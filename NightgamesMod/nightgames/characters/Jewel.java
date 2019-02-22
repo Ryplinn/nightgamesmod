@@ -105,7 +105,7 @@ public class Jewel extends BasePersonality {
         if (Flag.checkFlag(JEWEL_ANAL_FOCUS)) {
             growth.addTrait(50, Trait.drainingass);
         }
-        if (Flag.checkFlag(JEWEL_PHYSICAL_FOCUS)) {
+        if (Flag.checkFlag(JEWEL_MARTIAL_FOCUS)) {
             growth.addTrait(50, Trait.edger);
         }
         growth.addTrait(55, Trait.oblivious);
@@ -119,7 +119,7 @@ public class Jewel extends BasePersonality {
         if (Flag.checkFlag(JEWEL_ANAL_FOCUS)) {
             growth.addTrait(50, Trait.bewitchingbottom);
         }
-        if (Flag.checkFlag(JEWEL_PHYSICAL_FOCUS)) {
+        if (Flag.checkFlag(JEWEL_MARTIAL_FOCUS)) {
             growth.addTrait(50, Trait.unquestionable);
         }
         growth.addTrait(55, Trait.overwhelmingPresence);
