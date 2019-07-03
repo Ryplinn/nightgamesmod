@@ -2,7 +2,7 @@ package nightgames.actions;
 
 import nightgames.characters.Character;
 import nightgames.characters.State;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.ftc.FTCMatch;
 import nightgames.global.Flag;
 import nightgames.global.Match;

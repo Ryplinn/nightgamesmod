@@ -1,14 +1,14 @@
 package nightgames.nskills.tags;
 
-import java.util.Set;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.ResistType;
-import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
+import nightgames.characters.trait.Trait;
 import nightgames.nskills.struct.SkillResultStruct;
 import nightgames.status.Stsflag;
+
+import java.util.Set;
 
 public class WorshipSkillTag extends SkillTag {
     private static final SkillRequirement requirement = new SkillRequirement() {

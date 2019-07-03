@@ -1,13 +1,8 @@
 package nightgames.daytime;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import nightgames.characters.NPC;
 import nightgames.characters.Player;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.global.Flag;
 import nightgames.global.Formatter;
 import nightgames.gui.GUI;
@@ -16,6 +11,11 @@ import nightgames.items.Item;
 import nightgames.items.Loot;
 import nightgames.items.clothing.Clothing;
 import nightgames.requirements.RequirementWithDescription;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public abstract class BaseNPCTime extends Activity {
     protected NPC npc;

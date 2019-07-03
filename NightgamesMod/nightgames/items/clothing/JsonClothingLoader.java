@@ -1,20 +1,14 @@
 package nightgames.items.clothing;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import nightgames.characters.CharacterSex;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.json.JsonUtils;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class JsonClothingLoader {
     /*

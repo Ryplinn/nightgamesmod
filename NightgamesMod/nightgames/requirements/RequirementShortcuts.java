@@ -1,18 +1,18 @@
 package nightgames.requirements;
 
-import java.util.Arrays;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Emotion;
-import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.BodyPartMod;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Result;
 import nightgames.global.Flag;
 import nightgames.items.Item;
 import nightgames.items.ItemAmount;
 import nightgames.status.AttributeBuff;
 import nightgames.status.Stsflag;
+
+import java.util.Arrays;
 
 /**
  * Shortcut functions for requirements creation

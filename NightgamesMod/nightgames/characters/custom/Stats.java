@@ -1,12 +1,12 @@
 package nightgames.characters.custom;
 
+import nightgames.characters.Attribute;
+import nightgames.characters.trait.Trait;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import nightgames.characters.Attribute;
-import nightgames.characters.Trait;
 
 public class Stats {
     public int level;

@@ -1,19 +1,14 @@
 package nightgames.skills.strategy;
 
+import nightgames.characters.Character;
+import nightgames.characters.trait.Trait;
+import nightgames.combat.Combat;
+import nightgames.global.Random;
+import nightgames.skills.*;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import nightgames.characters.Character;
-import nightgames.characters.Trait;
-import nightgames.combat.Combat;
-import nightgames.global.Random;
-import nightgames.skills.Collar;
-import nightgames.skills.LaunchHarpoon;
-import nightgames.skills.MagLock;
-import nightgames.skills.Skill;
-import nightgames.skills.ThrowBomb;
-import nightgames.skills.Yank;
 
 public class TechStrategy extends AbstractStrategy {
 

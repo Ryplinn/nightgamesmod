@@ -2,11 +2,11 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.EarPart;
 import nightgames.characters.body.mods.PlantMod;
 import nightgames.characters.body.mods.TentacledMod;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;

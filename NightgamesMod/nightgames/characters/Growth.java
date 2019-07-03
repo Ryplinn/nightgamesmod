@@ -1,13 +1,14 @@
 package nightgames.characters;
 
-import java.util.*;
-
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.GenericBodyPart;
 import nightgames.characters.body.mods.PartMod;
+import nightgames.characters.trait.Trait;
 import nightgames.global.Flag;
 import nightgames.items.clothing.Clothing;
 import nightgames.utilities.DebugHelper;
+
+import java.util.*;
 
 public class Growth implements Cloneable {
     public class PartModApplication {

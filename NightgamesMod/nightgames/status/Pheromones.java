@@ -1,19 +1,21 @@
 package nightgames.status;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import com.google.gson.JsonObject;
-
-import nightgames.characters.*;
+import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.Emotion;
+import nightgames.characters.NPC;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.gui.GUI;
 import nightgames.skills.damage.DamageType;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Pheromones extends Horny {
     static List<Attribute> NON_DEBUFFABLE_ATTS = Arrays.asList(

@@ -4,6 +4,7 @@ import nightgames.characters.body.*;
 import nightgames.characters.body.mods.FieryMod;
 import nightgames.characters.body.mods.TrainedMod;
 import nightgames.characters.custom.CharacterLine;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.CombatScene;
 import nightgames.combat.CombatSceneChoice;

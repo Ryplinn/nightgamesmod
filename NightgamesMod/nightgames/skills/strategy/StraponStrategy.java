@@ -1,16 +1,16 @@
 package nightgames.skills.strategy;
 
-import java.util.Collections;
-import java.util.Set;
-
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
 import nightgames.characters.NPC;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.items.Item;
 import nightgames.skills.Skill;
 import nightgames.skills.Strapon;
+
+import java.util.Collections;
+import java.util.Set;
 
 public class StraponStrategy extends FuckStrategy {
     private static final Skill STRAPON_SKILL = new Strapon(NPC.noneCharacter());

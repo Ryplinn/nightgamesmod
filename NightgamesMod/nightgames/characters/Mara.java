@@ -5,6 +5,7 @@ import nightgames.characters.body.CockMod;
 import nightgames.characters.body.FacePart;
 import nightgames.characters.body.mods.CyberneticMod;
 import nightgames.characters.custom.CharacterLine;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.CombatScene;
 import nightgames.combat.CombatSceneChoice;

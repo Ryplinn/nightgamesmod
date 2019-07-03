@@ -1,32 +1,19 @@
 package nightgames.characters.body;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.CharacterSex;
-import nightgames.characters.Trait;
 import nightgames.characters.body.mods.PartMod;
 import nightgames.characters.body.mods.SizeMod;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
-import nightgames.global.*;
+import nightgames.global.DebugFlags;
+import nightgames.global.Flag;
+import nightgames.global.Formatter;
+import nightgames.global.Random;
 import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.json.JsonUtils;
@@ -39,6 +26,10 @@ import nightgames.status.BodyFetish;
 import nightgames.status.Status;
 import nightgames.status.Stsflag;
 import nightgames.status.addiction.AddictionType;
+
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Body implements Cloneable {
     static class PartReplacement {

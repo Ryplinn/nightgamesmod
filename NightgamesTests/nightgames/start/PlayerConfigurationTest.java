@@ -3,7 +3,7 @@ package nightgames.start;
 import nightgames.characters.Attribute;
 import nightgames.characters.CharacterSex;
 import nightgames.characters.Player;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.items.clothing.ClothingTable;
 import nightgames.json.JsonUtils;
 import org.hamcrest.core.IsCollectionContaining;
@@ -14,7 +14,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 /**
  * Tests involving starting player configuration.

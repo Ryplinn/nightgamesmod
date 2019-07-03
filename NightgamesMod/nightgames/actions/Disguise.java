@@ -1,15 +1,15 @@
 package nightgames.actions;
 
-import java.util.stream.Collectors;
-
 import nightgames.characters.Character;
 import nightgames.characters.NPC;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.global.Flag;
 import nightgames.global.Match;
 import nightgames.global.Random;
 import nightgames.status.Stsflag;
 import nightgames.utilities.DisguiseHelper;
+
+import java.util.stream.Collectors;
 
 public class Disguise extends Action {
     private static final long serialVersionUID = 2089054062272510717L;

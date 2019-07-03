@@ -1,14 +1,13 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
+
+import java.util.Optional;
 
 public class Lethargic extends DurationStatus {
     double magnitude;

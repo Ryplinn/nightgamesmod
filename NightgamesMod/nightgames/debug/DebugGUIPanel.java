@@ -2,7 +2,7 @@ package nightgames.debug;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.global.DebugFlags;
 import nightgames.global.GameState;
 import nightgames.global.Match;

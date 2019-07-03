@@ -1,6 +1,6 @@
 package nightgames.nskills.effects.rolls;
 
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.nskills.struct.SkillResultStruct;
 
 public class TraitBonusRoll extends BasicNumberRoll {

@@ -1,14 +1,13 @@
 package nightgames.items.clothing;
 
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import nightgames.characters.Character;
 import nightgames.characters.CharacterSex;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.items.Loot;
+
+import java.text.DecimalFormat;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Clothing implements Loot {
     public static final int N_LAYERS = 5;

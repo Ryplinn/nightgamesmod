@@ -2,7 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -10,16 +10,7 @@ import nightgames.global.Random;
 import nightgames.gui.GUI;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.Stance;
-import nightgames.status.Bound;
-import nightgames.status.Falling;
-import nightgames.status.Flatfooted;
-import nightgames.status.Frenzied;
-import nightgames.status.Parasited;
-import nightgames.status.Slimed;
-import nightgames.status.Status;
-import nightgames.status.Stsflag;
-import nightgames.status.Trance;
-import nightgames.status.Wary;
+import nightgames.status.*;
 
 public class ThrowSlime extends Skill {
 

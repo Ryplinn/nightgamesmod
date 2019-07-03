@@ -1,17 +1,17 @@
 package nightgames.stance;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.status.CockBound;
 import nightgames.status.Stsflag;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class FemdomSexStance extends Position {
     public FemdomSexStance(Character top, Character bottom, Stance stance) {

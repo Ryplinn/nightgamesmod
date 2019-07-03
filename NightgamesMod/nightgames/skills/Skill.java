@@ -1,20 +1,22 @@
 package nightgames.skills;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
-import nightgames.global.*;
+import nightgames.global.Formatter;
+import nightgames.global.Match;
+import nightgames.global.Random;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.damage.Staleness;
 import nightgames.status.FiredUp;
 import nightgames.status.Status;
 import nightgames.status.Stsflag;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class Skill {
     /**

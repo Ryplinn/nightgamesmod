@@ -9,6 +9,7 @@ import nightgames.characters.*;
 import nightgames.characters.body.Body;
 import nightgames.characters.custom.effect.CustomEffect;
 import nightgames.characters.custom.effect.MoneyModEffect;
+import nightgames.characters.trait.Trait;
 import nightgames.global.SaveFile;
 import nightgames.items.Item;
 import nightgames.items.ItemAmount;

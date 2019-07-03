@@ -1,14 +1,9 @@
 package nightgames.skills.petskills;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.mods.ParasitedMod;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
@@ -16,6 +11,11 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.pet.PetCharacter;
 import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 public class SlimeCloneParasite extends SimpleEnemySkill {
     public SlimeCloneParasite(Character self) {

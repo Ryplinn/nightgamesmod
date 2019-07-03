@@ -1,14 +1,10 @@
 package nightgames.skills;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Optional;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.CockMod;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -19,12 +15,12 @@ import nightgames.skills.damage.DamageType;
 import nightgames.stance.Neutral;
 import nightgames.stance.Position;
 import nightgames.stance.Stance;
-import nightgames.status.Bound;
-import nightgames.status.CockBound;
-import nightgames.status.Compulsive;
-import nightgames.status.MagLocked;
-import nightgames.status.Stsflag;
+import nightgames.status.*;
 import nightgames.status.Compulsive.Situation;
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Optional;
 
 public class Struggle extends Skill {
 

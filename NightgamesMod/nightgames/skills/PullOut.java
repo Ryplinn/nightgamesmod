@@ -1,11 +1,9 @@
 package nightgames.skills;
 
-import java.util.Optional;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -17,6 +15,8 @@ import nightgames.status.Stsflag;
 import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.Addiction.Severity;
 import nightgames.status.addiction.AddictionType;
+
+import java.util.Optional;
 
 public class PullOut extends Skill {
 

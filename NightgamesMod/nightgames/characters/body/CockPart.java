@@ -1,20 +1,20 @@
 package nightgames.characters.body;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
 import nightgames.characters.body.mods.PartMod;
 import nightgames.characters.body.mods.SizeMod;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.status.Sensitized;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CockPart extends GenericBodyPart {
     public static String synonyms[] = {"cock", "dick", "shaft", "phallus"};

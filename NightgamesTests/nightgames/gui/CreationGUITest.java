@@ -1,7 +1,7 @@
 package nightgames.gui;
 
 import nightgames.characters.Attribute;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.global.GameState;
 import org.hamcrest.core.IsCollectionContaining;
 import org.junit.Before;

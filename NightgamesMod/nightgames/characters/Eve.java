@@ -3,6 +3,7 @@ package nightgames.characters;
 import nightgames.characters.body.*;
 import nightgames.characters.body.mods.SizeMod;
 import nightgames.characters.custom.CharacterLine;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.daytime.Daytime;

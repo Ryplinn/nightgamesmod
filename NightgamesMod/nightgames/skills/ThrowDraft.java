@@ -1,22 +1,17 @@
 package nightgames.skills;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import nightgames.characters.Character;
 import nightgames.characters.Decider;
 import nightgames.characters.NPC;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.DebugFlags;
 import nightgames.global.Formatter;
 import nightgames.items.Item;
 import nightgames.items.ItemEffect;
+
+import java.util.*;
 
 public class ThrowDraft extends Skill {
     private static final Set<Item> transformativeItems = new HashSet<>();

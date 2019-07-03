@@ -2,13 +2,13 @@ package nightgames.daytime;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Player;
-import nightgames.characters.Trait;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.CockPart;
 import nightgames.characters.body.EarPart;
 import nightgames.characters.body.TailPart;
 import nightgames.characters.body.mods.FeralMod;
 import nightgames.characters.body.mods.SizeMod;
+import nightgames.characters.trait.Trait;
 import nightgames.global.Flag;
 import nightgames.global.GameState;
 import nightgames.gui.GUI;

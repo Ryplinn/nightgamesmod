@@ -1,7 +1,8 @@
 package nightgames.global;
 
-import nightgames.characters.*;
 import nightgames.characters.Character;
+import nightgames.characters.*;
+import nightgames.characters.trait.Trait;
 import nightgames.daytime.Daytime;
 import nightgames.ftc.FTCMatch;
 import nightgames.gui.GUI;

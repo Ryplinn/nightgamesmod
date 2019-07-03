@@ -1,26 +1,9 @@
 package nightgames.pet.arms;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
 import nightgames.characters.body.CockMod;
-import nightgames.characters.body.mods.ArcaneMod;
-import nightgames.characters.body.mods.CyberneticMod;
-import nightgames.characters.body.mods.DivineMod;
-import nightgames.characters.body.mods.FeralMod;
-import nightgames.characters.body.mods.FieryMod;
-import nightgames.characters.body.mods.GooeyMod;
-import nightgames.characters.body.mods.PlantMod;
-import nightgames.characters.body.mods.DemonicMod;
-import nightgames.characters.body.mods.TentacledMod;
-import nightgames.characters.body.mods.PartMod;
+import nightgames.characters.body.mods.*;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Random;
 import nightgames.pet.PetCharacter;
@@ -28,6 +11,9 @@ import nightgames.pet.arms.skills.ArmSkill;
 import nightgames.pet.arms.skills.DoubleGrab;
 import nightgames.pet.arms.skills.Idle;
 import nightgames.pet.arms.skills.MultiArmMove;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ArmManager {
     private static final List<MultiArmMove> MULTI_MOVES = Arrays.asList(new DoubleGrab());

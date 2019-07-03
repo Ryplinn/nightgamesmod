@@ -2,7 +2,7 @@ package nightgames.trap;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.gui.GUI;
 import nightgames.items.Item;
 

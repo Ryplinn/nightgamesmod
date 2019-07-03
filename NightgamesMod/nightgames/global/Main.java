@@ -1,7 +1,7 @@
 package nightgames.global;
 
 import nightgames.Resources.ResourceLoader;
-import nightgames.characters.TraitTree;
+import nightgames.characters.trait.TraitTree;
 import nightgames.gui.GUI;
 import nightgames.gui.HeadlessGui;
 import nightgames.json.JsonUtils;

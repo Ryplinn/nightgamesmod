@@ -1,7 +1,7 @@
 package nightgames.modifier.standard;
 
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.global.Flag;
 import nightgames.global.GameState;
 import nightgames.global.Match;

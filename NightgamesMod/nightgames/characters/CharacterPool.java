@@ -7,6 +7,7 @@ import nightgames.Resources.ResourceLoader;
 import nightgames.characters.custom.CustomNPC;
 import nightgames.characters.custom.JsonSourceNPCDataLoader;
 import nightgames.characters.custom.NPCData;
+import nightgames.characters.trait.Trait;
 import nightgames.json.JsonUtils;
 import nightgames.start.NpcConfiguration;
 import nightgames.start.StartConfiguration;

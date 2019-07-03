@@ -1,7 +1,10 @@
 package nightgames.characters;
 
+import nightgames.characters.trait.Trait;
 import nightgames.global.Formatter;
-import nightgames.gui.*;
+import nightgames.gui.CancelButton;
+import nightgames.gui.GUI;
+import nightgames.gui.LabeledValue;
 import nightgames.utilities.FixedDeque;
 
 import java.util.ArrayList;

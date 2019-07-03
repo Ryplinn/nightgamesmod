@@ -1,18 +1,18 @@
 package nightgames.skills;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import nightgames.characters.Character;
 import nightgames.characters.NPC;
 import nightgames.characters.Player;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
 import nightgames.pet.CharacterPet;
 import nightgames.pet.Pet;
 import nightgames.skills.petskills.SlimeCloneParasite;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Divide extends Skill {
     public Divide(Character self) {

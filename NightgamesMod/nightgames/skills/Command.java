@@ -1,17 +1,10 @@
 package nightgames.skills;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
-import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -21,15 +14,11 @@ import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.items.clothing.ClothingTable;
 import nightgames.skills.damage.DamageType;
-import nightgames.stance.Behind;
-import nightgames.stance.FaceSitting;
-import nightgames.stance.Kneeling;
-import nightgames.stance.Mount;
-import nightgames.stance.ReverseMount;
-import nightgames.stance.Stance;
-import nightgames.stance.StandingOver;
+import nightgames.stance.*;
 import nightgames.status.BodyFetish;
 import nightgames.status.Stsflag;
+
+import java.util.*;
 
 public class Command extends Skill {
 

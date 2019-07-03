@@ -1,7 +1,7 @@
 package nightgames.status;
 
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.requirements.DurationRequirement;
 

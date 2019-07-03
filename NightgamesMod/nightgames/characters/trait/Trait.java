@@ -1,5 +1,6 @@
-package nightgames.characters;
+package nightgames.characters.trait;
 
+import nightgames.characters.Character;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.items.clothing.ClothingSlot;

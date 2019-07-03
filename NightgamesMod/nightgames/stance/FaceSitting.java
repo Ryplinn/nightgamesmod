@@ -1,26 +1,19 @@
 package nightgames.stance;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
-import nightgames.skills.Anilingus;
-import nightgames.skills.Blowjob;
-import nightgames.skills.Cunnilingus;
-import nightgames.skills.Escape;
-import nightgames.skills.Nothing;
-import nightgames.skills.Skill;
-import nightgames.skills.Struggle;
-import nightgames.skills.Wait;
+import nightgames.skills.*;
 import nightgames.skills.damage.DamageType;
 import nightgames.status.Drained;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 
 public class FaceSitting extends AbstractBehindStance {
     FaceSitting(Character top, Character bottom, Stance en) {

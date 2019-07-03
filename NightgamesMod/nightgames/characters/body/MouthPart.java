@@ -2,16 +2,12 @@ package nightgames.characters.body;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.skills.damage.DamageType;
-import nightgames.status.FluidAddiction;
-import nightgames.status.Frenzied;
-import nightgames.status.PartiallyCorrupted;
-import nightgames.status.Stsflag;
-import nightgames.status.Trance;
+import nightgames.status.*;
 import nightgames.utilities.MathUtils;
 
 public class MouthPart extends GenericBodyPart {

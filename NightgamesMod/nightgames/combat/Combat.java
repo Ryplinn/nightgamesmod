@@ -7,6 +7,7 @@ import nightgames.characters.body.Body;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.mods.*;
+import nightgames.characters.trait.Trait;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.global.*;

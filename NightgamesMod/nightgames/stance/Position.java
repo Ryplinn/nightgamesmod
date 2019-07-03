@@ -1,21 +1,21 @@
 package nightgames.stance;
 
+import nightgames.characters.Character;
+import nightgames.characters.body.Body;
+import nightgames.characters.body.BodyPart;
+import nightgames.characters.trait.Trait;
+import nightgames.combat.Combat;
+import nightgames.global.Random;
+import nightgames.skills.Skill;
+import nightgames.skills.damage.DamageType;
+import nightgames.status.InsertedStatus;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import nightgames.characters.Character;
-import nightgames.characters.Trait;
-import nightgames.characters.body.Body;
-import nightgames.characters.body.BodyPart;
-import nightgames.combat.Combat;
-import nightgames.global.Random;
-import nightgames.skills.Skill;
-import nightgames.skills.damage.DamageType;
-import nightgames.status.InsertedStatus;
 
 public abstract class Position implements Cloneable {
     public Character top;

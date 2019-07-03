@@ -1,13 +1,9 @@
 package nightgames.skills;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
 import nightgames.characters.body.AssPart;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -16,6 +12,10 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.Stance;
 import nightgames.status.BodyFetish;
 import nightgames.status.Stsflag;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 public class Anilingus extends Skill {
     private static final String worshipString = "Ass Worship";

@@ -1,10 +1,10 @@
 package nightgames.nskills.tags;
 
-import java.util.Optional;
-
 import nightgames.characters.Attribute;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.status.Stsflag;
+
+import java.util.Optional;
 
 public abstract class SkillTag {
     public abstract SkillRequirement getRequirements();

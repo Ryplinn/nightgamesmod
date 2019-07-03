@@ -6,6 +6,7 @@ import nightgames.characters.body.FacePart;
 import nightgames.characters.body.WingsPart;
 import nightgames.characters.body.mods.DivineMod;
 import nightgames.characters.custom.CharacterLine;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.CombatScene;
 import nightgames.combat.CombatSceneChoice;

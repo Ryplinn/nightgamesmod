@@ -8,6 +8,7 @@ import nightgames.characters.body.FacePart;
 import nightgames.characters.body.WingsPart;
 import nightgames.characters.body.mods.ArcaneMod;
 import nightgames.characters.custom.CharacterLine;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;

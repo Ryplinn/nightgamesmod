@@ -1,16 +1,15 @@
 package nightgames.characters.body;
 
+import com.google.gson.JsonObject;
+import nightgames.characters.Attribute;
+import nightgames.characters.Character;
+import nightgames.characters.trait.Trait;
+import nightgames.combat.Combat;
+import nightgames.global.DebugFlags;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
-import com.google.gson.JsonObject;
-
-import nightgames.characters.Attribute;
-import nightgames.characters.Character;
-import nightgames.characters.Trait;
-import nightgames.combat.Combat;
-import nightgames.global.DebugFlags;
 
 public interface BodyPart {
     public void describeLong(StringBuilder b, Character c);

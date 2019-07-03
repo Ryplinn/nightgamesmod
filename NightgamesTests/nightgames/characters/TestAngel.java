@@ -2,6 +2,7 @@ package nightgames.characters;
 
 import nightgames.characters.body.*;
 import nightgames.characters.body.mods.DivineMod;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.daytime.Daytime;

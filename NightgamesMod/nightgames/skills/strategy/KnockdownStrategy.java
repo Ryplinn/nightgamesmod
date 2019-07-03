@@ -1,17 +1,17 @@
 package nightgames.skills.strategy;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Random;
 import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class KnockdownStrategy extends AbstractStrategy {
     @Override

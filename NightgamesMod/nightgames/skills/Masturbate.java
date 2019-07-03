@@ -1,18 +1,18 @@
 package nightgames.skills;
 
-import java.util.ArrayList;
-
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
-import nightgames.characters.Trait;
 import nightgames.characters.body.Body;
 import nightgames.characters.body.BodyPart;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
+
+import java.util.ArrayList;
 
 public class Masturbate extends Skill {
     public Masturbate(Character self) {

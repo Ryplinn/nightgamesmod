@@ -1,10 +1,7 @@
 package nightgames.nskills;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import nightgames.characters.Attribute;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.nskills.effects.SkillEffectBuilder;
 import nightgames.nskills.effects.rolls.BasicNumberRoll;
 import nightgames.nskills.effects.rolls.ConstantRoll;
@@ -12,6 +9,9 @@ import nightgames.nskills.effects.rolls.TraitBonusRoll;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.requirements.TraitRequirement;
 import nightgames.stance.Stance;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SkillPoolBuilder {
     List<SkillInterface> skills;

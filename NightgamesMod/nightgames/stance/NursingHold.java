@@ -1,21 +1,16 @@
 package nightgames.stance;
 
+import nightgames.characters.Character;
+import nightgames.characters.Emotion;
+import nightgames.characters.trait.Trait;
+import nightgames.combat.Combat;
+import nightgames.global.Formatter;
+import nightgames.skills.*;
+import nightgames.skills.damage.DamageType;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-
-import nightgames.characters.Character;
-import nightgames.characters.Emotion;
-import nightgames.characters.Trait;
-import nightgames.combat.Combat;
-import nightgames.global.Formatter;
-import nightgames.skills.Escape;
-import nightgames.skills.Nothing;
-import nightgames.skills.Skill;
-import nightgames.skills.Struggle;
-import nightgames.skills.Suckle;
-import nightgames.skills.Wait;
-import nightgames.skills.damage.DamageType;
 
 public class NursingHold extends AbstractFacingStance {
     public NursingHold(Character top, Character bottom) {

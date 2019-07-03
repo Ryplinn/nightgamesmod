@@ -1,9 +1,9 @@
 package nightgames.global;
 
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.StraponPart;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.gui.GUI;
 import nightgames.pet.PetCharacter;

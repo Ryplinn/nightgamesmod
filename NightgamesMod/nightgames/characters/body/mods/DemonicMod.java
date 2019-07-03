@@ -1,19 +1,19 @@
 package nightgames.characters.body.mods;
 
-import java.util.EnumSet;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.GenericBodyPart;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.pet.PetCharacter;
 import nightgames.skills.damage.DamageType;
 import nightgames.status.Drained;
+
+import java.util.EnumSet;
 
 public class DemonicMod extends PartMod {
     public static final DemonicMod INSTANCE = new DemonicMod();

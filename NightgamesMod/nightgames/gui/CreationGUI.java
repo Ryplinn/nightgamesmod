@@ -2,15 +2,15 @@ package nightgames.gui;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.CharacterSex;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.global.Flag;
 import nightgames.global.GameState;
 import nightgames.start.StartConfiguration;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class CreationGUI extends JPanel {
     /**

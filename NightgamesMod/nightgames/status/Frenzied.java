@@ -1,35 +1,20 @@
 package nightgames.status;
 
+import com.google.gson.JsonObject;
+import nightgames.characters.Attribute;
+import nightgames.characters.Character;
+import nightgames.characters.Emotion;
+import nightgames.characters.NPC;
+import nightgames.characters.body.BodyPart;
+import nightgames.characters.trait.Trait;
+import nightgames.combat.Combat;
+import nightgames.global.Formatter;
+import nightgames.skills.*;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import com.google.gson.JsonObject;
-
-import nightgames.characters.*;
-import nightgames.characters.Character;
-import nightgames.characters.body.BodyPart;
-import nightgames.combat.Combat;
-import nightgames.global.Formatter;
-import nightgames.skills.AssFuck;
-import nightgames.skills.Carry;
-import nightgames.skills.Fly;
-import nightgames.skills.Fuck;
-import nightgames.skills.Invitation;
-import nightgames.skills.ReverseAssFuck;
-import nightgames.skills.ReverseCarry;
-import nightgames.skills.ReverseFly;
-import nightgames.skills.ReverseFuck;
-import nightgames.skills.Shove;
-import nightgames.skills.Skill;
-import nightgames.skills.Straddle;
-import nightgames.skills.SubmissiveHold;
-import nightgames.skills.Tackle;
-import nightgames.skills.Tear;
-import nightgames.skills.ToggleKnot;
-import nightgames.skills.Undress;
-import nightgames.skills.WildThrust;
 
 public class Frenzied extends DurationStatus {
 

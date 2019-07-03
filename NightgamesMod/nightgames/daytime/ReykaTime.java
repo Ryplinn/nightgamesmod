@@ -2,10 +2,10 @@ package nightgames.daytime;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Player;
-import nightgames.characters.Trait;
 import nightgames.characters.body.*;
 import nightgames.characters.body.mods.DemonicMod;
 import nightgames.characters.body.mods.SizeMod;
+import nightgames.characters.trait.Trait;
 import nightgames.global.GameState;
 import nightgames.global.Random;
 import nightgames.gui.GUI;

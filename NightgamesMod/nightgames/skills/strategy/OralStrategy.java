@@ -1,18 +1,18 @@
 package nightgames.skills.strategy;
 
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Random;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.Blowjob;
 import nightgames.skills.Cunnilingus;
 import nightgames.skills.Skill;
+
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class OralStrategy extends KnockdownThenActionStrategy {
     @Override

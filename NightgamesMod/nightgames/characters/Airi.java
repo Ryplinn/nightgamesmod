@@ -4,6 +4,7 @@ import nightgames.characters.body.*;
 import nightgames.characters.body.mods.GooeyMod;
 import nightgames.characters.body.mods.SizeMod;
 import nightgames.characters.custom.CharacterLine;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.*;
 import nightgames.daytime.Daytime;
 import nightgames.global.*;

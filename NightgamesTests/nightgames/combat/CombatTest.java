@@ -4,7 +4,7 @@ import nightgames.actions.Movement;
 import nightgames.areas.Area;
 import nightgames.characters.BlankPersonality;
 import nightgames.characters.NPC;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.global.GameState;
 import nightgames.global.Match;
 import nightgames.global.TestGameState;

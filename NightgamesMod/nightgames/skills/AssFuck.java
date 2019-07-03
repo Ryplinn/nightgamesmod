@@ -3,8 +3,8 @@ package nightgames.skills;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
-import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -14,11 +14,7 @@ import nightgames.stance.Anal;
 import nightgames.stance.AnalProne;
 import nightgames.stance.BehindFootjob;
 import nightgames.stance.Stance;
-import nightgames.status.Flatfooted;
-import nightgames.status.Frenzied;
-import nightgames.status.IgnoreOrgasm;
-import nightgames.status.Oiled;
-import nightgames.status.Stsflag;
+import nightgames.status.*;
 
 public class AssFuck extends Fuck {
     public AssFuck(Character self) {

@@ -2,9 +2,14 @@ package nightgames.combat;
 
 import nightgames.actions.Movement;
 import nightgames.areas.Area;
-import nightgames.characters.*;
+import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.global.*;
+import nightgames.characters.State;
+import nightgames.characters.trait.Trait;
+import nightgames.global.DebugFlags;
+import nightgames.global.Formatter;
+import nightgames.global.Match;
+import nightgames.global.Random;
 import nightgames.gui.GUI;
 import nightgames.items.Item;
 import nightgames.status.*;
@@ -17,8 +22,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
-
-import static nightgames.requirements.RequirementShortcuts.item;
 
 /**
  * An Encounter is a meeting between two or more characters in one area during a match.

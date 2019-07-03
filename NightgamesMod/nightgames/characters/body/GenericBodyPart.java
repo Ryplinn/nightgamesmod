@@ -1,19 +1,12 @@
 package nightgames.characters.body;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.NPC;
-import nightgames.characters.Trait;
 import nightgames.characters.body.mods.PartMod;
 import nightgames.characters.body.mods.SizeMod;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.DebugFlags;
 import nightgames.global.Formatter;
@@ -21,6 +14,12 @@ import nightgames.global.Random;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.items.clothing.ClothingTrait;
 import nightgames.json.JsonUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class GenericBodyPart implements BodyPart {
     /**

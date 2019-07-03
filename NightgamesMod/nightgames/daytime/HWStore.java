@@ -1,16 +1,16 @@
 package nightgames.daytime;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import nightgames.characters.NPC;
 import nightgames.characters.Player;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.global.Flag;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class HWStore extends Store {
     HWStore(Player player) {

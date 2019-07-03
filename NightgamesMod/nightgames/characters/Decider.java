@@ -4,6 +4,7 @@ import nightgames.actions.Action;
 import nightgames.actions.Move;
 import nightgames.actions.Movement;
 import nightgames.characters.custom.effect.CustomEffect;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.daytime.Daytime;
 import nightgames.global.*;

@@ -3,7 +3,7 @@ package nightgames.trap;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.State;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Encounter;
 import nightgames.global.Match;
 import nightgames.gui.GUI;

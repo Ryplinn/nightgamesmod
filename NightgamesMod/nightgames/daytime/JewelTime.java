@@ -2,19 +2,16 @@ package nightgames.daytime;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Player;
-import nightgames.characters.Trait;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.CockPart;
 import nightgames.characters.body.mods.FieryMod;
 import nightgames.characters.body.mods.SizeMod;
+import nightgames.characters.trait.Trait;
 import nightgames.global.GameState;
 import nightgames.global.Random;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
-import nightgames.requirements.BodyPartRequirement;
-import nightgames.requirements.NotRequirement;
-import nightgames.requirements.RequirementShortcuts;
 import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 

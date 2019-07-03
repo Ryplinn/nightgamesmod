@@ -3,7 +3,7 @@ package nightgames.daytime;
 import nightgames.characters.Character;
 import nightgames.characters.NPC;
 import nightgames.characters.Player;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.global.Configuration;
 import nightgames.global.Flag;
 import nightgames.global.GameState;

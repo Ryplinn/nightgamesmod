@@ -2,9 +2,10 @@ package nightgames.actions;
 
 import nightgames.areas.Area;
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.global.Match;
-import nightgames.gui.*;
+import nightgames.gui.GUI;
+import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
 import nightgames.status.Detected;
 import nightgames.status.Horny;

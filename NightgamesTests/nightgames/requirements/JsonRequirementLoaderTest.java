@@ -3,7 +3,7 @@ package nightgames.requirements;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Emotion;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Result;
 import nightgames.items.Item;
 import nightgames.items.ItemAmount;
@@ -18,7 +18,7 @@ import java.util.List;
 
 import static nightgames.requirements.RequirementShortcuts.*;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * Tests for loading Requirements from Json.

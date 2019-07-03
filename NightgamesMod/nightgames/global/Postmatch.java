@@ -1,7 +1,7 @@
 package nightgames.global;
 
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.gui.ContinueButton;
 import nightgames.gui.GUI;
 import nightgames.gui.SaveButton;

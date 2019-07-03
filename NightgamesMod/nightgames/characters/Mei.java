@@ -6,6 +6,7 @@ import nightgames.characters.body.*;
 import nightgames.characters.body.mods.DemonicMod;
 import nightgames.characters.body.mods.ExtendedTonguedMod;
 import nightgames.characters.custom.CharacterLine;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.items.Item;

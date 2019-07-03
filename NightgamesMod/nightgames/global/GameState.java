@@ -1,6 +1,10 @@
 package nightgames.global;
 
-import nightgames.characters.*;
+import nightgames.characters.Attribute;
+import nightgames.characters.CharacterPool;
+import nightgames.characters.CharacterSex;
+import nightgames.characters.Player;
+import nightgames.characters.trait.Trait;
 import nightgames.daytime.Daytime;
 import nightgames.gui.GUI;
 import nightgames.skills.SkillPool;

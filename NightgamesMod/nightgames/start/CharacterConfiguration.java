@@ -2,8 +2,11 @@ package nightgames.start;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import nightgames.characters.*;
+import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterSex;
+import nightgames.characters.Growth;
+import nightgames.characters.trait.Trait;
 import nightgames.global.Flag;
 import nightgames.global.Random;
 import nightgames.items.clothing.Clothing;

@@ -1,8 +1,8 @@
 package nightgames.requirements;
 
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
-import nightgames.characters.TraitTree;
+import nightgames.characters.trait.Trait;
+import nightgames.characters.trait.TraitTree;
 import nightgames.combat.Combat;
 
 public class TraitRequirement extends BaseRequirement {

@@ -1,17 +1,16 @@
 package nightgames.status;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 public class Drained extends AttributeBuff {
     public static void drain(Combat c, Character drainer, Character drained, 

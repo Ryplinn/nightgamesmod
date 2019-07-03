@@ -1,26 +1,15 @@
 package nightgames.status;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
-import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
-import nightgames.skills.Beg;
-import nightgames.skills.Blowjob;
-import nightgames.skills.Cunnilingus;
-import nightgames.skills.Kiss;
-import nightgames.skills.LickNipples;
-import nightgames.skills.Skill;
-import nightgames.skills.Suckle;
+import nightgames.skills.*;
+
+import java.util.*;
 
 public class FluidAddiction extends DurationStatus {
     protected double magnitude;

@@ -1,10 +1,12 @@
 package nightgames.characters;
 
+import nightgames.characters.trait.Trait;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 public class LevelUpData implements Cloneable {
     private Set<Trait> traitsAdded;

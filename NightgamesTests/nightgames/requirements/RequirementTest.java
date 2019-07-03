@@ -2,22 +2,24 @@ package nightgames.requirements;
 
 import nightgames.actions.Movement;
 import nightgames.areas.Area;
-import nightgames.characters.*;
+import nightgames.characters.Attribute;
+import nightgames.characters.BlankPersonality;
+import nightgames.characters.Emotion;
+import nightgames.characters.NPC;
 import nightgames.characters.body.CockPart;
 import nightgames.characters.body.PussyPart;
 import nightgames.characters.body.mods.FieryMod;
 import nightgames.characters.body.mods.SizeMod;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Match;
-import nightgames.gui.TestGUI;
 import nightgames.items.Item;
 import nightgames.modifier.standard.NoModifier;
 import nightgames.stance.*;
 import nightgames.status.Alert;
 import nightgames.status.Stsflag;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Arrays;

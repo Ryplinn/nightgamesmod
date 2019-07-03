@@ -1,19 +1,15 @@
 package nightgames.skills.strategy;
 
+import nightgames.characters.Character;
+import nightgames.characters.trait.Trait;
+import nightgames.combat.Combat;
+import nightgames.skills.*;
+import nightgames.stance.Stance;
+import nightgames.status.Stsflag;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import nightgames.characters.Character;
-import nightgames.characters.Trait;
-import nightgames.combat.Combat;
-import nightgames.skills.Embrace;
-import nightgames.skills.Reversal;
-import nightgames.skills.Skill;
-import nightgames.skills.SuccubusNurse;
-import nightgames.skills.WingWrap;
-import nightgames.stance.Stance;
-import nightgames.status.Stsflag;
 
 public class DisablingStrategy extends KnockdownThenActionStrategy {
     @Override
