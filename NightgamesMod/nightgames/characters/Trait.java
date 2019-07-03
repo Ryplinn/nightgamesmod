@@ -1,18 +1,14 @@
 package nightgames.characters;
 
-import java.util.*;
-
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.items.clothing.ClothingTrait;
-import nightgames.status.Lethargic;
-import nightgames.status.Pheromones;
-import nightgames.status.Resistance;
-import nightgames.status.Status;
-import nightgames.status.Stsflag;
+import nightgames.status.*;
 import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
+
+import java.util.*;
 
 public enum Trait {
     sadist("Sadist", "Skilled at providing pleasure alongside pain",
@@ -89,7 +85,7 @@ public enum Trait {
         if (c.human()) {
             b.append("You exude");
         } else {
-            b.append(c.getName() + " exudes");
+            b.append(c.getName()).append(" exudes");
         }
         b.append(" an aura of pure eros, making both of you flush with excitement.");
     }), // Eve
@@ -115,7 +111,7 @@ public enum Trait {
         if (c.human()) {
             b.append("your");
         } else {
-            b.append(c.getName() + "'s");
+            b.append(c.getName()).append("'s");
         }
         b.append(" body.");
     }), // causes horny in opponents if aroused
@@ -133,18 +129,16 @@ public enum Trait {
     addictivefluids("Addictive Fluids", "Addictive bodily fluids"), // opponents can only use oral skills if available
     temptingtits("Tempting Tits", "Perfectly shaped and oh-so-tempting."),
     beguilingbreasts("Beguiling Breasts", "Glamourous breasts can put you in trance"), // the first time in a fight that you see bare breasts you are entranced
-    lactating("Lactating", "Breasts produces milk", new TraitDescription() {
-        public void describe(StringBuilder b, Character c, Trait t) {
-            if (!c.human()) {
-                if (c.breastsAvailable()) {
-                    b.append("You occasionally see milk dribbling down her breasts. Is she lactating?");
-                } else {
-                    b.append("You notice a damp spot on her " + c.getOutfit().getTopOfSlot(ClothingSlot.top).getName()
-                                    + ".");
-                }
+    lactating("Lactating", "Breasts produces milk", (b, c, t) -> {
+        if (!c.human()) {
+            if (c.breastsAvailable()) {
+                b.append("You occasionally see milk dribbling down her breasts. Is she lactating?");
             } else {
-                b.append("Your nipples ache from the milk building up in your mammaries.");
+                b.append("You notice a damp spot on her ")
+                                .append(c.getOutfit().getTopOfSlot(ClothingSlot.top).getName()).append(".");
             }
+        } else {
+            b.append("Your nipples ache from the milk building up in your mammaries.");
         }
     }),
     sedativecream("Sedative Cream", "Lactate that weakens the drinker"), // the first time in a fight that you see bare breasts you are entranced
@@ -172,7 +166,7 @@ public enum Trait {
 
     energydrain("Energy Drain", "Drains energy during intercourse"),
     objectOfWorship("Object Of Worship", "Opponents is periodically forced to worship your body.",
-                    (b, c, t) -> b.append("A divine aura surrounds " + c.nameDirectObject() + ".")),
+                    (b, c, t) -> b.append("A divine aura surrounds ").append(c.nameDirectObject()).append(".")),
     spiritphage("Semenphage", "Feeds on semen"),
     erophage("Erophage", "Feeds on sexuality"),
     tight("Tight", "Powerful musculature and exquisite tightness makes for quick orgasms."),
@@ -259,13 +253,11 @@ public enum Trait {
     undisciplined("Undisciplined", "Lover, not a fighter"), // restricts manuever, focus, armbar
     direct("Direct", "Patience is overrated"), // restricts whisper, dissolving trap, aphrodisiac trap, decoy, strip tease
 
-    shy("Shy", "Seldom prone to shameless displays", new TraitDescription() {
-        public void describe(StringBuilder b, Character c, Trait t) {
-            if (c.human())
-                b.append("You shy away from your opponent's gaze.");
-            else
-                b.append(c.subject() + " quickly avoids your gaze.");
-        }
+    shy("Shy", "Seldom prone to shameless displays", (b, c, t) -> {
+        if (c.human())
+            b.append("You shy away from your opponent's gaze.");
+        else
+            b.append(c.subject()).append(" quickly avoids your gaze.");
     }), // restricts striptease, flick, facesit, taunt, squeeze
 
     // Class
@@ -352,7 +344,7 @@ public enum Trait {
             if (c.human()) {
                 b.append("your slobbering pussy.");
             } else {
-                b.append(c.nameOrPossessivePronoun() + " slobbering pussy.");
+                b.append(c.nameOrPossessivePronoun()).append(" slobbering pussy.");
             }
         }
     }),
@@ -487,7 +479,7 @@ public enum Trait {
         if (c.human()) {
             b.append("A large black strap-on dildo adorns your waist.");
         } else {
-            b.append("A large black strap-on dildo adorns " + c.nameOrPossessivePronoun() + " waists.");
+            b.append("A large black strap-on dildo adorns ").append(c.nameOrPossessivePronoun()).append(" waists.");
         }
     }), // currently wearing a strapon
 
@@ -532,25 +524,25 @@ public enum Trait {
         return name;
     }
 
-    private Trait(String name, String description) {
+    Trait(String name, String description) {
         this.name = name;
         desc = description;
     }
 
-    private Trait(String name, String description, TraitDescription longDesc) {
+    Trait(String name, String description, TraitDescription longDesc) {
         this.name = name;
         desc = description;
         this.longDesc = longDesc;
     }
 
-    private Trait(String name, String description, TraitDescription longDesc, Trait parent) {
+    Trait(String name, String description, TraitDescription longDesc, Trait parent) {
         this.name = name;
         desc = description;
         this.longDesc = longDesc;
         this.parent = parent;
     }
 
-    private Trait(String name, String description, Status status) {
+    Trait(String name, String description, Status status) {
         this.name = name;
         desc = description;
         this.status = status;
@@ -568,7 +560,7 @@ public enum Trait {
     }
     
     public boolean isOverridden(Character ch) {
-        return OVERRIDES.containsKey(this) && OVERRIDES.get(this).stream().anyMatch(t -> ch.has(t));
+        return OVERRIDES.containsKey(this) && OVERRIDES.get(this).stream().anyMatch(ch::has);
     }
 
     public static Map<Trait, Resistance> resistances;
@@ -678,5 +670,9 @@ public enum Trait {
         } else {
             return nullResistance;
         }
+    }
+
+    public interface TraitDescription {
+        void describe(StringBuilder b, Character c, Trait t);
     }
 }
