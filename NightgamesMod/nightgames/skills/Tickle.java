@@ -115,7 +115,7 @@ public class Tickle extends Skill {
                                     getSelf(), target));
                 }
                 int m = (int) Math.round((2 + Random.random(3)) * (.25 + target.getExposure()));
-                int weak = (int) Math.round(bonus / 2 * (.25 + target.getExposure()));
+                int weak = (int) Math.round(bonus / 2.0 * (.25 + target.getExposure()));
                 target.body.pleasure(getSelf(), getSelf().body.getRandom("hands"), target.body.getRandom("skin"), (int) type
                                                 .modifyDamage(getSelf(), target, m),
                                 bonus, c, false, this);
