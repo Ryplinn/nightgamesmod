@@ -8,8 +8,8 @@ import nightgames.characters.Player;
 import nightgames.combat.Combat;
 import nightgames.daytime.Daytime;
 import nightgames.debug.DebugGUIPanel;
-import nightgames.global.*;
 import nightgames.global.Random;
+import nightgames.global.*;
 import nightgames.items.Item;
 import nightgames.skills.Skill;
 import nightgames.skills.TacticGroup;
@@ -30,8 +30,8 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
@@ -796,7 +796,7 @@ public class GUI extends JFrame implements Observer {
         stamina = new JLabel("Stamina: " + getLabelString(player.getStamina()));
         stamina.setFont(new Font("Sylfaen", Font.BOLD, 15));
         stamina.setHorizontalAlignment(SwingConstants.CENTER);
-        stamina.setForeground(new Color(164, 8, 2));
+        stamina.setForeground(GUIColors.STAMINA_FOREGROUND);
         stamina.setToolTipText(
                         "Stamina represents your endurance and ability to keep fighting. If it drops to zero, you'll be temporarily stunned.");
         meter.add(stamina);
@@ -804,7 +804,7 @@ public class GUI extends JFrame implements Observer {
         arousal = new JLabel("Arousal: " + getLabelString(player.getArousal()));
         arousal.setFont(new Font("Sylfaen", Font.BOLD, 15));
         arousal.setHorizontalAlignment(SwingConstants.CENTER);
-        arousal.setForeground(new Color(254, 1, 107));
+        arousal.setForeground(GUIColors.AROUSAL_FOREGROUND);
         arousal.setToolTipText(
                         "Arousal is raised when your opponent pleasures or seduces you. If it hits your max, you'll orgasm and lose the fight.");
         meter.add(arousal);
@@ -812,7 +812,7 @@ public class GUI extends JFrame implements Observer {
         mojo = new JLabel("Mojo: " + getLabelString(player.getMojo()));
         mojo.setFont(new Font("Sylfaen", Font.BOLD, 15));
         mojo.setHorizontalAlignment(SwingConstants.CENTER);
-        mojo.setForeground(new Color(51, 153, 255));
+        mojo.setForeground(GUIColors.MOJO_FOREGROUND);
         mojo.setToolTipText(
                         "Mojo is the abstract representation of your momentum and style. It increases with normal techniques and is used to power special moves");
         meter.add(mojo);
@@ -820,7 +820,7 @@ public class GUI extends JFrame implements Observer {
         willpower = new JLabel("Willpower: " + getLabelString(player.getWillpower()));
         willpower.setFont(new Font("Sylfaen", Font.BOLD, 15));
         willpower.setHorizontalAlignment(SwingConstants.CENTER);
-        willpower.setForeground(new Color(68, 170, 85));
+        willpower.setForeground(GUIColors.WILLPOWER_FOREGROUND);
         willpower.setToolTipText("Willpower is a representation of your will to fight. When this reaches 0, you lose.");
         meter.add(willpower);
         try {
@@ -832,32 +832,32 @@ public class GUI extends JFrame implements Observer {
         }
         staminaBar = new JProgressBar();
         staminaBar.setBorder(new SoftBevelBorder(1, null, null, null, null));
-        staminaBar.setForeground(new Color(164, 8, 2));
-        staminaBar.setBackground(new Color(50, 50, 50));
+        staminaBar.setForeground(GUIColors.STAMINA_FOREGROUND);
+        staminaBar.setBackground(GUIColors.METER_BACKGROUND);
         meter.add(staminaBar);
         staminaBar.setMaximum(player.getStamina().max());
         staminaBar.setValue(player.getStamina().get());
 
         arousalBar = new JProgressBar();
         arousalBar.setBorder(new SoftBevelBorder(1, null, null, null, null));
-        arousalBar.setForeground(new Color(254, 1, 107));
-        arousalBar.setBackground(new Color(50, 50, 50));
+        arousalBar.setForeground(GUIColors.AROUSAL_FOREGROUND);
+        arousalBar.setBackground(GUIColors.METER_BACKGROUND);
         meter.add(arousalBar);
         arousalBar.setMaximum(player.getArousal().max());
         arousalBar.setValue(player.getArousal().get());
 
         mojoBar = new JProgressBar();
         mojoBar.setBorder(new SoftBevelBorder(1, null, null, null, null));
-        mojoBar.setForeground(new Color(51, 153, 255));
-        mojoBar.setBackground(new Color(50, 50, 50));
+        mojoBar.setForeground(GUIColors.MOJO_FOREGROUND);
+        mojoBar.setBackground(GUIColors.METER_BACKGROUND);
         meter.add(mojoBar);
         mojoBar.setMaximum(player.getMojo().max());
         mojoBar.setValue(player.getMojo().get());
 
         willpowerBar = new JProgressBar();
         willpowerBar.setBorder(new SoftBevelBorder(1, null, null, null, null));
-        willpowerBar.setForeground(new Color(68, 170, 85));
-        willpowerBar.setBackground(new Color(50, 50, 50));
+        willpowerBar.setForeground(GUIColors.WILLPOWER_FOREGROUND);
+        willpowerBar.setBackground(GUIColors.METER_BACKGROUND);
         meter.add(willpowerBar);
         willpowerBar.setMaximum(player.getWillpower().max());
         willpowerBar.setValue(player.getWillpower().get());
