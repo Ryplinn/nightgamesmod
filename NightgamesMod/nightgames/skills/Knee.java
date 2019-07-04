@@ -60,7 +60,7 @@ public class Knee extends Skill {
             if (target.has(ClothingTrait.armored) || target.has(Trait.brassballs)) {
                 m *= .75;
             }
-            target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target, m));
+            target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, m));
 
             target.emote(Emotion.angry, 20);
         } else {

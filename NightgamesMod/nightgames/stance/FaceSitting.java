@@ -140,7 +140,7 @@ public class FaceSitting extends AbstractBehindStance {
     @Override
     public void decay(Combat c) {
         time++;
-        bottom.weaken(c, (int) top.modifyDamage(DamageType.stance, bottom, 5));
+        bottom.weaken(c, (int) DamageType.stance.modifyDamage(top, bottom, 5));
         top.emote(Emotion.dominant, 20);
         top.emote(Emotion.horny, 10);
         if (top.has(Trait.energydrain)) {
@@ -149,7 +149,7 @@ public class FaceSitting extends AbstractBehindStance {
                             + " {other:possessive} very spirit drained through %s connection.",
                             top, bottom, c.bothPossessive(bottom)));
             int m = Random.random(5) + 5;
-            bottom.drain(c, top, (int) top.modifyDamage(DamageType.drain, bottom, m));
+            bottom.drain(c, top, (int) DamageType.drain.modifyDamage(top, bottom, m));
         }
         if (top.has(Trait.drainingass)) {
             if (Random.random(3) == 0) {

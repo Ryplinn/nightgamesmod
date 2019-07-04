@@ -93,7 +93,7 @@ public class NursingHold extends AbstractFacingStance {
     @Override
     public void decay(Combat c) {
         time++;
-        bottom.weaken(c, (int) top.modifyDamage(DamageType.temptation, bottom, 3));
+        bottom.weaken(c, (int) DamageType.temptation.modifyDamage(top, bottom, 3));
         top.emote(Emotion.dominant, 10);
     }
 

@@ -1,8 +1,5 @@
 package nightgames.skills;
 
-import java.util.Collection;
-import java.util.List;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
@@ -18,6 +15,9 @@ import nightgames.status.BodyFetish;
 import nightgames.status.Shamed;
 import nightgames.status.Stsflag;
 import nightgames.status.TailFucked;
+
+import java.util.Collection;
+import java.util.List;
 
 public class TailPeg extends Skill {
 
@@ -120,7 +120,7 @@ public class TailPeg extends Skill {
                     target.add(c, new TailFucked(target, getSelf(), "ass"));
                 }
             }
-            target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target, strength / 2));
+            target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, strength / 2));
             target.emote(Emotion.nervous, 10);
             target.emote(Emotion.desperate, 10);
             getSelf().emote(Emotion.confident, 15);

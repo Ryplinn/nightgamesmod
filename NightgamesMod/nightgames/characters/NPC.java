@@ -725,7 +725,7 @@ public class NPC extends Character {
             case positioning:
                 if (c.getStance().dom(this)) {
                     c.write(this, getName() + " outmanuevers you and you're exhausted from the struggle.");
-                    target.weaken(c, (int) this.modifyDamage(DamageType.stance, target, 15));
+                    target.weaken(c, (int) DamageType.stance.modifyDamage(NPC.this, target, 15));
                 } else {
                     c.write(this, getName() + " outmanuevers you and catches you from behind when you stumble.");
                     c.setStance(new Behind(this, target));

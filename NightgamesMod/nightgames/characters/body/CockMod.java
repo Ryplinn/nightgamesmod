@@ -1,35 +1,20 @@
 package nightgames.characters.body;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.body.mods.CyberneticMod;
-import nightgames.characters.body.mods.FeralMod;
-import nightgames.characters.body.mods.FieryMod;
-import nightgames.characters.body.mods.PartMod;
-import nightgames.characters.body.mods.DemonicMod;
+import nightgames.characters.body.mods.*;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.pet.PetCharacter;
 import nightgames.skills.damage.DamageType;
-import nightgames.status.AttributeBuff;
-import nightgames.status.CockBound;
-import nightgames.status.DivineCharge;
-import nightgames.status.Drained;
-import nightgames.status.Enthralled;
-import nightgames.status.FluidAddiction;
-import nightgames.status.Horny;
-import nightgames.status.Hypersensitive;
-import nightgames.status.Pheromones;
-import nightgames.status.Stsflag;
-import nightgames.status.Winded;
+import nightgames.status.*;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 public class CockMod extends PartMod {
     public static final CockMod error = new CockMod("error", 1.0, 1.0, 1.0);
@@ -123,7 +108,7 @@ public class CockMod extends PartMod {
                                 opponent.nameOrPossessivePronoun(), self.nameDirectObject());
                 amtDrained = 3;
             }
-            int strength = (int) self.modifyDamage(DamageType.drain, opponent, amtDrained);
+            int strength = (int) DamageType.drain.modifyDamage(self, opponent, amtDrained);
         	if (amtDrained != 0) {
         		if (self.isPet()) {
 	                Character master = ((PetCharacter) self).getSelf().owner();
@@ -259,7 +244,7 @@ public class CockMod extends PartMod {
                     Drained.drain(c, self, opponent, Attribute.Power, attDamage, 20, true);
                     Drained.drain(c, self, opponent, Attribute.Cunning, attDamage, 20, true);
                     Drained.drain(c, self, opponent, Attribute.Seduction, attDamage, 20, true);
-                    opponent.drainWillpower(c, self, (int) self.modifyDamage(DamageType.drain, opponent, willDamage));
+                    opponent.drainWillpower(c, self, (int) DamageType.drain.modifyDamage(self, opponent, willDamage));
                 }
             }
         }

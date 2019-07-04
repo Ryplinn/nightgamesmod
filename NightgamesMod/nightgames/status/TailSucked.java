@@ -1,9 +1,6 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.body.BodyPart;
@@ -11,6 +8,8 @@ import nightgames.combat.Combat;
 import nightgames.global.Random;
 import nightgames.skills.TailSuck;
 import nightgames.skills.damage.DamageType;
+
+import java.util.Optional;
 
 public class TailSucked extends Status implements InsertedStatus {
 
@@ -62,7 +61,7 @@ public class TailSucked extends Status implements InsertedStatus {
         Attribute toDrain = Random.pickRandom(affected.att.entrySet().stream().filter(e -> e.getValue() != 0)
                         .map(e -> e.getKey()).toArray(Attribute[]::new)).get();
         Drained.drain(c, sucker, affected, toDrain, power, 20, true);
-        affected.drain(c, sucker, (int) sucker.modifyDamage(DamageType.drain, affected, 10));
+        affected.drain(c, sucker, (int) DamageType.drain.modifyDamage(sucker, affected, 10));
         affected.drainMojo(c, sucker, 1 + Random.random(power * 3));
     }
 

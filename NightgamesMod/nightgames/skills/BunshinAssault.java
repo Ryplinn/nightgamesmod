@@ -71,22 +71,22 @@ public class BunshinAssault extends Skill {
                 switch(Random.random(4)){
                 case 0:
                     r=Result.weak;
-                    target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target, Random
+                    target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random
                                     .random(1, 4)));
                     break;
                 case 1:
                     r=Result.normal;
-                    target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target, Random
+                    target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random
                                     .random(2, 5)));
                     break;
                 case 2:
                     r=Result.strong;
-                    target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target, Random
+                    target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random
                                     .random(6, 9)));
                     break;
                 default:
                     r=Result.critical;
-                    target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target, Random
+                    target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random
                                     .random(10, 14)));
                     break;
                 }

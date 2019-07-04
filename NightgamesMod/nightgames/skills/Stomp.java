@@ -83,7 +83,7 @@ public class Stomp extends Skill {
             pain += 20 - (int) Math
                             .round((10 + Random.random(10)) * target.getOutfit().getExposure(ClothingSlot.bottom));
         }
-        target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target, pain));
+        target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, pain));
         target.emote(Emotion.angry, 25);
         return true;
     }

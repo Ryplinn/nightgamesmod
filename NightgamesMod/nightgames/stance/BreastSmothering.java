@@ -1,25 +1,15 @@
 package nightgames.stance;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
-import nightgames.skills.BreastSmother;
-import nightgames.skills.Escape;
-import nightgames.skills.Finger;
-import nightgames.skills.FondleBreasts;
-import nightgames.skills.Nothing;
-import nightgames.skills.Nurple;
-import nightgames.skills.Skill;
-import nightgames.skills.Struggle;
-import nightgames.skills.Suckle;
-import nightgames.skills.Tickle;
-import nightgames.skills.Wait;
+import nightgames.skills.*;
 import nightgames.skills.damage.DamageType;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 
 public class BreastSmothering extends AbstractFacingStance {
     public BreastSmothering(Character top, Character bottom) {
@@ -98,7 +88,7 @@ public class BreastSmothering extends AbstractFacingStance {
     @Override
     public void decay(Combat c) {
         time++;
-        bottom.weaken(c, (int) top.modifyDamage(DamageType.temptation, bottom, 3));
+        bottom.weaken(c, (int) DamageType.temptation.modifyDamage(top, bottom, 3));
         top.emote(Emotion.dominant, 10);
     }
     

@@ -436,82 +436,6 @@ public abstract class Character extends Observable implements Cloneable {
         return state.isVulnerable();
     }
 
-    public double modifyDamage(DamageType type, Character other, double baseDamage) {
-        // so for each damage type, one level from the attacker should result in about 3% increased damage, while a point in defense should reduce damage by around 1.5% per level.
-        // this differential should be max capped to (2 * (100 + attacker's level * 1.5))%
-        // this differential should be min capped to (.5 * (100 + attacker's level * 1.5))%
-        double maxDamage = baseDamage * 2 * (1 + .015 * getLevel());
-        double minDamage = baseDamage * .5 * (1 + .015 * getLevel());
-        double multiplier = (1 + .03 * getOffensivePower(type) - .015 * other.getDefensivePower(type));
-        if (DebugFlags.isDebugOn(DebugFlags.DEBUG_DAMAGE)) {
-            System.out.println(baseDamage + " from " + getTrueName() + " has multiplier " + multiplier + " against " + other.getTrueName() + " ["+ getOffensivePower(type) +", " + other.getDefensivePower(type) + "].");
-        }
-        double damage = baseDamage * multiplier;
-        return Math.min(Math.max(minDamage, damage), maxDamage);
-    }
-
-    private double getDefensivePower(DamageType type){
-        switch (type) {
-            case arcane:
-                return get(Attribute.Arcane) + get(Attribute.Dark) / 2 + get(Attribute.Divinity) / 2 + get(Attribute.Ki) / 2;
-            case biological:
-                return get(Attribute.Animism) / 2 + get(Attribute.Bio) / 2 + get(Attribute.Medicine) / 2 + get(Attribute.Science) / 2 + get(Attribute.Cunning) / 2 + get(Attribute.Seduction) / 2;
-            case pleasure:
-                return get(Attribute.Seduction);
-            case temptation:
-                return (get(Attribute.Seduction) * 2 + get(Attribute.Submissive) * 2 + get(Attribute.Cunning)) / 2.0;
-            case technique:
-                return get(Attribute.Cunning);
-            case physical:
-                return (get(Attribute.Power) * 2 + get(Attribute.Cunning)) / 2.0;
-            case gadgets:
-                return get(Attribute.Cunning);
-            case drain:
-                return (get(Attribute.Dark) * 2 + get(Attribute.Arcane)) / 2.0;
-            case stance:
-                return (get(Attribute.Cunning) * 2 + get(Attribute.Power)) / 2.0;
-            case weaken:
-                return (get(Attribute.Dark) * 2 + get(Attribute.Divinity)) / 2.0;
-            case willpower:
-                return (get(Attribute.Dark) + get(Attribute.Fetish) + get(Attribute.Divinity) * 2 + getLevel()) / 2.0;
-            default:
-                return 0;
-        }
-    }
-
-    private double getOffensivePower(DamageType type){
-        switch (type) {
-            case biological:
-                return (get(Attribute.Animism) + get(Attribute.Bio) + get(Attribute.Medicine) + get(Attribute.Science)) / 2;
-            case gadgets:
-                double power = (get(Attribute.Science) * 2 + get(Attribute.Cunning)) / 3.0;
-                if (has(Trait.toymaster)) {
-                    power += 20;
-                }
-                return power;
-            case pleasure:
-                return get(Attribute.Seduction);
-            case arcane:
-                return get(Attribute.Arcane);
-            case temptation:
-                return (get(Attribute.Seduction) * 2 + get(Attribute.Cunning)) / 3.0;
-            case technique:
-                return get(Attribute.Cunning);
-            case physical:
-                return (get(Attribute.Power) * 2 + get(Attribute.Cunning) + get(Attribute.Ki) * 2) / 3.0;
-            case drain:
-                return (get(Attribute.Dark) * 2 + get(Attribute.Arcane)) / (has(Trait.gluttony) ? 1.5 : 2.0);
-            case stance:
-                return (get(Attribute.Cunning) * 2 + get(Attribute.Power)) / 3.0;
-            case weaken:
-                return (get(Attribute.Dark) * 2 + get(Attribute.Divinity) + get(Attribute.Ki)) / 3.0;
-            case willpower:
-                return (get(Attribute.Dark) + get(Attribute.Fetish) + get(Attribute.Divinity) * 2 + getLevel()) / 3.0;
-            default:
-                return 0;
-        }
-    }
-
     public void pain(Combat c, Character other, int i) {
         pain(c, other, i, true, true);
     }
@@ -2155,7 +2079,7 @@ public abstract class Character extends Observable implements Cloneable {
                                                     + selfOrgan.describe(this) + " through your connection.",
                                     this, opponent));
                     int m = Random.random(5) + 5;
-                    opponent.drain(c, this, (int) this.modifyDamage(DamageType.drain, opponent, m));
+                    opponent.drain(c, this, (int) DamageType.drain.modifyDamage(this, opponent, m));
                 }
                 body.tickHolding(c, opponent, selfOrgan, otherOrgan);
             }
@@ -2289,13 +2213,13 @@ public abstract class Character extends Observable implements Cloneable {
         Optional<PetCharacter> randomOpponentPetOptional = Random.pickRandom(c.getPetsFor(opponent));
         if (randomOpponentPetOptional.isPresent()) {
             PetCharacter pet = randomOpponentPetOptional.get();
-            boolean weakenBetter = modifyDamage(DamageType.physical, pet, 100) / pet.getStamina().remaining() 
+            boolean weakenBetter = DamageType.physical.modifyDamage(this, pet, 100) / pet.getStamina().remaining()
                             > 100 / pet.getStamina().remaining();
             if (canAct() && c.getStance().mobile(this) && pet.roll(this, c, 20)) {
                 if (weakenBetter) {
                     c.write(Formatter.format("{self:SUBJECT-ACTION:focus|focuses} {self:possessive} attentions on {other:name-do}, "
                                     + "thoroughly exhausting {other:direct-object} in a game of cat and mouse.", this, pet));
-                    pet.weaken(c, (int) modifyDamage(DamageType.physical, pet, Random.random(10, 20)));
+                    pet.weaken(c, (int) DamageType.physical.modifyDamage(this, pet, Random.random(10, 20)));
                 } else {
                     c.write(Formatter.format("{self:SUBJECT-ACTION:focus|focuses} {self:possessive} attentions on {other:name-do}, "
                                     + "harassing and toying with {other:possessive} body as much as {self:pronoun} can.", this, pet));

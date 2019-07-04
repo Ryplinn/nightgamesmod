@@ -78,8 +78,8 @@ public class Tickle extends Skill {
                                     getSelf(), target));
                 }
                 target.body.pleasure(getSelf(), getSelf().body.getRandom("hands"), target.body.getRandom("skin"),
-                                (int) getSelf().modifyDamage(type, target, 2 + Random.random(4)), bonus, c, false, this);
-                target.weaken(c, (int) getSelf().modifyDamage(type, target, weak + Random.random(10, 15)));
+                                (int) type.modifyDamage(getSelf(), target, 2 + Random.random(4)), bonus, c, false, this);
+                target.weaken(c, (int) type.modifyDamage(getSelf(), target, weak + Random.random(10, 15)));
             } else if (hastickler() && Random.random(2) == 1) {
                 type = DamageType.gadgets;
                 int bonus = 0;
@@ -104,7 +104,7 @@ public class Tickle extends Skill {
                     target.body.pleasure(getSelf(), getSelf().body.getRandom("hands"), target.body.getRandom("skin"),
                                     4 + Random.random(2), bonus, c, false, this);
                 }
-                target.weaken(c, (int) getSelf().modifyDamage(type, target, bonus + Random.random(5, 10)));
+                target.weaken(c, (int) type.modifyDamage(getSelf(), target, bonus + Random.random(5, 10)));
             } else {
                 writeOutput(c, Result.normal, target);
                 int bonus = 0;
@@ -116,9 +116,10 @@ public class Tickle extends Skill {
                 }
                 int m = (int) Math.round((2 + Random.random(3)) * (.25 + target.getExposure()));
                 int weak = (int) Math.round(bonus / 2 * (.25 + target.getExposure()));
-                target.body.pleasure(getSelf(), getSelf().body.getRandom("hands"), target.body.getRandom("skin"), (int) getSelf().modifyDamage(type, target, m),
+                target.body.pleasure(getSelf(), getSelf().body.getRandom("hands"), target.body.getRandom("skin"), (int) type
+                                                .modifyDamage(getSelf(), target, m),
                                 bonus, c, false, this);
-                target.weaken(c, (int) getSelf().modifyDamage(type, target, weak + Random.random(4, 7)));
+                target.weaken(c, (int) type.modifyDamage(getSelf(), target, weak + Random.random(4, 7)));
             }
         } else {
             writeOutput(c, Result.miss, target);

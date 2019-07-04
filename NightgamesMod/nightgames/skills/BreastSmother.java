@@ -73,7 +73,7 @@ public class BreastSmother extends Skill {
         }
 
         target.temptWithSkill(c, getSelf(), getSelf().body.getRandom("breasts"), (int) Math.round(n / 2), this);
-        target.weaken(c, (int) getSelf().modifyDamage(DamageType.physical, target, Random.random(5, 15)));
+        target.weaken(c, (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(5, 15)));
 
         target.loseWillpower(c, Math.min(5, target.getWillpower().max() * 10 / 100 ));     
 

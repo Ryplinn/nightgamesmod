@@ -75,7 +75,7 @@ public class Drain extends Skill {
             case 0:
                 getSelf().arouse(getSelf().getArousal().max() / 4, c);
             case 1:
-                target.drain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.drain, target, staminaStrength));
+                target.drain(c, getSelf(), (int) DamageType.drain.modifyDamage(getSelf(), target, staminaStrength));
                 break;
             case 2:
                 target.loseMojo(c, staminaStrength / 2);
@@ -87,7 +87,7 @@ public class Drain extends Skill {
                 break;
             case 4:
                 steal(c, target, Attribute.Power, strength);
-                target.drain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.drain, target, staminaStrength));
+                target.drain(c, getSelf(), (int) DamageType.drain.modifyDamage(getSelf(), target, staminaStrength));
                 break;
             case 5:
                 steal(c, target, Attribute.Seduction, strength);
@@ -97,7 +97,7 @@ public class Drain extends Skill {
                 steal(c, target, Attribute.Power, strength);
                 steal(c, target, Attribute.Seduction, strength);
                 steal(c, target, Attribute.Cunning, strength);
-                target.drain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.drain, target, staminaStrength));
+                target.drain(c, getSelf(), (int) DamageType.drain.modifyDamage(getSelf(), target, staminaStrength));
                 target.drainMojo(c, getSelf(), target.getMojo().get());
                 target.temptNoSource(c, getSelf(), 20, this);
                 break;

@@ -35,7 +35,7 @@ public class FairyKick extends SimpleEnemySkill {
             int m = 3 + getSelf().getLevel() + Random.random(5);
             c.write(getSelf(), Formatter.format("{self:SUBJECT-ACTION:fly|flies} at {other:direct-object} and kicks {other:direct-object} in the balls. "
                             + "{self:PRONOUN} doesn't have a lot of weight to put behind it, but it still hurts like hell.", getSelf(), target));
-            target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target, m));
+            target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, m));
             target.emote(Emotion.nervous, 10);
             target.emote(Emotion.angry, 10);
         } else {

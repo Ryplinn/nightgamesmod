@@ -140,7 +140,7 @@ public class Struggle extends Skill {
                                     + target.possessiveAdjective()
                                     + " knot through your asshole, and the rest of her dick soon follows.");
                     getSelf().removeStatus(Stsflag.knotted);
-                    target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target, 10));
+                    target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, 10));
                 } else {
                     c.write(getSelf(), "You manage to break away from " + target.getName() + ".");
                 }
@@ -152,7 +152,7 @@ public class Struggle extends Skill {
                                     target.nameDirectObject(), target.possessiveAdjective(),
                                     getSelf().possessiveAdjective()));
                     getSelf().removeStatus(Stsflag.knotted);
-                    target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target, 10));
+                    target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, 10));
                 } else {
                     c.write(getSelf(), String.format("%s pulls away from %s and"
                                     + " %s dick slides out of %s butt.",

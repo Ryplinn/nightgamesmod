@@ -51,7 +51,7 @@ public class MagicMissile extends Skill {
                 writeOutput(c, Result.normal, target);
                 target.emote(Emotion.angry, 5);
             }
-            target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.arcane, target, m));
+            target.pain(c, getSelf(), (int) DamageType.arcane.modifyDamage(getSelf(), target, m));
         } else {
             writeOutput(c, Result.miss, target);
             return false;

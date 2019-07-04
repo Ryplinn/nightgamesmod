@@ -1,7 +1,5 @@
 package nightgames.skills;
 
-import java.util.Optional;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
@@ -10,6 +8,8 @@ import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.pet.PetCharacter;
 import nightgames.skills.damage.DamageType;
+
+import java.util.Optional;
 
 public class FlyCatcher extends Skill {
     public FlyCatcher(Character self) {
@@ -43,7 +43,7 @@ public class FlyCatcher extends Skill {
         if (targetPet.isPresent()) {
             writeOutput(c, Result.normal, targetPet.get());
             double m = Random.random(30, 50);
-            targetPet.get().pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, targetPet.get(), m));
+            targetPet.get().pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), targetPet.get(), m));
             getSelf().weaken(c, getSelf().getStamina().max() / 4);
         return true;
         } else {

@@ -72,7 +72,7 @@ public class DemonicMod extends PartMod {
             if (bottomless) {
                 strength = strength * 3 / 2;
             }
-            strength = (int) self.modifyDamage(DamageType.drain, opponent, strength);
+            strength = (int) DamageType.drain.modifyDamage(self, opponent, strength);
             opponent.drain(c, self, strength);
             if (self.isPet()) {
                 Character master = ((PetCharacter) self).getSelf().owner();

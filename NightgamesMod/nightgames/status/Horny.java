@@ -1,9 +1,6 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
@@ -12,15 +9,17 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.skills.damage.DamageType;
 
+import java.util.Optional;
+
 public class Horny extends DurationStatus {
     private float magnitude;
     protected String source;
 
     public static Status getWithPsycologicalType(Character from, Character target, float magnitude, int duration, String source) {
-        return new Horny(target, (float) from.modifyDamage(DamageType.temptation, target, magnitude), duration, source);
+        return new Horny(target, (float) DamageType.temptation.modifyDamage(from, target, magnitude), duration, source);
     }
     public static Horny getWithBiologicalType(Character from, Character target, float magnitude, int duration, String source) {
-        return new Horny(target, (float) from.modifyDamage(DamageType.biological, target, magnitude), duration, source);
+        return new Horny(target, (float) DamageType.biological.modifyDamage(from, target, magnitude), duration, source);
     }
     
     public Horny(Character affected, float magnitude, int duration, String source) {

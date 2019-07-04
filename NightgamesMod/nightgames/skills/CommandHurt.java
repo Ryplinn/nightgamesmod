@@ -19,7 +19,7 @@ public class CommandHurt extends PlayerCommand {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        target.pain(c, getSelf(), (int) target.modifyDamage(DamageType.physical, target, Random.random(30, 50)));
+        target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(target, target, Random.random(30, 50)));
         c.write(getSelf(), deal(c, 0, Result.normal, target));
         return true;
     }

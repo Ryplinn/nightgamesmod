@@ -27,7 +27,7 @@ public class ToyAttack extends ArmSkill {
     public boolean resolve(Combat c, Arm arm, Character owner, Character target) {
 
         int m = 5 + Random.random(10);
-        m += (int) owner.modifyDamage(DamageType.gadgets, target, 2);
+        m += (int) DamageType.gadgets.modifyDamage(owner, target, 2);
         if (c.getStance()
              .penetrated(c, target) && target.hasDick()) {
             c.write(PetCharacter.DUMMY,

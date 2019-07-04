@@ -78,7 +78,7 @@ public class Jumped extends FemdomSexStance {
     @Override
     public void decay(Combat c) {
         time++;
-        top.weaken(c, (int) bottom.modifyDamage(DamageType.stance, top, 2));
+        top.weaken(c, (int) DamageType.stance.modifyDamage(bottom, top, 2));
     }
 
     @Override

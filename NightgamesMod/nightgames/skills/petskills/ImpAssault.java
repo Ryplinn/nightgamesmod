@@ -42,12 +42,12 @@ public class ImpAssault extends SimpleEnemySkill {
                 c.write(getSelf(), Formatter.format("While {other:name-possessive} attention is focused on {self:possessive} master, "
                                 + "{self:subject} creeps close to {other:direct-object} and uppercuts {other:direct-object} in the balls.", 
                                 getSelf(), target));
-                target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target, m));
+                target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, m));
                 target.emote(Emotion.nervous, 10);
                 target.emote(Emotion.angry, 10);
             } else {
                 c.write(getSelf(), Formatter.format("{self:SUBJECT} runs up to {other:name-do} and punches {other:direct-object} in the gut.", getSelf(), target));
-                target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target, m));
+                target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, m));
                 target.emote(Emotion.nervous, 10);
                 target.emote(Emotion.angry, 10);
             }

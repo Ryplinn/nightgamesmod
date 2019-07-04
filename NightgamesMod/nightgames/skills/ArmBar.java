@@ -34,7 +34,7 @@ public class ArmBar extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         if (target.roll(getSelf(), c, accuracy(c, target))) {
-            int m = (int) getSelf().modifyDamage(DamageType.physical, target, Random.random(6, 10));
+            int m = (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(6, 10));
             writeOutput(c, m, Result.normal, target);
             target.pain(c, getSelf(), m);
             target.add(c, new AttributeBuff(target, Attribute.Power, -4, 5));

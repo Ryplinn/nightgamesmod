@@ -44,7 +44,7 @@ public class UseOnahole extends Skill {
             } else {
                 writeOutput(c, Result.normal, target);
             }
-            m = (int)getSelf().modifyDamage(DamageType.gadgets, target, m);
+            m = (int) DamageType.gadgets.modifyDamage(getSelf(), target, m);
             target.body.pleasure(getSelf(), null, target.body.getRandomCock(), m, c, this);
         } else {
             writeOutput(c, Result.miss, target);

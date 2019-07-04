@@ -42,7 +42,7 @@ public class HipThrow extends Skill {
     public boolean resolve(Combat c, Character target) {
         if (getSelf().checkVsDc(Attribute.Power, target.knockdownDC() - target.get(Attribute.Cunning) / 2)) {
             writeOutput(c, Result.normal, target);
-            target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target, Random.random(10, 16)));
+            target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(10, 16)));
             target.add(c, new Falling(target));
             target.emote(Emotion.angry, 5);
         } else {

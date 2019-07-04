@@ -59,12 +59,12 @@ public class Slap extends Skill {
             } else if (getSelf().get(Attribute.Animism) >= 8) {
                 writeOutput(c, Result.special, target);
                 if (getSelf().has(Trait.pimphand)) {
-                    target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target,
+                    target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target,
                                     Random.random(35, 50) * (25 + getSelf().getArousal().percent()) / 100));
                     target.emote(Emotion.nervous, 40);
                     target.emote(Emotion.angry, 30);
                 } else {
-                    target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target,
+                    target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target,
                                     Random.random(25, 45) * (25 + getSelf().getArousal().percent()) / 100));
                     target.emote(Emotion.nervous, 25);
                     target.emote(Emotion.angry, 30);
@@ -72,12 +72,12 @@ public class Slap extends Skill {
             } else {
                 writeOutput(c, Result.normal, target);
                 if (getSelf().has(Trait.pimphand)) {
-                    target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target, Random
+                    target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random
                                     .random(7, 15)));
                     target.emote(Emotion.nervous, 20);
                     target.emote(Emotion.angry, 30);
                 } else {
-                    target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target, Random
+                    target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random
                                     .random(5, 10)));
                     target.emote(Emotion.nervous, 10);
                     target.emote(Emotion.angry, 30);

@@ -54,7 +54,7 @@ public class Flick extends Skill {
                     m += 2 + Random.random(target.get(Attribute.Perception) / 2);
                     mojoLost = 40;
                 }
-                target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target, m));
+                target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, m));
                 target.loseMojo(c, mojoLost);
                 getSelf().emote(Emotion.dominant, 10);
                 target.emote(Emotion.angry, 15);

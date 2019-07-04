@@ -37,21 +37,21 @@ public class Wait extends Skill {
         if (channel(c)) {
             writeOutput(c, Result.special, target);
             if (focused(c)) {
-                getSelf().heal(c, (int) getSelf().modifyDamage(DamageType.physical, NPC.noneCharacter(), Random
+                getSelf().heal(c, (int) DamageType.physical.modifyDamage(getSelf(), NPC.noneCharacter(), Random
                                 .random(8, 16)));
                 getSelf().calm(c, Random.random(8, 14));
             } else {
-                getSelf().heal(c, (int) getSelf().modifyDamage(DamageType.physical, NPC.noneCharacter(), Random
+                getSelf().heal(c, (int) DamageType.physical.modifyDamage(getSelf(), NPC.noneCharacter(), Random
                                 .random(4, 8)));
             }
         } else if (focused(c)) {
             writeOutput(c, Result.strong, target);
-            getSelf().heal(c, (int) getSelf().modifyDamage(DamageType.physical, NPC.noneCharacter(), Random
+            getSelf().heal(c, (int) DamageType.physical.modifyDamage(getSelf(), NPC.noneCharacter(), Random
                             .random(8, 16)));
             getSelf().calm(c, Random.random(8, 14));
         } else {
             writeOutput(c, Result.normal, target);
-            getSelf().heal(c, (int) getSelf().modifyDamage(DamageType.physical, NPC.noneCharacter(), Random
+            getSelf().heal(c, (int) DamageType.physical.modifyDamage(getSelf(), NPC.noneCharacter(), Random
                             .random(4, 8)));
         }
         return true;

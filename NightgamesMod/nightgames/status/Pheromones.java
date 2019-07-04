@@ -32,7 +32,7 @@ public class Pheromones extends Horny {
     }
 
     public static Pheromones getWith(Character from, Character target, float magnitude, int duration, String source) {
-        return new Pheromones(target, from, (float) from.modifyDamage(DamageType.biological, target, magnitude), duration, source);
+        return new Pheromones(target, from, (float) DamageType.biological.modifyDamage(from, target, magnitude), duration, source);
     }
 
     private int stacks;

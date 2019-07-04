@@ -138,7 +138,7 @@ public class Engulfed extends Position {
     @Override
     public void decay(Combat c) {
         time++;
-        bottom.weaken(c, (int) top.modifyDamage(DamageType.stance, bottom, 5));
+        bottom.weaken(c, (int) DamageType.stance.modifyDamage(top, bottom, 5));
         top.emote(Emotion.dominant, 10);
     }
 

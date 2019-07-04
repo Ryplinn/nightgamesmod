@@ -420,7 +420,7 @@ public abstract class Position implements Cloneable {
     public void struggle(Combat c, Character struggler) {
         time += 2;
         Character partner = getPartner(c, struggler);
-        partner.weaken(c, (int) struggler.modifyDamage(DamageType.stance, partner, Random.random(6, 11)));
+        partner.weaken(c, (int) DamageType.stance.modifyDamage(struggler, partner, Random.random(6, 11)));
     }
 
     public void escape(Combat c, Character escapee) {

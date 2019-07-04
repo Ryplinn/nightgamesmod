@@ -774,7 +774,7 @@ public class Player extends Character {
                 if (c.getStance()
                      .dom(this)) {
                     c.write(this, "You outmanuever " + target.getName() + " and you exhausted her from the struggle.");
-                    target.weaken(c, (int) this.modifyDamage(DamageType.stance, target, 15));
+                    target.weaken(c, (int) DamageType.stance.modifyDamage(Player.this, target, 15));
                 } else {
                     c.write(this, target.getName()
                                     + " loses her balance while grappling with you. Before she can fall to the floor, you catch her from behind and hold her up.");
