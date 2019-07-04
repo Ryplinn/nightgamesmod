@@ -510,9 +510,11 @@ public abstract class Character extends Observable implements Cloneable {
             }
         }
         if (other != null && other.has(Trait.sadist) && !is(Stsflag.masochism)) {
-            c.write("<br/>"+ Formatter.capitalizeFirstLetter(
-                            String.format("%s blows hits all the right spots and %s to some masochistic tendencies.", 
-                                            other.nameOrPossessivePronoun(), subjectAction("awaken"))));
+            if (c != null) {
+                c.write("<br/>"+ Formatter.capitalizeFirstLetter(
+                                String.format("%s blows hits all the right spots and %s to some masochistic tendencies.",
+                                                other.nameOrPossessivePronoun(), subjectAction("awaken"))));
+            }
             add(c, new Masochistic(this));
         }
         // if you are a masochist, arouse by pain up to the threshold.
@@ -521,8 +523,10 @@ public abstract class Character extends Observable implements Cloneable {
         }
         if (other != null && other.has(Trait.disablingblows) && Random.random(5) == 0) {
             int mag = Random.random(3) + 1;
-            c.write(other, Formatter.format("Something about the way {other:subject-action:hit|hits}"
-                            + " {self:name-do} seems to strip away {self:possessive} strength.", this, other));
+            if (c != null) {
+                c.write(other, Formatter.format("Something about the way {other:subject-action:hit|hits}"
+                                + " {self:name-do} seems to strip away {self:possessive} strength.", this, other));
+            }
             add(c, new AttributeBuff(this, Attribute.Power, -mag, 10));
         }
         stamina.reduce(pain);
