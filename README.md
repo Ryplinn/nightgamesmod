@@ -39,7 +39,8 @@ This stable branch is feature-frozen at v2.5.1.2 of nergantre's master branch. C
 
 1. **PRETTY GOOD** Fix everything I broke in the previous steps.
 
-1. Migrate combat to an event-based system, or at least some sort of system. Will enable the next step.
+1. Migrate combat to an event-based system, or at least some sort of system.
+    1. Specify and unify damage system. Things are pretty ad-hoc right now.
     1. Add hooks to combat phases, movement phases, taking and receiving damage, daytime activities, etc. that trait and status specifications can use to apply their effects.
     1. Migrate existing traits and statuses to use this system.
 
