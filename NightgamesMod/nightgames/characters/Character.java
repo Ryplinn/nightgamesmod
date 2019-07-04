@@ -2017,18 +2017,18 @@ public abstract class Character extends Observable implements Cloneable {
         loseWillpower(c, i, 0, false, "");
     }
 
-    public void loseWillpower(Combat c, int i, boolean primary) {
-        loseWillpower(c, i, 0, primary, "");
+    public void loseWillpower(Combat c, int i, boolean fromOrgasm) {
+        loseWillpower(c, i, 0, fromOrgasm, "");
     }
 
-    public void loseWillpower(Combat c, int i, int extra, boolean primary, String source) {
+    public void loseWillpower(Combat c, int i, int extra, boolean fromOrgasm, String source) {
         int amt = i + extra;
         String reduced = "";
-        if (has(Trait.strongwilled) && primary) {
+        if (has(Trait.strongwilled) && fromOrgasm) {
             amt = amt * 2 / 3 + 1;
             reduced = " (Strong-willed)";
         }
-        if (is(Stsflag.feral) && primary) {
+        if (is(Stsflag.feral) && fromOrgasm) {
             amt = amt * 1 / 2;
             reduced = " (Feral)";
         }
