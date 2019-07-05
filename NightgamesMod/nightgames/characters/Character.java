@@ -1977,7 +1977,7 @@ public abstract class Character extends Observable implements Cloneable {
                 }
                 int gained;
                 if (Flag.checkFlag(Flag.hardmode)) {
-                    drainStamina(c, opponent, 30 + Random.random(50));
+                    drain(c, opponent, 30 + Random.random(50), MeterType.STAMINA);
                     gained = opponent.getXPReqToNextLevel();
                 } else {
                     gained = opponent.getXPReqToNextLevel();
@@ -2068,7 +2068,7 @@ public abstract class Character extends Observable implements Cloneable {
                                                     + selfOrgan.describe(this) + " through your connection.",
                                     this, opponent));
                     int m = Random.random(5) + 5;
-                    opponent.drainStamina(c, this, (int) DamageType.drain.modifyDamage(this, opponent, m));
+                    opponent.drain(c, this, (int) DamageType.drain.modifyDamage(this, opponent, m), MeterType.STAMINA);
                 }
                 body.tickHolding(c, opponent, selfOrgan, otherOrgan);
             }
@@ -3459,7 +3459,7 @@ public abstract class Character extends Observable implements Cloneable {
     public void drain(Combat c, Character drainer, int i, MeterType drainType, MeterType restoreType, float efficiency) {
         int drained = i;
         int bonus = 0;
-        int overkill = 0;
+        int overkill;
         Meter targetMeter = drainType.getMeter(this);
         Meter drainerMeter = restoreType.getMeter(drainer);
 
@@ -3490,24 +3490,9 @@ public abstract class Character extends Observable implements Cloneable {
         drain(c, drainer, i, drainType, restoreType, 1.0f);
     }
 
-    public void drainWillpower(Combat c, Character drainer, int i) {
-        drain(c, drainer, i, MeterType.WILLPOWER, MeterType.WILLPOWER);
-    }
-
-    public void drainWillpowerAsMojo(Combat c, Character drainer, int i, float efficiency) {
-        drain(c, drainer, i, MeterType.WILLPOWER, MeterType.MOJO, efficiency);
-    }
-
-    public void drainStaminaAsMojo(Combat c, Character drainer, int i, float efficiency) {
-        drain(c, drainer, i, MeterType.STAMINA, MeterType.MOJO, efficiency);
-    }
-
-    public void drainMojo(Combat c, Character drainer, int i) {
-        drain(c, drainer, i, MeterType.MOJO, MeterType.MOJO);
-    }
-
-    public void drainStamina(Combat c, Character drainer, int i) {
-        drain(c, drainer, i, MeterType.STAMINA, MeterType.STAMINA);
+    public void drain(Combat c, Character drainer, int i, MeterType drainType) {
+        // If the restore type isn't specified, it's the same as the drain type.
+        drain(c, drainer, i, drainType, drainType);
     }
 
     public void update() {

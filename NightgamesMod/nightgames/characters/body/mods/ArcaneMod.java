@@ -51,7 +51,7 @@ public class ArcaneMod extends PartMod {
                 strength = 5 + self.get(Attribute.Arcane) / 6;
             }
             c.write(self, message);
-            opponent.drainMojo(c, self, strength);
+            opponent.drain(c, self, strength, Character.MeterType.MOJO);
             if (self.isPet()) {
                 Character master = ((PetCharacter) self).getSelf().owner();
                 c.write(self, Formatter.format("The energy seems to flow through {self:direct-object} and into {self:possessive} {other:master}.", self, master));

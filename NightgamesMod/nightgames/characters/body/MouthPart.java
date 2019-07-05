@@ -123,7 +123,8 @@ public class MouthPart extends GenericBodyPart {
                                                 + target.describe(opponent) + " into your mouth.");
             }
             bonus += Random.random(3) + 2;
-            opponent.drainWillpowerAsMojo(c, self, (int) DamageType.drain.modifyDamage(self, opponent, 2), 2);
+            opponent.drain(c, self, (int) DamageType.drain.modifyDamage(self, opponent, 2), Character.MeterType.WILLPOWER, Character.MeterType.MOJO,
+                            (float) 2);
         }
         return bonus;
     }

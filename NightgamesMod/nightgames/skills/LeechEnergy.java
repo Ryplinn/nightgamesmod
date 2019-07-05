@@ -1,9 +1,5 @@
 package nightgames.skills;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.body.BodyPart;
@@ -12,6 +8,10 @@ import nightgames.combat.Result;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.nskills.tags.SkillTag;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class LeechEnergy extends Skill {
     String lastPart;
@@ -109,7 +109,8 @@ public class LeechEnergy extends Skill {
             } else {
                 c.write(getSelf(), "Wtf happened");
             }
-            target.drainStaminaAsMojo(c, getSelf(), 10 + Random.random(20), 1.5f);
+            target.drain(c, getSelf(), 10 + Random.random(20), Character.MeterType.STAMINA, Character.MeterType.MOJO,
+                            1.5f);
             target.body.pleasure(getSelf(), selfPart, part, 10 + Random.random(20), c, this);
         } else {
             writeOutput(c, Result.miss, target);

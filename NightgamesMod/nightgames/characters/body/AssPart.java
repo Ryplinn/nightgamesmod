@@ -104,13 +104,13 @@ public class AssPart extends GenericBodyPart {
                 c.write(self, Formatter.format("{self:name-possessive} ass seems to <i>inhale</i>, drawing"
                                 + " great gouts of {other:name-possessive} strength from {other:possessive}"
                                 + " body.", self, opponent));
-                opponent.drainStamina(c, self, self.getLevel());
+                opponent.drain(c, self, self.getLevel(), Character.MeterType.STAMINA);
                 Drained.drain(c, self, opponent, Attribute.Power, 3, 10, true);
             } else {
                 c.write(self, Formatter.format("The feel of {self:name-possessive} ass around"
                                 + " {other:name-possessive} %s drains"
                                 + " {other:direct-object} of {other:possessive} energy.", self, opponent, target.describe(opponent)));
-                opponent.drainStamina(c, self, self.getLevel()/2);
+                opponent.drain(c, self, self.getLevel()/2, Character.MeterType.STAMINA);
             }
         }
         return bonus;

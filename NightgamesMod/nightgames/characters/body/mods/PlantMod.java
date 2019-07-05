@@ -32,7 +32,7 @@ public class PlantMod extends PartMod {
                             "The small rough fibery filaments inside {self:name-possessive} flower %s wrap around {other:name-possessive} cock. "
                                             + "A profound exhaustion settles on {other:direct-object}, as {other:subject-action:feel|feels} {self:name-possessive} insidious flower leeching {other:possessive} strength.",
                             self, opponent, partType));
-            opponent.drainStaminaAsMojo(c, self, 20, 1.25f);
+            opponent.drain(c, self, 20, Character.MeterType.STAMINA, Character.MeterType.MOJO, 1.25f);
             opponent.loseWillpower(c, 5);
         }
     }

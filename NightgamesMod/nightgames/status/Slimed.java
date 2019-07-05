@@ -95,7 +95,7 @@ public class Slimed extends DurationStatus {
         }
         if (stacks >= 0 && origin.has(Trait.ParasiticBond)) {
             Formatter.writeFormattedIfCombat(c, "While not connected directly to {other:direct-object}, {other:name-possessive} slime seems to be eroding {self:name-possessive} stamina while energizing {other:direct-object}", affected, origin);
-            affected.drainStaminaAsMojo(c, origin, 2 + stacks / 4, 1.0f);
+            affected.drain(c, origin, 2 + stacks / 4, Character.MeterType.STAMINA, Character.MeterType.MOJO, 1.0f);
         }
     }
 

@@ -185,8 +185,8 @@ public class TailSuck extends Skill {
         Attribute toDrain = Random.pickRandom(target.att.entrySet().stream().filter(e -> e.getValue() != 0)
                         .map(e -> e.getKey()).toArray(Attribute[]::new)).get();
         Drained.drain(c, getSelf(), target, toDrain, power(), 20, true);
-        target.drainStamina(c, getSelf(), (int) DamageType.drain.modifyDamage(getSelf(), target, 10));
-        target.drainMojo(c, getSelf(), 1 + Random.random(power() * 3));
+        target.drain(c, getSelf(), (int) DamageType.drain.modifyDamage(getSelf(), target, 10), Character.MeterType.STAMINA);
+        target.drain(c, getSelf(), 1 + Random.random(power() * 3), Character.MeterType.MOJO);
         target.emote(Emotion.desperate, 5);
         getSelf().emote(Emotion.confident, 5);
     }

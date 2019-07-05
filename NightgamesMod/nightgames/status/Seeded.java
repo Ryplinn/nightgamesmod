@@ -1,9 +1,6 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
@@ -13,6 +10,8 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.gui.GUI;
+
+import java.util.Optional;
 
 public class Seeded extends Status implements InsertedStatus {
     private String target;
@@ -126,7 +125,7 @@ public class Seeded extends Status implements InsertedStatus {
                 GUI.gui.message(c, affected,
                                 Formatter.format("The thick tuber-like roots inside {self:direct-object} constantly shift and scrape against {self:possessive} %s, leaving {self:direct-object} both horny and lenthargic at the same time.",
                                                 affected, other, hole.describe(affected)));
-            affected.drainStaminaAsMojo(c, other, Random.random(5, 11), 1.0f);
+            affected.drain(c, other, Random.random(5, 11), Character.MeterType.STAMINA, Character.MeterType.MOJO, 1.0f);
             affected.body.pleasure(other, seed, hole, Random.random(10, 20) + other.get(Attribute.Bio) / 2, c);
         } else if (time >= 1) {
             if (stage < 1) {
@@ -140,7 +139,7 @@ public class Seeded extends Status implements InsertedStatus {
                 GUI.gui.message(c, affected,
                                 Formatter.format("{self:SUBJECT-ACTION:feel|feels} slow as the thin threadlike roots latch onto your inner walls and seem to leech your vigor.",
                                                 affected, other, hole.describe(affected)));
-            affected.drainStaminaAsMojo(c, other, Random.random(2, 6), 1.0f);
+            affected.drain(c, other, Random.random(2, 6), Character.MeterType.STAMINA, Character.MeterType.MOJO, 1.0f);
         } else {
             if (!c.shouldAutoresolve())
                 GUI.gui.message(c, affected, Formatter.format("The seed sits uncomfortably in {self:possessive} %s.",

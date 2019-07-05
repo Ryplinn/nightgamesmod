@@ -149,19 +149,19 @@ public class FaceSitting extends AbstractBehindStance {
                             + " {other:possessive} very spirit drained through %s connection.",
                             top, bottom, c.bothPossessive(bottom)));
             int m = Random.random(5) + 5;
-            bottom.drainStamina(c, top, (int) DamageType.drain.modifyDamage(top, bottom, m));
+            bottom.drain(c, top, (int) DamageType.drain.modifyDamage(top, bottom, m), Character.MeterType.STAMINA);
         }
         if (top.has(Trait.drainingass)) {
             if (Random.random(3) == 0) {
                 c.write(top, Formatter.format("{self:name-possessive} ass seems to <i>inhale</i>, drawing"
                                 + " great gouts of {other:name-possessive} strength from {other:possessive}"
                                 + " body.", top, bottom));
-                bottom.drainStamina(c, top, top.getLevel());
+                bottom.drain(c, top, top.getLevel(), Character.MeterType.STAMINA);
                 Drained.drain(c, top, bottom, Attribute.Power, 3, 10, true);
             } else {
                 c.write(top, Formatter.format("{other:SUBJECT-ACTION:feel} both {other:possessive} breath and energy being stolen by {self:NAME-POSSESSIVE} ass overlapping {other:POSSESSIVE} face."
                                 + " .", top, bottom));
-                bottom.drainStamina(c, top, top.getLevel()/2);
+                bottom.drain(c, top, top.getLevel()/2, Character.MeterType.STAMINA);
             }
         }
     }

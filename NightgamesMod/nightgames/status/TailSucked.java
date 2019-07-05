@@ -61,8 +61,8 @@ public class TailSucked extends Status implements InsertedStatus {
         Attribute toDrain = Random.pickRandom(affected.att.entrySet().stream().filter(e -> e.getValue() != 0)
                         .map(e -> e.getKey()).toArray(Attribute[]::new)).get();
         Drained.drain(c, sucker, affected, toDrain, power, 20, true);
-        affected.drainStamina(c, sucker, (int) DamageType.drain.modifyDamage(sucker, affected, 10));
-        affected.drainMojo(c, sucker, 1 + Random.random(power * 3));
+        affected.drain(c, sucker, (int) DamageType.drain.modifyDamage(sucker, affected, 10), Character.MeterType.STAMINA);
+        affected.drain(c, sucker, 1 + Random.random(power * 3), Character.MeterType.MOJO);
     }
 
     @Override

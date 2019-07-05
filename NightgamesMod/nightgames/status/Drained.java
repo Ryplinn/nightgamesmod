@@ -44,7 +44,7 @@ public class Drained extends AttributeBuff {
                 }
             }
             if (drainer.has(Trait.RaptorMentis)) {
-                drained.drainMojo(c, drainer, Math.max(5, realValue));
+                drained.drain(c, drainer, Math.max(5, realValue), Character.MeterType.MOJO);
             }
         } else {
             Formatter.writeIfCombat(c, drainer, Formatter.format("{self:subject-action:try} to drain {other:name-possessive} %s but {self:action:find} that there's nothing left to take.",

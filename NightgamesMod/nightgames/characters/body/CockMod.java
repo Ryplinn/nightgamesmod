@@ -113,9 +113,9 @@ public class CockMod extends PartMod {
         		if (self.isPet()) {
 	                Character master = ((PetCharacter) self).getSelf().owner();
 	                c.write(self, Formatter.format("The stolen strength seems to flow through to {self:possessive} {other:master} through {self:possessive} infernal connection.", self, master));
-	                opponent.drainWillpower(c, master, strength);
-	            } else {
-	                opponent.drainWillpower(c, self, strength);
+                    opponent.drain(c, master, strength, Character.MeterType.WILLPOWER);
+                } else {
+                    opponent.drain(c, self, strength, Character.MeterType.WILLPOWER);
                 }
             }
             c.write(self, message);
@@ -244,7 +244,8 @@ public class CockMod extends PartMod {
                     Drained.drain(c, self, opponent, Attribute.Power, attDamage, 20, true);
                     Drained.drain(c, self, opponent, Attribute.Cunning, attDamage, 20, true);
                     Drained.drain(c, self, opponent, Attribute.Seduction, attDamage, 20, true);
-                    opponent.drainWillpower(c, self, (int) DamageType.drain.modifyDamage(self, opponent, willDamage));
+                    opponent.drain(c, self,
+                                    (int) DamageType.drain.modifyDamage(self, opponent, willDamage), Character.MeterType.WILLPOWER);
                 }
             }
         }
