@@ -41,7 +41,7 @@ public class Tickle extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         DamageType type = DamageType.technique;
-        if (getSelf().has(Trait.ticklemonster) || target.roll(getSelf(), c, accuracy(c, target))) {
+        if (getSelf().has(Trait.ticklemonster) || target.roll(getSelf(), accuracy(c, target))) {
             if (target.crotchAvailable() && c.getStance().reachBottom(getSelf()) && !c.getStance().havingSex(c)) {
                 int bonus = 0;
                 int weak = 0;

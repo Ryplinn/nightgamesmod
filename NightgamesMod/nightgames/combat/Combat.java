@@ -95,8 +95,8 @@ public class Combat extends Observable implements Cloneable {
         this.p1 = p1;
         combatantData = new HashMap<>();
         this.p2 = p2;
-        p1.startBattle(this);
-        p2.startBattle(this);
+        p1.startBattle();
+        p2.startBattle();
         // If we're reaching this deep into another object to get some data, it's probably in the wrong place.
         // TODO: Move ArmManager access to somewhere else
         getCombatantData(p1).setManager(Match.getMatch().getMatchData().getDataFor(p1).getArmManager());
@@ -973,7 +973,7 @@ public class Combat extends Observable implements Cloneable {
 
     private boolean checkCounter(Character attacker, Character target, Skill skill) {
         return !target.has(Trait.submissive) && getStance().mobile(target)
-                        && target.counterChance(this, attacker, skill) > Random.random(100);
+                        && target.counterChance(attacker) > Random.random(100);
     }
 
     private boolean resolveCrossCounter(Skill skill, Character target, int chance) {
@@ -1148,7 +1148,7 @@ public class Combat extends Observable implements Cloneable {
     public String debugMessage() {
         return "Stance: " + getStance().getClass()
                                        .getName()
-                        + "\np1: " + p1.debugMessage(this, getStance()) + "\np2: " + p2.debugMessage(this, getStance());
+                        + "\np1: " + p1.debugMessage(this) + "\np2: " + p2.debugMessage(this);
     }
 
     public void checkStamina(Character p) {
@@ -1641,6 +1641,10 @@ public class Combat extends Observable implements Cloneable {
 
     public List<PetCharacter> getOtherCombatants() {
         return otherCombatants;
+    }
+
+    public List<String> getOtherCombatantTypes() {
+        return otherCombatants.stream().map(PetCharacter::getType).collect(Collectors.toList());
     }
 
     public boolean isEnded() {

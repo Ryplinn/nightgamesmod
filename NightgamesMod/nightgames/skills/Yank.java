@@ -43,7 +43,7 @@ public class Yank extends Skill {
             acc += 20;
             removeChance /= 2;
         }
-        if (target.roll(getSelf(), c, acc)) {
+        if (target.roll(getSelf(), acc)) {
             c.write(getSelf(), Formatter.format("{self:SUBJECT-ACTION:yank|yanks} {other:name-do}"
                             + " forward by the toy still connecting them, and "
                             + " {other:pronoun-action} stumbles and falls.", getSelf(), target));

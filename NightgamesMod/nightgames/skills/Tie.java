@@ -36,7 +36,7 @@ public class Tie extends Skill {
             target.add(c, new Bound(target, (40 + 3 * Math.sqrt(getSelf().get(Attribute.Cunning))), "handcuffs"));
         } else {
             getSelf().consume(Item.ZipTie, 1);
-            if (target.roll(getSelf(), c, accuracy(c, target))) {
+            if (target.roll(getSelf(), accuracy(c, target))) {
                 writeOutput(c, Result.normal, target);
                 target.add(c, new Bound(target, (25 + 3 * Math.sqrt(getSelf().get(Attribute.Cunning))), "ziptie"));
             } else {

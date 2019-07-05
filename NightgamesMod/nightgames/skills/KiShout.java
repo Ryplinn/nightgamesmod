@@ -47,7 +47,7 @@ public class KiShout extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), c, accuracy(c, target))) {
+        if (target.roll(getSelf(), accuracy(c, target))) {
             writeOutput(c, Result.normal, target);
             target.pain(c, getSelf(), (int) (10 + 3 * Math.sqrt(getSelf().get(Attribute.Ki))));
             target.add(c, new Falling(target));

@@ -56,7 +56,7 @@ public class LaunchHarpoon extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        if (!target.canAct() || c.getStance().sub(target) || target.roll(getSelf(), c, accuracy(c, target))) {
+        if (!target.canAct() || c.getStance().sub(target) || target.roll(getSelf(), accuracy(c, target))) {
             String aim;
             if (!target.canAct()) {
                 aim = "With {other:subject} unable to do anything to evade it, when"

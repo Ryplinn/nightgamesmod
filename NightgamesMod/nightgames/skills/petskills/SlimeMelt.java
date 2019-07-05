@@ -1,8 +1,5 @@
 package nightgames.skills.petskills;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
@@ -13,6 +10,9 @@ import nightgames.items.clothing.ClothingSlot;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SlimeMelt extends SimpleEnemySkill {
     public SlimeMelt(Character self) {
@@ -45,7 +45,7 @@ public class SlimeMelt extends SimpleEnemySkill {
             strippable.add(ClothingSlot.top);
         }
         ClothingSlot targetSlot = Random.pickRandom(strippable).get();
-        if (target.roll(getSelf(), c, accuracy(c, target))) {
+        if (target.roll(getSelf(), accuracy(c, target))) {
             // should never be null here, since otherwise we can't use the skill          
             Clothing stripped = target.strip(targetSlot, c);
             c.write(getSelf(), Formatter.format("{self:SUBJECT} pounces on {other:name-do} playfully, "

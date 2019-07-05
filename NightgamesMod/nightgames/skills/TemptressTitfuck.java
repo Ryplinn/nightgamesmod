@@ -61,7 +61,7 @@ public class TemptressTitfuck extends Paizuri {
             fetishChance += 5;
         }
 
-        if (target.roll(getSelf(), c, accuracy(c, target))) {
+        if (target.roll(getSelf(), accuracy(c, target))) {
             if (!target.body.getRandomCock().isReady(target)) {
                 m -= 7;
                 target.body.pleasure(getSelf(), getSelf().body.getRandom("breasts"), target.body.getRandomCock(), m, c, this);

@@ -37,7 +37,7 @@ public class UseOnahole extends Skill {
     public boolean resolve(Combat c, Character target) {
         int m = 5 + Random.random(10);
 
-        if (target.roll(getSelf(), c, accuracy(c, target))) {
+        if (target.roll(getSelf(), accuracy(c, target))) {
             if (getSelf().has(Item.Onahole2)) {
                 m += 5;
                 writeOutput(c, Result.upgrade, target);

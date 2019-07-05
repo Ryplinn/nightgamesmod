@@ -40,7 +40,7 @@ public class SlimeCloneParasite extends SimpleEnemySkill {
     private final static List<String> PARASITEABLE_PARTS = Arrays.asList("cock", "pussy", "ass", "mouth");
     @Override
     public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), c, accuracy(c, target))) {
+        if (target.roll(getSelf(), accuracy(c, target))) {
             List<BodyPart> possibleTargets = new ArrayList<>();
             for (String type : PARASITEABLE_PARTS) {
                 if (!target.body.getRandom(type).moddedPartCountsAs(target, ParasitedMod.INSTANCE)) {

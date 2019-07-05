@@ -48,7 +48,7 @@ public class CockGrowth extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        Result res = target.roll(getSelf(), c, accuracy(c, target)) ? Result.normal : Result.miss;
+        Result res = target.roll(getSelf(), accuracy(c, target)) ? Result.normal : Result.miss;
         if (res == Result.normal && !target.hasDick()) {
             res = Result.special;
         }

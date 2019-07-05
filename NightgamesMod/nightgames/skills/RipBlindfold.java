@@ -55,7 +55,7 @@ public class RipBlindfold extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        boolean hit = target.roll(getSelf(), c, accuracy(c, target));
+        boolean hit = target.roll(getSelf(), accuracy(c, target));
 
         if (hit) {
             c.write(getSelf(),

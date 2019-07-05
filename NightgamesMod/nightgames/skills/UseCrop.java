@@ -45,7 +45,7 @@ public class UseCrop extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), c, accuracy(c, target))) {
+        if (target.roll(getSelf(), accuracy(c, target))) {
             double m = Random.random(12, 18);
             if (target.crotchAvailable() && c.getStance().reachBottom(getSelf())) {
                 if (getSelf().has(Item.Crop2) && Random.random(10) > 7 && !target.has(Trait.brassballs)) {

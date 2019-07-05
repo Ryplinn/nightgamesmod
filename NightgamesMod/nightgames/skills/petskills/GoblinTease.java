@@ -27,7 +27,7 @@ public class GoblinTease extends SimpleEnemySkill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), c, accuracy(c, target))) {
+        if (target.roll(getSelf(), accuracy(c, target))) {
             int m = (int) (Random.random(10, 16) + Math.sqrt(getSelf().getLevel()) / 2);
             if (target.hasDick() && target.clothingFuckable(target.body.getRandom("cock")) && !c.getStance().penisInserted(target)) {
                 c.write(getSelf(), Formatter.format("{self:SUBJECT} steps over {other:name-possessive} dick and starts massaging it with "

@@ -46,7 +46,7 @@ public class PressurePoint extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), c, accuracy(c, target))) {
+        if (target.roll(getSelf(), accuracy(c, target))) {
             writeOutput(c, Result.normal, target);
             target.add(c, new PressurePointed(target));
             getSelf().weaken(c, getSelf().getStamina().max() / 5);

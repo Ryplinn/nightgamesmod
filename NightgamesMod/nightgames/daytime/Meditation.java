@@ -7,7 +7,6 @@ import nightgames.global.Flag;
 import nightgames.global.Random;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
-import nightgames.items.clothing.ClothingTable;
 
 import java.util.List;
 
@@ -79,7 +78,7 @@ public class Meditation extends Activity {
                 player.modAttributeDontSaveData(Attribute.Ki, 1);
                 Flag.flag("Trained" + Attribute.Ki.name());
                 acted = true;
-                player.gainIfAbsent(ClothingTable.getByID("gi"));
+                player.gainIfAbsent("gi");
                 choose("Leave", nextChoices);
             } else {
                 GUI.gui.message("You don't have enough money for training.");

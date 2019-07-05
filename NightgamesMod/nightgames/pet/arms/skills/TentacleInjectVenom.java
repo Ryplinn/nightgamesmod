@@ -7,8 +7,8 @@ import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.pet.PetCharacter;
 import nightgames.pet.arms.Arm;
-import nightgames.status.AttributeBuff;
 import nightgames.status.Atrophy;
+import nightgames.status.AttributeBuff;
 
 public class TentacleInjectVenom extends TentacleArmSkill {
     public TentacleInjectVenom() {
@@ -21,7 +21,8 @@ public class TentacleInjectVenom extends TentacleArmSkill {
 
     @Override
     public boolean usable(Combat c, Arm arm, Character owner, Character target) {
-        return super.usable(c, arm, owner, target) && c.getStance().distance() < 2 && !target.hasStatusVariant(getSourceString(owner));
+        return super.usable(c, arm, owner, target) && c.getStance().distance() < 2 && target.status.stream()
+                        .noneMatch(s -> s.getVariant().equals(getSourceString(owner)));
     }
 
     @Override

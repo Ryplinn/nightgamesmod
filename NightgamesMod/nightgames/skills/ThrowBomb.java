@@ -59,7 +59,7 @@ public class ThrowBomb extends Skill {
                                     .dom(getSelf()))
                         || s == Stance.cowgirl || s == Stance.missionary || s == Stance.mount || c.getStance()
                                                                                                   .dom(getSelf())
-                        || target.roll(getSelf(), c, 75)) {
+                        || target.roll(getSelf(), 75)) {
             writeOutput(c, Result.normal, target);
             target.add(c, new PheromoneBombed(target));
         } else {

@@ -67,7 +67,7 @@ public class TailPeg extends Skill {
     }
     @Override
     public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), c, accuracy(c, target))) {
+        if (target.roll(getSelf(), accuracy(c, target))) {
             int strength = Math.min(20, 10 + getSelf().get(Attribute.Dark) / 4);
             boolean intercourse = !c.getStance().getPartsFor(c, getSelf(), target).isEmpty() && c.getStance().penisInserted(target);
             boolean shamed = false;

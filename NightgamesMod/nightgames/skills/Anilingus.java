@@ -73,7 +73,7 @@ public class Anilingus extends Skill {
             result = Result.reverse;
             m += Random.random(6);
             n = 10;
-        } else if (!c.getStance().mobile(target) || target.roll(getSelf(), c, accuracy(c, target))) {
+        } else if (!c.getStance().mobile(target) || target.roll(getSelf(), accuracy(c, target))) {
             m += Random.random(6);
             if (getSelf().has(Trait.silvertongue)) {
                 m += 4;

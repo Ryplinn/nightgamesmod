@@ -30,7 +30,7 @@ public class FondleBreasts extends Skill {
     public boolean resolve(Combat c, Character target) {
         int m = 6 + Random.random(4);
         Result result = Result.normal;
-        if (target.roll(getSelf(), c, accuracy(c, target))) {
+        if (target.roll(getSelf(), accuracy(c, target))) {
             if (target.breastsAvailable()) {
                 m += 4;
                 result = Result.strong;

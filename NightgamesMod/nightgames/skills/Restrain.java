@@ -28,7 +28,7 @@ public class Restrain extends Skill {
     }
 
     public boolean resolve(Combat c, Character target, boolean nofail) {
-        if (nofail || target.roll(getSelf(), c, accuracy(c, target))) {
+        if (nofail || target.roll(getSelf(), accuracy(c, target))) {
             writeOutput(c, Result.normal, target);
             c.setStance(new Pin(getSelf(), target), getSelf(), true);
             target.emote(Emotion.nervous, 10);

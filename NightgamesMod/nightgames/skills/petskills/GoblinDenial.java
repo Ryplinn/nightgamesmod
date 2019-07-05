@@ -25,7 +25,7 @@ public class GoblinDenial extends SimpleMasterSkill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), c, accuracy(c, target))) {
+        if (target.roll(getSelf(), accuracy(c, target))) {
             int m = Random.random(17, 24) + getSelf().getLevel() / 2;
             c.write(getSelf(), Formatter.format("{self:SUBJECT} suddenly appears to turn against {other:name-do} and slaps {other:direct-object} sensitive testicles. "
                             + "You're momentarily confused, but you realize the shock probably lessened some of {other:possessive} pent up desires.", getSelf(), target));

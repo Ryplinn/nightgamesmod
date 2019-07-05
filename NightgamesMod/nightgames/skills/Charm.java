@@ -38,7 +38,7 @@ public class Charm extends Skill {
             printBlinded(c);
             return false;
         }
-        if (target.roll(getSelf(), c, accuracy(c, target))) {
+        if (target.roll(getSelf(), accuracy(c, target))) {
             writeOutput(c, Result.normal, target);
             double mag = 2 + Random.random(4) + getSelf().body.getHotness(target);
             if (target.has(Trait.imagination)) {

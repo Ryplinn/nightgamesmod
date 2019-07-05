@@ -7,7 +7,6 @@ import nightgames.global.Flag;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
-import nightgames.items.clothing.ClothingTable;
 
 import java.util.List;
 
@@ -130,7 +129,7 @@ public class Workshop extends Activity {
                 if (!player.has(Item.ShockGlove)) {
                     player.gain(Item.ShockGlove);
                 }
-                player.gainIfAbsent(ClothingTable.getByID("labcoat"));
+                player.gainIfAbsent("labcoat");
                 if (player.getPure(Attribute.Science) >= 4 && !player.has(Item.Aersolizer)) {
                     player.gain(Item.Aersolizer);
                 }

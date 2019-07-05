@@ -7,10 +7,9 @@ public class KnockdownSkillTag extends SkillTag {
     private final SkillRequirement requirement = new SkillRequirement() {
         @Override
         public boolean meets(SkillResultStruct results, double value) {
-            return !results.getSelf().getCharacter().is(Stsflag.braced)
-                            && !results.getSelf().getCharacter().is(Stsflag.wary)
-                            && results.getSelf().getCharacter().canKnockDown(results.getCombat(),
-                                            results.getOther().getCharacter(), results.getResult().getAllAttributes(),
+            return !results.getSelf().getCharacter().is(Stsflag.braced) && !results.getSelf().getCharacter()
+                            .is(Stsflag.wary) && results.getSelf().getCharacter()
+                            .canKnockDown(results.getOther().getCharacter(), results.getResult().getAllAttributes(),
                                             (int) Math.round(value), results.getRoll());
         }
     };

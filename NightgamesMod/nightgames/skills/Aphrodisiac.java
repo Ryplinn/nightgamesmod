@@ -1,7 +1,5 @@
 package nightgames.skills;
 
-import java.util.function.Predicate;
-
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
@@ -13,6 +11,8 @@ import nightgames.items.Item;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.status.Horny;
+
+import java.util.function.Predicate;
 
 public class Aphrodisiac extends Skill {
     public Aphrodisiac(Character self) {
@@ -52,7 +52,7 @@ public class Aphrodisiac extends Skill {
     public boolean resolve(Combat c, Character target) {
         float magnitude = 10;
         String type = " aphrodisiacs";
-        if (!target.roll(getSelf(), c, accuracy(c, target))) {
+        if (!target.roll(getSelf(), accuracy(c, target))) {
 
             writeOutput(c, Result.miss, target);
             return false;

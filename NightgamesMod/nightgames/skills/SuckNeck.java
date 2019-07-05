@@ -28,7 +28,7 @@ public class SuckNeck extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), c, accuracy(c, target))) {
+        if (target.roll(getSelf(), accuracy(c, target))) {
             if (getSelf().get(Attribute.Dark) >= 1) {
                 writeOutput(c, Result.special, target);
                 int m = target.getStamina().max() / 8;

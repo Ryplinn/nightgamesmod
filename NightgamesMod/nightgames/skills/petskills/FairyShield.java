@@ -25,7 +25,7 @@ public class FairyShield extends SimpleMasterSkill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), c, accuracy(c, target))) {
+        if (target.roll(getSelf(), accuracy(c, target))) {
             int duration = 3 + getSelf().getLevel() / 10;
             c.write(getSelf(), Formatter.format("{self:SUBJECT} raises a shield around {other:name-do}, preventing attacks!", getSelf(), target));
             target.add(c, new Shield(target, .5, duration));

@@ -51,7 +51,7 @@ public class BreastGrowth extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         Result res;
-        if (target.roll(getSelf(), c, accuracy(c, target))) {
+        if (target.roll(getSelf(), accuracy(c, target))) {
             if (target.body.getRandomBreasts().equals(BreastsPart.flat)) {
                 res = Result.special;
             } else {
