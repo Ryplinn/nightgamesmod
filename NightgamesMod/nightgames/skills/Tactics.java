@@ -1,28 +1,31 @@
 package nightgames.skills;
 
-import java.awt.Color;
+import nightgames.gui.GUIColor;
+
+import java.awt.*;
 
 public enum Tactics {
-    damage(TacticGroup.hurt, new Color(150, 0, 0)),
-    pleasure(TacticGroup.pleasure, Color.PINK),
-    fucking(TacticGroup.pleasure, new Color(255, 100, 200)),
-    positioning(TacticGroup.positioning, new Color(0, 100, 0)),
-    stripping(TacticGroup.positioning, new Color(0, 100, 0)),
-    recovery(TacticGroup.recovery, Color.WHITE),
-    calming(TacticGroup.recovery, Color.WHITE),
-    debuff(TacticGroup.manipulation, Color.CYAN),
-    summoning(TacticGroup.manipulation, Color.YELLOW),
-    misc(TacticGroup.misc, new Color(200, 200, 200));
+    damage(TacticGroup.hurt, GUIColor.TACTICS_DAMAGE),
+    pleasure(TacticGroup.pleasure, GUIColor.TACTICS_PLEASURE),
+    fucking(TacticGroup.pleasure, GUIColor.TACTICS_FUCK),
+    positioning(TacticGroup.positioning, GUIColor.TACTICS_POSITION),
+    stripping(TacticGroup.positioning, GUIColor.TACTICS_STRIP),
+    recovery(TacticGroup.recovery, GUIColor.TACTICS_RECOVER),
+    calming(TacticGroup.recovery, GUIColor.TACTICS_CALM),
+    debuff(TacticGroup.manipulation, GUIColor.TACTICS_DEBUFF),
+    summoning(TacticGroup.manipulation, GUIColor.TACTICS_SUMMON),
+    misc(TacticGroup.misc, GUIColor.TACTICS_MISC),
+    ;
 
-    private final Color color;
+    private final GUIColor color;
     private final TacticGroup group;
-    Tactics(TacticGroup group, Color color) {
+    Tactics(TacticGroup group, GUIColor color) {
         this.color = color;
         this.group = group;
     }
 
     public Color getColor() {
-        return color;
+        return color.color;
     }
 
     public TacticGroup getGroup() {

@@ -127,7 +127,7 @@ public class GUI extends JFrame implements Observer {
         
         // frame title
         setTitle("NightGames Mod");
-        setBackground(GUIColors.bgDark);
+        setBackground(GUIColor.BG_DARK.color);
         // closing operation
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -544,7 +544,7 @@ public class GUI extends JFrame implements Observer {
 
         portraitPanel.setLayout(new ShrinkingCardLayout());
 
-        portraitPanel.setBackground(GUIColors.bgDark);
+        portraitPanel.setBackground(GUIColor.BG_DARK.color);
         portrait = new JLabel("");
         portrait.setVerticalAlignment(SwingConstants.TOP);
         portraitPanel.add(portrait, USE_PORTRAIT);
@@ -564,8 +564,8 @@ public class GUI extends JFrame implements Observer {
         textPane = new JTextPane();
         DefaultCaret caret = (DefaultCaret) textPane.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        textPane.setForeground(GUIColors.textColorLight);
-        textPane.setBackground(GUIColors.bgLight);
+        textPane.setForeground(GUIColor.TEXT_LIGHT.color);
+        textPane.setBackground(GUIColor.BG_LIGHT.color);
         textPane.setPreferredSize(new Dimension(width, 400));
         textPane.setEditable(false);
         textPane.setContentType("text/html");
@@ -584,7 +584,7 @@ public class GUI extends JFrame implements Observer {
         textAreaPanel.setLayout(new BoxLayout(textAreaPanel, BoxLayout.PAGE_AXIS));
         textAreaPanel.add(imgLabel);
         textAreaPanel.add(textScroll);
-        textAreaPanel.setBackground(GUIColors.bgDark);
+        textAreaPanel.setBackground(GUIColor.BG_DARK.color);
 
         centerPanel.add(textAreaPanel, USE_MAIN_TEXT_UI);
 
@@ -596,7 +596,7 @@ public class GUI extends JFrame implements Observer {
 
         // commandPanel - visible, contains the player's command buttons
         groupBox = Box.createHorizontalBox();
-        groupBox.setBackground(GUIColors.bgDark);
+        groupBox.setBackground(GUIColor.BG_DARK.color);
         groupBox.setBorder(new CompoundBorder());
         JPanel groupPanel = new JPanel();
         gamePanel.add(groupPanel);
@@ -605,7 +605,7 @@ public class GUI extends JFrame implements Observer {
         groupPanel.add(groupBox);
         groupPanel.add(commandPanel.getPanel());
         gamePanel.add(groupPanel);
-        groupPanel.setBackground(GUIColors.bgDark);
+        groupPanel.setBackground(GUIColor.BG_DARK.color);
         groupPanel.setBorder(new CompoundBorder());
 
         skills = new HashMap<>();
@@ -789,14 +789,14 @@ public class GUI extends JFrame implements Observer {
         player.gui = this;
         player.addObserver(this);
         JPanel meter = new JPanel();
-        meter.setBackground(GUIColors.bgDark);
+        meter.setBackground(GUIColor.BG_DARK.color);
         topPanel.add(meter);
         meter.setLayout(new GridLayout(0, 4, 0, 0));
 
         stamina = new JLabel("Stamina: " + getLabelString(player.getStamina()));
         stamina.setFont(new Font("Sylfaen", Font.BOLD, 15));
         stamina.setHorizontalAlignment(SwingConstants.CENTER);
-        stamina.setForeground(GUIColors.STAMINA_FOREGROUND);
+        stamina.setForeground(GUIColor.STAMINA_FOREGROUND.color);
         stamina.setToolTipText(
                         "Stamina represents your endurance and ability to keep fighting. If it drops to zero, you'll be temporarily stunned.");
         meter.add(stamina);
@@ -804,7 +804,7 @@ public class GUI extends JFrame implements Observer {
         arousal = new JLabel("Arousal: " + getLabelString(player.getArousal()));
         arousal.setFont(new Font("Sylfaen", Font.BOLD, 15));
         arousal.setHorizontalAlignment(SwingConstants.CENTER);
-        arousal.setForeground(GUIColors.AROUSAL_FOREGROUND);
+        arousal.setForeground(GUIColor.AROUSAL_FOREGROUND.color);
         arousal.setToolTipText(
                         "Arousal is raised when your opponent pleasures or seduces you. If it hits your max, you'll orgasm and lose the fight.");
         meter.add(arousal);
@@ -812,7 +812,7 @@ public class GUI extends JFrame implements Observer {
         mojo = new JLabel("Mojo: " + getLabelString(player.getMojo()));
         mojo.setFont(new Font("Sylfaen", Font.BOLD, 15));
         mojo.setHorizontalAlignment(SwingConstants.CENTER);
-        mojo.setForeground(GUIColors.MOJO_FOREGROUND);
+        mojo.setForeground(GUIColor.MOJO_FOREGROUND.color);
         mojo.setToolTipText(
                         "Mojo is the abstract representation of your momentum and style. It increases with normal techniques and is used to power special moves");
         meter.add(mojo);
@@ -820,7 +820,7 @@ public class GUI extends JFrame implements Observer {
         willpower = new JLabel("Willpower: " + getLabelString(player.getWillpower()));
         willpower.setFont(new Font("Sylfaen", Font.BOLD, 15));
         willpower.setHorizontalAlignment(SwingConstants.CENTER);
-        willpower.setForeground(GUIColors.WILLPOWER_FOREGROUND);
+        willpower.setForeground(GUIColor.WILLPOWER_FOREGROUND.color);
         willpower.setToolTipText("Willpower is a representation of your will to fight. When this reaches 0, you lose.");
         meter.add(willpower);
         try {
@@ -832,32 +832,32 @@ public class GUI extends JFrame implements Observer {
         }
         staminaBar = new JProgressBar();
         staminaBar.setBorder(new SoftBevelBorder(1, null, null, null, null));
-        staminaBar.setForeground(GUIColors.STAMINA_FOREGROUND);
-        staminaBar.setBackground(GUIColors.METER_BACKGROUND);
+        staminaBar.setForeground(GUIColor.STAMINA_FOREGROUND.color);
+        staminaBar.setBackground(GUIColor.METER_BACKGROUND.color);
         meter.add(staminaBar);
         staminaBar.setMaximum(player.getStamina().max());
         staminaBar.setValue(player.getStamina().get());
 
         arousalBar = new JProgressBar();
         arousalBar.setBorder(new SoftBevelBorder(1, null, null, null, null));
-        arousalBar.setForeground(GUIColors.AROUSAL_FOREGROUND);
-        arousalBar.setBackground(GUIColors.METER_BACKGROUND);
+        arousalBar.setForeground(GUIColor.AROUSAL_FOREGROUND.color);
+        arousalBar.setBackground(GUIColor.METER_BACKGROUND.color);
         meter.add(arousalBar);
         arousalBar.setMaximum(player.getArousal().max());
         arousalBar.setValue(player.getArousal().get());
 
         mojoBar = new JProgressBar();
         mojoBar.setBorder(new SoftBevelBorder(1, null, null, null, null));
-        mojoBar.setForeground(GUIColors.MOJO_FOREGROUND);
-        mojoBar.setBackground(GUIColors.METER_BACKGROUND);
+        mojoBar.setForeground(GUIColor.MOJO_FOREGROUND.color);
+        mojoBar.setBackground(GUIColor.METER_BACKGROUND.color);
         meter.add(mojoBar);
         mojoBar.setMaximum(player.getMojo().max());
         mojoBar.setValue(player.getMojo().get());
 
         willpowerBar = new JProgressBar();
         willpowerBar.setBorder(new SoftBevelBorder(1, null, null, null, null));
-        willpowerBar.setForeground(GUIColors.WILLPOWER_FOREGROUND);
-        willpowerBar.setBackground(GUIColors.METER_BACKGROUND);
+        willpowerBar.setForeground(GUIColor.WILLPOWER_FOREGROUND.color);
+        willpowerBar.setBackground(GUIColor.METER_BACKGROUND.color);
         meter.add(willpowerBar);
         willpowerBar.setMaximum(player.getWillpower().max());
         willpowerBar.setValue(player.getWillpower().get());
@@ -870,21 +870,21 @@ public class GUI extends JFrame implements Observer {
         JPanel bio = new JPanel();
         topPanel.add(bio);
         bio.setLayout(new GridLayout(2, 0, 0, 0));
-        bio.setBackground(GUIColors.bgDark);
+        bio.setBackground(GUIColor.BG_DARK.color);
 
         JLabel name = new JLabel(player.getTrueName());
         name.setHorizontalAlignment(SwingConstants.LEFT);
         name.setFont(new Font("Sylfaen", Font.BOLD, 15));
-        name.setForeground(GUIColors.textColorLight);
+        name.setForeground(GUIColor.TEXT_LIGHT.color);
         bio.add(name);
         lvl = new JLabel("Lvl: " + player.getLevel());
         lvl.setFont(new Font("Sylfaen", Font.BOLD, 15));
-        lvl.setForeground(GUIColors.textColorLight);
+        lvl.setForeground(GUIColor.TEXT_LIGHT.color);
 
         bio.add(lvl);
         xp = new JLabel("XP: " + player.getXP());
         xp.setFont(new Font("Sylfaen", Font.BOLD, 15));
-        xp.setForeground(GUIColors.textColorLight);
+        xp.setForeground(GUIColor.TEXT_LIGHT.color);
         bio.add(xp);
 
         UIManager.put("ToggleButton.select", new Color(75, 88, 102));
@@ -913,7 +913,7 @@ public class GUI extends JFrame implements Observer {
         });
         loclbl = new JLabel();
         loclbl.setFont(new Font("Sylfaen", Font.BOLD, 16));
-        loclbl.setForeground(GUIColors.textColorLight);
+        loclbl.setForeground(GUIColor.TEXT_LIGHT.color);
 
         //stsbtn.setBackground(new Color(85, 98, 112));
         //stsbtn.setForeground(GUIColors.textColorLight);
@@ -921,7 +921,7 @@ public class GUI extends JFrame implements Observer {
 
         timeLabel = new JLabel();
         timeLabel.setFont(new Font("Sylfaen", Font.BOLD, 16));
-        timeLabel.setForeground(GUIColors.textColorLight);
+        timeLabel.setForeground(GUIColor.TEXT_LIGHT.color);
         bio.add(timeLabel);
         cashLabel = new JLabel();
         cashLabel.setFont(new Font("Sylfaen", Font.BOLD, 16));
@@ -1145,7 +1145,7 @@ public class GUI extends JFrame implements Observer {
         }
         // We may be in between setting NIGHT and building the Match object
         String timeText;
-        String textColor = "rgb(0, 0, 0)";
+        String textColor = "'rgb(0, 0, 0)'";
         if (Time.getTime() == Time.NIGHT) {
             // yup... silverbard pls :D
             if (Match.getMatch() == null) {
@@ -1155,19 +1155,19 @@ public class GUI extends JFrame implements Observer {
             } else {
                 timeText = Match.getMatch().getTime() + " pm";
             }
-            textColor = "rgb(51, 101, 202)";
+            textColor = GUIColor.CLOCK_NIGHT.rgbHTML();
         } else if (Time.getTime() == Time.DAY) { // not updating correctly during daytime
             if (Daytime.getDay() != null) {
                 timeText = Daytime.getDay().getTime();
             } else {
                 timeText = "10:00 am";
             }
-            textColor = "rgb(253, 184, 19)";
+            textColor = GUIColor.CLOCK_DAY.rgbHTML();
         } else {
             System.err.println("Unknown time of day: " + Time.getTime());
             timeText = "";
         }
-        timeLabel.setText(String.format("<html>Day %d - <font color='%s'>%s</font></html>", Time.getDate(), textColor, timeText));
+        timeLabel.setText(String.format("<html>Day %d - <font color=%s>%s</font></html>", Time.getDate(), textColor, timeText));
         displayStatus(player);
         List<Item> availItems = player.getInventory().entrySet().stream().filter(entry -> (entry.getValue() > 0))
                 .map(Map.Entry::getKey).collect(Collectors.toList());
@@ -1175,14 +1175,14 @@ public class GUI extends JFrame implements Observer {
 	    JPanel inventoryPane = new JPanel();
 	    inventoryPane.setLayout(new GridLayout(0, 5));
 	    inventoryPane.setSize(new Dimension(400, 800));
-	    inventoryPane.setBackground(GUIColors.bgDark);
+	    inventoryPane.setBackground(GUIColor.BG_DARK.color);
 
 	    Map<Item, Integer> items = player.getInventory();
 	    int count = 0;
 
 	    for (Item i : availItems) {
 	        JLabel label = new JLabel(i.getName() + ": " + items.get(i) + "\n");
-	        label.setForeground(GUIColors.textColorLight);
+	        label.setForeground(GUIColor.TEXT_LIGHT.color);
 	        label.setToolTipText(i.getDesc());
 	        inventoryPane.add(label);
 	        count++;
@@ -1225,7 +1225,7 @@ public class GUI extends JFrame implements Observer {
         sep.setMaximumSize(new Dimension(statusPanel.getWidth(), 2));
         statusPanel.add(sep);
         int count = 0;
-        statsPanel.setBackground(GUIColors.bgLight);
+        statsPanel.setBackground(GUIColor.BG_LIGHT.color);
         int descFontSize = fontsize - 1;
         ArrayList<JLabel> attlbls = new ArrayList<>();
         for (Attribute a : Attribute.values()) {
@@ -1234,24 +1234,26 @@ public class GUI extends JFrame implements Observer {
             if (pure > 0 || amt > 0) {
                 if (amt == pure) {
                     JLabel label = new JLabel(String.format("<html><font face='Georgia' size=%d>%s: %s</font></html>", descFontSize, a.name(), amt));
-                    label.setForeground(GUIColors.textColorLight);
+                    label.setForeground(GUIColor.TEXT_LIGHT.color);
                     attlbls.add(count, label);
                     statsPanel.add(attlbls.get(count++));
                 } else {
-                    String attrColor;
-                    String bonusColor;
+                    GUIColor attrColor;
+                    GUIColor bonusColor;
                     if (amt < pure) {
-                        attrColor = "255,100,100";
-                        bonusColor = "255,0,0";
+                        attrColor = GUIColor.STATS_ATTRIBUTE_DRAINED;
+                        bonusColor = GUIColor.STATS_MALUS;
                     } else {
-                        attrColor = "100,255,255";
-                        bonusColor = "0,255,0";
+                        attrColor = GUIColor.STATS_ATTRIBUTE_FULL;
+                        bonusColor = GUIColor.STATS_BONUS;
                     }
                     int statBonusFontSize = descFontSize - 1;
-                    String labelString = String.format("<html><font face='Georgia' size=%d>%s: <font color='rgb(%s)'>%d</font> <font size=%d color='rgb(%s)'>(%+d)</font></font></html>",
-                                    descFontSize, a.name(), attrColor, amt, statBonusFontSize, bonusColor, amt - pure);
+                    String labelString =
+                                    String.format("<html><font face='Georgia' size=%d>%s: <font color=%s>%d</font> <font size=%d color=%s>(%+d)</font></font></html>",
+                                                    descFontSize, a.name(), attrColor.rgbHTML(), amt, statBonusFontSize,
+                                                    bonusColor.rgbHTML(), amt - pure);
                     JLabel label = new JLabel(labelString);
-                    label.setForeground(GUIColors.textColorLight);
+                    label.setForeground(GUIColor.TEXT_LIGHT.color);
                     attlbls.add(count, label);
                     statsPanel.add(attlbls.get(count++));
                 }
@@ -1262,7 +1264,7 @@ public class GUI extends JFrame implements Observer {
         JTextPane statusText = new JTextPane();
         DefaultCaret caret = (DefaultCaret) statusText.getCaret();
         caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
-        statusText.setBackground(GUIColors.bgLight);
+        statusText.setBackground(GUIColor.BG_LIGHT.color);
         statusText.setEditable(false);
         statusText.setContentType("text/html");
         HTMLDocument doc = (HTMLDocument) statusText.getDocument();
@@ -1280,7 +1282,7 @@ public class GUI extends JFrame implements Observer {
         }
         Random.unfreezeRNG();
         JScrollPane scrollPane = new JScrollPane(statusText);
-        scrollPane.setBackground(GUIColors.bgLight);
+        scrollPane.setBackground(GUIColor.BG_LIGHT.color);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         JPanel currentStatusPanel = new JPanel(new GridLayout());
@@ -1291,10 +1293,10 @@ public class GUI extends JFrame implements Observer {
         currentStatusPanel.setMaximumSize(new Dimension(width/4, 2000));
         currentStatusPanel.setPreferredSize(new Dimension(width/4, 2000));
         
-        currentStatusPanel.setBackground(GUIColors.bgLight);
+        currentStatusPanel.setBackground(GUIColor.BG_LIGHT.color);
         statusPanel.add(currentStatusPanel);
         currentStatusPanel.add(scrollPane);
-        statusPanel.setBackground(GUIColors.bgLight);
+        statusPanel.setBackground(GUIColor.BG_LIGHT.color);
         if (width < 720) {
             currentStatusPanel.setSize(new Dimension(height, width / 6));
             System.out.println("Oh god so tiny");

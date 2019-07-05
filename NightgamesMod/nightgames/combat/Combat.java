@@ -12,6 +12,7 @@ import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.global.*;
 import nightgames.gui.GUI;
+import nightgames.gui.GUIColor;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingSlot;
@@ -722,11 +723,11 @@ public class Combat extends Observable implements Cloneable {
 
     private String describe() {
         if (!p1.human() && !p2.human() && beingObserved) {
-            return "<font color='rgb(255,220,220)'>"
+            return String.format("<font color=%s>", GUIColor.COMBAT_OBSERVE_P1_DESC.rgbHTML())
                             + p1.describe(GameState.gameState.characterPool.getPlayer().get(Attribute.Perception), this)
-                            + "</font><br/><br/><font color='rgb(220,220,255)'>"
+                            + String.format("</font><br/><br/><font color=%s>", GUIColor.COMBAT_OBSERVE_P2_DESC.rgbHTML())
                             + p2.describe(GameState.gameState.characterPool.getPlayer().get(Attribute.Perception), this)
-                            + "</font><br/><br/><font color='rgb(134,196,49)'><b>"
+                            + String.format("</font><br/><br/><font color=%s><b>", GUIColor.COMBAT_OBSERVE_STANCE_DESC.rgbHTML())
                             + Formatter.capitalizeFirstLetter(getStance().describe(this)) + "</b></font>";
         } else if (beingObserved) {
             Player player;
@@ -1126,16 +1127,7 @@ public class Combat extends Observable implements Cloneable {
     }
 
     private String formatMessage(Character user, String text) {
-        if (user.human()) {
-            text = "<font color='rgb(200,200,255)'>" + text + "<font color='white'>";
-        } else if (user.isPet() && user.isPetOf(GameState.gameState.characterPool.getPlayer())) {
-            text = "<font color='rgb(130,225,200)'>" + text + "<font color='white'>";
-        } else if (user.isPet()) {
-            text = "<font color='rgb(210,130,255)'>" + text + "<font color='white'>";
-        } else {
-            text = "<font color='rgb(255,200,200)'>" + text + "<font color='white'>";
-        }
-        return text;
+        return String.format("<font color=%s>", GUIColor.characterColor(user).rgbHTML()) + text + "<font color='white'>";
     }
 
     public String getMessage() {

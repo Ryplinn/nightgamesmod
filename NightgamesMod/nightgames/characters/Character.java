@@ -48,6 +48,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static nightgames.gui.GUIColor.*;
+
 @SuppressWarnings("unused")
 public abstract class Character extends Observable implements Cloneable {
     private static final String APOSTLES_COUNT = "APOSTLES_COUNT";
@@ -444,8 +446,8 @@ public abstract class Character extends Observable implements Cloneable {
         int pain = i;
         int bonus = 0;
         if (is(Stsflag.rewired) && physical) {
-            String message = String.format("%s pleasured for <font color='rgb(255,50,200)'>%d<font color='white'>\n",
-                            Formatter.capitalizeFirstLetter(subjectWas()), pain);
+            String message = String.format("%s pleasured for <font color=%s>%d<font color='white'>\n",
+                            Formatter.capitalizeFirstLetter(subjectWas()), AROUSAL_GAIN.rgbHTML(), pain);
             if (c != null) {
                 c.writeSystemMessage(message);
             }
@@ -499,8 +501,8 @@ public abstract class Character extends Observable implements Cloneable {
         // calm down by the overflow
 
         if (c != null) {
-            c.writeSystemMessage(String.format("%s hurt for <font color='rgb(250,10,10)'>%d<font color='white'>",
-                            subjectWas(), pain));
+            c.writeSystemMessage(String.format("%s hurt for <font color=%s>%d<font color='white'>",
+                            subjectWas(), STAMINA_LOSS.rgbHTML(), pain));
         }
         if (difference > 0 && !is(Stsflag.masochism)) {
             if (other != null && other.has(Trait.wrassler)) {
@@ -546,8 +548,8 @@ public abstract class Character extends Observable implements Cloneable {
         if (drained > 0) {
             if (c != null) {
                 c.writeSystemMessage(
-                                String.format("%s drained of <font color='rgb(200,200,200)'>%d<font color='white'> stamina by %s",
-                                                subjectWas(), drained, drainer.subject()));
+                                String.format("%s drained of <font color=%s>%d<font color='white'> stamina by %s",
+                                                subjectWas(), STAMINA_LOSS.rgbHTML(), drained, drainer.subject()));
             }
             stamina.reduce(drained);
             drainer.stamina.restore(drained);
@@ -567,8 +569,8 @@ public abstract class Character extends Observable implements Cloneable {
         }
         if (weak > 0) {
             if (c != null) {
-                c.writeSystemMessage(String.format("%s weakened by <font color='rgb(200,200,200)'>%d<font color='white'>",
-                                subjectWas(), weak));
+                c.writeSystemMessage(String.format("%s weakened by <font color=%s>%d<font color='white'>",
+                                subjectWas(), STAMINA_LOSS.rgbHTML(), weak));
             }
             stamina.reduce(weak);
         }
@@ -580,8 +582,8 @@ public abstract class Character extends Observable implements Cloneable {
     public void heal(Combat c, int i, String reason) {
         i = Math.max(1, i);
         if (c != null) {
-            c.writeSystemMessage(String.format("%s healed for <font color='rgb(100,240,30)'>%d<font color='white'>%s",
-                            subjectWas(), i, reason));
+            c.writeSystemMessage(String.format("%s healed for <font color=%s>%d<font color='white'>%s",
+                            subjectWas(), STAMINA_GAIN.rgbHTML(), i, reason));
         }
         stamina.restore(i);
     }
@@ -658,9 +660,9 @@ public abstract class Character extends Observable implements Cloneable {
 
         String bonusString = "";
         if (bonus > 0) {
-            bonusString = String.format(" + <font color='rgb(240,60,220)'>%d<font color='white'>", bonus);
+            bonusString = String.format(" + <font color=%s>%d<font color='white'>", TEMPT_BONUS.rgbHTML(), bonus);
         } else if (bonus < 0) {
-            bonusString = String.format(" - <font color='rgb(120,180,200)'>%d<font color='white'>", Math.abs(bonus));
+            bonusString = String.format(" - <font color=%s>%d<font color='white'>", TEMPT_MALUS.rgbHTML(), Math.abs(bonus));
         }
 
         if (tempter != null) {
@@ -685,9 +687,9 @@ public abstract class Character extends Observable implements Cloneable {
                 }
                 dmg = (int) Math.max(0, Math.round((i + bonus) * temptMultiplier * stalenessModifier));
                 message = String.format(
-                                "%s tempted by %s %s for <font color='rgb(240,100,100)'>%d<font color='white'> (base:%d%s, charisma:%.1f%s)%s\n",
+                                "%s tempted by %s %s for <font color=%s>%d<font color='white'> (base:%d%s, charisma:%.1f%s)%s\n",
                                 Formatter.capitalizeFirstLetter(subjectWas()), tempter.nameOrPossessivePronoun(),
-                                with.describe(tempter), dmg, i, bonusString, temptMultiplier, stalenessString, extraMsg);
+                                with.describe(tempter), AROUSAL_TEMPT.rgbHTML(), dmg, i, bonusString, temptMultiplier, stalenessString, extraMsg);
             } else {
                 temptMultiplier *= tempter.body.getCharismaBonus(c, this);
                 if (c != null && tempter.has(Trait.obsequiousAppeal) && c.getStance()
@@ -699,9 +701,9 @@ public abstract class Character extends Observable implements Cloneable {
                 }
                 dmg = Math.max((int) Math.round((i + bonus) * temptMultiplier * stalenessModifier), 0);
                 message = String.format(
-                                "%s tempted %s for <font color='rgb(240,100,100)'>%d<font color='white'> (base:%d%s, charisma:%.1f%s)%s\n",
+                                "%s tempted %s for <font color=%s>%d<font color='white'> (base:%d%s, charisma:%.1f%s)%s\n",
                                 Formatter.capitalizeFirstLetter(tempter.subject()),
-                                tempter == this ? reflectivePronoun() : nameDirectObject(), dmg, i, bonusString, temptMultiplier, stalenessString, extraMsg);
+                                tempter == this ? reflectivePronoun() : nameDirectObject(), AROUSAL_TEMPT.rgbHTML(), dmg, i, bonusString, temptMultiplier, stalenessString, extraMsg);
             }
 
             if (DebugFlags.isDebugOn(DebugFlags.DEBUG_DAMAGE)) {
@@ -731,8 +733,8 @@ public abstract class Character extends Observable implements Cloneable {
             int damage = Math.max(0, (int) Math.round((i + bonus) * baseModifier));
             if (c != null) {
                 c.writeSystemMessage(
-                                String.format("%s tempted for <font color='rgb(240,100,100)'>%d<font color='white'>%s\n",
-                                                subjectWas(), damage, extraMsg));
+                                String.format("%s tempted for <font color=%s>%d<font color='white'>%s\n",
+                                                subjectWas(), AROUSAL_TEMPT.rgbHTML(), damage, extraMsg));
             }
             tempt(damage);
         }
@@ -743,6 +745,7 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public void arouse(int i, Combat c, String source) {
+        // NOTE: This is for non-physical, non-tempting lust arousal. Normal arousal is handled by Body.pleasure().
         String extraMsg = "";
         if (has(Trait.Unsatisfied) && (getArousal().percent() >= 50 || getWillpower().percent() < 25)) {
             extraMsg += " (Unsatisfied)";
@@ -753,8 +756,8 @@ public abstract class Character extends Observable implements Cloneable {
                 i = Math.max(1, i * 2 / 3);
             }
         }
-        String message = String.format("%s aroused for <font color='rgb(240,100,100)'>%d<font color='white'> %s%s\n",
-                        Formatter.capitalizeFirstLetter(subjectWas()), i, source, extraMsg);
+        String message = String.format("%s aroused for <font color=%s>%d<font color='white'> %s%s\n",
+                        Formatter.capitalizeFirstLetter(subjectWas()), AROUSAL_TEMPT.rgbHTML(), i, source, extraMsg);
         if (c != null) {
             c.writeSystemMessage(message);
         }
@@ -785,8 +788,9 @@ public abstract class Character extends Observable implements Cloneable {
         i = Math.min(arousal.get(), i);
         if (i > 0) {
             if (c != null) {
-                String message = String.format("%s calmed down by <font color='rgb(80,145,200)'>%d<font color='white'>\n",
-                                Formatter.capitalizeFirstLetter(subjectAction("have", "has")), i);
+                String message = String.format("%s calmed down by <font color=%s>%d<font color='white'>\n",
+                                Formatter.capitalizeFirstLetter(subjectAction("have", "has")), AROUSAL_LOSS.rgbHTML(),
+                                i);
                 c.writeSystemMessage(message);
             }
             arousal.reduce(i);
@@ -831,8 +835,8 @@ public abstract class Character extends Observable implements Cloneable {
             mojo.restore(x);
             if (c != null) {
                 c.writeSystemMessage(Formatter.capitalizeFirstLetter(
-                                String.format("%s <font color='rgb(100,200,255)'>%d<font color='white'> mojo%s.",
-                                                subjectAction("built", "built"), x, source)));
+                                String.format("%s <font color=%s>%d<font color='white'> mojo%s.",
+                                                subjectAction("built", "built"), MOJO_GAIN.rgbHTML(), x, source)));
             }
         } else if (x < 0) {
             loseMojo(c, x);
@@ -856,8 +860,8 @@ public abstract class Character extends Observable implements Cloneable {
         }
         if (c != null && i != 0) {
             c.writeSystemMessage(Formatter.capitalizeFirstLetter(
-                            String.format("%s <font color='rgb(150,150,250)'>%d<font color='white'> mojo%s.",
-                                            subjectAction("spent", "spent"), cost, source)));
+                            String.format("%s <font color=%s>%d<font color='white'> mojo%s.",
+                                            subjectAction("spent", "spent"), MOJO_SPEND.rgbHTML(), cost, source)));
         }
     }
 
@@ -873,8 +877,8 @@ public abstract class Character extends Observable implements Cloneable {
         }
         if (c != null) {
             c.writeSystemMessage(Formatter.capitalizeFirstLetter(
-                            String.format("%s <font color='rgb(150,150,250)'>%d<font color='white'> mojo%s.",
-                                            subjectAction("lost", "lost"), amt, source)));
+                            String.format("%s <font color=%s>%d<font color='white'> mojo%s.",
+                                            subjectAction("lost", "lost"), MOJO_LOSS.rgbHTML(), amt, source)));
         }
         return amt;
     }
@@ -1739,7 +1743,7 @@ public abstract class Character extends Observable implements Cloneable {
             resolvePreOrgasmForOpponent(c, opponent, selfPart, opponentPart, times, totalTimes);
         }
         int overflow = arousal.getOverflow();
-        c.write(this, String.format("<font color='rgb(255,50,200)'>%s<font color='white'> arousal overflow", overflow));
+        c.write(this, String.format("<font color=%s>%s<font color='white'> arousal overflow", AROUSAL_OVERFLOW.rgbHTML(), overflow));
         if (this != opponent) {
             resolvePostOrgasmForOpponent(c, opponent, selfPart, opponentPart);
         }
@@ -2035,14 +2039,15 @@ public abstract class Character extends Observable implements Cloneable {
         int old = willpower.get();
         willpower.reduce(amt);
         if (c != null) {
-            c.writeSystemMessage(String.format(
-                            "%s lost <font color='rgb(220,130,40)'>%s<font color='white'> willpower" + reduced + "%s.",
-                            Formatter.capitalizeFirstLetter(subject()), extra == 0 ? Integer.toString(amt) : i + "+" + extra + " (" + amt + ")",
-                            source));
+            c.writeSystemMessage(
+                            String.format("%s lost <font color=%s>%s<font color='white'> willpower" + reduced + "%s.",
+                                            Formatter.capitalizeFirstLetter(subject()), WILLPOWER_LOSS.rgbHTML(),
+                                            extra == 0 ? Integer.toString(amt) : i + "+" + extra + " (" + amt + ")",
+                                            source));
         } else if (human()) {
             GUI.gui.systemMessage(String
-                            .format("%s lost <font color='rgb(220,130,40)'>%d<font color='white'> willpower" + reduced
-                                            + "%s.", subject(), amt, source));
+                            .format("%s lost <font color=%s>%d<font color='white'> willpower" + reduced
+                                            + "%s.", subject(), WILLPOWER_LOSS.rgbHTML(), amt, source));
         }
         if (DebugFlags.isDebugOn(DebugFlags.DEBUG_SCENE)) {
             System.out.printf("will power reduced from %d to %d\n", old, willpower.get());
@@ -2051,7 +2056,8 @@ public abstract class Character extends Observable implements Cloneable {
 
     public void restoreWillpower(Combat c, int i) {
         willpower.restore(i);
-        c.writeSystemMessage(String.format("%s regained <font color='rgb(181,230,30)'>%d<font color='white'> willpower.", subject(), i));
+        c.writeSystemMessage(String.format("%s regained <font color=%s>%d<font color='white'> willpower.", subject(),
+                        WILLPOWER_GAIN.rgbHTML(), i));
     }
 
     private static List<String> ANGEL_APOSTLES_QUOTES = Arrays.asList(
@@ -3486,8 +3492,8 @@ public abstract class Character extends Observable implements Cloneable {
         int restored = drained;
         if (c != null) {
             c.writeSystemMessage(
-                            String.format("%s drained of <font color='rgb(220,130,40)'>%d<font color='white'> willpower<font color='white'> by %s",
-                                            subjectWas(), drained, drainer.subject()));
+                            String.format("%s drained of <font color=%s>%d<font color='white'> willpower<font color='white'> by %s",
+                                            subjectWas(), WILLPOWER_LOSS.rgbHTML(), drained, drainer.subject()));
         }
         willpower.reduce(drained);
         drainer.willpower.restore(restored);
@@ -3508,8 +3514,8 @@ public abstract class Character extends Observable implements Cloneable {
         int restored = Math.round(drained * efficiency);
         if (c != null) {
             c.writeSystemMessage(
-                            String.format("%s drained of <font color='rgb(220,130,40)'>%d<font color='white'> willpower as <font color='rgb(100,162,240)'>%d<font color='white'> mojo by %s",
-                                            subjectWas(), drained, restored, drainer.subject()));
+                            String.format("%s drained of <font color=%s>%d<font color='white'> willpower as <font color=%s>%d<font color='white'> mojo by %s",
+                                            subjectWas(), WILLPOWER_LOSS.rgbHTML(), drained, MOJO_GAIN.rgbHTML(), restored, drainer.subject()));
         }
         willpower.reduce(drained);
         drainer.mojo.restore(restored);
@@ -3530,8 +3536,8 @@ public abstract class Character extends Observable implements Cloneable {
         int restored = Math.round(drained * efficiency);
         if (c != null) {
             c.writeSystemMessage(
-                            String.format("%s drained of <font color='rgb(240,162,100)'>%d<font color='white'> stamina as <font color='rgb(100,162,240)'>%d<font color='white'> mojo by %s",
-                                            subjectWas(), drained, restored, drainer.subject()));
+                            String.format("%s drained of <font color=%s>%d<font color='white'> stamina as <font color=%s>%d<font color='white'> mojo by %s",
+                                            subjectWas(), STAMINA_LOSS.rgbHTML(), drained, MOJO_GAIN.rgbHTML(), restored, drainer.subject()));
         }
         stamina.reduce(drained);
         drainer.mojo.restore(restored);
@@ -3551,8 +3557,8 @@ public abstract class Character extends Observable implements Cloneable {
         drained = Math.max(1, drained);
         if (c != null) {
             c.writeSystemMessage(
-                            String.format("%s drained of <font color='rgb(0,162,240)'>%d<font color='white'> mojo by %s",
-                                            subjectWas(), drained, drainer.subject()));
+                            String.format("%s drained of <font color=%s>%d<font color='white'> mojo by %s",
+                                            subjectWas(), MOJO_LOSS.rgbHTML(), drained, drainer.subject()));
         }
         mojo.reduce(drained);
         drainer.mojo.restore(drained);

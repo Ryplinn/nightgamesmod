@@ -14,6 +14,7 @@ import nightgames.global.DebugFlags;
 import nightgames.global.Flag;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
+import nightgames.gui.GUIColor;
 import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.json.JsonUtils;
@@ -239,6 +240,7 @@ public class Body implements Cloneable {
 
         String bodyString = "body";
         String startString = "Overall, ";
+        // TODO: Check this logic
         if (topLayer >= 2 && bottomLayer >= 2) {
             bodyString = "clothed form";
             startString = "Even though much of it is hidden away, ";
@@ -263,29 +265,36 @@ public class Body implements Cloneable {
             bodyString = "half-naked figure";
         }
 
+        GUIColor hotnessColor;
         if (hotness > 3.2) {
-            message = "%s{self:possessive} %s is <font color='rgb(100,255,250)'>absolute perfection</font>, "
+            message = "%s{self:possessive} %s is <font color=%s>absolute perfection</font>, "
                             + "as if perfectly sculpted by a divine hand.";
+            hotnessColor = GUIColor.HOTNESS_PERFECT;
         } else if (hotness > 2.6){
-            message = "%s{self:possessive} %s is <font color='rgb(85,185,255)'>exquisitely beautiful</font>. "
+            message = "%s{self:possessive} %s is <font color=%s>exquisitely beautiful</font>. "
                             + "There aren't many like {self:direct-object} in the world.";
+            hotnessColor = GUIColor.HOTNESS_EXQUISITE;
         } else if (hotness > 2.1){
-            message = "%s{self:pronoun-action:have|has} a <font color='rgb(210,130,250)'>{self:if-female:lovely}{self:if-male:handsome} %s</font>"
+            message = "%s{self:pronoun-action:have|has} a <font color=%s>{self:if-female:lovely}{self:if-male:handsome} %s</font>"
                             + "{other:if-human: that definitely ignites a fire between your legs}.";
+            hotnessColor = GUIColor.HOTNESS_LOVELY;
         } else if (hotness > 1.6){
-            message = "%s{self:possessive} %s is <font color='rgb(250,130,220)'>quite attractive</font>, "
+            message = "%s{self:possessive} %s is <font color=%s>quite attractive</font>, "
                             + "although not particularly outstanding in any regard.";
+            hotnessColor = GUIColor.HOTNESS_ATTRACTIVE;
         } else if (hotness > 1.0) {
-            message = "%s{self:possessive} %s is <font color='rgb(255,130,150)'>so-so</font>. "
+            message = "%s{self:possessive} %s is <font color=%s>so-so</font>. "
                             + "{self:PRONOUN} would blend in with all the other {self:guy}s on campus.";
+            hotnessColor = GUIColor.HOTNESS_SOSO;
         } else {
-            message = "%s{self:possessive} %s is <font color='rgb(255,105,105)'>not very attractive</font>... "
+            message = "%s{self:possessive} %s is <font color=%s>not very attractive</font>... "
                             + "Hopefully {self:pronoun} can make up for it in technique.";
+            hotnessColor = GUIColor.HOTNESS_NOT;
         }
         if (Flag.checkFlag(Flag.systemMessages)) {
             message += String.format(" (%.01f)", hotness);
         }
-        return Formatter.format(message, character, other, startString, bodyString);
+        return Formatter.format(message, character, other, startString, hotnessColor.rgbHTML(), bodyString);
     }
     private static final BodyPartSorter SORTER = new BodyPartSorter();
     public void describeBodyText(StringBuilder b, Character other, boolean notableOnly) {
@@ -717,37 +726,27 @@ public class Body implements Cloneable {
             if (with == nonePart) {
                 pleasuredBy = opponent.subject();
             }
-            String firstColor =
-                            character.human() ? "<font color='rgb(150,150,255)'>" : "<font color='rgb(255,150,150)'>";
-            if (character.isPet()) {
-                if (((PetCharacter)character).getSelf().owner().human()) {
-                    firstColor = "<font color='rgb(130,225,200)'>";
-                } else {
-                    firstColor = "<font color='rgb(210,130,255)'>";
-                }
-            }
-            String secondColor =
-                            opponent.human() ? "<font color='rgb(150,150,255)'>" : "<font color='rgb(255,150,150)'>";
-            if (opponent.isPet()) {
-                if (((PetCharacter)opponent).getSelf().owner().human()) {
-                    secondColor = "<font color='rgb(130,225,200)'>";
-                } else {
-                    secondColor = "<font color='rgb(210,130,255)'>";
-                }
-            }
-            String bonusString = baseBonusDamage > 0
-                            ? String.format(" + <font color='rgb(255,100,50)'>%.1f</font>", baseBonusDamage)
-                            : baseBonusDamage < 0 ? String.format(" + <font color='rgb(50,100,255)'>%.1f</font>", baseBonusDamage) : "";
+            GUIColor firstColor = GUIColor.characterColor(character);
+            GUIColor secondColor = GUIColor.characterColor(opponent);
+            String bonusString = baseBonusDamage > 0 ?
+                            String.format(" + <font color=%s>%.1f</font>", GUIColor.AROUSAL_BONUS.rgbHTML(),
+                                            baseBonusDamage) :
+                            baseBonusDamage < 0 ?
+                                            String.format(" + <font color=%s>%.1f</font>",
+                                                            GUIColor.AROUSAL_MALUS.rgbHTML(), baseBonusDamage) :
+                                            "";
             String stageString = skill == null ? "" : String.format(" + stage:%.2f", skill.multiplierForStage(character));
             String dominanceString = dominance < 0.01 ? "" : String.format(" + dominance:%.2f", dominance);
             String staleString = staleness < .99 ? String.format(" x staleness: %.2f", staleness) : "";
-            String battleString = String.format(
-                            "%s%s %s</font> was pleasured by %s%s</font> for <font color='rgb(255,50,200)'>%d</font> "
-                                            + "base:%.1f (%.1f%s) x multiplier: %.2f (1 + sen:%.1f + ple:%.1f + per:%.1f %s %s)%s\n",
-                            firstColor, Formatter.capitalizeFirstLetter(character.nameOrPossessivePronoun()),
-                            target.describe(character), secondColor, pleasuredBy, result, base, magnitude, bonusString,
-                            multiplier, sensitivity - 1, pleasure - 1, perceptionBonus - 1, stageString, dominanceString, 
-                            staleString);
+            String battleString =
+                            String.format("<font color=%s>%s %s</font> was pleasured by <font color=%s>%s</font> for <font color=%s>%d</font> "
+                                                            + "base:%.1f (%.1f%s) x multiplier: %.2f (1 + sen:%.1f + ple:%.1f + per:%.1f %s %s)%s\n",
+                                            firstColor.rgbHTML(),
+                                            Formatter.capitalizeFirstLetter(character.nameOrPossessivePronoun()),
+                                            target.describe(character), secondColor.rgbHTML(), pleasuredBy,
+                                            GUIColor.AROUSAL_GAIN.rgbHTML(), result, base, magnitude, bonusString,
+                                            multiplier, sensitivity - 1, pleasure - 1, perceptionBonus - 1, stageString,
+                                            dominanceString, staleString);
             if (c != null) {
                 c.writeSystemMessage(battleString);
             }
@@ -757,17 +756,18 @@ public class Body implements Cloneable {
                 opponent.temptNoSkill(c, character, target, (int) Math.round(perceptionlessDamage * (otherFetish.get().magnitude - .2)));
             }
         } else {
-            String firstColor =
-                            character.human() ? "<font color='rgb(150,150,255)'>" : "<font color='rgb(255,150,150)'>";
+            GUIColor firstColor = GUIColor.characterColor(character);
             String bonusString = baseBonusDamage > 0
-                            ? String.format(" + <font color='rgb(255,100,50)'>%.1f</font>", baseBonusDamage)
+                            ? String.format(" + <font color=%s>%.1f</font>", GUIColor.AROUSAL_BONUS, baseBonusDamage)
                             : "";
-            String battleString = String.format(
-                            "%s%s %s</font> was pleasured for <font color='rgb(255,50,200)'>%d</font> "
-                                            + "base:%.1f (%.2f%s) x multiplier: %.2f (sen:%.1f + ple:%.1f + per:%.1f)\n",
-                            firstColor, Formatter.capitalizeFirstLetter(character.nameOrPossessivePronoun()),
-                            target.describe(character), result, base, magnitude, bonusString, multiplier,
-                            sensitivity - 1, pleasure - 1, perceptionBonus - 1);
+            String battleString =
+                            String.format("<font color=%s>%s %s</font> was pleasured for <font color=%s>%d</font> "
+                                                            + "base:%.1f (%.2f%s) x multiplier: %.2f (sen:%.1f + ple:%.1f + per:%.1f)\n",
+                                            firstColor.rgbHTML(),
+                                            Formatter.capitalizeFirstLetter(character.nameOrPossessivePronoun()),
+                                            target.describe(character), GUIColor.AROUSAL_GAIN.rgbHTML(), result, base,
+                                            magnitude, bonusString, multiplier, sensitivity - 1, pleasure - 1,
+                                            perceptionBonus - 1);
             if (c != null) {
                 c.writeSystemMessage(battleString);
             }

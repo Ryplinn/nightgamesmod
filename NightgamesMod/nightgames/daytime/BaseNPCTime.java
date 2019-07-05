@@ -6,6 +6,7 @@ import nightgames.characters.trait.Trait;
 import nightgames.global.Flag;
 import nightgames.global.Formatter;
 import nightgames.gui.GUI;
+import nightgames.gui.GUIColor;
 import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
 import nightgames.items.Loot;
@@ -61,9 +62,9 @@ public abstract class BaseNPCTime extends Activity {
     
     private String formatRequirementString(String description, boolean meets) {
         if (meets) {
-            return String.format("<font color='rgb(90,210,100)'>%s</font>", description);
+            return String.format("<font color=%s>%s</font>", GUIColor.EVENT_REQUIREMENT_MEETS.rgbHTML(), description);
         } else {
-            return String.format("<font color='rgb(210,90,90)'>%s</font>", description);
+            return String.format("<font color=%s>%s</font>", GUIColor.EVENT_REQUIREMENT_NOTMEETS.rgbHTML(), description);
         }
     }
 

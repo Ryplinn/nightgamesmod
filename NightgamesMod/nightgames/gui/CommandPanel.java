@@ -3,8 +3,8 @@ package nightgames.gui;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class CommandPanel {
     private static final List<Character> POSSIBLE_HOTKEYS = Arrays.asList(
@@ -22,7 +22,7 @@ public class CommandPanel {
     private JPanel rows[];
     public CommandPanel(int width) {
         panel = new JPanel();
-        panel.setBackground(GUIColors.bgDark);
+        panel.setBackground(GUIColor.BG_DARK.color);
         panel.setPreferredSize(new Dimension(width, 160));
         panel.setMinimumSize(new Dimension(width, 160));
         panel.setBorder(new CompoundBorder());
