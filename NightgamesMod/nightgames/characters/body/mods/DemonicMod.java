@@ -73,7 +73,7 @@ public class DemonicMod extends PartMod {
                 strength = strength * 3 / 2;
             }
             strength = (int) DamageType.drain.modifyDamage(self, opponent, strength);
-            opponent.drain(c, self, strength);
+            opponent.drainStamina(c, self, strength);
             if (self.isPet()) {
                 Character master = ((PetCharacter) self).getSelf().owner();
                 c.write(self, Formatter.format("The stolen strength seems to be shared with {self:possessive} {other:master} through {self:possessive} infernal connection.", self, master));

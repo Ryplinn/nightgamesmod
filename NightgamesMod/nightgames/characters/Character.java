@@ -20,6 +20,7 @@ import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.global.*;
 import nightgames.gui.GUI;
+import nightgames.gui.GUIColor;
 import nightgames.items.Item;
 import nightgames.items.clothing.*;
 import nightgames.json.JsonUtils;
@@ -532,28 +533,6 @@ public abstract class Character extends Observable implements Cloneable {
             add(c, new AttributeBuff(this, Attribute.Power, -mag, 10));
         }
         stamina.reduce(pain);
-    }
-
-    public void drain(Combat c, Character drainer, int i) {
-        int drained = i;
-        int bonus = 0;
-
-        for (Status s : getStatuses()) {
-            bonus += s.drained(c, drained);
-        }
-        drained += bonus;
-        if (drained >= stamina.get()) {
-            drained = stamina.get();
-        }
-        if (drained > 0) {
-            if (c != null) {
-                c.writeSystemMessage(
-                                String.format("%s drained of <font color=%s>%d<font color='white'> stamina by %s",
-                                                subjectWas(), STAMINA_LOSS.rgbHTML(), drained, drainer.subject()));
-            }
-            stamina.reduce(drained);
-            drainer.stamina.restore(drained);
-        }
     }
 
     public void weaken(Combat c, final int i) {
@@ -1998,7 +1977,7 @@ public abstract class Character extends Observable implements Cloneable {
                 }
                 int gained;
                 if (Flag.checkFlag(Flag.hardmode)) {
-                    drain(c, opponent, 30 + Random.random(50));
+                    drainStamina(c, opponent, 30 + Random.random(50));
                     gained = opponent.getXPReqToNextLevel();
                 } else {
                     gained = opponent.getXPReqToNextLevel();
@@ -2089,7 +2068,7 @@ public abstract class Character extends Observable implements Cloneable {
                                                     + selfOrgan.describe(this) + " through your connection.",
                                     this, opponent));
                     int m = Random.random(5) + 5;
-                    opponent.drain(c, this, (int) DamageType.drain.modifyDamage(this, opponent, m));
+                    opponent.drainStamina(c, this, (int) DamageType.drain.modifyDamage(this, opponent, m));
                 }
                 body.tickHolding(c, opponent, selfOrgan, otherOrgan);
             }
@@ -3477,91 +3456,58 @@ public abstract class Character extends Observable implements Cloneable {
         orgasms = 0;
     }
 
-    public void drainWillpower(Combat c, Character drainer, int i) {
+    public void drain(Combat c, Character drainer, int i, MeterType drainType, MeterType restoreType, float efficiency) {
         int drained = i;
         int bonus = 0;
+        int overkill = 0;
+        Meter targetMeter = drainType.getMeter(this);
+        Meter drainerMeter = restoreType.getMeter(drainer);
 
         for (Status s : getStatuses()) {
             bonus += s.drained(c, drained);
         }
         drained += bonus;
-        if (drained >= willpower.get()) {
-            drained = willpower.get();
-        }
-        drained = Math.max(1, drained);
-        int restored = drained;
+        overkill = Math.max(0, drained - targetMeter.get());
+        drained -= overkill;
+        int restored = Math.round(drained * efficiency);
         if (c != null) {
-            c.writeSystemMessage(
-                            String.format("%s drained of <font color=%s>%d<font color='white'> willpower<font color='white'> by %s",
-                                            subjectWas(), WILLPOWER_LOSS.rgbHTML(), drained, drainer.subject()));
+            String subjectText = String.format("%s drained of", subjectWas());
+            String drainText = String.format(" <font color=%s>%d<font color='white'> %s%s", drainType.lossColor.rgbHTML(),
+                                            drained, drainType.name,
+                                            overkill > 0 ? " (" + overkill + " overkill)" : "");
+            String restoreText = drainType == restoreType && drained == restored ?
+                            String.format(" as <font color=%s>%d<font color='white'> %s",
+                                            restoreType.gainColor.rgbHTML(), restored, restoreType.name) :
+                            "";
+            String drainerText = String.format(" by %s", drainer.subject());
+            c.writeSystemMessage(subjectText + drainText + restoreText + drainerText);
         }
-        willpower.reduce(drained);
-        drainer.willpower.restore(restored);
+        targetMeter.reduce(drained);
+        drainerMeter.restore(restored);
+    }
+
+    public void drain(Combat c, Character drainer, int i, MeterType drainType, MeterType restoreType) {
+        drain(c, drainer, i, drainType, restoreType, 1.0f);
+    }
+
+    public void drainWillpower(Combat c, Character drainer, int i) {
+        drain(c, drainer, i, MeterType.WILLPOWER, MeterType.WILLPOWER);
     }
 
     public void drainWillpowerAsMojo(Combat c, Character drainer, int i, float efficiency) {
-        int drained = i;
-        int bonus = 0;
-
-        for (Status s : getStatuses()) {
-            bonus += s.drained(c, drained);
-        }
-        drained += bonus;
-        if (drained >= willpower.get()) {
-            drained = willpower.get();
-        }
-        drained = Math.max(1, drained);
-        int restored = Math.round(drained * efficiency);
-        if (c != null) {
-            c.writeSystemMessage(
-                            String.format("%s drained of <font color=%s>%d<font color='white'> willpower as <font color=%s>%d<font color='white'> mojo by %s",
-                                            subjectWas(), WILLPOWER_LOSS.rgbHTML(), drained, MOJO_GAIN.rgbHTML(), restored, drainer.subject()));
-        }
-        willpower.reduce(drained);
-        drainer.mojo.restore(restored);
+        drain(c, drainer, i, MeterType.WILLPOWER, MeterType.MOJO, efficiency);
     }
 
     public void drainStaminaAsMojo(Combat c, Character drainer, int i, float efficiency) {
-        int drained = i;
-        int bonus = 0;
-
-        for (Status s : getStatuses()) {
-            bonus += s.drained(c, drained);
-        }
-        drained += bonus;
-        if (drained >= stamina.get()) {
-            drained = stamina.get();
-        }
-        drained = Math.max(1, drained);
-        int restored = Math.round(drained * efficiency);
-        if (c != null) {
-            c.writeSystemMessage(
-                            String.format("%s drained of <font color=%s>%d<font color='white'> stamina as <font color=%s>%d<font color='white'> mojo by %s",
-                                            subjectWas(), STAMINA_LOSS.rgbHTML(), drained, MOJO_GAIN.rgbHTML(), restored, drainer.subject()));
-        }
-        stamina.reduce(drained);
-        drainer.mojo.restore(restored);
+        drain(c, drainer, i, MeterType.STAMINA, MeterType.MOJO, efficiency);
     }
 
     public void drainMojo(Combat c, Character drainer, int i) {
-        int drained = i;
-        int bonus = 0;
+        drain(c, drainer, i, MeterType.MOJO, MeterType.MOJO);
+    }
 
-        for (Status s : getStatuses()) {
-            bonus += s.drained(c, drained);
-        }
-        drained += bonus;
-        if (drained >= mojo.get()) {
-            drained = mojo.get();
-        }
-        drained = Math.max(1, drained);
-        if (c != null) {
-            c.writeSystemMessage(
-                            String.format("%s drained of <font color=%s>%d<font color='white'> mojo by %s",
-                                            subjectWas(), MOJO_LOSS.rgbHTML(), drained, drainer.subject()));
-        }
-        mojo.reduce(drained);
-        drainer.mojo.restore(drained);
+    public void drainStamina(Combat c, Character drainer, int i) {
+        drain(c, drainer, i, MeterType.STAMINA, MeterType.STAMINA);
     }
 
     public void update() {
@@ -3820,7 +3766,7 @@ public abstract class Character extends Observable implements Cloneable {
     public void flagStatus(Stsflag flag) {
         statusFlags.add(flag);
     }
-    
+
     public void unflagStatus(Stsflag flag) {
         statusFlags.remove(flag);
     }
@@ -3900,7 +3846,7 @@ public abstract class Character extends Observable implements Cloneable {
     public boolean isPetOf(Character other) {
         return false;
     }
-    
+
     public boolean isPet() {
         return false;
     }
@@ -3908,7 +3854,7 @@ public abstract class Character extends Observable implements Cloneable {
     public int getPetLimit() {
         return has(Trait.congregation) ? 2 : 1;
     }
-    
+
     public Collection<Action> allowedActions() {
         return status.stream().flatMap(s -> s.allowedActions().stream()).collect(Collectors.toSet());
     }
@@ -4035,11 +3981,11 @@ public abstract class Character extends Observable implements Cloneable {
     public boolean checkAddiction() {
         return getAddictionStream().anyMatch(a -> a.atLeast(Severity.LOW));
     }
-    
+
     public boolean checkAddiction(AddictionType type) {
         return getAddiction(type).map(Addiction::isActive).orElse(false);
     }
-    
+
     public boolean checkAddiction(AddictionType type, Character cause) {
         return getAddiction(type).map(addiction -> addiction.isActive() && addiction.wasCausedBy(cause)).orElse(false);
     }
@@ -4063,4 +4009,38 @@ public abstract class Character extends Observable implements Cloneable {
     public int fleeModifier() {
         return get(Attribute.Speed) + (has(Trait.sprinter) ? 5 : 0);
     }
+
+    public enum MeterType {
+        STAMINA("stamina", STAMINA_GAIN, STAMINA_LOSS),
+        AROUSAL("arousal", AROUSAL_GAIN, AROUSAL_LOSS),
+        MOJO("mojo", MOJO_GAIN, MOJO_LOSS),
+        WILLPOWER("willpower", WILLPOWER_GAIN, WILLPOWER_LOSS),
+        ;
+
+        String name;
+        GUIColor gainColor;
+        GUIColor lossColor;
+
+        MeterType(String name, GUIColor gainColor, GUIColor lossColor) {
+            this.name = name;
+            this.gainColor = gainColor;
+            this.lossColor = lossColor;
+        }
+
+        Meter getMeter(Character character) {
+            switch (this) {
+                case STAMINA:
+                    return character.stamina;
+                case AROUSAL:
+                    return character.arousal;
+                case MOJO:
+                    return character.mojo;
+                case WILLPOWER:
+                    return character.willpower;
+                default:
+                    throw new RuntimeException("Invalid Meter Type");
+            }
+        }
+    }
+
 }
