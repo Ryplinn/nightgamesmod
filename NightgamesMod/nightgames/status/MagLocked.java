@@ -1,17 +1,14 @@
 package nightgames.status;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.items.Item;
+
+import java.util.Optional;
 
 public class MagLocked extends Status {
 
@@ -76,7 +73,9 @@ public class MagLocked extends Status {
         if (count > 1) {
             flag(Stsflag.bound);
             c.getOpponent(affected).consume(Item.Battery, count - 1);
-            if (count == 3) flag(Stsflag.hogtied);
+            if (count == 3) {
+                flag(Stsflag.hogtied);
+            }
         }
         if (!c.getOpponent(affected).has(Item.Battery)) {
             c.write(Formatter.format(
@@ -85,13 +84,6 @@ public class MagLocked extends Status {
                             affected, c.getOpponent(affected)));
             affected.removelist.add(this);
         }
-    }
-
-    @Override
-    public Set<Stsflag> flags() {
-        Set<Stsflag> flags = new HashSet<>(super.flags().size() + 1);
-        flags.add(Stsflag.stunned);
-        return flags;
     }
 
     @Override

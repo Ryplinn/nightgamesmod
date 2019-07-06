@@ -345,6 +345,7 @@ public abstract class Character extends Observable implements Cloneable {
         return total;
     }
 
+    // TODO: Review whether checks consider low or high rolls successes
     public boolean checkVsDc(Attribute a, int dc) {
         return checkVsDc(a, 0, dc);
     }

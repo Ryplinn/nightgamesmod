@@ -42,7 +42,7 @@ public class Struggle extends Skill {
             return getSelf().canRespond();
         }
         return ((!c.getStance().mobile(getSelf()) && !c.getStance().dom(getSelf()) || getSelf().bound()
-                        || getSelf().is(Stsflag.maglocked))
+                        || (getSelf().is(Stsflag.maglocked) && !getSelf().is(Stsflag.hogtied)))
                         || hasSingleGrabber(c, target))
                         && getSelf().canRespond();
     }
@@ -286,7 +286,7 @@ public class Struggle extends Skill {
         
         // One MagLock, pretty easy to remove
         if (stat.getCount() == 1) {
-            if (!target.checkVsDc(Attribute.Science, dc * 2)) {
+            if (target.checkVsDc(Attribute.Science, dc / 2)) {
                 c.write(getSelf(), Formatter.format("Still having one hand completely free, it's not to"
                             + " difficult for {self:subject} to remove the lone MagLock"
                             + " {other:subject} had placed around {self:possessive} wrist.", getSelf(), target));
@@ -303,7 +303,7 @@ public class Struggle extends Skill {
                 return false;
             }
             // Two MagLocks, difficult to remove
-            if (!target.checkVsDc(Attribute.Science, dc)) {
+            if (target.checkVsDc(Attribute.Science, dc)) {
                 String msg = "{self:SUBJECT-ACTION:struggle|struggles} against the powerful"
                                 + " MagLocks locked around {self:possessive} wrists by ";
                 if (Arrays.asList(Attribute.Dark, Attribute.Arcane, Attribute.Temporal, Attribute.Divinity)
@@ -317,7 +317,7 @@ public class Struggle extends Skill {
                                 .contains(highestAdvancedAttr)) {
                     msg += "finding and exploiting a weakness in their design";
                 } else {
-                    msg += "twisting and turning {slef:possessive} hands as much as possible"
+                    msg += "twisting and turning {self:possessive} hands as much as possible"
                                     + " while attempting to force them apart";
                 }
                 msg += ", and eventually succeeds. The two bands drop to the ground and power down.";
