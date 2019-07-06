@@ -29,6 +29,7 @@ import nightgames.status.Stsflag;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -102,7 +103,7 @@ public class Body implements Cloneable {
 
     public Body() {
         bodyParts = new LinkedHashSet<>();
-        currentParts = new HashSet<>();
+        currentParts = ConcurrentHashMap.newKeySet();
         replacements = new ArrayList<>();
         modReplacements = new HashMap<>();
         lastPleasuredBy = nonePart;

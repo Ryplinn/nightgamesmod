@@ -1212,7 +1212,7 @@ public class GUI extends JFrame implements Observer {
 
         
         if (width < 720) {
-            statusPanel.setMaximumSize(new Dimension(height, width / 6));
+            statusPanel.setMaximumSize(new Dimension(width / 6, height));
             System.out.println("STATUS PANEL");
         }
         JPanel statsPanel = new JPanel(new GridLayout(0, 3));

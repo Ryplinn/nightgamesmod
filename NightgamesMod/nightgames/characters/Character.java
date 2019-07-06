@@ -44,6 +44,7 @@ import nightgames.utilities.ProseUtils;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -105,7 +106,7 @@ public abstract class Character extends Observable implements Cloneable {
         cloned = 0;
         custom = false;
         body = new Body(this);
-        att = new HashMap<>();
+        att = new EnumMap<>(Attribute.class);
         cooldowns = new HashMap<>();
         flags = new HashMap<>();
         levelPlan = new HashMap<>();
@@ -167,7 +168,7 @@ public abstract class Character extends Observable implements Cloneable {
     @Override
     public Character clone() throws CloneNotSupportedException {
         Character c = (Character) super.clone();
-        c.att = new HashMap<>(att);
+        c.att = new EnumMap<>(att);
         c.stamina = stamina.clone();
         c.cloned = cloned + 1;
         c.arousal = arousal.clone();
@@ -186,7 +187,7 @@ public abstract class Character extends Observable implements Cloneable {
         c.removelist = new HashSet<>(removelist);
         c.addlist = new HashSet<>(addlist);
         c.mercy = new CopyOnWriteArrayList<>(mercy);
-        c.inventory = new HashMap<>(inventory);
+        c.inventory = new ConcurrentHashMap<>(inventory);
         c.attractions = new HashMap<>(attractions);
         c.affections = new HashMap<>(affections);
         c.skills = (new CopyOnWriteArrayList<>(getSkills()));
