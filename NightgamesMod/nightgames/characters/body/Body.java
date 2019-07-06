@@ -267,34 +267,34 @@ public class Body implements Cloneable {
 
         GUIColor hotnessColor;
         if (hotness > 3.2) {
-            message = "%s{self:possessive} %s is <font color=%s>absolute perfection</font>, "
+            message = "%1$s{self:possessive} %2$s is <font color=%3$s>absolute perfection</font>, "
                             + "as if perfectly sculpted by a divine hand.";
             hotnessColor = GUIColor.HOTNESS_PERFECT;
         } else if (hotness > 2.6){
-            message = "%s{self:possessive} %s is <font color=%s>exquisitely beautiful</font>. "
+            message = "%1$s{self:possessive} %2$s is <font color=%3$s>exquisitely beautiful</font>. "
                             + "There aren't many like {self:direct-object} in the world.";
             hotnessColor = GUIColor.HOTNESS_EXQUISITE;
         } else if (hotness > 2.1){
-            message = "%s{self:pronoun-action:have|has} a <font color=%s>{self:if-female:lovely}{self:if-male:handsome} %s</font>"
+            message = "%1$s{self:pronoun-action:have|has} a <font color=%3$s>{self:if-female:lovely}{self:if-male:handsome} %2$s</font>"
                             + "{other:if-human: that definitely ignites a fire between your legs}.";
             hotnessColor = GUIColor.HOTNESS_LOVELY;
         } else if (hotness > 1.6){
-            message = "%s{self:possessive} %s is <font color=%s>quite attractive</font>, "
+            message = "%1$s{self:possessive} %2$s is <font color=%3$s>quite attractive</font>, "
                             + "although not particularly outstanding in any regard.";
             hotnessColor = GUIColor.HOTNESS_ATTRACTIVE;
         } else if (hotness > 1.0) {
-            message = "%s{self:possessive} %s is <font color=%s>so-so</font>. "
+            message = "%1$s{self:possessive} %2$s is <font color=%3$s>so-so</font>. "
                             + "{self:PRONOUN} would blend in with all the other {self:guy}s on campus.";
             hotnessColor = GUIColor.HOTNESS_SOSO;
         } else {
-            message = "%s{self:possessive} %s is <font color=%s>not very attractive</font>... "
+            message = "%1$s{self:possessive} %2$s is <font color=%3$s>not very attractive</font>... "
                             + "Hopefully {self:pronoun} can make up for it in technique.";
             hotnessColor = GUIColor.HOTNESS_NOT;
         }
         if (Flag.checkFlag(Flag.systemMessages)) {
             message += String.format(" (%.01f)", hotness);
         }
-        return Formatter.format(message, character, other, startString, hotnessColor.rgbHTML(), bodyString);
+        return Formatter.format(message, character, other, startString, bodyString, hotnessColor.rgbHTML());
     }
     private static final BodyPartSorter SORTER = new BodyPartSorter();
     public void describeBodyText(StringBuilder b, Character other, boolean notableOnly) {
