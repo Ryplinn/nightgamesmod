@@ -779,7 +779,9 @@ public class GUI extends JFrame implements Observer {
     }
 
     private void populateGameState(GameState gameState) {
-        getContentPane().remove(creation);
+        if (creation != null) {
+            getContentPane().remove(creation);
+        }
         getContentPane().add(gamePanel);
         getContentPane().validate();
 
