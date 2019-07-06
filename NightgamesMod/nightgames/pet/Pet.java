@@ -1,6 +1,7 @@
 package nightgames.pet;
 
 import nightgames.characters.Character;
+import nightgames.characters.NPC;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
@@ -29,7 +30,11 @@ public abstract class Pet implements Cloneable {
     }
 
     public Character owner() {
-        return owner;
+        if (owner != null) {
+            return owner;
+        } else {
+            return NPC.noneCharacter();
+        }
     }
 
     public String own() {
