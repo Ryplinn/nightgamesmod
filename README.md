@@ -46,7 +46,8 @@ This stable branch is feature-frozen at v2.5.1.2 of nergantre's master branch. C
 
 1. Separate display and game logic. There will need to be a layer between display logic and game logic, although exactly where that code lives is less important than the conceptual structure.
 
-    1. HTML styling should be handled on the display style. Having on-screen text stored in an easy-to-parse/compare format somewhere would be helpful.
+    1. Find a better way to prevent ConcurrentModificationExceptions. There should be a way to design things such that we don't have to explicitly use thread-safe data structures all over the place.
+    1. HTML styling should be handled on the display side. Having on-screen text stored in an easy-to-parse/compare format somewhere would be helpful.
 
 1. Make most trait and status effects specified in data files, rather than code.
 
