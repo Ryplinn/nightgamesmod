@@ -128,8 +128,8 @@ public abstract class Character extends Observable implements Cloneable {
         outfitPlan = new OutfitPlan();
 
         closet = new HashSet<>();
-        skills = (new CopyOnWriteArrayList<>());
-        status = new ArrayList<>();
+        skills = new CopyOnWriteArrayList<>();
+        status = new CopyOnWriteArrayList<>();
         statusFlags = EnumSet.noneOf(Stsflag.class);
         traits = new CopyOnWriteArrayList<>();
         temporaryAddedTraits = new HashMap<>();
@@ -204,7 +204,7 @@ public abstract class Character extends Observable implements Cloneable {
 
     public void finishClone(Character other) {
         List<Status> oldstatus = status;
-        status = new ArrayList<>();
+        status = new CopyOnWriteArrayList<>();
         for (Status s : oldstatus) {
             status.add(s.instance(this, other));
         }
