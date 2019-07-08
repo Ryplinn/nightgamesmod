@@ -1,21 +1,16 @@
 package nightgames.combat;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import nightgames.characters.Character;
+import nightgames.characters.body.arms.ArmManager;
 import nightgames.global.DebugFlags;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
-import nightgames.pet.arms.ArmManager;
 import nightgames.skills.Skill;
 import nightgames.skills.damage.Staleness;
 import nightgames.skills.strategy.CombatStrategy;
 import nightgames.skills.strategy.DefaultStrategy;
+
+import java.util.*;
 
 public class CombatantData implements Cloneable {
     private List<Clothing> clothespile;

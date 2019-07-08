@@ -1,6 +1,7 @@
 package nightgames.characters;
 
 import nightgames.characters.body.*;
+import nightgames.characters.body.arms.ArmManager;
 import nightgames.characters.body.mods.GooeyMod;
 import nightgames.characters.body.mods.SizeMod;
 import nightgames.characters.custom.CharacterLine;
@@ -9,7 +10,6 @@ import nightgames.combat.*;
 import nightgames.daytime.Daytime;
 import nightgames.global.*;
 import nightgames.items.Item;
-import nightgames.pet.arms.ArmManager;
 import nightgames.stance.Engulfed;
 import nightgames.start.NpcConfiguration;
 import nightgames.status.Flatfooted;

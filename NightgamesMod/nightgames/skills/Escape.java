@@ -1,18 +1,18 @@
 package nightgames.skills;
 
-import java.util.Optional;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.body.arms.skills.Grab;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
 import nightgames.nskills.tags.SkillTag;
-import nightgames.pet.arms.skills.Grab;
 import nightgames.stance.Neutral;
 import nightgames.status.Compulsive;
 import nightgames.status.Compulsive.Situation;
 import nightgames.status.Stsflag;
+
+import java.util.Optional;
 
 public class Escape extends Skill {
     public Escape(Character self) {

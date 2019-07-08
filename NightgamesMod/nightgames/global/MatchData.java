@@ -1,7 +1,7 @@
 package nightgames.global;
 
 import nightgames.characters.Character;
-import nightgames.pet.arms.ArmManager;
+import nightgames.characters.body.arms.ArmManager;
 
 import java.util.HashMap;
 import java.util.Map;
