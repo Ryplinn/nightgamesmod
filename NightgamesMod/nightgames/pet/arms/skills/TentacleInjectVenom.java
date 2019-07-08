@@ -5,7 +5,7 @@ import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
-import nightgames.pet.PetCharacter;
+import nightgames.gui.GUIColor;
 import nightgames.pet.arms.Arm;
 import nightgames.status.Atrophy;
 import nightgames.status.AttributeBuff;
@@ -15,7 +15,7 @@ public class TentacleInjectVenom extends TentacleArmSkill {
         super("Tentacle Injection: Venom", 20);
     }
 
-    public String getSourceString(Character self) {
+    private String getSourceString(Character self) {
         return Formatter.format("{self:NAME-POSSESSIVE} tentacle venom", self, self);
     }
 
@@ -31,7 +31,7 @@ public class TentacleInjectVenom extends TentacleArmSkill {
         boolean success = sub || Random.random(100) < 10 + owner.get(Attribute.Slime);
 
         if (success) {
-            c.write(PetCharacter.DUMMY, Formatter.format("{self:NAME-POSSESSIVE} injector tentacle shoots forward and embeds itself in {other:name-possessive} arm. "
+            c.write(GUIColor.limbColor(owner), Formatter.format("{self:NAME-POSSESSIVE} injector tentacle shoots forward and embeds itself in {other:name-possessive} arm. "
                             + "{other:pronoun-action:yelp} and {other:action:pull} it out straight away. Unfortunately, "
                             + "{other:pronoun} already {other:action:start} to feel sluggish as {other:pronoun-action:realize} "
                             + "{other:pronoun-action:have} been poisoned.", owner, target));
@@ -40,7 +40,7 @@ public class TentacleInjectVenom extends TentacleArmSkill {
             target.add(c, new AttributeBuff(target, Attribute.Speed, target.getPure(Attribute.Speed) / 3, 10));
             return true;
         } else {
-            c.write(PetCharacter.DUMMY, Formatter.format("A %s flies towards {other:name-do}, "
+            c.write(GUIColor.limbColor(owner), Formatter.format("A %s flies towards {other:name-do}, "
                             + "but {other:pronoun-action:dodge} out of the way just in time.", owner, target, arm.getName()));
             return false;
         }

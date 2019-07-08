@@ -64,7 +64,6 @@ public class Combat extends Observable implements Cloneable {
     public Area location;
     private String message;
     private Position stance;
-    public Character lastTalked;
     protected int timer;
     public Result state;
     private Map<String, String> images;
@@ -1107,6 +1106,7 @@ public class Combat extends Observable implements Cloneable {
         if (this.cloned) {
             return;
         }
+        // TODO: Does this work if the message starts with an HTML tag?
         text = Formatter.capitalizeFirstLetter(text);
         if (text.isEmpty()) {
             return;
@@ -1121,13 +1121,15 @@ public class Combat extends Observable implements Cloneable {
     }
 
     public void write(Character user, String text) {
-        text = formatMessage(user, text);
-        write(text);
-        lastTalked = user;
+        write(GUIColor.characterColor(user), text);
     }
 
-    private String formatMessage(Character user, String text) {
-        return String.format("<font color=%s>", GUIColor.characterColor(user).rgbHTML()) + text + "<font color='white'>";
+    public void write(GUIColor color, String text) {
+        write(colorMessage(color, text));
+    }
+
+    private String colorMessage(GUIColor color, String text) {
+        return String.format("<font color=%s>", color.rgbHTML()) + text + "<font color='white'>";
     }
 
     public String getMessage() {

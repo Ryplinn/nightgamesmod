@@ -6,7 +6,7 @@ import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
-import nightgames.pet.PetCharacter;
+import nightgames.gui.GUIColor;
 import nightgames.pet.arms.Arm;
 import nightgames.pet.arms.TentacleArm;
 import nightgames.status.PartFucked;
@@ -35,7 +35,7 @@ public class TentacleFuck extends TentacleArmSkill {
         }
 
         if (success) {
-            c.write(PetCharacter.DUMMY, Formatter.format("{self:NAME-POSSESSIVE} %s shoots forward, snaking through {other:possessive} guard "
+            c.write(GUIColor.limbColor(owner), Formatter.format("{self:NAME-POSSESSIVE} %s shoots forward, snaking through {other:possessive} guard "
                             + "and impaling itself inside {other:possessive} defenseless pussy. "
                             + "{other:SUBJECT:try} pulling it out with {other:possessive} hands but the slippery appendage easily eludes {other:possessive} grip. "
                             + "The entire business just ends ups arousing {other:direct-object} to no end.", owner, target, arm.getName()));
@@ -43,7 +43,7 @@ public class TentacleFuck extends TentacleArmSkill {
             target.add(c, new PartFucked(target, owner, tentaclePart, "pussy"));
             return true;
         } else {
-            c.write(PetCharacter.DUMMY, Formatter.format("A %s flies towards {other:name-possessive} crotch, "
+            c.write(GUIColor.limbColor(owner), Formatter.format("A %s flies towards {other:name-possessive} crotch, "
                             + "but {other:pronoun-action:dodge} out of the way just in time.", owner, target, arm.getName()));
         }
         return false;

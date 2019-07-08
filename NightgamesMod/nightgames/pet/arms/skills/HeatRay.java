@@ -5,7 +5,7 @@ import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
-import nightgames.pet.PetCharacter;
+import nightgames.gui.GUIColor;
 import nightgames.pet.arms.Arm;
 
 public class HeatRay extends ArmSkill {
@@ -20,7 +20,7 @@ public class HeatRay extends ArmSkill {
         boolean success = sub || Random.random(100) < 10 + owner.get(Attribute.Science);
         
         if (success) {
-            c.write(PetCharacter.DUMMY, Formatter.format("{self:NAME-POSSESSIVE} %s levels its"
+            c.write(GUIColor.limbColor(owner), Formatter.format("{self:NAME-POSSESSIVE} %s levels its"
                             + " opening at {other:name-do} menacingly. {other:PRONOUN-ACTION:don't|doesn't}"
                             + " see anything, but {other:pronoun} certainly {other:action:feel|feels} what"
                             + " the device is doing as areas all over {other:possessive} body grow uncomfortably,"

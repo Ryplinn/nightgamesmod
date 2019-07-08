@@ -24,9 +24,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class PetCharacter extends Character {
-    
-    public static final PetCharacter DUMMY = new PetCharacter();
-    
+
     private static final Set<SkillTag> PET_UNUSABLE_TAG = new HashSet<>();
     static {
         PET_UNUSABLE_TAG.add(SkillTag.suicidal);
@@ -111,7 +109,7 @@ public class PetCharacter extends Character {
             this.level += 1;
             getGrowth().levelUp(this);
         }
-        distributePoints(Arrays.asList());
+        distributePoints(Collections.emptyList());
         if (self.owner().has(Trait.inspirational)) {
             for (Trait t : INSPIRABLE_TRAITS) {
                 if (self.owner().has(t) && !has(t)) {
@@ -126,14 +124,6 @@ public class PetCharacter extends Character {
         this.stamina.fill();
     }
 
-    private PetCharacter() {
-        super("{{{DUMMY}}}", 1);
-    }
-    
-    public boolean isDummy() {
-        return self == null;
-    }
-    
     public PetCharacter cloneWithOwner(Character owner) throws CloneNotSupportedException {
         PetCharacter clone = (PetCharacter) clone();
         clone.self = getSelf().cloneWithOwner(owner);
@@ -144,7 +134,7 @@ public class PetCharacter extends Character {
     public void ding(Combat c) {
         level += 1;
         getGrowth().levelUp(this);
-        distributePoints(Arrays.asList());
+        distributePoints(Collections.emptyList());
     }
 
     @Override
@@ -194,18 +184,17 @@ public class PetCharacter extends Character {
     }
 
     public void act(Combat c, Character target) {
-        List<Skill> allowedEnemySkills = new ArrayList<>(getSkills()
-                        .stream().filter(skill -> Skill.skillIsUsable(c, skill, target) && Collections.disjoint(skill.getTags(c), PET_UNUSABLE_TAG))
-                        .collect(Collectors.toList()));
+        List<Skill> allowedEnemySkills = getSkills().stream()
+                        .filter(skill -> Skill.skillIsUsable(c, skill, target) && Collections
+                                        .disjoint(skill.getTags(c), PET_UNUSABLE_TAG)).collect(Collectors.toList());
         Skill.filterAllowedSkills(c, allowedEnemySkills, this, target);        
 
-        List<Skill> possibleMasterSkills = new ArrayList<>(getSkills());
-        possibleMasterSkills.addAll(Combat.WORSHIP_SKILLS);
-        List<Skill> allowedMasterSkills = new ArrayList<>(getSkills()
-                        .stream().filter(skill -> Skill.skillIsUsable(c, skill, getSelf().owner)
-                                        && (skill.getTags(c).contains(SkillTag.helping) || (getSelf().owner.has(Trait.showmanship) && skill.getTags(c).contains(SkillTag.worship)))
-                                        && Collections.disjoint(skill.getTags(c), PET_UNUSABLE_TAG))
-                        .collect(Collectors.toList()));
+        List<Skill> allowedMasterSkills = getSkills().stream()
+                        .filter(skill -> Skill.skillIsUsable(c, skill, getSelf().owner) && (
+                                        skill.getTags(c).contains(SkillTag.helping) || (
+                                                        getSelf().owner.has(Trait.showmanship) && skill.getTags(c)
+                                                                        .contains(SkillTag.worship))) && Collections
+                                        .disjoint(skill.getTags(c), PET_UNUSABLE_TAG)).collect(Collectors.toList());
         Skill.filterAllowedSkills(c, allowedMasterSkills, this, getSelf().owner);
         WeightedSkill bestEnemySkill = Decider.prioritizePet(this, target, allowedEnemySkills, c);
         WeightedSkill bestMasterSkill = Decider.prioritizePet(this, getSelf().owner, allowedMasterSkills, c);
@@ -247,7 +236,7 @@ public class PetCharacter extends Character {
 
     @Override
     public Optional<Action> move() {
-        return null;
+        return Optional.empty();
     }
 
     @Override
@@ -332,7 +321,7 @@ public class PetCharacter extends Character {
     }
 
     public boolean isPetOf(Character other) {
-        return other != null && !isDummy() && ownerType.equals(other.getType());
+        return other != null && ownerType.equals(other.getType());
     }
 
     public Pet getSelf() {

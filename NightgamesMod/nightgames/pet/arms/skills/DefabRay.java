@@ -5,9 +5,9 @@ import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
+import nightgames.gui.GUIColor;
 import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingSlot;
-import nightgames.pet.PetCharacter;
 import nightgames.pet.arms.Arm;
 
 public class DefabRay extends ArmSkill {
@@ -32,7 +32,7 @@ public class DefabRay extends ArmSkill {
                 return false;
             }
             target.shred(slot);
-            c.write(PetCharacter.DUMMY, Formatter.format("{self:NAME-POSSESSIVE} %s points at you, its"
+            c.write(GUIColor.limbColor(owner), Formatter.format("{self:NAME-POSSESSIVE} %s points at you, its"
                             + " head faintly glowing with a blue light. Suddenly, an eerily similar light"
                             + " surrounds {other:name-possessive} %s, and it soon disappears entirely!"
                             , owner, target, arm.getName(), item.toString()));

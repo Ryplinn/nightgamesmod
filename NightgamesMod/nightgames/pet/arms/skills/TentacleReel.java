@@ -3,7 +3,7 @@ package nightgames.pet.arms.skills;
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
-import nightgames.pet.PetCharacter;
+import nightgames.gui.GUIColor;
 import nightgames.pet.arms.Arm;
 import nightgames.stance.Engulfed;
 import nightgames.status.Stsflag;
@@ -27,12 +27,12 @@ public class TentacleReel extends TentacleArmSkill {
         }
 
         if (bound.getStacks() >= 2) {
-            c.write(PetCharacter.DUMMY, Formatter.format("The %s wrapped around {other:name-possessive} waist manages to pull {other:direct-object} right up against {self:name-do}. "
+            c.write(GUIColor.limbColor(owner), Formatter.format("The %s wrapped around {other:name-possessive} waist manages to pull {other:direct-object} right up against {self:name-do}. "
                             + "It does not stop there though; the tentacle somehow manages to pull {other:direct-object} into {self:possessive} very body, engulfing {other:direct-object} inside.", owner, target, arm.getName()));
             target.free();
             c.setStance(new Engulfed(owner, target), owner, true);
         } else {
-            c.write(PetCharacter.DUMMY, Formatter.format("The %s wrapped around {other:name-possessive} waist starts pulling {other:direct-object} back towards {self:name-do}.", owner, target, arm.getName()));
+            c.write(GUIColor.limbColor(owner), Formatter.format("The %s wrapped around {other:name-possessive} waist starts pulling {other:direct-object} back towards {self:name-do}.", owner, target, arm.getName()));
             bound.setStacks(bound.getStacks() + 1);
         }
 

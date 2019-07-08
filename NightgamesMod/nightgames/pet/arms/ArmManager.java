@@ -6,7 +6,7 @@ import nightgames.characters.body.mods.*;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Random;
-import nightgames.pet.PetCharacter;
+import nightgames.gui.GUIColor;
 import nightgames.pet.arms.skills.ArmSkill;
 import nightgames.pet.arms.skills.DoubleGrab;
 import nightgames.pet.arms.skills.Idle;
@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ArmManager {
-    private static final List<MultiArmMove> MULTI_MOVES = Arrays.asList(new DoubleGrab());
+    private static final List<MultiArmMove> MULTI_MOVES = Collections.singletonList(new DoubleGrab());
 
     private List<Arm> arms;
 
@@ -98,12 +98,8 @@ public class ArmManager {
                     new PlantMod(), new DemonicMod(),
                     new TentacledMod());
 
-    public void addArm(Arm arm) {
+    private void addArm(Arm arm) {
         arms.add(arm);
-    }
-
-    public int armCount() {
-        return arms.size();
     }
 
     public List<Arm> getActiveArms() {
@@ -142,7 +138,7 @@ public class ArmManager {
         }
         if (!tentacleArms.isEmpty()) {
             msg += "You can see " + tentacleArms.size() + " tentacles attached to " + owner.possessiveAdjective() + " back.<br/>";
-            msg += tentacleArms.stream().map(arm -> arm.describe()).collect(Collectors.joining("<br/>"));
+            msg += tentacleArms.stream().map(TentacleArm::describe).collect(Collectors.joining("<br/>"));
             msg += "<br/>";
         }
         return msg;
@@ -150,7 +146,8 @@ public class ArmManager {
 
     private List<Arm> handleMultiArmMoves(Combat c, Character owner, Character target) {
         List<Arm> remaining = arms;
-        Collections.shuffle(MULTI_MOVES);
+        // Until more than one multi-arm move exists, shuffling the list has no point.
+        // Collections.shuffle(MULTI_MOVES);
         for (MultiArmMove mam : MULTI_MOVES) {
             if (mam.shouldExecute()) {
                 Optional<List<Arm>> used = mam.getInvolvedArms(c, owner, target, remaining);
@@ -170,7 +167,7 @@ public class ArmManager {
                                                   .filter(s -> s.usable(c, arm, owner, target))
                                                   .toArray(ArmSkill[]::new));
             if (skill.isPresent()) {
-                c.write(PetCharacter.DUMMY, String.format("<b>%s %s uses %s</b>", owner.nameOrPossessivePronoun(),
+                c.write(GUIColor.limbColor(owner), String.format("<b>%s %s uses %s</b>", owner.nameOrPossessivePronoun(),
                                 arm.getName(), skill.get().getName()));
                 skill.get().resolve(c, arm, owner, target);
                 return;

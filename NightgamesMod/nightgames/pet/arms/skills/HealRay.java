@@ -4,7 +4,7 @@ import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
-import nightgames.pet.PetCharacter;
+import nightgames.gui.GUIColor;
 import nightgames.pet.arms.Arm;
 
 public class HealRay extends ArmSkill {
@@ -37,7 +37,7 @@ public class HealRay extends ArmSkill {
             msg += "but it soon sputters and dies out. {self:PRONOUN-ACTION:are not|does not seem} pleased.";
         }
 
-        c.write(PetCharacter.DUMMY, Formatter.format(msg, owner, target, arm.getType()
+        c.write(GUIColor.limbColor(owner), Formatter.format(msg, owner, target, arm.getType()
                                                                          .getDesc(),
                         arm.getName()));
 

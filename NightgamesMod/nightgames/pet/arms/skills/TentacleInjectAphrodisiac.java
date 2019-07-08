@@ -5,7 +5,7 @@ import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
-import nightgames.pet.PetCharacter;
+import nightgames.gui.GUIColor;
 import nightgames.pet.arms.Arm;
 import nightgames.stance.Kneeling;
 import nightgames.status.Horny;
@@ -15,7 +15,7 @@ public class TentacleInjectAphrodisiac extends TentacleArmSkill {
         super("Tentacle Injection: Aphrodisiac", 20);
     }
 
-    public String getSourceString(Character self) {
+    private String getSourceString(Character self) {
         return Formatter.format("{self:NAME-POSSESSIVE} aphrodisiac poison", self, self);
     }
 
@@ -31,7 +31,7 @@ public class TentacleInjectAphrodisiac extends TentacleArmSkill {
         boolean success = sub || Random.random(100) < 10 + owner.get(Attribute.Slime);
 
         if (success) {
-            c.write(PetCharacter.DUMMY, Formatter.format("{self:NAME-POSSESSIVE} tentacle with a needle-like tip makes a sudden motion and comes flying at {other:name-do}. "
+            c.write(GUIColor.limbColor(owner), Formatter.format("{self:NAME-POSSESSIVE} tentacle with a needle-like tip makes a sudden motion and comes flying at {other:name-do}. "
                             + "With no time to dodge, {other:pronoun} can only yelp in pain at the sudden prick of a hypodermic needle penetrating {other:possessive} skin. "
                             + "{other:SUBJECT} quickly {other:action:pull} the tentacle off {other:possessive} arm, but by then it's too late: an unnatural heat rips through {other:possessive} body, "
                             + "causing {other:direct-object} to drop to {other:possessive} knees.", owner, target));
@@ -41,7 +41,7 @@ public class TentacleInjectAphrodisiac extends TentacleArmSkill {
             }
             return true;
         } else {
-            c.write(PetCharacter.DUMMY, Formatter.format("A %s flies towards {other:name-do}, "
+            c.write(GUIColor.limbColor(owner), Formatter.format("A %s flies towards {other:name-do}, "
                             + "but {other:pronoun-action:dodge} out of the way just in time.", owner, target, arm.getName()));
             return false;
         }

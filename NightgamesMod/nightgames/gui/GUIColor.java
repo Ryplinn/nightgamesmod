@@ -36,6 +36,8 @@ public enum GUIColor {
     NPC_COLOR(new Color(255, 175, 175)),
     PLAYER_PET_COLOR(new Color(130, 255, 200)),
     NPC_PET_COLOR(new Color(210, 130, 255)),
+    PLAYER_AUTONOMOUS_LIMB(new Color(174, 174, 230)),
+    NPC_AUTONOMOUS_LIMB(new Color(242, 194, 194)),
 
     HOTNESS_PERFECT(new Color(100, 255, 250)),
     HOTNESS_EXQUISITE(new Color(85, 185, 255)),
@@ -79,6 +81,7 @@ public enum GUIColor {
 
     public static GUIColor characterColor(Character character) {
         if (character.isPet()) {
+            // FIXME: still getting NPEs here
             if (((PetCharacter)character).getSelf().owner().human()) {
                 return GUIColor.PLAYER_PET_COLOR;
             } else {
@@ -88,6 +91,14 @@ public enum GUIColor {
             return GUIColor.PLAYER_COLOR;
         } else {
             return GUIColor.NPC_COLOR;
+        }
+    }
+
+    public static GUIColor limbColor(Character owner) {
+        if (owner.human()) {
+            return GUIColor.PLAYER_AUTONOMOUS_LIMB;
+        } else {
+            return GUIColor.NPC_AUTONOMOUS_LIMB;
         }
     }
 
