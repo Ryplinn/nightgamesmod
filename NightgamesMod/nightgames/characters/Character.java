@@ -3429,10 +3429,11 @@ public abstract class Character extends Observable implements Cloneable {
             String drainText = String.format(" <font color=%s>%d<font color='white'> %s%s", drainType.lossColor.rgbHTML(),
                                             drained, drainType.name,
                                             overkill > 0 ? " (" + overkill + " overkill)" : "");
+            // Only display restore text if the amount or type restored is different from the amount and type drained.
             String restoreText = drainType == restoreType && drained == restored ?
+                            "" :
                             String.format(" as <font color=%s>%d<font color='white'> %s",
-                                            restoreType.gainColor.rgbHTML(), restored, restoreType.name) :
-                            "";
+                                            restoreType.gainColor.rgbHTML(), restored, restoreType.name);
             String drainerText = String.format(" by %s", drainer.subject());
             c.writeSystemMessage(subjectText + drainText + restoreText + drainerText);
         }
