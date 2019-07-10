@@ -27,7 +27,7 @@ public class CounterPin extends CounterBase {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Power) >= 12;
+        return user.get(Attribute.power) >= 12;
     }
 
     @Override

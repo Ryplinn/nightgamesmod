@@ -30,7 +30,7 @@ public class WingWrapped extends Status {
     }
 
     private static int calcStrength(Character wrapper) {
-        return wrapper.get(Attribute.Power) / 4 + wrapper.get(Attribute.Dark) / 6;
+        return wrapper.get(Attribute.power) / 4 + wrapper.get(Attribute.darkness) / 6;
     }
 
     @Override
@@ -62,7 +62,7 @@ public class WingWrapped extends Status {
 
     @Override
     public int mod(Attribute a) {
-        if (a == Attribute.Speed) {
+        if (a == Attribute.speed) {
             return -strength/4;
         }
         return 0;
@@ -85,7 +85,7 @@ public class WingWrapped extends Status {
                             + " they can no longer confine {self:name-do}.", affected, wrapper));
             affected.removelist.add(this);
         } else if (wrapper.has(Trait.VampireWings) && affected.outfit.slotEmpty(ClothingSlot.top)) {
-            if (affected.get(Attribute.Power) < 6) {
+            if (affected.get(Attribute.power) < 6) {
                 c.write(wrapper, Formatter.format("{other:NAME-POSSESSIVE} {other:body-part:wings}, pressed"
                                 + " against {self:name-possessive} bare skin, try to reel in"
                                 + " {self:possessive} power, but they fail to draw on what little"
@@ -95,7 +95,7 @@ public class WingWrapped extends Status {
                                 + " against {self:name-possessive} bare skin, leech {self:possessive}"
                                 + " power from {self:possessive} body, letting it flow back into"
                                 + " {other:direct-object}.", affected, wrapper));
-                Drained.drain(c, wrapper, affected, Attribute.Power, 3, 20, true);
+                Drained.drain(c, wrapper, affected, Attribute.power, 3, 20, true);
             }
         }
     }

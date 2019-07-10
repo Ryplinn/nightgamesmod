@@ -15,7 +15,7 @@ public class Substitute extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.Ninjutsu) >= 21;
+        return getSelf().getPure(Attribute.ninjutsu) >= 21;
     }
 
     @Override

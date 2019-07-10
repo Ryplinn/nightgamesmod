@@ -16,7 +16,7 @@ public class Spores extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().get(Attribute.Bio) >= 13;
+        return getSelf().get(Attribute.bio) >= 13;
     }
 
     @Override

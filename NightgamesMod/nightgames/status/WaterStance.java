@@ -37,7 +37,7 @@ public class WaterStance extends DurationStatus {
 
     @Override
     public int mod(Attribute a) {
-        if (Attribute.Power == a) {
+        if (Attribute.power == a) {
             return -2;
         }
         return 0;

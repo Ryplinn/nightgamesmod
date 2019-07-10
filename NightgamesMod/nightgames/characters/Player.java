@@ -220,7 +220,7 @@ public class Player extends Character {
     @Override
     public void detect() {
         for (Area adjacent : location.adjacent) {
-            if (adjacent.ping(get(Attribute.Perception))) {
+            if (adjacent.ping(get(Attribute.perception))) {
                 GUI.gui
                       .message("You hear something in the <b>" + adjacent.name + "</b>.");
                 adjacent.setPinged(true);
@@ -259,20 +259,20 @@ public class Player extends Character {
             gui.message("She is naked and helpless.<br/>");
             return;
         }
-        if (get(Attribute.Perception) >= 6) {
+        if (get(Attribute.perception) >= 6) {
             gui.message("She is level " + opponent.getLevel());
         }
-        if (get(Attribute.Perception) >= 8) {
-            gui.message("Her Power is " + opponent.get(Attribute.Power) + ", her Cunning is "
-                            + opponent.get(Attribute.Cunning) + ", and her Seduction is "
-                            + opponent.get(Attribute.Seduction));
+        if (get(Attribute.perception) >= 8) {
+            gui.message("Her Power is " + opponent.get(Attribute.power) + ", her Cunning is "
+                            + opponent.get(Attribute.cunning) + ", and her Seduction is "
+                            + opponent.get(Attribute.seduction));
         }
         if (opponent.mostlyNude() || opponent.state == State.shower) {
             gui.message("She is completely naked.");
         } else {
             gui.message("She is dressed and ready to fight.");
         }
-        if (get(Attribute.Perception) >= 4) {
+        if (get(Attribute.perception) >= 4) {
             if (opponent.getArousal()
                         .percent() > 70) {
                 arousal = "horny";
@@ -374,13 +374,13 @@ public class Player extends Character {
                 for (Area path : location.adjacent) {
                     possibleActions.add(new Move(path));
                 }
-                if (getPure(Attribute.Cunning) >= 28) {
+                if (getPure(Attribute.cunning) >= 28) {
                     for (Area path : location.shortcut) {
                         possibleActions.add(new Shortcut(path));
                     }
                 }
 
-                if (getPure(Attribute.Ninjutsu) >= 5) {
+                if (getPure(Attribute.ninjutsu) >= 5) {
                     for (Area path : location.jump) {
                         possibleActions.add(new Leap(path));
                     }
@@ -455,7 +455,7 @@ public class Player extends Character {
 
     @Override
     public int getMaxWillpowerPossible() {
-        return 50 + getLevel() * 5 - get(Attribute.Submissive) * 2;
+        return 50 + getLevel() * 5 - get(Attribute.submission) * 2;
     }
 
     @Override
@@ -487,7 +487,7 @@ public class Player extends Character {
     public void craft() {
         int roll = Random.random(10);
         GUI.gui.message("You spend some time crafting some potions with the equipment.");
-        if (checkVsDc(Attribute.Cunning, 25)) {
+        if (checkVsDc(Attribute.cunning, 25)) {
             if (roll == 9) {
                 gain(Item.Aphrodisiac);
                 gain(Item.DisSol);
@@ -497,7 +497,7 @@ public class Player extends Character {
                 gain(Item.Lubricant);
                 gain(Item.Sedative);
             }
-        } else if (checkVsDc(Attribute.Cunning, 20)) {
+        } else if (checkVsDc(Attribute.cunning, 20)) {
             if (roll == 9) {
                 gain(Item.Aphrodisiac);
             } else if (roll >= 7) {
@@ -509,7 +509,7 @@ public class Player extends Character {
             } else {
                 gain(Item.EnergyDrink);
             }
-        } else if (checkVsDc(Attribute.Cunning, 15)) {
+        } else if (checkVsDc(Attribute.cunning, 15)) {
             if (roll == 9) {
                 gain(Item.Aphrodisiac);
             } else if (roll >= 8) {
@@ -722,18 +722,18 @@ public class Player extends Character {
             case damage:
                 c.write(this, "You dodge " + target.getName()
                                 + "'s slow attack and hit her sensitive tit to stagger her.");
-                target.pain(c, target, 4 + Math.min(Random.random(get(Attribute.Power)), 20));
+                target.pain(c, target, 4 + Math.min(Random.random(get(Attribute.power)), 20));
                 break;
             case pleasure:
                 if (!target.crotchAvailable() || !target.hasPussy()) {
                     c.write(this, "You pull " + target.getName()
                                     + " off balance and lick her sensitive ear. She trembles as you nibble on her earlobe.");
                     target.body.pleasure(this, body.getRandom("tongue"), target.body.getRandom("ears"),
-                                    4 + Math.min(Random.random(get(Attribute.Seduction)), 20), c);
+                                    4 + Math.min(Random.random(get(Attribute.seduction)), 20), c);
                 } else {
                     c.write(this, "You pull " + target.getName() + " to you and rub your thigh against her girl parts.");
                     target.body.pleasure(this, body.getRandom("feet"), target.body.getRandomPussy(),
-                                    4 + Math.min(Random.random(get(Attribute.Seduction)), 20), c);
+                                    4 + Math.min(Random.random(get(Attribute.seduction)), 20), c);
                 }
                 break;
             case fucking:
@@ -751,7 +751,7 @@ public class Player extends Character {
                     }
                 } else {
                     target.body.pleasure(this, body.getRandom("hands"), target.body.getRandomBreasts(),
-                                    4 + Math.min(Random.random(get(Attribute.Seduction)), 20), c);
+                                    4 + Math.min(Random.random(get(Attribute.seduction)), 20), c);
                     c.write(this, Formatter.format(
                                     "{self:SUBJECT-ACTION:pinch|pinches} {other:possessive} nipples with {self:possessive} hands as {other:subject-action:try|tries} to fuck {self:direct-object}. "
                                                     + "While {other:subject-action:yelp|yelps} with surprise, {self:subject-action:take|takes} the chance to pleasure {other:possessive} body.",
@@ -767,7 +767,7 @@ public class Player extends Character {
                 } else {
                     c.write(this, "You manage to dodge " + target.possessiveAdjective()
                                     + " groping hands and give a retaliating slap in return.");
-                    target.pain(c, target, 4 + Math.min(Random.random(get(Attribute.Power)), 20));
+                    target.pain(c, target, 4 + Math.min(Random.random(get(Attribute.power)), 20));
                 }
                 break;
             case positioning:
@@ -784,7 +784,7 @@ public class Player extends Character {
             default:
                 c.write(this, "You manage to dodge " + target.possessiveAdjective()
                                 + " attack and give a retaliating slap in return.");
-                target.pain(c, target, 4 + Math.min(Random.random(get(Attribute.Power)), 20));
+                target.pain(c, target, 4 + Math.min(Random.random(get(Attribute.power)), 20));
         }
     }
 

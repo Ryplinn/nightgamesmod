@@ -17,7 +17,7 @@ public class Honeypot extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Dark) >= 9 || user.get(Attribute.Seduction) >= 18;
+        return user.get(Attribute.darkness) >= 9 || user.get(Attribute.seduction) >= 18;
     }
 
     @Override

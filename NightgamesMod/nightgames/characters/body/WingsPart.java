@@ -158,7 +158,7 @@ public enum WingsPart implements BodyPart,BodyPartMod {
     @Override
     public int mod(Attribute a, int total) {
         switch (a) {
-            case Speed:
+            case speed:
                 return 2;
             default:
                 return 0;

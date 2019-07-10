@@ -797,7 +797,7 @@ public class Body implements Cloneable {
         if (opponent != null && Arrays.asList(fetishParts)
                                       .contains(with.getType())) {
             if (opponent.has(Trait.fetishTrainer)
-                            && Random.random(100) < Math.min(opponent.get(Attribute.Fetish), 25)) {
+                            && Random.random(100) < Math.min(opponent.get(Attribute.fetishism), 25)) {
                 c.write(character, character.subjectAction("now have", "now has") + " a new fetish, courtesy of "
                                 + opponent.directObject() + ".");
                 character.add(c, new BodyFetish(character, opponent, with.getType(), .25));
@@ -825,26 +825,26 @@ public class Body implements Cloneable {
         if (opponent == character) {
             return 1.0;
         } else {
-            double effectiveSeduction = character.get(Attribute.Seduction);
+            double effectiveSeduction = character.get(Attribute.seduction);
             if (c.getStance().dom(character) && character.has(Trait.brutesCharisma)) {
-                effectiveSeduction += c.getStance().getDominanceOfStance(character) * (character.get(Attribute.Power) / 5.0 + character.get(Attribute.Ki) / 5.0);
+                effectiveSeduction += c.getStance().getDominanceOfStance(character) * (character.get(Attribute.power) / 5.0 + character.get(Attribute.ki) / 5.0);
             }
 
             if (character.has(Trait.PrimalHeat) && character.is(Stsflag.frenzied)) {
-                effectiveSeduction += character.get(Attribute.Animism) / 2;
+                effectiveSeduction += character.get(Attribute.animism) / 2;
             }
 
             if (opponent.has(Trait.MindlessDesire) && character.is(Stsflag.frenzied)) {
                 effectiveSeduction /= 2;
             }
 
-            int seductionDiff = (int) Math.max(0, effectiveSeduction - opponent.get(Attribute.Seduction));
+            int seductionDiff = (int) Math.max(0, effectiveSeduction - opponent.get(Attribute.seduction));
             double seductionBonus = 0;
             for (int i = 0; i < seductionDiff; i++) {
                 seductionBonus += SEDUCTION_DIMISHING_RETURNS_CURVE.getOrDefault((i / 10), 0.01);   
             }
             double hotness = (getHotness(opponent) - 1) / 2 + 1;
-            double perception = (1.0 + (opponent.get(Attribute.Perception) - 5) / 10.0);
+            double perception = (1.0 + (opponent.get(Attribute.perception) - 5) / 10.0);
             if (DebugFlags.isDebugOn(DebugFlags.DEBUG_DAMAGE) && DebugFlags.isDebugOn(DebugFlags.DEBUG_SKILLS_RATING)) {
                 System.out.println(String.format("Seduction Bonus: %.1f, hotness: %.1f, perception: %.1f", seductionBonus, hotness, perception));
             }
@@ -1278,9 +1278,9 @@ public class Body implements Cloneable {
             c.write(character, "<br/><b>" + Formatter.capitalizeFirstLetter(character.subjectAction("glow", "glows")
                             + " with power as the cum is absorbed by " + character.possessiveAdjective() + " "
                             + part.describe(character) + ".</b>"));
-            character.add(c, new AttributeBuff(character, Attribute.Power, 5, 10));
-            character.add(c, new AttributeBuff(character, Attribute.Seduction, 10, 10));
-            character.add(c, new AttributeBuff(character, Attribute.Cunning, 5, 10));
+            character.add(c, new AttributeBuff(character, Attribute.power, 5, 10));
+            character.add(c, new AttributeBuff(character, Attribute.seduction, 10, 10));
+            character.add(c, new AttributeBuff(character, Attribute.cunning, 5, 10));
             character.buildMojo(c, 100);
         }
         if (opponent.has(Trait.hypnoticsemen)) {

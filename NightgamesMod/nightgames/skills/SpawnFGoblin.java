@@ -18,7 +18,7 @@ public class SpawnFGoblin extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.Fetish) >= 9;
+        return getSelf().getPure(Attribute.fetishism) >= 9;
     }
 
     @Override
@@ -36,8 +36,8 @@ public class SpawnFGoblin extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        int power = 3 + getSelf().get(Attribute.Fetish);
-        int ac = 2 + getSelf().get(Attribute.Fetish);
+        int power = 3 + getSelf().get(Attribute.fetishism);
+        int ac = 2 + getSelf().get(Attribute.fetishism);
         writeOutput(c, Result.normal, target);
         c.addPet(getSelf(), new FGoblin(getSelf(), power, ac).getSelf());
         return true;

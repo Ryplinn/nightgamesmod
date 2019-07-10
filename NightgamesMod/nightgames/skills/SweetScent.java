@@ -43,7 +43,7 @@ public class SweetScent extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Bio) >= 5;
+        return user.get(Attribute.bio) >= 5;
     }
 
     @Override

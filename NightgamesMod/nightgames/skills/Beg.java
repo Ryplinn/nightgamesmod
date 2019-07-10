@@ -20,7 +20,7 @@ public class Beg extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.Submissive) >= 12;
+        return getSelf().getPure(Attribute.submission) >= 12;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class Beg extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        if ((Random.random(30) <= getSelf().get(Attribute.Submissive) - target.get(Attribute.Cunning) / 2
+        if ((Random.random(30) <= getSelf().get(Attribute.submission) - target.get(Attribute.cunning) / 2
                         && !target.is(Stsflag.cynical) || target.getMood() == Emotion.dominant)
                         && target.getMood() != Emotion.angry && target.getMood() != Emotion.desperate) {
             Result results;

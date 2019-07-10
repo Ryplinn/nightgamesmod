@@ -17,7 +17,7 @@ public class HeatRay extends ArmSkill {
     @Override
     public boolean resolve(Combat c, Arm arm, Character owner, Character target) {
         boolean sub = c.getStance().dom(owner);
-        boolean success = sub || Random.random(100) < 10 + owner.get(Attribute.Science);
+        boolean success = sub || Random.random(100) < 10 + owner.get(Attribute.science);
         
         if (success) {
             c.write(GUIColor.limbColor(owner), Formatter.format("{self:NAME-POSSESSIVE} %s levels its"
@@ -25,7 +25,7 @@ public class HeatRay extends ArmSkill {
                             + " see anything, but {other:pronoun} certainly {other:action:feel|feels} what"
                             + " the device is doing as areas all over {other:possessive} body grow uncomfortably,"
                             + " almost painfully hot.", owner, target, arm.getName()));
-            target.pain(c, owner, 15 + Random.random((int) (owner.get(Attribute.Science) * 1.5)));
+            target.pain(c, owner, 15 + Random.random((int) (owner.get(Attribute.science) * 1.5)));
             return true;
         }
 

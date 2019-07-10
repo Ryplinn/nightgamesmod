@@ -74,10 +74,10 @@ public class SuccubusNurse extends Skill {
                                         ? "making {other:direct-object} feel strangely" + " calm and passive inside"
                                         : "feeling strangely erotic"));
         if (getSelf().has(Trait.Pacification)) {
-            target.add(c, new AttributeBuff(target, Attribute.Power, -2, 5));
+            target.add(c, new AttributeBuff(target, Attribute.power, -2, 5));
         }
         new Suckle(target).resolve(c, getSelf(), true);
-        if (Random.random(100) < 5 + 2 * getSelf().get(Attribute.Fetish)) {
+        if (Random.random(100) < 5 + 2 * getSelf().get(Attribute.fetishism)) {
             target.add(c, new BodyFetish(target, getSelf(), BreastsPart.a.getType(), .25));
         }
         return true;

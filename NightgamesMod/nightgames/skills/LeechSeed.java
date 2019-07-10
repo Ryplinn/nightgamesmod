@@ -56,7 +56,7 @@ public class LeechSeed extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().get(Attribute.Bio) >= 10;
+        return getSelf().get(Attribute.bio) >= 10;
     }
 
     @Override

@@ -33,7 +33,7 @@ public class Reversal extends Skill {
     
     @Override
     public float priorityMod(Combat c) {
-        return 5.f - (float) getSelf().get(Attribute.Submissive) / 3.f;
+        return 5.f - (float) getSelf().get(Attribute.submission) / 3.f;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class Reversal extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Cunning) >= 24;
+        return user.get(Attribute.cunning) >= 24;
     }
 
     @Override
@@ -76,7 +76,7 @@ public class Reversal extends Skill {
     @Override
     public int accuracy(Combat c, Character target) {
         return Math.round(Math.max(Math.min(150,
-                        2.5f * (getSelf().get(Attribute.Cunning) - target.get(Attribute.Cunning)) + 75),
+                        2.5f * (getSelf().get(Attribute.cunning) - target.get(Attribute.cunning)) + 75),
                         40));
     }
 

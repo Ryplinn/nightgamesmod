@@ -21,13 +21,13 @@ public class Tear extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Power) >= 32 || user.get(Attribute.Animism) >= 12
-                        || user.get(Attribute.Medicine) >= 12;
+        return user.get(Attribute.power) >= 32 || user.get(Attribute.animism) >= 12
+                        || user.get(Attribute.medicine) >= 12;
     }
 
     @Override
     public boolean usable(Combat c, Character target) {
-        boolean notMedical = getSelf().get(Attribute.Power) >= 32 || getSelf().get(Attribute.Animism) >= 12;
+        boolean notMedical = getSelf().get(Attribute.power) >= 32 || getSelf().get(Attribute.animism) >= 12;
         return ((c.getStance().reachTop(getSelf()) && !target.breastsAvailable())
                         || ((c.getStance().reachBottom(getSelf()) && !target.crotchAvailable()))) && getSelf().canAct()
                         && (notMedical || getSelf().has(Item.MedicalSupplies, 1));
@@ -35,7 +35,7 @@ public class Tear extends Skill {
 
     @Override
     public String describe(Combat c) {
-        if (getSelf().get(Attribute.Medicine) >= 12 && getSelf().has(Item.MedicalSupplies, 1)) {
+        if (getSelf().get(Attribute.medicine) >= 12 && getSelf().has(Item.MedicalSupplies, 1)) {
             return "Dissect your opponent's clothing";
         }
         return "Rip off your opponent's clothes";
@@ -43,14 +43,14 @@ public class Tear extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        boolean isMedical = (getSelf().get(Attribute.Medicine) >= 12 && getSelf().has(Item.MedicalSupplies, 1));
+        boolean isMedical = (getSelf().get(Attribute.medicine) >= 12 && getSelf().has(Item.MedicalSupplies, 1));
         if (c.getStance().reachTop(getSelf()) && !target.getOutfit().slotEmpty(ClothingSlot.top)) {
             Clothing article = target.getOutfit().getTopOfSlot(ClothingSlot.top);
             if (isMedical && !article.is(ClothingTrait.indestructible)
-                            && (((getSelf().checkVsDc(Attribute.Power,
+                            && (((getSelf().checkVsDc(Attribute.power,
                                             article.dc() + (target.getStamina().percent()
                                                             - (target.getArousal().percent()) / 4)
-                                            + getSelf().get(Attribute.Medicine) * 4)) || !target.canAct()))) {
+                                            + getSelf().get(Attribute.medicine) * 4)) || !target.canAct()))) {
                 if (getSelf().human()) {
                     c.write(getSelf(),
                                     Formatter.format("Grabbing your scalpel, you jump forward. The sharp blade makes quick work of {other:possessive}} clothing and your skill with the blade allows you avoid harming them completely. {other:SUBJECT} can only look at you with shock as {other:possessive} shredded clothes float to the ground between you.",
@@ -65,11 +65,11 @@ public class Tear extends Skill {
                     c.write(getSelf(), target.nakedLiner(c, target));
                 }
                 getSelf().consume(Item.MedicalSupplies, 1);
-            } else if (!article.is(ClothingTrait.indestructible) && getSelf().get(Attribute.Animism) >= 12
-                            && (getSelf().checkVsDc(Attribute.Power,
+            } else if (!article.is(ClothingTrait.indestructible) && getSelf().get(Attribute.animism) >= 12
+                            && (getSelf().checkVsDc(Attribute.power,
                                             article.dc() + (target.getStamina().percent()
                                                             - (target.getArousal().percent()) / 4)
-                                            + getSelf().get(Attribute.Animism) * getSelf().getArousal().percent() / 100)
+                                            + getSelf().get(Attribute.animism) * getSelf().getArousal().percent() / 100)
                             || !target.canAct())) {
                 if (getSelf().human()) {
                     c.write(getSelf(), "You channel your animal spirit and shred " + target.getName() + "'s "
@@ -88,7 +88,7 @@ public class Tear extends Skill {
                     c.write(getSelf(), target.nakedLiner(c, target));
                 }
             } else if (!article.is(ClothingTrait.indestructible)
-                            && getSelf().checkVsDc(Attribute.Power, article.dc()
+                            && getSelf().checkVsDc(Attribute.power, article.dc()
                                             + (target.getStamina().percent() - target.getArousal().percent()) / 4)
                             || !target.canAct()) {
                 if (getSelf().human()) {
@@ -124,7 +124,7 @@ public class Tear extends Skill {
         } else if (!target.getOutfit().slotEmpty(ClothingSlot.bottom)) {
             Clothing article = target.getOutfit().getTopOfSlot(ClothingSlot.bottom);
             if (isMedical && !article.is(ClothingTrait.indestructible)
-                          && ((getSelf().checkVsDc(Attribute.Power, article.dc() + (target.getStamina().percent() - (target.getArousal().percent()) / 4) + getSelf().get(Attribute.Medicine) * 4))
+                          && ((getSelf().checkVsDc(Attribute.power, article.dc() + (target.getStamina().percent() - (target.getArousal().percent()) / 4) + getSelf().get(Attribute.medicine) * 4))
                             || !target.canAct())) {
                 if (getSelf().human()) {
                     c.write(getSelf(),
@@ -140,11 +140,11 @@ public class Tear extends Skill {
                     c.write(getSelf(), target.nakedLiner(c, target));
                 }
                 getSelf().consume(Item.MedicalSupplies, 1);
-            } else if (!article.is(ClothingTrait.indestructible) && getSelf().get(Attribute.Animism) >= 12
-                            && (getSelf().checkVsDc(Attribute.Power,
+            } else if (!article.is(ClothingTrait.indestructible) && getSelf().get(Attribute.animism) >= 12
+                            && (getSelf().checkVsDc(Attribute.power,
                                             article.dc() + (target.getStamina().percent()
                                                             - (target.getArousal().percent()) / 4)
-                                            + getSelf().get(Attribute.Animism) * getSelf().getArousal().percent() / 100)
+                                            + getSelf().get(Attribute.animism) * getSelf().getArousal().percent() / 100)
                             || !target.canAct())) {
                 if (getSelf().human()) {
                     c.write(getSelf(), "You channel your animal spirit and shred " + target.getName() + "'s "
@@ -173,7 +173,7 @@ public class Tear extends Skill {
                 }
                 target.emote(Emotion.nervous, 10);
             } else if (!article.is(ClothingTrait.indestructible)
-                            && getSelf().checkVsDc(Attribute.Power, article.dc()
+                            && getSelf().checkVsDc(Attribute.power, article.dc()
                                             + (target.getStamina().percent() - target.getArousal().percent()) / 4)
                             || !target.canAct()) {
                 if (getSelf().human()) {
@@ -227,9 +227,9 @@ public class Tear extends Skill {
     }
 
     public String getLabel(Combat c) {
-        if (getSelf().get(Attribute.Medicine) >= 12) {
+        if (getSelf().get(Attribute.medicine) >= 12) {
             return "Clothing-ectomy";
-        } else if (getSelf().get(Attribute.Animism) >= 12) {
+        } else if (getSelf().get(Attribute.animism) >= 12) {
             return "Shred Clothes";
         } else {
             return "Tear Clothes";

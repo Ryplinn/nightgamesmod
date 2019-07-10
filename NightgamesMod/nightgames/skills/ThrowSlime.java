@@ -17,14 +17,14 @@ public class ThrowSlime extends Skill {
     public ThrowSlime(Character self) {
         super("Throw Slime", self, 4);
         addTag(SkillTag.knockdown);
-        if (self.get(Attribute.Slime) >= 12) {
+        if (self.get(Attribute.slime) >= 12) {
             addTag(SkillTag.mental);
         }
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Slime) > 0;
+        return user.get(Attribute.slime) > 0;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ThrowSlime extends Skill {
 
     @Override
     public int getMojoCost(Combat c) {
-        return 9 + getSelf().get(Attribute.Slime);
+        return 9 + getSelf().get(Attribute.slime);
     }
 
     @Override
@@ -115,9 +115,9 @@ public class ThrowSlime extends Skill {
         public Status build(Character user, Character target) {
             switch (this) {
                 case BOUND_S:
-                    return new Bound(target, 55 + 4 * Math.sqrt(user.get(Attribute.Slime)), "slime");
+                    return new Bound(target, 55 + 4 * Math.sqrt(user.get(Attribute.slime)), "slime");
                 case BOUND_W:
-                    return new Bound(target, 20 + 2 * Math.sqrt(user.get(Attribute.Slime)), "slime");
+                    return new Bound(target, 20 + 2 * Math.sqrt(user.get(Attribute.slime)), "slime");
                 case FALL:
                     return new Falling(target);
                 case FLAT_1:
@@ -234,7 +234,7 @@ public class ThrowSlime extends Skill {
     }
 
     public HitType decideEffect(Combat c, Character target) {
-        int slime = getSelf().get(Attribute.Slime);
+        int slime = getSelf().get(Attribute.slime);
         int bonus = Math.min(slime, 40) - 20;
 
         if (!c.getStance().mobile(target) || !target.canRespond()) {

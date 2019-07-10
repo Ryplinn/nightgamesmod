@@ -16,7 +16,7 @@ public class AttributeBuff extends DurationStatus {
     protected int value;
 
     public AttributeBuff() {
-        this(NPC.noneCharacter(), Attribute.Hypnosis, 1, 0);
+        this(NPC.noneCharacter(), Attribute.hypnotism, 1, 0);
     }
 
     public AttributeBuff(Character affected, Attribute att, int value, int duration) {

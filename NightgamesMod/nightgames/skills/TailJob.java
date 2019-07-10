@@ -15,7 +15,7 @@ public class TailJob extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        boolean enough = getSelf().get(Attribute.Seduction) >= 20 || getSelf().get(Attribute.Animism) >= 1;
+        boolean enough = getSelf().get(Attribute.seduction) >= 20 || getSelf().get(Attribute.animism) >= 1;
         return enough && user.body.get("tail").size() > 0;
     }
 
@@ -34,14 +34,14 @@ public class TailJob extends Skill {
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
         int m = (5 + Random.random(10))
-                        + Math.min(getSelf().getArousal().getReal() / 20, getSelf().get(Attribute.Animism));
+                        + Math.min(getSelf().getArousal().getReal() / 20, getSelf().get(Attribute.animism));
         String receiver;
         if (target.hasDick()) {
             receiver = "cock";
         } else {
             receiver = "pussy";
         }
-        if (Random.random(100) < 5 + 2 * getSelf().get(Attribute.Fetish)) {
+        if (Random.random(100) < 5 + 2 * getSelf().get(Attribute.fetishism)) {
             target.add(c, new BodyFetish(target, getSelf(), "tail", .25));
         }
         target.body.pleasure(getSelf(), getSelf().body.getRandom("tail"), target.body.getRandom(receiver), m, c, this);

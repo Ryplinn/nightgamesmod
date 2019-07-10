@@ -18,7 +18,7 @@ public class FlyCatcher extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Ki) >= 9 || user.get(Attribute.Cunning) >= 18;
+        return user.get(Attribute.ki) >= 9 || user.get(Attribute.cunning) >= 18;
     }
 
     @Override

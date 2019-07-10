@@ -24,7 +24,7 @@ public class SubmissiveHold extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return (user.get(Attribute.Seduction) > 15 && user.get(Attribute.Power) >= 15) || user.has(Trait.stronghold);
+        return (user.get(Attribute.seduction) > 15 && user.get(Attribute.power) >= 15) || user.has(Trait.stronghold);
     }
 
     @Override
@@ -105,9 +105,9 @@ public class SubmissiveHold extends Skill {
             c.write(getSelf(), receive(c, 0, Result.normal, target));
         }
         if (isArmLock(c.getStance())) {
-            target.add(c, new ArmLocked(target, 4 * getSelf().get(Attribute.Power)));
+            target.add(c, new ArmLocked(target, 4 * getSelf().get(Attribute.power)));
         } else {
-            target.add(c, new LegLocked(target, 4 * getSelf().get(Attribute.Power)));
+            target.add(c, new LegLocked(target, 4 * getSelf().get(Attribute.power)));
         }
         return true;
     }

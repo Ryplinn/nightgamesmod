@@ -105,7 +105,7 @@ public class AssFuck extends Fuck {
         }
         int otherm = m;
         if (getSelf().has(Trait.insertion)) {
-            otherm += Math.min(getSelf().get(Attribute.Seduction) / 4, 40);
+            otherm += Math.min(getSelf().get(Attribute.seduction) / 4, 40);
         }
         target.body.pleasure(getSelf(), getSelfOrgan(), getTargetOrgan(target), otherm, c, this);
         if (!getSelf().has(Trait.strapped)) {
@@ -135,7 +135,7 @@ public class AssFuck extends Fuck {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Seduction) >= 15 || target.has(Trait.buttslut);
+        return user.get(Attribute.seduction) >= 15 || target.has(Trait.buttslut);
     }
 
     @Override

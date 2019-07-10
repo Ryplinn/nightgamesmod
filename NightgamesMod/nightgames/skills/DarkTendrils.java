@@ -21,7 +21,7 @@ public class DarkTendrils extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Dark) >= 12;
+        return user.get(Attribute.darkness) >= 12;
     }
 
     @Override
@@ -41,9 +41,9 @@ public class DarkTendrils extends Skill {
         if (target.roll(getSelf(), accuracy(c, target))) {
             if (Random.random(2) == 1) {
                 writeOutput(c, Result.normal, target);
-                target.add(c, new Bound(target, 35 + 2 * Math.sqrt(getSelf().get(Attribute.Dark)), "shadows"));
+                target.add(c, new Bound(target, 35 + 2 * Math.sqrt(getSelf().get(Attribute.darkness)), "shadows"));
                 target.add(c, new Falling(target));
-            } else if (getSelf().checkVsDc(Attribute.Dark, target.knockdownDC() - getSelf().getMojo().get())) {
+            } else if (getSelf().checkVsDc(Attribute.darkness, target.knockdownDC() - getSelf().getMojo().get())) {
                 writeOutput(c, Result.weak, target);
                 target.add(c, new Falling(target));
             } else {

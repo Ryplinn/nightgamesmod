@@ -25,7 +25,7 @@ public class Drain extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Dark) >= 15 || user.has(Trait.energydrain) || (user.has(Trait.leveldrainer) && user.getLevel() >= 10);
+        return user.get(Attribute.darkness) >= 15 || user.has(Trait.energydrain) || (user.has(Trait.leveldrainer) && user.getLevel() >= 10);
     }
 
     @Override
@@ -62,9 +62,9 @@ public class Drain extends Skill {
     }
 
     public boolean resolve(Combat c, Character target, boolean nocost) {
-        int strength = Math.max(10, 1 + getSelf().get(Attribute.Dark) / 4);
+        int strength = Math.max(10, 1 + getSelf().get(Attribute.darkness) / 4);
         int staminaStrength = 50;
-        int type = Math.max(1, Random.centeredrandom(6, getSelf().get(Attribute.Dark) / 3.0, 3));
+        int type = Math.max(1, Random.centeredrandom(6, getSelf().get(Attribute.darkness) / 3.0, 3));
         if (!drainsAttributes(c) && type > 2) {
             type = 1;
             staminaStrength /= 2;
@@ -82,21 +82,21 @@ public class Drain extends Skill {
                 getSelf().buildMojo(c, staminaStrength / 2);
                 break;
             case 3:
-                steal(c, target, Attribute.Cunning, strength);
+                steal(c, target, Attribute.cunning, strength);
                 target.drain(c, getSelf(), target.getMojo().get() / 2, Character.MeterType.MOJO);
                 break;
             case 4:
-                steal(c, target, Attribute.Power, strength);
+                steal(c, target, Attribute.power, strength);
                 target.drain(c, getSelf(), (int) DamageType.drain.modifyDamage(getSelf(), target, staminaStrength), Character.MeterType.STAMINA);
                 break;
             case 5:
-                steal(c, target, Attribute.Seduction, strength);
+                steal(c, target, Attribute.seduction, strength);
                 target.temptNoSource(c, getSelf(), 10, this);
                 break;
             case 6:
-                steal(c, target, Attribute.Power, strength);
-                steal(c, target, Attribute.Seduction, strength);
-                steal(c, target, Attribute.Cunning, strength);
+                steal(c, target, Attribute.power, strength);
+                steal(c, target, Attribute.seduction, strength);
+                steal(c, target, Attribute.cunning, strength);
                 target.drain(c, getSelf(), (int) DamageType.drain.modifyDamage(getSelf(), target, staminaStrength), Character.MeterType.STAMINA);
                 target.drain(c, getSelf(), target.getMojo().get(), Character.MeterType.MOJO);
                 target.temptNoSource(c, getSelf(), 20, this);

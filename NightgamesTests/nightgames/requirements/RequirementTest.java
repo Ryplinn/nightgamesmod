@@ -78,12 +78,12 @@ public class RequirementTest {
     }
 
     @Test public void attributeTest() throws Exception {
-        self.att.put(Attribute.Seduction, 20);
-        other.att.put(Attribute.Seduction, 18);
-        AttributeRequirement req = attribute(Attribute.Seduction, 19);
+        self.att.put(Attribute.seduction, 20);
+        other.att.put(Attribute.seduction, 18);
+        AttributeRequirement req = attribute(Attribute.seduction, 19);
         assertThat(req.meets(combat, self, other), is(true));
         assertThat(req.meets(combat, other, self), is(false));
-        other.att.put(Attribute.Seduction, 19);
+        other.att.put(Attribute.seduction, 19);
         assertThat(req.meets(combat, other, self), is(true));
     }
 

@@ -28,7 +28,7 @@ public class TemptressTitfuck extends Paizuri {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.has(Trait.temptress)&& user.get(Attribute.Technique) >= 15;
+        return user.has(Trait.temptress)&& user.get(Attribute.technique) >= 15;
     }
 
     @Override
@@ -48,9 +48,9 @@ public class TemptressTitfuck extends Paizuri {
         }
         
 
-        int fetishChance = 7 + breasts.getSize() + getSelf().get(Attribute.Fetish) / 2;
+        int fetishChance = 7 + breasts.getSize() + getSelf().get(Attribute.fetishism) / 2;
 
-        int m = 7 + Random.random(getSelf().get(Attribute.Technique) / 2) + breasts.getSize();
+        int m = 7 + Random.random(getSelf().get(Attribute.technique) / 2) + breasts.getSize();
         
         if(getSelf().is(Stsflag.oiled)) {
             m += Random.random(2, 5);
@@ -72,7 +72,7 @@ public class TemptressTitfuck extends Paizuri {
                     
                     target.body.pleasure(getSelf(), getSelf().body.getRandom("breasts"), target.body.getRandom("cock"), m, c, this);
                     if (Random.random(100) < fetishChance) {
-                        target.add(c, new BodyFetish(target, getSelf(), BreastsPart.a.getType(), .05 + (0.01 * breasts.getSize()) + getSelf().get(Attribute.Fetish) * .01));
+                        target.add(c, new BodyFetish(target, getSelf(), BreastsPart.a.getType(), .05 + (0.01 * breasts.getSize()) + getSelf().get(Attribute.fetishism) * .01));
                     }
                 } else {
                     // Was flaccid, still is
@@ -90,7 +90,7 @@ public class TemptressTitfuck extends Paizuri {
                 getSelf().add(c, new FiredUp(getSelf(), target, "breasts"));
                 
                 if (Random.random(100) < fetishChance) {
-                    target.add(c, new BodyFetish(target, getSelf(), BreastsPart.a.getType(), .05 + (0.01 * breasts.getSize()) + getSelf().get(Attribute.Fetish) * .01));
+                    target.add(c, new BodyFetish(target, getSelf(), BreastsPart.a.getType(), .05 + (0.01 * breasts.getSize()) + getSelf().get(Attribute.fetishism) * .01));
                 }
             }
         } else {

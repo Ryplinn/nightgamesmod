@@ -20,7 +20,7 @@ public class Cowardice extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.Submissive) >= 3;
+        return getSelf().getPure(Attribute.submission) >= 3;
     }
 
     @Override

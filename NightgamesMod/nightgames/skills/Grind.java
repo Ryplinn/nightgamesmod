@@ -18,7 +18,7 @@ public class Grind extends Thrust {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Seduction) >= 14;
+        return user.get(Attribute.seduction) >= 14;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class Grind extends Thrust {
             target.heal(c, 20);
             target.buildMojo(c, 5);
             target.loseWillpower(c, Random.random(3) + 2, false);
-            getSelf().usedAttribute(Attribute.Divinity, c, .5);
+            getSelf().usedAttribute(Attribute.divinity, c, .5);
         }
         return res;
     }
@@ -118,7 +118,7 @@ public class Grind extends Thrust {
 
     @Override
     public String getLabel(Combat c) {
-        if (getSelf().get(Attribute.Divinity) >= 10) {
+        if (getSelf().get(Attribute.divinity) >= 10) {
             return divineName;
         } else {
             return "Grind";

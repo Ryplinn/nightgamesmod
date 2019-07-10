@@ -19,7 +19,7 @@ public class BunshinAssault extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.Ninjutsu) >= 6;
+        return getSelf().getPure(Attribute.ninjutsu) >= 6;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class BunshinAssault extends Skill {
     }
 
     private int numberOfClones(Combat c) {
-        return Math.min(Math.min(getSelf().getMojo().get()/2, getSelf().get(Attribute.Ninjutsu)/2), 15);
+        return Math.min(Math.min(getSelf().getMojo().get()/2, getSelf().get(Attribute.ninjutsu)/2), 15);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class BunshinAssault extends Skill {
 
     @Override
     public int accuracy(Combat c, Character target) {
-        return 25 + getSelf().get(Attribute.Speed) * 5;
+        return 25 + getSelf().get(Attribute.speed) * 5;
     }
 
     @Override

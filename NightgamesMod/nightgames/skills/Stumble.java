@@ -19,7 +19,7 @@ public class Stumble extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.Submissive) >= 9;
+        return getSelf().getPure(Attribute.submission) >= 9;
     }
 
     @Override

@@ -19,7 +19,7 @@ public class Parasite extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Slime) >= 21;
+        return user.get(Attribute.slime) >= 21;
     }
 
     @Override

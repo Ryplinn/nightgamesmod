@@ -82,7 +82,7 @@ public class Enthralled extends DurationStatus {
 
     @Override
     public int mod(Attribute a) {
-        if (a == Attribute.Perception) {
+        if (a == Attribute.perception) {
             return -5;
         }
         return -2;
@@ -113,8 +113,8 @@ public class Enthralled extends DurationStatus {
 
     @Override
     public void tick(Combat c) {
-        if (affected.checkVsDc(Attribute.Cunning, master.get(Attribute.Seduction) / 2 + master.get(Attribute.Arcane) / 2
-                        + master.get(Attribute.Dark) / 2 + 10 + 10 * (getDuration() - timesRefreshed))) {
+        if (affected.checkVsDc(Attribute.cunning, master.get(Attribute.seduction) / 2 + master.get(Attribute.arcane) / 2
+                        + master.get(Attribute.darkness) / 2 + 10 + 10 * (getDuration() - timesRefreshed))) {
             if (DebugFlags.isDebugOn(DebugFlags.DEBUG_SCENE)) {
                 System.out.println("Escaped from Enthralled");
             }

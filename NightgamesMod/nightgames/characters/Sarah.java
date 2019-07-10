@@ -39,10 +39,10 @@ public class Sarah extends BasePersonality {
         character.outfitPlan.addByID("frillypanties");
 
         character.change();
-        character.modAttributeDontSaveData(Attribute.Power, 2);
-        character.modAttributeDontSaveData(Attribute.Cunning, 1);
-        character.modAttributeDontSaveData(Attribute.Perception, 1);
-        character.modAttributeDontSaveData(Attribute.Speed, 2);
+        character.modAttributeDontSaveData(Attribute.power, 2);
+        character.modAttributeDontSaveData(Attribute.cunning, 1);
+        character.modAttributeDontSaveData(Attribute.perception, 1);
+        character.modAttributeDontSaveData(Attribute.speed, 2);
         character.getStamina().setMax(150);
         character.getArousal().setMax(100);
         character.rank = 1;
@@ -78,8 +78,8 @@ public class Sarah extends BasePersonality {
         character.getGrowth().addTrait(50, Trait.oblivious);
         character.getGrowth().addTrait(55, Trait.resurrection);
 
-        preferredAttributes.add(c -> Optional.of(Attribute.Power));
-        preferredAttributes.add(c -> c.getLevel() >= 30 ? Optional.of(Attribute.Ki) : Optional.empty());
+        preferredAttributes.add(c -> Optional.of(Attribute.power));
+        preferredAttributes.add(c -> c.getLevel() >= 30 ? Optional.of(Attribute.ki) : Optional.empty());
         character.body.add(new FacePart(.1, 2.9));
     }
 

@@ -218,14 +218,14 @@ public class Daytime {
         int a;
         int b;
         if (one.getPure(att) > two.getPure(att)) {
-            a = 100 - 2 * one.get(Attribute.Perception);
-            b = 90 - 2 * two.get(Attribute.Perception);
+            a = 100 - 2 * one.get(Attribute.perception);
+            b = 90 - 2 * two.get(Attribute.perception);
         } else if (one.getPure(att) < two.getPure(att)) {
-            a = 90 - 2 * one.get(Attribute.Perception);
-            b = 100 - 2 * two.get(Attribute.Perception);
+            a = 90 - 2 * one.get(Attribute.perception);
+            b = 100 - 2 * two.get(Attribute.perception);
         } else {
-            a = 100 - 2 * one.get(Attribute.Perception);
-            b = 100 - 2 * two.get(Attribute.Perception);
+            a = 100 - 2 * one.get(Attribute.perception);
+            b = 100 - 2 * two.get(Attribute.perception);
         }
         if (Random.random(100) >= a) {
             one.modAttributeDontSaveData(att, 1);

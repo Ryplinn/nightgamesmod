@@ -23,7 +23,7 @@ public abstract class TentacleArm extends Arm {
 
     @Override
     int attackOdds(Combat c, Character owner, Character target) {
-        return (int) Math.min(40, 5 + owner.get(Attribute.Slime) * .4);
+        return (int) Math.min(40, 5 + owner.get(Attribute.slime) * .4);
     }
 
     public static TentaclePart PART = new TentaclePart("tentacle", "back", "slime", 0.0, 1.0, 0.0);

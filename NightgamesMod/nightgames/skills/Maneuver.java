@@ -59,7 +59,7 @@ public class Maneuver extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Cunning) >= 20 || isFlashStep(c);
+        return user.get(Attribute.cunning) >= 20 || isFlashStep(c);
     }
 
     @Override
@@ -116,7 +116,7 @@ public class Maneuver extends Skill {
     }
 
     private boolean isFlashStep(Combat c) {
-        return getSelf().getStamina().percent() > 15 && getSelf().get(Attribute.Ki) >= 6;
+        return getSelf().getStamina().percent() > 15 && getSelf().get(Attribute.ki) >= 6;
     }
 
     @Override

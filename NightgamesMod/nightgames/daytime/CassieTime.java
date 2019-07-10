@@ -450,7 +450,7 @@ public class CassieTime extends BaseNPCTime {
                                     + "You shoot your load into her hot depths, feeding the intensity of her orgasm. The two of you collapse on the bed, still joined below the waist and completely spent.");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.Seduction);
+                Daytime.train(player, npc, Attribute.seduction);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
                 break;
@@ -496,7 +496,7 @@ public class CassieTime extends BaseNPCTime {
                                     + "the favor.\"</i> You are a bit horny, but more than that, you're comfortable. For now you decide to just relax and enjoy Cassie's warmth.");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.Cunning);
+                Daytime.train(player, npc, Attribute.cunning);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
                 break;
@@ -541,7 +541,7 @@ public class CassieTime extends BaseNPCTime {
                                     + "down and she goes limp from exhaustion. Looks like you're done sparring for now.");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.Power);
+                Daytime.train(player, npc, Attribute.power);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
                 break;

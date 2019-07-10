@@ -18,7 +18,7 @@ public class LivingClothingOther extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Science) >= 15;
+        return user.get(Attribute.science) >= 15;
     }
 
     @Override

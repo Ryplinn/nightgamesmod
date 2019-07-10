@@ -27,7 +27,7 @@ public class Nurse extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().get(Attribute.Seduction) > 10;
+        return getSelf().get(Attribute.seduction) > 10;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class Nurse extends Skill {
             new Suckle(target).resolve(c, getSelf());
             getSelf().emote(Emotion.dominant, 10);
         }
-        if (Random.random(100) < 5 + 2 * getSelf().get(Attribute.Fetish)) {
+        if (Random.random(100) < 5 + 2 * getSelf().get(Attribute.fetishism)) {
             target.add(c, new BodyFetish(target, getSelf(), BreastsPart.a.getType(), .25));
         }
         return true;

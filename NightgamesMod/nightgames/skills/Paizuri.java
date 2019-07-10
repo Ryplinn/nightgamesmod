@@ -57,7 +57,7 @@ public class Paizuri extends Skill {
             }
         }
         
-        int fetishChance = 7 + breasts.getSize() + getSelf().get(Attribute.Fetish) / 2;
+        int fetishChance = 7 + breasts.getSize() + getSelf().get(Attribute.fetishism) / 2;
 
         int m = 5 + Random.random(5) + breasts.getSize();
         
@@ -88,7 +88,7 @@ public class Paizuri extends Skill {
         }
         target.body.pleasure(getSelf(), getSelf().body.getRandom("breasts"), target.body.getRandom("cock"), m, c, this);
         if (Random.random(100) < fetishChance) {
-            target.add(c, new BodyFetish(target, getSelf(), BreastsPart.a.getType(), .05 + (0.01 * breasts.getSize()) + getSelf().get(Attribute.Fetish) * .01));
+            target.add(c, new BodyFetish(target, getSelf(), BreastsPart.a.getType(), .05 + (0.01 * breasts.getSize()) + getSelf().get(Attribute.fetishism) * .01));
         }
         if (getSelf().has(Trait.temptingtits)) {
             target.temptWithSkill(c, getSelf(), getSelf().body.getRandom("breasts"), m/5, this);
@@ -98,7 +98,7 @@ public class Paizuri extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Seduction) >= 20 && user.hasBreasts();
+        return user.get(Attribute.seduction) >= 20 && user.hasBreasts();
     }
 
     @Override

@@ -16,14 +16,14 @@ public class BushAmbush extends Action {
     @Override
     public boolean usable(Character user) {
         return user.location().id() == Movement.ftcPath
-                        && (user.get(Attribute.Cunning) >= 20 || user.get(Attribute.Animism) >= 10)
+                        && (user.get(Attribute.cunning) >= 20 || user.get(Attribute.animism) >= 10)
                         && user.state != State.inBushes && !user.bound();
     }
 
     @Override
     public Movement execute(Character user) {
         if (user.human()) {
-            if (user.get(Attribute.Animism) >= 10) {
+            if (user.get(Attribute.animism) >= 10) {
                 GUI.gui.message("You crouch down in some dense bushes, ready" + " to pounce on passing prey.");
             } else {
                 GUI.gui.message("You spot some particularly dense bushes, and figure"

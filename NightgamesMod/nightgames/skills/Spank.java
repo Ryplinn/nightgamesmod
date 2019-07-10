@@ -58,7 +58,7 @@ public class Spank extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Seduction) >= 8;
+        return user.get(Attribute.seduction) >= 8;
     }
 
     @Override

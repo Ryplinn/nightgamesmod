@@ -61,7 +61,7 @@ public class Slimed extends DurationStatus {
 
     @Override
     public int mod(Attribute a) {
-    	if (a == Attribute.Speed) {
+    	if (a == Attribute.speed) {
     		return -stacks / 10;
     	}
 

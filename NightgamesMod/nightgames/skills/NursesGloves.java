@@ -15,7 +15,7 @@ public class NursesGloves extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Medicine) >= 1;
+        return user.get(Attribute.medicine) >= 1;
     }
 
     @Override

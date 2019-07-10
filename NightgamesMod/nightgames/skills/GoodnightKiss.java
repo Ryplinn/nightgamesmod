@@ -14,7 +14,7 @@ public class GoodnightKiss extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.Ninjutsu) >= 18;
+        return getSelf().getPure(Attribute.ninjutsu) >= 18;
     }
 
     @Override

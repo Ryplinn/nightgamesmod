@@ -40,7 +40,7 @@ public class HypnoVisor extends Status {
 
     @Override
     public int mod(Attribute a) {
-        if (a == Attribute.Perception) {
+        if (a == Attribute.perception) {
             return -3;
         }
         return 0;

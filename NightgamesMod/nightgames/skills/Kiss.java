@@ -73,7 +73,7 @@ public class Kiss extends Skill {
             }
         }
         Result res = Result.normal;
-        if (getSelf().get(Attribute.Seduction) >= 9) {
+        if (getSelf().get(Attribute.seduction) >= 9) {
             m += Random.random(4, 6);
             res = Result.normal;
         } else {
@@ -106,7 +106,7 @@ public class Kiss extends Skill {
             target.heal(c, 100);
             target.loseWillpower(c, Random.random(3) + 2, false);
             target.add(c, new Lovestruck(target, getSelf(), 2));
-            getSelf().usedAttribute(Attribute.Divinity, c, .5);
+            getSelf().usedAttribute(Attribute.divinity, c, .5);
         }
         if (getSelf().has(Trait.TenderKisses) && target.is(Stsflag.charmed) && Random.random(3) == 0) {
             DurationStatus charmed = (DurationStatus) target.getStatus(Stsflag.charmed);
@@ -126,7 +126,7 @@ public class Kiss extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Seduction) >= 3;
+        return user.get(Attribute.seduction) >= 3;
     }
 
     @Override
@@ -272,11 +272,11 @@ public class Kiss extends Skill {
 
     @Override
     public String getLabel(Combat c) {
-        if (getSelf().get(Attribute.Divinity) >= 1 && getSelf().canSpend(divineCost)) {
+        if (getSelf().get(Attribute.divinity) >= 1 && getSelf().canSpend(divineCost)) {
             return divineString;
         } else if (getSelf().has(Trait.soulsucker)) {
             return "Drain Kiss";
-        } else if (getSelf().get(Attribute.Seduction) >= 20) {
+        } else if (getSelf().get(Attribute.seduction) >= 20) {
             return "Deep Kiss";
         } else {
             return "Kiss";

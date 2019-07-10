@@ -17,7 +17,7 @@ public class AttireShift extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.getPure(Attribute.Temporal) >= 6;
+        return user.getPure(Attribute.temporal) >= 6;
     }
 
     @Override

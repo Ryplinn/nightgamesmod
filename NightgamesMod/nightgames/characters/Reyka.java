@@ -59,9 +59,9 @@ public class Reyka extends BasePersonality {
         self.outfitPlan.addByID("garters");
         self.outfitPlan.addByID("stilettopumps");
         self.change();
-        self.modAttributeDontSaveData(Attribute.Dark, 2);
-        self.modAttributeDontSaveData(Attribute.Seduction, 3);
-        self.modAttributeDontSaveData(Attribute.Cunning, 2);
+        self.modAttributeDontSaveData(Attribute.darkness, 2);
+        self.modAttributeDontSaveData(Attribute.seduction, 3);
+        self.modAttributeDontSaveData(Attribute.cunning, 2);
         self.setTrophy(Item.ReykaTrophy);
 
         self.adjustTraits();
@@ -84,11 +84,11 @@ public class Reyka extends BasePersonality {
         character.getGrowth().arousal = 10;
         character.getGrowth().bonusStamina = 1;
         character.getGrowth().bonusArousal = 3;
-        preferredAttributes.add(c -> c.get(Attribute.Dark) < 50 && c.get(Attribute.Dark) <= c.get(Attribute.Fetish) + 10
-                        ? Optional.of(Attribute.Dark) : Optional.empty());
-        preferredAttributes.add(c -> c.get(Attribute.Dark) > c.get(Attribute.Fetish) + 10 && c.get(Attribute.Fetish) < 50
-                                        ? Optional.of(Attribute.Fetish) : Optional.empty());
-        preferredAttributes.add(c -> Optional.of(Attribute.Seduction));
+        preferredAttributes.add(c -> c.get(Attribute.darkness) < 50 && c.get(Attribute.darkness) <= c.get(Attribute.fetishism) + 10
+                        ? Optional.of(Attribute.darkness) : Optional.empty());
+        preferredAttributes.add(c -> c.get(Attribute.darkness) > c.get(Attribute.fetishism) + 10 && c.get(Attribute.fetishism) < 50
+                                        ? Optional.of(Attribute.fetishism) : Optional.empty());
+        preferredAttributes.add(c -> Optional.of(Attribute.seduction));
 
         character.getGrowth().addTrait(0, Trait.succubus);
         character.getGrowth().addTrait(0, Trait.proheels);

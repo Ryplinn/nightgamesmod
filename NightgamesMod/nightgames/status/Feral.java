@@ -37,15 +37,15 @@ public class Feral extends Status {
     @Override
     public int mod(Attribute a) {
         switch (a) {
-            case Power:
-                return 1 + affected.getPure(Attribute.Animism) / 2;
-            case Cunning:
+            case power:
+                return 1 + affected.getPure(Attribute.animism) / 2;
+            case cunning:
                 return 3;
-            case Seduction:
+            case seduction:
                 return 2;
-            case Animism:
-                return affected.getPure(Attribute.Animism) / 2;
-            case Speed:
+            case animism:
+                return affected.getPure(Attribute.animism) / 2;
+            case speed:
                 return 2;
             default:
                 break;
@@ -58,7 +58,7 @@ public class Feral extends Status {
         if (affected.getArousal().percent() < 40) {
             affected.removelist.add(this);
         }
-        int ignoreOrgasmChance = Math.max(3, 8 - affected.get(Attribute.Animism) / 20);
+        int ignoreOrgasmChance = Math.max(3, 8 - affected.get(Attribute.animism) / 20);
         if (Random.random(ignoreOrgasmChance) == 0) {
             affected.addlist.add(new IgnoreOrgasm(affected, 0));
         }

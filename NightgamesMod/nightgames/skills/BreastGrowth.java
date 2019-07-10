@@ -17,7 +17,7 @@ public class BreastGrowth extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Arcane) >= 12;
+        return user.get(Attribute.arcane) >= 12;
     }
 
     @Override

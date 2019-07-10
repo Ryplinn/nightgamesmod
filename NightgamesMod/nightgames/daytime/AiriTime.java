@@ -227,7 +227,7 @@ public class AiriTime extends BaseNPCTime {
                                                                 + "and gives you a sweet kiss. <i>\"That was fun, and the fluids really helped me out. Uhm... let's do it again soon okay?\"</i>",
                                                 GameState.gameState.characterPool.getCharacterByType("Airi"),
                                                 GameState.gameState.characterPool.getPlayer()));
-                Daytime.train(player, npc, Attribute.Seduction);
+                Daytime.train(player, npc, Attribute.seduction);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
                 if (Random.random(5) == 0 && (!player.has(Trait.Clingy) || !npc.has(Trait.Clingy))) {
@@ -259,7 +259,7 @@ public class AiriTime extends BaseNPCTime {
                                                                 + "Defeated, you can only sigh in resignation. Looks like you have a couple of expensive dates soon.",
                                                 GameState.gameState.characterPool.getCharacterByType("Airi"),
                                                 GameState.gameState.characterPool.getPlayer()));
-                Daytime.train(player, npc, Attribute.Power);
+                Daytime.train(player, npc, Attribute.power);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
                 if (Random.random(5) == 0 && (!player.has(Trait.fakeout) || !npc.has(Trait.fakeout))) {
@@ -275,7 +275,7 @@ public class AiriTime extends BaseNPCTime {
                 GUI.gui.message(Formatter.format("[Placeholder]You play monster hunter with Airi.",
                                 GameState.gameState.characterPool.getCharacterByType("Airi"),
                                 GameState.gameState.characterPool.getPlayer()));
-                Daytime.train(player, npc, Attribute.Cunning);
+                Daytime.train(player, npc, Attribute.cunning);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
                 if (Random.random(5) == 0 && (!player.has(Trait.fakeout) || !npc.has(Trait.fakeout))) {

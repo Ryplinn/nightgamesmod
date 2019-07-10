@@ -8,7 +8,6 @@ import nightgames.characters.MaxAttribute;
 import nightgames.characters.PreferredAttribute;
 import nightgames.characters.custom.effect.CustomEffect;
 import nightgames.characters.custom.effect.MoneyModEffect;
-import nightgames.items.clothing.ClothingTable;
 import nightgames.json.JsonUtils;
 import nightgames.items.Item;
 import nightgames.items.ItemAmount;
@@ -20,7 +19,6 @@ import nightgames.status.Stsflag;
 import org.hamcrest.beans.SamePropertyValuesAs;
 import org.hamcrest.core.IsCollectionContaining;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
@@ -146,8 +144,8 @@ public class JsonSourceNPCDataLoaderTest {
         JsonSourceNPCDataLoader.loadPreferredAttributes(prefAttJSON, preferred);
 
         List<PreferredAttribute> expectedPreferred = new ArrayList<>();
-        expectedPreferred.add(new MaxAttribute(Attribute.Technique, 30));
-        expectedPreferred.add(new MaxAttribute(Attribute.Seduction));
+        expectedPreferred.add(new MaxAttribute(Attribute.technique, 30));
+        expectedPreferred.add(new MaxAttribute(Attribute.seduction));
 
         assertThat(preferred, IsCollectionContaining.hasItems(expectedPreferred.toArray(new PreferredAttribute[] {})));
     }

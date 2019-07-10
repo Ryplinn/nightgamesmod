@@ -31,7 +31,7 @@ public class Invitation extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Seduction) > 25 || user.has(Trait.submissive);
+        return user.get(Attribute.seduction) > 25 || user.has(Trait.submissive);
     }
 
     @Override
@@ -133,8 +133,8 @@ public class Invitation extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         int difficulty = target.getLevel() - target.getArousal().get() * 10 / target.getArousal().max()
-                        + target.get(Attribute.Seduction);
-        int strength = getSelf().getLevel() + getSelf().get(Attribute.Seduction)
+                        + target.get(Attribute.seduction);
+        int strength = getSelf().getLevel() + getSelf().get(Attribute.seduction)
                         * (getSelf().has(Trait.submissive) ? 2 : 1) * (hasDivinity() ? 2 : 1);
 
         boolean success = Random.random(Math.min(Math.max(difficulty - strength, 1), 10)) == 0;
@@ -156,20 +156,20 @@ public class Invitation extends Skill {
         }
         if (success) {
             if (c.getStance().en == Stance.missionary) {
-                target.add(c, new LegLocked(target, 4 * getSelf().get(Attribute.Power)));
+                target.add(c, new LegLocked(target, 4 * getSelf().get(Attribute.power)));
             } else {
-                target.add(c, new ArmLocked(target, 4 * getSelf().get(Attribute.Power)));
+                target.add(c, new ArmLocked(target, 4 * getSelf().get(Attribute.power)));
             }
             new Thrust(target).resolve(c, getSelf());
             if (hasDivinity()) {
-                getSelf().usedAttribute(Attribute.Divinity, c, .5);
+                getSelf().usedAttribute(Attribute.divinity, c, .5);
             }
         }
         return success;
     }
 
     public boolean hasDivinity() {
-        return getSelf().get(Attribute.Divinity) >= 25;
+        return getSelf().get(Attribute.divinity) >= 25;
     }
 
     @Override

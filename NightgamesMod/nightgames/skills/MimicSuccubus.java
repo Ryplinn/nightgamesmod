@@ -22,7 +22,7 @@ public class MimicSuccubus extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.human() && user.get(Attribute.Slime) >= 10;
+        return user.human() && user.get(Attribute.slime) >= 10;
     }
 
     @Override
@@ -83,11 +83,11 @@ public class MimicSuccubus extends Skill {
             getSelf().body.temporaryAddOrReplacePartWithType(part.upgrade().upgrade(), 10);
         }
 
-        int strength = Math.max(10, getSelf().get(Attribute.Slime)) * 2 / 3;
+        int strength = Math.max(10, getSelf().get(Attribute.slime)) * 2 / 3;
         if (getSelf().has(Trait.Masquerade)) {
             strength = strength * 3 / 2;
         }
-        getSelf().add(c, new AttributeBuff(getSelf(), Attribute.Dark, strength, 10));
+        getSelf().add(c, new AttributeBuff(getSelf(), Attribute.darkness, strength, 10));
         getSelf().add(c, new SlimeMimicry("succubus", getSelf(), 10));
         getSelf().body.temporaryAddPartMod("pussy", DemonicMod.INSTANCE, 10);
         getSelf().body.temporaryAddPartMod("cock", CockMod.incubus, 10);

@@ -18,7 +18,7 @@ public class Deepen extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.Hypnosis) >= 1;
+        return getSelf().getPure(Attribute.hypnotism) >= 1;
     }
 
     @Override

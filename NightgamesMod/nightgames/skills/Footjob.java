@@ -21,7 +21,7 @@ public class Footjob extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Seduction) >= 22;
+        return user.get(Attribute.seduction) >= 22;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class Footjob extends Skill {
             } else {
                 target.body.pleasure(getSelf(), getSelf().body.getRandom("feet"), target.body.getRandom("pussy"), m, c, this);
             }
-            if (Random.random(100) < 15 + 2 * getSelf().get(Attribute.Fetish)) {
+            if (Random.random(100) < 15 + 2 * getSelf().get(Attribute.fetishism)) {
                 target.add(c, new BodyFetish(target, getSelf(), "feet", .25));
             }
         } else {

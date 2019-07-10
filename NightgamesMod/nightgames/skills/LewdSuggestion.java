@@ -17,7 +17,7 @@ public class LewdSuggestion extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.Hypnosis) >= 3;
+        return getSelf().getPure(Attribute.hypnotism) >= 3;
     }
 
     @Override

@@ -14,7 +14,7 @@ public class Barrier extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Arcane) >= 18;
+        return user.get(Attribute.arcane) >= 18;
     }
 
     @Override

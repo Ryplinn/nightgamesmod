@@ -25,7 +25,7 @@ public class BreastSmother extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.getLevel() >= 15 ||user.get(Attribute.Seduction) >= 30 && user.hasBreasts();
+        return user.getLevel() >= 15 ||user.get(Attribute.seduction) >= 30 && user.hasBreasts();
     }
 
     @Override
@@ -83,7 +83,7 @@ public class BreastSmother extends Skill {
         } else {
             getSelf().emote(Emotion.dominant, 10);
         }
-        if (Random.random(100) < 15 + 2 * getSelf().get(Attribute.Fetish)) {
+        if (Random.random(100) < 15 + 2 * getSelf().get(Attribute.fetishism)) {
             target.add(c, new BodyFetish(target, getSelf(), "breasts", .25));
         }
         return true;

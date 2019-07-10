@@ -44,14 +44,14 @@ public class Meditation extends Activity {
                                 + "session.\"</i> Her expression darkens as she bites her lip. <i>\"My father is not in good health and he can't take students. I need money to keep the dojo open, and "
                                 + "I know you're making plenty in the games.\"</i>");
                 Flag.flag(Flag.metSuzume);
-                choose("Train: $" + 1000 * (player.get(Attribute.Ki) + 1), nextChoices);
+                choose("Train: $" + 1000 * (player.get(Attribute.ki) + 1), nextChoices);
                 choose("Sharpen Senses", nextChoices);
                 choose("Shut Out Sensation", nextChoices);
                 choose("Leave", nextChoices);
             } else {
                 GUI.gui.message("You go to the Suzuki dojo and remove your shoes out of respect. Suzume (or Suzuki-shisho as she's instructed you to call her) give you a friendly "
                                 + "smile as you bow. <i>\"Welcome apprentice. Are you ready to continue your training or are you here to meditate?\"</i>");
-                choose("Train: $" + 1000 * (player.get(Attribute.Ki) + 1), nextChoices);
+                choose("Train: $" + 1000 * (player.get(Attribute.ki) + 1), nextChoices);
                 choose("Sharpen Senses", nextChoices);
                 choose("Shut Out Sensation", nextChoices);
                 choose("Leave", nextChoices);
@@ -70,13 +70,13 @@ public class Meditation extends Activity {
         } else if (choice.equals("Leave")) {
             done(acted, instance);
         } else if (choice.startsWith("Train")) {
-            if (player.money >= 1000 * (player.getPure(Attribute.Ki) + 1)) {
+            if (player.money >= 1000 * (player.getPure(Attribute.ki) + 1)) {
                 GUI.gui.message("Suzuki-shisho insists that you train in the nude. She claims it's a tribute to an old Japanese grappling tradition. You're about 95% certain she's "
                                 + "lying. Fortunately the dojo doesn't appear to have any other students, so the two of you have plenty of privacy. It's also closer to the circumstances you're "
                                 + "normally fighting in.<br/><br/><i>\"Your Ki skills can be very useful, but be careful to pace yourself or you may run out of stamina.\"</i>");
-                player.money -= 1000 * (player.getPure(Attribute.Ki) + 1);
-                player.modAttributeDontSaveData(Attribute.Ki, 1);
-                Flag.flag("Trained" + Attribute.Ki.name());
+                player.money -= 1000 * (player.getPure(Attribute.ki) + 1);
+                player.modAttributeDontSaveData(Attribute.ki, 1);
+                Flag.flag("Trained" + Attribute.ki.name());
                 acted = true;
                 player.gainIfAbsent("gi");
                 choose("Leave", nextChoices);
@@ -106,8 +106,8 @@ public class Meditation extends Activity {
                                 + "your body. When she puts your finger in her mouth and begins to lick it, it does feel like she's giving you a blowjob. You manage to endure her 'fingerjob' for about thirty seconds "
                                 + "before you hit your peak and cum in your pants. Suzume giggles when she realizes what happened. <i>\"I probably should have warned you to bring a change of underwear with you. Don't worry, "
                                 + "your hypersensitivity will level out over the next hour or so. You'll be a bit more perceptive, but not like you are now.\"</i>");
-                if (player.getPure(Attribute.Perception) < 9) {
-                    player.modAttributeDontSaveData(Attribute.Perception, 1);
+                if (player.getPure(Attribute.perception) < 9) {
+                    player.modAttributeDontSaveData(Attribute.perception, 1);
                 }
             } else {
                 GUI.gui.message("Suzume instructs you to sit in the middle of the dojo and close your eyes. <i>\"I'm going to count down from ten. With each number, you will feel your "
@@ -136,8 +136,8 @@ public class Meditation extends Activity {
                                 + "is working quite well. <i>\"Don't worry, I would never damage someone in my care. You would, however, be in a lot of discomfort if the suggestion wasn't working.\"</i> She releases your "
                                 + "genitals, helps you to your feet, and hands you your missing clothes. <i>\"Your sensitivity should already be starting to return. You'll keep some of your endurance, but you'll probably "
                                 + "feel it when someone undresses you.\"</i>");
-                if (player.getPure(Attribute.Perception) > 1) {
-                    player.modAttributeDontSaveData(Attribute.Perception, -1);
+                if (player.getPure(Attribute.perception) > 1) {
+                    player.modAttributeDontSaveData(Attribute.perception, -1);
                 }
             } else {
                 GUI.gui.message("Suzume has you lie down on the cold, somewhat uncomfortable floor. <i>\"Now please close your eyes while I count down from ten. I want you to imagine a set of stairs and "
@@ -164,19 +164,19 @@ public class Meditation extends Activity {
 
     @Override
     public void shop(NPC npc, int budget) {
-        if (npc.getPure(Attribute.Ki) > 0 && budget >= 1000 * (npc.getPure(Attribute.Ki) + 1)) {
-            if (budget >= 2000 * (npc.getPure(Attribute.Ki) + 2)) {
-                npc.money -= 1000 * (npc.getPure(Attribute.Ki) + 1);
-                npc.modAttributeDontSaveData(Attribute.Ki, 1);
+        if (npc.getPure(Attribute.ki) > 0 && budget >= 1000 * (npc.getPure(Attribute.ki) + 1)) {
+            if (budget >= 2000 * (npc.getPure(Attribute.ki) + 2)) {
+                npc.money -= 1000 * (npc.getPure(Attribute.ki) + 1);
+                npc.modAttributeDontSaveData(Attribute.ki, 1);
             }
-            npc.money -= 1000 * (npc.getPure(Attribute.Ki) + 1);
-            npc.modAttributeDontSaveData(Attribute.Ki, 1);
+            npc.money -= 1000 * (npc.getPure(Attribute.ki) + 1);
+            npc.modAttributeDontSaveData(Attribute.ki, 1);
         }
         int r = Random.random(4);
-        if (r == 3 && npc.getPure(Attribute.Perception) < 9) {
-            npc.modAttributeDontSaveData(Attribute.Perception, 1);
-        } else if (r == 2 && npc.getPure(Attribute.Perception) > 1) {
-            npc.modAttributeDontSaveData(Attribute.Perception, -1);
+        if (r == 3 && npc.getPure(Attribute.perception) < 9) {
+            npc.modAttributeDontSaveData(Attribute.perception, 1);
+        } else if (r == 2 && npc.getPure(Attribute.perception) > 1) {
+            npc.modAttributeDontSaveData(Attribute.perception, -1);
         }
     }
 }

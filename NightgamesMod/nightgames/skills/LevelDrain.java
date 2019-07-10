@@ -23,7 +23,7 @@ public class LevelDrain extends Drain {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Dark) >= 20 && !user.has(Trait.leveldrainer);
+        return user.get(Attribute.darkness) >= 20 && !user.has(Trait.leveldrainer);
         //The second clause may seem incorrect, but it isn't. Characters with this
         //trait drain levels passively and cannot also use this skill.
     }
@@ -62,7 +62,7 @@ public class LevelDrain extends Drain {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        int type = Random.centeredrandom(2, getSelf().get(Attribute.Dark) / 20.0f, 2);
+        int type = Random.centeredrandom(2, getSelf().get(Attribute.darkness) / 20.0f, 2);
         writeOutput(c, type, Result.normal, target);
         switch (type) {
             case 0:

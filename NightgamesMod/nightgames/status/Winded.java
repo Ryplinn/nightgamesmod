@@ -45,7 +45,7 @@ public class Winded extends DurationStatus {
 
     @Override
     public int mod(Attribute a) {
-        if (a == Attribute.Power || a == Attribute.Speed) {
+        if (a == Attribute.power || a == Attribute.speed) {
             return -2;
         } else {
             return 0;
@@ -56,7 +56,7 @@ public class Winded extends DurationStatus {
     public void onRemove(Combat c, Character other) {
         if (c != null) {
             if (c.getStance().mobile(affected)) {
-                if (affected.get(Attribute.Divinity) > 0) {
+                if (affected.get(Attribute.divinity) > 0) {
                     affected.addlist.add(new BastionOfFaith(affected));
                 } else {
                     affected.addlist.add(new Braced(affected));

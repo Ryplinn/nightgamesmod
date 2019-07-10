@@ -52,7 +52,7 @@ public class MagicTraining extends Activity {
                             + "we go. I've tasted some of your essence and you've tasted some of mine.\"</i> What was that about? <i>\"Oh this wasn't just a demonstration. I also took the liberty of creating a magic "
                             + "link between us. It'll make your training easier.\"</i>");
             Flag.flag(Flag.metAisha);
-            choose("Lesson: $" + 1000 * (player.getPure(Attribute.Arcane) + 1), nextChoices);
+            choose("Lesson: $" + 1000 * (player.getPure(Attribute.arcane) + 1), nextChoices);
             choose("Leave", nextChoices);
             acted = true;
         } else if (choice.equals("Start")) {
@@ -61,24 +61,24 @@ public class MagicTraining extends Activity {
         } else if (choice.equals("Leave")) {
             done(acted, instance);
         } else if (choice.startsWith("Lesson")) {
-            if (player.money >= 1000 * (player.getPure(Attribute.Arcane) + 1)) {
+            if (player.money >= 1000 * (player.getPure(Attribute.arcane) + 1)) {
                 int scene;
-                if(player.getPure(Attribute.Arcane)>18){
+                if(player.getPure(Attribute.arcane)>18){
                     scene = Random.random(4);
                 }
-                else if(player.getPure(Attribute.Arcane)==18){
+                else if(player.getPure(Attribute.arcane)==18){
                     scene = 3;
                 }
-                else if(player.getPure(Attribute.Arcane)>15){
+                else if(player.getPure(Attribute.arcane)>15){
                     scene = Random.random(3);
                 }
-                else if(player.getPure(Attribute.Arcane)==15){
+                else if(player.getPure(Attribute.arcane)==15){
                     scene = 2;
                 }
-                else if(player.getPure(Attribute.Arcane)>3){
+                else if(player.getPure(Attribute.arcane)>3){
                     scene = Random.random(2);
                 }
-                else if(player.getPure(Attribute.Arcane)==3){
+                else if(player.getPure(Attribute.arcane)==3){
                     scene = 1;
                 }
                 else{
@@ -216,24 +216,24 @@ public class MagicTraining extends Activity {
                                         + "<i>\"It happens when two mages cum at the same time. Good, right?\"</i> You can only nod. After lounging in bed for a while you finally excuse yourself. "
                                         + "You walk back to your dorm, thinking about the awesome applications of magic.");
                 }
-                player.money -= 1000 * (player.getPure(Attribute.Arcane) + 1);
-                player.modAttributeDontSaveData(Attribute.Arcane, 1);
-                Flag.flag("Trained" + Attribute.Arcane.name());
+                player.money -= 1000 * (player.getPure(Attribute.arcane) + 1);
+                player.modAttributeDontSaveData(Attribute.arcane, 1);
+                Flag.flag("Trained" + Attribute.arcane.name());
                 acted = true;
             } else {
                 GUI.gui.message("You don't have enough money for training.");
             }
             choose("Leave", nextChoices);
         } else if (choice.startsWith("Animism")) {
-            if (player.money >= 500 + 500 * (player.getPure(Attribute.Animism) + 1)) {
-                player.money -= 500 + 500 * (player.getPure(Attribute.Animism) + 1);
+            if (player.money >= 500 + 500 * (player.getPure(Attribute.animism) + 1)) {
+                player.money -= 500 + 500 * (player.getPure(Attribute.animism) + 1);
                 GUI.gui.message("Kat comes in again to help you practice tapping "
                                 + "into your animal side. As per Kat's suggestion, you both spend "
                                 + "the entire training session naked, so as to distance yourselves "
                                 + "from civilized habits. Aisha volunteers to help out by teasing"
                                 + " you to sufficient arousal for your instincts to come out. She "
                                 + "also provides some actual help by monitoring your spirit's power.");
-                player.modAttributeDontSaveData(Attribute.Animism, 1);
+                player.modAttributeDontSaveData(Attribute.animism, 1);
                 acted = true;
             } else {
                 GUI.gui.message("You don't have enough money for training.");
@@ -272,7 +272,7 @@ public class MagicTraining extends Activity {
                             + " to you alone. If you really want this power, you'll probably "
                             + "need to rely on Kat's help.");
             choose("Get Animal Spirit", nextChoices);
-            choose("Lesson: $" + (500 + 500 * (player.getPure(Attribute.Arcane) + 1)), nextChoices);
+            choose("Lesson: $" + (500 + 500 * (player.getPure(Attribute.arcane) + 1)), nextChoices);
             choose("Leave", nextChoices);
         } else if (choice.startsWith("Get Animal Spirit")) {
             GUI.gui.message("Kat agrees to come to the creative writing reference"
@@ -341,8 +341,8 @@ public class MagicTraining extends Activity {
                             + "tone. <i>\"I think we can consider that a success. If Kat is willing to "
                             + "continue to help you out, you should ask her to train you to control your new powers. "
                             + "I want you to do it here, so I can continue to watch you... just to be safe, of course.\"</i>");
-            player.modAttributeDontSaveData(Attribute.Animism, 1);
-            Flag.flag("Trained" + Attribute.Animism.name());
+            player.modAttributeDontSaveData(Attribute.animism, 1);
+            Flag.flag("Trained" + Attribute.animism.name());
             acted = true;
             choose("Leave", nextChoices);
         } else if (choice.startsWith("Buy a minor scroll: $200")) {
@@ -358,28 +358,28 @@ public class MagicTraining extends Activity {
 
     @Override
     public void shop(NPC npc, int budget) {
-        if (npc.getPure(Attribute.Arcane) > 0 && budget >= 1000 * (npc.getPure(Attribute.Arcane) + 1)) {
-            if (budget >= 2000 * (npc.getPure(Attribute.Arcane) + 2)) {
-                npc.money -= 1000 * (npc.getPure(Attribute.Arcane) + 1);
-                npc.modAttributeDontSaveData(Attribute.Dark, 1);
+        if (npc.getPure(Attribute.arcane) > 0 && budget >= 1000 * (npc.getPure(Attribute.arcane) + 1)) {
+            if (budget >= 2000 * (npc.getPure(Attribute.arcane) + 2)) {
+                npc.money -= 1000 * (npc.getPure(Attribute.arcane) + 1);
+                npc.modAttributeDontSaveData(Attribute.darkness, 1);
             }
-            npc.money -= 1000 * (npc.getPure(Attribute.Arcane) + 1);
-            npc.modAttributeDontSaveData(Attribute.Arcane, 1);
+            npc.money -= 1000 * (npc.getPure(Attribute.arcane) + 1);
+            npc.modAttributeDontSaveData(Attribute.arcane, 1);
         }
     }
 
     private void presentOptions(List<LabeledValue<String>> nextChoices) {
-        choose("Lesson: $" + 1000 * (player.getPure(Attribute.Arcane) + 1), nextChoices);
-        if (player.getPure(Attribute.Animism) >= 1) {
-            choose("Animism training: $" + (500 + 500 * (player.getPure(Attribute.Animism) + 1)), nextChoices);
+        choose("Lesson: $" + 1000 * (player.getPure(Attribute.arcane) + 1), nextChoices);
+        if (player.getPure(Attribute.animism) >= 1) {
+            choose("Animism training: $" + (500 + 500 * (player.getPure(Attribute.animism) + 1)), nextChoices);
         }
         if (Flag.checkFlag(Flag.catspirit) && !Flag.checkFlag(Flag.furry)) {
             choose("Ask about Animal Spirit", nextChoices);
         }
-        if (Flag.checkFlag(Flag.furry) && player.getPure(Attribute.Animism) == 0) {
+        if (Flag.checkFlag(Flag.furry) && player.getPure(Attribute.animism) == 0) {
             choose("Get Animal Spirit", nextChoices);
         }
-        if (player.getPure(Attribute.Arcane) >= 2 && player.money >= 200) {
+        if (player.getPure(Attribute.arcane) >= 2 && player.money >= 200) {
             choose("Buy a minor scroll: $200", nextChoices);
         }
         choose("Leave", nextChoices);

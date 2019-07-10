@@ -20,7 +20,7 @@ public class ShamefulDisplay extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.Submissive) >= 15 && !getSelf().has(Trait.shameless);
+        return getSelf().getPure(Attribute.submission) >= 15 && !getSelf().has(Trait.shameless);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ShamefulDisplay extends Skill {
         }
         getSelf().add(c, new Shamed(getSelf()));
         int divisor = target.getMood() == Emotion.dominant ? 3 : 4;
-        target.add(c, Horny.getWithPsycologicalType(getSelf(), target, getSelf().get(Attribute.Submissive) / divisor, 2, " (Dominant Thrill)"));
+        target.add(c, Horny.getWithPsycologicalType(getSelf(), target, getSelf().get(Attribute.submission) / divisor, 2, " (Dominant Thrill)"));
         return true;
     }
 

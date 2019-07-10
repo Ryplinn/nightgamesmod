@@ -85,13 +85,13 @@ public class Frenzied extends DurationStatus {
 
     @Override
     public int mod(Attribute a) {
-        if (a == Attribute.Cunning) {
+        if (a == Attribute.cunning) {
             return -5;
         }
-        if (a == Attribute.Power) {
+        if (a == Attribute.power) {
             return 8;
         }
-        if (a == Attribute.Animism) {
+        if (a == Attribute.animism) {
             return 8;
         }
         return 0;

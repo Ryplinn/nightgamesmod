@@ -3,14 +3,12 @@ package nightgames.json;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import nightgames.characters.Attribute;
-import nightgames.items.clothing.ClothingTable;
 import nightgames.items.clothing.ClothingTrait;
 import org.hamcrest.collection.IsMapContaining;
 import org.hamcrest.core.IsCollectionContaining;
 import org.hamcrest.number.IsCloseTo;
 import com.google.gson.JsonObject;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -81,8 +79,8 @@ public class JsonUtilsTest {
 
     @Test public void testMapFromJson() throws Exception {
         assertThat(JsonUtils.mapFromJson(sampleJSON.getAsJsonObject("map"), Attribute.class, Integer.class),
-                        allOf(IsMapContaining.hasEntry(Attribute.Power, 5),
-                                        IsMapContaining.hasEntry(Attribute.Seduction, 15)));
+                        allOf(IsMapContaining.hasEntry(Attribute.power, 5),
+                                        IsMapContaining.hasEntry(Attribute.seduction, 15)));
     }
 
     @Test public void rootFromFile() throws Exception {

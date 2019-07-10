@@ -108,7 +108,7 @@ public class Seeded extends Status implements InsertedStatus {
             affected.heal(c, 100, " (Seedling)");
             affected.arouse(Math.max(Random.random(50, 100), affected.getArousal().max() / 4), c,
                             other.nameOrPossessivePronoun() + " seedling");
-            affected.body.pleasure(other, seed, hole, Random.random(10, 20) + other.get(Attribute.Bio) / 2, c);
+            affected.body.pleasure(other, seed, hole, Random.random(10, 20) + other.get(Attribute.bio) / 2, c);
             affected.add(c, new Frenzied(other, 1000));
         } else if (time >= 2) {
             if (stage < 2) {
@@ -126,7 +126,7 @@ public class Seeded extends Status implements InsertedStatus {
                                 Formatter.format("The thick tuber-like roots inside {self:direct-object} constantly shift and scrape against {self:possessive} %s, leaving {self:direct-object} both horny and lenthargic at the same time.",
                                                 affected, other, hole.describe(affected)));
             affected.drain(c, other, Random.random(5, 11), Character.MeterType.STAMINA, Character.MeterType.MOJO, 1.0f);
-            affected.body.pleasure(other, seed, hole, Random.random(10, 20) + other.get(Attribute.Bio) / 2, c);
+            affected.body.pleasure(other, seed, hole, Random.random(10, 20) + other.get(Attribute.bio) / 2, c);
         } else if (time >= 1) {
             if (stage < 1) {
                 stage = 1;

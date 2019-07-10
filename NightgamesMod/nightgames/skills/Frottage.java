@@ -21,7 +21,7 @@ public class Frottage extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Seduction) >= 26;
+        return user.get(Attribute.seduction) >= 26;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class Frottage extends Skill {
             getSelf().body.pleasure(target, receiver, dealer, m / 2, c, this);
         }
         target.body.pleasure(getSelf(), dealer, receiver, m, c, this);
-        if (Random.random(100) < 15 + 2 * getSelf().get(Attribute.Fetish)) {
+        if (Random.random(100) < 15 + 2 * getSelf().get(Attribute.fetishism)) {
             target.add(c, new BodyFetish(target, getSelf(), "cock", .25));
         }
         getSelf().emote(Emotion.horny, 15);

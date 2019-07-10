@@ -19,7 +19,7 @@ public class KiShout extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Ki) >= 18;
+        return user.get(Attribute.ki) >= 18;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class KiShout extends Skill {
 
     @Override
     public int accuracy(Combat c, Character target) {
-        double attDifference = (2 * getSelf().get(Attribute.Ki) + getSelf().get(Attribute.Power)) - target.get(Attribute.Power);
+        double attDifference = (2 * getSelf().get(Attribute.ki) + getSelf().get(Attribute.power)) - target.get(Attribute.power);
         double accuracy = 2.5f * attDifference + 75 - target.knockdownDC();
         return (int) Math.round(MathUtils.clamp(accuracy, 25, 150));
     }
@@ -49,13 +49,13 @@ public class KiShout extends Skill {
     public boolean resolve(Combat c, Character target) {
         if (target.roll(getSelf(), accuracy(c, target))) {
             writeOutput(c, Result.normal, target);
-            target.pain(c, getSelf(), (int) (10 + 3 * Math.sqrt(getSelf().get(Attribute.Ki))));
+            target.pain(c, getSelf(), (int) (10 + 3 * Math.sqrt(getSelf().get(Attribute.ki))));
             target.add(c, new Falling(target));
             getSelf().weaken(c, getSelf().getStamina().max() / 4);
             return true;
         } else {
             writeOutput(c, Result.miss, target);
-            target.pain(c, getSelf(), (int) (10 + 3 * Math.sqrt(getSelf().get(Attribute.Ki))));
+            target.pain(c, getSelf(), (int) (10 + 3 * Math.sqrt(getSelf().get(Attribute.ki))));
             getSelf().weaken(c, getSelf().getStamina().max() / 4);
             return false;
         }

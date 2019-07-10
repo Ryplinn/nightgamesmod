@@ -20,11 +20,11 @@ public class Stats {
     public Stats() {
         level = 1;
         attributes = new HashMap<>();
-        attributes.put(Attribute.Seduction, 5);
-        attributes.put(Attribute.Cunning, 5);
-        attributes.put(Attribute.Power, 5);
-        attributes.put(Attribute.Speed, 5);
-        attributes.put(Attribute.Perception, 5);
+        attributes.put(Attribute.seduction, 5);
+        attributes.put(Attribute.cunning, 5);
+        attributes.put(Attribute.power, 5);
+        attributes.put(Attribute.speed, 5);
+        attributes.put(Attribute.perception, 5);
         stamina = 25;
         arousal = 50;
         mojo = 25;

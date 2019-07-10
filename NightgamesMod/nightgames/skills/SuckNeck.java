@@ -29,7 +29,7 @@ public class SuckNeck extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         if (target.roll(getSelf(), accuracy(c, target))) {
-            if (getSelf().get(Attribute.Dark) >= 1) {
+            if (getSelf().get(Attribute.darkness) >= 1) {
                 writeOutput(c, Result.special, target);
                 int m = target.getStamina().max() / 8;
                 target.drain(c, getSelf(),
@@ -48,7 +48,7 @@ public class SuckNeck extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().get(Attribute.Seduction) >= 12;
+        return getSelf().get(Attribute.seduction) >= 12;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class SuckNeck extends Skill {
 
     @Override
     public String getLabel(Combat c) {
-        if (getSelf().get(Attribute.Dark) >= 1) {
+        if (getSelf().get(Attribute.darkness) >= 1) {
             return "Drain energy";
         } else {
             return getName(c);

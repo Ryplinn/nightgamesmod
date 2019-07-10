@@ -22,7 +22,7 @@ public class Offer extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.Submissive) >= 6;
+        return getSelf().getPure(Attribute.submission) >= 6;
     }
 
     @Override
@@ -58,19 +58,19 @@ public class Offer extends Skill {
                 writeOutput(c, Result.special, target);
                 c.setStance(new Missionary(target, getSelf()), target, true);
                 getSelf().body.pleasure(target, target.body.getRandomCock(), getSelf().body.getRandomPussy(),
-                                Random.random(5) + getSelf().get(Attribute.Perception), c, this);
+                                Random.random(5) + getSelf().get(Attribute.perception), c, this);
                 target.body.pleasure(getSelf(), getSelf().body.getRandomPussy(), target.body.getRandomCock(),
-                                Random.random(5) + getSelf().get(Attribute.Perception), c, this);
+                                Random.random(5) + getSelf().get(Attribute.perception), c, this);
 
             } else {
                 // offer ass to dick/strapon
                 writeOutput(c, Result.anal, target);
                 c.setStance(new Anal(target, getSelf()), target, true);
                 getSelf().body.pleasure(target, target.body.getRandomInsertable(), getSelf().body.getRandomAss(),
-                                Random.random(5) + getSelf().get(Attribute.Perception), c, this);
+                                Random.random(5) + getSelf().get(Attribute.perception), c, this);
                 if (!target.has(Trait.strapped)) {
                     target.body.pleasure(getSelf(), getSelf().body.getRandomAss(), target.body.getRandomCock(),
-                                    Random.random(5) + getSelf().get(Attribute.Perception), c, this);
+                                    Random.random(5) + getSelf().get(Attribute.perception), c, this);
                 }
             }
         } else {
@@ -79,9 +79,9 @@ public class Offer extends Skill {
             writeOutput(c, Result.normal, target);
             c.setStance(new Cowgirl(target, getSelf()), target, true);
             getSelf().body.pleasure(target, target.body.getRandomPussy(), getSelf().body.getRandomCock(),
-                            Random.random(5) + getSelf().get(Attribute.Perception), c, this);
+                            Random.random(5) + getSelf().get(Attribute.perception), c, this);
             target.body.pleasure(getSelf(), getSelf().body.getRandomCock(), target.body.getRandomPussy(),
-                            Random.random(5) + getSelf().get(Attribute.Perception), c, this);
+                            Random.random(5) + getSelf().get(Attribute.perception), c, this);
         }
 
         if (getSelf().checkAddiction(AddictionType.MIND_CONTROL, target)) {

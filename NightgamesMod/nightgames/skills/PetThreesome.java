@@ -162,7 +162,7 @@ public class PetThreesome extends Skill {
                 }
             }
             if (fucker.has(Trait.insertion)) {
-                otherm += Math.min(fucker.get(Attribute.Seduction) / 4, 40);
+                otherm += Math.min(fucker.get(Attribute.seduction) / 4, 40);
             }
             target.body.pleasure(fucker, selfO, targetO, otherm, c, this);
             fucker.body.pleasure(target, targetO, selfO, m, c, this);

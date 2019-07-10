@@ -28,7 +28,7 @@ public class TentacleInjectVenom extends TentacleArmSkill {
     @Override
     public boolean resolve(Combat c, Arm arm, Character owner, Character target) {
         boolean sub = target.bound() || !c.getStance().mobile(target);
-        boolean success = sub || Random.random(100) < 10 + owner.get(Attribute.Slime);
+        boolean success = sub || Random.random(100) < 10 + owner.get(Attribute.slime);
 
         if (success) {
             c.write(GUIColor.limbColor(owner), Formatter.format("{self:NAME-POSSESSIVE} injector tentacle shoots forward and embeds itself in {other:name-possessive} arm. "
@@ -36,8 +36,8 @@ public class TentacleInjectVenom extends TentacleArmSkill {
                             + "{other:pronoun} already {other:action:start} to feel sluggish as {other:pronoun-action:realize} "
                             + "{other:pronoun-action:have} been poisoned.", owner, target));
             target.add(c, new Atrophy(target, owner.getLevel() / 3, 10, getSourceString(owner)));
-            target.add(c, new AttributeBuff(target, Attribute.Power, target.getPure(Attribute.Power) / 3, 10));
-            target.add(c, new AttributeBuff(target, Attribute.Speed, target.getPure(Attribute.Speed) / 3, 10));
+            target.add(c, new AttributeBuff(target, Attribute.power, target.getPure(Attribute.power) / 3, 10));
+            target.add(c, new AttributeBuff(target, Attribute.speed, target.getPure(Attribute.speed) / 3, 10));
             return true;
         } else {
             c.write(GUIColor.limbColor(owner), Formatter.format("A %s flies towards {other:name-do}, "

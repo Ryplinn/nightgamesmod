@@ -21,12 +21,12 @@ public class AphrodisiacTrap extends Trap {
     }
 
     public void setStrength(Character user) {
-        setStrength(user.get(Attribute.Cunning) + user.get(Attribute.Science) + user.getLevel() / 2);
+        setStrength(user.get(Attribute.cunning) + user.get(Attribute.science) + user.getLevel() / 2);
     }
 
     @Override
     public void trigger(Character target) {
-        if (!target.checkVsDc(Attribute.Perception, 20 + target.baseDisarm())) {
+        if (!target.checkVsDc(Attribute.perception, 20 + target.baseDisarm())) {
             if (target.human()) {
                 GUI.gui.message(
                                 "You spot a liquid spray trap in time to avoid setting it off. You carefully manage to disarm the trap and pocket the potion.");
@@ -65,7 +65,7 @@ public class AphrodisiacTrap extends Trap {
 
     @Override
     public boolean requirements(Character owner) {
-        return owner.get(Attribute.Cunning) >= 12 && !owner.has(Trait.direct);
+        return owner.get(Attribute.cunning) >= 12 && !owner.has(Trait.direct);
     }
 
     @Override

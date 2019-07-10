@@ -33,13 +33,13 @@ public class Nimble extends DurationStatus {
 
     @Override
     public float fitnessModifier() {
-        return affected.get(Attribute.Animism) / 10.0f;
+        return affected.get(Attribute.animism) / 10.0f;
     }
 
     @Override
     public int mod(Attribute a) {
         switch (a) {
-            case Speed:
+            case speed:
                 return 2 + affected.getArousal().getReal() / 100;
             default:
                 break;
@@ -76,12 +76,12 @@ public class Nimble extends DurationStatus {
 
     @Override
     public int evade() {
-        return affected.get(Attribute.Animism) * affected.getArousal().percent() / 100;
+        return affected.get(Attribute.animism) * affected.getArousal().percent() / 100;
     }
 
     @Override
     public int escape() {
-        return affected.get(Attribute.Animism) * affected.getArousal().percent() / 100;
+        return affected.get(Attribute.animism) * affected.getArousal().percent() / 100;
     }
 
     @Override
@@ -96,7 +96,7 @@ public class Nimble extends DurationStatus {
 
     @Override
     public int counter() {
-        return (affected.get(Attribute.Animism) / 2) * affected.getArousal().percent() / 100;
+        return (affected.get(Attribute.animism) / 2) * affected.getArousal().percent() / 100;
     }
 
     @Override

@@ -98,7 +98,7 @@ public class Missionary extends MaledomSexStance {
     }
 
     public static Position similarInstance(Character top, Character bottom) {
-        if (top.get(Attribute.Power) > 25 && Random.random(2) == 0) {
+        if (top.get(Attribute.power) > 25 && Random.random(2) == 0) {
             return new UpsideDownMaledom(top, bottom);
         }
         return new Missionary(top, bottom);

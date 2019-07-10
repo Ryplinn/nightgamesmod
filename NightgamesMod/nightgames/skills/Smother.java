@@ -26,7 +26,7 @@ public class Smother extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Fetish) >= 5;
+        return user.get(Attribute.fetishism) >= 5;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class Smother extends Skill {
         if (c.getStance().enumerate() != Stance.smothering) {
             c.setStance(new Smothering(getSelf(), target), getSelf(), true);
         }
-        if (Random.random(100) < 25 + 2 * getSelf().get(Attribute.Fetish)) {
+        if (Random.random(100) < 25 + 2 * getSelf().get(Attribute.fetishism)) {
             target.add(c, new BodyFetish(target, getSelf(), "ass", .35));
         }
         return true;

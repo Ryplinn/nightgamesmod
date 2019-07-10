@@ -57,7 +57,7 @@ public class Charm extends Skill {
     }
 
     private boolean resolvePurr(Combat c, Character target) {
-        if (Random.random(target.getLevel()) <= getSelf().get(Attribute.Animism) * getSelf().getArousal().percent()
+        if (Random.random(target.getLevel()) <= getSelf().get(Attribute.animism) * getSelf().getArousal().percent()
                         / 100 && !target.wary()) {
             int damage = getSelf().getArousal().getReal() / 10;
             if (damage < 10) {
@@ -77,7 +77,7 @@ public class Charm extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return (user.get(Attribute.Cunning) >= 8 && user.get(Attribute.Seduction) > 16) || isPurr(c);
+        return (user.get(Attribute.cunning) >= 8 && user.get(Attribute.seduction) > 16) || isPurr(c);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class Charm extends Skill {
     }
 
     private boolean isPurr(Combat c) {
-        return getSelf().get(Attribute.Animism) >= 9 && getSelf().getArousal().percent() >= 20;
+        return getSelf().get(Attribute.animism) >= 9 && getSelf().getArousal().percent() >= 20;
     }
 
     @Override

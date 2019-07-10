@@ -130,7 +130,7 @@ public class SizeMod extends PartMod {
             if ((size > 0 || self.useFemalePronouns())) {
                 return Optional.empty();
             } else {
-                if (self.get(Attribute.Power) > self.getLevel() + 5) {
+                if (self.get(Attribute.power) > self.getLevel() + 5) {
                     return Optional.of("muscular pecs");
                 }
                 return Optional.of("flat chest");

@@ -135,7 +135,7 @@ public class MaraTime extends BaseNPCTime {
             choose("Games", nextChoices);
             choose("Sparring", nextChoices);
             choose("Sex", nextChoices);
-            if(player.getPure(Attribute.Arcane)>=3){
+            if(player.getPure(Attribute.arcane)>=3){
                 choose("Faerie play", nextChoices);
             }
             if (player.checkAddiction(AddictionType.MIND_CONTROL)) {
@@ -328,7 +328,7 @@ public class MaraTime extends BaseNPCTime {
 
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.Seduction);
+                Daytime.train(player, npc, Attribute.seduction);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
                 break;
@@ -391,7 +391,7 @@ public class MaraTime extends BaseNPCTime {
                                     + "pretending to be mad at you, but she does demand to be on top during your 'follow-up game' to address your combined sexual frustration.");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.Cunning);
+                Daytime.train(player, npc, Attribute.cunning);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
                 break;
@@ -448,7 +448,7 @@ public class MaraTime extends BaseNPCTime {
 
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.Power);
+                Daytime.train(player, npc, Attribute.power);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
                 break;

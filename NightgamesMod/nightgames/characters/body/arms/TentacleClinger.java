@@ -27,6 +27,6 @@ public class TentacleClinger extends TentacleArm {
         if (target.is(Stsflag.tentacleBound)) {
             return 100;
         }
-        return (int) Math.min(40, 5 + owner.get(Attribute.Slime) * .4);
+        return (int) Math.min(40, 5 + owner.get(Attribute.slime) * .4);
     }
 }

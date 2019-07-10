@@ -26,7 +26,7 @@ public class GooeyMod extends PartMod {
                                             + " leaves the shaft in a constant flow rather than spurts. When {other:possessive} orgasm is"
                                             + " over, {other:subject-action:are} much more drained of cum than usual.",
                             self, opponent, partName));
-            opponent.loseWillpower(c, 10 + Random.random(Math.min(20, self.get(Attribute.Bio))));
+            opponent.loseWillpower(c, 10 + Random.random(Math.min(20, self.get(Attribute.bio))));
         }
     }
 

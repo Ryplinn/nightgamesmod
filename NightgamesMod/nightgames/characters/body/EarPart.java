@@ -164,7 +164,7 @@ public enum EarPart implements BodyPart, BodyPartMod {
 
     @Override
     public int mod(Attribute a, int total) {
-        if (a == Attribute.Seduction) {
+        if (a == Attribute.seduction) {
             switch (this) {
                 case pointed:
                     return 2;

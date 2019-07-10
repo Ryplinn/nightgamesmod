@@ -48,12 +48,12 @@ public class Maya extends BasePersonality {
         self.outfitPlan.addByID("sneakers");
         self.outfitPlan.addByID("socks");
         self.change();
-        self.modAttributeDontSaveData(Attribute.Dark, 10);
-        self.modAttributeDontSaveData(Attribute.Seduction, 15);
-        self.modAttributeDontSaveData(Attribute.Cunning, 15);
-        self.modAttributeDontSaveData(Attribute.Speed, 2);
-        self.modAttributeDontSaveData(Attribute.Power, 7);
-        self.modAttributeDontSaveData(Attribute.Hypnosis, 5);
+        self.modAttributeDontSaveData(Attribute.darkness, 10);
+        self.modAttributeDontSaveData(Attribute.seduction, 15);
+        self.modAttributeDontSaveData(Attribute.cunning, 15);
+        self.modAttributeDontSaveData(Attribute.speed, 2);
+        self.modAttributeDontSaveData(Attribute.power, 7);
+        self.modAttributeDontSaveData(Attribute.hypnotism, 5);
         self.getStamina().setMax(90);
         self.getArousal().setMax(150);
         self.getMojo().setMax(150);

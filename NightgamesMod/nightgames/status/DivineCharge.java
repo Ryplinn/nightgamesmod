@@ -65,7 +65,7 @@ public class DivineCharge extends Status {
 
     @Override
     public void onApply(Combat c, Character other) {
-        affected.usedAttribute(Attribute.Divinity, c, .25);
+        affected.usedAttribute(Attribute.divinity, c, .25);
     };
 
     @Override
@@ -99,7 +99,7 @@ public class DivineCharge extends Status {
         // this will get out of hand super quick, but eh, you shouldn't let it
         // get
         // that far.
-        double maximum = Math.max(2, Math.pow(2., affected.get(Attribute.Divinity) / 5.0) * .25);
+        double maximum = Math.max(2, Math.pow(2., affected.get(Attribute.divinity) / 5.0) * .25);
         this.magnitude = Math.min(maximum, this.magnitude);
 
     }

@@ -29,11 +29,11 @@ public class TestAngel extends BasePersonality {
         baseChar.setName("TestAngel");
         baseChar.level = 1;
 
-        baseChar.att.put(Attribute.Power, 5);
-        baseChar.att.put(Attribute.Seduction, 7);
-        baseChar.att.put(Attribute.Cunning, 5);
-        baseChar.att.put(Attribute.Perception, 6);
-        baseChar.att.put(Attribute.Speed, 5);
+        baseChar.att.put(Attribute.power, 5);
+        baseChar.att.put(Attribute.seduction, 7);
+        baseChar.att.put(Attribute.cunning, 5);
+        baseChar.att.put(Attribute.perception, 6);
+        baseChar.att.put(Attribute.speed, 5);
 
         baseChar.money = 0;
         baseChar.xp = 0;
@@ -86,8 +86,8 @@ public class TestAngel extends BasePersonality {
         self.outfitPlan.addByID("miniskirt");
         self.outfitPlan.addByID("sandals");
         self.change();
-        self.att.put(Attribute.Seduction, 7);
-        self.att.put(Attribute.Perception, 6);
+        self.att.put(Attribute.seduction, 7);
+        self.att.put(Attribute.perception, 6);
         self.adjustTraits();
 
         self.add(Trait.undisciplined);
@@ -130,8 +130,8 @@ public class TestAngel extends BasePersonality {
         character.getGrowth().addTrait(54, Trait.desensitized2);
 
         preferredAttributes
-                        .add(c -> c.get(Attribute.Divinity) < 50 ? Optional.of(Attribute.Divinity) : Optional.empty());
-        preferredAttributes.add(c -> Optional.of(Attribute.Seduction));
+                        .add(c -> c.get(Attribute.divinity) < 50 ? Optional.of(Attribute.divinity) : Optional.empty());
+        preferredAttributes.add(c -> Optional.of(Attribute.seduction));
     }
 
     @Override public void rest(int time) {
@@ -431,7 +431,7 @@ public class TestAngel extends BasePersonality {
         character.outfitPlan.addByID("bikinitop");
         character.outfitPlan.addByID("bikinibottoms");
         character.outfitPlan.addByID("highheels");
-        character.modAttributeDontSaveData(Attribute.Divinity, 1);
+        character.modAttributeDontSaveData(Attribute.divinity, 1);
     }
 
     @Override public boolean checkMood(Combat c, Emotion mood, int value) {

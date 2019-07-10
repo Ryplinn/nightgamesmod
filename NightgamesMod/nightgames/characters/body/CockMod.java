@@ -167,12 +167,12 @@ public class CockMod extends PartMod {
                                 self.possessiveAdjective(), self.possessiveAdjective(), part.describe(self),
                                 self.possessiveAdjective());
                 c.write(self, message);
-                for (int i = 0; i < Math.max(2, (self.get(Attribute.Ki) + 5) / 10); i++) { // +5
+                for (int i = 0; i < Math.max(2, (self.get(Attribute.ki) + 5) / 10); i++) { // +5
                                                                                            // for
                                                                                            // rounding:
                                                                                            // 24->29->20,
                                                                                            // 25->30->30
-                    Attribute attr = new Attribute[] {Attribute.Power, Attribute.Cunning, Attribute.Seduction}[Random
+                    Attribute attr = new Attribute[] {Attribute.power, Attribute.cunning, Attribute.seduction}[Random
                                     .random(3)];
                     self.add(c, new AttributeBuff(self, attr, 1, 10));
                 }
@@ -241,9 +241,9 @@ public class CockMod extends PartMod {
                                     part.describe(self), opponent.directObject(), self.directObject()));
                     int attDamage = target.moddedPartCountsAs(opponent, FeralMod.INSTANCE) ? 10 : 5;
                     int willDamage = target.moddedPartCountsAs(opponent, FeralMod.INSTANCE) ? 10 : 5;
-                    Drained.drain(c, self, opponent, Attribute.Power, attDamage, 20, true);
-                    Drained.drain(c, self, opponent, Attribute.Cunning, attDamage, 20, true);
-                    Drained.drain(c, self, opponent, Attribute.Seduction, attDamage, 20, true);
+                    Drained.drain(c, self, opponent, Attribute.power, attDamage, 20, true);
+                    Drained.drain(c, self, opponent, Attribute.cunning, attDamage, 20, true);
+                    Drained.drain(c, self, opponent, Attribute.seduction, attDamage, 20, true);
                     opponent.drain(c, self,
                                     (int) DamageType.drain.modifyDamage(self, opponent, willDamage), Character.MeterType.WILLPOWER);
                 }

@@ -43,11 +43,11 @@ public class Eve extends BasePersonality {
         self.outfitPlan.addByID("garters");
 
         self.change();
-        self.modAttributeDontSaveData(Attribute.Power, 1);
-        self.modAttributeDontSaveData(Attribute.Fetish, 1);
-        self.modAttributeDontSaveData(Attribute.Cunning, 1);
-        self.modAttributeDontSaveData(Attribute.Speed, 1);
-        self.modAttributeDontSaveData(Attribute.Seduction, 2);
+        self.modAttributeDontSaveData(Attribute.power, 1);
+        self.modAttributeDontSaveData(Attribute.fetishism, 1);
+        self.modAttributeDontSaveData(Attribute.cunning, 1);
+        self.modAttributeDontSaveData(Attribute.speed, 1);
+        self.modAttributeDontSaveData(Attribute.seduction, 2);
         self.adjustTraits();
         self.setTrophy(Item.EveTrophy);
         self.body.add(BreastsPart.d);
@@ -69,8 +69,8 @@ public class Eve extends BasePersonality {
         character.getGrowth().arousal = 6;
         character.getGrowth().bonusStamina = 1;
         character.getGrowth().bonusArousal = 3;
-        preferredAttributes.add(c -> c.get(Attribute.Fetish) < 80 ? Optional.of(Attribute.Fetish) : Optional.empty());
-        preferredAttributes.add(c -> Optional.of(Attribute.Seduction));
+        preferredAttributes.add(c -> c.get(Attribute.fetishism) < 80 ? Optional.of(Attribute.fetishism) : Optional.empty());
+        preferredAttributes.add(c -> Optional.of(Attribute.seduction));
         character.getGrowth().addTrait(0, Trait.exhibitionist);
         character.getGrowth().addTrait(0, Trait.proheels);
         character.getGrowth().addTrait(0, Trait.insatiable);

@@ -15,7 +15,7 @@ public class ViceGrip extends Tighten {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Ninjutsu) >= 24;
+        return user.get(Attribute.ninjutsu) >= 24;
     }
 
     @Override

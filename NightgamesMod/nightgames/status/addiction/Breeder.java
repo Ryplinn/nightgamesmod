@@ -162,7 +162,7 @@ public class Breeder extends Addiction {
 
     @Override
     public int mod(Attribute a) {
-        return a == Attribute.Animism ? getSeverity().ordinal() * 2 : 0;
+        return a == Attribute.animism ? getSeverity().ordinal() * 2 : 0;
     }
 
     @Override

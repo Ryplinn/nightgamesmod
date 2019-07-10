@@ -18,7 +18,7 @@ public class SpawnImp extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Dark) >= 6;
+        return user.get(Attribute.darkness) >= 6;
     }
 
     @Override
@@ -40,8 +40,8 @@ public class SpawnImp extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         getSelf().arouse(5, c);
-        int power = 5 + getSelf().get(Attribute.Dark);
-        int ac = 2 + getSelf().get(Attribute.Dark) / 10;
+        int power = 5 + getSelf().get(Attribute.darkness);
+        int ac = 2 + getSelf().get(Attribute.darkness) / 10;
         if (getSelf().human()) {
             c.write(getSelf(), deal(c, 0, Result.normal, target));
             if (gender == Ptype.impfem) {

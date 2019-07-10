@@ -37,7 +37,7 @@ public class OrgasmicTighten extends Thrust {
     public int[] getDamage(Combat c, Character target) {
         int[] result = new int[2];
 
-        int m = Random.random(25, 40) + Math.min(getSelf().get(Attribute.Power) / 3, 20);
+        int m = Random.random(25, 40) + Math.min(getSelf().get(Attribute.power) / 3, 20);
         result[0] = m;
         result[1] = 0;
 
@@ -64,7 +64,7 @@ public class OrgasmicTighten extends Thrust {
             target.body.pleasure(getSelf(), selfO, targetO, m[0], c, this);
         if (m[1] != 0)
             getSelf().body.pleasure(target, targetO, selfO, m[1], -10000, c, false, this);
-        if (selfO.isType("ass") && Random.random(100) < 2 + getSelf().get(Attribute.Fetish)) {
+        if (selfO.isType("ass") && Random.random(100) < 2 + getSelf().get(Attribute.fetishism)) {
             target.add(c, new BodyFetish(target, getSelf(), "ass", .25));
         }
         return true;

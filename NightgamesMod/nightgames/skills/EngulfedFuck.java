@@ -45,7 +45,7 @@ public class EngulfedFuck extends Skill {
     public boolean resolve(Combat c, Character target) {
         Pairing pair = Pairing.findPairing(getSelf(), target);
         double base = 10.0 + Math.min(20, Random
-                        .random(getSelf().get(Attribute.Slime) / 3 + getSelf().get(Attribute.Seduction) / 5));
+                        .random(getSelf().get(Attribute.slime) / 3 + getSelf().get(Attribute.seduction) / 5));
         int selfDmg = (int) ((base * pair.modPleasure(true)) / (getSelf().has(Trait.experienced) ? 2.0 : 3.0));
         int targetDmg = (int) (base * pair.modPleasure(false));
         switch (pair) {

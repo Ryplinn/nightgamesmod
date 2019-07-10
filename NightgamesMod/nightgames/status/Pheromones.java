@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
 
 public class Pheromones extends Horny {
     static List<Attribute> NON_DEBUFFABLE_ATTS = Arrays.asList(
-                    Attribute.Speed,
-                    Attribute.Animism,
-                    Attribute.Nymphomania,
-                    Attribute.Willpower
+                    Attribute.speed,
+                    Attribute.animism,
+                    Attribute.nymphomania,
+                    Attribute.willpower
     );
 
     private Character sourceCharacter;

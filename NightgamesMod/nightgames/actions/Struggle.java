@@ -25,7 +25,7 @@ public class Struggle extends Action {
         if (DebugFlags.isDebugOn(DebugFlags.DEBUG_SCENE)) {
             System.out.println(user.getTrueName() + " struggles with difficulty " + difficulty);
         }
-        if (user.checkVsDc(Attribute.Power, difficulty)) {
+        if (user.checkVsDc(Attribute.power, difficulty)) {
             if (user.human()) {
                 if (status != null) {
                     GUI.gui.message("You manage to break free from the " + status.getVariant() + ".");

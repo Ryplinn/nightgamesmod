@@ -79,7 +79,7 @@ public class AngelTime extends BaseNPCTime {
         {
             TransformationOption blessedCock = new ApplyPartModOption("cock", CockMod.blessed);
             blessedCock.ingredients.put(Item.HolyWater, 3);
-            blessedCock.addRequirement(attribute(Attribute.Divinity, 10), "At least 10 Divinity");
+            blessedCock.addRequirement(attribute(Attribute.divinity, 10), "At least 10 Divinity");
             blessedCock.option = "Blessed Cock";
             blessedCock.scene = "[Placeholder]<br/>Angel performs a sacrament on your cock, imbuing it with holy powers.";
             options.add(blessedCock);
@@ -87,7 +87,7 @@ public class AngelTime extends BaseNPCTime {
         {
             TransformationOption divinePussy = new ApplyPartModOption("pussy", DivineMod.INSTANCE);
             divinePussy.ingredients.put(Item.HolyWater, 3);
-            divinePussy.addRequirement(attribute(Attribute.Divinity, 10), "At least 10 Divinity");
+            divinePussy.addRequirement(attribute(Attribute.divinity, 10), "At least 10 Divinity");
             divinePussy.option = "Divine Pussy";
             divinePussy.scene = "[Placeholder]<br/>Angel performs a sacrament on your pussy, imbuing it with holy powers.";
             options.add(divinePussy);
@@ -95,7 +95,7 @@ public class AngelTime extends BaseNPCTime {
         {
             TransformationOption sacredAss = new ApplyPartModOption("ass", DivineMod.INSTANCE);
             sacredAss.ingredients.put(Item.HolyWater, 6);
-            sacredAss.addRequirement(attribute(Attribute.Divinity, 20), "At least 20 Divinity");
+            sacredAss.addRequirement(attribute(Attribute.divinity, 20), "At least 20 Divinity");
             sacredAss.option = "Sacred Ass";
             sacredAss.scene = "[Placeholder]<br/>Angel blesses your ass, imbuing it with holy powers.";
             options.add(sacredAss);
@@ -104,7 +104,7 @@ public class AngelTime extends BaseNPCTime {
             TransformationOption angelWings = new TransformationOption();
             angelWings.ingredients.put(Item.HolyWater, 2);
             angelWings.addRequirement(not(bodypart("wings")), "No wings");
-            angelWings.addRequirement(attribute(Attribute.Divinity, 10), "At least 10 Divinity");
+            angelWings.addRequirement(attribute(Attribute.divinity, 10), "At least 10 Divinity");
             angelWings.option = "Angelic Wings";
             angelWings.scene = "[Placeholder]<br/>Angel gives you white feathery wings on your back.";
             angelWings.effect = (c, self, other) -> {
@@ -119,7 +119,7 @@ public class AngelTime extends BaseNPCTime {
             divinity.option = "Bestow Divinity";
             divinity.scene = "[Placeholder]<br/>Angel has sex with you, lending you a part of her divinity.";
             divinity.effect = (c, self, other) -> {
-                self.modAttributeDontSaveData(Attribute.Divinity, 1);
+                self.modAttributeDontSaveData(Attribute.divinity, 1);
                 return true;
             };
             options.add(divinity);
@@ -330,7 +330,7 @@ public class AngelTime extends BaseNPCTime {
                                     + "don't regret it.");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.Seduction);
+                Daytime.train(player, npc, Attribute.seduction);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
                 break;
@@ -397,7 +397,7 @@ public class AngelTime extends BaseNPCTime {
                                     + "No one is allowed to get dressed and you get the lion's share of the interest, but you feel strangely comfortable with most of the girls in similar states of undress. ");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.Cunning);
+                Daytime.train(player, npc, Attribute.cunning);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
                 break;
@@ -461,7 +461,7 @@ public class AngelTime extends BaseNPCTime {
                                     + "you. In no time, you disgracefully cum in front of four horny girls, leaving your balls even more sore than before.");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.Power);
+                Daytime.train(player, npc, Attribute.power);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
                 break;

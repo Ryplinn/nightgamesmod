@@ -33,7 +33,7 @@ public class Thrust extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return !user.has(Trait.temptress) || user.get(Attribute.Technique) < 11;
+        return !user.has(Trait.temptress) || user.get(Attribute.technique) < 11;
     }
 
     protected boolean havingSex(Combat c, Character target) {
@@ -132,7 +132,7 @@ public class Thrust extends Skill {
         if (m[1] != 0) {
             getSelf().body.pleasure(target, targetO, selfO, m[1], c, this);
         }
-        if (selfO.isType("ass") && Random.random(100) < 2 + getSelf().get(Attribute.Fetish)) {
+        if (selfO.isType("ass") && Random.random(100) < 2 + getSelf().get(Attribute.fetishism)) {
             target.add(c, new BodyFetish(target, getSelf(), "ass", .25));
         }
         return true;

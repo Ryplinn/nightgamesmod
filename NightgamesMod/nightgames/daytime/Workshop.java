@@ -40,11 +40,11 @@ public class Workshop extends Activity {
                             + "and I'm not helping you for free. No offence, but I'm rooting for your opponents. Male solidarity is fine and well, but they're a lot more attractive than you.\"</i>");
             Flag.flag(Flag.metJett);
             acted = true;
-            choose("Lecture: $" + 1000 * (player.getPure(Attribute.Science) + 1), nextChoices);
+            choose("Lecture: $" + 1000 * (player.getPure(Attribute.science) + 1), nextChoices);
         } else if (choice.equals("Start")) {
             GUI.gui.message("You head to Jett's workshop. He sets down the parts he was working on and turns to "
                             + "face you. <i>\"You need something? I hope you brought your wallet.\"</i>");
-            choose("Lecture: $" + 1000 * (player.getPure(Attribute.Science) + 1), nextChoices);
+            choose("Lecture: $" + 1000 * (player.getPure(Attribute.science) + 1), nextChoices);
             acted = false;
         } else if (choice.equals("Upgrade Dildo: $2000")) {
             if (player.money >= Item.Dildo2.getPrice()) {
@@ -118,19 +118,19 @@ public class Workshop extends Activity {
             done(acted, instance);
             return;
         } else if (choice.startsWith("Lecture")) {
-            if (player.money >= 1000 * (player.getPure(Attribute.Science) + 1)) {
+            if (player.money >= 1000 * (player.getPure(Attribute.science) + 1)) {
                 GUI.gui.message("They say that geniuses make poor teachers, but Jett disproves that theory. He explains the principles behind his work in a way that you "
                                 + "can easily follow. Despite his unfriendly demeanor, he answers any questions you have without complaint. After about an hour of intense lecture, you "
                                 + "feel like you've gotten the benefits of a week of classes.<br/><br/><i>\"Some of this equipment is likely to consume battery power rapidly. If you need to "
                                 + "recharge during a match, there are a few compatible charging stations in the Mechanical Engineering workshops.\"</i>");
-                player.money -= 1000 * (player.getPure(Attribute.Science) + 1);
-                player.modAttributeDontSaveData(Attribute.Science, 1);
-                Flag.flag("Trained" + Attribute.Science.name());
+                player.money -= 1000 * (player.getPure(Attribute.science) + 1);
+                player.modAttributeDontSaveData(Attribute.science, 1);
+                Flag.flag("Trained" + Attribute.science.name());
                 if (!player.has(Item.ShockGlove)) {
                     player.gain(Item.ShockGlove);
                 }
                 player.gainIfAbsent("labcoat");
-                if (player.getPure(Attribute.Science) >= 4 && !player.has(Item.Aersolizer)) {
+                if (player.getPure(Attribute.science) >= 4 && !player.has(Item.Aersolizer)) {
                     player.gain(Item.Aersolizer);
                 }
                 acted = true;
@@ -160,10 +160,10 @@ public class Workshop extends Activity {
     @Override
     public void shop(NPC npc, int budget) {
         int remaining = budget;
-        if (npc.getPure(Attribute.Science) > 0 && remaining >= 1000) {
+        if (npc.getPure(Attribute.science) > 0 && remaining >= 1000) {
             npc.money -= 1000;
             remaining -= 1000;
-            npc.modAttributeDontSaveData(Attribute.Science, 1);
+            npc.modAttributeDontSaveData(Attribute.science, 1);
             if (!npc.has(Item.ShockGlove)) {
                 npc.gain(Item.ShockGlove);
             }
@@ -198,10 +198,10 @@ public class Workshop extends Activity {
             npc.consume(Item.Strapon, 1, false);
             npc.gain(Item.Strapon2);
         }
-        if (npc.getPure(Attribute.Science) > 0 && remaining >= 1000) {
+        if (npc.getPure(Attribute.science) > 0 && remaining >= 1000) {
             npc.money -= 1000;
             remaining -= 1000;
-            npc.modAttributeDontSaveData(Attribute.Science, 1);
+            npc.modAttributeDontSaveData(Attribute.science, 1);
             if (!npc.has(Item.ShockGlove)) {
                 npc.gain(Item.ShockGlove);
             }

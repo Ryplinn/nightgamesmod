@@ -91,7 +91,7 @@ public abstract class Prematch {
             player.getArousal().empty();
             player.getMojo().empty();
             player.getWillpower().fill();
-            if (player.getPure(Attribute.Science) > 0) {
+            if (player.getPure(Attribute.science) > 0) {
                 player.chargeBattery();
             }
             if (characterPool.human.getAffection(player) > maxaffection && !player.has(Trait.event) && !Flag

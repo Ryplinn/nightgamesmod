@@ -19,7 +19,7 @@ public class TemptressHandjob extends Handjob {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.has(Trait.temptress) && user.get(Attribute.Seduction) >= 5;
+        return user.has(Trait.temptress) && user.get(Attribute.seduction) >= 5;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class TemptressHandjob extends Handjob {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        int m = 7 + Random.random(getSelf().get(Attribute.Technique) / 2);
+        int m = 7 + Random.random(getSelf().get(Attribute.technique) / 2);
 
         if (target.roll(getSelf(), accuracy(c, target))) {
             if (!target.body.getRandomCock().isReady(target)) {

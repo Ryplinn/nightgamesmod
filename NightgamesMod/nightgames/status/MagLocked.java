@@ -62,7 +62,7 @@ public class MagLocked extends Status {
 
     @Override
     public int mod(Attribute a) {
-        if (a == Attribute.Speed) {
+        if (a == Attribute.speed) {
             return count == 3 ? 99 : count == 2 ? 3 : 0;
         }
         return 0;

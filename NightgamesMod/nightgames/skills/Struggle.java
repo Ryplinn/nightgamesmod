@@ -87,7 +87,7 @@ public class Struggle extends Skill {
 
     private boolean struggleBound(Combat c, Character target) {
         Bound status = (Bound) target.getStatus(Stsflag.bound);
-        if (getSelf().checkVsDc(Attribute.Power, -getSelf().getEscape(c, target))) {
+        if (getSelf().checkVsDc(Attribute.power, -getSelf().getEscape(c, target))) {
             if (getSelf().human()) {
                 if (status != null) {
                     c.write(getSelf(), "You manage to break free from the " + status + ".");
@@ -128,9 +128,9 @@ public class Struggle extends Skill {
         int diffMod = knotted ? 50 : 0;
         if (target.has(Trait.grappler))
             diffMod += 15;
-        if (getSelf().checkVsDc(Attribute.Power,
+        if (getSelf().checkVsDc(Attribute.power,
                         target.getStamina().get() / 2 - getSelf().getStamina().get() / 2
-                                        + target.get(Attribute.Power) - getSelf().get(Attribute.Power)
+                                        + target.get(Attribute.power) - getSelf().get(Attribute.power)
                                         - getSelf().getEscape(c, target) + diffMod)) {
             if (c.getStance().reversable(c)) {
                 c.setStance(c.getStance().reverse(c, true));
@@ -186,9 +186,9 @@ public class Struggle extends Skill {
         if (target.has(Trait.grappler)) {
             diffMod += 15;
         }
-        if (getSelf().checkVsDc(Attribute.Power,
+        if (getSelf().checkVsDc(Attribute.power,
                         target.getStamina().get() / 2 - getSelf().getStamina().get() / 2
-                                        + target.get(Attribute.Power) - getSelf().get(Attribute.Power)
+                                        + target.get(Attribute.power) - getSelf().get(Attribute.power)
                                         - getSelf().getEscape(c, target) + diffMod)) {
             if (getSelf().hasStatus(Stsflag.cockbound)) {
                 CockBound s = (CockBound) getSelf().getStatus(Stsflag.cockbound);
@@ -234,7 +234,7 @@ public class Struggle extends Skill {
 
     private boolean struggleRegular(Combat c, Character target) {
         int difficulty = target.getStamina().get() / 2 - getSelf().getStamina().get() / 2 
-                        + target.get(Attribute.Power) - getSelf().get(Attribute.Power)
+                        + target.get(Attribute.power) - getSelf().get(Attribute.power)
                         - getSelf().getEscape(c, target);
         if (target.has(Trait.powerfulcheeks)) {
             difficulty += 5;
@@ -242,7 +242,7 @@ public class Struggle extends Skill {
         if (target.has(Trait.bewitchingbottom)) {
             difficulty += 5;
         }
-        if (getSelf().checkVsDc(Attribute.Power, difficulty)
+        if (getSelf().checkVsDc(Attribute.power, difficulty)
                         && (!target.has(Trait.grappler) || Random.random(10) >= 2)) {
             if (getSelf().human()) {
                 c.write(getSelf(), "You manage to scrabble out of " + target.getName() + "'s grip.");
@@ -265,7 +265,7 @@ public class Struggle extends Skill {
         int attrLevel = 0;
         for (Map.Entry<Attribute, Integer> ent : getSelf().att.entrySet()) {
             Attribute attr = ent.getKey();
-            if (attr == Attribute.Power || attr == Attribute.Seduction || attr == Attribute.Cunning) {
+            if (attr == Attribute.power || attr == Attribute.seduction || attr == Attribute.cunning) {
                 continue;
             }
             if (ent.getValue() > attrLevel) {
@@ -278,15 +278,15 @@ public class Struggle extends Skill {
         int dc;
         
         if (basic) {
-           attrLevel = Math.max(getSelf().get(Attribute.Power), 
-                           Math.max(getSelf().get(Attribute.Seduction), 
-                                           getSelf().get(Attribute.Cunning))) / 2;        
+           attrLevel = Math.max(getSelf().get(Attribute.power),
+                           Math.max(getSelf().get(Attribute.seduction),
+                                           getSelf().get(Attribute.cunning))) / 2;
         }
         dc = attrLevel + Random.random(-10, 20);
         
         // One MagLock, pretty easy to remove
         if (stat.getCount() == 1) {
-            if (target.checkVsDc(Attribute.Science, dc / 2)) {
+            if (target.checkVsDc(Attribute.science, dc / 2)) {
                 c.write(getSelf(), Formatter.format("Still having one hand completely free, it's not to"
                             + " difficult for {self:subject} to remove the lone MagLock"
                             + " {other:subject} had placed around {self:possessive} wrist.", getSelf(), target));
@@ -303,17 +303,17 @@ public class Struggle extends Skill {
                 return false;
             }
             // Two MagLocks, difficult to remove
-            if (target.checkVsDc(Attribute.Science, dc)) {
+            if (target.checkVsDc(Attribute.science, dc)) {
                 String msg = "{self:SUBJECT-ACTION:struggle|struggles} against the powerful"
                                 + " MagLocks locked around {self:possessive} wrists by ";
-                if (Arrays.asList(Attribute.Dark, Attribute.Arcane, Attribute.Temporal, Attribute.Divinity)
+                if (Arrays.asList(Attribute.darkness, Attribute.arcane, Attribute.temporal, Attribute.divinity)
                                 .contains(highestAdvancedAttr)) {
                     msg += "trying to pry them of with {self:possessive} magic";
-                } else if (Arrays.asList(Attribute.Power, 
-                                Attribute.Ki, Attribute.Ninjutsu, Attribute.Animism, Attribute.Nymphomania)
+                } else if (Arrays.asList(Attribute.power,
+                                Attribute.ki, Attribute.ninjutsu, Attribute.animism, Attribute.nymphomania)
                                 .contains(highestAdvancedAttr)) {
                     msg += "applying brute force with {self:possessive} powerful muscles";
-                } else if (Arrays.asList(Attribute.Cunning, Attribute.Science, Attribute.Hypnosis)
+                } else if (Arrays.asList(Attribute.cunning, Attribute.science, Attribute.hypnotism)
                                 .contains(highestAdvancedAttr)) {
                     msg += "finding and exploiting a weakness in their design";
                 } else {
@@ -337,10 +337,10 @@ public class Struggle extends Skill {
     }
     
     private boolean struggleGrabber(Combat c, Character target) {
-        int baseResist = Math.min(90, 40 + target.get(Attribute.Science));
-        int trueResist = Math.max(20, baseResist) - getSelf().get(Attribute.Science) / 2 
-                                                  - getSelf().get(Attribute.Power) / 3 
-                                                  - getSelf().get(Attribute.Cunning) / 3;
+        int baseResist = Math.min(90, 40 + target.get(Attribute.science));
+        int trueResist = Math.max(20, baseResist) - getSelf().get(Attribute.science) / 2
+                                                  - getSelf().get(Attribute.power) / 3
+                                                  - getSelf().get(Attribute.cunning) / 3;
         if (Random.random(100) > trueResist) {
             c.write(getSelf(), Formatter.format("{self:SUBJECT-ACTION:wrench|wrenches}"
                             + " {other:name-possessive} Grabber off {self:possessive}"
@@ -357,7 +357,7 @@ public class Struggle extends Skill {
     
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Power) >= 3;
+        return user.get(Attribute.power) >= 3;
     }
 
     @Override

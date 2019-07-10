@@ -26,7 +26,7 @@ public class Challenge implements Deployable {
         if (!target.breastsAvailable() && !target.crotchAvailable()) {
             available.add(GOAL.clothedwin);
         }
-        if (owner.getPure(Attribute.Seduction) >= 9) {
+        if (owner.getPure(Attribute.seduction) >= 9) {
             available.add(GOAL.analwin);
         }
         if (owner.getAffection(target) >= 10) {

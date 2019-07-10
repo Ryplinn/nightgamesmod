@@ -77,9 +77,9 @@ public class BreastsPart extends GenericBodyPart {
     @Override
     public int mod(Attribute a, int total) {
         switch (a) {
-            case Speed:
+            case speed:
                 return -Math.max(getSize() - 3, 0) / 2;
-            case Seduction:
+            case seduction:
                 return Math.max(getSize() - 3, 0);
             default:
                 return 0;
@@ -175,7 +175,7 @@ public class BreastsPart extends GenericBodyPart {
                                 Formatter.format("The power seems to leave {other:name-possessive} body as {other:pronoun-action:sip|sips} {self:possessive} cloying cream.",
                                                 self, opponent));
                 opponent.weaken(c, opponent.getStamina().max() / 10);
-                opponent.add(c, new AttributeBuff(opponent, Attribute.Power, -Random.random(1, 3), 20));
+                opponent.add(c, new AttributeBuff(opponent, Attribute.power, -Random.random(1, 3), 20));
             }
             if (self.has(Trait.Pacification)) {
                 c.write(opponent,

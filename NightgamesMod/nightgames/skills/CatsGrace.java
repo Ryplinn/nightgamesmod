@@ -16,7 +16,7 @@ public class CatsGrace extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Animism) >= 3;
+        return user.get(Attribute.animism) >= 3;
     }
 
     @Override

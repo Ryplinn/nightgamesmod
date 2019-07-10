@@ -493,9 +493,9 @@ public class CreationGUI extends JPanel {
                 Flag.flag(Flag.hardmode);
             }
             Map<Attribute, Integer> selectedAttributes = new HashMap<>();
-            selectedAttributes.put(Attribute.Power, power);
-            selectedAttributes.put(Attribute.Seduction, seduction);
-            selectedAttributes.put(Attribute.Cunning, cunning);
+            selectedAttributes.put(Attribute.power, power);
+            selectedAttributes.put(Attribute.seduction, seduction);
+            selectedAttributes.put(Attribute.cunning, cunning);
             String rate = (String) expBox.getSelectedItem();
             GameState state = new GameState(name, startConfig, traits, sex, selectedAttributes, expRateMap.get(rate),
                             GameState.DEFAULT_MONEY_RATE);
@@ -517,9 +517,9 @@ public class CreationGUI extends JPanel {
         }
         Map<Attribute, Integer> cfgAttributes = cfg.playerAttributes();
         int points = cfg.availableAttributePoints();
-        power = cfgAttributes.getOrDefault(Attribute.Power, 3);
-        seduction = cfgAttributes.getOrDefault(Attribute.Seduction, 3);
-        cunning = cfgAttributes.getOrDefault(Attribute.Cunning, 3);
+        power = cfgAttributes.getOrDefault(Attribute.power, 3);
+        seduction = cfgAttributes.getOrDefault(Attribute.seduction, 3);
+        cunning = cfgAttributes.getOrDefault(Attribute.cunning, 3);
         remaining = points;
         refresh();
     }

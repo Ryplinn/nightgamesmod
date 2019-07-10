@@ -30,7 +30,7 @@ public class Finger extends Skill {
     public boolean resolve(Combat c, Character target) {
         if (target.roll(getSelf(), accuracy(c, target))) {
             int m = Random.random(8, 13);
-            if (getSelf().get(Attribute.Seduction) >= 8) {
+            if (getSelf().get(Attribute.seduction) >= 8) {
                 m += 6;
                 if (getSelf().human()) {
                     c.write(getSelf(), deal(c, m, Result.normal, target));
@@ -67,7 +67,7 @@ public class Finger extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Seduction) >= 5;
+        return user.get(Attribute.seduction) >= 5;
     }
 
     @Override

@@ -38,11 +38,11 @@ public class Mei extends BasePersonality {
         character.outfitPlan.addByID("garters");
 
         character.change();
-        character.modAttributeDontSaveData(Attribute.Power, 1);
-        character.modAttributeDontSaveData(Attribute.Seduction, 1);
-        character.modAttributeDontSaveData(Attribute.Cunning, 1);
-        character.modAttributeDontSaveData(Attribute.Perception, 1);
-        character.modAttributeDontSaveData(Attribute.Speed, 1);
+        character.modAttributeDontSaveData(Attribute.power, 1);
+        character.modAttributeDontSaveData(Attribute.seduction, 1);
+        character.modAttributeDontSaveData(Attribute.cunning, 1);
+        character.modAttributeDontSaveData(Attribute.perception, 1);
+        character.modAttributeDontSaveData(Attribute.speed, 1);
         character.getStamina().setMax(100);
         character.getArousal().setMax(150);
         character.rank = 1;
@@ -78,9 +78,9 @@ public class Mei extends BasePersonality {
         character.getGrowth().addTrait(45, Trait.gluttony);
         character.getGrowth().addBodyPartMod(50, "pussy", ExtendedTonguedMod.INSTANCE);
         character.getGrowth().addTrait(55, Trait.carnalvirtuoso);
-        preferredAttributes.add(c -> Optional.of(Attribute.Seduction));
+        preferredAttributes.add(c -> Optional.of(Attribute.seduction));
 
-        preferredAttributes.add(c -> c.getLevel() >= 30 ? Optional.of(Attribute.Dark) : Optional.empty());
+        preferredAttributes.add(c -> c.getLevel() >= 30 ? Optional.of(Attribute.darkness) : Optional.empty());
         // mostly feminine face, cute but not quite at Angel's level
         character.body.add(new FacePart(.1, 2.9));
     }

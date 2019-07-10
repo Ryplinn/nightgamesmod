@@ -49,12 +49,12 @@ public class Yui extends BasePersonality {
         character.outfitPlan.addByID("tabi");
 
         character.change();
-        character.modAttributeDontSaveData(Attribute.Power, 1);
-        character.modAttributeDontSaveData(Attribute.Seduction, 1);
-        character.modAttributeDontSaveData(Attribute.Cunning, 1);
-        character.modAttributeDontSaveData(Attribute.Perception, 1);
-        character.modAttributeDontSaveData(Attribute.Ninjutsu, 1);
-        character.modAttributeDontSaveData(Attribute.Speed, 2);
+        character.modAttributeDontSaveData(Attribute.power, 1);
+        character.modAttributeDontSaveData(Attribute.seduction, 1);
+        character.modAttributeDontSaveData(Attribute.cunning, 1);
+        character.modAttributeDontSaveData(Attribute.perception, 1);
+        character.modAttributeDontSaveData(Attribute.ninjutsu, 1);
+        character.modAttributeDontSaveData(Attribute.speed, 2);
         character.getStamina().setMax(100);
         character.getArousal().setMax(90);
         character.rank = 1;
@@ -74,8 +74,8 @@ public class Yui extends BasePersonality {
         character.getGrowth().willpower = 1.4f;
         character.getGrowth().bonusStamina = 2;
         character.getGrowth().bonusArousal = 2;
-        preferredAttributes.add(c -> c.get(Attribute.Ninjutsu) < 60 && c.getLevel() >= 10 ? Optional.of(Attribute.Ninjutsu)  : Optional.empty());
-        preferredAttributes.add(c -> c.get(Attribute.Cunning) < 50 ? Optional.of(Attribute.Cunning) : Optional.empty());
+        preferredAttributes.add(c -> c.get(Attribute.ninjutsu) < 60 && c.getLevel() >= 10 ? Optional.of(Attribute.ninjutsu)  : Optional.empty());
+        preferredAttributes.add(c -> c.get(Attribute.cunning) < 50 ? Optional.of(Attribute.cunning) : Optional.empty());
 
         character.getGrowth().addTrait(0, Trait.obedient);
         character.getGrowth().addTrait(0, Trait.cute);

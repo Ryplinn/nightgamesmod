@@ -121,7 +121,7 @@ public class LeechEnergy extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().get(Attribute.Bio) >= 10;
+        return getSelf().get(Attribute.bio) >= 10;
     }
 
     @Override
@@ -146,7 +146,7 @@ public class LeechEnergy extends Skill {
 
     @Override
     public String getLabel(Combat c) {
-        if (getSelf().get(Attribute.Dark) >= 1) {
+        if (getSelf().get(Attribute.darkness) >= 1) {
             return "Drain energy";
         } else {
             return getName(c);

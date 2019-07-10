@@ -73,7 +73,7 @@ public class Match {
             combatant.getArousal().empty();
             combatant.getMojo().empty();
             combatant.getWillpower().fill();
-            if (combatant.getPure(Attribute.Science) > 0) {
+            if (combatant.getPure(Attribute.science) > 0) {
                 combatant.chargeBattery();
             }
             manageConditions(combatant);
@@ -134,7 +134,7 @@ public class Match {
             // Sorting by initiative, descending. Raw speed stat breaks ties.
             combatants.forEach(Character::rollInitiative);
             combatants.sort(Comparator.comparingInt((Character c) -> c.lastInitRoll)
-                            .thenComparingInt(c -> c.get(Attribute.Speed)).reversed());
+                            .thenComparingInt(c -> c.get(Attribute.speed)).reversed());
             if (DebugFlags.isDebugOn(DebugFlags.DEBUG_INITIATIVE)) {
                 System.out.println("Initiative rolls:");
                 combatants.forEach(c -> System.out.println(String.format("%s rolls %d" , c.getName(), c.lastInitRoll)));

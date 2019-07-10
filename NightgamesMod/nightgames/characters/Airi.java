@@ -59,11 +59,11 @@ public class Airi extends BasePersonality {
         self.outfitPlan.addByID("shoes");
         self.change();
         self.rank = 1;
-        self.modAttributeDontSaveData(Attribute.Power, -1);
-        self.modAttributeDontSaveData(Attribute.Slime, 1);
-        self.modAttributeDontSaveData(Attribute.Cunning, 2);
-        self.modAttributeDontSaveData(Attribute.Speed, -1);
-        self.modAttributeDontSaveData(Attribute.Seduction, 6);
+        self.modAttributeDontSaveData(Attribute.power, -1);
+        self.modAttributeDontSaveData(Attribute.slime, 1);
+        self.modAttributeDontSaveData(Attribute.cunning, 2);
+        self.modAttributeDontSaveData(Attribute.speed, -1);
+        self.modAttributeDontSaveData(Attribute.seduction, 6);
         self.getStamina().setMax(50);
         self.getArousal().setMax(80);
         self.getMojo().setMax(100);
@@ -326,7 +326,7 @@ public class Airi extends BasePersonality {
         character.getGrowth().addTrait(46, Trait.responsive);
         character.getGrowth().addTrait(61, Trait.desensitized);
 
-        preferredAttributes.add(c -> c.getPure(Attribute.Slime) < c.getLevel() * 1.5 ? Optional.of(Attribute.Slime) : Optional.empty());
+        preferredAttributes.add(c -> c.getPure(Attribute.slime) < c.getLevel() * 1.5 ? Optional.of(Attribute.slime) : Optional.empty());
     }
 
     private void useMimicry() {

@@ -20,7 +20,7 @@ public class StunBlast extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Science) >= 9;
+        return user.get(Attribute.science) >= 9;
     }
 
     @Override

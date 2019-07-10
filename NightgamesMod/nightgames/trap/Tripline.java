@@ -23,7 +23,7 @@ public class Tripline extends Trap {
     public void trigger(Character target) {
         int m = 30 + target.getLevel() * 5;
         if (target.human()) {
-            if (!target.checkVsDc(Attribute.Perception, 20 + target.baseDisarm())) {
+            if (!target.checkVsDc(Attribute.perception, 20 + target.baseDisarm())) {
                 GUI.gui.message("You trip over a line of cord and fall on your face.");
                 target.pain(null, null, m);
                 target.location().opportunity(target, this);
@@ -32,7 +32,7 @@ public class Tripline extends Trap {
                 target.location().remove(this);
             }
         } else {
-            if (!target.checkVsDc(Attribute.Perception, 20 + target.baseDisarm())) {
+            if (!target.checkVsDc(Attribute.perception, 20 + target.baseDisarm())) {
                 if (target.location().humanPresent()) {
                     GUI.gui.message(target.getName()
                                     + " carelessly stumbles over the tripwire and lands with an audible thud.");

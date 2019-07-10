@@ -23,7 +23,7 @@ public class TentacleInjectSensitivity extends TentacleArmSkill {
     @Override
     public boolean resolve(Combat c, Arm arm, Character owner, Character target) {
         boolean sub = target.bound() || !c.getStance().mobile(target);
-        boolean success = sub || Random.random(100) < 10 + owner.get(Attribute.Slime);
+        boolean success = sub || Random.random(100) < 10 + owner.get(Attribute.slime);
 
         if (success) {
             c.write(GUIColor.limbColor(owner), Formatter.format("With a sudden whipping motion, {self:NAME-POSSESSIVE} needle-tipped tentacle flies forward and stabs itself into {other:name-possessive} skin. "

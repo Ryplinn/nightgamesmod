@@ -459,7 +459,7 @@ public class ReykaTime extends BaseNPCTime {
                                     + "Then again, you realize you didn't have any choice from the start. ");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.Seduction);
+                Daytime.train(player, npc, Attribute.seduction);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
                 break;
@@ -589,7 +589,7 @@ public class ReykaTime extends BaseNPCTime {
                                     + "the marks and your unerringly sore ass, it's probably better that way.");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.Power);
+                Daytime.train(player, npc, Attribute.power);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
                 break;
@@ -708,7 +708,7 @@ public class ReykaTime extends BaseNPCTime {
                                     + "out.");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.Cunning);
+                Daytime.train(player, npc, Attribute.cunning);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
                 break;

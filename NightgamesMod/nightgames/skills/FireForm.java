@@ -15,7 +15,7 @@ public class FireForm extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Ki) >= 15;
+        return user.get(Attribute.ki) >= 15;
     }
 
     @Override

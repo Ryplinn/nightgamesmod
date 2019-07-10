@@ -49,9 +49,9 @@ public class Shamed extends DurationStatus {
 
     @Override
     public int mod(Attribute a) {
-        if (a == Attribute.Seduction || a == Attribute.Cunning) {
+        if (a == Attribute.seduction || a == Attribute.cunning) {
             return Math.min(-2 * magnitude, -affected.getPure(a) * magnitude / 5);
-        } else if (a == Attribute.Submissive && affected.getPure(Attribute.Submissive) > 0) {
+        } else if (a == Attribute.submission && affected.getPure(Attribute.submission) > 0) {
             return magnitude;
         } else {
             return 0;
@@ -61,7 +61,7 @@ public class Shamed extends DurationStatus {
     @Override
     public void tick(Combat c) {
         affected.emote(Emotion.nervous, 20);
-        if (affected.getPure(Attribute.Submissive) > 0) {
+        if (affected.getPure(Attribute.submission) > 0) {
             affected.buildMojo(c, 3 * magnitude, " (Shamed)");
         } else {
             affected.loseMojo(c, 5 * magnitude, " (Shamed)");

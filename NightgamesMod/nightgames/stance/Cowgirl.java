@@ -89,7 +89,7 @@ public class Cowgirl extends FemdomSexStance {
     }
 
     public static Position similarInstance(Character top, Character bottom) {
-        if (top.get(Attribute.Power) > 25 && Random.random(2) == 0) {
+        if (top.get(Attribute.power) > 25 && Random.random(2) == 0) {
             return new UpsideDownFemdom(top, bottom);
         }
         return new Cowgirl(top, bottom);

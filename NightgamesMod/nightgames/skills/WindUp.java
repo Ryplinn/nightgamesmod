@@ -14,7 +14,7 @@ public class WindUp extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.getPure(Attribute.Temporal) >= 1;
+        return user.getPure(Attribute.temporal) >= 1;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class WindUp extends Skill {
     
     @Override
     public float priorityMod(Combat c) {
-        int temp = getSelf().getPure(Attribute.Temporal);
+        int temp = getSelf().getPure(Attribute.temporal);
         float base;
         if (temp < 6)
             base = 1.f;

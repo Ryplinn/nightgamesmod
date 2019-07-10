@@ -58,10 +58,10 @@ public class Kat extends BasePersonality {
         self.outfitPlan.addByID("socks");
         self.change();
         self.setTrophy(Item.KatTrophy);
-        self.modAttributeDontSaveData(Attribute.Power, 1);
-        self.modAttributeDontSaveData(Attribute.Animism, 1);
-        self.modAttributeDontSaveData(Attribute.Cunning, 1);
-        self.modAttributeDontSaveData(Attribute.Speed, 1);
+        self.modAttributeDontSaveData(Attribute.power, 1);
+        self.modAttributeDontSaveData(Attribute.animism, 1);
+        self.modAttributeDontSaveData(Attribute.cunning, 1);
+        self.modAttributeDontSaveData(Attribute.speed, 1);
         self.getStamina().setMax(100);
         self.getArousal().setMax(100);
         self.getMojo().setMax(80);
@@ -264,7 +264,7 @@ public class Kat extends BasePersonality {
                                                                                                             .getPlayer());
                                                             return true;
                                                         }))));
-        preferredAttributes.add(c -> Optional.of(Attribute.Animism));
+        preferredAttributes.add(c -> Optional.of(Attribute.animism));
         character.getGrowth().addTrait(0, Trait.dexterous);
         character.getGrowth().addTrait(0, Trait.pheromones);
         character.getGrowth().addTrait(0, Trait.shy);

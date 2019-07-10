@@ -24,7 +24,7 @@ public class TentacleSquirt extends TentacleArmSkill {
     @Override
     public boolean resolve(Combat c, Arm arm, Character owner, Character target) {
         boolean sub = target.bound() || !c.getStance().mobile(target);
-        boolean success = sub || Random.random(100) < 10 + owner.get(Attribute.Slime);
+        boolean success = sub || Random.random(100) < 10 + owner.get(Attribute.slime);
         ThrowSlime throwSlimeSkill = new ThrowSlime(owner);
         HitType type = throwSlimeSkill.decideEffect(c, target);
 

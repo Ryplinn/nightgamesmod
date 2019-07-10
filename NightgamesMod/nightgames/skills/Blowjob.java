@@ -104,7 +104,7 @@ public class Blowjob extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Seduction) >= 10 && !user.has(Trait.temptress);
+        return user.get(Attribute.seduction) >= 10 && !user.has(Trait.temptress);
     }
 
     @Override

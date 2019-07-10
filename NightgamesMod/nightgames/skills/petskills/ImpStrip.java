@@ -48,7 +48,7 @@ public class ImpStrip extends SimpleEnemySkill {
         int difficulty = !targetSlot.isPresent() ? 999999 : target.getOutfit().getTopOfSlot(targetSlot.get()).dc() + target.getLevel()
                 + (target.getStamina().percent() / 5 - target.getArousal().percent()) / 4
                 - (!target.canAct() || c.getStance().sub(target) ? 20 : 0);
-        if (getSelf().checkVsDc(Attribute.Cunning, difficulty)) {
+        if (getSelf().checkVsDc(Attribute.cunning, difficulty)) {
             // should never be null here, since otherwise we can't use the skill          
             Clothing stripped = target.strip(targetSlot.get(), c);
             c.write(getSelf(), Formatter.format("{self:SUBJECT} steals {other:name-possessive} %s and runs off with it.",

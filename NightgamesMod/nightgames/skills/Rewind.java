@@ -15,7 +15,7 @@ public class Rewind extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.getPure(Attribute.Temporal) >= 10;
+        return user.getPure(Attribute.temporal) >= 10;
     }
 
     @Override

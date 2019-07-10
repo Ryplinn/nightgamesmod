@@ -47,8 +47,8 @@ public class Angel extends BasePersonality {
         self.outfitPlan.addByID("miniskirt");
         self.outfitPlan.addByID("sandals");
         self.change();
-        self.modAttributeDontSaveData(Attribute.Seduction, 2);
-        self.modAttributeDontSaveData(Attribute.Perception, 1);
+        self.modAttributeDontSaveData(Attribute.seduction, 2);
+        self.modAttributeDontSaveData(Attribute.perception, 1);
         self.adjustTraits();
 
         self.getStamina().setMax(60);
@@ -223,9 +223,9 @@ public class Angel extends BasePersonality {
         character.getGrowth().addTrait(57, Trait.desensitized2);
         // 60 - second choice 6
         preferredAttributes
-                        .add(c -> c.get(Attribute.Divinity) < 50 ? Optional.of(Attribute.Divinity) : Optional.empty());
-        preferredAttributes.add(c -> Optional.of(Attribute.Seduction));
-        preferredAttributes.add(c -> (c.has(Trait.nymphomania) && c.get(Attribute.Nymphomania) < (c.getLevel() - 10) / 2) ? Optional.of(Attribute.Nymphomania) : Optional.empty());
+                        .add(c -> c.get(Attribute.divinity) < 50 ? Optional.of(Attribute.divinity) : Optional.empty());
+        preferredAttributes.add(c -> Optional.of(Attribute.seduction));
+        preferredAttributes.add(c -> (c.has(Trait.nymphomania) && c.get(Attribute.nymphomania) < (c.getLevel() - 10) / 2) ? Optional.of(Attribute.nymphomania) : Optional.empty());
     }
 
     private void useSex() {
@@ -239,7 +239,7 @@ public class Angel extends BasePersonality {
 
     private void useNymphomania() {
         Flag.flag(ANGEL_NYMPHOMANIA_FOCUS);
-        character.modAttributeDontSaveData(Attribute.Nymphomania, 1);
+        character.modAttributeDontSaveData(Attribute.nymphomania, 1);
         character.getGrowth().addTrait(12, Trait.lastStand);
         character.getGrowth().addTrait(20, Trait.nymphomania);
         character.getGrowth().addTrait(25, Trait.RawSexuality);
@@ -656,7 +656,7 @@ public class Angel extends BasePersonality {
         character.outfitPlan.addByID("bikinitop");
         character.outfitPlan.addByID("bikinibottoms");
         character.outfitPlan.addByID("highheels");
-        character.modAttributeDontSaveData(Attribute.Divinity, 1);
+        character.modAttributeDontSaveData(Attribute.divinity, 1);
         character.getGrowth().addOrRemoveTraits(character);
     }
 

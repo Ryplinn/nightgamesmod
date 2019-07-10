@@ -25,7 +25,7 @@ public class StripSelf extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Cunning) >= 3;
+        return user.get(Attribute.cunning) >= 3;
     }
 
     @Override

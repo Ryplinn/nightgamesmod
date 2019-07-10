@@ -23,7 +23,7 @@ public class SkillPoolBuilder {
     public void buildSkillPool() {
         SkillEffectBuilder builder = new SkillEffectBuilder();
         SkillResult defaultResult = new SkillResult().addUserTag(SkillTag.anal)
-                                                     .addUserTag(Attribute.Seduction.getSkillTag(), 30)
+                                                     .addUserTag(Attribute.seduction.getSkillTag(), 30)
                                                      .addUserTag(SkillTag.usesMouth)
                                                      .addUserTag(SkillTag.oral)
                                                      .addUserTag(SkillTag.reachLowerBody)

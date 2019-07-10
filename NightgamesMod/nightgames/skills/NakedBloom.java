@@ -16,7 +16,7 @@ public class NakedBloom extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Arcane) >= 15;
+        return user.get(Attribute.arcane) >= 15;
     }
 
     @Override

@@ -25,7 +25,7 @@ public class ImbueFetish extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Fetish) >= 10;
+        return user.get(Attribute.fetishism) >= 10;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class ImbueFetish extends Skill {
             c.write(getSelf(), receive(c, 0, Result.normal, target));
         }
         target.add(c, new BodyFetish(target, getSelf(), chosenFetish,
-                        Random.randomdouble() * .2 + getSelf().get(Attribute.Fetish) * .01));
+                        Random.randomdouble() * .2 + getSelf().get(Attribute.fetishism) * .01));
         chosenFetish = null;
         return true;
     }

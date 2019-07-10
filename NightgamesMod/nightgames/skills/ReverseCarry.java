@@ -20,7 +20,7 @@ public class ReverseCarry extends Carry {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Power) >= 20 && user.hasPussy();
+        return user.get(Attribute.power) >= 20 && user.hasPussy();
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ReverseCarry extends Carry {
             int m = 5 + Random.random(5);
             int otherm = m;
             if (getSelf().has(Trait.insertion)) {
-                otherm += Math.min(getSelf().get(Attribute.Seduction) / 4, 40);
+                otherm += Math.min(getSelf().get(Attribute.seduction) / 4, 40);
             }
             c.setStance(new Jumped(getSelf(), target), getSelf(), getSelf().canMakeOwnDecision());
             target.body.pleasure(getSelf(), getSelfOrgan(), getTargetOrgan(target), otherm, c, this);

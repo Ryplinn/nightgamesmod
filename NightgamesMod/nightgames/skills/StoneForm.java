@@ -15,7 +15,7 @@ public class StoneForm extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Ki) >= 12;
+        return user.get(Attribute.ki) >= 12;
     }
 
     @Override

@@ -15,7 +15,7 @@ public class SpawnSlime extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Science) >= 3;
+        return user.get(Attribute.science) >= 3;
     }
 
     @Override
@@ -38,8 +38,8 @@ public class SpawnSlime extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         getSelf().consume(Item.Battery, 5);
-        int power = 5 + getSelf().get(Attribute.Science);
-        int ac = 3 + getSelf().get(Attribute.Science) / 10;
+        int power = 5 + getSelf().get(Attribute.science);
+        int ac = 3 + getSelf().get(Attribute.science) / 10;
         writeOutput(c, Result.normal, target);
         c.addPet(getSelf(), new Slime(getSelf(), power, ac).getSelf());
         return true;

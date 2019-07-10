@@ -27,7 +27,7 @@ public class SlimeMimicry extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Slime) >= 10 && !user.human() && user.has(Trait.Imposter);
+        return user.get(Attribute.slime) >= 10 && !user.human() && user.has(Trait.Imposter);
     }
 
     @Override

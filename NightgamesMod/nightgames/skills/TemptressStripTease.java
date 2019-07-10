@@ -20,7 +20,7 @@ public class TemptressStripTease extends StripTease {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.has(Trait.temptress) && user.get(Attribute.Technique) >= 8;
+        return user.has(Trait.temptress) && user.get(Attribute.technique) >= 8;
     }
 
     @Override
@@ -58,7 +58,7 @@ public class TemptressStripTease extends StripTease {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        int technique = getSelf().get(Attribute.Technique);
+        int technique = getSelf().get(Attribute.technique);
         //assert technique > 0;
 
         if (isDance(c)) {

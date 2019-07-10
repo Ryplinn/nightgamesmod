@@ -15,7 +15,7 @@ public class Haste extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.getPure(Attribute.Temporal) >= 1;
+        return user.getPure(Attribute.temporal) >= 1;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class Haste extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         getSelf().add(c, new Primed(getSelf(), -1));
-        getSelf().add(c, new AttributeBuff(getSelf(), Attribute.Speed, 10, 6));
+        getSelf().add(c, new AttributeBuff(getSelf(), Attribute.speed, 10, 6));
         writeOutput(c, Result.normal, target);
         return true;
     }

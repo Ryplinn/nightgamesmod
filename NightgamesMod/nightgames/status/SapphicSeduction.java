@@ -26,7 +26,7 @@ public class SapphicSeduction extends Status {
 
     @Override
     public int mod(Attribute a) {
-        if (a == Attribute.Seduction) {
+        if (a == Attribute.seduction) {
             return affected.getLevel() / 2;
         }
         return 0;

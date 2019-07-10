@@ -46,7 +46,7 @@ public class Hypersensitive extends DurationStatus {
 
     @Override
     public int mod(Attribute a) {
-        if (a == Attribute.Perception) {
+        if (a == Attribute.perception) {
             return 4;
         }
         return 0;

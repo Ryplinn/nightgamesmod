@@ -15,7 +15,7 @@ public class Unstrip extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.getPure(Attribute.Temporal) >= 8;
+        return user.getPure(Attribute.temporal) >= 8;
     }
 
     @Override

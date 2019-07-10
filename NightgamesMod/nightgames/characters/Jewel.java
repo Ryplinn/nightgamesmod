@@ -66,8 +66,8 @@ public class Jewel extends BasePersonality {
         self.outfitPlan.addByID("sneakers");
         self.outfitPlan.addByID("socks");
         self.change();
-        self.modAttributeDontSaveData(Attribute.Power, 2);
-        self.modAttributeDontSaveData(Attribute.Speed, 1);
+        self.modAttributeDontSaveData(Attribute.power, 2);
+        self.modAttributeDontSaveData(Attribute.speed, 1);
         self.adjustTraits();
         self.getMojo()
             .setMax(80);
@@ -212,10 +212,10 @@ public class Jewel extends BasePersonality {
                                                                             return true;
                                                                         }))));
 
-        preferredAttributes.add(c -> c.get(Attribute.Ki) < 15 ? Optional.of(Attribute.Ki) : Optional.empty());
-        preferredAttributes.add(c -> c.get(Attribute.Ki) >= 15 && c.get(Attribute.Fetish) < 100
-                        ? Optional.of(Attribute.Fetish) : Optional.empty());
-        preferredAttributes.add(c -> c.get(Attribute.Power) < 80 ? Optional.of(Attribute.Power) : Optional.empty());
+        preferredAttributes.add(c -> c.get(Attribute.ki) < 15 ? Optional.of(Attribute.ki) : Optional.empty());
+        preferredAttributes.add(c -> c.get(Attribute.ki) >= 15 && c.get(Attribute.fetishism) < 100
+                        ? Optional.of(Attribute.fetishism) : Optional.empty());
+        preferredAttributes.add(c -> c.get(Attribute.power) < 80 ? Optional.of(Attribute.power) : Optional.empty());
         growth.addTrait(0, Trait.wrassler);
         growth.addTrait(0, Trait.direct);
         growth.addTrait(0, Trait.insatiable);
@@ -482,7 +482,7 @@ public class Jewel extends BasePersonality {
                             + " I like. Thanks for being cool about it.\"</i> You smile back tell her she's welcome, but you'd appreciate it if she weren't so rough. "
                             + "The last thing you hear before she round the corner is her giggled response. <i>\"We'll see.\"</i>";
         }
-        if (character.has(Trait.fighter) && character.get(Attribute.Ki) >= 10) {
+        if (character.has(Trait.fighter) && character.get(Attribute.ki) >= 10) {
             String message = "Your duel with Jewel is rapidly reaching its conclusion and it's not going that well for you. Something seems different about her, her moves have an additional level of "
                             + "coordination that is made worse by her already monstrous strength. But the worst thing is that she is throwing powerful moves at you like they were nothing!<br/><br/>"
                             + "All of this has culminated in the situation you find yourself in now, namely pinned to the ground by Jewel as "
@@ -794,7 +794,7 @@ public class Jewel extends BasePersonality {
         character.unequipAllClothing();
         character.outfitPlan.addByID("gi");
         character.outfitPlan.addByID("panties");
-        character.modAttributeDontSaveData(Attribute.Ki, 1);
+        character.modAttributeDontSaveData(Attribute.ki, 1);
         character.getGrowth()
                  .addOrRemoveTraits(character);
     }

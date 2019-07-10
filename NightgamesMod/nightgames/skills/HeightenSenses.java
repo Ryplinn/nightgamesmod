@@ -18,14 +18,14 @@ public class HeightenSenses extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.Hypnosis) >= 5;
+        return getSelf().getPure(Attribute.hypnotism) >= 5;
     }
 
     @Override
     public boolean usable(Combat c, Character target) {
         return getSelf().canAct() && c.getStance().mobile(getSelf()) && !c.getStance().behind(getSelf())
                         && !c.getStance().behind(target) && !c.getStance().sub(getSelf())
-                        && (!target.is(Stsflag.hypersensitive) || target.getPure(Attribute.Perception) < 9);
+                        && (!target.is(Stsflag.hypersensitive) || target.getPure(Attribute.perception) < 9);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class HeightenSenses extends Skill {
             } else {
                 c.write(getSelf(), receive(c, 0, Result.strong, target));
             }
-            target.add(c, new AttributeBuff(target, Attribute.Perception, 1, 20));
+            target.add(c, new AttributeBuff(target, Attribute.perception, 1, 20));
         } else {
             if (getSelf().human()) {
                 c.write(getSelf(), deal(c, 0, Result.normal, target));

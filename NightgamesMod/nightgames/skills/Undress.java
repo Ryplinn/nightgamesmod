@@ -18,7 +18,7 @@ public class Undress extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Cunning) >= 5;
+        return user.get(Attribute.cunning) >= 5;
     }
 
     @Override

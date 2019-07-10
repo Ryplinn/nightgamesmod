@@ -39,7 +39,7 @@ public class Escape extends Skill {
             return false;
         }
         if (getSelf().bound()) {
-            if (getSelf().checkVsDc(Attribute.Cunning, 5 - getSelf().getEscape(c, target))) {
+            if (getSelf().checkVsDc(Attribute.cunning, 5 - getSelf().getEscape(c, target))) {
                 if (getSelf().human()) {
                     c.write(getSelf(), "You slip your hands out of your restraints.");
                 } else if (c.shouldPrintReceive(target, c)) {
@@ -57,7 +57,7 @@ public class Escape extends Skill {
                 getSelf().struggle();
                 return false;
             }
-        } else if (getSelf().checkVsDc(Attribute.Cunning, 10 + target.get(Attribute.Cunning) - getSelf().getEscape(c, target))) {
+        } else if (getSelf().checkVsDc(Attribute.cunning, 10 + target.get(Attribute.cunning) - getSelf().getEscape(c, target))) {
             if (getSelf().human()) {
                 if (getSelf().hasStatus(Stsflag.cockbound)) {
                     c.write(getSelf(), "You somehow managed to wiggle out of " + target.getName()
@@ -106,7 +106,7 @@ public class Escape extends Skill {
     
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Cunning) >= 8;
+        return user.get(Attribute.cunning) >= 8;
     }
 
     @Override

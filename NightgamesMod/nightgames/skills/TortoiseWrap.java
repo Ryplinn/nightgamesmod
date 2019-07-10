@@ -20,7 +20,7 @@ public class TortoiseWrap extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.Fetish) >= 24;
+        return getSelf().getPure(Attribute.fetishism) >= 24;
     }
 
     @Override

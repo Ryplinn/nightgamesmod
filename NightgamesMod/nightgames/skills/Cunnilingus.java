@@ -86,7 +86,7 @@ public class Cunnilingus extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Seduction) >= 10;
+        return user.get(Attribute.seduction) >= 10;
     }
 
     @Override

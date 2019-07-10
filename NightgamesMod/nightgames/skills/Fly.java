@@ -23,7 +23,7 @@ public class Fly extends Fuck {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.body.get("wings").size() > 0 && user.get(Attribute.Power) >= 15;
+        return user.body.get("wings").size() > 0 && user.get(Attribute.power) >= 15;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class Fly extends Fuck {
             int m = 5 + Random.random(5);
             int otherm = m;
             if (getSelf().has(Trait.insertion)) {
-                otherm += Math.min(getSelf().get(Attribute.Seduction) / 4, 40);
+                otherm += Math.min(getSelf().get(Attribute.seduction) / 4, 40);
             }
             c.setStance(new FlyingCarry(getSelf(), target), getSelf(), getSelf().canMakeOwnDecision());
             target.body.pleasure(getSelf(), getSelfOrgan(), getTargetOrgan(target), otherm, c, this);

@@ -17,7 +17,7 @@ public class NeedleThrow extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.Ninjutsu) >= 1;
+        return getSelf().getPure(Attribute.ninjutsu) >= 1;
     }
 
     @Override

@@ -19,7 +19,7 @@ public class Turnover extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Power) >= 4;
+        return user.get(Attribute.power) >= 4;
     }
 
     @Override

@@ -24,7 +24,7 @@ public class StripMinor extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().get(Attribute.Cunning) >= 3;
+        return getSelf().get(Attribute.cunning) >= 3;
     }
 
     @Override
@@ -104,7 +104,7 @@ public class StripMinor extends Skill {
                         - target.getArousal().percent()) / 5
                         - (!target.canAct() || c.getStance().sub(target) ? 20 : 0);
         difficulty -= 15;
-        if (getSelf().checkVsDc(Attribute.Cunning, difficulty) || !target.canAct()) {
+        if (getSelf().checkVsDc(Attribute.cunning, difficulty) || !target.canAct()) {
             c.write(getSelf(),
                             Formatter.format("{self:SUBJECT-ACTION:reach|reaches} for"
                                             + " {other:name-possessive} %s and {self:action:pull|pulls} "

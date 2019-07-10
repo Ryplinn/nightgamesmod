@@ -67,7 +67,7 @@ public class ToyAttack extends ArmSkill {
                 part = "ass";
             }
             if (c.getStance()
-                 .dom(owner) || Random.random(100) < owner.get(Attribute.Science) + owner.get(Attribute.Cunning)) {
+                 .dom(owner) || Random.random(100) < owner.get(Attribute.science) + owner.get(Attribute.cunning)) {
                 if (part.equals("pussy")) {
                     c.write(GUIColor.limbColor(owner), Formatter.format("{self:NAME-POSSESSIVE} %s shapes itself"
                                     + " into a cock-like column of material and shoots straight at"

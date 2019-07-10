@@ -24,9 +24,9 @@ public class Parasited extends Status {
     private double time;
     private int stage;
     static List<Attribute> DEBUFFABLE_ATTS = Arrays.asList(
-                    Attribute.Power,
-                    Attribute.Seduction,
-                    Attribute.Cunning
+                    Attribute.power,
+                    Attribute.seduction,
+                    Attribute.cunning
     );
 
     public Parasited(Character affected, Character other) {

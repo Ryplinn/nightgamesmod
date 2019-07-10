@@ -118,7 +118,7 @@ public class Corruption extends Addiction {
                     assert buffs.isEmpty();
                 default:
             }
-            buffs.forEach((att, b) -> affected.add(c, new Converted(affected, Attribute.Dark, att, b, 20)));
+            buffs.forEach((att, b) -> affected.add(c, new Converted(affected, Attribute.darkness, att, b, 20)));
         }
         if (c != null && getCause().has(Trait.InfernalAllegiance) && !affected.is(Stsflag.compelled) && shouldCompel() && c.getOpponent(affected).equals(
                         getCause())) {
@@ -137,7 +137,7 @@ public class Corruption extends Addiction {
         return !getDrainAttr().isPresent();
     }
 
-    private static final Set<Attribute> UNDRAINABLE_ATTS = EnumSet.of(Attribute.Dark, Attribute.Speed, Attribute.Perception);
+    private static final Set<Attribute> UNDRAINABLE_ATTS = EnumSet.of(Attribute.darkness, Attribute.speed, Attribute.perception);
 
     private boolean attIsDrainable(Attribute att) {
         double maxDrainFraction = 1 - getMagnitude();
@@ -145,7 +145,7 @@ public class Corruption extends Addiction {
     }
 
     private Optional<Attribute> getDrainAttr() {
-        Optional<AttributeBuff> darkBuff = affected.getStatusOfClass(AttributeBuff.class).stream().filter(status -> status.getModdedAttribute() == Attribute.Dark).findAny();
+        Optional<AttributeBuff> darkBuff = affected.getStatusOfClass(AttributeBuff.class).stream().filter(status -> status.getModdedAttribute() == Attribute.darkness).findAny();
         if (!darkBuff.isPresent() || darkBuff.get().getValue() <  10 + getMagnitude() * 50) {
             return Random.pickRandom(Arrays.stream(Attribute.values()).filter(this::attIsDrainable).toArray(Attribute[]::new));
         }
@@ -299,7 +299,7 @@ public class Corruption extends Addiction {
 
     @Override
     public int mod(Attribute a) {
-        return a == Attribute.Dark ? 5 : 0;
+        return a == Attribute.darkness ? 5 : 0;
     }
 
     @Override

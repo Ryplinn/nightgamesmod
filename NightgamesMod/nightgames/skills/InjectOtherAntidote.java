@@ -13,7 +13,7 @@ public class InjectOtherAntidote extends Skill {
     }
 
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Medicine) >= 7;
+        return user.get(Attribute.medicine) >= 7;
     }
 
     public boolean usable(Combat c, Character target) {

@@ -60,9 +60,9 @@ public class Aggressive extends DurationStatus {
 
     @Override
     public int mod(Attribute a) {
-        if (a == Attribute.Cunning)
+        if (a == Attribute.cunning)
             return -3;
-        if (a == Attribute.Power)
+        if (a == Attribute.power)
             return 3;
         return 0;
     }

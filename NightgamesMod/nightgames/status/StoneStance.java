@@ -33,7 +33,7 @@ public class StoneStance extends DurationStatus {
 
     @Override
     public int mod(Attribute a) {
-        if (a == Attribute.Speed) {
+        if (a == Attribute.speed) {
             return -1;
         }
         return 0;

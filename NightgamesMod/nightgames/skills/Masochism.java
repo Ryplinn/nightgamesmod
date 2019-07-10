@@ -15,7 +15,7 @@ public class Masochism extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Fetish) >= 1;
+        return user.get(Attribute.fetishism) >= 1;
     }
 
     @Override

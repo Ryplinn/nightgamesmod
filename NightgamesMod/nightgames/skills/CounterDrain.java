@@ -44,7 +44,7 @@ public class CounterDrain extends CounterBase {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Dark) >= 25;
+        return user.get(Attribute.darkness) >= 25;
     }
 
     @Override

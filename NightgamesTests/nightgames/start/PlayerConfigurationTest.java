@@ -34,9 +34,9 @@ public class PlayerConfigurationTest {
     @Test public void testPlayerCreation() throws Exception {
         Map<Attribute, Integer> chosenAttributes = new HashMap<>();
         List<Trait> pickedTraits = Arrays.asList(Trait.romantic, Trait.insatiable);
-        chosenAttributes.put(Attribute.Power, 5);
-        chosenAttributes.put(Attribute.Seduction, 6);
-        chosenAttributes.put(Attribute.Cunning, 7);
+        chosenAttributes.put(Attribute.power, 5);
+        chosenAttributes.put(Attribute.seduction, 6);
+        chosenAttributes.put(Attribute.cunning, 7);
         Player malePlayer = new Player("dude", CharacterSex.male, Optional.of(playerConfig), pickedTraits,
                         chosenAttributes);
         assertEquals(5, malePlayer.level);

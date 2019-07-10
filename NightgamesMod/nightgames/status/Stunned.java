@@ -51,7 +51,7 @@ public class Stunned extends DurationStatus {
 
     @Override
     public int mod(Attribute a) {
-        if (a == Attribute.Power || a == Attribute.Speed) {
+        if (a == Attribute.power || a == Attribute.speed) {
             return -2;
         } else {
             return 0;
@@ -61,7 +61,7 @@ public class Stunned extends DurationStatus {
     @Override
     public void onRemove(Combat c, Character other) {
         if (makesBraced) {
-            if (affected.get(Attribute.Divinity) > 0) {
+            if (affected.get(Attribute.divinity) > 0) {
                 affected.addlist.add(new BastionOfFaith(affected, 3));
             } else {
                 affected.addlist.add(new Braced(affected, 2));

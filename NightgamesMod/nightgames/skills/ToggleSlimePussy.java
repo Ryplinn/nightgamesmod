@@ -18,7 +18,7 @@ public class ToggleSlimePussy extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().get(Attribute.Slime) > 14;
+        return getSelf().get(Attribute.slime) > 14;
     }
 
     @Override

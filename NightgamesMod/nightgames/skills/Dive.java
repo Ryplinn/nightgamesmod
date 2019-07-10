@@ -20,7 +20,7 @@ public class Dive extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.Submissive) >= 1;
+        return getSelf().getPure(Attribute.submission) >= 1;
     }
 
     @Override

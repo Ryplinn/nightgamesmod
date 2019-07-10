@@ -51,10 +51,10 @@ public class AssPart extends GenericBodyPart {
     @Override
     public int mod(Attribute a, int total) { 
         int bonus = super.mod(a, total);
-        if (getSize() > SizeMod.ASS_SIZE_NORMAL & a == Attribute.Seduction) {
+        if (getSize() > SizeMod.ASS_SIZE_NORMAL & a == Attribute.seduction) {
             bonus += (getSize() - SizeMod.ASS_SIZE_NORMAL) * 2;
         }
-        if (getSize() > SizeMod.ASS_SIZE_FLARED & a == Attribute.Speed) {
+        if (getSize() > SizeMod.ASS_SIZE_FLARED & a == Attribute.speed) {
             bonus += (getSize() - SizeMod.ASS_SIZE_FLARED);
         }
         return bonus;
@@ -93,7 +93,7 @@ public class AssPart extends GenericBodyPart {
                             self, opponent));
             bonus += self.has(Trait.tight) && self.has(Trait.holecontrol) ? 10 : 5;
             if (self.has(Trait.tight)) {
-                opponent.pain(c, self, Math.min(30, self.get(Attribute.Power)));
+                opponent.pain(c, self, Math.min(30, self.get(Attribute.power)));
             }
             if (!c.getStance().mobile(opponent) || !opponent.canRespond()) {
                 bonus /= 5;
@@ -105,7 +105,7 @@ public class AssPart extends GenericBodyPart {
                                 + " great gouts of {other:name-possessive} strength from {other:possessive}"
                                 + " body.", self, opponent));
                 opponent.drain(c, self, self.getLevel(), Character.MeterType.STAMINA);
-                Drained.drain(c, self, opponent, Attribute.Power, 3, 10, true);
+                Drained.drain(c, self, opponent, Attribute.power, 3, 10, true);
             } else {
                 c.write(self, Formatter.format("The feel of {self:name-possessive} ass around"
                                 + " {other:name-possessive} %s drains"

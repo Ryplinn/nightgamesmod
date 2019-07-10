@@ -37,7 +37,7 @@ public class ArmBar extends Skill {
             int m = (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(6, 10));
             writeOutput(c, m, Result.normal, target);
             target.pain(c, getSelf(), m);
-            target.add(c, new AttributeBuff(target, Attribute.Power, -4, 5));
+            target.add(c, new AttributeBuff(target, Attribute.power, -4, 5));
             target.emote(Emotion.angry, 15);
         } else {
             writeOutput(c, Result.miss, target);
@@ -48,7 +48,7 @@ public class ArmBar extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Power) >= 20 && !user.has(Trait.undisciplined);
+        return user.get(Attribute.power) >= 20 && !user.has(Trait.undisciplined);
     }
 
     @Override

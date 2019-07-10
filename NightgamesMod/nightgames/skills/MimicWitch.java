@@ -21,7 +21,7 @@ public class MimicWitch extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.human() && user.get(Attribute.Slime) >= 10;
+        return user.human() && user.get(Attribute.slime) >= 10;
     }
 
     @Override
@@ -77,11 +77,11 @@ public class MimicWitch extends Skill {
             getSelf().body.temporaryAddOrReplacePartWithType(part.upgrade(), 10);
         }
 
-        int strength = Math.max(10, getSelf().get(Attribute.Slime)) * 2 / 3;
+        int strength = Math.max(10, getSelf().get(Attribute.slime)) * 2 / 3;
         if (getSelf().has(Trait.Masquerade)) {
             strength = strength * 3 / 2;
         }
-        getSelf().add(c, new AttributeBuff(getSelf(), Attribute.Arcane, strength, 10));
+        getSelf().add(c, new AttributeBuff(getSelf(), Attribute.arcane, strength, 10));
         getSelf().add(c, new SlimeMimicry("witch", getSelf(), 10));
 
         getSelf().body.temporaryAddPartMod("pussy", ArcaneMod.INSTANCE, 10);

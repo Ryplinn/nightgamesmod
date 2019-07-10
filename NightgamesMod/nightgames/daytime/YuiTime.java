@@ -55,10 +55,10 @@ public class YuiTime extends BaseNPCTime {
                 acted = true;
                 player.gain(Item.Tripwire);
                 player.gain(Item.Rope);
-                if (player.getPure(Attribute.Ninjutsu) >= 1) {
+                if (player.getPure(Attribute.ninjutsu) >= 1) {
                     player.gain(Item.Needle, 3);
                 }
-                if (player.getPure(Attribute.Ninjutsu) >= 3) {
+                if (player.getPure(Attribute.ninjutsu) >= 3) {
                     player.gain(Item.SmokeBomb, 2);
                 }
             } else {
@@ -71,8 +71,8 @@ public class YuiTime extends BaseNPCTime {
         } else if (choice.startsWith("Train")) {
             GUI.gui.message("Yui's skills at subterfuge turn out to be as strong as she claimed. She's also quite a good teacher. Apparently she helped train her "
                                   + "younger sister, so she's used to it. Nothing she teaches you is overtly sexual, but you can see some useful applications for the Games.");
-            player.modAttributeDontSaveData(Attribute.Ninjutsu, 1);
-            Flag.flag("Trained" + Attribute.Ninjutsu.name());
+            player.modAttributeDontSaveData(Attribute.ninjutsu, 1);
+            Flag.flag("Trained" + Attribute.ninjutsu.name());
             choose("Leave", nextChoices);
         }
     }

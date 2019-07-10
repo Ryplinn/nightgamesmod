@@ -354,7 +354,7 @@ public class KatTime extends BaseNPCTime {
                 npc.getGrowth().addTrait(0, Trait.affectionate);
             }
             choose("Leave", nextChoices);
-            Daytime.train(player, npc, Attribute.Seduction);
+            Daytime.train(player, npc, Attribute.seduction);
             npc.gainAffection(player, 1);
             player.gainAffection(npc, 1);
         } else if (choice.equals("Games")) {
@@ -416,7 +416,7 @@ public class KatTime extends BaseNPCTime {
                 npc.getGrowth().addTrait(0, Trait.tease);
             }
             choose("Leave", nextChoices);
-            Daytime.train(player, npc, Attribute.Cunning);
+            Daytime.train(player, npc, Attribute.cunning);
             npc.gainAffection(player, 1);
             player.gainAffection(npc, 1);
         } else if (choice.equals("Sparring")) {
@@ -451,7 +451,7 @@ public class KatTime extends BaseNPCTime {
                             + "You lightly caress her body as she's recovering from her climax. She giggles softly at the ticklish sensation and looks up at you with a flushed smile. <i>\"You're "
                             + "good at this kind of sparring. Can I put my clothes on before we continue? This feels nice, but it's really embarrassing.\"</i>");
             choose("Leave", nextChoices);
-            Daytime.train(player, npc, Attribute.Power);
+            Daytime.train(player, npc, Attribute.power);
             npc.gainAffection(player, 1);
             player.gainAffection(npc, 1);
             if (!player.has(Trait.aikidoNovice)) {

@@ -21,7 +21,7 @@ public class AssJob extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Seduction) >= 25;
+        return user.get(Attribute.seduction) >= 25;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class AssJob extends Skill {
         if (c.getStance().behind(target)) {
             writeOutput(c, Result.special, target);
             int m = Random.random(10, 14);
-            int fetishChance = 20 + getSelf().get(Attribute.Fetish) / 2;
+            int fetishChance = 20 + getSelf().get(Attribute.fetishism) / 2;
             if (target.crotchAvailable()) {
                 if (getSelf().crotchAvailable()) {
                     m += 6;
@@ -66,13 +66,13 @@ public class AssJob extends Skill {
             target.body.pleasure(getSelf(), getSelf().body.getRandomAss(), target.body.getRandomCock(), m, c, this);
 
             if (Random.random(100) < fetishChance) {
-                target.add(c, new BodyFetish(target, getSelf(), "ass", .1 + getSelf().get(Attribute.Fetish) * .05));
+                target.add(c, new BodyFetish(target, getSelf(), "ass", .1 + getSelf().get(Attribute.fetishism) * .05));
             }
         } else if (target.roll(getSelf(), accuracy(c, target))) {
             if (c.getStance().en == Stance.reversemount) {
                 writeOutput(c, Result.strong, target);
                 int m = Random.random(14, 19);
-                int fetishChance = 20 + getSelf().get(Attribute.Fetish) / 2;
+                int fetishChance = 20 + getSelf().get(Attribute.fetishism) / 2;
                 if (target.crotchAvailable()) {
                     if (getSelf().crotchAvailable()) {
                         m += 6;
@@ -92,7 +92,7 @@ public class AssJob extends Skill {
                 }
 
                 if (Random.random(100) < fetishChance) {
-                    target.add(c, new BodyFetish(target, getSelf(), "ass", .1 + getSelf().get(Attribute.Fetish) * .05));
+                    target.add(c, new BodyFetish(target, getSelf(), "ass", .1 + getSelf().get(Attribute.fetishism) * .05));
                 }
             } else {
                 writeOutput(c, Result.normal, target);

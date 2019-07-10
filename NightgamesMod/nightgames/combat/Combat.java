@@ -561,19 +561,19 @@ public class Combat extends Observable implements Cloneable {
             write(self,
                             Formatter.format("<br/>{other:NAME-POSSESSIVE} eyes start glowing and {self:subject-action:feel|feels} a strong pleasure wherever {other:possessive} gaze lands. {self:SUBJECT-ACTION:are|is} literally being raped by {other:name-possessive} eyes!",
                                             other, self));
-            other.temptNoSkillNoSource(this, self, self.get(Attribute.Seduction) / 2);
+            other.temptNoSkillNoSource(this, self, self.get(Attribute.seduction) / 2);
         }
 
         if (getStance().facing(self, other) && other.breastsAvailable() && !self.has(Trait.temptingtits) && other.has(Trait.temptingtits)) {
             write(self, Formatter.format("{self:SUBJECT-ACTION:can't avert|can't avert} {self:possessive} eyes from {other:NAME-POSSESSIVE} perfectly shaped tits sitting in front of {self:possessive} eyes.",
                                             self, other));
-            self.temptNoSkill(this, other, other.body.getRandomBreasts(), 10 + Math.max(0, other.get(Attribute.Seduction) / 3 - 7));
+            self.temptNoSkill(this, other, other.body.getRandomBreasts(), 10 + Math.max(0, other.get(Attribute.seduction) / 3 - 7));
         } else if (getOpponent(self).has(Trait.temptingtits) && getStance().behind(other)) {
             write(self, Formatter.format("{self:SUBJECT-ACTION:feel|feels} a heat in {self:possessive} groin as {other:name-possessive} enticing tits pressing against {self:possessive} back.",
                             self, other));
             double selfTopExposure = self.outfit.getExposure(ClothingSlot.top);
             double otherTopExposure = other.outfit.getExposure(ClothingSlot.top);
-            double temptDamage = 20 + Math.max(0, other.get(Attribute.Seduction) / 2 - 12);
+            double temptDamage = 20 + Math.max(0, other.get(Attribute.seduction) / 2 - 12);
             temptDamage = temptDamage * Math.min(1, selfTopExposure + .5) * Math.min(1, otherTopExposure + .5);
             self.temptNoSkill(this, other, other.body.getRandomBreasts(), (int) temptDamage);
         }
@@ -608,8 +608,8 @@ public class Combat extends Observable implements Cloneable {
                 if (Random.random(3) == 0) {
                     Addiction add = other.getAddiction(AddictionType.MIND_CONTROL).orElse(null);
                     Clothing source = (Clothing) infra.toArray()[0];
-                    boolean knows = (add != null && add.atLeast(Severity.MED)) || other.get(Attribute.Cunning) >= 30
-                                    || other.get(Attribute.Science) >= 10;
+                    boolean knows = (add != null && add.atLeast(Severity.MED)) || other.get(Attribute.cunning) >= 30
+                                    || other.get(Attribute.science) >= 10;
                     String msg;
                     if (other.human()) {
                         msg = "<i>You hear a soft buzzing, just at the edge of your hearing. ";
@@ -723,9 +723,9 @@ public class Combat extends Observable implements Cloneable {
     private String describe() {
         if (!p1.human() && !p2.human() && beingObserved) {
             return String.format("<font color=%s>", GUIColor.COMBAT_OBSERVE_P1_DESC.rgbHTML())
-                            + p1.describe(GameState.gameState.characterPool.getPlayer().get(Attribute.Perception), this)
+                            + p1.describe(GameState.gameState.characterPool.getPlayer().get(Attribute.perception), this)
                             + String.format("</font><br/><br/><font color=%s>", GUIColor.COMBAT_OBSERVE_P2_DESC.rgbHTML())
-                            + p2.describe(GameState.gameState.characterPool.getPlayer().get(Attribute.Perception), this)
+                            + p2.describe(GameState.gameState.characterPool.getPlayer().get(Attribute.perception), this)
                             + String.format("</font><br/><br/><font color=%s><b>", GUIColor.COMBAT_OBSERVE_STANCE_DESC.rgbHTML())
                             + Formatter.capitalizeFirstLetter(getStance().describe(this)) + "</b></font>";
         } else if (beingObserved) {
@@ -740,10 +740,10 @@ public class Combat extends Observable implements Cloneable {
             }
             if (player.is(Stsflag.blinded)) {
                 return "<b>You are blinded, and cannot see what " + other.getTrueName() + " is doing!</b><br/><br/>" + Formatter.capitalizeFirstLetter(getStance().describe(this)) + "<br/><br/>"
-                                + player.describe(other.get(Attribute.Perception), this) + "<br/><br/>";
+                                + player.describe(other.get(Attribute.perception), this) + "<br/><br/>";
             } else {
-                return other.describe(player.get(Attribute.Perception), this) + "<br/><br/>" + Formatter.capitalizeFirstLetter(getStance().describe(this)) + "<br/><br/>"
-                                + player.describe(other.get(Attribute.Perception), this) + "<br/><br/>";
+                return other.describe(player.get(Attribute.perception), this) + "<br/><br/>" + Formatter.capitalizeFirstLetter(getStance().describe(this)) + "<br/><br/>"
+                                + player.describe(other.get(Attribute.perception), this) + "<br/><br/>";
             }
         } else {
             return "";
@@ -781,7 +781,7 @@ public class Combat extends Observable implements Cloneable {
 
     private boolean rollWorship(Character self, Character other) {
         if ((other.has(Trait.objectOfWorship) || self.is(Stsflag.lovestruck)) && (other.breastsAvailable() || other.crotchAvailable())) {
-            double chance = Math.min(20, Math.max(5, other.get(Attribute.Divinity) + 10 - self.getLevel()));
+            double chance = Math.min(20, Math.max(5, other.get(Attribute.divinity) + 10 - self.getLevel()));
             if (other.has(Trait.revered)) {
                 chance += 10;
             }
@@ -797,7 +797,7 @@ public class Combat extends Observable implements Cloneable {
     private boolean rollAssWorship(Character self, Character opponent) {
         int chance = 0;
         if (opponent.has(Trait.temptingass)) {
-            chance += Math.max(0, Math.min(15, opponent.get(Attribute.Seduction) - self.get(Attribute.Seduction)));
+            chance += Math.max(0, Math.min(15, opponent.get(Attribute.seduction) - self.get(Attribute.seduction)));
             if (self.is(Stsflag.feral))
                 chance += 10;
             if (self.is(Stsflag.charmed) || opponent.is(Stsflag.alluring))
@@ -934,14 +934,14 @@ public class Combat extends Observable implements Cloneable {
         if (self.has(Trait.confidentdom) && Random.random(2) == 0) {
             Attribute attr;
             String desc;
-            if (self.get(Attribute.Ki) > 0 && Random.random(2) == 0) {
-                attr = Attribute.Ki;
+            if (self.get(Attribute.ki) > 0 && Random.random(2) == 0) {
+                attr = Attribute.ki;
                 desc = "strengthening {self:possessive} focus on martial discipline";
             } else if (Random.random(2) == 0) {
-                attr = Attribute.Power;
+                attr = Attribute.power;
                 desc = "further empowering {self:possessive} muscles";
             } else {
-                attr = Attribute.Cunning;
+                attr = Attribute.cunning;
                 desc = "granting {self:direct-object} increased mental clarity";
             }
             write(self, Formatter.format("{self:SUBJECT-ACTION:feel|feels} right at home atop"

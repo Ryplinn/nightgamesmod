@@ -18,7 +18,7 @@ public class Simulacrum extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().get(Attribute.Divinity) >= 12;
+        return getSelf().get(Attribute.divinity) >= 12;
     }
 
     @Override

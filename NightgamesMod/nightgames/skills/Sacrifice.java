@@ -14,7 +14,7 @@ public class Sacrifice extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Dark) >= 15;
+        return user.get(Attribute.darkness) >= 15;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class Sacrifice extends Skill {
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
         getSelf().pain(c, getSelf(), getSelf().getStamina().max() / 3);
-        getSelf().calm(c, getSelf().getArousal().max() / 3 + 20 + getSelf().get(Attribute.Dark));
+        getSelf().calm(c, getSelf().getArousal().max() / 3 + 20 + getSelf().get(Attribute.darkness));
         return true;
     }
 

@@ -33,7 +33,7 @@ public class Engulf extends CounterBase {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().get(Attribute.Slime) > 19;
+        return getSelf().get(Attribute.slime) > 19;
     }
 
     @Override

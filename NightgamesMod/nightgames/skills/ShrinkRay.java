@@ -22,7 +22,7 @@ public class ShrinkRay extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Science) >= 12;
+        return user.get(Attribute.science) >= 12;
     }
 
     @Override

@@ -35,7 +35,7 @@ public class TemptressRide extends Thrust {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.has(Trait.temptress) && user.get(Attribute.Technique) >= 11;
+        return user.has(Trait.temptress) && user.get(Attribute.technique) >= 11;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class TemptressRide extends Thrust {
         if (c.getStance().anallyPenetrated(c, getSelf())) {
             return super.resolve(c, target);
         }
-        int targetDmg = 10 + Random.random(Math.max(10, getSelf().get(Attribute.Technique)));
+        int targetDmg = 10 + Random.random(Math.max(10, getSelf().get(Attribute.technique)));
         int selfDmg = (int) Math.max(1f, targetDmg / 3f);
         if (getSelf().has(Trait.experienced)) {
             selfDmg *= 0.67;

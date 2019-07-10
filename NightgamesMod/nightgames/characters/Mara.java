@@ -170,8 +170,8 @@ public class Mara extends BasePersonality {
         self.outfitPlan.addByID("pantyhose");
         self.outfitPlan.addByID("boots");
         self.change();
-        self.modAttributeDontSaveData(Attribute.Cunning, 2);
-        self.modAttributeDontSaveData(Attribute.Perception, 2);
+        self.modAttributeDontSaveData(Attribute.cunning, 2);
+        self.modAttributeDontSaveData(Attribute.perception, 2);
         self.getStamina().setMax(80);
         self.getArousal().setMax(80);
         self.getMojo().setMax(120);
@@ -312,13 +312,13 @@ public class Mara extends BasePersonality {
                                             return true;
                                         }))));
 
-        preferredAttributes.add(c -> c.getRank() >= 4 && c.get(Attribute.Temporal) < 20
-                        ? Optional.of(Attribute.Temporal) : Optional.empty());
-        preferredAttributes.add(c -> c.get(Attribute.Science) < 15 ? Optional.of(Attribute.Science) : Optional.empty());
-        preferredAttributes.add(c -> c.get(Attribute.Science) >= 15 && c.get(Attribute.Fetish) < 50
-                        ? Optional.of(Attribute.Fetish) : Optional.empty());
+        preferredAttributes.add(c -> c.getRank() >= 4 && c.get(Attribute.temporal) < 20
+                        ? Optional.of(Attribute.temporal) : Optional.empty());
+        preferredAttributes.add(c -> c.get(Attribute.science) < 15 ? Optional.of(Attribute.science) : Optional.empty());
+        preferredAttributes.add(c -> c.get(Attribute.science) >= 15 && c.get(Attribute.fetishism) < 50
+                        ? Optional.of(Attribute.fetishism) : Optional.empty());
         preferredAttributes.add(
-                        c -> c.get(Attribute.Cunning) < 100 ? Optional.of(Attribute.Cunning) : Optional.empty());
+                        c -> c.get(Attribute.cunning) < 100 ? Optional.of(Attribute.cunning) : Optional.empty());
         character.getGrowth().addTrait(0, Trait.petite);
         character.getGrowth().addTrait(0, Trait.dexterous);
         character.getGrowth().addTrait(0, Trait.ticklish);
@@ -467,7 +467,7 @@ public class Mara extends BasePersonality {
         character.outfitPlan.addByID("pants");
         character.outfitPlan.addByID("pantyhose");
         character.outfitPlan.addByID("boots");
-        character.modAttributeDontSaveData(Attribute.Science, 1);
+        character.modAttributeDontSaveData(Attribute.science, 1);
         character.getGrowth()
                  .addOrRemoveTraits(character);
     }

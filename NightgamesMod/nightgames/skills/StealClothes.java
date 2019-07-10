@@ -17,7 +17,7 @@ public class StealClothes extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.Ninjutsu) >= 15;
+        return getSelf().getPure(Attribute.ninjutsu) >= 15;
     }
 
     @Override

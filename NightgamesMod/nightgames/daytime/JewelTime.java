@@ -290,7 +290,7 @@ public class JewelTime extends BaseNPCTime {
                                     + "head back.\"</i>");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.Seduction);
+                Daytime.train(player, npc, Attribute.seduction);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
                 break;
@@ -324,7 +324,7 @@ public class JewelTime extends BaseNPCTime {
                                     + "off your clothes. Honestly, as far as problems go, you could do much worse.");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.Cunning);
+                Daytime.train(player, npc, Attribute.cunning);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
                 break;
@@ -365,7 +365,7 @@ public class JewelTime extends BaseNPCTime {
                                     + "but you feel a faint sense of solidarity with them, even though Jewel let them keep their panties on.");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.Power);
+                Daytime.train(player, npc, Attribute.power);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
                 break;

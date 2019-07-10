@@ -41,11 +41,11 @@ public class Buzzed extends DurationStatus {
 
     @Override
     public int mod(Attribute a) {
-        if (a == Attribute.Perception) {
+        if (a == Attribute.perception) {
             return -3 * magnitude;
-        } else if (a == Attribute.Power) {
+        } else if (a == Attribute.power) {
             return -magnitude;
-        } else if (a == Attribute.Cunning) {
+        } else if (a == Attribute.cunning) {
             return -2 * magnitude;
         }
         return 0;

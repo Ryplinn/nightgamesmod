@@ -40,7 +40,7 @@ public class ComeHither extends Skill {
     public boolean resolve(Combat c, Character target) {
 
         boolean selfMounts = (!getSelf().hasPussy() && getSelf().hasDick())
-                             || target.get(Attribute.Submissive) > Random.random(30);
+                             || target.get(Attribute.submission) > Random.random(30);
         
         writeOutput(c, selfMounts ? Result.special : Result.normal, target);                   
                             

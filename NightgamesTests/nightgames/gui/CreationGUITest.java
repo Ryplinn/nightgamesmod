@@ -33,8 +33,8 @@ public class CreationGUITest {
         creationGUI.cunning = 9;
         creationGUI.makeGame(Optional.empty());
         GameState gameState = testGUI.loadedState.take();
-        assertThat(gameState.characterPool.human.att, allOf(hasEntry(Attribute.Power, 5), hasEntry(Attribute.Seduction, 11),
-                        hasEntry(Attribute.Cunning, 9)));
+        assertThat(gameState.characterPool.human.att, allOf(hasEntry(Attribute.power, 5), hasEntry(Attribute.seduction, 11),
+                        hasEntry(Attribute.cunning, 9)));
         assertThat(gameState.characterPool.human.getTraits(), IsCollectionContaining.hasItems(Trait.romantic, Trait.insatiable));
     }
 }

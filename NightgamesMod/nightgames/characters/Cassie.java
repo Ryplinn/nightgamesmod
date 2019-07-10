@@ -181,10 +181,10 @@ public class Cassie extends BasePersonality {
         self.outfitPlan.addByID("shoes");
 
         self.change();
-        self.modAttributeDontSaveData(Attribute.Power, 1);
-        self.modAttributeDontSaveData(Attribute.Seduction, 1);
-        self.modAttributeDontSaveData(Attribute.Cunning, 1);
-        self.modAttributeDontSaveData(Attribute.Perception, 1);
+        self.modAttributeDontSaveData(Attribute.power, 1);
+        self.modAttributeDontSaveData(Attribute.seduction, 1);
+        self.modAttributeDontSaveData(Attribute.cunning, 1);
+        self.modAttributeDontSaveData(Attribute.perception, 1);
 
         self.getStamina().setMax(70);
         self.getArousal().setMax(100);
@@ -240,7 +240,7 @@ public class Cassie extends BasePersonality {
         character.getGrowth().addTrait(43, Trait.dickhandler);
         character.getGrowth().addTrait(47, Trait.autonomousPussy);
         character.getGrowth().addTrait(60, Trait.obsequiousAppeal);
-        preferredAttributes.add(character -> character.get(Attribute.Submissive) < 20 ? Optional.of(Attribute.Submissive) : Optional.empty());
+        preferredAttributes.add(character -> character.get(Attribute.submission) < 20 ? Optional.of(Attribute.submission) : Optional.empty());
     }
 
     @Override
@@ -324,7 +324,7 @@ public class Cassie extends BasePersonality {
                             character.getGrowth().extraAttributes += 1;
                             return true;
                         }))));
-        preferredAttributes.add(c -> c.get(Attribute.Arcane) < 80 ? Optional.of(Attribute.Arcane) : Optional.empty());
+        preferredAttributes.add(c -> c.get(Attribute.arcane) < 80 ? Optional.of(Attribute.arcane) : Optional.empty());
 
         character.getGrowth().addTrait(0, Trait.softheart);
         character.getGrowth().addTrait(0, Trait.romantic);
@@ -582,7 +582,7 @@ public class Cassie extends BasePersonality {
     public String draw(Combat c, Result flag) {
         Character opponent=c.getOpponent(character);
         if (flag == Result.intercourse) {
-            if (character.has(Trait.witch) && opponent.getPure(Attribute.Arcane) >= 4 && character.getAffection(opponent) >= 12 &&
+            if (character.has(Trait.witch) && opponent.getPure(Attribute.arcane) >= 4 && character.getAffection(opponent) >= 12 &&
                             Random.random(2) == 0) {
                 return "You thrust your hips in time with Cassie's, pushing you both closer to orgasm. At this rate, it seems a draw is pretty much certain. If you pulled out, "
                                 + "there's a chance you could change tactics and take the advantage, but right at this moment, it feels like there are more important things than winning.<br/><br/> "
@@ -713,7 +713,7 @@ public class Cassie extends BasePersonality {
         character.outfitPlan.addByID("skirt");
         character.outfitPlan.addByID("shoes");
 
-        character.modAttributeDontSaveData(Attribute.Arcane, 1);
+        character.modAttributeDontSaveData(Attribute.arcane, 1);
         character.getGrowth().addOrRemoveTraits(character);
     }
 

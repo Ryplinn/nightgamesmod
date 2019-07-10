@@ -18,12 +18,12 @@ public class Snare extends Trap {
     }
 
     public void setStrength(Character user) {
-        setStrength(user.get(Attribute.Cunning) + user.getLevel() / 2);
+        setStrength(user.get(Attribute.cunning) + user.getLevel() / 2);
     }
 
     @Override
     public void trigger(Character target) {
-        if (target.checkVsDc(Attribute.Perception, 25 + getStrength() + target.baseDisarm())) {
+        if (target.checkVsDc(Attribute.perception, 25 + getStrength() + target.baseDisarm())) {
             if (target.human()) {
                 GUI.gui.message("You notice a snare on the floor in front of you and manage to disarm it safely");
             }
@@ -56,7 +56,7 @@ public class Snare extends Trap {
     
     @Override
     public boolean requirements(Character owner) {
-        return owner.get(Attribute.Cunning) >= 9;
+        return owner.get(Attribute.cunning) >= 9;
     }
 
     @Override

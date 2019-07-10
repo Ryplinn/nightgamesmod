@@ -22,7 +22,7 @@ public enum DamageType {
     drain,  // Transfers stamina from target to cause.
     weaken, // Non-punch stamina damage.
     willpower,  // Direct damage to willpower via non-orgasm means
-    stance, // Stamina damage from smothering and such
+    stance, // Stance upkeep costs
     arcane, // Damage from spells
     gadgets,    // Damage from toys
     technique,  // Damage from tickling
@@ -38,55 +38,56 @@ public enum DamageType {
     public double getDefensivePower(Character target){
         switch (this) {
             case arcane:
-                // (arcane + dark + divinity + ki) / 2
-                // each point of these attributes reduces incoming damage by .75%
-                return target.get(Attribute.Arcane) + target.get(Attribute.Dark) / 2.0 + target.get(Attribute.Divinity) / 2.0 + target
-                                .get(Attribute.Ki) / 2.0;
+                // (2 * arcane + dark + divinity + ki) / 2
+                // each point of arcane reduces incoming damage by 1.5%
+                // each point of the other attributes reduces incoming damage by .75%
+                return target.get(Attribute.arcane) + target.get(Attribute.darkness) / 2.0 + target.get(Attribute.divinity) / 2.0 + target
+                                .get(Attribute.ki) / 2.0;
             case biological:
                 // (animism + bio + medicine + science + cunning + seduction) / 2
                 // each point of these attributes reduces incoming damage by .75%
-                return target.get(Attribute.Animism) / 2.0 + target.get(Attribute.Bio) / 2.0 + target.get(Attribute.Medicine) / 2.0 + target
-                                .get(Attribute.Science) / 2.0 + target.get(Attribute.Cunning) / 2.0 + target.get(Attribute.Seduction) / 2.0;
+                return target.get(Attribute.animism) / 2.0 + target.get(Attribute.bio) / 2.0 + target.get(Attribute.medicine) / 2.0 + target
+                                .get(Attribute.science) / 2.0 + target.get(Attribute.cunning) / 2.0 + target.get(Attribute.seduction) / 2.0;
             case pleasure:
                 // each point of seduction reduces incoming damage by 1.5%
-                return target.get(Attribute.Seduction);
+                return target.get(Attribute.seduction);
             case temptation:
                 // (2 * seduction + 2 * submissive + cunning) / 2
-                // seduction and submission reduce incoming damage by 1.5%
+                // each point of seduction or submission reduces incoming damage by 1.5%
                 // cunning reduces incoming damage by .75%
-                return (target.get(Attribute.Seduction) * 2 + target.get(Attribute.Submissive) * 2 + target.get(Attribute.Cunning)) / 2.0;
+                return (target.get(Attribute.seduction) * 2 + target.get(Attribute.submission) * 2 + target.get(Attribute.cunning)) / 2.0;
             case technique:
                 // each point of cunning reduces incoming damage by 1.5%
-                return target.get(Attribute.Cunning);
+                return target.get(Attribute.cunning);
             case physical:
                 // (2 * power + cunning) / 2
                 // each point of power reduces incoming damage by 1.5%
                 // each point of cunning reduces incoming damage by 0.75%
-                return (target.get(Attribute.Power) * 2 + target.get(Attribute.Cunning)) / 2.0;
+                return (target.get(Attribute.power) * 2 + target.get(Attribute.cunning)) / 2.0;
             case gadgets:
                 // each point of cunning reduces incoming damage by 1.5%
-                return target.get(Attribute.Cunning);
+                return target.get(Attribute.cunning);
             case drain:
                 // (2 * dark + arcane) / 2
                 // each point of dark reduces incoming damage by 1.5%
                 // each point of arcane reduces incoming damage by 0.75%
-                return (target.get(Attribute.Dark) * 2 + target.get(Attribute.Arcane)) / 2.0;
+                return (target.get(Attribute.darkness) * 2 + target.get(Attribute.arcane)) / 2.0;
             case stance:
                 // (2 * cunning + power) / 2
                 // each point of cunning reduces incoming damage by 1.5%
                 // each point of power reduces incoming damage by 0.75%
-                return (target.get(Attribute.Cunning) * 2 + target.get(Attribute.Power)) / 2.0;
+                return (target.get(Attribute.cunning) * 2 + target.get(Attribute.power)) / 2.0;
             case weaken:
                 // (2 * dark + divinity) / 2
                 // each point of dark reduces incoming damage by 1.5%
                 // each point of power reduces incoming damage by .75%
-                return (target.get(Attribute.Dark) * 2 + target.get(Attribute.Divinity)) / 2.0;
+                return (target.get(Attribute.darkness) * 2 + target.get(Attribute.divinity)) / 2.0;
             case willpower:
                 // (dark + fetish + 2 * divinity + level) / 2
                 // each level reduces incoming damage by .75%
                 // each point of divinity reduces incoming damage by 1.5%
                 // each point of fetish or dark reduces incoming damage by .75%
-                return (target.get(Attribute.Dark) + target.get(Attribute.Fetish) + target.get(Attribute.Divinity) * 2 + target
+                return (target.get(Attribute.darkness) + target.get(Attribute.fetishism) + target.get(Attribute.divinity) * 2 + target
                                 .getLevel()) / 2.0;
             default:
                 return 0;
@@ -104,37 +105,40 @@ public enum DamageType {
             case biological:
                 // (animism + bio + medicine + science) / 2
                 // each point of these attributes increases outgoing damage by 1.5%
-                return (source.get(Attribute.Animism) + source.get(Attribute.Bio) + source.get(Attribute.Medicine) + source
-                                .get(Attribute.Science)) / 2.0;
+                return (source.get(Attribute.animism) + source.get(Attribute.bio) + source.get(Attribute.medicine) + source
+                                .get(Attribute.science)) / 2.0;
             case gadgets:
                 // (2 * science + cunning) / 3 + 20(has toymaster)
                 // each point of science increases outgoing damage by 2%
                 // each point of cunning increases outgoing damage by 1%
                 // toymaster trait increases outgoing damage by 60%
-                double power = (source.get(Attribute.Science) * 2 + source.get(Attribute.Cunning)) / 3.0;
+                double power = (source.get(Attribute.science) * 2 + source.get(Attribute.cunning)) / 3.0;
                 if (source.has(Trait.toymaster)) {
                     power += 20;
                 }
                 return power;
             case pleasure:
                 // each point of seduction increases outgoing damage by 3%
-                return source.get(Attribute.Seduction);
+                return source.get(Attribute.seduction);
             case arcane:
                 // each point of arcane increases outgoing damage by 3%
-                return source.get(Attribute.Arcane);
+                return source.get(Attribute.arcane);
             case temptation:
                 // (2 * seduction + cunning) / 3
                 // each point of seduction increases outgoing damage by 2%
                 // each point of cunning increases outgoing damage by 1%
-                return (source.get(Attribute.Seduction) * 2 + source.get(Attribute.Cunning)) / 3.0;
+                return (source.get(Attribute.seduction) * 2 + source.get(Attribute.cunning)) / 3.0;
             case technique:
                 // each point of cunning increases outgoing damage by 3%
-                return source.get(Attribute.Cunning);
+                return source.get(Attribute.cunning);
             case physical:
                 // (2 * power + cunning + 2 * ki) / 3
                 // each point of power or ki increases outgoing damage by 2%
                 // each point of cunning increases outgoing damage by 1%
-                return (source.get(Attribute.Power) * 2 + source.get(Attribute.Cunning) + source.get(Attribute.Ki) * 2) / 3.0;
+                // power represents raw strength
+                // cunning represents weakpoint targeting
+                // ki represents showing them your moves
+                return (source.get(Attribute.power) * 2 + source.get(Attribute.cunning) + source.get(Attribute.ki) * 2) / 3.0;
             case drain:
                 // with gluttony:
                 // (4 * dark + 2 * arcane) / 3
@@ -146,23 +150,23 @@ public enum DamageType {
                 // each point of arcane increases outgoing damage by 1.5%
                 // ergo:
                 // gluttony increases drain power by 33%
-                return (source.get(Attribute.Dark) * 2 + source.get(Attribute.Arcane)) / (source.has(Trait.gluttony) ? 1.5 : 2.0);
+                return (source.get(Attribute.darkness) * 2 + source.get(Attribute.arcane)) / (source.has(Trait.gluttony) ? 1.5 : 2.0);
             case stance:
                 // (2 * cunning + power) / 3
                 // each point of cunning increases outgoing damage by 2%
                 // each point of power increases outgoing damage by 1%
-                return (source.get(Attribute.Cunning) * 2 + source.get(Attribute.Power)) / 3.0;
+                return (source.get(Attribute.cunning) * 2 + source.get(Attribute.power)) / 3.0;
             case weaken:
                 // (2 * dark + divinity + ki) / 3
                 // each point of dark increases outgoing damage by 2%
                 // each point of divinity or ki increases outgoing damage by 1%
-                return (source.get(Attribute.Dark) * 2 + source.get(Attribute.Divinity) + source.get(Attribute.Ki)) / 3.0;
+                return (source.get(Attribute.darkness) * 2 + source.get(Attribute.divinity) + source.get(Attribute.ki)) / 3.0;
             case willpower:
                 // (dark + fetish + divinity * 2 + level) / 3
                 // each point of dark or fetish increases outgoing damage by 1%
                 // each point of divinity increases outgoing damage by 2%
                 // each level increases outgoing damage by 1%
-                return (source.get(Attribute.Dark) + source.get(Attribute.Fetish) + source.get(Attribute.Divinity) * 2 + source
+                return (source.get(Attribute.darkness) + source.get(Attribute.fetishism) + source.get(Attribute.divinity) * 2 + source
                                 .getLevel()) / 3.0;
             default:
                 return 0;

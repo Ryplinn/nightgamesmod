@@ -24,7 +24,7 @@ public class CheapShot extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.getPure(Attribute.Temporal) >= 2;
+        return user.getPure(Attribute.temporal) >= 2;
     }
 
     @Override

@@ -64,7 +64,7 @@ public class PullOut extends Skill {
         if (target.has(Trait.stronghold)) {
             baseDifficulty += 5;
         }
-        int powerMod = Math.min(20, Math.max(5, target.get(Attribute.Power) - getSelf().get(Attribute.Power)));
+        int powerMod = Math.min(20, Math.max(5, target.get(Attribute.power) - getSelf().get(Attribute.power)));
         if (c.getStance().en == Stance.anal) {
             if (target.has(Trait.bewitchingbottom)) {
                 Optional<BodyFetish> fetish = getSelf().body.getFetish("ass");
@@ -76,7 +76,7 @@ public class PullOut extends Skill {
                 writeOutput(c, result, target);
                 c.setStance(c.getStance().insertRandom(c));
                 return true;
-            } else if (getSelf().checkVsDc(Attribute.Power,
+            } else if (getSelf().checkVsDc(Attribute.power,
                             baseDifficulty - getSelf().getEscape(c, target) + powerMod)) {
                 if (isLocked) {
                     c.write(getSelf(), Formatter.format("Despite {other:name-possessive} inhumanly tight"
@@ -111,8 +111,8 @@ public class PullOut extends Skill {
             c.setStance(new StandingOver(getSelf(), target), getSelf(), true);
         } else {
             if (isLocked || target.has(Trait.tight) && c.getStance().inserted(getSelf())) {
-                boolean escaped = getSelf().checkVsDc(Attribute.Power,
-                                10 - getSelf().getEscape(c, target) + target.get(Attribute.Power));
+                boolean escaped = getSelf().checkVsDc(Attribute.power,
+                                10 - getSelf().getEscape(c, target) + target.get(Attribute.power));
                 if (escaped) {
                     writeOutput(c, result, target);
                 } else {

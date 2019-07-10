@@ -43,7 +43,7 @@ public class Slap extends Skill {
         if (target.roll(getSelf(), accuracy(c, target))) {
             if (isSlime()) {
                 writeOutput(c, Result.critical, target);
-                target.pain(c, getSelf(), Math.min(80, Random.random(10) + getSelf().get(Attribute.Slime) + getSelf().get(Attribute.Power) / 2));
+                target.pain(c, getSelf(), Math.min(80, Random.random(10) + getSelf().get(Attribute.slime) + getSelf().get(Attribute.power) / 2));
                 if (c.getStance().en == Stance.neutral && Random.random(5) == 0) {
                     c.setStance(new StandingOver(getSelf(), target), getSelf(), true);
                     c.write(getSelf(),
@@ -56,7 +56,7 @@ public class Slap extends Skill {
                 }
                 target.emote(Emotion.nervous, 40);
                 target.emote(Emotion.angry, 30);
-            } else if (getSelf().get(Attribute.Animism) >= 8) {
+            } else if (getSelf().get(Attribute.animism) >= 8) {
                 writeOutput(c, Result.special, target);
                 if (getSelf().has(Trait.pimphand)) {
                     target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target,
@@ -92,7 +92,7 @@ public class Slap extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Power) >= 5;
+        return user.get(Attribute.power) >= 5;
     }
 
     @Override
@@ -111,14 +111,14 @@ public class Slap extends Skill {
     }
     
     private boolean isSlime() {
-        return getSelf().get(Attribute.Slime) > 4;
+        return getSelf().get(Attribute.slime) > 4;
     }
 
     @Override
     public String getLabel(Combat c) {
         if (isSlime()) {
             return "Clobber";
-        } else if (getSelf().get(Attribute.Animism) >= 8) {
+        } else if (getSelf().get(Attribute.animism) >= 8) {
             return "Tiger Claw";
         } else {
             return "Slap";

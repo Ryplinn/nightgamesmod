@@ -24,7 +24,7 @@ public class Wait extends Skill {
     @Override
     public int getMojoBuilt(Combat c) {
         if (channel(c)) {
-            return 20 + getSelf().get(Attribute.Arcane) / 3;
+            return 20 + getSelf().get(Attribute.arcane) / 3;
         } else if (focused(c)) {
             return 20;
         } else {
@@ -135,10 +135,10 @@ public class Wait extends Skill {
     }
 
     private boolean focused(Combat c) {
-        return getSelf().get(Attribute.Cunning) >= 15 && !getSelf().has(Trait.undisciplined) && getSelf().canRespond() && !c.getStance().sub(getSelf());
+        return getSelf().get(Attribute.cunning) >= 15 && !getSelf().has(Trait.undisciplined) && getSelf().canRespond() && !c.getStance().sub(getSelf());
     }
 
     private boolean channel(Combat c) {
-        return getSelf().get(Attribute.Arcane) >= 1 && getSelf().canRespond() && !c.getStance().sub(getSelf());
+        return getSelf().get(Attribute.arcane) >= 1 && getSelf().canRespond() && !c.getStance().sub(getSelf());
     }
 }

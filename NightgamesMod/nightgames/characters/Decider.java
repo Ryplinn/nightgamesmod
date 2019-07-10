@@ -166,7 +166,7 @@ public class Decider {
                 }
             }
         }
-        if (character.get(Attribute.Science) >= 1 && !character.has(Item.Battery, 10)) {
+        if (character.get(Attribute.science) >= 1 && !character.has(Item.Battery, 10)) {
             for (Action act : available) {
                 if (act.consider() == Movement.recharge) {
                     return act;
@@ -229,11 +229,11 @@ public class Decider {
                 bff.gainAffection(self, Random.random(3) + 1);
                 switch (Random.random(3)) {
                     case 0:
-                        Daytime.train(self, bff, Attribute.Power);
+                        Daytime.train(self, bff, Attribute.power);
                     case 1:
-                        Daytime.train(self, bff, Attribute.Cunning);
+                        Daytime.train(self, bff, Attribute.cunning);
                     default:
-                        Daytime.train(self, bff, Attribute.Seduction);
+                        Daytime.train(self, bff, Attribute.seduction);
                 }
             }
         }

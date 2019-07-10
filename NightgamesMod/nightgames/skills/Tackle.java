@@ -43,8 +43,8 @@ public class Tackle extends Skill {
             target.add(c, new Winded(target, 2));
         }
         if (target.roll(getSelf(), accuracy(c, target))
-                        && getSelf().checkVsDc(Attribute.Power, target.knockdownDC() - getSelf().get(Attribute.Animism))) {
-            if (getSelf().get(Attribute.Animism) >= 1) {
+                        && getSelf().checkVsDc(Attribute.power, target.knockdownDC() - getSelf().get(Attribute.animism))) {
+            if (getSelf().get(Attribute.animism) >= 1) {
                 writeOutput(c, Result.special, target);
                 target.pain(c, getSelf(), (int) DamageType.physical
                                 .modifyDamage(getSelf(), target, Random.random(15, 30)));
@@ -68,7 +68,7 @@ public class Tackle extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Power) >= 26 && !user.has(Trait.petite) || user.get(Attribute.Animism) >= 1;
+        return user.get(Attribute.power) >= 26 && !user.has(Trait.petite) || user.get(Attribute.animism) >= 1;
     }
 
     @Override
@@ -78,7 +78,7 @@ public class Tackle extends Skill {
 
     @Override
     public int speed() {
-        if (getSelf().get(Attribute.Animism) >= 1) {
+        if (getSelf().get(Attribute.animism) >= 1) {
             return 3;
         } else {
             return 1;
@@ -92,11 +92,11 @@ public class Tackle extends Skill {
         }
         
         int base = 80;
-        if (getSelf().get(Attribute.Animism) >= 1) {
+        if (getSelf().get(Attribute.animism) >= 1) {
             base = 120 + (getSelf().getArousal().getReal() / 10);
         }
         return Math.round(Math.max(Math.min(150,
-                        2.5f * (getSelf().get(Attribute.Power) - c.getOpponent(getSelf()).get(Attribute.Power)) + base),
+                        2.5f * (getSelf().get(Attribute.power) - c.getOpponent(getSelf()).get(Attribute.power)) + base),
                         40));
     }
 
@@ -107,7 +107,7 @@ public class Tackle extends Skill {
 
     @Override
     public String getLabel(Combat c) {
-        if (getSelf().get(Attribute.Animism) >= 1) {
+        if (getSelf().get(Attribute.animism) >= 1) {
             return "Pounce";
         } else {
             return getName(c);

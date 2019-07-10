@@ -80,7 +80,7 @@ public class DemonicMod extends PartMod {
                 master.heal(c, strength);
             }
             for (int i = 0; i < 10; i++) {
-                Attribute canBeStolen[] = EnumSet.complementOf(EnumSet.of(Attribute.Speed, Attribute.Perception)).stream().filter(a -> opponent.get(a) > 0).toArray(size -> new Attribute[size]);
+                Attribute canBeStolen[] = EnumSet.complementOf(EnumSet.of(Attribute.speed, Attribute.perception)).stream().filter(a -> opponent.get(a) > 0).toArray(size -> new Attribute[size]);
                 Attribute stolen = Random.pickRandom(canBeStolen).orElse(null);
                 if (stolen != null) {
                     int stolenStrength = Math.min(strength / 10, opponent.get(stolen));

@@ -228,11 +228,11 @@ public class Encounter implements Serializable {
      * @return a list of the two characters sorted by speed.
      */
     private List<Character> faster(Character p1, Character p2) {
-        Random.DieRoll p1Check = p1.check(Attribute.Speed, p1.getTraitMod(Trait.sprinter, 5));
-        Random.DieRoll p2Check = p2.check(Attribute.Speed, p2.getTraitMod(Trait.sprinter, 5));
+        Random.DieRoll p1Check = p1.check(Attribute.speed, p1.getTraitMod(Trait.sprinter, 5));
+        Random.DieRoll p2Check = p2.check(Attribute.speed, p2.getTraitMod(Trait.sprinter, 5));
 
         if (p1Check.result() == p2Check.result()) {
-            if (p1.get(Attribute.Speed) >= p2.get(Attribute.Speed)) {
+            if (p1.get(Attribute.speed) >= p2.get(Attribute.speed)) {
                 return Arrays.asList(p1, p2);
             } else {
                 return Arrays.asList(p2, p1);

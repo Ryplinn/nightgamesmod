@@ -27,7 +27,7 @@ public class Strip extends ArmSkill {
     @Override
     public boolean resolve(Combat c, Arm arm, Character owner, Character target) {
         boolean sub = c.getStance().dom(owner);
-        double accuracy = 10 + owner.get(Attribute.Science);
+        double accuracy = 10 + owner.get(Attribute.science);
         boolean hasTop = !target.outfit.slotEmpty(ClothingSlot.top);
         boolean hasBottom = !target.outfit.slotEmpty(ClothingSlot.bottom);
         ClothingSlot slot;

@@ -42,10 +42,10 @@ public class CockPart extends GenericBodyPart {
     public int mod(Attribute a, int total) { 
         int bonus = super.mod(a, total);
         int size = getSize();
-        if (size > SizeMod.COCK_SIZE_AVERAGE & a == Attribute.Seduction) {
+        if (size > SizeMod.COCK_SIZE_AVERAGE & a == Attribute.seduction) {
             bonus += (size - SizeMod.COCK_SIZE_AVERAGE) * 2;
         }
-        if (size > SizeMod.COCK_SIZE_BIG & a == Attribute.Speed) {
+        if (size > SizeMod.COCK_SIZE_BIG & a == Attribute.speed) {
             bonus += (size - SizeMod.COCK_SIZE_BIG);
         }
         return bonus;

@@ -17,9 +17,9 @@ import static org.junit.Assert.*;
 public class PlayerTest {
     @Test public void testStartGenitals() throws Exception {
         Map<Attribute, Integer> selectedAttributes = new HashMap<>();
-        selectedAttributes.put(Attribute.Power, 5);
-        selectedAttributes.put(Attribute.Seduction, 6);
-        selectedAttributes.put(Attribute.Cunning, 7);
+        selectedAttributes.put(Attribute.power, 5);
+        selectedAttributes.put(Attribute.seduction, 6);
+        selectedAttributes.put(Attribute.cunning, 7);
         Player playerMale =
                         new Player("dude", CharacterSex.male, Optional.empty(), new ArrayList<>(), selectedAttributes);
         Player playerFemale = new Player("chick", CharacterSex.female, Optional.empty(), new ArrayList<>(),

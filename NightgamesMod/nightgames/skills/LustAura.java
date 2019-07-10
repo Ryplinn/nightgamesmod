@@ -18,7 +18,7 @@ public class LustAura extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Dark) >= 3;
+        return user.get(Attribute.darkness) >= 3;
     }
 
     @Override
