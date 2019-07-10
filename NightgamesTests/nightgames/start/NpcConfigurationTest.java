@@ -41,7 +41,7 @@ public class NpcConfigurationTest {
                         IsMapContaining.hasEntry(Attribute.seduction, 20),
                         IsMapContaining.hasEntry(Attribute.cunning, 15),
                         IsMapContaining.hasEntry(Attribute.divinity, 10),
-                        IsMapContaining.hasEntry(Attribute.arcane, 2)));
+                        IsMapContaining.hasEntry(Attribute.spellcasting, 2)));
         assertThat(mergedConfig.body.flatMap(body -> body.type),
                         equalTo(Optional.of(BodyConfiguration.Archetype.ANGEL)));
         assertThat(mergedConfig.xp.orElse(0), equalTo(50));
@@ -55,7 +55,7 @@ public class NpcConfigurationTest {
         assertThat(angel.character.att, allOf(Arrays.asList(IsMapContaining.hasEntry(Attribute.power, 13),
                         IsMapContaining.hasEntry(Attribute.seduction, 20),
                         IsMapContaining.hasEntry(Attribute.cunning, 15),
-                        IsMapContaining.hasEntry(Attribute.divinity, 10), IsMapContaining.hasEntry(Attribute.arcane, 2),
+                        IsMapContaining.hasEntry(Attribute.divinity, 10), IsMapContaining.hasEntry(Attribute.spellcasting, 2),
                         IsMapContaining.hasEntry(Attribute.perception, 6),
                         IsMapContaining.hasEntry(Attribute.speed, 5))));
         assertThat(angel.character.xp, equalTo(50));

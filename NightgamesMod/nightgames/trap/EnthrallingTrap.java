@@ -16,7 +16,7 @@ public class EnthrallingTrap extends Trap {
     }
 
     public void setStrength(Character user) {
-        setStrength(user.get(Attribute.darkness) + user.get(Attribute.arcane) + user.getLevel() / 2);
+        setStrength(user.get(Attribute.darkness) + user.get(Attribute.spellcasting) + user.getLevel() / 2);
     }
 
     public EnthrallingTrap(Character owner) {

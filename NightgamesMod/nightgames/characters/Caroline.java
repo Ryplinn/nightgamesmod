@@ -82,7 +82,7 @@ public class Caroline extends BasePersonality {
         character.getGrowth().addTrait(55, Trait.beguilingbreasts);
 
         preferredAttributes.add(c -> Optional.of(Attribute.cunning));
-        preferredAttributes.add(c -> c.getLevel() >= 30 ? Optional.of(Attribute.arcane) : Optional.empty());
+        preferredAttributes.add(c -> c.getLevel() >= 30 ? Optional.of(Attribute.spellcasting) : Optional.empty());
         // mostly feminine face, cute but not quite at Angel's level
         character.body.add(new FacePart(.1, 2.9));
     }

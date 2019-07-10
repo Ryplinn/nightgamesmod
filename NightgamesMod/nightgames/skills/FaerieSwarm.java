@@ -16,7 +16,7 @@ public class FaerieSwarm extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.arcane) >= 2;
+        return getSelf().getPure(Attribute.spellcasting) >= 2;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class FaerieSwarm extends Skill {
         getSelf().consume(Item.MinorScroll, 1);
         if (target.getOutfit().isNude()) {
             writeOutput(c, Result.normal, target);
-            target.body.pleasure(getSelf(), null, null, 25 + Random.random(getSelf().get(Attribute.arcane)), c, this);
+            target.body.pleasure(getSelf(), null, null, 25 + Random.random(getSelf().get(Attribute.spellcasting)), c, this);
         } else {
             writeOutput(c, Result.weak, target);
             target.undress(c);

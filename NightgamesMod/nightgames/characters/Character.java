@@ -248,7 +248,7 @@ public abstract class Character extends Observable implements Cloneable {
         }
         total += body.mod(a, total);
         switch (a) {
-            case arcane:
+            case spellcasting:
                 if (outfit.has(ClothingTrait.mystic)) {
                     total += 2;
                 }
@@ -302,7 +302,7 @@ public abstract class Character extends Observable implements Cloneable {
                 break;
             case hypnotism:
                 if (has(Trait.Illusionist)) {
-                    total += getPure(Attribute.arcane) / 2;
+                    total += getPure(Attribute.spellcasting) / 2;
                 }
                 break;
             case speed:

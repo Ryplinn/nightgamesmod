@@ -21,7 +21,7 @@ public class MagicMissile extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.arcane) >= 1;
+        return user.get(Attribute.spellcasting) >= 1;
     }
 
     @Override

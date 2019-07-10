@@ -24,7 +24,7 @@ public class Wait extends Skill {
     @Override
     public int getMojoBuilt(Combat c) {
         if (channel(c)) {
-            return 20 + getSelf().get(Attribute.arcane) / 3;
+            return 20 + getSelf().get(Attribute.spellcasting) / 3;
         } else if (focused(c)) {
             return 20;
         } else {
@@ -139,6 +139,6 @@ public class Wait extends Skill {
     }
 
     private boolean channel(Combat c) {
-        return getSelf().get(Attribute.arcane) >= 1 && getSelf().canRespond() && !c.getStance().sub(getSelf());
+        return getSelf().get(Attribute.spellcasting) >= 1 && getSelf().canRespond() && !c.getStance().sub(getSelf());
     }
 }

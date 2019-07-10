@@ -81,7 +81,7 @@ public class MimicWitch extends Skill {
         if (getSelf().has(Trait.Masquerade)) {
             strength = strength * 3 / 2;
         }
-        getSelf().add(c, new AttributeBuff(getSelf(), Attribute.arcane, strength, 10));
+        getSelf().add(c, new AttributeBuff(getSelf(), Attribute.spellcasting, strength, 10));
         getSelf().add(c, new SlimeMimicry("witch", getSelf(), 10));
 
         getSelf().body.temporaryAddPartMod("pussy", ArcaneMod.INSTANCE, 10);

@@ -38,7 +38,7 @@ public class Cache implements Deployable {
                 break;
             case 1:
                 test = Attribute.perception;
-                secondary = Attribute.arcane;
+                secondary = Attribute.spellcasting;
                 dc -= 8;
                 break;
             default:

@@ -10,7 +10,7 @@ public enum Attribute {
     cunning("less intelligent", "more intelligent", "guile", "cunning"),
     perception("less perceptive", "more perceptive", "keenness", "perception"),
     speed("slower", "faster", "quickness", "speed"),
-    arcane("more mundane", "more in tune with mystic energies", "mystic energies", "arcane powers"),
+    spellcasting("more mundane", "more in tune with mystic energies", "mystic energies", "arcane powers"),
     science("dumber", "more technologically inclined", "gadget know-how", "scientific knowledge"),
     darkness("like {self:pronoun-action:are} lacking some of {self:possessive} usual darkness", "more sinful", "sin", "darkness"),
     fetishism("like it's harder to fetishize things", "it's easier to dream about fetishes", "fantasies", "fetishes"),

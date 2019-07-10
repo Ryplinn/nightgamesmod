@@ -19,7 +19,7 @@ public class IllusionTrap extends Trap {
     }
 
     public void setStrength(Character user) {
-        setStrength(user.get(Attribute.arcane) + user.getLevel() / 2);
+        setStrength(user.get(Attribute.spellcasting) + user.getLevel() / 2);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class IllusionTrap extends Trap {
 
     @Override
     public boolean requirements(Character owner) {
-        return owner.get(Attribute.arcane) >= 5;
+        return owner.get(Attribute.spellcasting) >= 5;
     }
 
     @Override

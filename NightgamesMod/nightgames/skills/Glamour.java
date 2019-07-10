@@ -14,7 +14,7 @@ public class Glamour extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.arcane) >= 6;
+        return user.get(Attribute.spellcasting) >= 6;
     }
 
     @Override

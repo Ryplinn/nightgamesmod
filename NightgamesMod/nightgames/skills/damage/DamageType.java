@@ -41,7 +41,7 @@ public enum DamageType {
                 // (2 * arcane + dark + divinity + ki) / 2
                 // each point of arcane reduces incoming damage by 1.5%
                 // each point of the other attributes reduces incoming damage by .75%
-                return target.get(Attribute.arcane) + target.get(Attribute.darkness) / 2.0 + target.get(Attribute.divinity) / 2.0 + target
+                return target.get(Attribute.spellcasting) + target.get(Attribute.darkness) / 2.0 + target.get(Attribute.divinity) / 2.0 + target
                                 .get(Attribute.ki) / 2.0;
             case biological:
                 // (animism + bio + medicine + science + cunning + seduction) / 2
@@ -71,7 +71,7 @@ public enum DamageType {
                 // (2 * dark + arcane) / 2
                 // each point of dark reduces incoming damage by 1.5%
                 // each point of arcane reduces incoming damage by 0.75%
-                return (target.get(Attribute.darkness) * 2 + target.get(Attribute.arcane)) / 2.0;
+                return (target.get(Attribute.darkness) * 2 + target.get(Attribute.spellcasting)) / 2.0;
             case stance:
                 // (2 * cunning + power) / 2
                 // each point of cunning reduces incoming damage by 1.5%
@@ -122,7 +122,7 @@ public enum DamageType {
                 return source.get(Attribute.seduction);
             case arcane:
                 // each point of arcane increases outgoing damage by 3%
-                return source.get(Attribute.arcane);
+                return source.get(Attribute.spellcasting);
             case temptation:
                 // (2 * seduction + cunning) / 3
                 // each point of seduction increases outgoing damage by 2%
@@ -150,7 +150,7 @@ public enum DamageType {
                 // each point of arcane increases outgoing damage by 1.5%
                 // ergo:
                 // gluttony increases drain power by 33%
-                return (source.get(Attribute.darkness) * 2 + source.get(Attribute.arcane)) / (source.has(Trait.gluttony) ? 1.5 : 2.0);
+                return (source.get(Attribute.darkness) * 2 + source.get(Attribute.spellcasting)) / (source.has(Trait.gluttony) ? 1.5 : 2.0);
             case stance:
                 // (2 * cunning + power) / 3
                 // each point of cunning increases outgoing damage by 2%

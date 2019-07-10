@@ -135,7 +135,7 @@ public class MaraTime extends BaseNPCTime {
             choose("Games", nextChoices);
             choose("Sparring", nextChoices);
             choose("Sex", nextChoices);
-            if(player.getPure(Attribute.arcane)>=3){
+            if(player.getPure(Attribute.spellcasting)>=3){
                 choose("Faerie play", nextChoices);
             }
             if (player.checkAddiction(AddictionType.MIND_CONTROL)) {

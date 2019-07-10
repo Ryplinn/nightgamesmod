@@ -306,7 +306,7 @@ public class Struggle extends Skill {
             if (target.checkVsDc(Attribute.science, dc)) {
                 String msg = "{self:SUBJECT-ACTION:struggle|struggles} against the powerful"
                                 + " MagLocks locked around {self:possessive} wrists by ";
-                if (Arrays.asList(Attribute.darkness, Attribute.arcane, Attribute.temporal, Attribute.divinity)
+                if (Arrays.asList(Attribute.darkness, Attribute.spellcasting, Attribute.temporal, Attribute.divinity)
                                 .contains(highestAdvancedAttr)) {
                     msg += "trying to pry them of with {self:possessive} magic";
                 } else if (Arrays.asList(Attribute.power,
