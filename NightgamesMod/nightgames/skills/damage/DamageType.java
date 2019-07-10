@@ -27,6 +27,9 @@ public enum DamageType {
     gadgets,    // Damage from toys
     technique,  // Damage from tickling
     biological, // Damage from pheremones
+    asphyxiation,   // Damage from smothering
+    dark,   // Demonic energy
+    divine, // Divine energy
     ;
 
     /**
@@ -92,6 +95,31 @@ public enum DamageType {
                 // each point of fetish or dark reduces incoming damage by .75%
                 return target.get(Attribute.darkness) + target.get(Attribute.fetishism) + target.get(Attribute.divinity) * 2 + target
                                 .getLevel();
+            case asphyxiation:
+                // (power + fetish + 2 * submissive)
+                // each point of power or fetish reduces incoming damage by .75%
+                // each point of submissive reduces incoming damage by 1.5%
+                // power represents more lung capacity
+                // fetish and submissive represent how prepared for/desensitized you are to this sort of thing
+                return (target.get(Attribute.power) + target.get(Attribute.fetishism) + 2 * target.get(Attribute.submission));
+            case dark:
+                // (2 * dark + 2 * divinity + arcane + ki)
+                // each point of dark or divinity reduces incoming damage by 1.5%
+                // each point of arcane or ki reduces incoming damage by .75%
+                // darkness is familiar with itself
+                // light banishes shadow
+                // arcane helps channel all sorts of energies
+                // the balance of ki resists the unbalanced nature of darkness
+                return 2 * target.get(Attribute.darkness) + 2 * target.get(Attribute.divinity) + target
+                                .get(Attribute.spellcasting) + target.get(Attribute.ki);
+            case divine:
+                // (2 * divinity + 2 * science + arcane)
+                // each point of divinity or science reduces incoming damage by 1.5%
+                // each point of arcane reduces incoming damage by .75%
+                // deities have clashed with each other for ages
+                // science is unimpressed by divinity
+                // arcane helps channel all sorts of energies
+                return 2 * target.get(Attribute.divinity) + 2 * target.get(Attribute.science) + target.get(Attribute.spellcasting);
             default:
                 return 0;
         }
@@ -173,6 +201,19 @@ public enum DamageType {
                 // each level increases outgoing damage by 1%
                 return source.get(Attribute.darkness) + source.get(Attribute.fetishism) + source.get(Attribute.divinity) * 2 + source
                                 .getLevel();
+            case asphyxiation:
+                // 2 * power + 3 * fetish + cunning + slime
+                // power represents increased squeeze strength
+                // fetish represents better squeeze technique
+                // cunning represents better positioning
+                // slime represents effective sealing
+                return 2 * source.get(Attribute.power) + 3 * source.get(Attribute.fetishism) + source
+                                .get(Attribute.cunning) + source.get(Attribute.slime);
+            case dark:
+                // 3 * darkness + spellcasting
+                return 3 * source.get(Attribute.darkness) + source.get(Attribute.spellcasting);
+            case divine:
+                // 3 * divinity + spellcasting
                 return 3 * source.get(Attribute.divinity) + source.get(Attribute.spellcasting);
             default:
                 return 0;
