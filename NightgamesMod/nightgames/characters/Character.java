@@ -68,7 +68,7 @@ public abstract class Character extends Observable implements Cloneable {
     public OutfitPlan outfitPlan;
     protected Area location;
     private CopyOnWriteArrayList<Skill> skills;
-    public List<Status> status;
+    public CopyOnWriteArrayList<Status> status;
     private Set<Stsflag> statusFlags;
     private CopyOnWriteArrayList<Trait> traits;
     private Map<Trait, Integer> temporaryAddedTraits;
@@ -1013,7 +1013,6 @@ public abstract class Character extends Observable implements Cloneable {
 
     public void tick(Combat c) {
         body.tick(c);
-        // FIXME: ConcurrentModificationException here, after fighting Kat
         status.forEach(s -> s.tick(c));
         countdown(temporaryAddedTraits);
         countdown(temporaryRemovedTraits);
@@ -1617,7 +1616,7 @@ public abstract class Character extends Observable implements Cloneable {
         } else {
             levelPlan = new HashMap<>();
         }
-        status = new ArrayList<>();
+        List<Status> statusList = new ArrayList<>();
         for (JsonElement element : Optional.ofNullable(object.getAsJsonArray("status")).orElse(new JsonArray())) {
             try {
                 Addiction addiction = Addiction.load(this, element.getAsJsonObject());
@@ -1630,6 +1629,7 @@ public abstract class Character extends Observable implements Cloneable {
                 throw e;
             }
         }
+        status = new CopyOnWriteArrayList<>(statusList);
         change();
         SkillPool.learnSkills(this);
     }
@@ -3524,7 +3524,7 @@ public abstract class Character extends Observable implements Cloneable {
         temporaryAddedTraits.clear();
         temporaryRemovedTraits.clear();
         status = status.stream().filter(s -> !s.flags().contains(Stsflag.purgable))
-                        .collect(Collectors.toCollection(ArrayList::new));
+                        .collect(Collectors.toCollection(CopyOnWriteArrayList::new));
         body.purge(c);
     }
 
