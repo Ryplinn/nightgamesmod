@@ -1518,7 +1518,7 @@ public abstract class Character extends Observable implements Cloneable {
 
     public abstract String taunt(Combat c, Character target);
 
-    public abstract void decideIntervene(Encounter fight, Character p1, Character p2);
+    public abstract void decideIntervene(Encounter fight, Character p1, Character p2) throws InterruptedException;
 
     public abstract Encs showerSceneResponse(Character target, Encounter encounter);
 

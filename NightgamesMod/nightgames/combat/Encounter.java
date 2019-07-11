@@ -459,7 +459,7 @@ public class Encounter implements Serializable {
         location.remove(location.get(Spiderweb.class));
     }
 
-    public void intrude(Character intruder, Character assist) {
+    public void intrude(Character intruder, Character assist) throws InterruptedException {
         participants.add(intruder);
         fight.intervene(intruder, assist);
     }

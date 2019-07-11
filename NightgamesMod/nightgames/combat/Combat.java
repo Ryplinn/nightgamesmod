@@ -1232,7 +1232,7 @@ public class Combat extends Observable implements Cloneable {
         }
     }
 
-    public void intervene(Character intruder, Character assist) {
+    public void intervene(Character intruder, Character assist) throws InterruptedException {
         // Start the fight on next combat phase
         delayCounter = 0;
         Character target;
@@ -1258,6 +1258,7 @@ public class Combat extends Observable implements Cloneable {
             intruder.defeated(assist);
         } else {
             intruder.intervene3p(this, target, assist);
+            next();
             assist.victory3p(this, target, intruder);
         }
         phase = CombatPhase.RESULTS_SCENE;

@@ -123,7 +123,7 @@ public class Area implements Serializable {
         return activeEncounter != null;
     }
 
-    public Optional<Encounter> encounter() {
+    public Optional<Encounter> encounter() throws InterruptedException {
         if (!hasEncounter() && present.size() > 1) {
             activeEncounter = Match.getMatch().buildEncounter(this);
         } else if (present.size() > 2) {

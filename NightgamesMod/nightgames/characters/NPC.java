@@ -238,7 +238,6 @@ public class NPC extends Character {
         target.undress(c);
         gainTrophy(c, target);
         target.defeated(this);
-        c.updateAndClearMessage();
         c.write(ai.victory3p(c, target, assist));
         gainAttraction(target, 1);
     }
@@ -626,7 +625,7 @@ public class NPC extends Character {
     }
 
     @Override
-    public void decideIntervene(Encounter enc, Character p1, Character p2) {
+    public void decideIntervene(Encounter enc, Character p1, Character p2) throws InterruptedException {
         if (Random.random(20) + getAffection(p1) + (p1.has(Trait.sympathetic) ? 10 : 0) >= Random.random(20)
                         + getAffection(p2) + (p2.has(Trait.sympathetic) ? 10 : 0)) {
             enc.intrude(this, p1);
