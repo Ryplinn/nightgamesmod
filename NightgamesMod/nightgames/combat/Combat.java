@@ -1312,6 +1312,7 @@ public class Combat extends Observable implements Cloneable {
         if (!p2.has(Trait.Pseudopod)) {
             Match.getMatch().getMatchData().getDataFor(p2).setArmManager(getCombatantData(p2).getManager());
         }
+        gui.clearPortrait();
     }
 
     private Optional<CombatScene> getPostCombatScene(NPC npc) {
