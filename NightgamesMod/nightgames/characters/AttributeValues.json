@@ -1,0 +1,205 @@
+{
+  "power": {
+    "offense": {
+      "physical": 2,
+      "stance": 1,
+      "asphyxiation": 2
+    },
+    "defense": {
+      "physical": 2,
+      "asphyxiation": 1,
+      "stance": 1
+    },
+    "protection": {}
+  },
+  "seduction": {
+    "offense": {
+      "pleasure": 3,
+      "temptation": 2
+    },
+    "defense": {
+      "biological": 1,
+      "pleasure": 2,
+      "temptation": 2
+    },
+    "protection": {}
+  },
+  "cunning": {
+    "offense": {
+      "gadgets": 1,
+      "temptation": 1,
+      "technique": 3,
+      "physical": 1,
+      "stance": 2,
+      "asphyxiation": 1
+    },
+    "defense": {
+      "biological": 1,
+      "temptation": 1,
+      "technique": 2,
+      "physical": 1,
+      "gadgets": 1,
+      "stance": 2
+    },
+    "protection": {}
+  },
+  "perception": {
+    "offense": {},
+    "defense": {},
+    "protection": {}
+  },
+  "speed": {
+    "offense": {},
+    "defense": {},
+    "protection": {}
+  },
+  "spellcasting": {
+    "offense": {
+      "arcane": 3,
+      "drain": 1.5,
+      "dark": 1,
+      "divine": 1
+    },
+    "defense": {
+      "arcane": 2,
+      "dark": 1,
+      "divine": 1
+    },
+    "protection": {}
+  },
+  "science": {
+    "offense": {
+      "biological": 1,
+      "gadgets": 2
+    },
+    "defense": {
+      "biological": 1,
+      "divine": 2
+    },
+    "protection": {}
+  },
+  "darkness": {
+    "offense": {
+      "drain": 3,
+      "weaken": 2,
+      "willpower": 1,
+      "dark": 3
+    },
+    "defense": {
+      "arcane": 1,
+      "drain": 2,
+      "weaken": 2,
+      "willpower": 1,
+      "dark": 2
+    },
+    "protection": {}
+  },
+  "fetishism": {
+    "offense": {
+      "willpower": 1,
+      "asphyxiation": 3
+    },
+    "defense": {
+      "asphyxiation": 2
+    },
+    "protection": {}
+  },
+  "animism": {
+    "offense": {
+      "biological": 2
+    },
+    "defense": {
+      "biological": 1
+    },
+    "protection": {}
+  },
+  "ki": {
+    "offense": {
+      "physical": 2,
+      "weaken": 1,
+      "willpower": 1
+    },
+    "defense": {
+      "arcane": 1,
+      "dark": 1
+    },
+    "protection": {}
+  },
+  "bio": {
+    "offense": {
+      "biological": 2
+    },
+    "defense": {
+      "biological": 1
+    },
+    "protection": {}
+  },
+  "divinity": {
+    "offense": {
+      "weaken": 1,
+      "willpower": 2,
+      "divine": 3
+    },
+    "defense": {
+      "arcane": 1,
+      "weaken": 1,
+      "dark": 2,
+      "divine": 2
+    },
+    "protection": {}
+  },
+  "willpower": {
+    "offense": {},
+    "defense": {},
+    "protection": {}
+  },
+  "medicine": {
+    "offense": {
+      "biological": 1
+    },
+    "defense": {
+      "biological": 1
+    },
+    "protection": {}
+  },
+  "technique": {
+    "offense": {},
+    "defense": {},
+    "protection": {}
+  },
+  "submission": {
+    "offense": {},
+    "defense": {
+      "temptation": 2,
+      "asphyxiation": 2
+    },
+    "protection": {}
+  },
+  "hypnotism": {
+    "offense": {},
+    "defense": {},
+    "protection": {}
+  },
+  "nymphomania": {
+    "offense": {},
+    "defense": {},
+    "protection": {}
+  },
+  "slime": {
+    "offense": {
+      "asphyxiation": 1
+    },
+    "defense": {},
+    "protection": {}
+  },
+  "ninjutsu": {
+    "offense": {},
+    "defense": {},
+    "protection": {}
+  },
+  "temporal": {
+    "offense": {},
+    "defense": {},
+    "protection": {}
+  }
+}

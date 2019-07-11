@@ -39,6 +39,26 @@ public class JsonUtils {
         return getGson().fromJson(object, type);
     }
 
+    /**
+     * Turns JsonObjects with keys matching the names of an enum class into an EnumMap.
+     *
+     * Elements in the JsonObject that do not match any names in the enum class are ignored.
+     *
+     * @param object A JsonObject with keys matching the names of enumClazz.
+     * @param enumClazz The enum type to use.
+     * @param valueClazz The type of the values
+     * @return An EnumMap matching the structure of the JsonObject.
+     */
+    public static <K extends Enum<K>, V> EnumMap<K, V> enumMapFromJson(JsonObject object, Class<K> enumClazz, Class<V> valueClazz) {
+        EnumMap<K, V> map = new EnumMap<>(enumClazz);
+        for (K member : enumClazz.getEnumConstants()){
+            Optional<V> option =
+                            getOptional(object, member.name()).map(element -> getGson().fromJson(element, valueClazz));
+            option.ifPresent(value -> map.put(member, value));
+        }
+        return map;
+    }
+
     public static JsonObject JsonFromMap(Map<?, ?> map) {
         return getGson().toJsonTree(map).getAsJsonObject();
     }
