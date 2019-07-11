@@ -1013,6 +1013,7 @@ public abstract class Character extends Observable implements Cloneable {
 
     public void tick(Combat c) {
         body.tick(c);
+        // FIXME: ConcurrentModificationException here, after fighting Kat
         status.forEach(s -> s.tick(c));
         countdown(temporaryAddedTraits);
         countdown(temporaryRemovedTraits);

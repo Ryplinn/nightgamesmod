@@ -1,6 +1,7 @@
 package nightgames.characters;
 
 import nightgames.characters.trait.Trait;
+import nightgames.global.Formatter;
 import nightgames.nskills.tags.AttributeSkillTag;
 import nightgames.nskills.tags.SkillTag;
 
@@ -74,6 +75,10 @@ public enum Attribute {
         }
     }
 
+    public String displayName() {
+        return Formatter.capitalizeFirstLetter(this.name());
+    }
+
     public String getLowerPhrase() {
         return lowerVerb;
     }
@@ -105,6 +110,8 @@ public enum Attribute {
                 return submission;
             case "hypnosis":
                 return hypnotism;
+            case "dark":
+                return darkness;
             default:
                 return Attribute.valueOf(lowerCase);
         }

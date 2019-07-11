@@ -1,15 +1,14 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.NPC;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
+
+import java.util.Optional;
 
 public class AttributeBuff extends DurationStatus {
     protected Attribute modded;
@@ -20,7 +19,7 @@ public class AttributeBuff extends DurationStatus {
     }
 
     public AttributeBuff(Character affected, Attribute att, int value, int duration) {
-        this(String.format("%s %+d", att.toString(), value), affected, att, value, duration);
+        this(String.format("%s %+d", att.displayName(), value), affected, att, value, duration);
     }
 
     public AttributeBuff(String name, Character affected, Attribute att, int value, int duration) {
@@ -105,7 +104,7 @@ public class AttributeBuff extends DurationStatus {
         assert other.modded == modded;
         setDuration(Math.max(other.getDuration(), getDuration()));
         value += other.value;
-        name = String.format("%s %+d", modded.toString(), value);
+        name = String.format("%s %+d", modded.displayName(), value);
     }
 
     @Override

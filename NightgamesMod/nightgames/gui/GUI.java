@@ -1235,7 +1235,7 @@ public class GUI extends JFrame implements Observer {
             int pure = player.getPure(a);
             if (pure > 0 || amt > 0) {
                 if (amt == pure) {
-                    JLabel label = new JLabel(String.format("<html><font face='Georgia' size=%d>%s: %s</font></html>", descFontSize, a.name(), amt));
+                    JLabel label = new JLabel(String.format("<html><font face='Georgia' size=%d>%s: %s</font></html>", descFontSize, a.displayName(), amt));
                     label.setForeground(GUIColor.TEXT_LIGHT.color);
                     attlbls.add(count, label);
                     statsPanel.add(attlbls.get(count++));
@@ -1252,7 +1252,7 @@ public class GUI extends JFrame implements Observer {
                     int statBonusFontSize = descFontSize - 1;
                     String labelString =
                                     String.format("<html><font face='Georgia' size=%d>%s: <font color=%s>%d</font> <font size=%d color=%s>(%+d)</font></font></html>",
-                                                    descFontSize, a.name(), attrColor.rgbHTML(), amt, statBonusFontSize,
+                                                    descFontSize, a.displayName(), attrColor.rgbHTML(), amt, statBonusFontSize,
                                                     bonusColor.rgbHTML(), amt - pure);
                     JLabel label = new JLabel(labelString);
                     label.setForeground(GUIColor.TEXT_LIGHT.color);

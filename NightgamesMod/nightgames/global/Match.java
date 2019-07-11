@@ -147,6 +147,7 @@ public class Match {
                 combatant.upkeep();
                 manageConditions(combatant);
 
+                // FIXME: supporting a character in an existing combat uses text from the character who's losing, not the player perspective.
                 // Check for encounter before moving
                 Optional<Encounter> maybeEncounter = combatant.location().encounter();
 

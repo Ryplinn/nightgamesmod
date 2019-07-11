@@ -1,22 +1,21 @@
 package nightgames.status;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 public class Converted extends AttributeBuff {
     private Attribute converted;
 
     public Converted(Character affected, Attribute att, Attribute converted, int value, int duration) {
-        super(String.format("%s->%s (%d)", converted.name(), att.name(), value), affected, att, value, duration);
+        super(String.format("%s->%s (%d)", converted.displayName(), att.displayName(), value), affected, att, value, duration);
         this.converted = converted;
         unflag(Stsflag.purgable);
     }

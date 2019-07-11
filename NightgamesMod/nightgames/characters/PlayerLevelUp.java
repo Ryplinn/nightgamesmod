@@ -50,7 +50,7 @@ class PlayerLevelUp {
                             .collect(Collectors.toList());
             Formatter.writeIfCombatUpdateImmediately(gui.combat, player, remainingAttributePoints() + " Attribute Points remain.\n");
 
-            CompletableFuture<Attribute> chosenAttribute = gui.promptFuture(attributeChoices, Attribute::name);
+            CompletableFuture<Attribute> chosenAttribute = gui.promptFuture(attributeChoices, Attribute::displayName);
             CancelButton skipButton = new CancelButton("Skip", chosenAttribute);
             skipButton.setToolTipText("Save attribute points for next level-up.");
             gui.addButton(skipButton);
