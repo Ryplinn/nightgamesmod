@@ -1,25 +1,20 @@
 package nightgames.json;
 
+import com.google.gson.*;
+import nightgames.characters.Attribute;
+import nightgames.characters.body.BodyPart;
+import nightgames.characters.body.mods.PartMod;
+import nightgames.items.clothing.Clothing;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
-
-import nightgames.characters.body.BodyPart;
-import nightgames.characters.body.mods.PartMod;
-import nightgames.items.clothing.Clothing;
 
 public class JsonUtils {
     private static Gson gson = null;
@@ -80,6 +75,7 @@ public class JsonUtils {
                             .registerTypeAdapter(Clothing.class, new ClothingAdaptor())
                             .registerTypeAdapter(BodyPart.class, new BodyPartAdapter())
                             .registerTypeAdapter(PartMod.class, new PartModAdapter())
+                            .registerTypeAdapter(Attribute.class, new AttributeAdaptor())
                             .create();
         }
         return gson;

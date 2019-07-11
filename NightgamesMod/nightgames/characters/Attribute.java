@@ -93,4 +93,20 @@ public enum Attribute {
     public String getDrainerDO() {
         return drainerDirectObject.isEmpty() ? drainedDirectObject : drainerDirectObject;
     }
+
+    public static Attribute fromLegacyName(String legacyName) {
+        String lowerCase = legacyName.toLowerCase();
+        switch (lowerCase) {
+            case "arcane":
+                return spellcasting;
+            case "fetish":
+                return fetishism;
+            case "submissive":
+                return submission;
+            case "hypnosis":
+                return hypnotism;
+            default:
+                return Attribute.valueOf(lowerCase);
+        }
+    }
 }

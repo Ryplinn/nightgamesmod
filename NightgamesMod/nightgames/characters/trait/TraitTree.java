@@ -46,7 +46,7 @@ public class TraitTree {
             if (qName.equals("Requirements")) {
                 reqs = new ArrayList<>();
             } else if (qName.equals("AttributeReq")) {
-                att = Attribute.valueOf(attributes.getValue("type").trim());
+                att = Attribute.fromLegacyName(attributes.getValue("type").trim());
             }
         }
 

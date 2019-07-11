@@ -17,7 +17,7 @@ public class AttributeRequirement extends BaseRequirement {
     }
 
     public AttributeRequirement(String att, int amount) {
-        this.att = Attribute.valueOf(att);
+        this.att = Attribute.fromLegacyName(att);
         this.amount = amount;
     }
 
