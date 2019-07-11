@@ -1,9 +1,11 @@
 package nightgames.skills.damage;
 
 import nightgames.characters.Attribute;
+import nightgames.characters.AttributeValues;
 import nightgames.characters.Character;
-import nightgames.characters.trait.Trait;
 import nightgames.global.DebugFlags;
+
+import java.util.Map;
 
 /**
  * Damage Type Mechanics
@@ -14,7 +16,14 @@ import nightgames.global.DebugFlags;
  * Damage multiplier
  * 1 + (.03 * offensive power from source) - (.015 * defensive power sum from target)
  */
-// TODO: Resolve confusion between damage method (pleasure, tempt, strike, weaken) and damage flavor (stance, arcane, biological)
+// TODO: Resolve confusion between damage method (pleasure, tempt, strike, weaken) and damage flavor (stance, arcane, biological).
+// Damage methods:
+    // Would be handled via different methods in Character (drain(), arouse(), tempt(), hurt(), pleasure(), upkeep())
+    // Each would contain its own hooks for traits and statuses
+// Damage types:
+    // Represents what the damage looks like (arcane spell vs physical attack vs asphyxiation vs demonic energy)
+    // A single damage instance may have multiple types (a punch from a robot arm would be both physical and gadgetry)
+// Any damage type would be able to target any meter (stamina, arousal, mojo, willpower), and possibly any method would too
 public enum DamageType {
     pleasure, // Lust damage, usually through direct contact. Can trigger orgasm.
     temptation, // Lust damage, via teasing and tits. Does not trigger orgasm.
@@ -38,6 +47,26 @@ public enum DamageType {
      * @param target The character receiving the damage
      * @return The characters defensive power against the damage type
      */
+    public long getDefensivePower(Character target) {
+        Map<Attribute, Integer> attributeMap = target.getAttributes();
+        return Math.round(attributeMap.keySet().stream().mapToDouble(attribute -> attributeMap.get(attribute) * getDefensiveMultiplier(attribute)).sum());
+    }
+
+    public long getOffensivePower(Character source) {
+        Map<Attribute, Integer> attributeMap = source.getAttributes();
+        return Math.round(attributeMap.keySet().stream()
+                        .mapToDouble(attribute -> attributeMap.get(attribute) * getOffensiveMultiplier(attribute))
+                        .sum());
+    }
+
+    public double getDefensiveMultiplier(Attribute attribute) {
+        return AttributeValues.getDefensivePowerForAttribute(attribute, this);
+    }
+
+    public double getOffensiveMultiplier(Attribute attribute) {
+        return AttributeValues.getOffensivePowerForAttribute(attribute, this);
+    }
+    /* TODO: delete these comments after finding a new home for flavor justifications.
     public double getDefensivePower(Character target){
         switch (this) {
             // TODO: consider adding vulnerabilities
@@ -124,6 +153,7 @@ public enum DamageType {
                 return 0;
         }
     }
+     */
 
     /**
      * Every point of offensive power increases outgoing damage by 1%.
@@ -131,6 +161,7 @@ public enum DamageType {
      * @param source The character causing the damage
      * @return The character's offensive power of the damage type
      */
+    /*
     public double getOffensivePower(Character source){
         switch (this) {
             case biological:
@@ -219,6 +250,7 @@ public enum DamageType {
                 return 0;
         }
     }
+     */
 
     public double modifyDamage(Character source, Character target, double baseDamage) {
         // damage should be max capped to (2 * (100 + attacker's level * 1.5))%

@@ -333,6 +333,17 @@ public abstract class Character extends Observable implements Cloneable {
         return Math.max(0, total);
     }
 
+    /**
+     * Returns a read-only view of all of the character's current attributes, including temporary effects.
+     *
+     * @return The map of the character's attribute values.
+     */
+    public Map<Attribute, Integer> getAttributes() {
+        Map<Attribute, Integer> currentAttributes = Arrays.stream(Attribute.values()).filter(attribute -> this.get(attribute) != 0)
+                        .collect(Collectors.toMap(attribute -> attribute, this::get));
+        return Collections.unmodifiableMap(currentAttributes);
+    }
+
     public boolean has(ClothingTrait attribute) {
         return outfit.has(attribute);
     }
