@@ -1,14 +1,13 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
+
+import java.util.Optional;
 
 public class Collared extends Status implements Compulsive {
 
@@ -21,13 +20,8 @@ public class Collared extends Status implements Compulsive {
         flag(Stsflag.compelled);
         charges = 10;
         this.owner = owner;
-        charges = 15;
     }
 
-    public void spendCharges(Combat c, int amt) {
-        charges -= amt;
-    }
-    
     public void tick(Combat c) {
         if (charges <= 0) {
             c.write("<b>The collar around " + affected.nameOrPossessivePronoun() 
@@ -181,15 +175,14 @@ public class Collared extends Status implements Compulsive {
         switch (sit) {
             case PREVENT_ESCAPE:
             case PREVENT_STRUGGLE:
+            case PREVENT_REVERSAL:
             case STANCE_FLIP:
                 cost = 2;
                 break;
             case PREVENT_REMOVE_BOMB:
             case PUNISH_PAIN:
-                cost = 1;
-                break;
             default:
-                cost = 0;
+                cost = 1;
         }
         charges = Math.max(0, charges - cost);
     }
