@@ -93,7 +93,7 @@ public class Converted extends AttributeBuff {
         assert other.modded == modded;
         setDuration(Math.max(other.getDuration(), getDuration()));
         value += other.value;
-        name = String.format("%s->%s (%d)", converted.name(), modded.name(), value);
+        name = String.format("%s->%s (%d)", converted.displayName(), modded.displayName(), value);
     }
 
     @Override
