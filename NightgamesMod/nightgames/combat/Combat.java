@@ -1213,7 +1213,6 @@ public class Combat extends Observable implements Cloneable {
     }
 
     private void next() throws InterruptedException {
-        // TODO: ensure we only bother updating the GUI when we need input from the user. Then we can probably get rid of a lot of this stuff.
         boolean prompt = true;
         // NPCs only
         if (shouldAutoresolve()) {
@@ -1228,6 +1227,7 @@ public class Combat extends Observable implements Cloneable {
             prompt = false;
         }
         if (prompt) {
+            updateGUI();
             this.promptNext(gui);
         }
     }
@@ -1240,6 +1240,10 @@ public class Combat extends Observable implements Cloneable {
             target = p2;
         } else {
             target = p1;
+        }
+        phase = CombatPhase.RESULTS_SCENE;
+        if (p1.human() || p2.human() || intruder.human()) {
+            loadCombatGUI(gui);
         }
         if (target.resist3p(this, intruder, assist)) {
             target.gainXP(20 + target.lvlBonus(intruder));
@@ -1260,10 +1264,6 @@ public class Combat extends Observable implements Cloneable {
             intruder.intervene3p(this, target, assist);
             next();
             assist.victory3p(this, target, intruder);
-        }
-        phase = CombatPhase.RESULTS_SCENE;
-        if (p1.human() || p2.human() || intruder.human()) {
-            loadCombatGUI(gui);
         }
     }
 
