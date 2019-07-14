@@ -1621,7 +1621,7 @@ public abstract class Character extends Observable implements Cloneable {
             try {
                 Addiction addiction = Addiction.load(this, element.getAsJsonObject());
                 if (addiction != null) {
-                    status.add(addiction);
+                    statusList.add(addiction);
                 }
             } catch (Exception e) {
                 System.err.println("Failed to load status:");
