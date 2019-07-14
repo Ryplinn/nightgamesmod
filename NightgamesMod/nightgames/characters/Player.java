@@ -327,8 +327,8 @@ public class Player extends Character {
             master = ((Enthralled) getStatus(Stsflag.enthralled)).master;
             if (master != null) {
                 Move compelled = findPath(master.location());
-                gui.message("You feel an irresistible compulsion to head to the <b>" + master.location().name + "</b>");
                 if (compelled != null) {
+                    gui.message("You feel an irresistible compulsion to head to the <b>" + master.location().name + "</b>");
                     actionChoices.add(compelled);
                 }
             }
