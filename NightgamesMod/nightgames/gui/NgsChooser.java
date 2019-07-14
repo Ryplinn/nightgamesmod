@@ -10,11 +10,11 @@ import java.util.Optional;
 /**
  * Save file dialog specialized for .ngs files.
  */
-public class NgsChooser extends JFileChooser {
+class NgsChooser extends JFileChooser {
     private static final long serialVersionUID = 1726133121559035386L;
     private Component parent;
 
-    public NgsChooser(GUI gui) {
+    NgsChooser(GUI gui) {
         super("./");
         FileFilter savesFilter = new FileNameExtensionFilter("Nightgame Saves", "ngs");
         addChoosableFileFilter(savesFilter);
@@ -24,7 +24,10 @@ public class NgsChooser extends JFileChooser {
         this.parent = gui;
     }
 
-    public Optional<File> askForSaveFile() {
+    Optional<File> askForSaveFile(File lastFile) {
+        if (lastFile != null && getSelectedFile() == null) {
+            setSelectedFile(lastFile);
+        }
         int rv = showSaveDialog(parent);
 
         if (rv != JFileChooser.APPROVE_OPTION) {

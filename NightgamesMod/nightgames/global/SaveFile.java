@@ -20,6 +20,7 @@ import java.util.Optional;
  * Read and write SaveData to and from save files.
  */
 public class SaveFile {
+    private static File lastFile;
     static void autoSave() {
         if (Flag.checkFlag(Flag.autosave)) {
             save(new File("./auto.ngs"));
@@ -27,7 +28,7 @@ public class SaveFile {
     }
 
     public static void saveWithDialog() {
-        Optional<File> file = GUI.gui.askForSaveFile();
+        Optional<File> file = GUI.gui.askForSaveFile(lastFile);
         file.ifPresent(SaveFile::save);
     }
 
@@ -107,6 +108,7 @@ public class SaveFile {
             object = new JsonParser().parse(loader).getAsJsonObject();
         }
         System.out.println(String.format("Loaded game data from file %s", file.getName()));
+        lastFile = file;
         return new SaveData(object);
     }
 

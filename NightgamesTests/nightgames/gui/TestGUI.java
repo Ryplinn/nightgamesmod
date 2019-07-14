@@ -19,7 +19,7 @@ public class TestGUI extends GUI {
     }
 
     // Don't use save dialog in tests
-    @Override public Optional<File> askForSaveFile() {
+    @Override public Optional<File> askForSaveFile(File lastFile) {
         return Optional.empty();
     }
 

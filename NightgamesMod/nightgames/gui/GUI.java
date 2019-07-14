@@ -648,8 +648,8 @@ public class GUI extends JFrame implements Observer {
         }
     }
 
-    public Optional<File> askForSaveFile() {
-        return saveFileChooser.askForSaveFile();
+    public Optional<File> askForSaveFile(File lastSaveFile) {
+        return saveFileChooser.askForSaveFile(lastSaveFile);
     }
 
     // image loader
