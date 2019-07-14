@@ -12,7 +12,7 @@ import nightgames.global.Random;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.ArrayList;
@@ -226,8 +226,8 @@ public class JewelTime extends BaseNPCTime {
                             + " of licking me. That should be good enough.\" She shoves you towards and out of the door,"
                             + " leaving you standing in the hallway holding your shirt in your hands, to the great amusement"
                             + " of some of Jewel's neighbors. You hurriedly pull the shirt on and make your way out of the dorm.");
-            player.addict(null, AddictionType.DOMINANCE, npc, Addiction.MED_INCREASE);
-            player.getAddiction(AddictionType.DOMINANCE).ifPresent(Addiction::flagDaytime);
+            player.addict(null, AddictionType.DOMINANCE, npc, AddictionSymptom.MED_INCREASE);
+            player.getAddiction(AddictionType.DOMINANCE).ifPresent(AddictionSymptom::flagDaytime);
             choose("Leave", nextChoices);
         }
         switch (choice) {

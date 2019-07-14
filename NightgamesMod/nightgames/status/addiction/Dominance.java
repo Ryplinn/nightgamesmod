@@ -12,7 +12,7 @@ import nightgames.status.Stsflag;
 
 import java.util.Optional;
 
-public class Dominance extends Addiction {
+public class Dominance extends AddictionSymptom {
     private int originalWill;
 
     public Dominance(Character affected, String cause, float magnitude) {

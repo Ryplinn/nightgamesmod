@@ -7,7 +7,7 @@ import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.Optional;
@@ -45,7 +45,7 @@ public class WildThrust extends Thrust {
             c.write(getSelf(), Formatter.format("The sheer ferocity of {self:name-possessive} movements"
                             + " fill you with an unnatural desire to sate {self:possessive} thirst with"
                             + " your cum.", getSelf(), target));
-            target.addict(c, AddictionType.BREEDER, getSelf(), Addiction.LOW_INCREASE);
+            target.addict(c, AddictionType.BREEDER, getSelf(), AddictionSymptom.LOW_INCREASE);
         }
         return effective;
     }
@@ -67,16 +67,16 @@ public class WildThrust extends Thrust {
     }
 
     private void modBreeder(Combat c, Character p, Character target, int results[]) {
-        Optional<Addiction> addiction = p.getAddiction(AddictionType.BREEDER);
+        Optional<AddictionSymptom> addiction = p.getAddiction(AddictionType.BREEDER);
         if (!addiction.isPresent()) {
             return;
         }
 
-        Addiction add = addiction.get();
+        AddictionSymptom add = addiction.get();
         if (add.wasCausedBy(target)) {
             //Increased recoil vs Kat
             results[1] *= 1 + ((float) add.getSeverity().ordinal() / 3.f);
-            p.addict(c, AddictionType.BREEDER, target, Addiction.LOW_INCREASE);
+            p.addict(c, AddictionType.BREEDER, target, AddictionSymptom.LOW_INCREASE);
         } else {
             //Increased damage vs everyone else
             results[0] *= 1 + ((float) add.getSeverity().ordinal() / 3.f);

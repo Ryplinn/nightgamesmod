@@ -6,7 +6,7 @@ import nightgames.global.Flag;
 import nightgames.global.GameState;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +31,7 @@ public class AddictionRemoval extends Activity {
     public void visit(String choice, int page, List<LabeledValue<String>> nextChoices, ActivityInstance instance) {
         GUI.gui.clearText();
         GUI.gui.clearCommand();
-        Optional<Addiction> addiction = player.getStrongestAddiction();
+        Optional<AddictionSymptom> addiction = player.getStrongestAddiction();
         switch (choice) {
             case "Start":
                 GUI.gui.message("You walk to the place Aesop told you about "

@@ -15,7 +15,7 @@ import nightgames.status.*;
 
 import java.util.*;
 
-public class Corruption extends Addiction {
+public class Corruption extends AddictionSymptom {
     public Corruption(Character affected, String cause, float magnitude) {
         super(affected, "Corruption", cause, magnitude);
     }

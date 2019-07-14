@@ -4,7 +4,7 @@ import nightgames.characters.Character;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 @SuppressWarnings("unused")
@@ -45,7 +45,7 @@ public class Bite extends Skill {
                             + " you do realize you've sped up your thrusting and it does seem to feel even"
                             + " better than before.");            
         }
-        target.addict(c, AddictionType.BREEDER, getSelf(), Addiction.MED_INCREASE);
+        target.addict(c, AddictionType.BREEDER, getSelf(), AddictionSymptom.MED_INCREASE);
         
         return true;
     }

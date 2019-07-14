@@ -7,7 +7,7 @@ import nightgames.combat.Result;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.Stance;
 import nightgames.stance.StandingOver;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 public class Dive extends Skill {
@@ -44,7 +44,7 @@ public class Dive extends Skill {
 
         if (getSelf().checkAddiction(AddictionType.MIND_CONTROL, target)) {
             getSelf().unaddictCombat(AddictionType.MIND_CONTROL, 
-                            target, Addiction.LOW_INCREASE, c);
+                            target, AddictionSymptom.LOW_INCREASE, c);
             c.write(getSelf(), "Acting submissively voluntarily reduces Mara's control over " + getSelf().nameDirectObject());
         }
         return true;

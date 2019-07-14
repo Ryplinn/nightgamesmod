@@ -13,7 +13,7 @@ import nightgames.global.Random;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.ArrayList;
@@ -260,8 +260,8 @@ public class MaraTime extends BaseNPCTime {
                                 + " it's worth it?");
             }
             choose("Leave", nextChoices);
-            player.addict(null, AddictionType.MIND_CONTROL, npc, Addiction.MED_INCREASE);
-            player.getAddiction(AddictionType.MIND_CONTROL).ifPresent(Addiction::flagDaytime);
+            player.addict(null, AddictionType.MIND_CONTROL, npc, AddictionSymptom.MED_INCREASE);
+            player.getAddiction(AddictionType.MIND_CONTROL).ifPresent(AddictionSymptom::flagDaytime);
         }
         switch (choice) {
             case "Sex":

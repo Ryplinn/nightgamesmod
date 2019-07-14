@@ -13,7 +13,7 @@ import nightgames.status.Stsflag;
 
 import java.util.Optional;
 
-public class Breeder extends Addiction {
+public class Breeder extends AddictionSymptom {
     public Breeder(Character affected, String cause, float magnitude) {
         super(affected, "Breeder", cause, magnitude);
     }

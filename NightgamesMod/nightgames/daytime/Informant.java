@@ -8,7 +8,7 @@ import nightgames.global.Formatter;
 import nightgames.global.GameState;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 
 import java.util.HashMap;
 import java.util.List;
@@ -476,9 +476,9 @@ public class Informant extends Activity {
             GUI.gui.message(message.toString());
         }
         if (choice.equals("Help with Addiction")) {
-            Optional<Addiction> add = player.getStrongestAddiction();
+            Optional<AddictionSymptom> add = player.getStrongestAddiction();
             if (add.isPresent()) {
-                Addiction addiction = add.get();
+                AddictionSymptom addiction = add.get();
                 String message = "You tell Aesop about the feelings you've been having" + " lately, asking if he can do anything to help. <i>" + Formatter
                                 .format(addiction.informantsOverview(), addiction.affected, addiction.getCause());
                 if (!Flag.checkFlag(Flag.AddictionAdvice)) {

@@ -6,7 +6,7 @@ import nightgames.global.Random;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.items.clothing.ClothingTrait;
 import nightgames.status.*;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.*;
@@ -636,7 +636,7 @@ public enum Trait {
         });
         resistances.put(Trait.mindcontrolresistance, (combat, c, s) -> {
            if (s.mindgames() && combat != null && combat.getOpponent(c).has(Trait.mindcontroller)) {
-               float magnitude = c.getAddiction(AddictionType.MIND_CONTROL).map(Addiction::getMagnitude)
+               float magnitude = c.getAddiction(AddictionType.MIND_CONTROL).map(AddictionSymptom::getMagnitude)
                                                .orElse(0f);
                float threshold = 40 * magnitude;
                if (Random.random(100) < threshold) {

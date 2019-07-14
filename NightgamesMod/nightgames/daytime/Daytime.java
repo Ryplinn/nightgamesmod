@@ -7,7 +7,7 @@ import nightgames.characters.Player;
 import nightgames.global.*;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,8 +62,8 @@ public class Daytime {
 
     private void morning() {
         GUI.gui.clearText();
-        player.getAddictions().forEach(Addiction::clearDaytime);
-        player.getAddictions().stream().map(Addiction::describeMorning)
+        player.getAddictions().forEach(AddictionSymptom::clearDaytime);
+        player.getAddictions().stream().map(AddictionSymptom::describeMorning)
                         .map(description -> Formatter.format(description, player, null))
                         .forEach(s -> GUI.gui.message(s));
         if (eventMgr.playMorningScene()) {

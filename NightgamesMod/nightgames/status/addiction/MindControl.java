@@ -19,7 +19,7 @@ import nightgames.status.Stsflag;
 
 import java.util.Optional;
 
-public class MindControl extends Addiction {
+public class MindControl extends AddictionSymptom {
 
     public MindControl(Character affected, String cause, float magnitude) {
         super(affected, "Mind Control", cause, magnitude);

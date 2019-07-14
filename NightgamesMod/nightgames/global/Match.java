@@ -16,7 +16,7 @@ import nightgames.modifier.Modifier;
 import nightgames.skills.SkillPool;
 import nightgames.status.Status;
 import nightgames.status.Stsflag;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
@@ -287,7 +287,7 @@ public class Match {
                 character.add(Trait.masterheels);
             }
         }
-        GameState.gameState.characterPool.getPlayer().getAddictions().forEach(Addiction::endNight);
+        GameState.gameState.characterPool.getPlayer().getAddictions().forEach(AddictionSymptom::endNight);
         matchComplete.countDown();
     }
 
@@ -323,7 +323,7 @@ public class Match {
         condition.handleItems(player);
         condition.handleStatus(player);
         condition.handleTurn(player, this);
-        player.getAddictions().forEach(Addiction::refreshWithdrawal);
+        player.getAddictions().forEach(AddictionSymptom::refreshWithdrawal);
     }
 
     private int meanLvl() {

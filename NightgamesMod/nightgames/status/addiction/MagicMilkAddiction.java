@@ -13,7 +13,7 @@ import nightgames.status.Stsflag;
 
 import java.util.Optional;
 
-public class MagicMilkAddiction extends Addiction {
+public class MagicMilkAddiction extends AddictionSymptom {
     private int originalMaxWill;
 
     public MagicMilkAddiction(Character affected, String cause, float magnitude) {

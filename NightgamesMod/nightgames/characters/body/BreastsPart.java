@@ -12,7 +12,7 @@ import nightgames.items.clothing.ClothingSlot;
 import nightgames.status.AttributeBuff;
 import nightgames.status.Charmed;
 import nightgames.status.Stsflag;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 public class BreastsPart extends GenericBodyPart {
@@ -118,11 +118,11 @@ public class BreastsPart extends GenericBodyPart {
         if (self.has(Trait.lactating) && target.isType("mouth")) {
             if (self.has(Trait.magicmilk)) {
                 float addictionLevel;
-                Addiction addiction;
-                opponent.addict(c, AddictionType.MAGIC_MILK, self, Addiction.LOW_INCREASE);
+                AddictionSymptom addiction;
+                opponent.addict(c, AddictionType.MAGIC_MILK, self, AddictionSymptom.LOW_INCREASE);
                 addiction = opponent.getAddiction(AddictionType.MAGIC_MILK).get();
                 addictionLevel = addiction.getMagnitude();
-                if (addictionLevel < Addiction.LOW_THRESHOLD) {
+                if (addictionLevel < AddictionSymptom.LOW_THRESHOLD) {
                     // not addicted
                     c.write(opponent,
                                     Formatter.format("{self:NAME-POSSESSIVE} milk makes the blood surge from {other:name-possessive} head into {other:possessive} crotch, leaving {other:direct-object} light-headed and horny",
@@ -137,7 +137,7 @@ public class BreastsPart extends GenericBodyPart {
                     c.write(opponent,
                                     Formatter.format("As Cassie's milk dribbles down her breasts, you awake to a powerful need for her cream. Ignoring the potential aphrodisiac effectes, you quickly capture her nipples in your lips and relieve your parched throat with her delicious milk.",
                                                     self, opponent));
-                } else if (addictionLevel < Addiction.HIGH_THRESHOLD) {
+                } else if (addictionLevel < AddictionSymptom.HIGH_THRESHOLD) {
                     // dependent
                     c.write(opponent,
                                     Formatter.format("{other:NAME} desperately {other:action:suck|sucks} at {self:name-possessive} milky teats as soon as they're in front of {other:direct-object}. "
@@ -160,7 +160,7 @@ public class BreastsPart extends GenericBodyPart {
     
                 if (opponent.is(Stsflag.magicmilkcraving)) {
                     // temporarily relieve craving
-                    addiction.alleviateCombat(c, Addiction.LOW_INCREASE);
+                    addiction.alleviateCombat(c, AddictionSymptom.LOW_INCREASE);
                 }
                 if (c.getCombatantData(opponent) != null) {
                     int timesDrank = c.getCombatantData(opponent)

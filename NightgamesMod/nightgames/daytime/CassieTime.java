@@ -14,8 +14,8 @@ import nightgames.global.Random;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
-import nightgames.status.addiction.Addiction;
-import nightgames.status.addiction.Addiction.Severity;
+import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.AddictionSymptom.Severity;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.ArrayList;
@@ -395,8 +395,8 @@ public class CassieTime extends BaseNPCTime {
                 choose("Leave", nextChoices);
                 npc.gainAffection(player, 1);
                 player.gainAffection(npc, 1);
-                player.addict(null, AddictionType.MAGIC_MILK, npc, Addiction.MED_INCREASE);
-                player.getAddiction(AddictionType.MAGIC_MILK).ifPresent(Addiction::flagDaytime);
+                player.addict(null, AddictionType.MAGIC_MILK, npc, AddictionSymptom.MED_INCREASE);
+                player.getAddiction(AddictionType.MAGIC_MILK).ifPresent(AddictionSymptom::flagDaytime);
                 break;
             case "Sex":
                 if (npc.getAffection(player) >= 12 && (!player.has(Trait.silvertongue) || Random.random(2) == 1)) {

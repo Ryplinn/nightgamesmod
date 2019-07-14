@@ -14,7 +14,7 @@ import nightgames.global.GameState;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.ArrayList;
@@ -308,8 +308,8 @@ public class KatTime extends BaseNPCTime {
                                 + " that, is that a bad thing?");
             }
             choose("Leave", nextChoices);
-            player.addict(null, AddictionType.BREEDER, npc, Addiction.MED_INCREASE);
-            player.getAddiction(AddictionType.BREEDER).ifPresent(Addiction::flagDaytime);
+            player.addict(null, AddictionType.BREEDER, npc, AddictionSymptom.MED_INCREASE);
+            player.getAddiction(AddictionType.BREEDER).ifPresent(AddictionSymptom::flagDaytime);
         }
         if (choice.equals("Sex")) {
             GUI.gui.message("Kat sits on her bed and looks at you hesitantly, with red cheeks. <i>\"Are we going to... you know?\"</i> Despite her shy appearance, there's definitely "

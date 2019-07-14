@@ -11,7 +11,7 @@ import nightgames.global.Random;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.ArrayList;
@@ -351,8 +351,8 @@ public class ReykaTime extends BaseNPCTime {
                                     + " you head home. ");
                 }
                 choose("Leave", nextChoices);
-                player.addict(null, AddictionType.CORRUPTION, npc, Addiction.MED_INCREASE);
-                player.getAddiction(AddictionType.CORRUPTION).ifPresent(Addiction::flagDaytime);
+                player.addict(null, AddictionType.CORRUPTION, npc, AddictionSymptom.MED_INCREASE);
+                player.getAddiction(AddictionType.CORRUPTION).ifPresent(AddictionSymptom::flagDaytime);
                 break;
             case "Sex":
                 if (npc.getAffection(player) >= 8 && (!player.has(Trait.desensitized) || Random.random(2) == 1)) {

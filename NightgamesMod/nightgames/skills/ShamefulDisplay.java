@@ -9,7 +9,7 @@ import nightgames.combat.Result;
 import nightgames.global.Formatter;
 import nightgames.status.Horny;
 import nightgames.status.Shamed;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 public class ShamefulDisplay extends Skill {
@@ -43,7 +43,7 @@ public class ShamefulDisplay extends Skill {
         }
         if (getSelf().checkAddiction(AddictionType.MIND_CONTROL, target)) {
             getSelf().unaddictCombat(AddictionType.MIND_CONTROL, 
-                            target, Addiction.LOW_INCREASE, c);
+                            target, AddictionSymptom.LOW_INCREASE, c);
             c.write(getSelf(), "Acting submissively voluntarily reduces Mara's control over " + getSelf().nameDirectObject());
         }
         getSelf().add(c, new Shamed(getSelf()));

@@ -5,7 +5,7 @@ import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
 import nightgames.nskills.tags.SkillTag;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 public class DarkKiss extends Skill {
@@ -44,14 +44,14 @@ public class DarkKiss extends Skill {
                         + " has imbued you with stirs, and greedily draws %s willpower in through your connection, growing"
                         + " more powerful.", target.nameOrPossessivePronoun(), target.possessiveAdjective()));
 
-        Addiction add = getSelf().getAddiction(AddictionType.CORRUPTION).orElseThrow(() -> new SkillUnusableException(this));
+        AddictionSymptom add = getSelf().getAddiction(AddictionType.CORRUPTION).orElseThrow(() -> new SkillUnusableException(this));
         float mag = add.getMagnitude();
         int min = (int) (mag * 3);
         int mod = (int) (mag * 8);
         int amt = min + Random.random(mod);
         target.loseWillpower(c, amt, false);
-        add.alleviateCombat(c, Addiction.HIGH_INCREASE);
-        getSelf().addict(c, AddictionType.CORRUPTION, add.getCause(), Addiction.LOW_INCREASE);
+        add.alleviateCombat(c, AddictionSymptom.HIGH_INCREASE);
+        getSelf().addict(c, AddictionType.CORRUPTION, add.getCause(), AddictionSymptom.LOW_INCREASE);
         return true;
     }
 

@@ -12,7 +12,7 @@ public enum AddictionType {
     ;
     
     interface AddictionConstructor {
-        Addiction construct(Character affected, String supplier, Float magnitude);
+        AddictionSymptom construct(Character affected, String supplier, Float magnitude);
     }
     
     private final AddictionConstructor constructor;
@@ -21,11 +21,11 @@ public enum AddictionType {
         this.constructor = constructor;
     }
 
-    public Addiction build(Character affected, String cause) {
+    public AddictionSymptom build(Character affected, String cause) {
         return build(affected, cause, .01f);
     }
     
-    public Addiction build(Character affected, String cause, float mag) {
+    public AddictionSymptom build(Character affected, String cause, float mag) {
         return constructor.construct(affected, cause, mag);
     }
 }

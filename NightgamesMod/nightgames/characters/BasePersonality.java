@@ -16,8 +16,8 @@ import nightgames.global.*;
 import nightgames.items.Item;
 import nightgames.skills.Skill;
 import nightgames.start.NpcConfiguration;
-import nightgames.status.addiction.Addiction;
-import nightgames.status.addiction.Addiction.Severity;
+import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.AddictionSymptom.Severity;
 import nightgames.utilities.MathUtils;
 
 import java.util.*;
@@ -89,7 +89,7 @@ public abstract class BasePersonality implements Personality {
                 character.body.add(part.applyMod(preferredCockMod));
             }
         }
-        for (Addiction addiction : character.getAddictions()) {
+        for (AddictionSymptom addiction : character.getAddictions()) {
             if (addiction.atLeast(Severity.LOW)) {
                 Character cause = addiction.getCause();
                 int affection = character.getAffection(cause);
@@ -99,7 +99,7 @@ public abstract class BasePersonality implements Personality {
                 double chanceToDoDaytime = .25 + (addiction.getMagnitude() / 2) + MathUtils
                                 .clamp((affectionDelta / (10 + Math.sqrt(Time.getDate()) * 5)), -.7, .7);
                 if (Random.randomdouble() < chanceToDoDaytime) {
-                    addiction.aggravate(null, Addiction.MED_INCREASE);
+                    addiction.aggravate(null, AddictionSymptom.MED_INCREASE);
                     addiction.flagDaytime();
                     character.gainAffection(cause, 1);
                     DebugFlags.DEBUG_ADDICTION

@@ -12,8 +12,8 @@ import nightgames.stance.StandingOver;
 import nightgames.status.BodyFetish;
 import nightgames.status.CockBound;
 import nightgames.status.Stsflag;
-import nightgames.status.addiction.Addiction;
-import nightgames.status.addiction.Addiction.Severity;
+import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.AddictionSymptom.Severity;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.Optional;
@@ -39,11 +39,11 @@ public class PullOut extends Skill {
         if (!user.human()) {
             return false;
         }
-        Optional<Addiction> addiction = user.getAddiction(AddictionType.BREEDER);
+        Optional<AddictionSymptom> addiction = user.getAddiction(AddictionType.BREEDER);
         if (!addiction.isPresent()) {
             return false;
         }
-        Addiction add = addiction.get();
+        AddictionSymptom add = addiction.get();
         return add.atLeast(Severity.HIGH) || add.combatAtLeast(Severity.HIGH);
     }
 

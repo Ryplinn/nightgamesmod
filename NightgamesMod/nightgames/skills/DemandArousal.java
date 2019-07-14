@@ -7,7 +7,7 @@ import nightgames.combat.Result;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.status.Hypersensitive;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 public class DemandArousal extends Skill {
@@ -34,7 +34,7 @@ public class DemandArousal extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        Addiction addict = target.getAddiction(AddictionType.MIND_CONTROL)
+        AddictionSymptom addict = target.getAddiction(AddictionType.MIND_CONTROL)
                             .get();
         int dmg = (int) ((20 + Random.randomdouble() * 20) * addict.getMagnitude());
         float alleviation;
@@ -51,7 +51,7 @@ public class DemandArousal extends Skill {
                                 + " skin becomes incredibly sensitive. Once {self:name} has stopped speaking,"
                                 + " {other:pronoun-action:are|is} aroused out of {other:possessive} mind."
                                 , getSelf(), target);
-                alleviation = Addiction.MED_INCREASE;
+                alleviation = AddictionSymptom.MED_INCREASE;
                 target.add(c, new Hypersensitive(target, 2));
                 break;
             case LOW:
@@ -62,13 +62,13 @@ public class DemandArousal extends Skill {
                                 + " {self:subject-action:speak|speaks}.", getSelf(), target,
                                 target.hasDick() ? "dick getting hard" : target.hasPussy()
                                                 ? "pussy getting wet" : "nipples tingling");
-                alleviation = Addiction.LOW_INCREASE;
+                alleviation = AddictionSymptom.LOW_INCREASE;
                 break;
             case MED:
                 msg = Formatter.format("resonate powerfully in your mind. \"<i>You are getting"
                                 + " very excited, {other:name}. Your {other:main-genitals} obey me."
                                 + " You </i>will<i> cum for me, {other:name}.</i>\"", getSelf(), target);
-                alleviation = Addiction.MED_INCREASE * .67f;
+                alleviation = AddictionSymptom.MED_INCREASE * .67f;
                 break;
             case NONE:
             default:

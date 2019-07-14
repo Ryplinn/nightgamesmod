@@ -13,7 +13,7 @@ import nightgames.global.Random;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.ArrayList;
@@ -255,9 +255,9 @@ public class AngelTime extends BaseNPCTime {
                 }
                 choose("Leave", nextChoices);
                 player
-                                .addict(null, AddictionType.ZEAL, npc, Addiction.MED_INCREASE);
+                                .addict(null, AddictionType.ZEAL, npc, AddictionSymptom.MED_INCREASE);
                 player.getAddiction(AddictionType.ZEAL)
-                                .ifPresent(Addiction::flagDaytime);
+                                .ifPresent(AddictionSymptom::flagDaytime);
                 break;
             case "Sex":
                 if (npc.getAffection(player) >= 12 && (!player.has(Trait.experttongue) || Random.random(2) == 1)) {

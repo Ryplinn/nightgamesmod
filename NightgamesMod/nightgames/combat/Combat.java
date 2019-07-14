@@ -26,8 +26,8 @@ import nightgames.stance.*;
 import nightgames.status.*;
 import nightgames.status.Stunned;
 import nightgames.status.Compulsive.Situation;
-import nightgames.status.addiction.Addiction;
-import nightgames.status.addiction.Addiction.Severity;
+import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.AddictionSymptom.Severity;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.*;
@@ -145,7 +145,7 @@ public class Combat extends Observable implements Cloneable {
                 }
             }
         });
-        if (self.has(Trait.zealinspiring) && other.getAddiction(AddictionType.ZEAL).map(Addiction::isInWithdrawal).orElse(false)) {
+        if (self.has(Trait.zealinspiring) && other.getAddiction(AddictionType.ZEAL).map(AddictionSymptom::isInWithdrawal).orElse(false)) {
             self.add(this, new DivineCharge(self, .3));
         }
         if (self.has(Trait.suave) && !other.hasDick()) {
@@ -602,11 +602,11 @@ public class Combat extends Observable implements Cloneable {
 
         if (self.has(Trait.mindcontroller)) {
             Collection<Clothing> infra = self.outfit.getArticlesWithTrait(ClothingTrait.infrasound);
-            float magnitude = infra.size() * (Addiction.LOW_INCREASE / 6);
+            float magnitude = infra.size() * (AddictionSymptom.LOW_INCREASE / 6);
             if (magnitude > 0) {
                 other.addict(this, AddictionType.MIND_CONTROL, self, magnitude);
                 if (Random.random(3) == 0) {
-                    Addiction add = other.getAddiction(AddictionType.MIND_CONTROL).orElse(null);
+                    AddictionSymptom add = other.getAddiction(AddictionType.MIND_CONTROL).orElse(null);
                     Clothing source = (Clothing) infra.toArray()[0];
                     boolean knows = (add != null && add.atLeast(Severity.MED)) || other.get(Attribute.cunning) >= 30
                                     || other.get(Attribute.science) >= 10;
@@ -905,7 +905,7 @@ public class Combat extends Observable implements Cloneable {
         }
 
         Character other = getStance().getPartner(this, self);
-        Addiction add = other.getAddiction(AddictionType.DOMINANCE).orElse(null);
+        AddictionSymptom add = other.getAddiction(AddictionType.DOMINANCE).orElse(null);
         if (add != null && add.atLeast(Severity.MED) && !add.wasCausedBy(self)) {
             write(self, Formatter.format("{self:name} does {self:possessive} best to be dominant, but with the "
                         + "way Jewel has been working {self:direct-object} over {self:pronoun-action:are} completely desensitized." , self, other));
@@ -1207,7 +1207,7 @@ public class Combat extends Observable implements Cloneable {
                                     + " psyche finds strangely appealing. {self:SUBJECT-ACTION:find} {self:reflective}"
                                     + " wanting more.", p, other));
                 }
-                p.addict(this, AddictionType.DOMINANCE, other, Addiction.HIGH_INCREASE);
+                p.addict(this, AddictionType.DOMINANCE, other, AddictionSymptom.HIGH_INCREASE);
             }
         }
     }
@@ -1527,12 +1527,12 @@ public class Combat extends Observable implements Cloneable {
                 write(checked, "As you enter Kat, instinct immediately kicks in. It just"
                                 + " feels so right, like this is what you're supposed"
                                 + " to be doing all the time.");
-                checked.addict(this, AddictionType.BREEDER, opp, Addiction.MED_INCREASE);
+                checked.addict(this, AddictionType.BREEDER, opp, AddictionSymptom.MED_INCREASE);
             } else {
                 write(checked, "Something shifts inside of you as Kat fills herself with"
                                 + " you. A haze descends over your mind, clouding all but a desire"
                                 + " to fuck her as hard as you can.");
-                checked.addict(this, AddictionType.BREEDER, opp, Addiction.LOW_INCREASE);
+                checked.addict(this, AddictionType.BREEDER, opp, AddictionSymptom.LOW_INCREASE);
             }
         }
     }

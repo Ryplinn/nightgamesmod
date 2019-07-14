@@ -7,8 +7,8 @@ import nightgames.combat.Result;
 import nightgames.global.Formatter;
 import nightgames.status.HypnoVisor;
 import nightgames.status.Stsflag;
-import nightgames.status.addiction.Addiction;
-import nightgames.status.addiction.Addiction.Severity;
+import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.AddictionSymptom.Severity;
 import nightgames.status.addiction.AddictionType;
 
 public class HypnoVisorPlace extends Skill {
@@ -65,7 +65,7 @@ public class HypnoVisorPlace extends Skill {
     }
     
     private boolean isInWithdrawal(Character target) {
-        Addiction add = target.getAddiction(AddictionType.MIND_CONTROL).orElse(null);
+        AddictionSymptom add = target.getAddiction(AddictionType.MIND_CONTROL).orElse(null);
         return add != null && add.atLeast(Severity.LOW) && add.isInWithdrawal();
     }
 

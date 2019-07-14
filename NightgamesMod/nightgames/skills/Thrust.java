@@ -12,7 +12,7 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.damage.Staleness;
 import nightgames.stance.Stance;
 import nightgames.status.BodyFetish;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 public class Thrust extends Skill {
@@ -86,12 +86,12 @@ public class Thrust extends Skill {
         mt = target.modRecoilPleasure(c, mt);
 
         if (getSelf().checkAddiction(AddictionType.BREEDER, target)) {
-            float bonus = .3f * getSelf().getAddiction(AddictionType.BREEDER).map(Addiction::getCombatSeverity)
+            float bonus = .3f * getSelf().getAddiction(AddictionType.BREEDER).map(AddictionSymptom::getCombatSeverity)
                             .map(Enum::ordinal).orElse(0);
             mt += mt * bonus;
         }
         if (target.checkAddiction(AddictionType.BREEDER, getSelf())) {
-            float bonus = .3f * target.getAddiction(AddictionType.BREEDER).map(Addiction::getCombatSeverity)
+            float bonus = .3f * target.getAddiction(AddictionType.BREEDER).map(AddictionSymptom::getCombatSeverity)
                             .map(Enum::ordinal).orElse(0);
             m += m * bonus;
         }

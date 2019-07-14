@@ -18,7 +18,7 @@ import nightgames.status.Status;
 import javax.naming.OperationNotSupportedException;
 import java.util.Optional;
 
-public class ZealAddiction extends Addiction {
+public class ZealAddiction extends AddictionSymptom {
 
     private boolean shouldApplyDivineCharge;
     

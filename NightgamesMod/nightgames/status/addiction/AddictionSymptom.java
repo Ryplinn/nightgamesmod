@@ -3,7 +3,6 @@ package nightgames.status.addiction;
 import com.google.gson.JsonObject;
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
-import nightgames.global.DebugFlags;
 import nightgames.global.Formatter;
 import nightgames.global.GameState;
 import nightgames.global.Random;
@@ -15,7 +14,11 @@ import java.util.Optional;
 
 import static nightgames.global.DebugFlags.DEBUG_ADDICTION;
 
-public abstract class Addiction extends Status {
+// TODO: Addictions should have their own overarching game concept.
+// Treating them as regular statuses is leading to some wonkiness. Their combat effects should still be statuses, of course.
+// In particular, combat effects that require the presence of the addiction's cause should only apply when the cause is in the combat.
+// FIXME: Stop prostrating in front of Angel when fighting Samantha.
+public abstract class AddictionSymptom extends Status {
 
     public static final float LOW_INCREASE = .03f;
     public static final float MED_INCREASE = .08f;
@@ -35,7 +38,7 @@ public abstract class Addiction extends Status {
 
     protected boolean inWithdrawal;
 
-    protected Addiction(Character affected, String name, String cause, float magnitude) {
+    protected AddictionSymptom(Character affected, String name, String cause, float magnitude) {
         super(name, affected);
         flag(Stsflag.permanent);
         this.name = name;
@@ -47,7 +50,7 @@ public abstract class Addiction extends Status {
         overloading = false;
     }
 
-    protected Addiction(Character affected, String name, String cause) {
+    protected AddictionSymptom(Character affected, String name, String cause) {
         this(affected, name, cause, .01f);
     }
     
@@ -260,7 +263,7 @@ public abstract class Addiction extends Status {
         GUI.gui.message(describeIncrease());
     }
 
-    public static Addiction load(Character self, JsonObject object) {
+    public static AddictionSymptom load(Character self, JsonObject object) {
         String cause = object.get("cause").getAsString();
         if (cause == null) {
             return null;
@@ -270,7 +273,7 @@ public abstract class Addiction extends Status {
         float combat = object.get("combat").getAsFloat();
         boolean overloading = object.get("overloading").getAsBoolean();
         boolean reenforced = object.get("reenforced").getAsBoolean();
-        Addiction a = type.build(self, cause, mag);
+        AddictionSymptom a = type.build(self, cause, mag);
         a.magnitude = mag;
         a.combatMagnitude = combat;
         a.overloading = overloading;
@@ -292,7 +295,7 @@ public abstract class Addiction extends Status {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        Addiction addiction = (Addiction) o;
+        AddictionSymptom addiction = (AddictionSymptom) o;
 
         if (Float.compare(addiction.magnitude, magnitude) != 0)
             return false;

@@ -5,7 +5,7 @@ import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
 import nightgames.global.GameState;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 public class Pray extends Skill {
@@ -40,7 +40,7 @@ public class Pray extends Skill {
         int amt = Math.round((getSelf().getAddiction(AddictionType.ZEAL)
                         .orElseThrow(() -> new SkillUnusableException(this)).getMagnitude() * 8));
         getSelf().restoreWillpower(c, amt);
-        getSelf().addict(c, AddictionType.ZEAL, GameState.gameState.characterPool.getCharacterByType("Angel"), Addiction.LOW_INCREASE);
+        getSelf().addict(c, AddictionType.ZEAL, GameState.gameState.characterPool.getCharacterByType("Angel"), AddictionSymptom.LOW_INCREASE);
         return true;
     }
 

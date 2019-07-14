@@ -9,7 +9,7 @@ import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.status.Charmed;
 import nightgames.status.Stsflag;
-import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 public class Beg extends Skill {
@@ -54,7 +54,7 @@ public class Beg extends Skill {
                 target.add(c, new Charmed(target));
             }
             if (getSelf().checkAddiction(AddictionType.MIND_CONTROL, target)) {
-                getSelf().unaddictCombat(AddictionType.MIND_CONTROL, target, Addiction.LOW_INCREASE, c);
+                getSelf().unaddictCombat(AddictionType.MIND_CONTROL, target, AddictionSymptom.LOW_INCREASE, c);
                 c.write(getSelf(), "Acting submissively voluntarily reduces Mara's control over " + getSelf().nameDirectObject());
             }
             return true;
