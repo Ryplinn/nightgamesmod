@@ -1,6 +1,7 @@
 package nightgames.gui;
 
 import nightgames.characters.Character;
+import nightgames.global.Time;
 import nightgames.pet.PetCharacter;
 
 import java.awt.*;
@@ -99,6 +100,16 @@ public enum GUIColor {
             return GUIColor.PLAYER_AUTONOMOUS_LIMB;
         } else {
             return GUIColor.NPC_AUTONOMOUS_LIMB;
+        }
+    }
+
+    public static GUIColor timeTextColor(Time time) {
+        if (time == Time.NIGHT) {
+            return CLOCK_NIGHT;
+        } else if (time == Time.DAY) {
+            return CLOCK_DAY;
+        } else {
+            return TEXT_LIGHT;
         }
     }
 
