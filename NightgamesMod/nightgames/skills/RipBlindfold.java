@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -9,7 +10,7 @@ import nightgames.status.Stsflag;
 
 public class RipBlindfold extends Skill {
 
-    public RipBlindfold(Character self) {
+    RipBlindfold(CharacterType self) {
         super("Rip Blindfold", self);
     }
 
@@ -74,7 +75,7 @@ public class RipBlindfold extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new RipBlindfold(user);
+        return new RipBlindfold(user.getType());
     }
 
     @Override

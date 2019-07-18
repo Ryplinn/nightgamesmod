@@ -7,10 +7,8 @@ import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
-import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
-
-import java.util.Optional;
 
 public class DivineCharge extends Status {
     public double magnitude;
@@ -45,7 +43,7 @@ public class DivineCharge extends Status {
         if (c != null) {
             Character opponent = c.getOpponent(affected);
             if (!c.getStance().havingSex(c, affected) && !(affected.has(Trait.zealinspiring)
-                            && !opponent.getAddiction(AddictionType.ZEAL).map(AddictionSymptom::isInWithdrawal).orElse(false))) {
+                            && !opponent.getAddiction(AddictionType.ZEAL, affected).map(Addiction::isInWithdrawal).orElse(false))) {
                 magnitude = magnitude / 2;
                 c.write(affected, "The holy energy seeps out of " + affected.nameDirectObject() + ".");
                 if (magnitude < .05f)

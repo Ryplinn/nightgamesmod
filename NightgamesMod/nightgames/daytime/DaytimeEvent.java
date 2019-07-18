@@ -1,20 +1,19 @@
 package nightgames.daytime;
 
+import nightgames.characters.Character;
+import nightgames.global.GameState;
+import nightgames.global.Random;
+import nightgames.gui.GUI;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import nightgames.characters.Character;
-import nightgames.global.Random;
-import nightgames.gui.GUI;
-
 abstract class DaytimeEvent {
 
-    protected Character player;
     private List<EventVariation> scenes;
     
-    protected DaytimeEvent(Character player) {
-        this.player = player;
+    protected DaytimeEvent() {
         scenes = new ArrayList<>();
     }
     
@@ -72,7 +71,11 @@ abstract class DaytimeEvent {
     protected abstract Optional<String> getMorningReason();
     protected abstract void play(String response);
 
-    
+    protected Character getPlayer() {
+        return GameState.getGameState().characterPool.getPlayer();
+    }
+
+
     protected class EventVariation {
         private String name;
         private int priority;

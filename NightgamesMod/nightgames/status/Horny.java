@@ -3,6 +3,7 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -15,14 +16,14 @@ public class Horny extends DurationStatus {
     private float magnitude;
     protected String source;
 
-    public static Status getWithPsycologicalType(Character from, Character target, float magnitude, int duration, String source) {
-        return new Horny(target, (float) DamageType.temptation.modifyDamage(from, target, magnitude), duration, source);
+    public static Status getWithPsychologicalType(Character from, Character target, float magnitude, int duration, String source) {
+        return new Horny(target.getType(), (float) DamageType.temptation.modifyDamage(from, target, magnitude), duration, source);
     }
     public static Horny getWithBiologicalType(Character from, Character target, float magnitude, int duration, String source) {
-        return new Horny(target, (float) DamageType.biological.modifyDamage(from, target, magnitude), duration, source);
+        return new Horny(target.getType(), (float) DamageType.biological.modifyDamage(from, target, magnitude), duration, source);
     }
     
-    public Horny(Character affected, float magnitude, int duration, String source) {
+    public Horny(CharacterType affected, float magnitude, int duration, String source) {
         super("Horny", affected, duration);
         this.source = source;
         this.magnitude = magnitude;
@@ -38,11 +39,11 @@ public class Horny extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
-            return "Your heart pounds in your chest as you try to surpress your arousal from contacting " + source
+        if (getAffected().human()) {
+            return "Your heart pounds in your chest as you try to suppress your arousal from contacting " + source
                             + ".";
         } else {
-            return affected.getName() + " is flushed and "+affected.possessiveAdjective()
+            return getAffected().getName() + " is flushed and "+getAffected().possessiveAdjective()
             +" nipples are noticeably hard from contacting " + source + ".";
         }
     }
@@ -65,8 +66,8 @@ public class Horny extends DurationStatus {
 
     @Override
     public void tick(Combat c) {
-        affected.arouse(Math.round(magnitude), c, " (" + source + ")");
-        affected.emote(Emotion.horny, 20);
+        getAffected().arouse(Math.round(magnitude), c, " (" + source + ")");
+        getAffected().emote(Emotion.horny, 20);
     }
 
     @Override
@@ -76,7 +77,8 @@ public class Horny extends DurationStatus {
 
     @Override
     public String initialMessage(Combat c, Optional<Status> replacement) {
-        return String.format("%s %saroused by %s.\n", affected.subjectAction("are", "is"), replacement.isPresent() ? "" : "now ",
+        return String.format("%s%s aroused by %s.\n", getAffected().subjectAction("are", "is"),
+                        replacement == null ? " now" : "",
                         source + " (" + Formatter.formatDecimal(magnitude) + " x " + getDuration() + ")");
     }
 
@@ -151,7 +153,7 @@ public class Horny extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Horny(newAffected, magnitude, getDuration(), source);
+        return new Horny(newAffected.getType(), magnitude, getDuration(), source);
     }
 
     @Override  public JsonObject saveToJson() {

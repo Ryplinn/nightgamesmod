@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -10,7 +11,7 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.Stance;
 
 public class Suckle extends Skill {
-    public Suckle(Character self) {
+    public Suckle(CharacterType self) {
         super("Suckle", self);
         addTag(SkillTag.usesMouth);
         addTag(SkillTag.pleasure);

@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.arms.skills.Grab;
@@ -24,7 +25,7 @@ import java.util.Optional;
 
 public class Struggle extends Skill {
 
-    public Struggle(Character self) {
+    public Struggle(CharacterType self) {
         super("Struggle", self);
         addTag(SkillTag.positioning);
         addTag(SkillTag.escaping);
@@ -164,7 +165,7 @@ public class Struggle extends Skill {
             return true;
         } else {
             getSelf().struggle();
-            c.getStance().struggle(c, getSelf());
+            c.struggle(getSelf(), c.getStance());
             return false;
         }
     }
@@ -173,7 +174,7 @@ public class Struggle extends Skill {
         int diffMod = 0;
         Character partner;
         if (c.getStance().sub(getSelf())) {
-            partner = c.getStance().domSexCharacter(c);
+            partner = c.getStance().getDomSexCharacter();
         } else {
             partner = c.getStance().bottom;
         }
@@ -227,7 +228,7 @@ public class Struggle extends Skill {
             return true;
         } else {
             getSelf().struggle();
-            c.getStance().struggle(c, getSelf());
+            c.struggle(getSelf(), c.getStance());
             return false;
         }
     }
@@ -253,7 +254,7 @@ public class Struggle extends Skill {
             return true;
         } else {
             getSelf().struggle();
-            c.getStance().struggle(c, getSelf());
+            c.struggle(getSelf(), c.getStance());
             return false;
         }
     }

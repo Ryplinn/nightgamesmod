@@ -1,11 +1,11 @@
 package nightgames.stance;
 
-import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
 public class Smothering extends FaceSitting {
-    public Smothering(Character top, Character bottom) {
+    public Smothering(CharacterType top, CharacterType bottom) {
         super(top, bottom, Stance.smothering);
     }
     
@@ -16,6 +16,6 @@ public class Smothering extends FaceSitting {
 
     @Override
     public String describe(Combat c) {
-        return Formatter.format("{self:SUBJECT-ACTION:sit|sits} on {other:name-possessive} face, with {self:possessive} round ass fully encompassing {other:possessive} view. {other:SUBJECT} cannot even breathe except for the short pauses when {self:subject-action:allow|allows} {other:direct-object} to by lifting {self:possessive} ass.", top, bottom);
+        return Formatter.format("{self:SUBJECT-ACTION:sit|sits} on {other:name-possessive} face, with {self:possessive} round ass fully encompassing {other:possessive} view. {other:SUBJECT} cannot even breathe except for the short pauses when {self:subject-action:allow|allows} {other:direct-object} to by lifting {self:possessive} ass.", getTop(), getBottom());
     }
 }

@@ -23,14 +23,14 @@ public class VibrationModifier extends BaseModifier {
 
     @Override
     public String intro() {
-        if (GameState.gameState.characterPool.getPlayer().hasDick()) {
-            return "<i>\"Do you like toys, " + GameState.gameState.characterPool.getPlayer().getTrueName()
+        if (GameState.getGameState().characterPool.getPlayer().hasDick()) {
+            return "<i>\"Do you like toys, " + GameState.getGameState().characterPool.getPlayer().getTrueName()
                             + "? I thought of a way to make your matches harder that you'll still enjoy.\"</i> She holds up a small plastic ring. "
                             + "<i>\"Vibrating cock-ring,\"</i> she explains. <i>\"I'll give you a $" + bonus()
                             + " for each fight you win while this little fellow keeps you horny and ready to "
                             + "burst.\"</i>";
-        } else if (GameState.gameState.characterPool.getPlayer().hasPussy()) {
-            return "<i>\"Do you like toys, " + GameState.gameState.characterPool.getPlayer().getTrueName()
+        } else if (GameState.getGameState().characterPool.getPlayer().hasPussy()) {
+            return "<i>\"Do you like toys, " + GameState.getGameState().characterPool.getPlayer().getTrueName()
                             + "? I thought of a way to make your matches harder that you'll still enjoy.\"</i> She holds up a small plastic ring. "
                             + "<i>\"Vibrating clit-ring,\"</i> she explains. <i>\"I'll give you a $" + bonus()
                             + " for each fight you win while this little fellow keeps you horny and ready to "
@@ -41,7 +41,7 @@ public class VibrationModifier extends BaseModifier {
 
     @Override
     public String acceptance() {
-        if (GameState.gameState.characterPool.getPlayer().hasDick()) {
+        if (GameState.getGameState().characterPool.getPlayer().hasDick()) {
             return "You agree to Lilly's rule and reach out to take the cock-ring, but she shakes her head. <i>\"I need to put it on you to make sure it's positioned correctly. Don't worry, "
                             + "you don't need to undress.\"</i> She steps close to you and slips her hand down the front of your pants and underwear. Her fingers dexterously manipulate your dick as she "
                             + "manuevers the ring onto it. From her expression, it looks like she's concentrating on her task rather than trying to entice you, but her closeness and her touch still "
@@ -50,7 +50,7 @@ public class VibrationModifier extends BaseModifier {
                             + "have to endure this for three hours? <i>\"The intensity will automatically modulate to keep you from going numb, but after a few minutes, you'll partially adapt to it. "
                             + "I'll hang onto the remote during the match.\"</i> She hits the button again and the vibration stops. <i>\"If this ends up making you cum, I won't be offended if you think "
                             + "about me.\"</i>";
-        } else if (GameState.gameState.characterPool.getPlayer().hasPussy()) {
+        } else if (GameState.getGameState().characterPool.getPlayer().hasPussy()) {
             return "You agree to Lilly's rule and reach out to take the clit-ring, but she shakes her head. <i>\"I need to put it on you to make sure it's positioned correctly. Don't worry, "
                             + "you don't need to undress.\"</i> She steps close to you and slips her hand down the front of your waistband and underwear. Her fingers dexterously teases your nub as she "
                             + "manuevers the ring onto it. From her expression, it looks like she's concentrating on her task rather than trying to entice you, but her closeness and her touch still "
@@ -65,6 +65,6 @@ public class VibrationModifier extends BaseModifier {
 
     @Override
     public boolean isApplicable() {
-        return GameState.gameState.characterPool.getPlayer().hasDick() || GameState.gameState.characterPool.getPlayer().hasPussy();
+        return GameState.getGameState().characterPool.getPlayer().hasDick() || GameState.getGameState().characterPool.getPlayer().hasPussy();
     }
 }

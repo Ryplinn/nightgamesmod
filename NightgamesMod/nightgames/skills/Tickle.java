@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -15,7 +16,7 @@ import nightgames.status.Hypersensitive;
 import nightgames.status.Winded;
 
 public class Tickle extends Skill {
-    public Tickle(Character self) {
+    public Tickle(CharacterType self) {
         // tickle has higher decay but pretty fast recovery
         super("Tickle", self, 0, Staleness.build().withDefault(1.0).withFloor(.5).withDecay(.15).withRecovery(.20));
         addTag(SkillTag.weaken);
@@ -53,7 +54,7 @@ public class Tickle extends Skill {
                     bonus += 2;
                     weak += 2;
                 }
-                if (hastickler()) {
+                if (hasTickler()) {
                     result = Result.strong;
                     bonus += 5 + Random.random(4);
                     weak += 3 + Random.random(4);
@@ -69,7 +70,7 @@ public class Tickle extends Skill {
                     }
                 }
                 if (result == Result.special) {
-                    target.add(c, new Hypersensitive(target, 5));
+                    target.add(c, new Hypersensitive(target.getType(), 5));
                 }
                 if (target.has(Trait.ticklish)) {
                     bonus = 4 + Random.random(3);
@@ -80,7 +81,7 @@ public class Tickle extends Skill {
                 target.body.pleasure(getSelf(), getSelf().body.getRandom("hands"), target.body.getRandom("skin"),
                                 (int) type.modifyDamage(getSelf(), target, 2 + Random.random(4)), bonus, c, false, this);
                 target.weaken(c, (int) type.modifyDamage(getSelf(), target, weak + Random.random(10, 15)));
-            } else if (hastickler() && Random.random(2) == 1) {
+            } else if (hasTickler() && Random.random(2) == 1) {
                 type = DamageType.gadgets;
                 int bonus = 0;
                 if (target.breastsAvailable() && c.getStance().reachTop(getSelf())) {
@@ -135,7 +136,7 @@ public class Tickle extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Tickle(user);
+        return new Tickle(user.getType());
     }
 
     @Override
@@ -213,7 +214,7 @@ public class Tickle extends Skill {
         return "Tickles opponent, weakening and arousing her. More effective if she's nude";
     }
 
-    private boolean hastickler() {
+    private boolean hasTickler() {
         return getSelf().has(Item.Tickler) || getSelf().has(Item.Tickler2);
     }
 

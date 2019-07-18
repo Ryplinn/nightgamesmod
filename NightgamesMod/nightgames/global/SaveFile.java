@@ -33,7 +33,7 @@ public class SaveFile {
     }
 
     public static void save(File file) {
-        save(file, new SaveData(GameState.gameState));
+        save(file, new SaveData(GameState.getGameState()));
     }
 
     public static void save(File file, SaveData data) {
@@ -110,6 +110,10 @@ public class SaveFile {
         System.out.println(String.format("Loaded game data from file %s", file.getName()));
         lastFile = file;
         return new SaveData(object);
+    }
+
+    static File getLastFile() {
+        return lastFile;
     }
 
     public static class SaveFileException extends Throwable {

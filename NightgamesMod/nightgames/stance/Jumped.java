@@ -6,6 +6,8 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.skills.damage.DamageType;
 
+import java.util.Optional;
+
 public class Jumped extends FemdomSexStance {
     public Jumped(Character top, Character bottom) {
         super(top, bottom, Stance.standing);
@@ -71,7 +73,7 @@ public class Jumped extends FemdomSexStance {
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return new Neutral(top, bottom);
     }
 
@@ -82,19 +84,20 @@ public class Jumped extends FemdomSexStance {
     }
 
     @Override
-    public void checkOngoing(Combat c) {
+    public Optional<Position> checkOngoing(Combat c) {
         if (bottom.getStamina().get() < 2 && !top.has(Trait.petite)) {
             if (bottom.human()) {
                 c.write("Your legs give out and you fall on the floor. " + top.getName() + " lands heavily on your lap.");
-                c.setStance(new Cowgirl(top, bottom));
+                return Optional.of(new Cowgirl(top, bottom));
             } else {
                 c.write(Formatter.format("{other:SUBJECT-ACTION:lose} {other:possessive} balance and {other:action:fall},"
                                 + " pulling {self:name-do} down on top of {other:direct-object}.", top, bottom));
-                c.setStance(new Cowgirl(top, bottom));
+                return Optional.of(new Cowgirl(top, bottom));
             }
         } else {
             super.checkOngoing(c);
         }
+        return null;
     }
 
     @Override

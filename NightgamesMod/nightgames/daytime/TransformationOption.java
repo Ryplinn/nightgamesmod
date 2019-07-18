@@ -26,12 +26,10 @@ public class TransformationOption {
 
     public TransformationOption() {
         option = "";
-        ingredients = new HashMap<Item, Integer>();
+        ingredients = new HashMap<>();
         moneyCost = c -> 0;
         scene = "";
         requirements = new ArrayList<>();
-        effect = (c, self, other) -> {
-            return true;
-        };
+        effect = (c, self, other) -> true;
     }
 }

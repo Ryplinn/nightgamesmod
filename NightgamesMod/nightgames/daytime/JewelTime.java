@@ -12,7 +12,7 @@ import nightgames.global.Random;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
-import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.ArrayList;
@@ -23,8 +23,8 @@ import static nightgames.requirements.RequirementShortcuts.*;
 
 @SuppressWarnings("unused")
 public class JewelTime extends BaseNPCTime {
-    JewelTime(Player player) {
-        super(player, GameState.gameState.characterPool.getNPC("Jewel"));
+    JewelTime() {
+        super(GameState.getGameState().characterPool.getNPC("Jewel"));
         knownFlag = "JewelKnown";
         giftedString = "\"Thanks! You're pretty nice you know?\"";
         giftString = "\"A present? I'm not going to go easy on you even if you bribe me you know?\"";
@@ -125,7 +125,7 @@ public class JewelTime extends BaseNPCTime {
 
     @Override
     public void subVisitIntro(String choice, List<LabeledValue<String>> nextChoices) {
-        if (npc.getAffection(player) > 0) {
+        if (npc.getAffection(getPlayer()) > 0) {
             GUI.gui.message("You plan to intercept Jewel on her run again, but when you get to the gardens, you find her already there, sitting on a low stone wall. She smiles "
                             + "when she sees you and stands up to meet you. Apparently she was waiting for you, but you hadn't made plans to meet. How long was she waiting here?<br/><i>\"I just got here a "
                             + "few minutes ago. I had a feeling you were going to come here to see me. I've learned to always trust my intuition.\"</i> Her instincts are impressive and apparently convenient. "
@@ -133,12 +133,12 @@ public class JewelTime extends BaseNPCTime {
             choose("Games", nextChoices);
             choose("Sparring", nextChoices);
             choose("Sex", nextChoices);
-            if (player.checkAddiction(AddictionType.DOMINANCE, npc)) {
+            if (getPlayer().checkAddiction(AddictionType.DOMINANCE, npc)) {
                 choose("Ask about Dominance", nextChoices);
             }
-        } else if (npc.getAttraction(player) < 15) {
+        } else if (npc.getAttraction(getPlayer()) < 15) {
             GUI.gui.message("You wait by the campus gardens, which according to Aesop, is on Jewel's jogging route. Sure enough, she comes running by within ten minutes and "
-                            + "calls out to you when she notices you. <i>\"Hey " + player.getTrueName()
+                            + "calls out to you when she notices you. <i>\"Hey " + getPlayer().getTrueName()
                             + ". It's good to see you. Are you here to train too?\"</i> She's not breathing particularly heavily and there's only "
                             + "a subtle touch of sweat on her skin, so presumably you've caught her early in her run. You could pretend to have run into her by coincidence, but "
                             + "you decide to be honest and tell her you were hoping to train with her. She raises an eyebrow and looks over you appraisingly. <i>\"I wouldn't mind having a running partner, "
@@ -148,8 +148,8 @@ public class JewelTime extends BaseNPCTime {
                             + "I'll give you some motivation. If you can keep up with me until the end, I'll let you feel me up as much as you want.\"</i><br/><br/>That's certainly a tempting offer, but keeping up is "
                             + "quickly becoming more of a problem. Jewel keeps speeding up, probably caught up in her competitive spirit. After a few minutes more struggling to keep pace, you have to admit defeat. Jewel "
                             + "looks disappointed, but gives you a light smack on the butt and a <i>\"Thanks for trying\"</i> before she continues on her run.");
-            npc.gainAttraction(player, 2);
-            player.gainAttraction(npc, 2);
+            npc.gainAttraction(getPlayer(), 2);
+            getPlayer().gainAttraction(npc, 2);
         } else {
             GUI.gui.message("You look around the campus and manage to catch Jewel while she's preparing for her run. She's doing stretches in a tight workout outfit that shows "
                             + "off her midriff and legs. She sees you and gives you a friendly wave as you approach. You greet her and suggest spending some time training together. <i>\"I was just about "
@@ -159,8 +159,8 @@ public class JewelTime extends BaseNPCTime {
                             + "getting laid could be considered training, since sexual technique and endurance are both essential to victory in sex fights.<br/><br/>She mulls over this idea, cheeks slightly "
                             + "flushed imagining it. She's clearly interested, so you decide to give her one last push. You lightly brush a hand over her exposed midriff and teasingly ask if she is up for "
                             + "more one-on-one competition. She shivers at your touch and kisses you firmly. <i>\"You know exactly how to make me wet. I'll accept your challenge anytime.\"</i>");
-            npc.gainAffection(player, 1);
-            player.gainAffection(npc, 1);
+            npc.gainAffection(getPlayer(), 1);
+            getPlayer().gainAffection(npc, 1);
             choose("Games", nextChoices);
             choose("Sparring", nextChoices);
             choose("Sex", nextChoices);
@@ -195,7 +195,7 @@ public class JewelTime extends BaseNPCTime {
                             + "swept out from under you. You fall hard on your back, and Jewel less-than-gracefully"
                             + " drops herself onto your chest, knocking the wind out of you. Before you can even"
                             + " catch your breath, Jewel finishes pulling off your shirt and attaches two ropes to"
-                            + " your wrists. <br/><br/>\"Right over here, " + player.boyOrGirl() + ".\" She gets up and uses the ropes to"
+                            + " your wrists. <br/><br/>\"Right over here, " + getPlayer().boyOrGirl() + ".\" She gets up and uses the ropes to"
                             + " drag you to the couch, attaching the ropes to its legs. While you test how much "
                             + "movement you still have, Jewel finishes her work by tying your ankles to other "
                             + "furniture. Now spread-eagled on your back, the near future is looking rather bleak. "
@@ -211,7 +211,7 @@ public class JewelTime extends BaseNPCTime {
                             + " to enjoy it. Jewel grinds on your face until the fire in your balls finally dies "
                             + "down. \"Why aren't you whimpering anymore? I guess if you're not going to do that, "
                             + "you have no use for any air.\" Pulling her panties aside, she sits down right over your"
-                            + " mouth and nose. \"You'd best show some enthousiasm if you want another breath!\" You "
+                            + " mouth and nose. \"You'd best show some enthusiasm if you want another breath!\" You "
                             + "do. You suck on her lips and circle your tongue around whatever it can reach. Despite "
                             + "the fact that you're doing the best you can, Jewel does not stop. After half a minute "
                             + "you are getting quite desperate, but it's not until the last moment that Jewel rises "
@@ -226,13 +226,13 @@ public class JewelTime extends BaseNPCTime {
                             + " of licking me. That should be good enough.\" She shoves you towards and out of the door,"
                             + " leaving you standing in the hallway holding your shirt in your hands, to the great amusement"
                             + " of some of Jewel's neighbors. You hurriedly pull the shirt on and make your way out of the dorm.");
-            player.addict(null, AddictionType.DOMINANCE, npc, AddictionSymptom.MED_INCREASE);
-            player.getAddiction(AddictionType.DOMINANCE).ifPresent(AddictionSymptom::flagDaytime);
+            getPlayer().addict(null, AddictionType.DOMINANCE, npc, Addiction.MED_INCREASE);
+            getPlayer().getAddiction(AddictionType.DOMINANCE, npc).ifPresent(Addiction::flagDaytime);
             choose("Leave", nextChoices);
         }
         switch (choice) {
             case "Sex":
-                if (npc.getAffection(player) >= 16 && (!player.has(Trait.spiral) || Random.random(2) == 1)) {
+                if (npc.getAffection(getPlayer()) >= 16 && (!getPlayer().has(Trait.spiral) || Random.random(2) == 1)) {
                     GUI.gui.message("Jewel leads you to her bedroom instead of the wilderness for once. She seems unusually eager and almost like she could break into skipping at any time. "
                                     + "She's always been as fond of sex as the next girl, but this is uncharacteristic. You eventually decide to ask her if anything special is happening today. <i>\"Hmm? Well, "
                                     + "I guess I have some pretty high expectations for you today. Your sexual prowess has always been above average, but my instincts are telling me that you're capable of "
@@ -261,9 +261,9 @@ public class JewelTime extends BaseNPCTime {
                                     + "Your already overstimulated cock rubs against Jewel's vaginal walls and she screams in pleasure even as you ejaculate into her. For some reason the words 'Giga Drill Break' come "
                                     + "unbidden to your mind, but you resist the urge to yell. It takes Jewel a lot longer to recover from this orgasm, but when she does she smiles contently. <i>\"That was even better than I "
                                     + "expected.\"</i>");
-                    if (!player.has(Trait.spiral)) {
+                    if (!getPlayer().has(Trait.spiral)) {
                         GUI.gui.message("<br/><br/><b>You've learned to harness the awesome power that has laid dormant in your soul... maybe. You've at least learned to move your hips a lot during sex.</b>");
-                        player.add(Trait.spiral);
+                        getPlayer().add(Trait.spiral);
                         npc.getGrowth().addTrait(0, Trait.spiral);
                     }
                 } else {
@@ -290,12 +290,12 @@ public class JewelTime extends BaseNPCTime {
                                     + "head back.\"</i>");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.seduction);
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
+                Daytime.train(getPlayer(), npc, Attribute.seduction);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
                 break;
             case "Games":
-                if (npc.getAffection(player) >= 8 && (!player.has(Trait.fearless) || Random.random(2) == 1)) {
+                if (npc.getAffection(getPlayer()) >= 8 && (!getPlayer().has(Trait.fearless) || Random.random(2) == 1)) {
                     GUI.gui.message("Today you've brought a wargame to appeal to Jewel's love of military history. You let her play the Allies, both because her father is a soldier and because the "
                                     + "Allies are on offense in this scenario. She advances all her troops from the start, taking heavy casualties, but stealing a couple victory point locations from you. You bide "
                                     + "your time, not worried yet. You are being pushed back, but you're retreating into more defensible positions. More importantly, Jewel will start pulling back her damaged units "
@@ -311,9 +311,9 @@ public class JewelTime extends BaseNPCTime {
                                     + "on a real battlefield. <i>\"This isn't a real battlefield,\"</i> she retorts. She points to one of the troops in her casualty pile. <i>\"This is a piece of plastic, not a person with parents, "
                                     + "kids, or a spouse. In a game, the only thing that matters is victory. When you lose a piece, no one has to cry over a friend or family member's grave. You can't treat war like a game, "
                                     + "and likewise you can't treat a game like war.\"</i><br/><br/>She stands up and practically drags you out of your chair. <i>\"Enough serious talk. Strip and get on the bed. I'm on top today.\"</i>");
-                    if (!player.has(Trait.fearless)) {
+                    if (!getPlayer().has(Trait.fearless)) {
                         GUI.gui.message("<br/><br/><b>Jewel has taught you a valuable lesson in reckless determination.</b>");
-                        player.add(Trait.fearless);
+                        getPlayer().add(Trait.fearless);
                         npc.getGrowth().addTrait(0, Trait.fearless);
                     }
                 } else {
@@ -324,12 +324,12 @@ public class JewelTime extends BaseNPCTime {
                                     + "off your clothes. Honestly, as far as problems go, you could do much worse.");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.cunning);
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
+                Daytime.train(getPlayer(), npc, Attribute.cunning);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
                 break;
             case "Sparring":
-                if (npc.getAffection(player) >= 12 && (!player.has(Trait.dirtyfighter) || Random.random(2) == 1)) {
+                if (npc.getAffection(getPlayer()) >= 12 && (!getPlayer().has(Trait.dirtyfighter) || Random.random(2) == 1)) {
                     GUI.gui.message("Your martial arts training has finally reached the point where Jewel is willing to spar with you seriously. She's all business when it comes to sparring. There "
                                     + "are no sex holds and no stripping. The only victory condition is to make your opponent admit defeat. Jewel darts in with a snap-kick, which you barely manage to block, and "
                                     + "ducks out of the way of your counter. In theory, neither of you is trying to actually hurt the other, but if you miss a block she won't be able to pull the punch in time. "
@@ -344,9 +344,9 @@ public class JewelTime extends BaseNPCTime {
                                     + "were flat on their backs, so they aimed right for Carthage's balls. Speaking of which...\"</i> She slides her hand down the front of your pants to lightly grasp your testicles. "
                                     + "<i>\"You haven't given up yet. Should I assume you want to keep fighting?\"</i> You hastily concede before your situation becomes any more painful. She breathes lustily in your ear and "
                                     + "fondles your penis. <i>\"Try to recover quickly. I need this in me as soon as possible.\"</i>");
-                    if (!player.has(Trait.dirtyfighter)) {
+                    if (!getPlayer().has(Trait.dirtyfighter)) {
                         GUI.gui.message("<br/><br/><b>You've learned the hard way that kicks can be dangerous, even when you're down.</b>");
-                        player.add(Trait.dirtyfighter);
+                        getPlayer().add(Trait.dirtyfighter);
                         npc.getGrowth().addTrait(0, Trait.dirtyfighter);
                     }
                 } else {
@@ -365,15 +365,15 @@ public class JewelTime extends BaseNPCTime {
                                     + "but you feel a faint sense of solidarity with them, even though Jewel let them keep their panties on.");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.power);
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
+                Daytime.train(getPlayer(), npc, Attribute.power);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
                 break;
         }
     }
 
     @Override
     public Optional<String> getAddictionOption() {
-        return player.checkAddiction(AddictionType.DOMINANCE) ? Optional.of("Ask about Dominance") : Optional.empty();
+        return getPlayer().checkAnyAddiction(AddictionType.DOMINANCE) ? Optional.of("Ask about Dominance") : Optional.empty();
     }
 }

@@ -2,6 +2,7 @@ package nightgames.stance;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -14,20 +15,22 @@ import nightgames.status.Drained;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 
-public class FaceSitting extends AbstractBehindStance {
-    FaceSitting(Character top, Character bottom, Stance en) {
+public class FaceSitting extends Position {
+    FaceSitting(CharacterType top, CharacterType bottom, Stance en) {
         super(top, bottom, en);
+        facingType = FacingType.BEHIND;
     }
-    public FaceSitting(Character top, Character bottom) {
-        super(top, bottom, Stance.facesitting);
+    public FaceSitting(CharacterType top, CharacterType bottom) {
+        this(top, bottom, Stance.facesitting);
     }
 
     @Override
     public String describe(Combat c) {
-        return Formatter.capitalizeFirstLetter(top.subjectAction("are", "is")) + " sitting on "
-                        + bottom.nameOrPossessivePronoun() + " face while holding " + bottom.possessiveAdjective()
-                        + " arms so " + bottom.subject() + " cannot escape";
+        return Formatter.capitalizeFirstLetter(getTop().subjectAction("are", "is")) + " sitting on "
+                        + getBottom().nameOrPossessivePronoun() + " face while holding " + getBottom().possessiveAdjective()
+                        + " arms so " + getBottom().subject() + " cannot escape";
     }
 
     @Override
@@ -37,15 +40,15 @@ public class FaceSitting extends AbstractBehindStance {
 
     @Override
     public boolean mobile(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
     public String image() {
-        if (!top.useFemalePronouns()) {
+        if (!getTop().useFemalePronouns()) {
             return "facesitting_m.jpg";
         }
-        if (top.hasPussy() && bottom.hasPussy()) {
+        if (getTop().hasPussy() && getBottom().hasPussy()) {
             return "facesitting_ff.jpg";
         }
         return "facesitting.jpg";
@@ -53,52 +56,52 @@ public class FaceSitting extends AbstractBehindStance {
 
     @Override
     public boolean kiss(Character c, Character target) {
-        return target == top && c != bottom;
+        return target.getType() == top && c.getType() != bottom;
     }
 
     @Override
     public boolean facing(Character c, Character target) {
-        return c != bottom && target != bottom;
+        return c.getType() != bottom && target.getType() != bottom;
     }
 
     @Override
     public boolean dom(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
     public boolean sub(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
     public boolean reachTop(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
     public boolean reachBottom(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
     public boolean prone(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
     public boolean feet(Character c, Character target) {
-        return target == bottom;
+        return target.getType() == bottom;
     }
 
     @Override
     public boolean oral(Character c, Character target) {
-        return (c == bottom && target == top) || (target == bottom && c != top);
+        return (c.getType() == bottom && target.getType() == top) || (target.getType() == bottom && c.getType() != top);
     }
 
     @Override
     public boolean behind(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
@@ -107,29 +110,29 @@ public class FaceSitting extends AbstractBehindStance {
     }
 
     @Override
-    public Position insert(Combat c, Character pitcher, Character dom) {
+    public Optional<Position> insert(Combat c, Character pitcher, Character dom) {
         Character catcher = getPartner(c, pitcher);
         Character sub = getPartner(c, pitcher);
         if (pitcher.body.getRandomInsertable() == null || !catcher.hasPussy()) {
             // invalid
             return this;
         }
-        if (pitcher == dom && pitcher == top) {
+        if (pitcher == dom && pitcher.getType() == top) {
             // guy is sitting on girl's face facing her feet, and is the
             // dominant one in the new stance
             return new UpsideDownMaledom(pitcher, catcher);
         }
-        if (pitcher == sub && pitcher == top) {
+        if (pitcher == sub && pitcher.getType() == top) {
             // guy is sitting on girl's face facing her feet, and is the
             // submissive one in the new stance
             return Cowgirl.similarInstance(catcher, pitcher);
         }
-        if (pitcher == dom && pitcher == bottom) {
+        if (pitcher == dom && pitcher.getType() == bottom) {
             // girl is sitting on guy's face facing his feet, and is the
             // submissive one in the new stance
             return new Doggy(pitcher, catcher);
         }
-        if (pitcher == sub && pitcher == bottom) {
+        if (pitcher == sub && pitcher.getType() == bottom) {
             // girl is sitting on guy's face facing his feet, and is the
             // dominant one in the new stance
             return new ReverseCowgirl(catcher, pitcher);
@@ -140,38 +143,38 @@ public class FaceSitting extends AbstractBehindStance {
     @Override
     public void decay(Combat c) {
         time++;
-        bottom.weaken(c, (int) DamageType.stance.modifyDamage(top, bottom, 5));
-        top.emote(Emotion.dominant, 20);
-        top.emote(Emotion.horny, 10);
-        if (top.has(Trait.energydrain)) {
-            c.write(top, Formatter.format(
+        getBottom().weaken(c, (int) DamageType.stance.modifyDamage(getTop(), getBottom(), 5));
+        getTop().emote(Emotion.dominant, 20);
+        getTop().emote(Emotion.horny, 10);
+        if (getTop().has(Trait.energydrain)) {
+            c.write(getTop(), Formatter.format(
                             "{self:NAME-POSSESSIVE} body glows purple as {other:subject-action:feel|feels}"
                             + " {other:possessive} very spirit drained through %s connection.",
-                            top, bottom, c.bothPossessive(bottom)));
+                            getTop(), getBottom(), c.bothPossessive(getBottom())));
             int m = Random.random(5) + 5;
-            bottom.drain(c, top, (int) DamageType.drain.modifyDamage(top, bottom, m), Character.MeterType.STAMINA);
+            getBottom().drain(c, getTop(), (int) DamageType.drain.modifyDamage(getTop(), getBottom(), m), Character.MeterType.STAMINA);
         }
-        if (top.has(Trait.drainingass)) {
+        if (getTop().has(Trait.drainingass)) {
             if (Random.random(3) == 0) {
-                c.write(top, Formatter.format("{self:name-possessive} ass seems to <i>inhale</i>, drawing"
+                c.write(getTop(), Formatter.format("{self:name-possessive} ass seems to <i>inhale</i>, drawing"
                                 + " great gouts of {other:name-possessive} strength from {other:possessive}"
-                                + " body.", top, bottom));
-                bottom.drain(c, top, top.getLevel(), Character.MeterType.STAMINA);
-                Drained.drain(c, top, bottom, Attribute.power, 3, 10, true);
+                                + " body.", getTop(), getBottom()));
+                getBottom().drain(c, getTop(), getTop().getLevel(), Character.MeterType.STAMINA);
+                Drained.drain(c, getTop(), getBottom(), Attribute.power, 3, 10, true);
             } else {
-                c.write(top, Formatter.format("{other:SUBJECT-ACTION:feel} both {other:possessive} breath and energy being stolen by {self:NAME-POSSESSIVE} ass overlapping {other:POSSESSIVE} face."
-                                + " .", top, bottom));
-                bottom.drain(c, top, top.getLevel()/2, Character.MeterType.STAMINA);
+                c.write(getTop(), Formatter.format("{other:SUBJECT-ACTION:feel} both {other:possessive} breath and energy being stolen by {self:NAME-POSSESSIVE} ass overlapping {other:POSSESSIVE} face."
+                                + " .", getTop(), getBottom()));
+                getBottom().drain(c, getTop(), getTop().getLevel()/2, Character.MeterType.STAMINA);
             }
         }
     }
 
     @Override
     public Collection<Skill> availSkills(Combat c, Character self) {
-        if (self != bottom) {
+        if (self.getType() != bottom) {
             return Collections.emptySet();
         } else {
-            Collection<Skill> avail = new HashSet<Skill>();
+            Collection<Skill> avail = new HashSet<>();
             avail.add(new Cunnilingus(bottom));
             avail.add(new Anilingus(bottom));
             avail.add(new Blowjob(bottom));
@@ -185,17 +188,17 @@ public class FaceSitting extends AbstractBehindStance {
 
     @Override
     public float priorityMod(Character self) {
-        return getSubDomBonus(self, top.has(Trait.energydrain) ? 5.0f : 3.0f);
+        return getSubDomBonus(self, getTop().has(Trait.energydrain) ? 5.0f : 3.0f);
     }
 
     @Override
     public boolean faceAvailable(Character target) {
-        return target == top;
+        return target.getType() == top;
     }
 
     @Override
     public double pheromoneMod(Character self) {
-        if (self == top) {
+        if (self.getType() == top) {
             return 10;
         }
         return 2;
@@ -211,31 +214,30 @@ public class FaceSitting extends AbstractBehindStance {
     }
 
     public boolean isFaceSitting(Character self) {
-        return self == top;
+        return self.getType() == top;
     }
 
     public boolean isFacesatOn(Character self) {
-        return self == bottom;
+        return self.getType() == bottom;
     }
 
     @Override
     public void struggle(Combat c, Character struggler) {
         if (struggler.human()) {
-            c.write(struggler, "You try to free yourself from " + top.getName()
+            c.write(struggler, "You try to free yourself from " + getTop().getName()
                             + ", but she drops her ass over your face again, forcing you to service her.");
-        } else if (c.shouldPrintReceive(top, c)) {
+        } else if (c.shouldPrintReceive(getTop(), c)) {
             c.write(struggler, String.format("%s struggles against %s, but %s %s %s ass "
                             + "over %s face again, forcing %s to service %s.", struggler.subject(),
-                            top.nameDirectObject(), top.pronoun(), top.action("drop"),
-                            top.possessiveAdjective(), struggler.possessiveAdjective(),
-                            struggler.directObject(), top.directObject()));
+                            getTop().nameDirectObject(), getTop().pronoun(), getTop().action("drop"),
+                            getTop().possessiveAdjective(), struggler.possessiveAdjective(),
+                            struggler.directObject(), getTop().directObject()));
         }
-        if (top.hasPussy() && !top.has(Trait.temptingass)) {
-            new Cunnilingus(struggler).resolve(c, top);
+        if (getTop().hasPussy() && !getTop().has(Trait.temptingass)) {
+            new Cunnilingus(struggler.getType()).resolve(c, getTop());
         } else {
-            new Anilingus(struggler).resolve(c, top);
+            new Anilingus(struggler.getType()).resolve(c, getTop());
         }
-        super.struggle(c, struggler);
     }
 
     @Override
@@ -243,7 +245,6 @@ public class FaceSitting extends AbstractBehindStance {
         c.write(escapee, Formatter.format(
                         "{self:SUBJECT-ACTION:try} to escape {other:name-possessive} hold, but with"
                                         + " {other:direct-object} behind {self:direct-object} with {other:possessive} long legs wrapped around {self:possessive} waist securely, there is nothing {self:pronoun} can do.",
-                        escapee, top));
-        super.escape(c, escapee);
+                        escapee, getTop()));
     }
 }

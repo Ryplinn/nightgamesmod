@@ -10,38 +10,38 @@ import java.util.Optional;
 public class Threesomes extends DaytimeEvent {
 
     Threesomes(Character player) {
-        super(player);
-        if (GameState.gameState.characterPool.getNPC("Cassie")
+        super();
+        if (GameState.getGameState().characterPool.getNPC("Cassie")
                   .getAffection(player) >= 20
-                        && GameState.gameState.characterPool.getNPC("Jewel")
+                        && GameState.getGameState().characterPool.getNPC("Jewel")
                                  .getAffection(player) >= 20
-                        && GameState.gameState.characterPool.getNPC("Jewel")
-                                 .getAffection(GameState.gameState.characterPool.getNPC("Cassie")) >= 5) {
+                        && GameState.getGameState().characterPool.getNPC("Jewel")
+                                 .getAffection(GameState.getGameState().characterPool.getNPC("Cassie")) >= 5) {
                         //TODO && GameState.getValue(Flag.CassieDWV) >= 5) {
             register("CassieJewel", 5);
         }
-        if (GameState.gameState.characterPool.getNPC("Mara")
+        if (GameState.getGameState().characterPool.getNPC("Mara")
                   .getAffection(player) >= 20
-                        && GameState.gameState.characterPool.getNPC("Jewel")
+                        && GameState.getGameState().characterPool.getNPC("Jewel")
                                  .getAffection(player) >= 20
-                        && GameState.gameState.characterPool.getNPC("Jewel")
-                                 .getAffection(GameState.gameState.characterPool.getNPC("Mara")) >= 5) {
+                        && GameState.getGameState().characterPool.getNPC("Jewel")
+                                 .getAffection(GameState.getGameState().characterPool.getNPC("Mara")) >= 5) {
             register("MaraJewel", 5);
         }
-        if (GameState.gameState.characterPool.getNPC("Mara")
+        if (GameState.getGameState().characterPool.getNPC("Mara")
                   .getAffection(player) >= 15
-                        && GameState.gameState.characterPool.getNPC("Angel")
+                        && GameState.getGameState().characterPool.getNPC("Angel")
                                  .getAffection(player) >= 15
-                        && GameState.gameState.characterPool.getNPC("Angel")
-                                 .getAffection(GameState.gameState.characterPool.getNPC("Mara")) >= 10) {
+                        && GameState.getGameState().characterPool.getNPC("Angel")
+                                 .getAffection(GameState.getGameState().characterPool.getNPC("Mara")) >= 10) {
             register("AngelMara", 5);
         }
-        if (GameState.gameState.characterPool.getNPC("Mara")
+        if (GameState.getGameState().characterPool.getNPC("Mara")
                   .getAffection(player) >= 15
-                        && GameState.gameState.characterPool.getNPC("Cassie")
+                        && GameState.getGameState().characterPool.getNPC("Cassie")
                                  .getAffection(player) >= 15
-                        && GameState.gameState.characterPool.getNPC("Cassie")
-                                 .getAffection(GameState.gameState.characterPool.getNPC("Mara")) >= 10) {
+                        && GameState.getGameState().characterPool.getNPC("Cassie")
+                                 .getAffection(GameState.getGameState().characterPool.getNPC("Mara")) >= 10) {
             register("CassieMara", 5);
         }
     }
@@ -58,10 +58,10 @@ public class Threesomes extends DaytimeEvent {
                                       + "stock of the situation. You can't turn your head far enough to see her face, but based on her build and the bright red hair you can see out of the corner of your eye, "
                                       + "your attacker is probably Jewel.<br/><br/>"
                                       + "<i>\"Boy acquired!\"</i> You hear her call out. Cassie steps into the room, looking nervous and apologetic. <br/><i>\"I still don't know "
-                                      + "what this accomplishes. It's not like " + player.getTrueName()
+                                      + "what this accomplishes. It's not like " + getPlayer().getTrueName()
                                       + " was avoiding us. We could have just knocked on the door. Also you should be careful with what you're holding. "
                                       + "Those are a couple of anatomically vital parts.\"</i> <br/>You hear Jewel chuckle as she gently plays with your sack. <i>\"Don't worry. I'm being very nice to all "
-                                      + "of " + player.getTrueName()
+                                      + "of " + getPlayer().getTrueName()
                                       + "'s parts, aren't I?\"</i> She's enjoying herself so much she's practically purring in your ear. <br/><br/>"
                                       + "You don't mind indulging Jewel and Cassie a "
                                       + "bit, since you trust them not to do anything really bad, but it would be nice to know what is going on. Cassie fidgets awkwardly. <i>\"I'm not entirely sure. It's "
@@ -70,13 +70,13 @@ public class Threesomes extends DaytimeEvent {
                                       + "so troubled, she was practically in tears.\"</i> Cassie starts to sputter out a protest, but Jewel continues. <i>\"She's been lonely since you're not spending time "
                                       + "with her. How could I refuse a lonely maiden, neglected by her beloved?\"</i> Has it been that long since you went to visit Cassie? You hadn't realized. You'll "
                                       + "need to make it up to her, but Cassie was right, this could have been resolved by just talking to you. <i>\"The reason I captured "
-                                      + player.getTrueName() + " like this is because "
+                                      + getPlayer().getTrueName() + " like this is because "
                                       + "it's not enough to wait for someone to give you what you want. You need to take it.\"</i> You can't see her face, but she's clearly talking to Cassie now. <i>\"Come "
-                                      + "here. Get a good grip on " + player.getTrueName()
+                                      + "here. Get a good grip on " + getPlayer().getTrueName()
                                       + "'s 'vital parts'.\"</i> Cassie kneels over you and hesitantly grasps your balls. <i>\"Now he'll listen to whatever you say. Claim "
                                       + "him and he'll be all yours.\"</i><br/><br/>"
                                       + "<i>\"What?!\"</i> Cassie looks at Jewel in shock. <i>\"That's incredibly coercive. I don't want "
-                                      + player.getTrueName() + " to pay attention to me "
+                                      + getPlayer().getTrueName() + " to pay attention to me "
                                       + "just because I threatened to hurt him. Besides, what about you and the other girls? Right before you came here, you were telling me that you like him too. How would you "
                                       + "feel if I tried to monopolize him?\"</i><br/><br/>"
                                       + "Jewel moves enough that you can see her face. She's got a confident grin and a challenging gleam in her eye. <i>\"You can try to monopolize him all you want. Me and the "
@@ -96,7 +96,7 @@ public class Threesomes extends DaytimeEvent {
                                       + "she likes you too. Do you mind if she joins in?\"</i> <br/>"
                                       + "Jewel looks hesitant for the first time. <i>\"Are you sure? The point of this was to give you two some alone time. I can wait.\"</i><br/>"
                                       + "Cassie shakes her head. <i>\"I just said I wouldn't get jealous. I want to thank you for your help. "
-                                      + player.getTrueName() + " is very good with his tongue, I can personally vouch "
+                                      + getPlayer().getTrueName() + " is very good with his tongue, I can personally vouch "
                                       + "for that.\"</i> Jewel glances at you for confirmation and you lick your lips suggestively. She strips off her clothes and straddles your face. You grab Jewel's hips and thrust "
                                       + "you tongue into her slit, making her moan and almost lose her balance. You've been at Jewel's mercy since she ambushed you, so it's pretty satisfying to break her composure "
                                       + "with a lick.<br/><br/>"
@@ -145,7 +145,7 @@ public class Threesomes extends DaytimeEvent {
                                       + "Mara releases your dick to smirk at Jewel <i>\"Your verbal torture would probably be more convincing if you weren't stroking his hair like a newlywed wife. Did you do that "
                                       + "for every bully?\"</i><br/>"
                                       + "Jewel leans down, pressing her breasts against your face before sitting up. <i>\"Most bullies don't deserve as much affection as "
-                                      + player.getTrueName() + ". I just wish I was a "
+                                      + getPlayer().getTrueName() + ". I just wish I was a "
                                       + "little more flexible so I could kiss him from this position. Speaking of kissing things, you're going a little above and beyond with that blowjob. You're supposed to humiliate "
                                       + "him by jerking him off.\"</i><br/>"
                                       + "Mara rubs her cheek happily against your shaft. <i>\"I just want to give him an extra special orgasm as thanks for helping us out. Besides, I don't think a handjob is going to "
@@ -153,7 +153,7 @@ public class Threesomes extends DaytimeEvent {
                                       + "because we don't have a crowd. Should we open the door and try to attract an audience? I'm sure I could find a lot of girl who'd like to watch.\"</i> Oi. That's going a bit "
                                       + "too far. They're just pretending you bullied them after all.<br/><br/>"
                                       + "Jewel ignores your protest and giggles. <i>\"It's tempting, but I don't want to share "
-                                      + player.getTrueName()
+                                      + getPlayer().getTrueName()
                                       + "'s money shot with a bunch of strangers. I think we should be greedy and "
                                       + "keep this show to ourselves.\"</i><br/>"
                                       + "They don't have to wait too long for their show. Jewel's other victims probably didn't have to endure the efforts of an experienced sex fighter. Mara's mouth and hands quickly "

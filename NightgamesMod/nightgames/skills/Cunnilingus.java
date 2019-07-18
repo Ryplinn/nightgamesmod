@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -15,7 +16,7 @@ import nightgames.status.Enthralled;
 @SuppressWarnings("unused")
 public class Cunnilingus extends Skill {
 
-    public Cunnilingus(Character self) {
+    public Cunnilingus(CharacterType self) {
         super("Lick Pussy", self);
         addTag(SkillTag.usesMouth);
         addTag(SkillTag.pleasure);
@@ -24,7 +25,7 @@ public class Cunnilingus extends Skill {
 
     @Override
     public boolean usable(Combat c, Character target) {
-        boolean canUse = c.getStance().isBeingFaceSatBy(c, getSelf(), target) && getSelf().canRespond()
+        boolean canUse = c.getStance().isBeingFaceSatBy(getSelf(), target) && getSelf().canRespond()
                         || getSelf().canAct();
         boolean pussyAvailable = target.crotchAvailable() && target.hasPussy();
         boolean stanceAvailable = c.getStance().oral(getSelf(), target) && (!c.getStance().vaginallyPenetrated(c, target) || c.getStance().getPartsFor(c, getSelf(), target).contains(getSelf().body.getRandom("mouth")));
@@ -39,7 +40,7 @@ public class Cunnilingus extends Skill {
 
     @Override
     public int getMojoBuilt(Combat c) {
-        if (c.getStance().isBeingFaceSatBy(c, getSelf(), c.getOpponent(getSelf()))) {
+        if (c.getStance().isBeingFaceSatBy(getSelf(), c.getOpponent(getSelf()))) {
             return 0;
         } else {
             return 5;
@@ -49,7 +50,7 @@ public class Cunnilingus extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         Result results = Result.normal;
-        boolean facesitting = c.getStance().isBeingFaceSatBy(c, getSelf(), target);
+        boolean facesitting = c.getStance().isBeingFaceSatBy(getSelf(), target);
         int m = 10 + Random.random(8);
         if (getSelf().has(Trait.silvertongue)) {
             m += 4;
@@ -101,7 +102,7 @@ public class Cunnilingus extends Skill {
 
     @Override
     public int accuracy(Combat c, Character target) {
-        return !c.getStance().isBeingFaceSatBy(c, getSelf(), target) && c.getStance().reachTop(target)? 75 : 200;
+        return !c.getStance().isBeingFaceSatBy(getSelf(), target) && c.getStance().reachTop(target)? 75 : 200;
     }
 
     @Override

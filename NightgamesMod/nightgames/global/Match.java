@@ -16,7 +16,7 @@ import nightgames.modifier.Modifier;
 import nightgames.skills.SkillPool;
 import nightgames.status.Status;
 import nightgames.status.Stsflag;
-import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.Addiction;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
@@ -88,22 +88,22 @@ public class Match {
     }
 
     public void startMatch() {
-        GameState.gameState.characterPool.getPlayer().getAddictions().forEach(a -> {
+        GameState.getGameState().characterPool.getPlayer().getAddictions().forEach(a -> {
             Optional<Status> withEffect = a.startNight();
-            withEffect.ifPresent(s -> GameState.gameState.characterPool.getPlayer().addNonCombat(s));
+            withEffect.ifPresent(s -> GameState.getGameState().characterPool.getPlayer().addNonCombat(s));
         });
         startMatchGui(GUI.gui);
     }
 
     public static HashSet<Character> getParticipants() {
-        return new HashSet<>(GameState.gameState.characterPool.availableNpcs());
+        return new HashSet<>(GameState.getGameState().characterPool.availableNpcs());
     }
 
     public static List<Character> getMatchParticipantsInAffectionOrder() {
         if (match == null) {
             return Collections.emptyList();
         }
-        return GameState.gameState.characterPool.getInAffectionOrder(match.combatants.stream().filter(c -> !c.human()).collect(Collectors.toList()));
+        return GameState.getGameState().characterPool.getInAffectionOrder(match.combatants.stream().filter(c -> !c.human()).collect(Collectors.toList()));
     }
 
     public static Match getMatch() {
@@ -287,7 +287,7 @@ public class Match {
                 character.add(Trait.masterheels);
             }
         }
-        GameState.gameState.characterPool.getPlayer().getAddictions().forEach(AddictionSymptom::endNight);
+        GameState.getGameState().characterPool.getPlayer().getAddictions().forEach(Addiction::endNight);
         matchComplete.countDown();
     }
 
@@ -323,7 +323,7 @@ public class Match {
         condition.handleItems(player);
         condition.handleStatus(player);
         condition.handleTurn(player, this);
-        player.getAddictions().forEach(AddictionSymptom::refreshWithdrawal);
+        player.getAddictions().forEach(Addiction::refreshWithdrawal);
     }
 
     private int meanLvl() {
@@ -353,7 +353,7 @@ public class Match {
     }
 
     public void quit() {
-        Character human = GameState.gameState.characterPool.getPlayer();
+        Character human = GameState.getGameState().characterPool.getPlayer();
         if (human.state == State.combat) {
             human.location().activeEncounter.getCombat().ifPresent(Combat::forfeit);
             human.location().endEncounter();

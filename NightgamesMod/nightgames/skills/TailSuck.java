@@ -49,7 +49,7 @@ public class TailSuck extends Skill {
                             Random.random(10) + 10, c, this);
             drain(c, target);
         } else if (getSelf().roll(getSelf(), accuracy(c, target))) {
-            Result res = c.getStance().isBeingFaceSatBy(c, target, getSelf()) ? Result.critical
+            Result res = c.getStance().isBeingFaceSatBy(target, getSelf()) ? Result.critical
                             : Result.normal;
             writeOutput(c, res, target);
             target.body.pleasure(getSelf(), getSelf().body.getRandom("tail"), target.body.getRandomCock(),
@@ -153,7 +153,7 @@ public class TailSuck extends Skill {
                             getSelf().possessiveAdjective(), Formatter.capitalizeFirstLetter(target.pronoun()),
                             target.action("are", "is"), target.pronoun(), target.action("feel"),
                             target.possessiveAdjective(), target.body.getRandomCock().describe(target), 
-                            getSelf().possessiveAdjective(), user().body.getRandomPussy().describe(getSelf()),
+                            getSelf().possessiveAdjective(), getUser().body.getRandomPussy().describe(getSelf()),
                             target.possessiveAdjective(),
                             getSelf().subject(), target.directObject(), target.nameOrPossessivePronoun(),
                             target.pronoun(), target.action("feel"), target.possessiveAdjective(), target.directObject());

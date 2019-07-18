@@ -36,10 +36,10 @@ public class SkillButton extends ValueButton<Skill> {
         } else {
             setBorder(new LineBorder(getButton().getBackground(), 3));
         }
-        if (!skill.user()
+        if (!skill.getUser()
                    .cooldownAvailable(skill)) {
             getButton().setEnabled(false);
-            text += String.format("<br/>Remaining Cooldown: %d turns", skill.user()
+            text += String.format("<br/>Remaining Cooldown: %d turns", skill.getUser()
                                                                             .getCooldown(skill));
             getButton().setForeground(Color.WHITE);
             getButton().setBackground(getBackground().darker());

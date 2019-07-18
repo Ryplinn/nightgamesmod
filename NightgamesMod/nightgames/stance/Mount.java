@@ -1,31 +1,33 @@
 package nightgames.stance;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
-public class Mount extends AbstractFacingStance {
+public class Mount extends Position {
 
-    public Mount(Character top, Character bottom) {
+    public Mount(CharacterType top, CharacterType bottom) {
         super(top, bottom, Stance.mount);
+        facingType = FacingType.FACING;
     }
 
     @Override
     public String describe(Combat c) {
-        if (top.human()) {
-            return "You're on top of " + bottom.getName() + ".";
+        if (getTop().human()) {
+            return "You're on top of " + getBottom().getName() + ".";
         } else {
             return String.format("%s straddling %s, with %s enticing breasts right in front of %s.",
-                            top.subjectAction("are", "is"), bottom.nameDirectObject(),
-                            top.possessiveAdjective(), bottom.directObject());
+                            getTop().subjectAction("are", "is"), getBottom().nameDirectObject(),
+                            getTop().possessiveAdjective(), getBottom().directObject());
         }
     }
 
     @Override
     public String image() {
-        if (top.hasPussy() && bottom.hasPussy()) {
+        if (getTop().hasPussy() && getBottom().hasPussy()) {
             return "mount_ff.jpg";
-        } else if (bottom.hasPussy()) {
+        } else if (getBottom().hasPussy()) {
             return "mount_m.jpg";
         } else {
             return "mount_f.jpg";
@@ -34,7 +36,7 @@ public class Mount extends AbstractFacingStance {
 
     @Override
     public boolean mobile(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
@@ -44,12 +46,12 @@ public class Mount extends AbstractFacingStance {
 
     @Override
     public boolean dom(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
     public boolean sub(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
@@ -59,22 +61,22 @@ public class Mount extends AbstractFacingStance {
 
     @Override
     public boolean reachBottom(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
     public boolean prone(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
     public boolean feet(Character c, Character target) {
-        return target == bottom && c != top && c != bottom;
+        return target.getType() == bottom && c.getType() != top && c.getType() != bottom;
     }
 
     @Override
     public boolean oral(Character c, Character target) {
-        return target == bottom && c != top && c != bottom;
+        return target.getType() == bottom && c.getType() != top && c.getType() != bottom;
     }
 
     @Override
@@ -111,15 +113,13 @@ public class Mount extends AbstractFacingStance {
     public void struggle(Combat c, Character struggler) {
         c.write(struggler, Formatter.format("{self:SUBJECT-ACTION:try} to struggle out of {other:name-possessive} hold, but with"
                         + " {other:direct-object} sitting firmly on {self:possessive} chest, there is nothing {self:pronoun} can do.",
-                        struggler, top));
-        super.struggle(c, struggler);
+                        struggler, getTop()));
     }
 
     @Override
     public void escape(Combat c, Character escapee) {
         c.write(escapee, Formatter.format("{self:SUBJECT-ACTION:try} to escape {other:name-possessive} hold, but with"
                         + " {other:direct-object} sitting firmly on {self:possessive} chest, there is nothing {self:pronoun} can do.",
-                        escapee, top));
-        super.escape(c, escapee);
+                        escapee, getTop()));
     }
 }

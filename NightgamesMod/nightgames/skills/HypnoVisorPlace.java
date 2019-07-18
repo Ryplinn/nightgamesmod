@@ -7,8 +7,7 @@ import nightgames.combat.Result;
 import nightgames.global.Formatter;
 import nightgames.status.HypnoVisor;
 import nightgames.status.Stsflag;
-import nightgames.status.addiction.AddictionSymptom;
-import nightgames.status.addiction.AddictionSymptom.Severity;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
 public class HypnoVisorPlace extends Skill {
@@ -65,8 +64,8 @@ public class HypnoVisorPlace extends Skill {
     }
     
     private boolean isInWithdrawal(Character target) {
-        AddictionSymptom add = target.getAddiction(AddictionType.MIND_CONTROL).orElse(null);
-        return add != null && add.atLeast(Severity.LOW) && add.isInWithdrawal();
+        Addiction add = target.getAnyAddiction(AddictionType.MIND_CONTROL).orElse(null);
+        return add != null && add.atLeast(Addiction.Severity.LOW) && add.isInWithdrawal();
     }
 
     private String addictionDesc(Combat c, Character target) {
@@ -76,7 +75,7 @@ public class HypnoVisorPlace extends Skill {
                             + " when you don't have to think for yourself. So, let's wash that pesky"
                             + " stubborness right out of you, alright?.</i>", getSelf(), target);
         }
-        switch (target.getAddictionSeverity(AddictionType.MIND_CONTROL)) {
+        switch (target.getAnyAddictionSeverity(AddictionType.MIND_CONTROL)) {
             case HIGH:
                 return Formatter.format("<i>You're doing really well so far, {other:name}!"
                                 + " Still, a little refresher surely can't hurt?</i>", getSelf(), target);

@@ -6,13 +6,15 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 public class CrisisOfFaith extends Status {
-    public CrisisOfFaith(Character affected) {
+    public CrisisOfFaith(CharacterType affected) {
         super("Crisis of Faith", affected);
         assert affected == null || affected.human();
         flag(Stsflag.debuff);
@@ -75,8 +77,8 @@ public class CrisisOfFaith extends Status {
 
     @Override
     public int gainmojo(int x) {
-        return (int) (x * (1.0f - affected.getAddiction(AddictionType.ZEAL).map(AddictionSymptom::getMagnitude)
-                        .orElse(0f)));
+        return (int) (x * (1.0f - affected.getAnyAddiction(AddictionType.ZEAL).flatMap(Addiction::activeTracker)
+                        .map(AddictionSymptom::getCombatMagnitude).orElse(0f)));
     }
 
     @Override

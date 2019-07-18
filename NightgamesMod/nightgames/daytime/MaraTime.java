@@ -13,7 +13,7 @@ import nightgames.global.Random;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
-import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.ArrayList;
@@ -23,10 +23,10 @@ import java.util.Optional;
 import static nightgames.requirements.RequirementShortcuts.*;
 
 public class MaraTime extends BaseNPCTime {
-    MaraTime(Player player) {
-        super(player, GameState.gameState.characterPool.getNPC("Mara"));
+    MaraTime() {
+        super(GameState.getGameState().characterPool.getNPC("Mara"));
         knownFlag = "MaraKnown";
-        giftedString = "\"Awww thanks!\"";
+        giftedString = "\"Awww, thanks!\"";
         giftString = "\"A present? You shouldn't have!\"";
         transformationOptionString = "Modifications";
         advTrait = Trait.madscientist;
@@ -102,9 +102,7 @@ public class MaraTime extends BaseNPCTime {
             biomechAss.ingredients.put(Item.Spring, 5);
             biomechAss.ingredients.put(Item.Onahole, 1);
             biomechAss.option = "Biomech Ass";
-            biomechAss.addRequirement((c, self, other) -> {
-                return self.getLevel() >= 30;
-            }, "At least level 30");
+            biomechAss.addRequirement((c, self, other) -> self.getLevel() >= 30, "At least level 30");
             biomechAss.scene = "[Placeholder]<br/>Mara installs a biomech rectum on you.";
             options.add(biomechAss);
         }
@@ -115,9 +113,7 @@ public class MaraTime extends BaseNPCTime {
             prostheticMouth.ingredients.put(Item.Spring, 5);
             prostheticMouth.ingredients.put(Item.Onahole, 1);
             prostheticMouth.option = "Prosthetic Mouth";
-            prostheticMouth.addRequirement((c, self, other) -> {
-                return self.getLevel() >= 30;
-            }, "At least level 30");
+            prostheticMouth.addRequirement((c, self, other) -> self.getLevel() >= 30, "At least level 30");
             prostheticMouth.scene = "[Placeholder]<br/>Mara replaces your mouth with advanced computer augmented prosthetics.";
             options.add(prostheticMouth);
         }
@@ -125,7 +121,7 @@ public class MaraTime extends BaseNPCTime {
 
     @Override
     public void subVisitIntro(String choice, List<LabeledValue<String>> nextChoices) {
-        if (npc.getAffection(player) > 0) {
+        if (npc.getAffection(getPlayer()) > 0) {
             GUI.gui.message("You go to the computer lab to find Mara for some quality time. She immediately breaks into a smile when she sees you enter. You can tell "
                             + "at a glance that she's better rested than the first time you came in here. It's not just her that's changed. The room is still a mess of electronics, but "
                             + "a significant portion of the clutter is gone. You can reasonably walk across the room without getting tangled in anything. <i>\"I cut back on the number of "
@@ -135,56 +131,56 @@ public class MaraTime extends BaseNPCTime {
             choose("Games", nextChoices);
             choose("Sparring", nextChoices);
             choose("Sex", nextChoices);
-            if(player.getPure(Attribute.spellcasting)>=3){
+            if(getPlayer().getPure(Attribute.spellcasting)>=3){
                 choose("Faerie play", nextChoices);
             }
-            if (player.checkAddiction(AddictionType.MIND_CONTROL)) {
+            if (getPlayer().checkAnyAddiction(AddictionType.MIND_CONTROL)) {
                 choose("Confront about control", nextChoices);
             }
-        } else if (player.checkAddiction(AddictionType.MIND_CONTROL)) {
+        } else if (getPlayer().checkAnyAddiction(AddictionType.MIND_CONTROL)) {
             GUI.gui.message("Mara low-affection addiction intro");
-            if (npc.getAttraction(player) < 15) {
-                npc.gainAttraction(player, 2);
-                player.gainAttraction(npc, 2);
+            if (npc.getAttraction(getPlayer()) < 15) {
+                npc.gainAttraction(getPlayer(), 2);
+                getPlayer().gainAttraction(npc, 2);
             } else {
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
                 choose("Games", nextChoices);
                 choose("Sparring", nextChoices);
                 choose("Sex", nextChoices);
             }
             choose("Confront about control", nextChoices);
-        } else if (npc.getAttraction(player) < 15) {
+        } else if (npc.getAttraction(getPlayer()) < 15) {
             GUI.gui.message("You eventually find Mara in one of the computer labs, or at least a room labeled Computer Lab D. You typically think of a computer "
                             + "lab as having rows of fully functional computers and enough clear floorspace to walk through. Most of the computers here are only half assembled and "
                             + "every surface is covered with assorted electronics. Mara is the only one in the small room, unless someone is buried in the PLCs and cords. She's focused "
                             + "intensely on her work and doesn't even notice you until you call out to her.<br/><br/><i>\"Oh, hi "
-                            + player.getTrueName() + ".\"</i> She glances up at you, but continues typing "
+                            + getPlayer().getTrueName() + ".\"</i> She glances up at you, but continues typing "
                             + "on one of the keyboards in front of her. <i>\"How are you doing?\"</i> You ask her if she'd like to take a break and hang out for a while.<br/><i>\"Sounds fun, but I really "
                             + "need to finish this tonight and it's not being cooperative.\"</i> She lets out a long yawn and picks up a nearby energy drink, but tosses it away when she realizes it's "
                             + "empty. <i>\"I'm probably going to be stuck here right up to the start of tonight's match. If you could do me a favor and get me something with some caffeine, "
                             + "I'll love you forever.\"</i><br/><br/>You find a vending machine not too far from the lab and buy an energy drink. When you return to Mara, she doesn't acknowledge your "
                             + "presence. It doesn't seem like she's trying to be rude, but she's so consumed with her work that she's probably forgotten you were ever here. Deciding not to interrupt "
                             + "her again, you set the drink near her. For the first time, you notice the dark bags under her eyes. You worry that she's pushing herself too hard.");
-            npc.gainAttraction(player, 2);
-            player.gainAttraction(npc, 2);
+            npc.gainAttraction(getPlayer(), 2);
+            getPlayer().gainAttraction(npc, 2);
         } else {
             GUI.gui.message("You head to the computer lab to see Mara. She jumps in surprise when the door opens, but relaxes when she sees who you are. <i>\"Hi "
-                            + player.getTrueName() + ". "
+                            + getPlayer().getTrueName() + ". "
                             + "I'm in the middle of something I can't really put down, but if you won't be bored, I'd enjoy some company.\"</i> Mara clears the junk off a chair behind her. You make "
                             + "your way through the tangle of cords and sit down behind her. The two of you engage in some chat about nothing in particular, and you're impressed by her "
                             + "ability to hold a conversation while writing code at an astonishing speed.<br/><br/>Eventually curiosity gets the better of you and you have to ask why she was so jumpy "
-                            + "when you came in. <i>\"I thought you were my advisor. He doesn't want me working in here for awhile.\"</i> According to the other CE majors, Mara is the only one who uses "
-                            + "this lab regularly. Why is her advisor trying to kick her out? <i>\"It's not like that. I kinda... nodded off in here the other day and I must have hit the corner of "
+                            + "when you came in. <i>\"I thought you were my adviser. He doesn't want me working in here for awhile.\"</i> According to the other CE majors, Mara is the only one who uses "
+                            + "this lab regularly. Why is her adviser trying to kick her out? <i>\"It's not like that. I kinda... nodded off in here the other day and I must have hit the corner of "
                             + "one of the machines on the way down.\"</i> She touches a spot on her head, but you can't see if there's any mark there through her hair. <i>\"It was just a shallow cut, but "
-                            + "it must have looked pretty bad when he found me.\"</i><br/><br/>No wonder her advisor wants her to stop working. If she collapsed from exhaustion, that's a sign that she needs to "
+                            + "it must have looked pretty bad when he found me.\"</i><br/><br/>No wonder her adviser wants her to stop working. If she collapsed from exhaustion, that's a sign that she needs to "
                             + "pay more attention to her health! <i>\"I'm committed to too many deadlines to slow down now. I've made it through worse schedules, I'll live.\"</i> You can't just let her continue "
                             + "like this. She's taking her welfare way too lightly. You grab her hand to stop her from typing and demand that she take some time off or you're going to drag her out of here!<br/><br/>"
                             + "She stares at you stunned for a few long seconds before looking away. <i>\"You're worried about me too?\"</i> she whispers while gently squeezing your hand. In the silence that follows, "
                             + "she seems very small and fragile. Suddenly she smiles and meets your eyes as if nothing had happened. <i>\"Let's make a deal: I'll let you distract me from my projects. As long as "
                             + "we're having fun, I won't think about anything but you.\"</i> Basically she'll only take a break while you're hanging out together. It's better than nothing.");
-            npc.gainAffection(player, 1);
-            player.gainAffection(npc, 1);
+            npc.gainAffection(getPlayer(), 1);
+            getPlayer().gainAffection(npc, 1);
             choose("Games", nextChoices);
             choose("Sparring", nextChoices);
             choose("Sex", nextChoices);
@@ -195,8 +191,8 @@ public class MaraTime extends BaseNPCTime {
     @Override
     public void subVisit(String choice, List<LabeledValue<String>> nextChoices) {
         if (choice.equals("Confront about control")) {
-            if (npc.getAffection(player) == 0) {
-                GUI.gui.message("Mara has some fun making you do embarassing things in public, and then takes"
+            if (npc.getAffection(getPlayer()) == 0) {
+                GUI.gui.message("Mara has some fun making you do embarrassing things in public, and then takes"
                                 + " you home so you can put on a good show of jacking off for her. At the end, "
                                 + "she reinforces her control over you. This is a placeholder.");
             } else {
@@ -222,7 +218,7 @@ public class MaraTime extends BaseNPCTime {
                                 + "you. <i>\"Okay, so, now... Just... Strip and sit in that chair over there.\"</i> Still mute, you do"
                                 + " as she says. Once you've seated yourself, Mara walks over and kneels down in front of you. She looks"
                                 + " at your limp cock, and a smirk forms on her face. <i>\"Let's see if this works: Get hard.\"</i> You"
-                                + " want to tell her that's not something " + player.guyOrGirl() + "s can really control like that, but inexplicably you feel "
+                                + " want to tell her that's not something " + getPlayer().guyOrGirl() + "s can really control like that, but inexplicably you feel "
                                 + "the familiar sensation of blood rushing into your dick. Within seconds, it's as hard as it's ever been."
                                 + " <i>\"Oooh, that's going to be useful at night! Now, until I say otherwise, don't cum!\"</i> You do "
                                 + "<i>not</i> like the sound of that, but it's not as if you can actually do anything about it. You are "
@@ -231,7 +227,7 @@ public class MaraTime extends BaseNPCTime {
                                 + " holding something else in the other. It looks suspiciously like a fleshlight, but it has a weird attachment"
                                 + " at one end. <i>\"I just figured, since I'm kinda raping you anyway, I might as well get a little testing in."
                                 + " This thing is not </i>entirely<i> legal, but you'll keep quiet, right? Oh, right. So just let me know how it "
-                                + "feels.\"</i> The weird attatchment seems to be a connector, as she plugs it into her device. Mara brandishes her"
+                                + "feels.\"</i> The weird attachment seems to be a connector, as she plugs it into her device. Mara brandishes her"
                                 + " new toy proudly, then grabs a bottle of lube and applies it to the squishy-looking orifice. You must look like a"
                                 + " deer in the headlights faced with that thing, and Mara thrives on it. She slowly pushes it onto your cock. Oh, this"
                                 + " is going to be bad. The inside feels soft and warm and it's covered in ridges and filaments. When you bottom out"
@@ -241,35 +237,35 @@ public class MaraTime extends BaseNPCTime {
                                 + " arm-device, and the fleshlight starts to slowly rotate. The bumps and ridges feel exquisite against your skin,"
                                 + " and it only gets better as the device slowly accelerates. When it has reached a moderate speed, Mara flicks another"
                                 + " switch, and the thing starts undulating around your cock. The movements are very much like it's trying to milk you,"
-                                + " and it probably is. You are trembling with pleasure, and Mara just keeps making small adjustments to guage your"
+                                + " and it probably is. You are trembling with pleasure, and Mara just keeps making small adjustments to gauge your"
                                 + " response - more suction, tighter grip. You'd have cum in under a minute, but Mara's command keeps you on the edge"
                                 + " until she's finally finished her experiments after ten minutes. She disengages this modern torture device and your"
                                 + " dick comes back into view - red as a lobster. <i>\"Oh, no! Why didn't you say something? No, wait, sorry. If it's"
                                 + " any consolation, this is going to be one hell of an orgasm!\"</i> She kneels down and slowly licks your painfully"
                                 + " hard shaft. <i>\"It's okay. Just look at me. You can cum now.\"</i> She quickly latches her lips onto you, and not"
                                 + " a moment too soon. Your cum feels like it is rising up from your toes and fingers, and your entire body is convulsing"
-                                + " is ecstacy. Your eyes remain in place, though, locked onto hers as those patterns start flashing across them once"
+                                + " is ecstasy. Your eyes remain in place, though, locked onto hers as those patterns start flashing across them once"
                                 + " again. It feels as if with each powerful jet of cum, you are giving some more control to Mara, and nothing has ever"
                                 + " felt better. When you are finally done, Mara releases you from all commands. <i>\"I guess you hate me now, huh? I"
                                 + " know it was wrong, but I just had to try, to do something, I...\"</i> You cut her off by kissing her. Yeah, her"
                                 + " methods were pretty brutal, but that was the most intense thing you ever felt. If she can make you feel like that,"
-                                + " who cares about some hypnosis thing? <i>\"Oh, " + player.getTrueName()
+                                + " who cares about some hypnosis thing? <i>\"Oh, " + getPlayer().getTrueName()
                                 + "! You're not mad? Oh!\"</i> She wraps her arms "
                                 + "around you, and you continue hugging and making out for a while before you finally leave. Your "
                                 + "muscles feel a little sluggish, and it's only going to get worse with time and distance, but maybe"
                                 + " it's worth it?");
             }
             choose("Leave", nextChoices);
-            player.addict(null, AddictionType.MIND_CONTROL, npc, AddictionSymptom.MED_INCREASE);
-            player.getAddiction(AddictionType.MIND_CONTROL).ifPresent(AddictionSymptom::flagDaytime);
+            getPlayer().addict(null, AddictionType.MIND_CONTROL, npc, Addiction.MED_INCREASE);
+            getPlayer().getAddiction(AddictionType.MIND_CONTROL, npc).ifPresent(Addiction::flagDaytime);
         }
         switch (choice) {
             case "Sex":
-                if (npc.getAffection(player) >= 8 && (!player.has(Trait.ticklemonster) || Random.random(2) == 1)) {
+                if (npc.getAffection(getPlayer()) >= 8 && (!getPlayer().has(Trait.ticklemonster) || Random.random(2) == 1)) {
                     GUI.gui.message("You invite Mara to your room some fun. As soon as you get there she walks up behind you, shoves her hand down the front of your pants, and grabs you penis. "
                                     + "You're taken by surprise, but it doesn't stop you from getting hard in her hand. <i>\"You said we're here to have fun and I've decided you're my toy today,\"</i> she whispers "
                                     + "in an unusually sultry voice. When you're fully erect, she withdraws her hand and orders you to strip. Once you're naked, she has you sit on the bed and begins to fondle "
-                                    + "your balls. <i>\"" + Formatter.capitalizeFirstLetter(player.boyOrGirl())
+                                    + "your balls. <i>\"" + Formatter.capitalizeFirstLetter(getPlayer().boyOrGirl())
                                     + "s get really nervous when I play with these, but it feels good, doesn't it?\"</i> She's mostly back to her typical, mischievous self, but you can see a "
                                     + "dominant gleam in her eye. She takes her time undressing, turning it into a full stripshow, then she sits on your lap facing you. Her pussy is close enough to your straining "
                                     + "dick that you can feel her heat. <i>\"I think it would be a lot of fun to train you,\"</i> she says in her sweetest, innocent voice. <i>\"I'll train you so no other girl can get you "
@@ -278,7 +274,7 @@ public class MaraTime extends BaseNPCTime {
                                     + "The dual stimulus causes you to let out a sigh of pleasure. <br/><br/>Mara suddenly yelps and jerks away from you. What happened? Mara blushes and tries to regain her composure. <i>\"N-Nothing. "
                                     + "Your breath just tickled my neck a bit.\"</i> She's sensitive enough that breathing on her tickled? She leans back in and begins licking your neck seductively, but now you feel a mischievous "
                                     + "impulse of your own to see just how ticklish she is. You move your hand to the nape of her neck and trail your fingers lightly down her back. She shivers and you can hear her try "
-                                    + "to hide a small giggle. This could be fun. Now you move your fingers under her thighs and tickle behind her knees. She shrieks in surprise and scrambles off yout lap, suddenly realizing "
+                                    + "to hide a small giggle. This could be fun. Now you move your fingers under her thighs and tickle behind her knees. She shrieks in surprise and scrambles off your lap, suddenly realizing "
                                     + "she's the toy now. <i>\"Wait! We can be reasonable about this! I can do wonderful things to you.\"</i><br/><br/>You tackle Mara to the bed and wiggle your fingers under her arms. She flails "
                                     + "desperately in an attempt to escape while laughing uncontrollably. You move your hands to her small breasts to tickle and tease her nipples. Her voice catches in her throat at the "
                                     + "sensation and she manages to scramble out of your reach, covering her upper body protectively. The pose leaves her legs open and you can see her wetness flowing freely. She follows "
@@ -296,9 +292,9 @@ public class MaraTime extends BaseNPCTime {
                                     + "You're almost ready to come from just being inside her. She moves her hips, riding you for her own pleasure as much as yours. You've been hard for so long without relief that you know you "
                                     + "won't be able to last, so you massage and play with her breasts to accelerate her climax. When your endurance breaks and you shoot you seed in Mara, she shudders and you can feel her pussy "
                                     + "squeeze you. She collapses into your chest and mumbles, <i>\"Four orgasms. I think you're trying to train my body.\"</i>");
-                    if (!player.has(Trait.ticklemonster)) {
+                    if (!getPlayer().has(Trait.ticklemonster)) {
                         GUI.gui.message("<br/><br/><b>You've gotten better at finding sensitive spots when tickling nude opponents.</b>");
-                        player.add(Trait.ticklemonster);
+                        getPlayer().add(Trait.ticklemonster);
                         npc.getGrowth().addTrait(0, Trait.ticklemonster);
                     }
                 } else {
@@ -328,12 +324,12 @@ public class MaraTime extends BaseNPCTime {
 
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.seduction);
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
+                Daytime.train(getPlayer(), npc, Attribute.seduction);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
                 break;
             case "Games":
-                if (npc.getAffection(player) >= 16 && (!player.has(Trait.spider) || Random.random(2) == 1)) {
+                if (npc.getAffection(getPlayer()) >= 16 && (!getPlayer().has(Trait.spider) || Random.random(2) == 1)) {
                     GUI.gui.message("Mara is too damn good at these games. She moves her third spider next to your queen, trapping it in place. You don't lose until she fills in all six spaces "
                                     + "adjacent to your queen, but even with just those three pieces, you don't have enough room to move out of there. For the rest of the game, you try to block off her access "
                                     + "to the remaining spaces, while rushing to try to surround her queen and put her on the defensive. It's no use. You never manage to immobilize her queen so she always manages "
@@ -363,9 +359,9 @@ public class MaraTime extends BaseNPCTime {
                                     + "I'll even show you how to make it.\"</i> That can wait, you're still recovering from your megagasm and from being tied up for so long. Besides, even if it wasn't a fair fight, Mara did "
                                     + "make you cum. Surely she has something she wants you to do. She lowers her eyes shyly and replies softly. <i>\"Yeah, I want you to fall in love with me.\"</i> She gives you a tender, lingering "
                                     + "kiss. <i>\"There's no time limit, just get started on that when you get a chance.\"</i>");
-                    if (!player.has(Trait.spider)) {
+                    if (!getPlayer().has(Trait.spider)) {
                         GUI.gui.message("<br/><br/><b>Mara has taught you to make the brilliant and insanely complex Spiderweb Trap.</b>");
-                        player.add(Trait.spider);
+                        getPlayer().add(Trait.spider);
                         npc.getGrowth().addTrait(0, Trait.spider);
                     }
                 } else {
@@ -373,7 +369,7 @@ public class MaraTime extends BaseNPCTime {
                                     + "ahead. She doesn't even pretend to be trying very hard. While you're planning out your next move, she tends to get bored and cuddle with you on the couch. This has a pretty profound impact on "
                                     + "your ability to concentrate. Even simple calculations become a challenge when she's stroking your thigh or breathing on your neck. On your turn you place down two stones in formation to "
                                     + "use them next turn, but she immediately summons a Sylvan Princess and steals one of them. <i>\"That was a bit too obvious for me to let happen. Is your head completely in "
-                                    + "this game " + player.getTrueName()
+                                    + "this game " + getPlayer().getTrueName()
                                     + "?\"</i> She's doing it on purpose, you're certain. She's building up fearsome formations of units, but every time you try to work out a counter, your "
                                     + "attention is seized by the feeling of her small, but soft breasts against your arm; or the sweet scent of her shampoo; or the sensation of her fingers creeping toward the "
                                     + "zipper of your jeans... hey wait! <br/><br/><i>\"What?\"</i> she asks innocently, while unzipping your pants. <i>\"Your erection looked very uncomfortable in those restricting pants, so I "
@@ -384,19 +380,20 @@ public class MaraTime extends BaseNPCTime {
                                     + "noise escapes her as she lays there, unresisting. As suddenly as you grabbed her, you release her and stand back up, leaving her a bit dazed. You finally feel like your head is clear. "
                                     + "Looking at the board, you realize you're trailing enough in units to use your flare card, giving you an extra action. Playing a gun tower disrupts Mara's formation and, by the end of your "
                                     + "turn, you're in a much better position. <br/><br/><i>\"That's not fair!\"</i> Mara protests as she comes to her senses. <i>\"You can't play with a girl's heart like that just to win a game.\"</i> It doesn't "
-                                    + "really seem like you did anything worse than what she was doing just seconds ago. <i>\"It's completely different. If you tease a " + player.boyOrGirl() + ", he just gets hard and then you have something else to "
+                                    + "really seem like you did anything worse than what she was doing just seconds ago. <i>\"It's completely different. If you tease a " + getPlayer()
+                                    .boyOrGirl() + ", he just gets hard and then you have something else to "
                                     + "tease. But if you do that to a girl, she's going to fall in love! Look at my flushed cheeks. Feel my heartbeat. I'm madly in love right now and it's totally your fault!\"</i> She glares down "
                                     + "at the gameboard and looks through her cards. <i>\"I'm going to have to completely destroy you to avenge the wounded heart of a pure maiden.\"</i><br/><br/>In the end, Mara still ends up winning, but "
                                     + "it's far from completely destroying you. You managed to give her a pretty good run for her money for the second half. By the time the game is over, she's mostly forgotten why she's "
                                     + "pretending to be mad at you, but she does demand to be on top during your 'follow-up game' to address your combined sexual frustration.");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.cunning);
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
+                Daytime.train(getPlayer(), npc, Attribute.cunning);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
                 break;
             case "Sparring":
-                if (npc.getAffection(player) >= 12 && (!player.has(Trait.heeldrop) || Random.random(2) == 1)) {
+                if (npc.getAffection(getPlayer()) >= 12 && (!getPlayer().has(Trait.heeldrop) || Random.random(2) == 1)) {
                     GUI.gui.message("You and Mara prepare for some sparring practice by getting undressed. She tosses her clothes aside and is so eager that she's actually bouncing noticeably, "
                                     + "unconcerned about her nudity. You finish stretching and square off with her, but she raises a hand to stop you. <i>\"Wait! Can I have a kiss before we start?\"</i> You hesitate "
                                     + "in surprise. Mara's always angling for an advantage, is she going to try a sneak attack when you approach to kiss her? She pouts and looks a little hurt. <i>\"I wouldn't "
@@ -412,21 +409,22 @@ public class MaraTime extends BaseNPCTime {
                                     + "you can't really get mad at her for doing it effectively. She sits down on the mat and moves your head to her lap. <i>\"Here you go, we'll stay like this while you recover.\"</i> Her warm, "
                                     + "bare thighs make a very good pillow. You'd probably be able to enjoy it more if you weren't distracted by the pain from your balls. <i>\"I wish I had a chance of winning without hurting "
                                     + "you so much,\"</i> Mara says while stroking your hair. <i>\"I'm not as strong as Jewel, or as sexy as Angel. What I am is clever. The only way I can win it by finding my opponent's weakness "
-                                    + "and hitting it as hard as I can.\"</i> She leans down and softly kisses you on the lips. <i>\"Unfortunately, sometimes that means hurting a " + player.boyOrGirl() + " I like a lot.\"</i><br/><br/>By now, the pain in your groin "
+                                    + "and hitting it as hard as I can.\"</i> She leans down and softly kisses you on the lips. <i>\"Unfortunately, sometimes that means hurting a " + getPlayer()
+                                    .boyOrGirl() + " I like a lot.\"</i><br/><br/>By now, the pain in your groin "
                                     + "has started to recede and you're starting to react to being held by a naked girl. Mara glances between your legs and smiles. <i>\"Looks like you're feeling better.\"</i> She gently strokes "
                                     + "your dick until it becomes completely hard. <i>\"Feeling well enough for a quick squirt?\"</i> Your face reddens a bit at how she phrased her offer, but you nod. She grasps your shaft more "
                                     + "firmly and pumps it steadily. Your sore nuts give a twinge of protest, but it's quickly drowned out by your increasing need to cum. Mara smiles as you squirm under her hand and speeds "
                                     + "up her strokes to finish you off. Spurts of semen shoot into the air as you cum. You've probably recovered enough to get up, but you decide to take advantage of her lap pillow for a little "
                                     + "while longer.");
-                    if (!player.has(Trait.heeldrop)) {
+                    if (!getPlayer().has(Trait.heeldrop)) {
                         GUI.gui.message("<br/><br/><b>You've experienced Mara's most painful technique and learned how to use it yourself.</b>");
-                        player.add(Trait.heeldrop);
+                        getPlayer().add(Trait.heeldrop);
                         npc.getGrowth().addTrait(0, Trait.heeldrop);
                     }
                 } else {
                     GUI.gui.message("You suggest heading to the gym to do a bit of sparring, but she suggests her room would give you more privacy. This turns out to be important, because when "
                                     + "you arrive she starts undressing and invites you to do the same. Obviously she feels that wrestling naked will give her a natural advantage. <i>\"Of course it will,\"</i> she "
-                                    + "smiles mischieviously. <i>\"But you're not really going to refuse are you?\"</i> You look over her naked body top to bottom. There's no way you're going to to "
+                                    + "smiles mischievously. <i>\"But you're not really going to refuse are you?\"</i> You look over her naked body top to bottom. There's no way you're going to to "
                                     + "refuse. You hastily strip down while she starts stretching. She's remarkably flexible, and you're pretty sure some of the more provocative stretches she does are intended "
                                     + "to tempt you. It makes sense for her to grasp for any edge she can get. While you know she can be quite formidable from your night matches, you outmatch her in both height "
                                     + "and weight. In a pure physical contest without her tricks or seduction, she's at a substantial disadvantage.<br/><br/>The two of you square off in the middle of the room. Mara's "
@@ -448,17 +446,17 @@ public class MaraTime extends BaseNPCTime {
 
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.power);
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
+                Daytime.train(getPlayer(), npc, Attribute.power);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
                 break;
             case "Faerie play":
                 GUI.gui.message("The two of you head to Mara's room, where apparently she has a request for you. A quick glance around her room doesn't reveal any obvious traps or preparation. Everything seems "
-                                + "fairly normal: slightly messy and her laptop left unlocked with some 'adult entertainment' on the desktop. <i>\"Hey! Don't be nosy!\"</i> She closes her laptop, noticably blushing, and sits "
+                                + "fairly normal: slightly messy and her laptop left unlocked with some 'adult entertainment' on the desktop. <i>\"Hey! Don't be nosy!\"</i> She closes her laptop, noticeably blushing, and sits "
                                 + "on her bed.<br/><br/>" + "<i>\"So... you've been learning some actual magic, right?\"</i> She asks with thinly veiled excitement. <i>\"Can you summon those faeries anytime?\"</i> She's practically vibrating at "
                                 + "the idea of playing with one of your pixie familiars. You've never really tried summoning them outside of a fight or Aisha's training room. The Games seem to have a magic of their own that "
                                 + "make the supernatural seem perfectly normal. It's a little harder to focus on your mana here in the 'real world,' but you should be able to manage.<br/><br/>"
-                                + "You begin the spell, and after a bit longer than usual, you feel a fae spirit answer you. You extend your hand and a male faerie winks into existance.<br/>"
+                                + "You begin the spell, and after a bit longer than usual, you feel a fae spirit answer you. You extend your hand and a male faerie winks into existence.<br/>"
                                 + "<i>\"Ooh, a boy!\"</i> She giggles in amusement as she pokes and prods the fae. <i>\"He's got a tiny dick. It's so cute!\"</i> She seems to be enjoying "
                                 + "herself. You feel bad for your familiar though, summoned just to be bullied.<br/><br/>"
                                 + "<i>\"Oh, don't worry. He's not complaining. Are all faeries this sensitive?\"</i> They are significantly more sensitive than humans. Mara's delicate fingerwork does seem to be having an "
@@ -478,25 +476,25 @@ public class MaraTime extends BaseNPCTime {
                                 + "between her legs and hold them in place to control her squirming. The female faerie catches you intention and spreads Mara's pussy lips to reveal her dripping wet entrance. You lightly "
                                 + "prod her nethers with your cock, gauging her response.<br/><br/>"
                                 + "<i>\"God, yes! Fill me up!\"</i> That's as positive as reactions get. You're quite happy to comply. You thrust your hips, penetrating her with a single stroke. She squeals in delight and "
-                                + "wraps her legs around your hips. You piston your hips, fucking her in earnest. At first, you're worried about accidently squashing your familiars, but they have enough battle experience "
-                                + "to stay out of the way, darting in occassionally to tease and tickle sensitive areas. You kiss Mara passionately as you both approach climax. Both faeries target Mara's clit simultaneously, "
+                                + "wraps her legs around your hips. You piston your hips, fucking her in earnest. At first, you're worried about accidentally squashing your familiars, but they have enough battle experience "
+                                + "to stay out of the way, darting in occasionally to tease and tickle sensitive areas. You kiss Mara passionately as you both approach climax. Both faeries target Mara's clit simultaneously, "
                                 + "sending her into a fit of orgasmic shudders. Her pussy clenches, milking out your ejaculation.<br/><br/>"
                                 + "You collapse onto the bed, pulling Mara into your embrace. She leans her head contentedly against your chest. The two faeries, apparently realizing the humans in the room are too "
                                 + "tired to play with them and entertain themselves by starting an impromptu sex-fight. You and Mara watch the show and she giggles in delight as the female gains the upper hand, milking "
                                 + "the boy dry. Mara finally gets a chance to play with the female, giving the victor an orgasm as reward.");
-                if (!player.has(Trait.faefriend)) {
+                if (!getPlayer().has(Trait.faefriend)) {
                     GUI.gui.message("<br/><br/><b>You're finding it easier to call faeries. They seem to be more eager to respond to your summons.</b>");
-                    player.add(Trait.faefriend);
+                    getPlayer().add(Trait.faefriend);
                 }
                 choose("Leave", nextChoices);
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
                 break;
         }
     }
     
     @Override
     public Optional<String> getAddictionOption() {
-        return player.checkAddiction(AddictionType.MIND_CONTROL) ? Optional.of("Confront about control") : Optional.empty();
+        return getPlayer().checkAnyAddiction(AddictionType.MIND_CONTROL) ? Optional.of("Confront about control") : Optional.empty();
     }
 }

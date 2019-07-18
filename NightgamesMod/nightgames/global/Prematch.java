@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * Base class for match setup.
  */
 public abstract class Prematch {
-    public CompletableFuture<Match> preparedMatch;  // Completes when match is ready to play
+    private CompletableFuture<Match> preparedMatch;  // Completes when match is ready to play
 
     protected Prematch(CompletableFuture<Match> preparedMatch) {
         this.preparedMatch = preparedMatch;
@@ -31,7 +31,7 @@ public abstract class Prematch {
      * Chooses and creates an instance of the Prematch of one of the available Match types.
      * @return A new Prematch of the chosen Match type.
      */
-    public static Prematch decideMatchType(CompletableFuture<Match> match) {
+    static Prematch decideMatchType(CompletableFuture<Match> match) {
         return new PreMatchSchool(match);
         // When the player first reaches level 15, make an FTCMatch.
         // After the first FTC match, there's a one in ten chance that a match will be an FTC match.
@@ -81,8 +81,8 @@ public abstract class Prematch {
 
     public void setUpMatch(Modifier matchmod) {
         assert Daytime.day == null;
-        CharacterPool characterPool = GameState.gameState.characterPool;
-        Set<Character> lineup = new HashSet<>(characterPool.debugChars);
+        CharacterPool characterPool = GameState.getGameState().characterPool;
+        Set<Character> lineup = new HashSet<>(characterPool.debugChars());
         Character lover = null;
         int maxaffection = 0;
         Flag.unflag(Flag.FTC);
@@ -95,7 +95,7 @@ public abstract class Prematch {
                 player.chargeBattery();
             }
             if (characterPool.human.getAffection(player) > maxaffection && !player.has(Trait.event) && !Flag
-                            .checkCharacterDisabledFlag(player)) {
+                            .checkCharacterDisabledFlag(player.getType())) {
                 maxaffection = characterPool.human.getAffection(player);
                 lover = player;
             }
@@ -104,7 +104,7 @@ public abstract class Prematch {
         participants.add(characterPool.human);
         // Disable characters flagged as disabled
         for (NPC npc : characterPool.availableNpcs()) {
-            if (!Flag.checkCharacterDisabledFlag(npc)) {
+            if (!Flag.checkCharacterDisabledFlag(npc.getType())) {
                 participants.add(npc);
             }
         }
@@ -114,7 +114,7 @@ public abstract class Prematch {
         lineup.add(characterPool.human);
         if (matchmod.name().equals("maya")) {
             if (!Flag.checkFlag(Flag.Maya)) {
-                characterPool.newChallenger(new Maya(characterPool.human.getLevel()).getCharacter());
+                characterPool.newChallenger(characterPool.getNPCByType("Maya"), characterPool.human.getLevel() + 20);
                 Flag.flag(Flag.Maya);
             }
             NPC maya = Optional.ofNullable(characterPool.getNPC("Maya")).orElseThrow(() -> new IllegalStateException(

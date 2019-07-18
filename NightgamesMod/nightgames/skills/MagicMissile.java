@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -12,7 +13,7 @@ import nightgames.skills.damage.DamageType;
 
 public class MagicMissile extends Skill {
 
-    public MagicMissile(Character self) {
+    MagicMissile(CharacterType self) {
         super("Magic Missile", self);
         addTag(SkillTag.hurt);
         addTag(SkillTag.staminaDamage);
@@ -61,7 +62,7 @@ public class MagicMissile extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new MagicMissile(user);
+        return new MagicMissile(user.getType());
     }
 
     @Override

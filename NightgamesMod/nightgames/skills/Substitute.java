@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -9,7 +10,7 @@ import nightgames.stance.Behind;
 
 public class Substitute extends Skill {
 
-    public Substitute(Character self) {
+    Substitute(CharacterType self) {
         super("Substitute", self);
     }
 
@@ -59,7 +60,7 @@ public class Substitute extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Substitute(user);
+        return new Substitute(user.getType());
     }
 
     @Override

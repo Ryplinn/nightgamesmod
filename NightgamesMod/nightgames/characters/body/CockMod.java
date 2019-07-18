@@ -66,7 +66,7 @@ public class CockMod extends PartMod {
             String message = "";
             if (target.moddedPartCountsAs(opponent, DemonicMod.INSTANCE)) {
                 message += String.format(
-                                "The fae energies inside %s %s radiate outward and into %s, causing %s %s to grow much more sensitve.",
+                                "The fae energies inside %s %s radiate outward and into %s, causing %s %s to grow much more sensitive.",
                                 self.nameOrPossessivePronoun(), part.describe(self), opponent.nameOrPossessivePronoun(),
                                 opponent.possessiveAdjective(), target.describe(opponent));
                 bonus += damage * 0.5; // +50% damage
@@ -75,7 +75,7 @@ public class CockMod extends PartMod {
                 message += String.format("Power radiates out from %s %s, seeping into %s and subverting %s will. ",
                                 self.nameOrPossessivePronoun(), part.describe(self), opponent.nameOrPossessivePronoun(),
                                 opponent.directObject());
-                opponent.add(c, new Enthralled(opponent, self, 3));
+                opponent.add(c, new Enthralled(opponent.getType(), self, 3));
             }
             if (self.hasStatus(Stsflag.cockbound)) {
                 String binding = ((CockBound) self.getStatus(Stsflag.cockbound)).binding;
@@ -124,17 +124,17 @@ public class CockMod extends PartMod {
             if (Random.random(5) == 0 && target.getType().equals("pussy")) {
                 message += String.format(
                                 "%s %s out inside %s %s, pressing the metallic head of %s %s tightly against %s cervix. "
-                                                + "Then, a thin tube extends from %s uthera and into %s womb, pumping in a powerful aphrodisiac that soon has %s sensitive and"
+                                                + "Then, a thin tube extends from %s urethra and into %s womb, pumping in a powerful aphrodisiac that soon has %s sensitive and"
                                                 + " gasping for more.",
                                 self.subject(), self.human() ? "bottom" : "bottoms", opponent.nameOrPossessivePronoun(),
                                 target.describe(opponent), self.possessiveAdjective(), part.describe(self),
                                 opponent.possessiveAdjective(), self.possessiveAdjective(), opponent.possessiveAdjective(),
                                 opponent.directObject());
-                opponent.add(c, new Hypersensitive(opponent));
+                opponent.add(c, new Hypersensitive(opponent.getType()));
                 // Instantly addict
-                opponent.add(c, new FluidAddiction(opponent, self, 1, 2));
-                opponent.add(c, new FluidAddiction(opponent, self, 1, 2));
-                opponent.add(c, new FluidAddiction(opponent, self, 1, 2));
+                opponent.add(c, new FluidAddiction(opponent.getType(), self.getType(), 1, 2));
+                opponent.add(c, new FluidAddiction(opponent.getType(), self.getType(), 1, 2));
+                opponent.add(c, new FluidAddiction(opponent.getType(), self.getType(), 1, 2));
                 bonus -= 3; // Didn't actually move around too much
             } else if (target.moddedPartCountsAs(opponent, FieryMod.INSTANCE)) {
                 message += String.format(
@@ -151,7 +151,7 @@ public class CockMod extends PartMod {
             }
             c.write(self, message);
         } else if (this.equals(enlightened)) {
-            String message = "";
+            String message;
             if (target.moddedPartCountsAs(opponent, DemonicMod.INSTANCE)) {
                 message = String.format(
                                 "Almost instinctively, %s %s entire being into %s %s. While this would normally be a good thing,"
@@ -174,7 +174,7 @@ public class CockMod extends PartMod {
                                                                                            // 25->30->30
                     Attribute attr = new Attribute[] {Attribute.power, Attribute.cunning, Attribute.seduction}[Random
                                     .random(3)];
-                    self.add(c, new AttributeBuff(self, attr, 1, 10));
+                    self.add(c, new AttributeBuff(self.getType(), attr, 1, 10));
                 }
                 self.buildMojo(c, 5);
                 self.restoreWillpower(c, 1);
@@ -230,7 +230,7 @@ public class CockMod extends PartMod {
                                         Formatter.capitalizeFirstLetter(opponent.subjectAction("offer", "offers")));
                         duration += 2;
                     }
-                    opponent.add(c, new Enthralled(opponent, self, duration));
+                    opponent.add(c, new Enthralled(opponent.getType(), self, duration));
                     c.write(self, message);
                 }
             } else {
@@ -253,7 +253,7 @@ public class CockMod extends PartMod {
 
     public void tickHolding(Combat c, Character self, Character opponent, BodyPart otherOrgan, CockPart part) {
         if (this.equals(primal)) {
-            c.write(self, String.format("Raw sexual energy flows from %s %s into %s %s, enflaming %s lust",
+            c.write(self, String.format("Raw sexual energy flows from %s %s into %s %s, inflaming %s lust",
                             self.nameOrPossessivePronoun(), part.describe(self), opponent.nameOrPossessivePronoun(),
                             otherOrgan.describe(opponent), opponent.possessiveAdjective()));
             opponent.add(c, Pheromones.getWith(self, opponent, Random.random(3) + 1, 3, " primal passion"));
@@ -270,17 +270,6 @@ public class CockMod extends PartMod {
                                                 + "feels like pure ecstasy. {self:SUBJECT} hasn't even begun moving yet, but {self:possessive} cock simply sitting within you radiates a heat that has you squirming uncontrollably.",
                                 self, opponent));
             }
-        }
-    }
-
-    public void onEndPenetration(Combat c, Character self, Character opponent, BodyPart part, BodyPart target) {
-        if (this.equals(slimy)) {
-            c.write(self, Formatter.format(
-                            "As {self:possessive} {self:body-part:cock} leaves {other:possessive} "
-                                            + target.describe(opponent)
-                                            + ", a small bit of slime stays behind, vibrating inside of {other:direct-object}.",
-                            self, opponent));
-            opponent.add(c, new Horny(opponent, Math.max(4, opponent.getArousal().max() / 20), 10, self.nameOrPossessivePronoun() + " slimy residue"));
         }
     }
 

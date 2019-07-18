@@ -1,11 +1,14 @@
 package nightgames.stance;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
+import java.util.Optional;
+
 public class UpsideDownMaledom extends MaledomSexStance {
-    public UpsideDownMaledom(Character top, Character bottom) {
+    public UpsideDownMaledom(CharacterType top, CharacterType bottom) {
         super(top, bottom, Stance.upsidedownmaledom);
     }
 
@@ -81,7 +84,7 @@ public class UpsideDownMaledom extends MaledomSexStance {
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return new StandingOver(top, bottom);
     }
 

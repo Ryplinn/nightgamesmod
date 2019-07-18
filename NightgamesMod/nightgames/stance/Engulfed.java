@@ -112,7 +112,7 @@ public class Engulfed extends Position {
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return new Neutral(top, bottom);
     }
 
@@ -246,7 +246,6 @@ public class Engulfed extends Position {
                         + "{self:direct-object} back up when {self:pronoun-action:try}. "
                         + "All it really ends up accomplishing is some friction between {self:possessive} genitals and {other:poss-pronoun}.", struggler, opponent));
         pleasureRandomCombination(c, struggler, opponent);
-        super.struggle(c, struggler);
     }
 
     @Override
@@ -257,6 +256,5 @@ public class Engulfed extends Position {
                         + "However, none of {self:possessive} attempts to have {other:name-do} release {self:direct-object} does any good, "
                         + "as {other:pronoun} just stares at {self:direct-object} emotionlessly while teasing {self:possessive} lower half encased in {other:possessive} slime.", escapee, opponent));
         pleasureRandomCombination(c, escapee, opponent);
-        super.escape(c, escapee);
     }
 }

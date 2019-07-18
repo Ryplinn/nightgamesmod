@@ -7,7 +7,7 @@ import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
-import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.Optional;
@@ -31,7 +31,7 @@ public class PartiallyCorrupted extends DurationStatus {
     public String initialMessage(Combat c, Optional<Status> replacement) {
         if (counter > THRESHOLD) {
             affected.addict(c, AddictionType.CORRUPTION,
-                            cause, cause.has(Trait.Subversion) ? AddictionSymptom.HIGH_INCREASE : AddictionSymptom.MED_INCREASE);
+                            cause, cause.has(Trait.Subversion) ? Addiction.HIGH_INCREASE : Addiction.MED_INCREASE);
             counter = 0;
             return Formatter.format("{other:NAME-POSSESSIVE} lips have finally broke through {self:possessive} resistance and planted a bit of {other:possessive} darkness inside {self:possessive} very soul!", affected, cause);
         } else {

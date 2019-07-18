@@ -9,7 +9,7 @@ import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
 import nightgames.nskills.tags.SkillTag;
-import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.ArrayList;
@@ -85,7 +85,7 @@ public class Masturbate extends Skill {
             c.write(getSelf(), receive(c, 0, Result.normal, target));
         }
         if (getSelf().checkAddiction(AddictionType.MIND_CONTROL, target)) {
-            getSelf().unaddictCombat(AddictionType.MIND_CONTROL, target, AddictionSymptom.MED_INCREASE, c);
+            getSelf().unaddictCombat(AddictionType.MIND_CONTROL, target, Addiction.MED_INCREASE, c);
             c.write(getSelf(), "Touching yourself amuses Mara, reducing her control over you.");
         }
         int pleasure;

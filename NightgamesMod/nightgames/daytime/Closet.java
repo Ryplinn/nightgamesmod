@@ -6,12 +6,11 @@ import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public class Closet extends Activity {
 
-    Closet(Player player) {
-        super("Change Clothes", player);
+    Closet() {
+        super("Change Clothes");
     }
 
     @Override
@@ -25,7 +24,7 @@ public class Closet extends Activity {
         if (choice.equals("Start")) {
             GUI.gui.clearText();
             GUI.gui.clearCommand();
-            GUI.gui.changeClothes(player);
+            GUI.gui.changeClothes(getPlayer());
             done(false, instance);
         }
     }

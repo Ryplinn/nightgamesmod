@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -12,7 +13,7 @@ import nightgames.skills.damage.DamageType;
 import java.util.Optional;
 
 public class FlyCatcher extends Skill {
-    public FlyCatcher(Character self) {
+    public FlyCatcher(CharacterType self) {
         super("Fly Catcher", self);
     }
 
@@ -54,7 +55,7 @@ public class FlyCatcher extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new FlyCatcher(user);
+        return new FlyCatcher(user.getType());
     }
 
     @Override

@@ -3,6 +3,7 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.NPC;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -11,18 +12,18 @@ import nightgames.global.Formatter;
 import java.util.Optional;
 
 public class AttributeBuff extends DurationStatus {
-    protected Attribute modded;
+    Attribute modded;
     protected int value;
 
     public AttributeBuff() {
-        this(NPC.noneCharacter(), Attribute.hypnotism, 1, 0);
+        this(NPC.noneCharacter().getType(), Attribute.hypnotism, 1, 0);
     }
 
-    public AttributeBuff(Character affected, Attribute att, int value, int duration) {
+    public AttributeBuff(CharacterType affected, Attribute att, int value, int duration) {
         this(String.format("%s %+d", att.displayName(), value), affected, att, value, duration);
     }
 
-    public AttributeBuff(String name, Character affected, Attribute att, int value, int duration) {
+    public AttributeBuff(String name, CharacterType affected, Attribute att, int value, int duration) {
         super(name, affected, duration);
         flag(Stsflag.purgable);
         if (value < 0) {
@@ -37,25 +38,25 @@ public class AttributeBuff extends DurationStatus {
         int newValue;
         newValue = replacement.map(status -> ((AttributeBuff) status).value).orElseGet(() -> this.value);
         if (newValue < 0) {
-            return Formatter.format("{self:pronoun-action:feel|seems} %s{self:if-human: than before}{self:if-nonhuman: now}", affected, affected, modded.getLowerPhrase());
+            return Formatter.format("{self:pronoun-action:feel|seems} %s{self:if-human: than before}{self:if-nonhuman: now}", getAffected(), getAffected(), modded.getLowerPhrase());
         } else {
-            return Formatter.format("{self:pronoun-action:feel|seems} %s{self:if-human: than before}{self:if-nonhuman: now}", affected, affected, modded.getRaisePhrase());
+            return Formatter.format("{self:pronoun-action:feel|seems} %s{self:if-human: than before}{self:if-nonhuman: now}", getAffected(), getAffected(), modded.getRaisePhrase());
         }
     }
 
     @Override
     public float fitnessModifier() {
-        return value / (2.0f * Math.min(1.0f, Math.max(1, affected.getPure(modded)) / 10.0f));
+        return value / (2.0f * Math.min(1.0f, Math.max(1, getAffected().getPure(modded)) / 10.0f));
     }
 
     @Override
     public String describe(Combat c) {
         String person, adjective, modification;
 
-        if (affected.human()) {
+        if (getAffected().human()) {
             person = "You feel your";
         } else {
-            person = affected.getName() + "'s";
+            person = getAffected().getName() + "'s";
         }
         if (Math.abs(value) > 5) {
             adjective = "greatly";
@@ -164,7 +165,7 @@ public class AttributeBuff extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new AttributeBuff(newAffected, modded, value, getDuration());
+        return new AttributeBuff(newAffected.getType(), modded, value, getDuration());
     }
 
     @Override

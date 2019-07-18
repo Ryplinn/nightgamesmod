@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class AiriTime extends BaseNPCTime {
-    AiriTime(Player player) {
-        super(player, GameState.gameState.characterPool.getNPC("Airi"));
+    AiriTime() {
+        super(GameState.getGameState().characterPool.getNPC("Airi"));
         knownFlag = "Airi";
         giftedString = "\"Uhm... thank you!\"";
         giftString = "\"Oh wow... for me? th-thanks...!\"";
@@ -97,18 +97,18 @@ public class AiriTime extends BaseNPCTime {
 
     @Override
     public void subVisitIntro(String choice, List<LabeledValue<String>> nextChoices) {
-        if (npc.getAffection(player) > 0) {
+        if (npc.getAffection(getPlayer()) > 0) {
             GUI.gui
                   .message("You have some free time, so you decide to text Airi to see if she wants to meet up. You receive an answer in a few minutes with instructions to her flat off campus. "
                                   + "There's no time like the present, so you pack up and head towards her place. You arrive at a high-rise close to the north gate; following her instructions you press the dialer and button in her number. "
-                                  + "A few cracks of static later, you hear her soft voice <i>\"Hey " + player.getTrueName() + ", please come on in.\"</i> The sliding doors open for you and you head to her floor."
+                                  + "A few cracks of static later, you hear her soft voice <i>\"Hey " + getPlayer().getTrueName() + ", please come on in.\"</i> The sliding doors open for you and you head to her floor."
                                   + "<br/><br/>"
                                   + "You're a bit nervous, but you quickly find yourself standing outside a posh entrance ringing the bell. The sound of foot steps ring out from behind the door and you a flushed Airi welcoming you inside. "
                                   + "She's in human form again, wearing an elegant but sexy blouse and skirt set instead of her usual down to earth lab gear. You smile wryly at her as you realize that she's been getting ready for you.");
             choose("Games", nextChoices);
             choose("Sparring", nextChoices);
             choose("Sex", nextChoices);
-        } else if (npc.getAttraction(player) < 15) {
+        } else if (npc.getAttraction(getPlayer()) < 15) {
             GUI.gui.loadPortrait("airi_human.jpg");
             GUI.gui.showPortrait();
             GUI.gui
@@ -117,9 +117,9 @@ public class AiriTime extends BaseNPCTime {
                                   + "While her face is identical to her slime form's, she looks like a completely normal slim asian girl wearing jeans and a loose tshirt. "
                                   + "None of the quiet confidence and hunger she displayed last night seems to exist anymore. Rather, her bangs seems to hide her eyes and her presence is very thin."
                                   + "<br/><br/>After observing her work for a bit, you decide not to bother her and start working on your own exercises.");
-            npc.gainAttraction(player, 2);
-            player.gainAttraction(npc, 2);
-        } else if (npc.getAttraction(player) < 25) {
+            npc.gainAttraction(getPlayer(), 2);
+            getPlayer().gainAttraction(npc, 2);
+        } else if (npc.getAttraction(getPlayer()) < 25) {
             GUI.gui.loadPortrait("airi_human.jpg");
             GUI.gui.showPortrait();
             GUI.gui
@@ -129,16 +129,16 @@ public class AiriTime extends BaseNPCTime {
                                   + "It seem's like fortune was on your side today, and you find her once again sitting alone in the corner of the lab, this time having lunch. "
                                   + "You make a friendly gesture to her, and head towards her table. At first she seems confused, but once recognition registered in her eyes, Airi yelps and runs away."
                                   + "Confused by her now uncharacteristic behavior, you dejectedly decide to try again later.");
-            npc.gainAttraction(player, 2);
-            player.gainAttraction(npc, 2);
+            npc.gainAttraction(getPlayer(), 2);
+            getPlayer().gainAttraction(npc, 2);
         } else {
             GUI.gui.loadPortrait("airi_human.jpg");
             GUI.gui.showPortrait();
             GUI.gui.message("Once again, you chanced upon Airi in the university lab. You wrestle with yourself whether you should try approaching her again, seeing how well your last few attempts went. "
                             + "You glance up at the lithe asian girl, and you immediately notice something wrong. Airi has collapsed on her table with her face flushed and her skin moist with sweat."
                             + "Throwing your caution to the winds, you rush over to her and ask her if she's OK.");
-            npc.gainAffection(player, 1);
-            player.gainAffection(npc, 1);
+            npc.gainAffection(getPlayer(), 1);
+            getPlayer().gainAffection(npc, 1);
             choose("Rush over", nextChoices);
             return;
         }
@@ -225,14 +225,14 @@ public class AiriTime extends BaseNPCTime {
                                                                 + "<br/><br/>"
                                                                 + "The time goes by all too quickly, and Airi finally releases you from her body. You almost fall when you try getting up; your muscles are so relaxed that you could barely move at first. Airi, now back in human form, reaches up on her tiptoes "
                                                                 + "and gives you a sweet kiss. <i>\"That was fun, and the fluids really helped me out. Uhm... let's do it again soon okay?\"</i>",
-                                                GameState.gameState.characterPool.getCharacterByType("Airi"),
-                                                GameState.gameState.characterPool.getPlayer()));
-                Daytime.train(player, npc, Attribute.seduction);
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
-                if (Random.random(5) == 0 && (!player.has(Trait.Clingy) || !npc.has(Trait.Clingy))) {
+                                                GameState.getGameState().characterPool.getCharacterByType("Airi"),
+                                                GameState.getGameState().characterPool.getPlayer()));
+                Daytime.train(getPlayer(), npc, Attribute.seduction);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
+                if (Random.random(5) == 0 && (!getPlayer().has(Trait.Clingy) || !npc.has(Trait.Clingy))) {
                     GUI.gui.message("You feel like you learned a lot about holding on to someone. Maybe you can apply this in the games?");
-                    player.add(Trait.Clingy);
+                    getPlayer().add(Trait.Clingy);
                     npc.getGrowth().addTrait(0, Trait.Clingy);
                 }
                 choose("Leave", nextChoices);
@@ -257,14 +257,14 @@ public class AiriTime extends BaseNPCTime {
                                                                 + "gets the better of you and you agree. Facing off one last time, you try the same tactics again and rush towards her. Suddenly, you feel a pressure at your prostate again and are forcibly made to cum again before you even reach Airi. Falling at her feet, you can only shoot your sperm into the air as the unexpected "
                                                                 + "pleasure forces you to your knees. It looks like Airi never actually took out the slime that invaded your ass, and simply hid it inside you. The petite asian walks over to you and toys with your erection a bit with her feet. <i>\"Looks like there's many ways to win the same fight,\"</i> she giggles. "
                                                                 + "Defeated, you can only sigh in resignation. Looks like you have a couple of expensive dates soon.",
-                                                GameState.gameState.characterPool.getCharacterByType("Airi"),
-                                                GameState.gameState.characterPool.getPlayer()));
-                Daytime.train(player, npc, Attribute.power);
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
-                if (Random.random(5) == 0 && (!player.has(Trait.fakeout) || !npc.has(Trait.fakeout))) {
+                                                GameState.getGameState().characterPool.getCharacterByType("Airi"),
+                                                GameState.getGameState().characterPool.getPlayer()));
+                Daytime.train(getPlayer(), npc, Attribute.power);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
+                if (Random.random(5) == 0 && (!getPlayer().has(Trait.fakeout) || !npc.has(Trait.fakeout))) {
                     GUI.gui.message("You learn some real-world lessons on misleading people.");
-                    player.add(Trait.fakeout);
+                    getPlayer().add(Trait.fakeout);
                     npc.getGrowth().addTrait(0, Trait.fakeout);
                 }
                 choose("Leave", nextChoices);
@@ -273,14 +273,14 @@ public class AiriTime extends BaseNPCTime {
                 GUI.gui.loadPortrait("airi_human.jpg");
                 GUI.gui.showPortrait();
                 GUI.gui.message(Formatter.format("[Placeholder]You play monster hunter with Airi.",
-                                GameState.gameState.characterPool.getCharacterByType("Airi"),
-                                GameState.gameState.characterPool.getPlayer()));
-                Daytime.train(player, npc, Attribute.cunning);
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
-                if (Random.random(5) == 0 && (!player.has(Trait.fakeout) || !npc.has(Trait.fakeout))) {
+                                GameState.getGameState().characterPool.getCharacterByType("Airi"),
+                                GameState.getGameState().characterPool.getPlayer()));
+                Daytime.train(getPlayer(), npc, Attribute.cunning);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
+                if (Random.random(5) == 0 && (!getPlayer().has(Trait.fakeout) || !npc.has(Trait.fakeout))) {
                     GUI.gui.message("You feel like you learned a lot about holding on to someone. Maybe you can apply this in the games?");
-                    player.add(Trait.fakeout);
+                    getPlayer().add(Trait.fakeout);
                     npc.getGrowth().addTrait(0, Trait.fakeout);
                 }
                 choose("Leave", nextChoices);

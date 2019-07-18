@@ -6,12 +6,13 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class Charmed extends DurationStatus {
-    public Charmed(Character affected) {
+    public Charmed(CharacterType affected) {
         super("Charmed", affected, 5);
         flag(Stsflag.charmed);
         flag(Stsflag.purgable);
@@ -19,17 +20,17 @@ public class Charmed extends DurationStatus {
         flag(Stsflag.mindgames);
     }
 
-    public Charmed(Character affected, int duration) {
+    public Charmed(CharacterType affected, int duration) {
         this(affected);
         super.setDuration(duration);
     }
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
-            return "You feel an irresistible attraction to " + c.getOpponent(affected).nameDirectObject() + " and can't imagine harming "+c.getOpponent(affected).directObject()+".";
+        if (getAffected().human()) {
+            return "You feel an irresistible attraction to " + c.getOpponent(getAffected()).nameDirectObject() + " and can't imagine harming "+c.getOpponent(getAffected()).directObject()+".";
         } else {
-            return affected.getName() + " is looking at "+c.getOpponent(affected).nameDirectObject()
+            return getAffected().getName() + " is looking at "+c.getOpponent(getAffected()).nameDirectObject()
                             +" like a lovestruck teenager.";
         }
     }
@@ -46,13 +47,13 @@ public class Charmed extends DurationStatus {
 
     @Override
     public void onRemove(Combat c, Character other) {
-        affected.addlist.add(new Cynical(affected));
+        getAffected().addlist.add(new Cynical(affected));
     }
 
     @Override
     public void tick(Combat c) {
-        affected.emote(Emotion.horny, 15);
-        affected.loseWillpower(c, 1, 0, false, " (Charmed)");
+        getAffected().emote(Emotion.horny, 15);
+        getAffected().loseWillpower(c, 1, 0, false, " (Charmed)");
     }
 
     @Override
@@ -112,7 +113,7 @@ public class Charmed extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Charmed(newAffected);
+        return new Charmed(newAffected.getType());
     }
 
     @Override  public JsonObject saveToJson() {

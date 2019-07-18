@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -9,7 +10,7 @@ import nightgames.skills.damage.DamageType;
 
 public class Sedate extends Skill {
 
-    public Sedate(Character self) {
+    public Sedate(CharacterType self) {
         super("Sedate", self);
     }
 
@@ -49,7 +50,7 @@ public class Sedate extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Sedate(user);
+        return new Sedate(user.getType());
     }
 
     @Override

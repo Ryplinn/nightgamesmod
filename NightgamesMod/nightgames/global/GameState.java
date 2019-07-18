@@ -1,12 +1,10 @@
 package nightgames.global;
 
-import nightgames.characters.Attribute;
-import nightgames.characters.CharacterPool;
-import nightgames.characters.CharacterSex;
-import nightgames.characters.Player;
+import nightgames.characters.*;
 import nightgames.characters.trait.Trait;
 import nightgames.daytime.Daytime;
 import nightgames.gui.GUI;
+import nightgames.json.JsonUtils;
 import nightgames.skills.SkillPool;
 import nightgames.start.PlayerConfiguration;
 import nightgames.start.StartConfiguration;
@@ -20,9 +18,8 @@ import java.util.concurrent.ExecutionException;
  * Creates, destroys, and maintains the state of a running game.
  */
 public class GameState {
-    public static final double DEFAULT_XP_RATE = 1.0;
+    static final double DEFAULT_XP_RATE = 1.0;
     public static final double DEFAULT_MONEY_RATE = 1.0;
-    public volatile static GameState gameState;
     public double moneyRate;
     public double xpRate;
     private static boolean ingame = false;
@@ -51,7 +48,7 @@ public class GameState {
         Flag.resetCounters();
         Time.time = Time.NIGHT;
         Time.date = 1;
-        Flag.setCharacterDisabledFlag(characterPool.getNPCByType("Yui"));
+        Flag.setCharacterDisabledFlag(CharacterType.get("Yui"));
         Flag.setFlag(Flag.systemMessages, true);
     }
 
@@ -76,10 +73,6 @@ public class GameState {
         Time.date = data.date;
         Time.time = data.time;
         GUI.gui.fontsize = data.fontsize;
-    }
-
-    public static GameState state() {
-        return gameState;
     }
 
     // TODO: Make this its own scene.
@@ -112,6 +105,14 @@ public class GameState {
 
     public static boolean inGame() {
         return ingame;
+    }
+
+    public static GameState getGameState() {
+        return Main.gameState;
+    }
+
+    static void setGameState(GameState gameState) {
+        Main.gameState = gameState;
     }
 
     synchronized void gameLoop() {
@@ -174,9 +175,9 @@ public class GameState {
     }
 
     public static void closeCurrentGame() {
-        if (GameState.gameState != null) {
-            GameState.gameState.closeGame();
-            GameState.gameState = null;
+        if (GameState.getGameState() != null) {
+            GameState.getGameState().closeGame();
+            GameState.setGameState(null);
         }
     }
 }

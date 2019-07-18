@@ -1,28 +1,30 @@
 package nightgames.stance;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
-public class Behind extends AbstractBehindStance {
-    public Behind(Character top, Character bottom) {
+public class Behind extends Position {
+    public Behind(CharacterType top, CharacterType bottom) {
         super(top, bottom, Stance.behind);
+        this.facingType = FacingType.BEHIND;
     }
 
     @Override
     public String describe(Combat c) {
-        if (top.human()) {
-            return "You are holding " + bottom.getName() + " from behind.";
+        if (getTop().human()) {
+            return "You are holding " + getBottom().getName() + " from behind.";
         } else {
-            return String.format("%s is holding %s from behind.", top.subject(), bottom.nameDirectObject());
+            return String.format("%s is holding %s from behind.", getTop().subject(), getBottom().nameDirectObject());
         }
     }
 
     @Override
     public String image() {
-        if (top.hasPussy() && bottom.hasPussy()) {
+        if (getTop().hasPussy() && getBottom().hasPussy()) {
             return "behind_ff.jpg";
-        } else if (bottom.hasPussy()) {
+        } else if (getBottom().hasPussy()) {
             return "behind_m.jpg";
         } else {
             return "behind_f.jpg";
@@ -31,27 +33,27 @@ public class Behind extends AbstractBehindStance {
 
     @Override
     public boolean mobile(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
     public boolean kiss(Character c, Character target) {
-        return c != top && c != bottom;
+        return c.getType() != top && c.getType() != bottom;
     }
 
     @Override
     public boolean dom(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
     public boolean sub(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
     public boolean reachTop(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
@@ -66,17 +68,17 @@ public class Behind extends AbstractBehindStance {
 
     @Override
     public boolean feet(Character c, Character target) {
-        return c != top && c != bottom && target == top;
+        return c.getType() != top && c.getType() != bottom && target.getType() == top;
     }
 
     @Override
     public boolean oral(Character c, Character target) {
-        return c != top && c != bottom && target == top;
+        return c.getType() != top && c.getType() != bottom && target.getType() == top;
     }
 
     @Override
     public boolean behind(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
@@ -108,16 +110,14 @@ public class Behind extends AbstractBehindStance {
     public void struggle(Combat c, Character struggler) {
         c.write(struggler, String.format("%s to gain a more dominant position, but with"
                         + " %s behind %s holding %s waist firmly, there is nothing %s can do.",
-                        struggler.subjectAction("struggle"), top.subject(), struggler.directObject(),
+                        struggler.subjectAction("struggle"), getTop().subject(), struggler.directObject(),
                         struggler.possessiveAdjective(), struggler.pronoun()));
-        super.struggle(c, struggler);
     }
 
     @Override
     public void escape(Combat c, Character escapee) {
         c.write(escapee, Formatter.format("{self:SUBJECT-ACTION:try} to escape {other:name-possessive} hold, but with"
                         + " {other:direct-object} behind {self:direct-object} holding {self:possessive} waist firmly, there is nothing {self:pronoun} can do.",
-                        escapee, top));
-        super.escape(c, escapee);
+                        escapee, getTop()));
     }
 }

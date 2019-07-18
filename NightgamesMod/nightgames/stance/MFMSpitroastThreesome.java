@@ -1,9 +1,6 @@
 package nightgames.stance;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import nightgames.characters.Character;
@@ -22,7 +19,7 @@ public class MFMSpitroastThreesome extends MaledomSexStance {
     }
 
     @Override
-    public Character domSexCharacter(Combat c) {
+    public Character getDomSexCharacter() {
         return domSexCharacter;
     }
 
@@ -32,11 +29,12 @@ public class MFMSpitroastThreesome extends MaledomSexStance {
     }
 
     @Override
-    public void checkOngoing(Combat c) {
-        if (!c.getOtherCombatants().contains(domSexCharacter)) {
+    public Optional<Position> checkOngoing(Combat c) {
+        if (!c.otherCombatantsContains(getDomSexCharacter())) {
             c.write(bottom, Formatter.format("With the disappearance of {self:name-do}, {other:subject-action:manage|manages} to escape.", domSexCharacter, bottom));
             c.setStance(new Neutral(top, bottom));
         }
+        return null;
     }
 
     @Override
@@ -55,7 +53,7 @@ public class MFMSpitroastThreesome extends MaledomSexStance {
 
     @Override
     public List<BodyPart> partsForStanceOnly(Combat combat, Character self, Character other) {
-        if (self == domSexCharacter(combat) && other == bottom) {
+        if (self == getDomSexCharacter() && other == bottom) {
             return topParts(combat);
         }
         if (self == top) {
@@ -74,7 +72,7 @@ public class MFMSpitroastThreesome extends MaledomSexStance {
     }
 
     public Character getPartner(Combat c, Character self) {
-        Character domSex = domSexCharacter(c);
+        Character domSex = getDomSexCharacter();
         if (self == top) {
             return bottom;
         } else if (domSex == self) {
@@ -90,7 +88,7 @@ public class MFMSpitroastThreesome extends MaledomSexStance {
             return "";
         } else {
             return String.format("%s is fucking %s face while %s taking %s from behind.",
-                            top.subject(), bottom.nameOrPossessivePronoun(), domSexCharacter(c).subjectAction("are", "is"), bottom.directObject());
+                            top.subject(), bottom.nameOrPossessivePronoun(), getDomSexCharacter().subjectAction("are", "is"), bottom.directObject());
         }
     }
 
@@ -147,7 +145,7 @@ public class MFMSpitroastThreesome extends MaledomSexStance {
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return new Mount(top, bottom);
     }
 

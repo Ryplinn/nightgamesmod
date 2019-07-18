@@ -1,13 +1,14 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.status.Enthralled;
 import nightgames.status.Stsflag;
 
 public abstract class PlayerCommand extends Skill {
 
-    public PlayerCommand(String name, Character self) {
+    public PlayerCommand(String name, CharacterType self) {
         super(name, self);
     }
 

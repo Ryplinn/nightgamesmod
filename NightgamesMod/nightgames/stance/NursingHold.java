@@ -12,9 +12,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 
-public class NursingHold extends AbstractFacingStance {
+public class NursingHold extends Position {
     public NursingHold(Character top, Character bottom) {
         super(top, bottom, Stance.nursing);
+        facingType = FacingType.FACING;
     }
 
     @Override
@@ -149,7 +150,6 @@ public class NursingHold extends AbstractFacingStance {
                             struggler.directObject()));
         }
         (new Suckle(struggler)).resolve(c, top);
-        super.struggle(c, struggler);
     }
 
     @Override
@@ -158,6 +158,5 @@ public class NursingHold extends AbstractFacingStance {
                         + " {other:direct-object} impressive chest in front of {self:possessive} face, {self:pronoun-action:are} easily convinced to stop.",
                         escapee, top));
         (new Suckle(escapee)).resolve(c, top);
-        super.escape(c, escapee);
     }
 }

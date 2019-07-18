@@ -1,10 +1,11 @@
 package nightgames.stance;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -12,7 +13,7 @@ import nightgames.global.Random;
 import nightgames.status.Stsflag;
 
 public abstract class AnalSexStance extends Position {
-    public AnalSexStance(Character top, Character bottom, Stance stance) {
+    AnalSexStance(CharacterType top, CharacterType bottom, Stance stance) {
         super(top, bottom, stance);
     }
 
@@ -30,13 +31,13 @@ public abstract class AnalSexStance extends Position {
 
     @Override
     public List<BodyPart> topParts(Combat c) {
-        return Arrays.asList(top.body.getRandomInsertable()).stream().filter(part -> part != null && part.present())
+        return Stream.of(getTop().body.getRandomInsertable()).filter(part -> part != null && part.present())
                         .collect(Collectors.toList());
     }
 
     @Override
     public List<BodyPart> bottomParts() {
-        return Arrays.asList(bottom.body.getRandomAss()).stream().filter(part -> part != null && part.present())
+        return Stream.of(getBottom().body.getRandomAss()).filter(part -> part != null && part.present())
                         .collect(Collectors.toList());
     }
 
@@ -62,10 +63,10 @@ public abstract class AnalSexStance extends Position {
 
     @Override
     public void struggle(Combat c, Character struggler) {
-        Character inserter = inserted(top) ? top : bottom;
-        Character inserted = inserted(top) ? bottom : top;
+        Character inserter = inserted(getTop()) ? getTop() : getBottom();
+        Character inserted = inserted(getTop()) ? getBottom() : getTop();
         Character opponent = getPartner(c, struggler);
-        boolean knotted = top.is(Stsflag.knotted);
+        boolean knotted = getTop().is(Stsflag.knotted);
 
         if (struggler.human()) {
             if (knotted) {
@@ -78,38 +79,37 @@ public abstract class AnalSexStance extends Position {
                 c.write(struggler, "You try to pull dislodge " + inserted.nameDirectObject()
                                 + ", but " + inserted.pronoun() + " holds you down with " + inserted.possessiveAdjective() + " ass.");
             }
-            c.write(bottom, Formatter.format("{other:POSSESSIVE} hard cock grinding against {self:possessive} "
+            c.write(getBottom(), Formatter.format("{other:POSSESSIVE} hard cock grinding against {self:possessive} "
                             + "bowels as %s to twist out of %s grip brings both of you closer to the edge.", inserted, inserter,
                             struggler.pronoun() + " " + struggler.action("attempt"), opponent.possessiveAdjective()));
         } else if (c.shouldPrintReceive(getPartner(c, struggler), c)) {
             if (knotted) {
-                c.write(bottom,
+                c.write(getBottom(),
                                 String.format("%s frantically attempts to get %s cock out of %s ass, "
                                                 + "but %s knot is keeping it inside %s warm depths.",
                                                 struggler.subject(), inserter.nameOrPossessivePronoun(),
                                                 inserted.possessiveAdjective(), inserter.possessiveAdjective(),
                                                 inserted.possessiveAdjective()));
             } else {
-                c.write(bottom, String.format("%s tries to squirm away, but %s better leverage.",
+                c.write(getBottom(), String.format("%s tries to squirm away, but %s better leverage.",
                                 struggler.subject(), opponent.subjectAction("have", "has")));
             }
-            c.write(bottom, Formatter.format("{other:POSSESSIVE} hard cock grinding against {self:possessive} "
+            c.write(getBottom(), Formatter.format("{other:POSSESSIVE} hard cock grinding against {self:possessive} "
                             + "bowels as %s to twist out of %s grip brings both of %s closer to the edge.", inserted, inserter,
                             struggler.pronoun() + struggler.action(" attempt"), opponent.possessiveAdjective(), 
                             c.bothDirectObject(opponent)));
         }
-        bottom.body.pleasure(top, Random.pickRandom(topParts(c)).orElse(null), Random.pickRandom(bottomParts()).orElse(null),
+        getBottom().body.pleasure(getTop(), Random.pickRandom(topParts(c)).orElse(null), Random.pickRandom(bottomParts()).orElse(null),
                         Random.random(6, 10), c);
-        top.body.pleasure(bottom, Random.pickRandom(bottomParts()).orElse(null), Random.pickRandom(topParts(c)).orElse(null),
+        getTop().body.pleasure(getBottom(), Random.pickRandom(bottomParts()).orElse(null), Random.pickRandom(topParts(c)).orElse(null),
                         Random.random(6, 10), c);
-        super.struggle(c, struggler);
     }
 
     @Override
     public void escape(Combat c, Character escapee) {
-        Character inserter = inserted(top) ? top : bottom;
+        Character inserter = inserted(getTop()) ? getTop() : getBottom();
         Character opponent = getPartner(c, escapee);
-        boolean knotted = top.is(Stsflag.knotted);
+        boolean knotted = getTop().is(Stsflag.knotted);
 
         if (knotted) {
             c.write(escapee, Formatter.capitalizeFirstLetter(escapee.subjectAction("try")) + " to force " + inserter.nameOrPossessivePronoun()
@@ -122,10 +122,9 @@ public abstract class AnalSexStance extends Position {
             c.write(escapee, Formatter.format("{self:SUBJECT-ACTION:try} to take advantage of an opening in {other:name-possessive} stance to slip away, "
                             + "but {other:pronoun-action:pounds} {other:possessive} cock into {self:possessive} ass, forcing {self:direct-object} to give up.", escapee, opponent));
         }
-        bottom.body.pleasure(top, Random.pickRandom(topParts(c)).orElse(null), Random.pickRandom(bottomParts()).orElse(null),
+        getBottom().body.pleasure(getTop(), Random.pickRandom(topParts(c)).orElse(null), Random.pickRandom(bottomParts()).orElse(null),
                         Random.random(6, 10), c);
-        top.body.pleasure(bottom, Random.pickRandom(bottomParts()).orElse(null), Random.pickRandom(topParts(c)).orElse(null),
+        getTop().body.pleasure(getBottom(), Random.pickRandom(bottomParts()).orElse(null), Random.pickRandom(topParts(c)).orElse(null),
                         Random.random(6, 10), c);
-        super.escape(c, escapee);
     }
 }

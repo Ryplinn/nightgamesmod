@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.nskills.tags.SkillTag;
@@ -17,7 +18,7 @@ public class CommandDown extends PlayerCommand {
                         && !c.getStance().havingSex(c) && getSelf().canRespond();
     }
 
-    public CommandDown(Character self) {
+    CommandDown(CharacterType self) {
         super("Force Down", self);
         addTag(SkillTag.positioning);
     }
@@ -36,7 +37,7 @@ public class CommandDown extends PlayerCommand {
 
     @Override
     public Skill copy(Character user) {
-        return new CommandDown(user);
+        return new CommandDown(user.getType());
     }
 
     @Override

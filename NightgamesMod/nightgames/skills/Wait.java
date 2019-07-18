@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.NPC;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -12,7 +13,7 @@ import nightgames.skills.damage.DamageType;
 
 public class Wait extends Skill {
 
-    public Wait(Character self) {
+    public Wait(CharacterType self) {
         super("Wait", self);
     }
 
@@ -64,7 +65,7 @@ public class Wait extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Wait(user);
+        return new Wait(user.getType());
     }
 
     @Override
@@ -126,7 +127,7 @@ public class Wait extends Skill {
     @Override
     public String describe(Combat c) {
         if (channel(c)) {
-            return "Focus and channel the natual energies around you";
+            return "Focus and channel the natural energies around you";
         } else if (focused(c)) {
             return "Calm yourself and gain some mojo";
         } else {

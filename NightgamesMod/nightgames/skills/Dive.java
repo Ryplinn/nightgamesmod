@@ -2,17 +2,18 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.Stance;
 import nightgames.stance.StandingOver;
-import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
 public class Dive extends Skill {
 
-    public Dive(Character self) {
+    public Dive(CharacterType self) {
         super("Dive", self);
         addTag(SkillTag.positioning);
         addTag(SkillTag.suicidal);
@@ -44,7 +45,7 @@ public class Dive extends Skill {
 
         if (getSelf().checkAddiction(AddictionType.MIND_CONTROL, target)) {
             getSelf().unaddictCombat(AddictionType.MIND_CONTROL, 
-                            target, AddictionSymptom.LOW_INCREASE, c);
+                            target, Addiction.LOW_INCREASE, c);
             c.write(getSelf(), "Acting submissively voluntarily reduces Mara's control over " + getSelf().nameDirectObject());
         }
         return true;
@@ -52,7 +53,7 @@ public class Dive extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Dive(user);
+        return new Dive(user.getType());
     }
 
     @Override

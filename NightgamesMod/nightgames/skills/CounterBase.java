@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -9,14 +10,14 @@ import nightgames.status.CounterStatus;
 import nightgames.status.Stsflag;
 
 public abstract class CounterBase extends Skill {
-    private String description;
+    protected String description;
     private int duration;
 
-    public CounterBase(String name, Character self, int cooldown, String description) {
+    public CounterBase(String name, CharacterType self, int cooldown, String description) {
         this(name, self, cooldown, description, 0);
     }
 
-    public CounterBase(String name, Character self, int cooldown, String description, int duration) {
+    public CounterBase(String name, CharacterType self, int cooldown, String description, int duration) {
         super(name, self, cooldown);
         addTag(SkillTag.counter);
         this.description = description;

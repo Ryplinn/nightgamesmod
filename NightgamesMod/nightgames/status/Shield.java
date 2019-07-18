@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -13,11 +14,11 @@ import nightgames.combat.Combat;
 public class Shield extends DurationStatus {
     private double strength;
 
-    public Shield(Character affected, double strength) {
+    public Shield(CharacterType affected, double strength) {
         this(affected, strength, 7);
     }
 
-    public Shield(Character affected, double strength, int duration) {
+    public Shield(CharacterType affected, double strength, int duration) {
         super("Shield", affected, duration);
         this.strength = strength;
         flag(Stsflag.shielded);
@@ -26,7 +27,7 @@ public class Shield extends DurationStatus {
 
     @Override
     public String initialMessage(Combat c, Optional<Status> replacement) {
-        return String.format("%s now shielded.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now shielded.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -47,7 +48,7 @@ public class Shield extends DurationStatus {
     @Override
     public int regen(Combat c) {
         super.regen(c);
-        affected.emote(Emotion.confident, 5);
+        getAffected().emote(Emotion.confident, 5);
         return 0;
     }
 
@@ -103,7 +104,7 @@ public class Shield extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Shield(newAffected, strength, getDuration());
+        return new Shield(newAffected.getType(), strength, getDuration());
     }
 
     @Override  public JsonObject saveToJson() {

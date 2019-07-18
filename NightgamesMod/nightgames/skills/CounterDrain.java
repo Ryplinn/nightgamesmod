@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -11,9 +12,10 @@ import nightgames.stance.Cowgirl;
 import nightgames.stance.Missionary;
 
 public class CounterDrain extends CounterBase {
-    public CounterDrain(Character self) {
-        super("Counter Vortex", self, 6,
-                        Formatter.format("{self:SUBJECT-ACTION:glow|glows} with a purple light.", self, self));
+    CounterDrain(CharacterType self) {
+        super("Counter Vortex", self, 6, "");
+        this.description =
+                        Formatter.format("{self:SUBJECT-ACTION:glow|glows} with a purple light.", getSelf(), getSelf());
         addTag(SkillTag.drain);
         addTag(SkillTag.fucking);
         addTag(SkillTag.staminaDamage);
@@ -66,7 +68,7 @@ public class CounterDrain extends CounterBase {
 
     @Override
     public Skill copy(Character user) {
-        return new CounterDrain(user);
+        return new CounterDrain(user.getType());
     }
 
     @Override

@@ -3,11 +3,11 @@ package nightgames.stance;
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
 
-public class StandingOver extends AbstractFacingStance {
+public class StandingOver extends Position {
 
     public StandingOver(Character top, Character bottom) {
         super(top, bottom, Stance.standingover);
-
+        facingType = FacingType.FACING;
     }
 
     @Override

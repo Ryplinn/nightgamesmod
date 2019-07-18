@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -12,7 +13,7 @@ import nightgames.stance.Stance;
 import nightgames.status.BodyFetish;
 
 public class OrgasmicTighten extends Thrust {
-    public OrgasmicTighten(Character self) {
+    public OrgasmicTighten(CharacterType self) {
         super("Orgasmic Tighten", self);
         removeTag(SkillTag.pleasureSelf);
     }
@@ -39,7 +40,6 @@ public class OrgasmicTighten extends Thrust {
 
         int m = Random.random(25, 40) + Math.min(getSelf().get(Attribute.power) / 3, 20);
         result[0] = m;
-        result[1] = 0;
 
         return result;
     }
@@ -65,7 +65,7 @@ public class OrgasmicTighten extends Thrust {
         if (m[1] != 0)
             getSelf().body.pleasure(target, targetO, selfO, m[1], -10000, c, false, this);
         if (selfO.isType("ass") && Random.random(100) < 2 + getSelf().get(Attribute.fetishism)) {
-            target.add(c, new BodyFetish(target, getSelf(), "ass", .25));
+            target.add(c, new BodyFetish(target.getType(), self, "ass", .25));
         }
         return true;
     }
@@ -77,7 +77,7 @@ public class OrgasmicTighten extends Thrust {
 
     @Override
     public Skill copy(Character user) {
-        return new OrgasmicTighten(user);
+        return new OrgasmicTighten(user.getType());
     }
 
     @Override

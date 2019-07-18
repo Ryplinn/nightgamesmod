@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -20,7 +21,7 @@ public class Kiss extends Skill {
     private static final String divineString = "Kiss of Baptism";
     private static final int divineCost = 30;
 
-    public Kiss(Character self) {
+    public Kiss(CharacterType self) {
         // kiss starts off strong, but becomes stale fast. It recovers pretty quickly too, but makes spamming it less effective
         super("Kiss", self, 0, Staleness.build().withDefault(1.0).withFloor(.20).withDecay(.50).withRecovery(.10));
         addTag(SkillTag.usesMouth);

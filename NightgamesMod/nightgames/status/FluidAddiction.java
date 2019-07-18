@@ -3,6 +3,7 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
@@ -14,9 +15,9 @@ import java.util.*;
 public class FluidAddiction extends DurationStatus {
     protected double magnitude;
     private int activated;
-    Character target;
+    CharacterType target;
 
-    public FluidAddiction(Character affected, Character target, double magnitude, int duration) {
+    public FluidAddiction(CharacterType affected, CharacterType target, double magnitude, int duration) {
         super("Addicted", affected, duration);
         this.target = target;
         this.magnitude = magnitude;
@@ -26,24 +27,24 @@ public class FluidAddiction extends DurationStatus {
         flag(Stsflag.purgable);
     }
 
-    public FluidAddiction(Character affected, Character target) {
-        this(affected, target, 1, 4);
+    public Character getTarget() {
+        return target.fromPoolGuaranteed();
     }
 
     @Override
     public String describe(Combat c) {
         if (isActive()) {
-            if (affected.human()) {
-                return "You feel a desperate need to taste more of " + target.nameOrPossessivePronoun() + " fluids.";
+            if (getAffected().human()) {
+                return "You feel a desperate need to taste more of " + getTarget().nameOrPossessivePronoun() + " fluids.";
             } else {
-                return affected.getName() + " is eyeing "+c.getOpponent(affected).nameDirectObject()+" like a junkie.";
+                return getAffected().getName() + " is eyeing "+c.getOpponent(getAffected()).nameDirectObject()+" like a junkie.";
             }
         } else {
-            if (affected.human()) {
-                return "You're not sure why " + target.nameOrPossessivePronoun()
-                                + " fluids is so tantalizing, but you know you want some more";
+            if (getAffected().human()) {
+                return "You're not sure why " + getTarget().nameOrPossessivePronoun()
+                                + " fluids are so tantalizing, but you know you want some more";
             } else {
-                return affected.getName() + " seems to want more of "+c.getOpponent(affected).nameOrPossessivePronoun()+" fluids.";
+                return getAffected().getName() + " seems to want more of "+c.getOpponent(getAffected()).nameOrPossessivePronoun()+" fluids.";
             }
         }
     }
@@ -69,13 +70,13 @@ public class FluidAddiction extends DurationStatus {
 
     @Override
     public void onRemove(Combat c, Character other) {
-        affected.addlist.add(new Tolerance(affected, 3));
+        getAffected().addlist.add(new Tolerance(affected, 3));
     }
 
     @Override
     public int regen(Combat c) {
         super.regen(c);
-        affected.emote(Emotion.horny, 15);
+        getAffected().emote(Emotion.horny, 15);
         return 0;
     }
 
@@ -112,11 +113,11 @@ public class FluidAddiction extends DurationStatus {
     @Override
     public String initialMessage(Combat c, Optional<Status> replacement) {
         if (replacement.isPresent()) {
-            return String.format("%s %s to %s fluids.\n", affected.subjectAction("are", "is"),
-                            toString().toLowerCase(), target.nameOrPossessivePronoun());
+            return String.format("%s %s to %s fluids.\n", getAffected().subjectAction("are", "is"),
+                            toString().toLowerCase(), getTarget().nameOrPossessivePronoun());
         }
-        return String.format("%s now %s to %s fluids.\n", affected.subjectAction("are", "is"), toString().toLowerCase(),
-                        target.nameOrPossessivePronoun());
+        return String.format("%s now %s to %s fluids.\n", getAffected().subjectAction("are", "is"), toString().toLowerCase(),
+                        getTarget().nameOrPossessivePronoun());
     }
 
     @Override
@@ -174,13 +175,13 @@ public class FluidAddiction extends DurationStatus {
         List<Skill> availSkills;
         if (!isActive()) {
             return Collections.emptySet();
-        } else if (target.has(Trait.lactating)) {
-            availSkills = Arrays.asList((Skill) new Suckle(affected), new LickNipples(affected), new Kiss(affected),
+        } else if (getTarget().has(Trait.lactating)) {
+            availSkills = Arrays.asList(new Suckle(affected), new LickNipples(affected), new Kiss(affected),
                             new Cunnilingus(affected), new Blowjob(affected));
         } else {
-            availSkills = Arrays.asList((Skill) new Kiss(affected), new Cunnilingus(affected), new Blowjob(affected));
+            availSkills = Arrays.asList(new Kiss(affected), new Cunnilingus(affected), new Blowjob(affected));
         }
-        if (availSkills.stream().anyMatch(skill -> skill.usable(c, target))) {
+        if (availSkills.stream().anyMatch(skill -> skill.usable(c, getTarget()))) {
             return availSkills;
         } else {
             return Collections.singletonList(new Beg(affected));
@@ -189,7 +190,7 @@ public class FluidAddiction extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new FluidAddiction(newAffected, newOther, magnitude, getDuration());
+        return new FluidAddiction(newAffected.getType(), newOther.getType(), magnitude, getDuration());
     }
 
     public boolean activated() {

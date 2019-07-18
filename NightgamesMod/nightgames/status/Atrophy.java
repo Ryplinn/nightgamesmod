@@ -10,12 +10,11 @@ import nightgames.global.Formatter;
 import nightgames.skills.damage.DamageType;
 
 import java.util.Optional;
-
 public class Atrophy extends DurationStatus {
     private float magnitude;
     protected String source;
 
-    public static Status getWithPsycologicalType(Character from, Character target, float magnitude, int duration, String source) {
+    public static Status getWithPsychologicalType(Character from, Character target, float magnitude, int duration, String source) {
         return new Atrophy(target, (float) DamageType.temptation.modifyDamage(from, target, magnitude), duration, source);
     }
     public static Atrophy getWithBiologicalType(Character from, Character target, float magnitude, int duration, String source) {

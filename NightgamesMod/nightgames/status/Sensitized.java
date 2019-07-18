@@ -13,9 +13,9 @@ import nightgames.global.Formatter;
 import nightgames.json.JsonUtils;
 
 public class Sensitized extends DurationStatus {
-    BodyPart part;
+    private BodyPart part;
     double magnitude;
-    double maximum;
+    private double maximum;
 
     public Sensitized(Character affected, BodyPart part, double magnitude, double maximum, int duration) {
         super("Sensitized (" + part.getType() + ")", affected, duration);

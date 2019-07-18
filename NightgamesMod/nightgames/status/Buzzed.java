@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -14,7 +15,7 @@ public class Buzzed extends DurationStatus {
 
     private int magnitude;
 
-    public Buzzed(Character affected) {
+    public Buzzed(CharacterType affected) {
         super("Buzzed", affected, 20);
         flag(Stsflag.purgable);
         magnitude = 1;
@@ -22,10 +23,10 @@ public class Buzzed extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "You feel a pleasant buzz, which makes you a bit sluggish, but also takes the edge of your sense of touch.";
         } else {
-            return affected.getName() + " looks mildly buzzed, probably trying to dull "+affected.possessiveAdjective()+" senses.";
+            return getAffected().getName() + " looks mildly buzzed, probably trying to dull "+getAffected().possessiveAdjective()+" senses.";
         }
     }
 
@@ -54,7 +55,7 @@ public class Buzzed extends DurationStatus {
     @Override
     public int regen(Combat c) {
         super.regen(c);
-        affected.emote(Emotion.confident, 15);
+        getAffected().emote(Emotion.confident, 15);
         return 0;
     }
 
@@ -123,7 +124,7 @@ public class Buzzed extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Buzzed(newAffected);
+        return new Buzzed(newAffected.getType());
     }
 
     @Override  public JsonObject saveToJson() {

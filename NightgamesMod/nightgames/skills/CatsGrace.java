@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.stance.Stance;
@@ -10,7 +11,7 @@ import nightgames.status.Stsflag;
 
 public class CatsGrace extends Skill {
 
-    public CatsGrace(Character self) {
+    CatsGrace(CharacterType self) {
         super("Cat's Grace", self);
     }
 
@@ -39,7 +40,7 @@ public class CatsGrace extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new CatsGrace(user);
+        return new CatsGrace(user.getType());
     }
 
     @Override

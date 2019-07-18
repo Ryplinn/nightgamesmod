@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -14,7 +15,7 @@ import nightgames.skills.damage.DamageType;
 import nightgames.status.Stsflag;
 
 public class ImpAssault extends SimpleEnemySkill {
-    public ImpAssault(Character self) {
+    public ImpAssault(CharacterType self) {
         super("Imp Assault", self);
         addTag(SkillTag.staminaDamage);
         addTag(SkillTag.positioning);
@@ -64,7 +65,7 @@ public class ImpAssault extends SimpleEnemySkill {
 
     @Override
     public Skill copy(Character user) {
-        return new ImpAssault(user);
+        return new ImpAssault(user.getType());
     }
 
     @Override

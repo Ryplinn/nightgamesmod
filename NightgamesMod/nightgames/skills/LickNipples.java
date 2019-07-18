@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -11,7 +12,7 @@ import nightgames.stance.Stance;
 
 public class LickNipples extends Skill {
 
-    public LickNipples(Character self) {
+    public LickNipples(CharacterType self) {
         super("Lick Nipples", self);
         addTag(SkillTag.usesMouth);
         addTag(SkillTag.pleasure);
@@ -57,7 +58,7 @@ public class LickNipples extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new LickNipples(user);
+        return new LickNipples(user.getType());
     }
 
     @Override

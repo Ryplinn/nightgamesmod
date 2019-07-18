@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Porn extends Activity {
-    public Porn(Player player) {
-        super("Browse Porn Sites", player);
+    public Porn() {
+        super("Browse Porn Sites");
     }
 
     @Override
@@ -28,7 +28,7 @@ public class Porn extends Activity {
     public void visit(String choice, int page, List<LabeledValue<String>> nextChoices, ActivityInstance instance) {
         GUI.gui.clearText();
         if (choice.equals("Start")) {
-            int gain = gainArousal(player);
+            int gain = gainArousal(getPlayer());
             showScene(pickScene(gain));
             GUI.gui.message("<b>Your maximum arousal has increased by " + gain + ".</b>");
             choose("Leave", nextChoices);
@@ -105,13 +105,14 @@ public class Porn extends Activity {
             available.add(Scene.basic1);
             available.add(Scene.basic2);
             available.add(Scene.basic3);
-            if (GameState.gameState.characterPool.getNPC("Mara").getAffection(player) >= 5) {
+            if (GameState.getGameState().characterPool.getNPC("Mara").getAffection(getPlayer()) >= 5) {
                 available.add(Scene.mara1);
             }
-            if (GameState.gameState.characterPool.getNPC("Angel").getAffection(player) >= 10) {
+            if (GameState.getGameState().characterPool.getNPC("Angel").getAffection(getPlayer()) >= 10) {
                 available.add(Scene.angel1);
             }
-            if (Flag.checkFlag(Flag.Reyka) && GameState.gameState.characterPool.getNPC("Reyka").getAffection(player) >= 1) {
+            if (Flag.checkFlag(Flag.Reyka) && GameState.getGameState().characterPool.getNPC("Reyka").getAffection(
+                            getPlayer()) >= 1) {
                 available.add(Scene.reyka1);
             }
         }

@@ -3,6 +3,7 @@ package nightgames.skills;
 import java.util.Optional;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,7 +14,7 @@ import nightgames.stance.Kneeling;
 import nightgames.status.BodyFetish;
 
 public class FootWorship extends Skill {
-    public FootWorship(Character self) {
+    public FootWorship(CharacterType self) {
         super("Foot Worship", self);
         addTag(SkillTag.pleasure);
         addTag(SkillTag.worship);

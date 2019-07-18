@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -17,7 +18,7 @@ public class Invitation extends Skill {
     private static final String divineStringFemale = "Goddess's Invitation";
     private static final String divineStringMale = "God's Invitation";
 
-    public Invitation(Character self) {
+    public Invitation(CharacterType self) {
         super("Invitation", self, 6);
         addTag(SkillTag.fucking);
         addTag(SkillTag.positioning);
@@ -36,9 +37,9 @@ public class Invitation extends Skill {
 
     @Override
     public boolean usable(Combat c, Character target) {
-        boolean insertable = c.getStance().insert(c, getSelf(), getSelf()) != c.getStance()
-                        || c.getStance().insert(c, target, getSelf()) != c.getStance();
-        boolean stanceInsertable = c.getStance().insertRandomDom(c, target) != c.getStance();
+        boolean insertable = c.getStance().insert(c, getSelf(), getSelf()).isPresent()
+                        || c.getStance().insert(c, target, getSelf()).isPresent();
+        boolean stanceInsertable = c.getStance().insertRandomDom(c, target).isPresent();
         return stanceInsertable && c.getStance().distance() < 2 && insertable && getSelf().canRespond() && getSelf().crotchAvailable() && target.crotchAvailable()
                         && (getSelf().hasDick() && target.hasPussy() || getSelf().hasPussy() && target.hasDick()) && !target.isPet() && target.canRespond();
     }
@@ -59,7 +60,7 @@ public class Invitation extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Invitation(user);
+        return new Invitation(user.getType());
     }
 
     @Override
@@ -146,7 +147,7 @@ public class Invitation extends Skill {
         }
 
         if (success) {
-            c.setStance(c.getStance().insertRandomDom(c, target), getSelf(), getSelf().canMakeOwnDecision());
+            c.setStance(c.getStance().insertRandomDom(c, target).orElse(c.getStance()), getSelf(), getSelf().canMakeOwnDecision());
         }
 
         if (getSelf().human()) {
@@ -160,7 +161,7 @@ public class Invitation extends Skill {
             } else {
                 target.add(c, new ArmLocked(target, 4 * getSelf().get(Attribute.power)));
             }
-            new Thrust(target).resolve(c, getSelf());
+            new Thrust(target.getType()).resolve(c, getSelf());
             if (hasDivinity()) {
                 getSelf().usedAttribute(Attribute.divinity, c, .5);
             }
@@ -168,7 +169,7 @@ public class Invitation extends Skill {
         return success;
     }
 
-    public boolean hasDivinity() {
+    private boolean hasDivinity() {
         return getSelf().get(Attribute.divinity) >= 25;
     }
 

@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -9,7 +10,7 @@ import nightgames.global.Formatter;
 import nightgames.global.Random;
 
 public class Piston extends Thrust {
-    public Piston(Character self) {
+    public Piston(CharacterType self) {
         super("Piston", self);
     }
 

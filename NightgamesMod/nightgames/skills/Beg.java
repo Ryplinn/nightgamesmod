@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -9,12 +10,12 @@ import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.status.Charmed;
 import nightgames.status.Stsflag;
-import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
 public class Beg extends Skill {
 
-    public Beg(Character self) {
+    public Beg(CharacterType self) {
         super("Beg", self);
     }
 
@@ -51,10 +52,10 @@ public class Beg extends Skill {
                 c.write(getSelf(), receive(c, 0, results, target));
             }
             if (results == Result.normal) {
-                target.add(c, new Charmed(target));
+                target.add(c, new Charmed(target.getType()));
             }
             if (getSelf().checkAddiction(AddictionType.MIND_CONTROL, target)) {
-                getSelf().unaddictCombat(AddictionType.MIND_CONTROL, target, AddictionSymptom.LOW_INCREASE, c);
+                getSelf().unaddictCombat(AddictionType.MIND_CONTROL, target, Addiction.LOW_INCREASE, c);
                 c.write(getSelf(), "Acting submissively voluntarily reduces Mara's control over " + getSelf().nameDirectObject());
             }
             return true;
@@ -65,7 +66,7 @@ public class Beg extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Beg(user);
+        return new Beg(user.getType());
     }
 
     @Override

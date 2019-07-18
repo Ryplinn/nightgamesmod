@@ -22,7 +22,7 @@ public class UnderwearOnlyModifier extends BaseModifier {
 
     @Override
     public String intro() {
-        return "<i>\"So, " + GameState.gameState.characterPool.getPlayer().getTrueName()
+        return "<i>\"So, " + GameState.getGameState().characterPool.getPlayer().getTrueName()
                         + ", what would you say to another match in your underwear? For some reason, that just amuses the hell out of me. "
                         + "The bonus is still $" + bonus() + " per point.\"</i> ";
     }
@@ -38,7 +38,7 @@ public class UnderwearOnlyModifier extends BaseModifier {
 
     @Override
     public boolean isApplicable() {
-        return GameState.gameState.characterPool.getPlayer().outfitPlan.stream()
+        return GameState.getGameState().characterPool.getPlayer().outfitPlan.stream()
                         .anyMatch(article -> article.getLayer() == 0 && (article.getSlots().contains(ClothingSlot.top)
                                         || article.getSlots().contains(ClothingSlot.bottom)));
     }

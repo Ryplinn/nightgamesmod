@@ -28,7 +28,7 @@ public class MimicAngel extends Skill {
 
     @Override
     public boolean usable(Combat c, Character target) {
-        return getSelf().canRespond() && !getSelf().is(Stsflag.mimicry) && GameState.gameState.characterPool.getNPC("Angel").has(Trait.demigoddess);
+        return getSelf().canRespond() && !getSelf().is(Stsflag.mimicry) && GameState.getGameState().characterPool.getNPC("Angel").has(Trait.demigoddess);
     }
 
     @Override

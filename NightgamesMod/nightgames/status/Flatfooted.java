@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -22,7 +23,7 @@ public class Flatfooted extends DurationStatus {
         this.makesWary = makesWary;
     }
 
-    public Flatfooted(Character affected, int duration) {
+    public Flatfooted(CharacterType affected, int duration) {
         this(affected, duration, true);
     }
 

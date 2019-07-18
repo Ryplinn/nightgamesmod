@@ -11,9 +11,10 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 
-public class HeldOral extends AbstractFacingStance {
+public class HeldOral extends Position {
     public HeldOral(Character top, Character bottom) {
         super(top, bottom, Stance.oralpin);
+        facingType = FacingType.FACING;
     }
 
     @Override
@@ -190,7 +191,6 @@ public class HeldOral extends AbstractFacingStance {
                       + "After thoroughly exhausting {self:possessive} attempts, {other:pronoun-action:smile} smugly"
                       + " and {other:action:run} {other:possessive} tongue "
                       + "along {self:possessive} shaft to demostrate {other:possessive} victory.");
-        super.struggle(c, struggler);
     }
 
     @Override
@@ -208,6 +208,5 @@ public class HeldOral extends AbstractFacingStance {
                       + "After thoroughly exhausting every angle, {self:pronoun} can only give up in defeat. "
                       + "{other:PRONOUN-ACTION:smile} smugly and {other:action:run} {other:possessive} tongue "
                       + "along {self:possessive} shaft to demostrate {other:possessive} victory.");
-        super.escape(c, escapee);
     }
 }

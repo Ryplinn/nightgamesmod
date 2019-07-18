@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -10,27 +11,26 @@ import nightgames.nskills.tags.SkillTag;
 
 public class PussyGrind extends Skill {
 
-    public PussyGrind(String name, Character self, int cooldown) {
+    private PussyGrind(String name, CharacterType self, int cooldown) {
         super(name, self, cooldown);
         addTag(SkillTag.pleasure);
         addTag(SkillTag.fucking);
         addTag(SkillTag.petDisallowed);
     }
 
-    public PussyGrind(Character self) {
+    public PussyGrind(CharacterType self) {
         this("Pussy Grind", self, 0);
     }
 
     public BodyPart getSelfOrgan() {
-        BodyPart res = getSelf().body.getRandomPussy();
-        return res;
+        return getSelf().body.getRandomPussy();
     }
 
     public BodyPart getTargetOrgan(Character target) {
         return target.body.getRandomPussy();
     }
 
-    public boolean fuckable(Combat c, Character target) {
+    private boolean fuckable(Combat c, Character target) {
         return BodyPart.hasType(c.getStance().getPartsFor(c, getSelf(), target), "pussy")
                         && BodyPart.hasType(c.getStance().getPartsFor(c, target, getSelf()), "pussy");
     }
@@ -59,7 +59,7 @@ public class PussyGrind extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new PussyGrind(user);
+        return new PussyGrind(user.getType());
     }
 
     @Override

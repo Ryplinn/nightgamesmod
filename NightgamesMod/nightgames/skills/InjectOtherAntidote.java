@@ -2,13 +2,14 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
 import nightgames.items.Item;
 
 public class InjectOtherAntidote extends Skill {
-    public InjectOtherAntidote(Character self) {
+    private InjectOtherAntidote(CharacterType self) {
         super("Inject Antidote (Other)", self);
     }
 
@@ -41,7 +42,7 @@ public class InjectOtherAntidote extends Skill {
     }
 
     public Skill copy(Character user) {
-        return new InjectOtherAntidote(user);
+        return new InjectOtherAntidote(user.getType());
     }
 
     public Tactics type(Combat c) {

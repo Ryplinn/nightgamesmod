@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -12,7 +13,7 @@ import nightgames.stance.Stance;
 
 public class UseDildo extends Skill {
 
-    public UseDildo(Character self) {
+    UseDildo(CharacterType self) {
         super(Item.Dildo.getName(), self);
         addTag(SkillTag.usesToy);
     }
@@ -58,7 +59,7 @@ public class UseDildo extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new UseDildo(user);
+        return new UseDildo(user.getType());
     }
 
     @Override

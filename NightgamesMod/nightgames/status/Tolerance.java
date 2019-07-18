@@ -6,11 +6,12 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class Tolerance extends DurationStatus {
-    public Tolerance(Character affected, int duration) {
+    Tolerance(CharacterType affected, int duration) {
         super("Tolerance", affected, duration);
         flag(Stsflag.tolerance);
         flag(Stsflag.purgable);
@@ -18,17 +19,17 @@ public class Tolerance extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "You've built up a tolerance to addictive fluids.";
         } else {
-            return affected.getName() + " has built up a tolerance to "
-                           +c.getOpponent(affected).nameOrPossessivePronoun()+" addictive fluids.";
+            return getAffected().getName() + " has built up a tolerance to "
+                           +c.getOpponent(getAffected()).nameOrPossessivePronoun()+" addictive fluids.";
         }
     }
 
     @Override
     public String initialMessage(Combat c, Optional<Status> replacement) {
-        return String.format("%s built a tolerance to addictive fluids.\n", affected.subjectAction("have", "has"));
+        return String.format("%s built a tolerance to addictive fluids.\n", getAffected().subjectAction("have", "has"));
     }
 
     @Override
@@ -93,7 +94,7 @@ public class Tolerance extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Tolerance(newAffected, getDuration());
+        return new Tolerance(newAffected.getType(), getDuration());
     }
 
     @Override  public JsonObject saveToJson() {

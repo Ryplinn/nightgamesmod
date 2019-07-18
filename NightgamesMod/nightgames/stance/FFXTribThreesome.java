@@ -1,12 +1,10 @@
 package nightgames.stance;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -15,17 +13,17 @@ import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
 public class FFXTribThreesome extends Position {
-    private Character domSexCharacter;
+    private CharacterType domSexCharacter;
 
-    public FFXTribThreesome(Character domSexCharacter, Character top, Character bottom) {
+    public FFXTribThreesome(CharacterType domSexCharacter, CharacterType top, CharacterType bottom) {
         super(top, bottom, Stance.trib);
         this.domSexCharacter = domSexCharacter;
     }
 
     @Override
     public String describe(Combat c) {
-        return domSexCharacter.subjectAction("are", "is") + " holding " + bottom.nameOrPossessivePronoun() + " legs across "
-                        + top.possessiveAdjective() + " lap while grinding " + domSexCharacter
+        return getDomSexCharacter().subjectAction("are", "is") + " holding " + bottom.nameOrPossessivePronoun() + " legs across "
+                        + top.possessiveAdjective() + " lap while grinding " + getDomSexCharacter()
                         .possessiveAdjective()
                         + " soaked cunt into " + bottom.possessiveAdjective() + " pussy.";
     }
@@ -36,16 +34,17 @@ public class FFXTribThreesome extends Position {
     }
 
     @Override
-    public Character domSexCharacter(Combat c) {
+    public Character getDomSexCharacter() {
         return domSexCharacter;
     }
 
     @Override
-    public void checkOngoing(Combat c) {
-        if (!c.getOtherCombatants().contains(domSexCharacter)) {
-            c.write(bottom, Formatter.format("With the disappearance of {self:name-do}, {other:subject-action:manage|manages} to escape.", domSexCharacter, bottom));
+    public Optional<Position> checkOngoing(Combat c) {
+        if (!c.otherCombatantsContains(getDomSexCharacter())) {
+            c.write(bottom, Formatter.format("With the disappearance of {self:name-do}, {other:subject-action:manage|manages} to escape.", getDomSexCharacter(), bottom));
             c.setStance(new Neutral(top, bottom));
         }
+        return null;
     }
 
     @Override
@@ -59,14 +58,14 @@ public class FFXTribThreesome extends Position {
 
     @Override
     public List<BodyPart> partsForStanceOnly(Combat combat, Character self, Character other) {
-        if (self == domSexCharacter(combat) && other == bottom) {
+        if (self == getDomSexCharacter() && other == bottom) {
             return topParts(combat);
         }
         return self.equals(bottom) ? bottomParts() : Collections.emptyList();
     }
 
     public Character getPartner(Combat c, Character self) {
-        Character domSex = domSexCharacter(c);
+        Character domSex = getDomSexCharacter();
         if (self == top) {
             return bottom;
         } else if (domSex == self) {
@@ -141,7 +140,7 @@ public class FFXTribThreesome extends Position {
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return new Mount(top, bottom);
     }
 
@@ -209,7 +208,6 @@ public class FFXTribThreesome extends Position {
                         + " {other:possessive} grip on {self:possessive} leg.",
                         struggler, opponent, c.bothPossessive(opponent)));
         strugglePleasure(c, struggler, opponent);
-        super.struggle(c, struggler);
     }
 
     @Override
@@ -220,6 +218,5 @@ public class FFXTribThreesome extends Position {
                         + "Sadly, it doesn't accomplish much other than arousing the hell out of both of %s."
                         , escapee, opponent, c.bothDirectObject(opponent)));
         strugglePleasure(c, escapee, opponent);
-        super.escape(c, escapee);
     }
 }

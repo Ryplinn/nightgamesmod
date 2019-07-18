@@ -3,6 +3,8 @@ package nightgames.stance;
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
 
+import java.util.Optional;
+
 public class FlowerSex extends FemdomSexStance {
 
     public FlowerSex(Character top, Character bottom) {
@@ -76,7 +78,7 @@ public class FlowerSex extends FemdomSexStance {
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return new Mount(top, bottom);
     }
 

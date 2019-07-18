@@ -1,13 +1,14 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
 
 public class CommandMasturbate extends PlayerCommand {
 
-    public CommandMasturbate(Character self) {
+    CommandMasturbate(CharacterType self) {
         super("Force Masturbation", self);
     }
 
@@ -44,7 +45,7 @@ public class CommandMasturbate extends PlayerCommand {
 
     @Override
     public Skill copy(Character user) {
-        return new CommandMasturbate(user);
+        return new CommandMasturbate(user.getType());
     }
 
     @Override

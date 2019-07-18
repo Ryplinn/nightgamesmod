@@ -32,7 +32,7 @@ public class PetCharacter extends Character {
         PET_UNUSABLE_TAG.add(SkillTag.counter);
     }
     private String type;
-    private String ownerType;
+    private CharacterType ownerType;
     private Pet self;
 
     @Override
@@ -278,8 +278,8 @@ public class PetCharacter extends Character {
     }
 
     @Override
-    public String getType() {
-        return type;
+    public CharacterType getType() {
+        return CharacterType.get(type);
     }
 
     @Override

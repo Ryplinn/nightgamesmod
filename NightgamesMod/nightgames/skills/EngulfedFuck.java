@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -13,7 +14,7 @@ import nightgames.stance.Stance;
 
 public class EngulfedFuck extends Skill {
 
-    public EngulfedFuck(Character self) {
+    EngulfedFuck(CharacterType self) {
         super("Multi Fuck", self);
         addTag(SkillTag.fucking);
         addTag(SkillTag.pleasureSelf);
@@ -172,7 +173,7 @@ public class EngulfedFuck extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new EngulfedFuck(user);
+        return new EngulfedFuck(user.getType());
     }
 
     @Override
@@ -206,7 +207,7 @@ public class EngulfedFuck extends Skill {
 
         private final double selfMod, targetMod;
 
-        private Pairing(double selfMod, double targetMod) {
+        Pairing(double selfMod, double targetMod) {
             this.selfMod = selfMod;
             this.targetMod = targetMod;
         }

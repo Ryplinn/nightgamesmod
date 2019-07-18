@@ -28,7 +28,7 @@ public class Disguise extends Action {
                         .stream().filter(other -> !other.human() 
                                         && user != other 
                                         && !other.has(Trait.cursed)
-                                        && !Flag.checkCharacterDisabledFlag(other))
+                                        && !Flag.checkCharacterDisabledFlag(other.getType()))
                         .collect(Collectors.toList())).orElse(null);
         return target;
     }

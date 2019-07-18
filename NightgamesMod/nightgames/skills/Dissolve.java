@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -15,7 +16,7 @@ import nightgames.status.Slimed;
 
 public class Dissolve extends Skill {
 
-    public Dissolve(Character self) {
+    public Dissolve(CharacterType self) {
         super("Dissolve", self);
         addTag(SkillTag.stripping);
     }
@@ -77,7 +78,7 @@ public class Dissolve extends Skill {
     
     @Override
     public Skill copy(Character user) {
-        return new Dissolve(user);
+        return new Dissolve(user.getType());
     }
 
     @Override

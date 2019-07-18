@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
@@ -10,7 +11,7 @@ import nightgames.skills.Tactics;
 import nightgames.status.Horny;
 
 public class ImpFacesit extends SimpleEnemySkill {
-    public ImpFacesit(Character self) {
+    public ImpFacesit(CharacterType self) {
         super("Imp Facesit", self);
         addTag(SkillTag.pleasure);
         addTag(SkillTag.debuff);
@@ -34,13 +35,13 @@ public class ImpFacesit extends SimpleEnemySkill {
         c.write(getSelf(), Formatter.format("{self:SUBJECT} straddles {other:name-possessive} face, forcing {self:possessive} wet pussy onto {other:possessive} nose and mouth. "
                         + "{self:POSSESSIVE} scent is unnaturally intoxicating and fires up {other:possessive} libido.", getSelf(), target));
         getSelf().body.pleasure(target, target.body.getRandom("mouth"), getSelf().body.getRandomPussy(), 10, c);
-        target.add(c, new Horny(target, m, 5, "imp juices"));
+        target.add(c, new Horny(target.getType(), m, 5, "imp juices"));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new ImpFacesit(user);
+        return new ImpFacesit(user.getType());
     }
 
     @Override

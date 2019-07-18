@@ -6,11 +6,12 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class Cynical extends DurationStatus {
-    public Cynical(Character affected) {
+    public Cynical(CharacterType affected) {
         super("Cynical", affected, 3);
         flag(Stsflag.cynical);
     }

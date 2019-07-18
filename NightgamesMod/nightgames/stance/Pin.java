@@ -4,10 +4,13 @@ import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
-public class Pin extends AbstractFacingStance {
+import java.util.Optional;
+
+public class Pin extends Position {
 
     public Pin(Character top, Character bottom) {
         super(top, bottom, Stance.pin);
+        facingType = FacingType.FACING;
     }
 
     @Override
@@ -21,13 +24,14 @@ public class Pin extends AbstractFacingStance {
     }
 
     @Override
-    public void checkOngoing(Combat c) {
+    public Optional<Position> checkOngoing(Combat c) {
         if (!top.canAct() && bottom.canAct()) {
             c.write(bottom, Formatter.format("With {self:subject} unable to resist, "
                             + "{bottom:subject-action:roll} over on top of {self:direct-object}."
                             , top, bottom));
-            c.setStance(new Mount(bottom, top));
+            return Optional.of(new Mount(bottom, top));
         }
+        return null;
     }
     
     @Override
@@ -121,7 +125,6 @@ public class Pin extends AbstractFacingStance {
                         + " %s behind %s holding %s wrists behind %s waist firmly, there is little %s can do.",
                         struggler.subjectAction("struggle"), top.subject(), struggler.directObject(),
                         struggler.possessiveAdjective(), struggler.possessiveAdjective(), struggler.pronoun()));
-        super.struggle(c, struggler);
     }
 
     @Override
@@ -129,6 +132,5 @@ public class Pin extends AbstractFacingStance {
         c.write(escapee, Formatter.format("{self:SUBJECT-ACTION:try} to escape {other:name-possessive} pin, but with"
                         + " {other:direct-object} sitting on {self:possessive} back, holding {self:possessive} wrists firmly, there is nothing {self:pronoun} can do.",
                         escapee, top));
-        super.escape(c, escapee);
     }
 }

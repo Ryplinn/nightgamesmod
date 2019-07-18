@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.CockPart;
 import nightgames.characters.body.mods.SizeMod;
 import nightgames.characters.trait.Trait;
@@ -12,7 +13,7 @@ import nightgames.global.Random;
 import nightgames.status.Hypersensitive;
 
 public class CockGrowth extends Skill {
-    public CockGrowth(Character self) {
+    public CockGrowth(CharacterType self) {
         super("Cock Growth", self);
     }
 
@@ -57,7 +58,7 @@ public class CockGrowth extends Skill {
                         && !target.has(Trait.stableform);
 
         if (res != Result.miss) {
-            target.add(c, new Hypersensitive(target, 10));
+            target.add(c, new Hypersensitive(target.getType(), 10));
             CockPart part = target.body.getCockBelow(SizeMod.getMaximumSize("cock"));
             if (permanent) {
                 if (part != null) {
@@ -79,7 +80,7 @@ public class CockGrowth extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new CockGrowth(user);
+        return new CockGrowth(user.getType());
     }
 
     @Override

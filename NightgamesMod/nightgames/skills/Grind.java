@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -12,7 +13,7 @@ import nightgames.stance.Stance;
 public class Grind extends Thrust {
     private static final String divineName = "Sacrament";
 
-    public Grind(Character self) {
+    public Grind(CharacterType self) {
         super("Grind", self);
     }
 

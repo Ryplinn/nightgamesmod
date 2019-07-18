@@ -6,14 +6,15 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class Hypersensitive extends DurationStatus {
-    public Hypersensitive(Character affected) {
+    public Hypersensitive(CharacterType affected) {
         this(affected, 20);
     }
-    public Hypersensitive(Character affected, int duration) {
+    public Hypersensitive(CharacterType affected, int duration) {
         super("Hypersensitive", affected, duration);
         flag(Stsflag.hypersensitive);
         flag(Stsflag.debuff);
@@ -22,18 +23,18 @@ public class Hypersensitive extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "Your skin tingles and feels extremely sensitive to touch.";
         } else {
             return String.format("%s shivers from the breeze hitting %s skin and has goosebumps.",
-                            affected.pronoun(), affected.possessiveAdjective());
+                            getAffected().pronoun(), getAffected().possessiveAdjective());
         }
     }
 
     @Override
     public String initialMessage(Combat c, Optional<Status> replacement) {
         if (!replacement.isPresent()) {
-            return String.format("%s now hypersensitive.\n", affected.subjectAction("are", "is"));
+            return String.format("%s now hypersensitive.\n", getAffected().subjectAction("are", "is"));
         } else {
             return "";
         }
@@ -115,7 +116,7 @@ public class Hypersensitive extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Hypersensitive(newAffected);
+        return new Hypersensitive(newAffected.getType());
     }
 
     @Override  public JsonObject saveToJson() {

@@ -9,7 +9,7 @@ import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.status.DivineCharge;
 import nightgames.status.Stsflag;
-import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
 public class DivineMod extends PartMod {
@@ -67,7 +67,7 @@ public class DivineMod extends PartMod {
                                                 + "%s, {other:subject-action:are} assaulted by a feeling of inner peace and belonging. The soothing"
                                                 + " emotions washes over {other:pronoun}, before settling in as an unadulterated adoration for {other:possessive} divine partner.",
                                 self, opponent, part.describe(self)));
-                opponent.addict(c, AddictionType.ZEAL, self, AddictionSymptom.MED_INCREASE);
+                opponent.addict(c, AddictionType.ZEAL, self, Addiction.MED_INCREASE);
             }
         }
     }

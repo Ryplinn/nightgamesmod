@@ -2,6 +2,7 @@ package nightgames.daytime;
 
 import nightgames.characters.NPC;
 import nightgames.characters.Player;
+import nightgames.global.GameState;
 import nightgames.gui.LabeledValue;
 
 import java.util.ArrayList;
@@ -10,12 +11,14 @@ import java.util.List;
 public abstract class Activity {
     protected String name;
     protected int time;
-    protected Player player;
 
-    public Activity(String name, Player player) {
+    public Activity(String name) {
         this.name = name;
         time = 1;
-        this.player = player;
+    }
+
+    Player getPlayer() {
+        return GameState.getGameState().characterPool.getPlayer();
     }
 
     public abstract boolean known();

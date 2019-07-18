@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -13,7 +14,7 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.*;
 
 public class PetThreesome extends Skill {
-    public PetThreesome(String name, Character self, int cooldown) {
+    PetThreesome(String name, CharacterType self, int cooldown) {
         super(name, self, cooldown);
         addTag(SkillTag.pleasure);
         addTag(SkillTag.fucking);
@@ -24,20 +25,19 @@ public class PetThreesome extends Skill {
         return 6.0f;
     }
 
-    public PetThreesome(Character self) {
+    PetThreesome(CharacterType self) {
         this("Threesome", self, 0);
     }
 
     public BodyPart getSelfOrgan(Character fucker, Combat c) {
-        BodyPart res = fucker.body.getRandomCock();
-        return res;
+        return fucker.body.getRandomCock();
     }
 
     public BodyPart getTargetOrgan(Character target) {
         return target.body.getRandomPussy();
     }
 
-    public boolean fuckable(Combat c, Character target) {
+    private boolean fuckable(Combat c, Character target) {
         Character fucker = getFucker(c);
         if (fucker == null) {
             return false;
@@ -47,15 +47,12 @@ public class PetThreesome extends Skill {
         BodyPart targetO = getTargetOrgan(target);
         // You can't really have a threesome with a fairy... or can you?
         boolean possible = fucker.body.getHeight() > 70 && selfO != null && targetO != null;
-        boolean ready = possible;
         boolean stancePossible = !c.getStance().havingSex(c);
-        return possible && ready && stancePossible && canGetToCrotch(target);
+        return possible && stancePossible && canGetToCrotch(target);
     }
 
     private boolean canGetToCrotch(Character target) {
-        if (target.crotchAvailable())
-            return true;
-        return false;
+        return target.crotchAvailable();
     }
 
     @Override
@@ -115,13 +112,13 @@ public class PetThreesome extends Skill {
                                     + "{self:subject} mounts {other:direct-object} and pierces "
                                     + "{self:reflective} with {other:possessive} cock.", fucker, 
                                     target, master.subjectAction("are", "is"), master.possessiveAdjective()));
-                    c.setStance(new FFMFacesittingThreesome(fucker, master, target), getSelf(), true);
+                    c.setStance(new FFMFacesittingThreesome(fucker.getType(), master.getType(), target.getType()), getSelf(), true);
                 } else {
                     c.write(getSelf(), Formatter.format("While %s holding {other:name-do} down, "
                                     + "{self:subject} mounts {other:direct-object} and pierces "
                                     + "{self:reflective} with {other:possessive} cock.", fucker, 
                                     target, master.subjectAction("are", "is")));
-                    c.setStance(new FFMCowgirlThreesome(fucker, master, target), getSelf(), true);
+                    c.setStance(new FFMCowgirlThreesome(fucker.getType(), master.getType(), target.getType()), getSelf(), true);
                 }
             } else if (selfO.isType("cock") && master.hasPussy() && target.hasDick()) {
                 c.write(getSelf(), Formatter.format("While %s holding {other:name-do} down, "
@@ -181,7 +178,7 @@ public class PetThreesome extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new PetThreesome(user);
+        return new PetThreesome(user.getType());
     }
 
     @Override

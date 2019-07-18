@@ -17,8 +17,8 @@ public abstract class Store extends Activity {
     protected Map<Clothing, Integer> clothingstock;
     protected boolean acted;
 
-    public Store(String name, Player player) {
-        super(name, player);
+    public Store(String name) {
+        super(name);
         stock = new HashMap<>();
         clothingstock = new HashMap<>();
         acted = false;
@@ -44,7 +44,7 @@ public abstract class Store extends Activity {
     }
 
     List<LabeledValue<String>> displayClothes() {
-        return clothingstock.keySet().stream().filter(clothing -> !player.has(clothing)).map(this::sale).collect(Collectors.toList());
+        return clothingstock.keySet().stream().filter(clothing -> !getPlayer().has(clothing)).map(this::sale).collect(Collectors.toList());
     }
 
     protected List<LabeledValue<String>> displayItems() {
@@ -74,9 +74,9 @@ public abstract class Store extends Activity {
 
     public void buy(Item item) {
         int price = stock.getOrDefault(item, item.getPrice());
-        if (player.money >= price) {
-            player.modMoney(-price);
-            player.gain(item);
+        if (getPlayer().money >= price) {
+            getPlayer().modMoney(-price);
+            getPlayer().gain(item);
             acted = true;
             GUI.gui.refresh();
         } else {
@@ -86,9 +86,9 @@ public abstract class Store extends Activity {
 
     public void buy(Clothing item) {
         int price = clothingstock.getOrDefault(item, item.getPrice());
-        if (player.money >= price) {
-            player.modMoney(-price);
-            player.gain(item);
+        if (getPlayer().money >= price) {
+            getPlayer().modMoney(-price);
+            getPlayer().gain(item);
             acted = true;
             GUI.gui.refresh();
         } else {

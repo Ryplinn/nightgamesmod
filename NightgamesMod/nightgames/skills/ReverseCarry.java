@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -13,7 +14,7 @@ import nightgames.stance.Jumped;
 import nightgames.status.Falling;
 
 public class ReverseCarry extends Carry {
-    public ReverseCarry(Character self) {
+    public ReverseCarry(CharacterType self) {
         super("Jump", self);
         addTag(SkillTag.positioning);
     }

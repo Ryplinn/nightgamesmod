@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -10,7 +11,7 @@ import nightgames.nskills.tags.SkillTag;
 
 public class Defabricator extends Skill {
 
-    public Defabricator(Character self) {
+    public Defabricator(CharacterType self) {
         super("Defabricator", self);
         addTag(SkillTag.stripping);
     }
@@ -43,7 +44,7 @@ public class Defabricator extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Defabricator(user);
+        return new Defabricator(user.getType());
     }
 
     @Override

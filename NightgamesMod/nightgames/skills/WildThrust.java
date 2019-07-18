@@ -2,24 +2,25 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
-import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.Optional;
 
 public class WildThrust extends Thrust {
-    public WildThrust(Character self) {
+    public WildThrust(CharacterType self) {
         super("Wild Thrust", self);
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.animism) > 1 || user.checkAddiction(AddictionType.BREEDER);
+        return user.get(Attribute.animism) > 1 || user.checkAnyAddiction(AddictionType.BREEDER);
     }
 
     @Override
@@ -45,14 +46,14 @@ public class WildThrust extends Thrust {
             c.write(getSelf(), Formatter.format("The sheer ferocity of {self:name-possessive} movements"
                             + " fill you with an unnatural desire to sate {self:possessive} thirst with"
                             + " your cum.", getSelf(), target));
-            target.addict(c, AddictionType.BREEDER, getSelf(), AddictionSymptom.LOW_INCREASE);
+            target.addict(c, AddictionType.BREEDER, getSelf(), Addiction.LOW_INCREASE);
         }
         return effective;
     }
 
     @Override
     public int[] getDamage(Combat c, Character target) {
-        int results[] = new int[2];
+        int[] results = new int[2];
 
         int m = 5 + Random.random(20) + Math
                         .min(getSelf().get(Attribute.animism), getSelf().getArousal().getReal() / 30);
@@ -66,17 +67,17 @@ public class WildThrust extends Thrust {
         return results;
     }
 
-    private void modBreeder(Combat c, Character p, Character target, int results[]) {
-        Optional<AddictionSymptom> addiction = p.getAddiction(AddictionType.BREEDER);
+    private void modBreeder(Combat c, Character p, Character target, int[] results) {
+        Optional<Addiction> addiction = p.getStrongestAddiction(AddictionType.BREEDER);
         if (!addiction.isPresent()) {
             return;
         }
 
-        AddictionSymptom add = addiction.get();
+        Addiction add = addiction.get();
         if (add.wasCausedBy(target)) {
             //Increased recoil vs Kat
             results[1] *= 1 + ((float) add.getSeverity().ordinal() / 3.f);
-            p.addict(c, AddictionType.BREEDER, target, AddictionSymptom.LOW_INCREASE);
+            p.addict(c, AddictionType.BREEDER, target, Addiction.LOW_INCREASE);
         } else {
             //Increased damage vs everyone else
             results[0] *= 1 + ((float) add.getSeverity().ordinal() / 3.f);

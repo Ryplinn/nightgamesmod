@@ -2,9 +2,8 @@ package nightgames.combat;
 
 import nightgames.actions.Movement;
 import nightgames.areas.Area;
-import nightgames.characters.Attribute;
+import nightgames.characters.*;
 import nightgames.characters.Character;
-import nightgames.characters.State;
 import nightgames.characters.trait.Trait;
 import nightgames.global.DebugFlags;
 import nightgames.global.Formatter;
@@ -22,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
+import java.util.stream.Collectors;
 
 /**
  * An Encounter is a meeting between two or more characters in one area during a match.
@@ -30,11 +30,10 @@ public class Encounter implements Serializable {
 
     private static final long serialVersionUID = 3122246133619156539L;
 
-    private List<Character> participants;
+    private List<CharacterType> participants;
     protected Area location;
     protected transient Combat fight;
     private CountDownLatch waitForFinish;
-    private List<Character> faster;
 
     // TODO: Figure out what to do with encounters involving more than three characters.
     public Encounter(Area location) {
@@ -45,19 +44,27 @@ public class Encounter implements Serializable {
         checkEnthrall(getP1(), getP2());
         checkEnthrall(getP2(), getP1());
         waitForFinish = new CountDownLatch(1);
-        faster = faster(participants);
+    }
+
+    private Character get(int index) {
+        CharacterType type = participants.get(index);
+        return type.fromPool().orElseThrow(() -> new CharacterPool.CharacterNotFoundException(type));
     }
 
     public Character getP1() {
-        return participants.get(0);
+        return get(0);
     }
 
     public Character getP2() {
-        return participants.get(1);
+        return get(1);
+    }
+
+    private List<Character> getParticipants() {
+        return participants.stream().map(CharacterType::fromPoolGuaranteed).collect(Collectors.toList());
     }
 
     private boolean observed() {
-        return participants.stream().anyMatch(Character::human);
+        return getParticipants().stream().anyMatch(Character::human);
     }
 
     private void messageIfObserved(String message) {
@@ -70,22 +77,22 @@ public class Encounter implements Serializable {
         }
     }
 
-    private Optional<Character> getIntervener() {
+    private Optional<CharacterType> getIntervener() {
         if (participants.size() > 2) {
             return Optional.of(participants.get(2));
         }
         return Optional.empty();
     }
 
-    public List<Character> getExtras() {
-        List<Character> extras = new ArrayList<>();
+    public List<CharacterType> getExtras() {
+        List<CharacterType> extras = new ArrayList<>();
         if (participants.size() > 3) {
             extras.addAll(participants.subList(3, participants.size()));
         }
         return extras;
     }
 
-    public void intervene(Character intervener) {
+    public void intervene(CharacterType intervener) {
         assert participants.size() == 2;
         participants.add(intervener);
     }
@@ -95,13 +102,13 @@ public class Encounter implements Serializable {
         ambushRegular
     }
 
-    protected void checkEnthrall(Character p1, Character p2) {
+    private void checkEnthrall(Character p1, Character p2) {
         Status enthrall = p1.getStatus(Stsflag.enthralled);
         if (enthrall != null) {
-            if (((Enthralled) enthrall).master != p2) {
+            if (((Enthralled) enthrall).master != p2.getType()) {
                 p1.removelist.add(enthrall);
-                p1.addNonCombat(new Flatfooted(p1, 2));
-                p1.addNonCombat(new Hypersensitive(p1));
+                p1.addNonCombat(new Flatfooted(p1.getType(), 2));
+                p1.addNonCombat(new Hypersensitive(p1.getType()));
                 if (p1.human()) {
                     messageIfObserved( "At " + p2.getName() + "'s interruption, you break free from the"
                                     + " succubus' hold on your mind. However, the shock all but"
@@ -144,6 +151,7 @@ public class Encounter implements Serializable {
             } else {
                 boolean p1SpotCheck = p1.spotCheck(p2);
                 boolean p2SpotCheck = p2.spotCheck(p1);
+                List<Character> faster = faster(p1, p2);
                 if (p1SpotCheck && p2SpotCheck) {
                     Character.FightIntent p1Intent = p1.faceOff(p2, this);
                     Character.FightIntent p2Intent = p2.faceOff(p1, this);
@@ -244,10 +252,6 @@ public class Encounter implements Serializable {
         }
     }
 
-    private List<Character> faster(List<Character> characters) {
-        return faster(characters.get(0), characters.get(1));
-    }
-
     private Encs vulnerable(Character attacker, Character target) {
         if (target.state == State.shower) {
             return attacker.showerSceneResponse(target, this);
@@ -261,7 +265,7 @@ public class Encounter implements Serializable {
         throw new RuntimeException("Invalid vulnerable encounter type");
     }
 
-    protected void smokeFlee(Character runner) {
+    private void smokeFlee(Character runner) {
         GUI.gui.message(String.format("%s a smoke bomb and %s.",
                         Formatter.capitalizeFirstLetter(runner.subjectAction("drop", "drops")),
                         runner.action("disappear", "disappears")));
@@ -269,7 +273,7 @@ public class Encounter implements Serializable {
         runner.flee(this.location);
     }
 
-    protected void fleeHidden(Character attacker, Character runner) {
+    private void fleeHidden(Character attacker, Character runner) {
         if (attacker.human() || runner.human())
         GUI.gui.message(Formatter
                         .format("{self:SUBJECT-ACTION:flee} before {other:subject-action:can} notice {self:direct-object}.",
@@ -277,8 +281,9 @@ public class Encounter implements Serializable {
         runner.flee(this.location);
     }
 
-    protected void fleeAttempt(Character attacker, Character runner) {
-        if (this.faster.get(0).equals(attacker)) {
+    private void fleeAttempt(Character attacker, Character runner) {
+        List<Character> faster = faster(attacker, runner);
+        if (faster.get(0).equals(attacker)) {
             if (attacker.human()) {
                 GUI.gui.message(runner.getName() + " tries to run, but you stay right on her heels and catch her.");
             } else if (runner.human()) {
@@ -295,15 +300,15 @@ public class Encounter implements Serializable {
         }
     }
 
-    protected void ambush(Character attacker, Character target) {
-        target.addNonCombat(new Flatfooted(target, 3));
+    private void ambush(Character attacker, Character target) {
+        target.addNonCombat(new Flatfooted(target.getType(), 3));
         if (attacker.human() || target.human()) {
             GUI.gui.message(Formatter.format("{self:SUBJECT-ACTION:catch|catches} {other:name-do} by surprise and {self:action:attack|attacks}!", attacker, target));
         }
         fight = new Combat(attacker, target, location, Initiation.ambushRegular);
     }
 
-    protected void showerambush(Character attacker, Character target) {
+    private void showerambush(Character attacker, Character target) {
         if (target.human()) {
             if (location.id() == Movement.shower) {
                                 messageIfObserved("You aren't in the shower long before you realize you're not alone. Before you can turn around, a soft hand grabs your exposed penis. "
@@ -329,7 +334,7 @@ public class Encounter implements Serializable {
         fight = new Combat(attacker, target, location, Initiation.ambushStrip);
     }
 
-    protected void aphrodisiactrick(Character attacker, Character target) {
+    private void aphrodisiactrick(Character attacker, Character target) {
         attacker.consume(Item.Aphrodisiac, 1);
         attacker.gainXP(attacker.getVictoryXP(target));
         target.gainXP(target.getDefeatXP(attacker));
@@ -460,7 +465,7 @@ public class Encounter implements Serializable {
     }
 
     public void intrude(Character intruder, Character assist) throws InterruptedException {
-        participants.add(intruder);
+        participants.add(intruder.getType());
         fight.intervene(intruder, assist);
     }
 

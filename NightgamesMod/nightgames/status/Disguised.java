@@ -111,7 +111,7 @@ public class Disguised extends Status {
     }
 
     @Override public Status loadFromJson(JsonObject obj) {
-        return new Disguised(null, GameState.gameState.characterPool.getNPC(obj.get("disguisedTarget").getAsString()));
+        return new Disguised(null, GameState.getGameState().characterPool.getNPC(obj.get("disguisedTarget").getAsString()));
     }
 
     public NPC getTarget() {

@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Flag;
@@ -8,15 +9,15 @@ import nightgames.skills.Skill;
 
 public abstract class SimpleEnemySkill extends Skill {
     private int levelReq;
-    public SimpleEnemySkill (String name, Character self) {
+    public SimpleEnemySkill (String name, CharacterType self) {
         this(name, self, 0);
     }
-    public SimpleEnemySkill (String name, Character self, int levelReq) {
+    public SimpleEnemySkill (String name, CharacterType self, int levelReq) {
         super(name, self);
         this.levelReq = levelReq;
     }
 
-    protected boolean gendersMatch(Character other) {
+    boolean gendersMatch(Character other) {
         if (other.useFemalePronouns() && getSelf().useFemalePronouns() && Flag.checkFlag(Flag.skipFF)) {
             return false;
         }

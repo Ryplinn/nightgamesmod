@@ -40,7 +40,7 @@ public class NoToysModifier extends BaseModifier {
 
     @Override
     public boolean isApplicable() {
-        Map<Item, Integer> inv = GameState.gameState.characterPool.getPlayer().getInventory();
+        Map<Item, Integer> inv = GameState.getGameState().characterPool.getPlayer().getInventory();
         return inv.containsKey(Item.Dildo) || inv.containsKey(Item.Dildo2) || inv.containsKey(Item.Onahole)
                         || inv.containsKey(Item.Onahole2);
     }

@@ -13,7 +13,7 @@ import nightgames.global.Random;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
-import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.ArrayList;
@@ -23,25 +23,25 @@ import java.util.Optional;
 import static nightgames.requirements.RequirementShortcuts.*;
 
 public class AngelTime extends BaseNPCTime {
-    AngelTime(Player player) {
-        super(player, GameState.gameState.characterPool.getNPC("Angel"));
+    AngelTime() {
+        super(GameState.getGameState().characterPool.getNPC("Angel"));
         knownFlag = "AngelKnown";
-        giftedString = "\"Hmph thanks.\"";
-        giftString = "\"A present mm? Alright let's see it.\"";
+        giftedString = "\"Hmph, thanks.\"";
+        giftString = "\"A present, mm? All right, let's see it.\"";
         transformationOptionString = "Sacraments";
         advTrait = Trait.demigoddess;
         transformationIntro =
                         "[Placeholder]<br/>Angel says she may be able to try a few things with her new divine powers.";
         loveIntro = "You meet Angel at her room, but for once, she doesn't seem eager to get to sex. You can tell she has something on her mind, so you let her lean "
                         + "against you on the futon while she thinks. It's quiet. You aren't used to your time with Angel being quiet, mostly because you so rarely meet her alone. You "
-                        + "lose track of time sitting there before she breaks the silence. <i>\"" + player.getTrueName()
+                        + "lose track of time sitting there before she breaks the silence. <i>\"" + getPlayer().getTrueName()
                         + ", what do you think about my friends?\"</i> That's not the question you expected. "
                         + "You've gotten along with her friends quite well so far. Angel shifts her position so you can't see her face. <i>\"I've had several lovers who couldn't get along with "
                         + "my friends. Some of them pretended they did for awhile, some of them wanted me to spend less time with them.\"</i> Her friends are very socially and sexually aggressive. "
-                        + "You can see how that might make some " + player.guyOrGirl() + "s uncomfortable. The fact that Angel and Mei occasionally have sex could probably also be a point of contention. It's probably "
+                        + "You can see how that might make some " + getPlayer().guyOrGirl() + "s uncomfortable. The fact that Angel and Mei occasionally have sex could probably also be a point of contention. It's probably "
                         + "fortunate that the night games got you used to casual and group sex before you met them. <i>\"A lot of people are superficially interested in me, but "
                         + "most lose interest when they find out what I'm really like. Sarah, Mei and Caroline know me better than anyone, but they don't think any less of me. Mei and Sarah "
-                        + "need me as much as I need them. Caroline is good at making friends, but she chooses to stick with us anyway. If I have to choose between them or a " + player.boyOrGirl() + "friend, "
+                        + "need me as much as I need them. Caroline is good at making friends, but she chooses to stick with us anyway. If I have to choose between them or a " + getPlayer().boyOrGirl() + "friend, "
                         + "I choose them without a second thought.\"</i> Angel looks you in the eye. You've never seen her this worried and vulnerable. <i>\"Do you really like them?\"</i> You can "
                         + "reply with confidence that you've grown quite fond of Sarah, Mei and Caroline, personalities, quirks and all. <i>\"Good, because I don't kno-... No one's going to make "
                         + "me choose between you and them, got it? That's just not going to happen.\"</i> Angel stands up, back to her normal self. <i>\"So should we meet up with them or spend a "
@@ -128,7 +128,7 @@ public class AngelTime extends BaseNPCTime {
 
     @Override
     public void subVisitIntro(String choice, List<LabeledValue<String>> nextChoices) {
-        if (npc.getAffection(player) > 0) {
+        if (npc.getAffection(getPlayer()) > 0) {
             GUI.gui.message("You text Angel, suggesting to meet up. She responds with a location where to meet her. When you arrive however, you find her friends waiting "
                                   + "for you instead. One of the girls, Caroline, waves you over to where they're sitting. <i>\"Angel stepped away for a minute. Sit down and talk with us until "
                                   + "she gets back.\"</i> You spend some time chatting with the girls about their hobbies (Caroline plays a lot of video games and Sarah is fond of romance novels) "
@@ -138,36 +138,37 @@ public class AngelTime extends BaseNPCTime {
                                   + "careful with that girl,\"</i> Caroline warns as soon as Mei is out of earshot. <i>\"She has a bad habit of stealing Angel's men.\"</i> That's quite a specific bad habit. "
                                   + "It must put a considerable strain on their friendship. <i>\"No, Angel never really holds a grudge against her. She has an effective way of punishing Mei and then considers "
                                   + "them even.\"</i> Caroline doesn't elaborate on this 'punishment,' but you notice Sarah has turned bright red. <i>\"She'd probably get mad if Mei stole you though. "
-                                  + "Angel doesn't usually run off to fix her make-up just because she's meeting a " + player.guyOrGirl() + ". I think she really likes you.\"</i><br/><br/>With perfect timing, Angel arrives. Caroline "
+                                  + "Angel doesn't usually run off to fix her make-up just because she's meeting a " + getPlayer()
+                            .guyOrGirl() + ". I think she really likes you.\"</i><br/><br/>With perfect timing, Angel arrives. Caroline "
                                   + "stops talking, but gives you an encouraging wink. Angel takes the seat next to you that Mei just vacated and kisses you on the cheek in greeting. <i>\"Hello lover. "
                                   + "What sexy and scandalous plans do you have for us today?\"</i>");
             choose("Games", nextChoices);
             choose("Sparring", nextChoices);
             choose("Sex", nextChoices);
-            if (player.checkAddiction(AddictionType.ZEAL)) {
+            if (getPlayer().checkAnyAddiction(AddictionType.ZEAL)) {
                 choose("Worship", nextChoices);
             }
-        } else if (player.checkAddiction(AddictionType.ZEAL)) {
+        } else if (getPlayer().checkAnyAddiction(AddictionType.ZEAL)) {
             GUI.gui.message("Angel low-affection zeal intro");
-            if (npc.getAttraction(player) < 15) {
-                npc.gainAttraction(player, 2);
-                player.gainAttraction(npc, 2);
+            if (npc.getAttraction(getPlayer()) < 15) {
+                npc.gainAttraction(getPlayer(), 2);
+                getPlayer().gainAttraction(npc, 2);
             } else {
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
                 choose("Games", nextChoices);
                 choose("Sparring", nextChoices);
                 choose("Sex", nextChoices);
             }
             choose("Worship", nextChoices);
-        } else if (npc.getAttraction(player) < 15) {
+        } else if (npc.getAttraction(getPlayer()) < 15) {
             GUI.gui.message("While walking through the quad, you spot Angel talking with three other girls. They're too far away to hear what they are talking about, but "
                                   + "you can tell they're close friends. If Angel was alone, you wouldn't hesitate to talk to her, but their group is radiating an almost impenetrable atmosphere. "
                                   + "What strikes you more than anything else is how... normal they seem. At night, Angel is always an insatiable sex queen, but here she's just like any other college "
                                   + "girl. You're still musing on this as the girls pass by. It doesn't seem like Angel noticed you. You decide you'll probably have better luck approaching "
                                   + "her when she's alone.");
-            npc.gainAttraction(player, 2);
-            player.gainAttraction(npc, 2);
+            npc.gainAttraction(getPlayer(), 2);
+            getPlayer().gainAttraction(npc, 2);
         } else {
             GUI.gui.message("Using the information you got from Aesop, you go looking for Angel. Your hope is to invite her to spend time training together and possibly sex. "
                                   + "You find her pretty quickly, but she's at a table with several of her friends. You'd need to talk to her in private if you're going to bring up the night games, "
@@ -177,15 +178,16 @@ public class AngelTime extends BaseNPCTime {
                                   + "tell she's just teasing you. You mention Aesop's suggestions on how to train between matches. She thinks for a moment and then holds out her hand. <i>\"Phone,\"</i> she "
                                   + "demands. You hand over your phone, not understanding her intentions. She enters her number into it and returns it to you. <i>\"Give me a call whenever you want to train, "
                                   + "or if you're just horny,\"</i> she says with a relaxed smile.<br/><br/>You glance behind Angel to her friends, just outside of earshot. Two of them are trying (unsuccessfully) "
-                                  + "to look like they aren't watching you. The third is simply staring openly. Do they think you're Angel's " + player.boyOrGirl()+ "friend? <i>\"Oh, I told them we were fuck-buddies,\"</i> Angel "
+                                  + "to look like they aren't watching you. The third is simply staring openly. Do they think you're Angel's " + getPlayer()
+                            .boyOrGirl()+ "friend? <i>\"Oh, I told them we were fuck-buddies,\"</i> Angel "
                                   + "explains. <i>\"Come on, I'll introduce you.\"</i> She leads you back to the table and introduces each of her friends. The first girl, Caroline, seems very friendly and laid back. "
                                   + "Even though you've just met, she talks like you're old friends. The one who was blatantly watching you earlier is a slim, asian girl named Mei. Though she doesn't look "
                                   + "anything like Angel, something in her eyes tells you they're birds of a feather. Lastly, there's a quiet girl named Sarah who seems nice, but can't seem to say two sentences "
                                   + "to you without blushing and lowering her eyes.<br/><br/>The five of you chat idly for a few minutes before Angel returns to your previous topic in the least subtle way possible. "
                                   + "<i>\"So, sex? or...?\"</i> She doesn't seem to mind discussing this in front of her friends. None of them seem surprised at her frankness, though Sarah's blush deepens a bit. As "
                                   + "long as you don't mention your nightly activities, it's probably fine.");
-            npc.gainAffection(player, 1);
-            player.gainAffection(npc, 1);
+            npc.gainAffection(getPlayer(), 1);
+            getPlayer().gainAffection(npc, 1);
             choose("Games", nextChoices);
             choose("Sparring", nextChoices);
             choose("Sex", nextChoices);
@@ -200,7 +202,7 @@ public class AngelTime extends BaseNPCTime {
     public void subVisit(String choice, List<LabeledValue<String>> nextChoices) {
         switch (choice) {
             case "Worship":
-                if (npc.getAffection(player) == 0) {
+                if (npc.getAffection(getPlayer()) == 0) {
                     GUI.gui.message("Angel allows you to worship her, having you do some simple, menial tasks. This"
                                     + " is a placeholder. It still increases your addiction, though. You"
                                     + " won't suffer withdrawal effects tonight.");
@@ -213,10 +215,10 @@ public class AngelTime extends BaseNPCTime {
                                     + " going to make this easy on you, is she? You try to explain your predicament "
                                     + "as best you can, trying not to appear too needy about the whole thing. "
                                     + "<i>\"Oh... Oh! I mean... Well... Sure, I guess. Whatever is a girl to do when a cute "
-                                    + "" + player.guyOrGirl()
+                                    + "" + getPlayer().guyOrGirl()
                                     + " comes along, asking to worship her?\"</i> You give a start at the word 'worship',"
                                     + " but then, it does ring kind of true... <i>\"Oh, yes I am sure I can think of some nice"
-                                    + " tasks for you. Hmm, I might enjoy this. Follow me, altar " + player.boyOrGirl()
+                                    + " tasks for you. Hmm, I might enjoy this. Follow me, altar " + getPlayer().boyOrGirl()
                                     + ".\"</i> Whatever confusion"
                                     + " she felt clearly did not stand up to her dirty mind. Well, what's a sex goddess for?"
                                     + "\n\nAs soon as you reach the privacy of Angel's room, she regains the divine aura "
@@ -254,13 +256,12 @@ public class AngelTime extends BaseNPCTime {
                                     + " though, so you leave Angel and hurry home to fix it yourself. ");
                 }
                 choose("Leave", nextChoices);
-                player
-                                .addict(null, AddictionType.ZEAL, npc, AddictionSymptom.MED_INCREASE);
-                player.getAddiction(AddictionType.ZEAL)
-                                .ifPresent(AddictionSymptom::flagDaytime);
+                getPlayer()
+                                .addict(null, AddictionType.ZEAL, npc, Addiction.MED_INCREASE);
+                getPlayer().getAddiction(AddictionType.ZEAL, npc).ifPresent(Addiction::flagDaytime);
                 break;
             case "Sex":
-                if (npc.getAffection(player) >= 12 && (!player.has(Trait.experttongue) || Random.random(2) == 1)) {
+                if (npc.getAffection(getPlayer()) >= 12 && (!getPlayer().has(Trait.experttongue) || Random.random(2) == 1)) {
                     GUI.gui.message("You're in Angel's room, naked and feeling a little overwhelmed. She embraces your from behind and you can feel her soft, heavy breasts pressed against "
                                     + "your back. She nibbles lightly on your ear while motioning toward the naked girl on her bed. <i>\"She's all yours. Show me what you can do.\"</i> As for how you got here... "
                                     + "we should probably back up a bit.<br/><br/>You spent some time chatting with Angel and her friends. At this point it might be fair to call them your friends too. The conversation "
@@ -284,7 +285,7 @@ public class AngelTime extends BaseNPCTime {
                                     + "shudder run through her and she has to cling to your shoulders to stay on her feet. She smiles as you pull away and whispers, <i>\"You're a quick learner, lover.\"</i> She grasps your "
                                     + "pent-up cock and strokes it until you cum in her hands. She offers her semen covered hand to Mei, who hesitantly begins to lick it clean. Angel looks back to address you. <i>\"I hope that's "
                                     + "enough for a little while, I need to punish Mei now.\"</i><br/><br/>Mei jumps back in shock. <i>\"What did I do!?\"</i> Angel gives her a sadistically sweet smile. <i>\"Are you going to pretend you "
-                                    + "weren't kissing my " + player.boyOrGirl()
+                                    + "weren't kissing my " + getPlayer().boyOrGirl()
                                     + " on my bed a minute ago? He made you orgasm and you even drank his cum.\"</i> Angel walks over to the refrigerator in the corner, gets a couple ice cubes from the "
                                     + "freezer, and puts them in a glass. Mei stammers out protest while she walks back to the bed, but Angel silences her with a kiss. She takes one of the ice cubes and teases each of "
                                     + "Mei's nipples with it. She runs the cube down Mei's front and touches it to her clit. Mei yelps and tries to jerk away from the sensation, but Angel manages to slip the ice cube into "
@@ -297,9 +298,9 @@ public class AngelTime extends BaseNPCTime {
                                     + "bed, exhausted from multiple orgasms. <i>\"Mei is straight, so even when she's seeking my affection, I have to act like it's punishment. If I neglect her for too long, she steals a boy from "
                                     + "me so I have an excuse to punish her. She doesn't mean any harm, she just gets lonely.\"</i> That seems unnecessarily complicated. Still, it's very considerate of Angel to indulge Mei even when "
                                     + "they're fighting over guys. <i>\"Of course,\"</i> she says. <i>\"Mei is my friend.\"</i>");
-                    if (!player.has(Trait.experttongue)) {
+                    if (!getPlayer().has(Trait.experttongue)) {
                         GUI.gui.message("<br/><br/><b>You've improved your kissing technique to the point where it may render opponents temporarily helpless.</b>");
-                        player.add(Trait.experttongue);
+                        getPlayer().add(Trait.experttongue);
                         npc.getGrowth().addTrait(0, Trait.experttongue);
                     }
                 } else {
@@ -330,12 +331,12 @@ public class AngelTime extends BaseNPCTime {
                                     + "don't regret it.");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.seduction);
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
+                Daytime.train(getPlayer(), npc, Attribute.seduction);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
                 break;
             case "Games":
-                if (npc.getAffection(player) >= 8 && (!player.has(Trait.pokerface) || Random.random(2) == 1)) {
+                if (npc.getAffection(getPlayer()) >= 8 && (!getPlayer().has(Trait.pokerface) || Random.random(2) == 1)) {
                     GUI.gui.message("Today all the girls left the responsibility of choosing a game to you, with Angel's stipulation that it had to including stripping. You picked a simple, but intense "
                                     + "bluffing game with stripping rules slotted in so naturally it's like the game was designed for them. Not to be immodest, but clearly your genius knows no bounds. The first five "
                                     + "minutes of the game clearly separate the people who can bluff from those who can't. Mei bet far too aggressively and is already completely naked. You lost one coaster and your belt. "
@@ -354,27 +355,27 @@ public class AngelTime extends BaseNPCTime {
                                     + "Her stunned expression when she turns over a skull is priceless. She slips off her panties and gives you a glare that promises angry, aggressive sex the next chance she gets. Caroline speaks "
                                     + "up. <i>\"Well played, but there's literally no way you can win now that I know you're holding a skull. Do you want to just hand over the boxers now?\"</i><br/><br/>You concede defeat and forfeit your boxers. "
                                     + "Caroline looks you over slowly while deep in thought. <i>\"As the victor, I can have my way with the losers, but... I think I'll leave Angel's "
-                                    + player.boyOrGirl()
+                                    + getPlayer().boyOrGirl()
                                     + " to her.\"</i> Angel grins and pats the couch next to "
                                     + "her. As you somewhat hesitantly sit down, she begins to slowly stroke and play with your erection. She leans in close to whisper in your ear. <i>\"Everyone wants to see you cum, so I can tease "
                                     + "them by teasing you.\"</i> You groan quietly. You can't deny the pleasure she's giving you, but she's clearly not going to let you finish anytime soon. Caroline watches the two of you with a flushed "
                                     + "smile. Mei and Sarah are both watching rapt, each with one hand under the table. <i>\""
-                                    + player.getTrueName()
+                                    + getPlayer().getTrueName()
                                     + " isn't the only loser in the room,\"</i> Caroline says while glancing at the naked girls. <i>\"How about "
                                     + "the two of you give him some eye candy by showing him what you're doing under there.\"</i> Sarah lets out a surprised whimper at the command, but she and Mei both obey Caroline as she has them sit "
                                     + "facing you while they masturbate openly. Sarah looks so embarrassed she may cry, but you can tell she's getting off on this more than anyone else. Mei looks more composed, but from time to time you see her "
                                     + "bite her lip and shudder. You realize she's having multiple little orgasms and trying to hide it. After Sarah climaxes (loudly), Angel speeds up her handjob and whispers in your ear, <i>\"Cum for me. "
                                     + "You have my permission.\"</i> You couldn't hold back even if you wanted to. You shoot your load so far that some of it even hits Caroline, who is standing quite a ways away.");
-                    if (!player.has(Trait.pokerface)) {
+                    if (!getPlayer().has(Trait.pokerface)) {
                         GUI.gui.message("<br/><br/><b>You've mastered the art of bluffing.</b>");
-                        player.add(Trait.pokerface);
+                        getPlayer().add(Trait.pokerface);
                         npc.getGrowth().addTrait(0, Trait.pokerface);
                     }
                 } else {
                     GUI.gui.message("You know this can't end well for you. When you suggested playing a game, all of the girls shared a conspiratorial smile and Angel declared she had a game in mind. "
                                     + "Now you're sitting in a surprisingly roomy girls' dorm room, waiting to see what craziness Angel has in store for you. <i>\"Found it,\"</i> you hear Sarah call from the next room. Mei "
                                     + "speaks up while she's clearing a spot on the floor. <i>\"It's been awhile since we got to play this. We need to find more interesting "
-                                    + player.boyOrGirl()
+                                    + getPlayer().boyOrGirl()
                                     + "s.\"</i> Sarah and Angel return holding a "
                                     + "cardboard spinner and laying out a mat with multicolored circles on the floor. Huh, you weren't expecting something so normal. You haven't played this since you were a kid. "
                                     + "<i>\"We added a couple things to the spinner,\"</i> Sarah explains. <i>\"Also, you have to remove an article of clothing every time you fall.\"</i> Of course, it couldn't be a completely "
@@ -389,7 +390,7 @@ public class AngelTime extends BaseNPCTime {
                                     + "topless and you're in your boxers. <i>\"Right hand boob\"</i> You palm her breast without even thinking, and she lets out a soft noise. You apologize, but she just smiles back at you. "
                                     + "<i>\"Don't worry about it. You can probably repay me if you hold that position for a little while longer.\"</i> <i>\"Right hand male!\"</i> Wait... what? Caroline grins victoriously and her hand darts "
                                     + "into your boxers to grab your dick. Sarah cheers excitedly and leans in for a closer look. <i>\"Caroline got the penis! That means everyone else loses an article of clothing and that "
-                                    + "means Angel and " + player.getTrueName()
+                                    + "means Angel and " + getPlayer().getTrueName()
                                     + " are out. Caroline wins!\"</i> <br/><br/>There was definitely no mention of a bonus for grabbing your cock during the rules explanation. Caroline's response to "
                                     + "your protests is to rub the sensitive head of your dick with her thumb, making you squirm a bit despite your indignation. Angel speaks up from behind you while removing her panties. <i>\"If we warned you, you would have tried to protect your man "
                                     + "parts. That would have been no fun.\"</i> Caroline smiles while still holding your shaft. <i>\"I think of this as a team victory. If you want, I don't mind rewarding you for your cooperation.\"</i> "
@@ -397,12 +398,12 @@ public class AngelTime extends BaseNPCTime {
                                     + "No one is allowed to get dressed and you get the lion's share of the interest, but you feel strangely comfortable with most of the girls in similar states of undress. ");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.cunning);
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
+                Daytime.train(getPlayer(), npc, Attribute.cunning);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
                 break;
             case "Sparring":
-                if (npc.getAffection(player) >= 16 && (!player.has(Trait.disciplinarian) || Random.random(2) == 1)) {
+                if (npc.getAffection(getPlayer()) >= 16 && (!getPlayer().has(Trait.disciplinarian) || Random.random(2) == 1)) {
                     GUI.gui.message("Your strip wrestling with Angel has become a routine secondary version of your nightly competitions. Unfortunately, in this venue, Angel has a a much better "
                                     + "win rate than you. You've also gotten used to your three girl audience. Mei's sadistic side comes to the fore as she cheers on Angel whenever she's got the upper hand. Caroline, "
                                     + "on the other hand, consistently encourages the underdog, usually you. Sarah seems to support both of you evenly, but spends most of the matches covertly masturbating to the "
@@ -430,9 +431,9 @@ public class AngelTime extends BaseNPCTime {
                                     + "hand as she orgasms. As she goes limp in your arms, the other girls snap out of whatever what keeping them silent and they gather around you. Mei stands nearby, but can't seem to make eye "
                                     + "contact with Angel. Caroline pats Angel on the head while congratulating you on your victory. Sarah crouches next to Angel and kisses her on the cheek affectionately. It occurs to you, not "
                                     + "for the first time, what a close group of friends they are. You feel honored that they're starting to count you as one of them.");
-                    if (!player.has(Trait.disciplinarian)) {
+                    if (!getPlayer().has(Trait.disciplinarian)) {
                         GUI.gui.message("<br/><br/><b>You've learn how to spank your opponent in a way that can ruin their morale.</b>");
-                        player.add(Trait.disciplinarian);
+                        getPlayer().add(Trait.disciplinarian);
                         npc.getGrowth().addTrait(0, Trait.disciplinarian);
                     }
                 } else {
@@ -452,7 +453,7 @@ public class AngelTime extends BaseNPCTime {
                                     + "In response, you change your target and successfully untie both sides of her panties and pull them off. While your hands are occupied though, Angel suddenly slips her hand down the front of your pants and grabs "
                                     + "your balls. After that, pain happens.<br/><br/>When the spectators see your plight, they each react differently. Mei cheers enthusiastically, <i>\"Come on Angel, twist his balls off!\"</i> Caroline is a "
                                     + "bit more sympathetic, though her cheeks are tinted with a light blush. <i>\"Ouch, poor "
-                                    + player.boyOrGirl()
+                                    + getPlayer().boyOrGirl()
                                     + ". That's probably checkmate.\"</i> Sarah says nothing, but is flushed with arousal and has a hand between "
                                     + "her legs. Angel herself has a smile that's equal parts sadistic and affectionate. She kisses you while trying to work off your pants with her free hand, but eventually decides she needs both hands "
                                     + "and releases your genitals. Most of the fight has already been squeezed out of you and you collapse to the floor.<br/><br/>Angel straddles your head while she strips off your pants and underwear. "
@@ -461,15 +462,15 @@ public class AngelTime extends BaseNPCTime {
                                     + "you. In no time, you disgracefully cum in front of four horny girls, leaving your balls even more sore than before.");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.power);
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
+                Daytime.train(getPlayer(), npc, Attribute.power);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
                 break;
         }
     }
     
     @Override
     public Optional<String> getAddictionOption() {
-        return player.checkAddiction(AddictionType.ZEAL) ? Optional.of("Worship") : Optional.empty();
+        return getPlayer().checkAnyAddiction(AddictionType.ZEAL) ? Optional.of("Worship") : Optional.empty();
     }
 }

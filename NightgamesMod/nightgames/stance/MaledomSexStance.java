@@ -1,6 +1,7 @@
 package nightgames.stance;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -8,12 +9,13 @@ import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.status.Stsflag;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class MaledomSexStance extends Position {
-    public MaledomSexStance(Character top, Character bottom, Stance stance) {
+    public MaledomSexStance(CharacterType top, CharacterType bottom, Stance stance) {
         super(top, bottom, stance);
     }
 
@@ -31,29 +33,15 @@ public abstract class MaledomSexStance extends Position {
     }
 
     @Override
-    public void checkOngoing(Combat c) {
-        Character inserter = inserted(top) ? top : bottom;
-        Character inserted = inserted(top) ? bottom : top;
+    public Optional<Position> checkOngoing(Combat c) {
+        Character inserter = inserted(getTop()) ? getTop() : getBottom();
+        Character inserted = inserted(getTop()) ? getBottom() : getTop();
 
-        if (!inserter.hasInsertable()) {
-            if (inserter.human()) {
-                c.write("With your phallus gone, you groan in frustration and cease your merciless movements.");
-            } else {
-                c.write(inserter.getName() + " groans with frustration with the sudden disappearance of "
-                                + inserter.possessiveAdjective() + " pole.");
-            }
-            c.setStance(insertRandom(c));
+        Optional<Position> newStance = dickMissing(c, inserter, inserted);
+        if (!newStance.isPresent()) {
+            newStance = pussyMissing(c, inserter, inserted);
         }
-        if (!inserted.hasPussy() && !anallyPenetratedBy(c, inserted, inserter)) {
-            if (inserted.human()) {
-                c.write("With your pussy suddenly disappearing, " + inserter.subject()
-                                + " can't continue fucking you anymore.");
-            } else {
-                c.write("You groan with frustration with the sudden disappearance of "
-                                + inserted.nameOrPossessivePronoun() + " pussy.");
-            }
-            c.setStance(insertRandom(c));
-        }
+        return newStance;
     }
 
     @Override
@@ -63,7 +51,7 @@ public abstract class MaledomSexStance extends Position {
 
     @Override
     public boolean inserted(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
@@ -73,13 +61,13 @@ public abstract class MaledomSexStance extends Position {
 
     @Override
     public List<BodyPart> topParts(Combat c) {
-        return Arrays.asList(domSexCharacter(c).body.getRandomInsertable()).stream().filter(part -> part != null && part.present())
+        return Stream.of(getDomSexCharacter().body.getRandomInsertable()).filter(part -> part != null && part.present())
                         .collect(Collectors.toList());
     }
 
     @Override
     public List<BodyPart> bottomParts() {
-        return Arrays.asList(bottom.body.getRandomPussy()).stream().filter(part -> part != null && part.present())
+        return Stream.of(getBottom().body.getRandomPussy()).filter(part -> part != null && part.present())
                         .collect(Collectors.toList());
     }
 

@@ -4,10 +4,8 @@ import java.util.Optional;
 
 import com.google.gson.JsonObject;
 
-import nightgames.characters.Attribute;
+import nightgames.characters.*;
 import nightgames.characters.Character;
-import nightgames.characters.Emotion;
-import nightgames.characters.NPC;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -17,11 +15,11 @@ import nightgames.global.Formatter;
  */
 public class Stunned extends DurationStatus {
     private boolean makesBraced;
-    public Stunned(Character affected) {
+    public Stunned(CharacterType affected) {
         this(affected, 1, true);
     }
 
-    public Stunned(Character affected, int duration, boolean makesBraced) {
+    public Stunned(CharacterType affected, int duration, boolean makesBraced) {
         super("Stunned", affected, duration);
         flag(Stsflag.stunned);
         flag(Stsflag.debuff);

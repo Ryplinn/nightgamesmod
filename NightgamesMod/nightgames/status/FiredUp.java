@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -13,16 +14,20 @@ import nightgames.global.Formatter;
 public class FiredUp extends DurationStatus {
 
     private int stack;
-    private Character other;
+    private CharacterType other;
     private String part;
 
-    public FiredUp(Character affected, Character other, String part) {
+    public FiredUp(CharacterType affected, CharacterType other, String part) {
         super("Fired Up", affected, 2);
         this.part = part;
         stack = 1;
         this.other = other;
         flag(Stsflag.firedup);
         flag(Stsflag.purgable);
+    }
+
+    private Character getOther() {
+        return other.fromPoolGuaranteed();
     }
 
     public int getStack() {
@@ -35,38 +40,38 @@ public class FiredUp extends DurationStatus {
 
     @Override
     public String initialMessage(Combat c, Optional<Status> replacement) {
-        return String.format("%s really getting into using %s %s.", affected.subjectAction("are", "is"),
-                        affected.possessiveAdjective(), part);
+        return String.format("%s really getting into using %s %s.", getAffected().subjectAction("are", "is"),
+                        getAffected().possessiveAdjective(), part);
     }
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             if (stack == 1) {
                 return "You are getting a good sense of how to best use your " + part + ".";
             } else if (stack == 2) {
                 return String.format("The movements of your %s are growing ever more attuned to %s reactions.", part,
-                                other.nameOrPossessivePronoun());
+                                getOther().nameOrPossessivePronoun());
             } else {
                 return String.format(
                                 "You have completely mapped out %s body, and you are finding all of %s most sensitive areas as if by magic.",
-                                affected.nameOrPossessivePronoun(), affected.possessiveAdjective());
+                                getAffected().nameOrPossessivePronoun(), getAffected().possessiveAdjective());
             }
         } else {
             if (stack == 1) {
                 return Formatter.capitalizeFirstLetter(String.format(
                                 "%s has a big grin on %s face at the prospect of further pleasuring %s with %s %s.",
-                                affected.pronoun(), affected.possessiveAdjective(), c.getOpponent(affected).nameDirectObject(),
-                                affected.possessiveAdjective(), part));
+                                getAffected().pronoun(), getAffected().possessiveAdjective(), c.getOpponent(getAffected()).nameDirectObject(),
+                                getAffected().possessiveAdjective(), part));
             } else if (stack == 2) {
                 return Formatter.capitalizeFirstLetter(String.format(
                                 "%s looks as if %s is enjoying working %s %s almost as much as %s.",
-                                affected.pronoun(), affected.possessiveAdjective(), affected.pronoun(), part,
-                                c.getOpponent(affected).subjectAction("are", "is")));
+                                getAffected().pronoun(), getAffected().possessiveAdjective(), getAffected().pronoun(), part,
+                                c.getOpponent(getAffected()).subjectAction("are", "is")));
             } else {
                 return Formatter.capitalizeFirstLetter(
                                 String.format("%s is focused almost exclusively on using %s %s to the greatest possible effect, and it's working.",
-                                                affected.pronoun(), affected.possessiveAdjective(), part));
+                                                getAffected().pronoun(), getAffected().possessiveAdjective(), part));
             }
         }
     }
@@ -138,7 +143,7 @@ public class FiredUp extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new FiredUp(newAffected, newOther, part);
+        return new FiredUp(newAffected.getType(), newOther.getType(), part);
     }
 
     @Override

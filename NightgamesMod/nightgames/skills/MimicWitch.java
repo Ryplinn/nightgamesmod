@@ -26,7 +26,7 @@ public class MimicWitch extends Skill {
 
     @Override
     public boolean usable(Combat c, Character target) {
-        return getSelf().canRespond() && !getSelf().is(Stsflag.mimicry) && GameState.gameState.characterPool.getNPC("Cassie").has(Trait.witch);
+        return getSelf().canRespond() && !getSelf().is(Stsflag.mimicry) && GameState.getGameState().characterPool.getNPC("Cassie").has(Trait.witch);
     }
 
     @Override

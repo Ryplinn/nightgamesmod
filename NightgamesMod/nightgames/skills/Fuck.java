@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.StraponPart;
@@ -16,14 +17,14 @@ import nightgames.nskills.tags.SkillTag;
 
 public class Fuck extends Skill {
 
-    public Fuck(String name, Character self, int cooldown) {
+    public Fuck(String name, CharacterType self, int cooldown) {
         super(name, self, cooldown);
         addTag(SkillTag.pleasure);
         addTag(SkillTag.fucking);
         addTag(SkillTag.petDisallowed);
     }
 
-    public Fuck(Character self) {
+    public Fuck(CharacterType self) {
         this("Fuck", self, 0);
     }
 
@@ -39,7 +40,7 @@ public class Fuck extends Skill {
         return target.body.getRandomPussy();
     }
 
-    public boolean fuckable(Combat c, Character target) {
+    boolean fuckable(Combat c, Character target) {
         BodyPart selfO = getSelfOrgan();
         BodyPart targetO = getTargetOrgan(target);
         boolean possible = selfO != null && targetO != null;
@@ -86,7 +87,7 @@ public class Fuck extends Skill {
                         && c.getStance().mobile(getSelf()) && !c.getStance().mobile(target) && getSelf().canAct();
     }
 
-    protected String premessage(Combat c, Character target) {
+    String premessage(Combat c, Character target) {
         String premessage = "";
         Clothing underwear = getSelf().getOutfit().getSlotAt(ClothingSlot.bottom, 0);
         Clothing bottom = getSelf().getOutfit().getSlotAt(ClothingSlot.bottom, 1);
@@ -183,7 +184,7 @@ public class Fuck extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Fuck(user);
+        return new Fuck(user.getType());
     }
 
     @Override

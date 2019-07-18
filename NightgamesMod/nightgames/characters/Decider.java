@@ -28,18 +28,18 @@ public class Decider {
         }
     }
 
-    public static ArrayList<WeightedSkill> parseSkills(HashSet<Skill> available, Combat c, NPC character) {
-        HashSet<Skill> damage = new HashSet<Skill>();
-        HashSet<Skill> pleasure = new HashSet<Skill>();
-        HashSet<Skill> fucking = new HashSet<Skill>();
-        HashSet<Skill> position = new HashSet<Skill>();
-        HashSet<Skill> debuff = new HashSet<Skill>();
-        HashSet<Skill> recovery = new HashSet<Skill>();
-        HashSet<Skill> calming = new HashSet<Skill>();
-        HashSet<Skill> summoning = new HashSet<Skill>();
-        HashSet<Skill> stripping = new HashSet<Skill>();
-        HashSet<Skill> misc = new HashSet<Skill>();
-        ArrayList<WeightedSkill> priority = new ArrayList<WeightedSkill>();
+    static ArrayList<WeightedSkill> parseSkills(HashSet<Skill> available, Combat c, NPC character) {
+        HashSet<Skill> damage = new HashSet<>();
+        HashSet<Skill> pleasure = new HashSet<>();
+        HashSet<Skill> fucking = new HashSet<>();
+        HashSet<Skill> position = new HashSet<>();
+        HashSet<Skill> debuff = new HashSet<>();
+        HashSet<Skill> recovery = new HashSet<>();
+        HashSet<Skill> calming = new HashSet<>();
+        HashSet<Skill> summoning = new HashSet<>();
+        HashSet<Skill> stripping = new HashSet<>();
+        HashSet<Skill> misc = new HashSet<>();
+        ArrayList<WeightedSkill> priority = new ArrayList<>();
         for (Skill a : available) {
             if (a.type(c) == Tactics.damage) {
                 damage.add(a);
@@ -129,11 +129,11 @@ public class Decider {
          */ return priority;
     }
 
-    public static Action parseMoves(Collection<Action> available, Collection<Movement> radar, NPC character) {
-        HashSet<Action> enemy = new HashSet<Action>();
-        HashSet<Action> onlyWhenSafe = new HashSet<Action>();
-        HashSet<Action> utility = new HashSet<Action>();
-        HashSet<Action> tactic = new HashSet<Action>();
+    static Action parseMoves(Collection<Action> available, Collection<Movement> radar, NPC character) {
+        HashSet<Action> enemy = new HashSet<>();
+        HashSet<Action> onlyWhenSafe = new HashSet<>();
+        HashSet<Action> utility = new HashSet<>();
+        HashSet<Action> tactic = new HashSet<>();
         if (character.mostlyNude()) {
             for (Action act : available) {
                 if (act.consider() == Movement.resupply) {
@@ -204,21 +204,21 @@ public class Decider {
         }
         // give disguise some priority when just picking something random
         if (tactic.stream().anyMatch(a -> a.consider() == Movement.disguise) && Random.random(5) == 0) {
-            return tactic.stream().filter(a -> a.consider() == Movement.disguise).findFirst().get();
+            return tactic.stream().filter(a -> a.consider() == Movement.disguise).findFirst().orElse(null);
         }
-        Action[] actions = tactic.toArray(new Action[tactic.size()]);
+        Action[] actions = tactic.toArray(new Action[0]);
         return actions[Random.random(actions.length)];
     }
 
     public static void visit(Character self) {
-        if (Flag.checkCharacterDisabledFlag(self)) {
+        if (Flag.checkCharacterDisabledFlag(self.getType())) {
             return;
         }
         int max = 0;
         Character bff = null;
         if (!self.attractions.isEmpty()) {
-            for (String key : self.attractions.keySet()) {
-                Character friend = GameState.gameState.characterPool.getCharacterByType(key);
+            for (CharacterType key : self.attractions.keySet()) {
+                Character friend = key.fromPool().orElseThrow(() -> new CharacterPool.CharacterNotFoundException(key));
                 if (self.getAttraction(friend) > max && !friend.human()) {
                     max = self.getAttraction(friend);
                     bff = friend;
@@ -244,9 +244,10 @@ public class Decider {
         return prioritizePetWithWeights(self, target, weightedList, c);
     }
 
-    public static WeightedSkill prioritizePetWithWeights(PetCharacter self, Character target, List<WeightedSkill> plist, Combat c) {
+    private static WeightedSkill prioritizePetWithWeights(PetCharacter self, Character target,
+                    List<WeightedSkill> plist, Combat c) {
         if (plist.isEmpty()) {
-            return new WeightedSkill(1.0, new Wait(self));
+            return new WeightedSkill(1.0, new Wait(self.getType()));
         }
         // The higher, the better the AI will plan for "rare" events better
         final int RUN_COUNT = 3;
@@ -274,7 +275,7 @@ public class Decider {
             }
 
             // Sum up rating, add to map
-            rating = (double) Math.pow(2, RATING_FACTOR * raw_rating + wskill.weight + wskill.skill.priorityMod(c)
+            rating = Math.pow(2, RATING_FACTOR * raw_rating + wskill.weight + wskill.skill.priorityMod(c)
                             + Match.getMatch().condition.getSkillModifier().encouragement(wskill.skill, c, self));
             sum += rating;
             moveList.add(new WeightedSkill(sum, raw_rating, rating, wskill.skill));
@@ -284,10 +285,10 @@ public class Decider {
         }
         // Debug
         if (DebugFlags.isDebugOn(DebugFlags.DEBUG_SKILLS)) {
-            String s = "Pet choices: ";
+            StringBuilder s = new StringBuilder("Pet choices: ");
             for (WeightedSkill entry : moveList) {
-                s += String.format("\n(%.1f\t\t%.1f\t\tculm: %.1f\t\t/ %.1f)\t\t-> %s", entry.raw_rating, entry.rating,
-                                entry.weight, entry.rating * 100.0f / sum, entry.skill.getLabel(c));
+                s.append(String.format("\n(%.1f\t\t%.1f\t\tculm: %.1f\t\t/ %.1f)\t\t-> %s", entry.raw_rating,
+                                entry.rating, entry.weight, entry.rating * 100.0f / sum, entry.skill.getLabel(c)));
             }
             System.out.println(s);
         }
@@ -304,7 +305,7 @@ public class Decider {
         return moveList.get(moveList.size() - 1);
     }
 
-    public static Skill prioritizeNew(Character self, List<WeightedSkill> plist, Combat c) {
+    static Skill prioritizeNew(Character self, List<WeightedSkill> plist, Combat c) {
         if (plist.isEmpty()) {
             return null;
         }
@@ -335,10 +336,11 @@ public class Decider {
             }
 
             if (self instanceof NPC) {
-                wskill.weight += ((NPC)self).ai.getAiModifiers().modAttack(wskill.skill.getClass());
+                NPC selfNPC = (NPC) self;
+                wskill.weight += (selfNPC.ai.getAiModifiers(selfNPC).modAttack(wskill.skill.getClass()));
             }
             // Sum up rating, add to map
-            rating = (double) Math.pow(2, RATING_FACTOR * raw_rating + wskill.weight + wskill.skill.priorityMod(c)
+            rating = Math.pow(2, RATING_FACTOR * raw_rating + wskill.weight + wskill.skill.priorityMod(c)
                             + Match.getMatch().condition.getSkillModifier().encouragement(wskill.skill, c, self));
             sum += rating;
             moveList.add(new WeightedSkill(sum, raw_rating, rating, wskill.skill));
@@ -348,10 +350,10 @@ public class Decider {
         }
         // Debug
         if (DebugFlags.isDebugOn(DebugFlags.DEBUG_SKILLS)) {
-            String s = "AI choices: ";
+            StringBuilder s = new StringBuilder("AI choices: ");
             for (WeightedSkill entry : moveList) {
-                s += String.format("\n(%.1f\t\t%.1f\t\tculm: %.1f\t\t/ %.1f)\t\t-> %s", entry.raw_rating, entry.rating,
-                                entry.weight, entry.rating * 100.0f / sum, entry.skill.getLabel(c));
+                s.append(String.format("\n(%.1f\t\t%.1f\t\tculm: %.1f\t\t/ %.1f)\t\t-> %s", entry.raw_rating,
+                                entry.rating, entry.weight, entry.rating * 100.0f / sum, entry.skill.getLabel(c)));
             }
             System.out.println(s);
         }
@@ -375,9 +377,9 @@ public class Decider {
             System.out.println("Before:\n" + c.debugMessage());
         }
         return rateActionWithObserver(self, self.getSelf().owner(), target, c, masterFit, otherFit, (combat, selfCopy, other) -> {
-            skill.setSelf(selfCopy);
+            skill.setSelf(selfCopy.getType());
             skill.resolve(combat, other);
-            skill.setSelf(self);
+            skill.setSelf(self.getType());
             return true;
         });
     }
@@ -388,10 +390,11 @@ public class Decider {
             System.out.println("===> Rating " + skill);
             System.out.println("Before:\n" + c.debugMessage());
         }
+        // FIXME: null pointer exception here attempting to rate Tighten while fighting Eve during a threesome
         return rateAction(self, c, selfFit, otherFit, (combat, selfCopy, other) -> {
-            skill.setSelf(selfCopy);
+            skill.setSelf(selfCopy.getType());
             skill.resolve(combat, other);
-            skill.setSelf(self);
+            skill.setSelf(self.getType());
             return true;
         });
     }
@@ -401,10 +404,13 @@ public class Decider {
             return clonedCombat.p1;
         } else if (c.p2 == self) {
             return clonedCombat.p2;
-        } else if (c.getOtherCombatants().contains(self)) {
-            return clonedCombat.getOtherCombatants().stream().filter(other -> other.equals(self)).findAny().get();
         } else {
-            throw new IllegalArgumentException("Tried to use a badly cloned combat");
+            if (c.otherCombatantsContains(self)) {
+                return clonedCombat.getOtherCombatants().stream().filter(other -> other.equals(self)).findAny()
+                                .orElseThrow(() -> new IllegalArgumentException("Tried to use a badly cloned combat"));
+            } else {
+                throw new IllegalArgumentException("Tried to use a badly cloned combat");
+            }
         }
     }
 
@@ -412,7 +418,7 @@ public class Decider {
         return rateActionWithObserver(skillUser, skillUser, c.getOpponent(skillUser), c, selfFit, otherFit, effect);
     }
 
-    public static double rateActionWithObserver(Character skillUser, Character fitnessObserver, Character target,
+    private static double rateActionWithObserver(Character skillUser, Character fitnessObserver, Character target,
                     Combat c, double selfFit, double otherFit, CustomEffect effect) {
         // Clone ourselves a new combat... This should clone our characters, too
         Combat c2;

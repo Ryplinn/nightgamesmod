@@ -6,35 +6,36 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class Satiated extends DurationStatus {
     int value;
 
-    public Satiated(Character affected, int xp, int levels) {
+    public Satiated(CharacterType affected, int xp, int levels) {
         super("Satiated", affected, 1);
-        value = xp + 95 + 5 * (affected.getLevel() + levels);
+        value = xp + 95 + 5 * (affected.fromPoolGuaranteed().getLevel() + levels);
     }
 
-    public Satiated(Character affected, int value) {
+    public Satiated(CharacterType affected, int value) {
         super("Satiated", affected, 1);
         this.value = value;
     }
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "You feel immensely powerful after feeding on your opponent's essence\n";
         } else {
-            return affected.getName() + " feels immensely satisfied after feeding on "+
-                            c.getOpponent(affected).nameOrPossessivePronoun()+" essence\n";
+            return getAffected().getName() + " feels immensely satisfied after feeding on "+
+                            c.getOpponent(getAffected()).nameOrPossessivePronoun()+" essence\n";
         }
     }
 
     @Override
     public String initialMessage(Combat c, Optional<Status> replacement) {
-        return String.format("%s now satiated.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now satiated.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -99,7 +100,7 @@ public class Satiated extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Satiated(newAffected, value);
+        return new Satiated(newAffected.getType(), value);
     }
 
     @Override  public JsonObject saveToJson() {

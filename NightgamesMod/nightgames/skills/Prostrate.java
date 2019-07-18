@@ -7,7 +7,7 @@ import nightgames.global.Random;
 import nightgames.stance.Behind;
 import nightgames.stance.Mount;
 import nightgames.stance.Stance;
-import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
 // Not Prostate, ProstRate
@@ -24,9 +24,9 @@ public class Prostrate extends Skill {
 
     @Override
     public boolean usable(Combat c, Character target) {
-        if (!getSelf().checkAddiction(AddictionType.ZEAL))
+        if (!getSelf().checkAnyAddiction(AddictionType.ZEAL))
             return false;
-        return getSelf().getAddiction(AddictionType.ZEAL).map(a -> c.getStance().en == Stance.neutral && a.wasCausedBy(target)).orElse(false);
+        return getSelf().getAnyAddiction(AddictionType.ZEAL).map(a -> c.getStance().en == Stance.neutral && a.wasCausedBy(target)).orElse(false);
     }
 
     @Override
@@ -49,8 +49,8 @@ public class Prostrate extends Skill {
                             + " chest and shoulder while walking around you and gently hugging you from behind.");
             c.setStance(new Behind(target, getSelf()), getSelf(), true);
         }
-        getSelf().unaddictCombat(AddictionType.ZEAL, target, AddictionSymptom.LOW_INCREASE, c);
-        getSelf().addict(c, AddictionType.ZEAL, target, AddictionSymptom.LOW_INCREASE);
+        getSelf().unaddictCombat(AddictionType.ZEAL, target, Addiction.LOW_INCREASE, c);
+        getSelf().addict(c, AddictionType.ZEAL, target, Addiction.LOW_INCREASE);
         return true;
     }
 

@@ -152,7 +152,7 @@ public class Challenge implements Deployable {
     }
 
     @Override
-    public Character owner() {
+    public Character getOwner() {
         return null;
     }
 

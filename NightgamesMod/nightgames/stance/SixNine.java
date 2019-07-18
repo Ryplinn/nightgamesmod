@@ -3,15 +3,17 @@ package nightgames.stance;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import nightgames.characters.Character;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
-public class SixNine extends AbstractBehindStance {
+public class SixNine extends Position {
     public SixNine(Character top, Character bottom) {
         super(top, bottom, Stance.sixnine);
+        facingType = FacingType.BEHIND;
     }
 
     @Override
@@ -138,7 +140,7 @@ public class SixNine extends AbstractBehindStance {
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return this;
     }
 
@@ -168,7 +170,6 @@ public class SixNine extends AbstractBehindStance {
                         + " %s on top of %s sitting on %s chest, there is nothing %s can do.",
                         struggler.subjectAction("struggle"), top.subject(), struggler.directObject(),
                         struggler.possessiveAdjective(), struggler.pronoun()));
-        super.struggle(c, struggler);
     }
 
     @Override
@@ -176,6 +177,5 @@ public class SixNine extends AbstractBehindStance {
         c.write(escapee, Formatter.format("{self:SUBJECT-ACTION:try} to escape {other:name-possessive} hold, but with"
                         + " {other:direct-object} sitting firmly on {self:possessive} chest, there is nothing {self:pronoun} can do.",
                         escapee, top));
-        super.escape(c, escapee);
     }
 }

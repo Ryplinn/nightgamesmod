@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.nskills.tags.SkillTag;
@@ -9,7 +10,7 @@ import nightgames.skills.Tactics;
 import nightgames.status.Falling;
 
 public class SlimeTrip extends SimpleEnemySkill {
-    public SlimeTrip(Character self) {
+    public SlimeTrip(CharacterType self) {
         super("Slime Trip", self);
         addTag(SkillTag.positioning);
         addTag(SkillTag.knockdown);
@@ -35,10 +36,10 @@ public class SlimeTrip extends SimpleEnemySkill {
         if (target.roll(getSelf(), accuracy(c, target))) {
             c.write(getSelf(), Formatter.format("{other:SUBJECT-ACTION:slip|slips} on {self:name-do} as it clings to {other:possessive} feet, losing {other:possessive} balance.",
                             getSelf(), target));
-            target.add(c, new Falling(target));
+            target.add(c, new Falling(target.getType()));
         } else {
             c.write(getSelf(), Formatter.format("{self:SUBJECT-ACTION:stumble|stumbles} as {self:subject} clings to {other:possessive} leg. "
-                            + "{other:SUBJECT-ACTION:manage|manages} to catch {other:reflective} and {other:action:scrape|scrapes} off the clingly blob.",
+                            + "{other:SUBJECT-ACTION:manage|manages} to catch {other:reflective} and {other:action:scrape|scrapes} off the clingy blob.",
                             getSelf(), target));
             return false;
         }
@@ -47,7 +48,7 @@ public class SlimeTrip extends SimpleEnemySkill {
 
     @Override
     public Skill copy(Character user) {
-        return new SlimeTrip(user);
+        return new SlimeTrip(user.getType());
     }
 
     @Override

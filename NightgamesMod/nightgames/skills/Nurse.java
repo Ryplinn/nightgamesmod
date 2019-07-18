@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.trait.Trait;
@@ -18,7 +19,7 @@ import nightgames.status.Suckling;
 
 public class Nurse extends Skill {
 
-    public Nurse(Character self) {
+    public Nurse(CharacterType self) {
         super("Nurse", self);
         addTag(SkillTag.pleasureSelf);
         addTag(SkillTag.breastfeed);
@@ -90,7 +91,7 @@ public class Nurse extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Nurse(user);
+        return new Nurse(user.getType());
     }
 
     @Override

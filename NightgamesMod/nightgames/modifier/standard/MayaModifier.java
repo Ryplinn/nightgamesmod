@@ -51,7 +51,7 @@ public class MayaModifier extends BaseModifier {
 
     @Override
     public boolean isApplicable() {
-        return GameState.gameState.characterPool.getPlayer().getRank() > 0 && Time.getDate() % 15 == 0;
+        return GameState.getGameState().characterPool.getPlayer().getRank() > 0 && Time.getDate() % 15 == 0;
     }
 
 }

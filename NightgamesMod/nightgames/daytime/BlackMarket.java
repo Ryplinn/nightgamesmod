@@ -15,8 +15,8 @@ import nightgames.items.Item;
 public class BlackMarket extends Store {
     private boolean trained;
 
-    BlackMarket(Player player) {
-        super("Black Market", player);
+    BlackMarket() {
+        super("Black Market");
         add(Item.Aphrodisiac);
         add(Item.SPotion);
         add(Item.DisSol);
@@ -51,13 +51,13 @@ public class BlackMarket extends Store {
         } else {
             attemptBuy(choice);
         }
-        if (player.human()) {
+        if (getPlayer().human()) {
             if (Flag.checkFlag(Flag.blackMarketPlus)) {
                 if (!Flag.checkFlag(Flag.metRin)) {
                     GUI.gui.message("You knock on the door to the black market. When Ridley answers, you tell him that you're here to see his premium goods on behalf of "
                                     + "Callisto. Ridley glances back into the room for a moment and then walks past you without saying anything. You stand there confused, until you see the "
                                     + "girl on the couch stand up and approach you with a smile. <i>\"Hello "
-                                    + player.getTrueName()
+                                    + getPlayer().getTrueName()
                                     + ",\"</i> she says while extending her hand. <i>\"I'm Rin Callisto. You shouldn't "
                                     + "be surprised I know who you are, you've been putting on a good show lately.\"</i> You've seen her here before, but you've never taken a good look at her. She "
                                     + "has elegant features, shoulder length black hair, and looks a couple years older than you. She's very pretty, but you overlooked her because you assumed she "
@@ -76,15 +76,15 @@ public class BlackMarket extends Store {
                     Flag.flag(Flag.darkness);
                     acted = true;
                 } else if (choice.startsWith("Dark Power")) {
-                    if (player.money >= 1000 * (player.getPure(Attribute.darkness) + 1)) {
-                        player.money -= 1000 * (player.getPure(Attribute.darkness) + 1);
+                    if (getPlayer().money >= 1000 * (getPlayer().getPure(Attribute.darkness) + 1)) {
+                        getPlayer().money -= 1000 * (getPlayer().getPure(Attribute.darkness) + 1);
                         GUI.gui.message("Rin lights some incense and has you lie down on the couch with one of the cursed artifacts on your chest. As she performs a lengthy "
                                         + "ritual, you feel your body heat up and an overwhelming sense of danger flood through you. You're certain something powerful is trying to take control "
                                         + "of your soul. Rin chants softly and wraps a talisman around a wooden rod. The presence inside you looms and seems ready to devour you, when suddenly she "
                                         + "strikes the artifact with the rod. A shock runs through your consciousness, and the sense of danger disappears. The dark power is still present, but it "
                                         + "seems tame now, willing to obey your command should you call for it. <i>\"The ritual is complete. You can keep the artifact as a souvenir, but all its "
                                         + "power is in you now.\"</i><br/><br/>");
-                        player.modAttributeDontSaveData(Attribute.darkness, 1);
+                        getPlayer().modAttributeDontSaveData(Attribute.darkness, 1);
                         Flag.flag("Trained" + Attribute.darkness.name());
                         acted = true;
                         trained = true;
@@ -100,13 +100,13 @@ public class BlackMarket extends Store {
                     Flag.flag(Flag.fetishism);
                     acted = true;
                 } else if (choice.startsWith("Fetishism")) {
-                    if (player.money >= 1000 * (player.getPure(Attribute.fetishism) + 1)) {
-                        player.money -= 1000 * (player.getPure(Attribute.fetishism) + 1);
+                    if (getPlayer().money >= 1000 * (getPlayer().getPure(Attribute.fetishism) + 1)) {
+                        getPlayer().money -= 1000 * (getPlayer().getPure(Attribute.fetishism) + 1);
                         GUI.gui.message("You select one of the S&M toys and pay Rin for it. She picks up the toy - a leather riding crop - and gives you a small wicked smile. <i>\"Good "
                                         + "choice. This one will grant you the masochism fetish if used properly. I'm quite good with these. Get undressed and we'll get started.\"</i> Your trepidation "
                                         + "must show on your face, because her smiles becomes slightly more reassuring. <i>\"Sometimes the path to power can be painful. The gifts in these items may "
                                         + "bring you victory, but there's no easy way to unlock them. Besides, you'll enjoy it before we're through. That's the whole point after all.\"</i><br/><br/>");
-                        player.modAttributeDontSaveData(Attribute.fetishism, 1);
+                        getPlayer().modAttributeDontSaveData(Attribute.fetishism, 1);
                         Flag.flag("Trained" + Attribute.fetishism.name());
                         acted = true;
                         trained = true;
@@ -121,12 +121,12 @@ public class BlackMarket extends Store {
                     if (!Flag.checkFlag(Flag.darkness)) {
                         choose("Cursed Artifacts", nextChoices);
                     } else {
-                        choose("Dark Power: $" + 1000 * (player.getPure(Attribute.darkness) + 1), nextChoices);
+                        choose("Dark Power: $" + 1000 * (getPlayer().getPure(Attribute.darkness) + 1), nextChoices);
                     }
                     if (!Flag.checkFlag(Flag.fetishism)) {
                         choose("S&M Gear", nextChoices);
                     } else {
-                        choose("Fetishism: $" + 1000 * (player.getPure(Attribute.fetishism) + 1), nextChoices);
+                        choose("Fetishism: $" + 1000 * (getPlayer().getPure(Attribute.fetishism) + 1), nextChoices);
                     }
                 }
             } else {
@@ -135,7 +135,7 @@ public class BlackMarket extends Store {
                                 + "the nearby table and an attractive girl on the couch who makes no indication that she noticed you enter. <i>\"Don't mind the bitch,\"</i> says Ridley, noticing your "
                                 + "attention. <i>\"She doesn't care who you are and neither do I. What are you looking for?\"</i>");
             }
-            Map<Item, Integer> MyInventory = this.player.getInventory();
+            Map<Item, Integer> MyInventory = this.getPlayer().getInventory();
             for (Item i : stock.keySet()) {
                 if (MyInventory.get(i) == null || MyInventory.get(i) == 0) {
                     GUI.gui.message(i.getName() + ": $" + i.getPrice());
@@ -144,7 +144,7 @@ public class BlackMarket extends Store {
                                     i.getName() + ": $" + i.getPrice() + " (you have: " + MyInventory.get(i) + ")");
                 }
             }
-            GUI.gui.message("You have : $" + player.money + " to spend.");
+            GUI.gui.message("You have : $" + getPlayer().money + " to spend.");
             displayGoods(nextChoices);
             choose("Leave", nextChoices);
         }

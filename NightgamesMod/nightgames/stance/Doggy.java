@@ -1,13 +1,16 @@
 package nightgames.stance;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
+import java.util.Optional;
+
 public class Doggy extends MaledomSexStance {
 
-    public Doggy(Character top, Character bottom) {
+    public Doggy(CharacterType top, CharacterType bottom) {
         super(top, bottom, Stance.doggy);
     }
 
@@ -78,7 +81,7 @@ public class Doggy extends MaledomSexStance {
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return new Behind(top, bottom);
     }
 

@@ -5,6 +5,8 @@ import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
+import java.util.Optional;
+
 public class AnalProne extends AnalSexStance {
 
     public AnalProne(Character top, Character bottom) {
@@ -86,12 +88,12 @@ public class AnalProne extends AnalSexStance {
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return new Mount(top, bottom);
     }
 
     @Override
-    public void checkOngoing(Combat c) {
+    public Optional<Position> checkOngoing(Combat c) {
         Character inserter = inserted(top) ? top : bottom;
         Character inserted = inserted(top) ? bottom : top;
 
@@ -113,6 +115,7 @@ public class AnalProne extends AnalSexStance {
             }
             c.setStance(insertRandom(c));
         }
+        return null;
     }
 
     @Override

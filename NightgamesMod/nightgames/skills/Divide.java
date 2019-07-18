@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.NPC;
 import nightgames.characters.Player;
 import nightgames.characters.trait.Trait;
@@ -15,7 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Divide extends Skill {
-    public Divide(Character self) {
+    Divide(CharacterType self) {
         super("Divide", self);
     }
 
@@ -54,7 +55,7 @@ public class Divide extends Skill {
             power = Math.max(1, self.getLevel() / 2);
         }
         int ac = 4 + power / 3;
-        CharacterPet pet = null;
+        CharacterPet pet;
         String clonePrefix = String.format("%s clone", self.nameOrPossessivePronoun());
         Set<String> existingNames = c.getOtherCombatants()
                                       .stream().map(Character::getTrueName)
@@ -69,12 +70,12 @@ public class Divide extends Skill {
             }
         }
         if (self instanceof Player) {
-            pet = new CharacterPet(cloneName, self, (Player)self, power, ac);
+            pet = new CharacterPet(cloneName, self, self, power, ac);
         } else if (self instanceof NPC) {
-            pet = new CharacterPet(cloneName, self, (NPC)self, power, ac);
+            pet = new CharacterPet(cloneName, self, self, power, ac);
         } else {
             c.write(self, "Something fucked up happened in Divide.");
-            return pet;
+            return null;
         }
         pet.getSelf().add(Trait.MindlessClone);
         pet.getSelf().getSkills().add(new SlimeCloneParasite(pet.getSelf()));
@@ -88,7 +89,7 @@ public class Divide extends Skill {
         if (pet == null) {
             return false;
         }
-        c.write(getSelf(), formatMessage(Result.normal, target));
+        c.write(getSelf(), formatMessage(target));
         c.addPet(getSelf(), pet.getSelf());
 
         return true;
@@ -96,7 +97,7 @@ public class Divide extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Divide(user);
+        return new Divide(user.getType());
     }
 
     @Override
@@ -109,12 +110,12 @@ public class Divide extends Skill {
         return "unused";
     }
     
-    private String formatMessage(Result modifier, Character target) {
+    private String formatMessage(Character target) {
         if (getSelf().human()) {
-            return Formatter.format("You focus your attention on your slimey consitution and force yourself apart. "
+            return Formatter.format("You focus your attention on your slimy constitution and force yourself apart. "
                             + "The force of effort almost makes you black out, but when you finally raise your head, you are face to face with your own clone!", getSelf(), target);
         } else {
-            return Formatter.format("Airi's slimey body bubbles as if boiling over. Worried, you step closer to make sure she's not in any kind of trouble. "
+            return Formatter.format("Airi's slimy body bubbles as if boiling over. Worried, you step closer to make sure she's not in any kind of trouble. "
                             + "Suddenly, her viscous body splits apart, making you jump in surprise. Somehow, she managed to divide her body in half, and now you're another copy of her!",
                             getSelf(), target);
         }

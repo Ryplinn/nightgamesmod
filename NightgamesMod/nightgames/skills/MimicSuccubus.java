@@ -27,7 +27,7 @@ public class MimicSuccubus extends Skill {
 
     @Override
     public boolean usable(Combat c, Character target) {
-        return getSelf().canRespond() && !getSelf().is(Stsflag.mimicry) && GameState.gameState.characterPool.characterTypeInGame(Reyka.class.getSimpleName());
+        return getSelf().canRespond() && !getSelf().is(Stsflag.mimicry) && GameState.getGameState().characterPool.characterTypeInGame(Reyka.class.getSimpleName());
     }
 
     @Override

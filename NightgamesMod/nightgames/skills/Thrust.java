@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -12,22 +13,23 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.damage.Staleness;
 import nightgames.stance.Stance;
 import nightgames.status.BodyFetish;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 public class Thrust extends Skill {
-    public Thrust(String name, Character self) {
+    public Thrust(String name, CharacterType self) {
         // thrust skills become stale very slowly and recovers pretty fast
         this(name, self, Staleness.build().withDecay(.05).withDefault(1.0).withRecovery(.10).withFloor(.5));
     }
-    public Thrust(String name, Character self, Staleness staleness) {
+    public Thrust(String name, CharacterType self, Staleness staleness) {
         super(name, self, 0 , staleness);
         addTag(SkillTag.fucking);
         addTag(SkillTag.thrusting);
         addTag(SkillTag.pleasureSelf);
     }
 
-    public Thrust(Character self) {
+    public Thrust(CharacterType self) {
         this("Thrust", self);
     }
 
@@ -71,7 +73,7 @@ public class Thrust extends Skill {
     }
 
     public int[] getDamage(Combat c, Character target) {
-        int results[] = new int[2];
+        int[] results = new int[2];
 
         int m = 8 + Random.random(11);
         if (c.getStance().anallyPenetrated(c, target) && getSelf().has(Trait.assmaster)) {
@@ -86,13 +88,13 @@ public class Thrust extends Skill {
         mt = target.modRecoilPleasure(c, mt);
 
         if (getSelf().checkAddiction(AddictionType.BREEDER, target)) {
-            float bonus = .3f * getSelf().getAddiction(AddictionType.BREEDER).map(AddictionSymptom::getCombatSeverity)
-                            .map(Enum::ordinal).orElse(0);
+            float bonus = .3f * getSelf().getAddiction(AddictionType.BREEDER, target).flatMap(Addiction::activeTracker)
+                            .map(AddictionSymptom::getCombatSeverity).map(Enum::ordinal).orElse(0);
             mt += mt * bonus;
         }
         if (target.checkAddiction(AddictionType.BREEDER, getSelf())) {
-            float bonus = .3f * target.getAddiction(AddictionType.BREEDER).map(AddictionSymptom::getCombatSeverity)
-                            .map(Enum::ordinal).orElse(0);
+            float bonus = .3f * target.getAddiction(AddictionType.BREEDER, getSelf()).flatMap(Addiction::activeTracker)
+                            .map(AddictionSymptom::getCombatSeverity).map(Enum::ordinal).orElse(0);
             m += m * bonus;
         }
         results[0] = m;
@@ -133,7 +135,7 @@ public class Thrust extends Skill {
             getSelf().body.pleasure(target, targetO, selfO, m[1], c, this);
         }
         if (selfO.isType("ass") && Random.random(100) < 2 + getSelf().get(Attribute.fetishism)) {
-            target.add(c, new BodyFetish(target, getSelf(), "ass", .25));
+            target.add(c, new BodyFetish(target.getType(), this.self, "ass", .25));
         }
         return true;
     }
@@ -145,7 +147,7 @@ public class Thrust extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Thrust(user);
+        return new Thrust(user.getType());
     }
 
     @Override

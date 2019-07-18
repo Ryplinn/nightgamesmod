@@ -3,6 +3,7 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.GenericBodyPart;
@@ -15,12 +16,12 @@ import java.util.Optional;
 
 public class Seeded extends Status implements InsertedStatus {
     private String target;
-    private Character other;
-    public static final BodyPart SEED_PART = new GenericBodyPart("seed", 0.0, 1.0, 0.0, "seed", "a ");;
+    private CharacterType other;
+    private static final BodyPart SEED_PART = new GenericBodyPart("seed", 0.0, 1.0, 0.0, "seed", "a ");
     private double time;
     private int stage;
 
-    public Seeded(Character affected, Character other, String hole) {
+    public Seeded(CharacterType affected, CharacterType other, String hole) {
         super("seeded", affected);
         this.target = hole;
         this.other = other;
@@ -33,41 +34,41 @@ public class Seeded extends Status implements InsertedStatus {
 
     @Override
     public String initialMessage(Combat c, Optional<Status> replacement) {
-        BodyPart hole = affected.body.getRandom(target);
+        BodyPart hole = getAffected().body.getRandom(target);
         if (hole == null) {
             return "";
         }
-        return Formatter.capitalizeFirstLetter(
-                        String.format("%s planted a seed in %s %s\n", other.subjectAction("have", "has"),
-                                        affected.nameOrPossessivePronoun(), hole.describe(affected)));
+        return Formatter.capitalizeFirstLetter(String.format("%s planted a seed in %s %s\n",
+                        getOther().subjectAction("have", "has"),
+                        getAffected().nameOrPossessivePronoun(), hole.describe(getAffected())));
     }
 
     @Override
     public String describe(Combat c) {
-        BodyPart hole = affected.body.getRandom(target);
-        if (affected.human()) {
+        BodyPart hole = getAffected().body.getRandom(target);
+        if (getAffected().human()) {
             if (stage > 4) {
                 return Formatter.capitalizeFirstLetter(
-                                String.format("A large white lilly grows from your %s\n", hole.describe(affected)));
+                                String.format("A large white lilly grows from your %s\n", hole.describe(getAffected())));
             } else if (stage > 3) {
                 return Formatter.capitalizeFirstLetter(
-                                String.format("A small green bud peeks out from your %s\n", hole.describe(affected)));
+                                String.format("A small green bud peeks out from your %s\n", hole.describe(getAffected())));
             }
             return Formatter.capitalizeFirstLetter(
-                            String.format("A lemon-sized seed is lodged firmly in your %s\n", hole.describe(affected)));
+                            String.format("A lemon-sized seed is lodged firmly in your %s\n", hole.describe(getAffected())));
         } else {
             if (stage > 4) {
                 return Formatter.capitalizeFirstLetter(String.format(
-                                "A large white lilly grows from " + affected.possessiveAdjective() + " %s\n",
-                                hole.describe(affected)));
+                                "A large white lilly grows from " + getAffected().possessiveAdjective() + " %s\n",
+                                hole.describe(getAffected())));
             } else if (stage > 3) {
                 return Formatter.capitalizeFirstLetter(String.format(
-                                "A small green bud peeks out from " + affected.possessiveAdjective() + " %s\n",
-                                hole.describe(affected)));
+                                "A small green bud peeks out from " + getAffected().possessiveAdjective() + " %s\n",
+                                hole.describe(getAffected())));
             }
             return Formatter.capitalizeFirstLetter(String.format(
-                            "A lemon-sized seed is lodged firmly in " + affected.possessiveAdjective() + " %s\n",
-                            hole.describe(affected)));
+                            "A lemon-sized seed is lodged firmly in " + getAffected().possessiveAdjective() + " %s\n",
+                            hole.describe(getAffected())));
         }
     }
 
@@ -83,10 +84,10 @@ public class Seeded extends Status implements InsertedStatus {
 
     @Override
     public void tick(Combat c) {
-        BodyPart hole = affected.body.getRandom(target);
+        BodyPart hole = getAffected().body.getRandom(target);
         GenericBodyPart seed = new GenericBodyPart("seedling", 1.0, 1.0, 1.0, "seedling", "a");
         if (hole == null) {
-            affected.removelist.add(this);
+            getAffected().removelist.add(this);
             return;
         }
 
@@ -94,61 +95,61 @@ public class Seeded extends Status implements InsertedStatus {
             if (stage < 3) {
                 stage = 3;
                 if (!c.shouldAutoresolve())
-                    GUI.gui.message(c, affected,
+                    GUI.gui.message(c, getAffected(),
                                     Formatter.format("{other:name-possessive} seedling has finally flowered. A brilliant white lilly now covers {self:name-possessive} %s, displaying {self:possessive} verdant submission for everyone to see. "
                                                     + "While the little seedling has finally stopped sapping your vitality, the now-matured root network has somehow integrated with your nervous system and bloodsteam. As pulses of chemical and electrical obedience wrack {self:possessive} body, "
                                                     + "{self:subject-action:know|knows} that {self:pronoun} {self:action:have|has} lost this fight.",
-                                    affected, other, hole.describe(affected), hole.describe(affected)));
+                                    getAffected(), getOther(), hole.describe(getAffected()), hole.describe(getAffected())));
             }
             if (!c.shouldAutoresolve())
-                GUI.gui.message(c, affected,
+                GUI.gui.message(c, getAffected(),
                                 Formatter.format("The seedling churns against {self:possessive} inner walls, while sending a chemical cocktail of aphrodisiacs and narcotics directly into {self:possessive} bloodstream. "
                                                 + "{self:possessive} mind blanks out as every thought is replaced with a feral need to mate.",
-                                affected, other, hole.describe(affected)));
-            affected.heal(c, 100, " (Seedling)");
-            affected.arouse(Math.max(Random.random(50, 100), affected.getArousal().max() / 4), c,
-                            other.nameOrPossessivePronoun() + " seedling");
-            affected.body.pleasure(other, seed, hole, Random.random(10, 20) + other.get(Attribute.bio) / 2, c);
-            affected.add(c, new Frenzied(other, 1000));
+                                getAffected(), getOther(), hole.describe(getAffected())));
+            getAffected().heal(c, 100, " (Seedling)");
+            getAffected().arouse(Math.max(Random.random(50, 100), getAffected().getArousal().max() / 4), c,
+                            getOther().nameOrPossessivePronoun() + " seedling");
+            getAffected().body.pleasure(getOther(), seed, hole, Random.random(10, 20) + getOther().get(Attribute.bio) / 2, c);
+            getAffected().add(c, new Frenzied(other, 1000));
         } else if (time >= 2) {
             if (stage < 2) {
                 stage = 2;
                 if (!c.shouldAutoresolve())
-                    GUI.gui.message(c, affected,
+                    GUI.gui.message(c, getAffected(),
                                     Formatter.format("Having drained enough of {self:name-possessive} essence, the seed shows yet more changes. "
                                                     + "The roots growth thicker and more active, now constantly grinding against {self:possessive} walls. "
                                                     + "On the other side, a small green bud has poked its head out from inside {self:possessive} %s. "
                                                     + "{self:SUBJECT-ACTION:worry|worries} about its implications, but the constant piston motion from your %s is making it hard to concentrate.",
-                                    affected, other, hole.describe(affected), hole.describe(affected)));
+                                    getAffected(), getOther(), hole.describe(getAffected()), hole.describe(getAffected())));
             }
             if (!c.shouldAutoresolve())
-                GUI.gui.message(c, affected,
+                GUI.gui.message(c, getAffected(),
                                 Formatter.format("The thick tuber-like roots inside {self:direct-object} constantly shift and scrape against {self:possessive} %s, leaving {self:direct-object} both horny and lenthargic at the same time.",
-                                                affected, other, hole.describe(affected)));
-            affected.drain(c, other, Random.random(5, 11), Character.MeterType.STAMINA, Character.MeterType.MOJO, 1.0f);
-            affected.body.pleasure(other, seed, hole, Random.random(10, 20) + other.get(Attribute.bio) / 2, c);
+                                                getAffected(), getOther(), hole.describe(getAffected())));
+            getAffected().drain(c, getOther(), Random.random(5, 11), Character.MeterType.STAMINA, Character.MeterType.MOJO, 1.0f);
+            getAffected().body.pleasure(getOther(), seed, hole, Random.random(10, 20) + getOther().get(Attribute.bio) / 2, c);
         } else if (time >= 1) {
             if (stage < 1) {
                 stage = 1;
                 if (!c.shouldAutoresolve())
-                    GUI.gui.message(c, affected,
+                    GUI.gui.message(c, getAffected(),
                                     Formatter.format("With a quiet rumble, the seed burried inside {self:name-possessive} %s sprouts thin spindly roots that reach into {self:possessive} innards.",
-                                                    affected, other, hole.describe(affected)));
+                                                    getAffected(), getOther(), hole.describe(getAffected())));
             }
             if (!c.shouldAutoresolve())
-                GUI.gui.message(c, affected,
+                GUI.gui.message(c, getAffected(),
                                 Formatter.format("{self:SUBJECT-ACTION:feel|feels} slow as the thin threadlike roots latch onto your inner walls and seem to leech your vigor.",
-                                                affected, other, hole.describe(affected)));
-            affected.drain(c, other, Random.random(2, 6), Character.MeterType.STAMINA, Character.MeterType.MOJO, 1.0f);
+                                                getAffected(), getOther(), hole.describe(getAffected())));
+            getAffected().drain(c, getOther(), Random.random(2, 6), Character.MeterType.STAMINA, Character.MeterType.MOJO, 1.0f);
         } else {
             if (!c.shouldAutoresolve())
-                GUI.gui.message(c, affected, Formatter.format("The seed sits uncomfortably in {self:possessive} %s.",
-                                affected, other, hole.describe(affected)));
-            affected.pain(c, other, 1, false, false);
+                GUI.gui.message(c, getAffected(), Formatter.format("The seed sits uncomfortably in {self:possessive} %s.",
+                                getAffected(), getOther(), hole.describe(getAffected())));
+            getAffected().pain(c, getOther(), 1, false, false);
         }
 
-        affected.emote(Emotion.desperate, 10);
-        affected.emote(Emotion.nervous, 10);
+        getAffected().emote(Emotion.desperate, 10);
+        getAffected().emote(Emotion.nervous, 10);
         time += .25;
     }
 
@@ -208,7 +209,7 @@ public class Seeded extends Status implements InsertedStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Seeded(newAffected, newOther, target);
+        return new Seeded(newAffected.getType(), newOther.getType(), target);
     }
 
      public JsonObject saveToJson() {
@@ -229,12 +230,12 @@ public class Seeded extends Status implements InsertedStatus {
 
     @Override
     public BodyPart getHolePart() {
-        return affected.body.getRandom(target);
+        return getAffected().body.getRandom(target);
     }
 
     @Override
     public Character getReceiver() {
-        return affected;
+        return getAffected();
     }
 
     @Override
@@ -244,6 +245,10 @@ public class Seeded extends Status implements InsertedStatus {
 
     @Override
     public Character getPitcher() {
-        return other;
+        return getOther();
+    }
+
+    public Character getOther() {
+        return other.fromPoolGuaranteed();
     }
 }

@@ -1,6 +1,7 @@
 package nightgames.stance;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -9,12 +10,13 @@ import nightgames.global.Random;
 import nightgames.status.CockBound;
 import nightgames.status.Stsflag;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class FemdomSexStance extends Position {
-    public FemdomSexStance(Character top, Character bottom, Stance stance) {
+    public FemdomSexStance(CharacterType top, CharacterType bottom, Stance stance) {
         super(top, bottom, stance);
     }
 
@@ -32,9 +34,9 @@ public abstract class FemdomSexStance extends Position {
     }
 
     @Override
-    public void checkOngoing(Combat c) {
-        Character inserter = inserted(domSexCharacter(c)) ? domSexCharacter(c) : bottom;
-        Character inserted = inserted(domSexCharacter(c)) ? bottom : domSexCharacter(c);
+    public Optional<Position> checkOngoing(Combat c) {
+        Character inserter = inserted(getDomSexCharacter()) ? getDomSexCharacter() : getBottom();
+        Character inserted = inserted(getDomSexCharacter()) ? getBottom() : getDomSexCharacter();
 
         if (!inserter.hasInsertable()) {
             if (inserter.human()) {
@@ -55,23 +57,24 @@ public abstract class FemdomSexStance extends Position {
             }
             c.setStance(insertRandom(c));
         }
+        return null;
     }
 
     @Override
     public List<BodyPart> topParts(Combat c) {
-        return Arrays.asList(domSexCharacter(c).body.getRandomPussy()).stream().filter(part -> part != null && part.present())
+        return Stream.of(getDomSexCharacter().body.getRandomPussy()).filter(part -> part != null && part.present())
                         .collect(Collectors.toList());
     }
 
     @Override
     public List<BodyPart> bottomParts() {
-        return Arrays.asList(bottom.body.getRandomInsertable()).stream().filter(part -> part != null && part.present())
+        return Stream.of(getBottom().body.getRandomInsertable()).filter(part -> part != null && part.present())
                         .collect(Collectors.toList());
     }
 
     @Override
     public boolean inserted(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
@@ -119,7 +122,6 @@ public abstract class FemdomSexStance extends Position {
             struggler.body.pleasure(opponent, opponent.body.getRandomPussy(), struggler.body.getRandomCock(), selfM, c);
         }
         opponent.body.pleasure(struggler, struggler.body.getRandomInsertable(), opponent.body.getRandomPussy(), targM, c);
-        super.struggle(c, struggler);
     }
 
     @Override
@@ -149,6 +151,5 @@ public abstract class FemdomSexStance extends Position {
             escapee.body.pleasure(opponent, opponent.body.getRandomPussy(), escapee.body.getRandomCock(), selfM, c);
         }
         opponent.body.pleasure(escapee, escapee.body.getRandomInsertable(), opponent.body.getRandomPussy(), targM, c);
-        super.escape(c, escapee);
     }
 }

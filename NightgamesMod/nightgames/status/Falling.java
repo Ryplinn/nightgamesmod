@@ -3,6 +3,7 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -12,7 +13,7 @@ import nightgames.stance.StandingOver;
 import java.util.Optional;
 
 public class Falling extends Status {
-    public Falling(Character affected) {
+    public Falling(CharacterType affected) {
         super("Falling", affected);
         flag(Stsflag.falling);
         flag(Stsflag.debuff);
@@ -35,25 +36,25 @@ public class Falling extends Status {
 
     @Override
     public String initialMessage(Combat c, Optional<Status> replacement) {
-        return String.format("%s knocked off balance.\n", affected.subjectAction("are", "is"));
+        return String.format("%s knocked off balance.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
     public int regen(Combat c) {
-        affected.removelist.add(this);
-        if (c.getStance().havingSex(c) && c.getStance().dom(affected) && c.getStance().reversable(c)) {
-            c.write(c.getOpponent(affected), Formatter.format("{other:SUBJECT-ACTION:take|takes} the chance to shift into a more dominant position.", affected, c.getOpponent(affected)));
+        getAffected().removelist.add(this);
+        if (c.getStance().havingSex(c) && c.getStance().dom(getAffected()) && c.getStance().reversable(c)) {
+            c.write(c.getOpponent(getAffected()), Formatter.format("{other:SUBJECT-ACTION:take|takes} the chance to shift into a more dominant position.", getAffected(), c.getOpponent(getAffected())));
             c.setStance(c.getStance().reverse(c, true));
-        } else if (!c.getStance().prone(affected)) {
-            c.setStance(new StandingOver(c.getOpponent(affected), affected));
+        } else if (!c.getStance().prone(getAffected())) {
+            c.setStance(new StandingOver(c.getOpponent(getAffected()), getAffected()));
         }
-        if (affected.has(Trait.NimbleRecovery)) {
-            c.write(Formatter.format("{self:NAME-POSSESSIVE} nimble body expertly breaks the fall.", affected, c.getOpponent(affected)));
-            affected.add(c, new Stunned(affected, 0, true));
-        } else if (affected.has(Trait.Unwavering)) {
-            c.write(Formatter.format("{self:SUBJECT-ACTION:go|goes} down but the fall seems to hardly affect {self:direct-object}.", affected, c.getOpponent(affected)));
+        if (getAffected().has(Trait.NimbleRecovery)) {
+            c.write(Formatter.format("{self:NAME-POSSESSIVE} nimble body expertly breaks the fall.", getAffected(), c.getOpponent(getAffected())));
+            getAffected().add(c, new Stunned(affected, 0, true));
+        } else if (getAffected().has(Trait.Unwavering)) {
+            c.write(Formatter.format("{self:SUBJECT-ACTION:go|goes} down but the fall seems to hardly affect {self:direct-object}.", getAffected(), c.getOpponent(getAffected())));
         } else {
-            affected.add(c, new Stunned(affected));            
+            getAffected().add(c, new Stunned(affected));
         }
         return 0;
     }
@@ -110,7 +111,7 @@ public class Falling extends Status {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Falling(newAffected);
+        return new Falling(newAffected.getType());
     }
 
     @Override  public JsonObject saveToJson() {

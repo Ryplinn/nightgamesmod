@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.StoneStance;
@@ -9,7 +10,7 @@ import nightgames.status.Stsflag;
 
 public class StoneForm extends Skill {
 
-    public StoneForm(Character self) {
+    StoneForm(CharacterType self) {
         super("Stone Form", self);
     }
 
@@ -31,13 +32,13 @@ public class StoneForm extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        getSelf().add(c, new StoneStance(getSelf()));
+        getSelf().add(c, new StoneStance(self));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new StoneForm(user);
+        return new StoneForm(user.getType());
     }
 
     @Override

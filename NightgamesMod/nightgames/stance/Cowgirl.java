@@ -6,6 +6,8 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 
+import java.util.Optional;
+
 public class Cowgirl extends FemdomSexStance {
 
     public Cowgirl(Character top, Character bottom) {
@@ -73,7 +75,7 @@ public class Cowgirl extends FemdomSexStance {
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return new Mount(top, bottom);
     }
 

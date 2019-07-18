@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.nskills.tags.SkillTag;
@@ -10,10 +11,10 @@ import nightgames.skills.Tactics;
 public abstract class SimpleMasterSkill extends Skill {
     private int levelReq;
 
-    public SimpleMasterSkill (String name, Character self) {
+    SimpleMasterSkill(String name, CharacterType self) {
         this(name, self, 0);
     }
-    public SimpleMasterSkill (String name, Character self, int levelReq) {
+    SimpleMasterSkill(String name, CharacterType self, int levelReq) {
         super(name, self);
         this.levelReq = levelReq;
         addTag(SkillTag.helping);

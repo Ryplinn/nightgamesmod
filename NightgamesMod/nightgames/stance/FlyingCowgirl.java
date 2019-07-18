@@ -6,6 +6,8 @@ import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.skills.damage.DamageType;
 
+import java.util.Optional;
+
 public class FlyingCowgirl extends FemdomSexStance {
 
     private Character top, bottom;
@@ -89,7 +91,7 @@ public class FlyingCowgirl extends FemdomSexStance {
     }
 
     @Override
-    public void checkOngoing(Combat c) {
+    public Optional<Position> checkOngoing(Combat c) {
         if (top.getStamina().get() < 5) {
             if (top.human()) {
                 c.write("You're too tired to stay in the air. You plummet to the ground and " + bottom.getName()
@@ -99,14 +101,15 @@ public class FlyingCowgirl extends FemdomSexStance {
                                 + " falls to the ground and so do you. Fortunately, her body cushions your fall, but you're not sure she appreciates that as much as you do.");
             }
             top.pain(c, bottom, (int) DamageType.physical.modifyDamage(bottom, top, Random.random(50, 75)));
-            c.setStance(new Mount(bottom, top));
+            return Optional.of(new Mount(bottom, top));
         } else {
             super.checkOngoing(c);
         }
+        return null;
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return new Mount(top, bottom);
     }
 

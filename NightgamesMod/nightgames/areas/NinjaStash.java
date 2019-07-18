@@ -47,7 +47,7 @@ public class NinjaStash implements Deployable {
     }
 
     @Override
-    public Character owner() {
+    public Character getOwner() {
         return owner;
     }
     

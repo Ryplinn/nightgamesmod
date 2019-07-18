@@ -1,10 +1,6 @@
 package nightgames.stance;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import nightgames.characters.Character;
@@ -23,7 +19,7 @@ public class XHFDaisyChainThreesome extends MaledomSexStance {
     }
 
     @Override
-    public Character domSexCharacter(Combat c) {
+    public Character getDomSexCharacter() {
         return domSexCharacter;
     }
 
@@ -34,15 +30,16 @@ public class XHFDaisyChainThreesome extends MaledomSexStance {
 
     @Override
     public boolean canthrust(Combat c, Character self) {
-        return domSexCharacter(c) == self || top == self;
+        return getDomSexCharacter() == self || top == self;
     }
 
     @Override
-    public void checkOngoing(Combat c) {
-        if (!c.getOtherCombatants().contains(domSexCharacter)) {
+    public Optional<Position> checkOngoing(Combat c) {
+        if (!c.otherCombatantsContains(getDomSexCharacter())) {
             c.write(bottom, Formatter.format("With the disappearance of {self:name-do}, {master:subject-action:continue} to ride {self:name-do} in a reverse cowgirl position.", domSexCharacter, bottom));
             c.setStance(new ReverseCowgirl(top, bottom));
         }
+        return null;
     }
 
     @Override
@@ -70,7 +67,7 @@ public class XHFDaisyChainThreesome extends MaledomSexStance {
 
     @Override
     public List<BodyPart> partsForStanceOnly(Combat combat, Character self, Character other) {
-        if (self == domSexCharacter(combat) && other == bottom) {
+        if (self == getDomSexCharacter() && other == bottom) {
             return Arrays.asList(top.body.getRandomInsertable()).stream().filter(part -> part != null && part.present())
                             .collect(Collectors.toList());
         } else if (self == top && other == bottom) {
@@ -110,7 +107,7 @@ public class XHFDaisyChainThreesome extends MaledomSexStance {
     }
 
     public Character getPartner(Combat c, Character self) {
-        Character domSex = domSexCharacter(c);
+        Character domSex = getDomSexCharacter();
         if (self == top) {
             return bottom;
         } else if (domSex == self) {
@@ -177,7 +174,7 @@ public class XHFDaisyChainThreesome extends MaledomSexStance {
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return new Mount(top, bottom);
     }
 

@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -9,7 +10,7 @@ import nightgames.status.Stsflag;
 
 public class HypnoVisorRemove extends Skill {
 
-    public HypnoVisorRemove(Character self) {
+    HypnoVisorRemove(CharacterType self) {
         super("Remove Hypno Visor", self);
     }
 
@@ -20,7 +21,7 @@ public class HypnoVisorRemove extends Skill {
 
     @Override
     public int accuracy(Combat c, Character target) {
-        return (int) ((Math.min(0.8, (double) .2 + getSelf().get(Attribute.cunning) / 100.0)) * 100);
+        return (int) ((Math.min(0.8, .2 + getSelf().get(Attribute.cunning) / 100.0)) * 100);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class HypnoVisorRemove extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new HypnoVisorRemove(user);
+        return new HypnoVisorRemove(user.getType());
     }
 
     @Override

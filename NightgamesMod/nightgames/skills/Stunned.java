@@ -1,12 +1,13 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
 
 public class Stunned extends Skill {
-    public Stunned(Character self) {
+    public Stunned(CharacterType self) {
         super("Stunned", self);
     }
 
@@ -37,7 +38,7 @@ public class Stunned extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Stunned(user);
+        return new Stunned(user.getType());
     }
 
     @Override

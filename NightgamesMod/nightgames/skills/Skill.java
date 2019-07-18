@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -23,22 +24,22 @@ public abstract class Skill {
      *
      */
     private String name;
-    private Character self;
+    public CharacterType self;
     private int cooldown;
     private Set<SkillTag> tags;
     public String choice;
     private Staleness staleness;
 
-    public Skill(String name, Character self) {
+    public Skill(String name, CharacterType self) {
         this(name, self, 0);
     }
-    public Skill(String name, Character self, int cooldown) {
+    public Skill(String name, CharacterType self, int cooldown) {
         this(name, self, cooldown, Staleness.build().withDecay(.1).withFloor(.5).withRecovery(.05));
     }
 
-    public Skill(String name, Character self, int cooldown, Staleness staleness) {
+    public Skill(String name, CharacterType self, int cooldown, Staleness staleness) {
         this.name = name;
-        setSelf(self);
+        this.self = self;
         this.cooldown = cooldown;
         this.staleness = staleness;
         choice = "";
@@ -56,13 +57,13 @@ public abstract class Skill {
     }
     public static void filterAllowedSkills(Combat c, Collection<Skill> skills, Character user, Character target) {
         boolean filtered = false;
-        Set<Skill> stanceSkills = new HashSet<Skill>(c.getStance().availSkills(c, user));
+        Set<Skill> stanceSkills = new HashSet<>(c.getStance().availSkills(c, user));
 
         if (stanceSkills.size() > 0) {
             skills.retainAll(stanceSkills);
             filtered = true;
         }
-        Set<Skill> availSkills = new HashSet<Skill>();
+        Set<Skill> availSkills = new HashSet<>();
         for (Status st : user.status) {
             for (Skill sk : st.allowedSkills(c)) {
                 if ((target != null && skillIsUsable(c, sk, target)) || skillIsUsable(c, sk)) {
@@ -74,7 +75,7 @@ public abstract class Skill {
             skills.retainAll(availSkills);
             filtered = true;
         }
-        Set<Skill> noReqs = new HashSet<Skill>();
+        Set<Skill> noReqs = new HashSet<>();
         if (!filtered) {
             // if the skill is restricted by status/stance, do not check for
             // requirements
@@ -102,9 +103,8 @@ public abstract class Skill {
         boolean allureRestricted =
                         target.is(Stsflag.alluring) && (s.type(c) == Tactics.damage || s.type(c) == Tactics.debuff);
         boolean modifierRestricted = !Match.getMatch().condition.getSkillModifier().allowedSkill(c,s);
-        boolean usable = s.usable(c, target) && s.getSelf().canSpend(s.getMojoCost(c)) && !charmRestricted
+        return s.usable(c, target) && s.getSelf().canSpend(s.getMojoCost(c)) && !charmRestricted
                         && !allureRestricted && !modifierRestricted;
-        return usable;
     }
 
     public int getMojoBuilt(Combat c) {
@@ -162,11 +162,15 @@ public abstract class Skill {
         return getName();
     }
 
-    public Character user() {
+    public Character getUser() {
         return getSelf();
     }
 
-    public void setSelf(Character self) {
+    public CharacterType user() {
+        return self;
+    }
+
+    public void setSelf(CharacterType self) {
         this.self = self;
     }
 
@@ -190,29 +194,29 @@ public abstract class Skill {
     }
 
     public static boolean resolve(Skill skill, Combat c, Character target) {
-        skill.user().addCooldown(skill);
+        skill.getUser().addCooldown(skill);
         // save the mojo built of the skill before resolving it (or the status
         // may change)
         int generated = skill.getMojoBuilt(c);
 
         // Horrendously ugly, I know.
         // But you were the one who removed getWithOrganType...
-        if (skill.user().has(Trait.temptress)) {
-            FiredUp status = (FiredUp) skill.user().status.stream().filter(s -> s instanceof FiredUp).findAny()
+        if (skill.getUser().has(Trait.temptress)) {
+            FiredUp status = (FiredUp) skill.getUser().status.stream().filter(s -> s instanceof FiredUp).findAny()
                             .orElse(null);
             if (status != null) {
                 if (status.getPart().equals("hands") && skill.getClass() != TemptressHandjob.class
                                 || status.getPart().equals("mouth") && skill.getClass() != TemptressBlowjob.class
                                 || status.getPart().equals("pussy") && skill.getClass() != TemptressRide.class) {
-                    skill.user().removeStatus(Stsflag.firedup);
+                    skill.getUser().removeStatus(Stsflag.firedup);
                 }
             }
         }
 
         boolean success = skill.resolve(c, target);
-        skill.user().spendMojo(c, skill.getMojoCost(c));
+        skill.getUser().spendMojo(c, skill.getMojoCost(c));
         if (success) {
-            skill.user().buildMojo(c, generated);
+            skill.getUser().buildMojo(c, generated);
         } else if (target.has(Trait.tease) && Random.random(4) == 0) {
             c.write(target, Formatter.format("Dancing just past {other:name-possessive} reach gives {self:name-do} a minor high.", target, skill.getSelf()));
             target.buildMojo(c, 20);
@@ -220,8 +224,8 @@ public abstract class Skill {
         if (success && c.getCombatantData(skill.getSelf()) != null) {
             c.getCombatantData(skill.getSelf()).decreaseMoveModifier(c, skill);
         }
-        if (c.getCombatantData(skill.user()) != null) { 
-            c.getCombatantData(skill.user()).setLastUsedSkillName(skill.getName());
+        if (c.getCombatantData(skill.getUser()) != null) {
+            c.getCombatantData(skill.getUser()).setLastUsedSkillName(skill.getName());
         }
         return success;
     }
@@ -235,7 +239,7 @@ public abstract class Skill {
     }
 
     public Character getSelf() {
-        return self;
+        return self.fromPoolGuaranteed();
     }
     
     protected void printBlinded(Combat c) {
@@ -274,7 +278,7 @@ public abstract class Skill {
         tags.remove(tag);
     }
     public final Set<SkillTag> getTags(Combat c) {
-        return getTags(c, c.getOpponent(self));
+        return getTags(c, c.getOpponent(getSelf()));
     }
 
     public Set<SkillTag> getTags(Combat c, Character target) {

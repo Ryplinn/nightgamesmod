@@ -11,9 +11,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 
-public class BreastSmothering extends AbstractFacingStance {
+public class BreastSmothering extends Position {
     public BreastSmothering(Character top, Character bottom) {
         super(top, bottom, Stance.breastsmothering);
+        facingType = FacingType.FACING;
     }
     
     public String image() {
@@ -126,7 +127,6 @@ public class BreastSmothering extends AbstractFacingStance {
         c.write(struggler, Formatter.format("{self:SUBJECT-ACTION:attempt} to struggle out of {other:name-possessive} {other:body-part:breasts}, "
                         + "but {other:pronoun-action:have} other ideas.", struggler, top));
         (new BreastSmother(top)).resolve(c, bottom);
-        super.struggle(c, struggler);
     }
 
     @Override
@@ -134,6 +134,5 @@ public class BreastSmothering extends AbstractFacingStance {
         c.write(escapee, Formatter.format("{self:SUBJECT-ACTION:attempt} to extract {self:reflective} out of {other:name-possessive} {other:body-part:breasts}, "
                         + "but {other:pronoun-action:have} other ideas.", escapee, top));
         (new BreastSmother(top)).resolve(c, bottom);
-        super.escape(c, escapee);
     }
 }

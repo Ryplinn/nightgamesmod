@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
@@ -17,7 +18,7 @@ import nightgames.status.Oiled;
 import nightgames.status.Stsflag;
 
 public class ReverseAssFuck extends Fuck {
-    public ReverseAssFuck(Character self) {
+    public ReverseAssFuck(CharacterType self) {
         super("Anal Ride", self, 0);
         addTag(SkillTag.anal);
     }

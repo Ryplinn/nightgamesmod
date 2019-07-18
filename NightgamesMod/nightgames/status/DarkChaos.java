@@ -1,24 +1,27 @@
 package nightgames.status;
 
-import java.util.Optional;
-import java.util.function.Function;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.stance.Stance;
 import nightgames.stance.StandingOver;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+
 public class DarkChaos extends Status {
 
-    public DarkChaos(Character affected) {
+    public DarkChaos(CharacterType affected) {
         super("Dark Chaos", affected);
         flag(Stsflag.debuff);
     }
@@ -30,10 +33,10 @@ public class DarkChaos extends Status {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "The blackness coursing through your soul is looking for ways to hinder you.";
         } else {
-            return Formatter.format("{self:subject-action:are} visibly distracted, trying to fight the corruption in {self:reflective}.", affected, affected);
+            return Formatter.format("{self:subject-action:are} visibly distracted, trying to fight the corruption in {self:reflective}.", getAffected(), getAffected());
         }
     }
 
@@ -41,11 +44,15 @@ public class DarkChaos extends Status {
     public void tick(Combat c) {
         if (c == null)
             return;
-        float odds = affected.getAddiction(AddictionType.CORRUPTION).map(AddictionSymptom::getMagnitude).orElse(0f)
-                        / 4;
+        float odds = getAffected().getAnyAddiction(AddictionType.CORRUPTION).flatMap(Addiction::activeTracker)
+                        .map(AddictionSymptom::getCombatMagnitude).orElse(0f) / 4;
         if (odds > Math.random()) {
-            Effect e = Effect.pick(c, affected);
-            e.execute(c, affected);
+            Optional<Effect> e = Effect.pick(c, getAffected());
+            if (e.isPresent()) {
+                e.get().execute(c, getAffected());
+            } else {
+                System.err.println("No usable Dark Chaos effects!");
+            }
         }
     }
 
@@ -111,7 +118,7 @@ public class DarkChaos extends Status {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new DarkChaos(newAffected);
+        return new DarkChaos(newAffected.getType());
     }
 
      @Override public JsonObject saveToJson() {
@@ -127,22 +134,22 @@ public class DarkChaos extends Status {
     private enum Effect {
         HORNY((affected) -> new Horny(affected, 3.f, 5, "Reyka's Corruption"),
                         "The corruption settles into {self:possessive} genitals, inflaming {self:possessive} lusts."),
-        HYPER((affected) -> new Hypersensitive(affected),
+        HYPER(Hypersensitive::new,
                         "The corruption flows across {self:possessive} skin, leaving it much more sensitive."),
-        CHARMED((affected) -> new Charmed(affected),
+        CHARMED(Charmed::new,
                         "The blackness subverts {self:possessive} mind, making it unthinkable for {self:pronoun} to harm {self:possessive} opponent."),
-        SHAMED((affected) -> new Shamed(affected), "The blackness plants a deep sense of shame in {self:possessive} mind."),
-        FALLING((affected) -> new Falling(affected),
+        SHAMED(Shamed::new, "The blackness plants a deep sense of shame in {self:possessive} mind."),
+        FALLING(Falling::new,
                         "The darkness interferes with {self:possessive} balance, sending {self:pronoun} falling to the ground."),
         FLATFOOTED((affected) -> new Flatfooted(affected, 1),
                         "The darkness clouds {self:possessive} mind, distracting {self:direct-object} from the fight."),
         FRENZIED((affected) -> new Frenzied(affected, 3), "The corruption senses what {self:subject-action:are} doing, and is compelling"
                         + " {self:pronoun} to fuck as hard as {self:pronoun} can.");
 
-        private final Function<Character, ? extends Status> effect;
+        private final Function<CharacterType, ? extends Status> effect;
         private final String message;
 
-        private Effect(Function<Character, ? extends Status> supplier, String message) {
+        Effect(Function<CharacterType, ? extends Status> supplier, String message) {
             this.effect = supplier;
             this.message = message;
         }
@@ -158,17 +165,18 @@ public class DarkChaos extends Status {
             if (this == FALLING)
                 c.setStance(new StandingOver(c.getOpponent(affected), affected));
             else
-                affected.addlist.add(effect.apply(affected));
+                affected.addlist.add(effect.apply(affected.getType()));
             c.write(affected, Formatter.format(message, affected, partner));
         }
 
-        static Effect pick(Combat c, Character affected) {
+        static Optional<Effect> pick(Combat c, Character affected) {
             if (c.getStance().havingSex(c, affected))
-                return FRENZIED;
-            Effect picked;
+                return Optional.of(FRENZIED);
+            Optional<Effect> picked;
+            List<Effect> values = Arrays.asList(values());
             do {
-                picked = Random.pickRandom(values()).get();
-            } while (!picked.possible(c));
+                picked = Random.pickRandom(values);
+            } while (picked.isPresent() && picked.get().possible(c));
             return picked;
         }
     }

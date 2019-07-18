@@ -12,8 +12,8 @@ import java.util.List;
 
 public class ClothingStore extends Store {
 
-    ClothingStore(Player player) {
-        super("Clothing Store", player);
+    ClothingStore() {
+        super("Clothing Store");
         ClothingTable.getAllBuyableFrom("ClothingStore").forEach(this::add);
     }
 
@@ -34,13 +34,13 @@ public class ClothingStore extends Store {
         } else {
             attemptBuy(choice);
         }
-        if (player.human()) {
+        if (getPlayer().human()) {
             GUI.gui.message(
                             "This is a normal retail clothing outlet. For obvious reasons, you'll need to buy anything you want to wear at night in bulk.");
             for (Clothing i : clothing().keySet()) {
-                GUI.gui.message(i.getName() + ": " + i.getPrice() + (player.has(i) ? " (Owned)" : ""));
+                GUI.gui.message(i.getName() + ": " + i.getPrice() + (getPlayer().has(i) ? " (Owned)" : ""));
             }
-            GUI.gui.message("You have: $" + player.money + " available to spend.");
+            GUI.gui.message("You have: $" + getPlayer().money + " available to spend.");
             displayGoods(nextChoices);
             choose("Leave", nextChoices);
         }

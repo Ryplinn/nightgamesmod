@@ -6,12 +6,13 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
 public class Oiled extends Status {
-    public Oiled(Character affected) {
+    public Oiled(CharacterType affected) {
         super("Oiled", affected);
         flag(Stsflag.oiled);
     }

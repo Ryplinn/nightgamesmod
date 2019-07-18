@@ -211,14 +211,14 @@ public class SaveData {
                         + ", moneyRate=" + moneyRate + '}';
     }
 
-    public class SaveDataException extends Exception {
+    class SaveDataException extends Exception {
         private static final long serialVersionUID = 1024586601078477748L;
 
-        public SaveDataException(String message) {
+        SaveDataException(String message) {
             super(message);
         }
 
-        public SaveDataException(Throwable cause) {
+        SaveDataException(Throwable cause) {
             super(cause);
         }
     }

@@ -22,7 +22,7 @@ public class NoItemsModifier extends BaseModifier {
 
     @Override
     public String intro() {
-        return "<i>\"Tell me " + GameState.gameState.characterPool.getPlayer().getTrueName()
+        return "<i>\"Tell me " + GameState.getGameState().characterPool.getPlayer().getTrueName()
                         + ", are you the sort of player who spends all his winnings on disposable toys and traps to give yourself the edge? You'd "
                         + "probably be better off saving the money and relying more on your own abilities. If you can go the entire night without using any consumable items, I'll "
                         + "toss you a $" + bonus() + " bonus.\"</i>";

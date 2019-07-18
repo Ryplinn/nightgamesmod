@@ -1,12 +1,15 @@
 package nightgames.stance;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
+import java.util.Optional;
+
 public class ReverseCowgirl extends FemdomSexStance {
 
-    public ReverseCowgirl(Character top, Character bottom) {
+    public ReverseCowgirl(CharacterType top, CharacterType bottom) {
         super(top, bottom, Stance.reversecowgirl);
 
     }
@@ -67,7 +70,7 @@ public class ReverseCowgirl extends FemdomSexStance {
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return new ReverseMount(top, bottom);
     }
 

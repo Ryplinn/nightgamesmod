@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -11,7 +12,7 @@ import nightgames.status.Horny;
 import nightgames.status.InducedEuphoria;
 
 public class InjectAphrodisiac extends Skill {
-    public InjectAphrodisiac(Character self) {
+    private InjectAphrodisiac(CharacterType self) {
         super("Inject Aphrodisiac", self);
     }
 
@@ -47,7 +48,7 @@ public class InjectAphrodisiac extends Skill {
     }
 
     public Skill copy(Character user) {
-        return new InjectAphrodisiac(user);
+        return new InjectAphrodisiac(user.getType());
     }
 
     public Tactics type(Combat c) {

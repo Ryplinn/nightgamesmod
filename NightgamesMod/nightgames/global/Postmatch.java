@@ -53,7 +53,7 @@ class Postmatch {
         double level = 0;
         int maxLevelTracker = 0;
 
-        Set<Character> everyone = GameState.gameState.characterPool.everyone();
+        Set<Character> everyone = GameState.getGameState().characterPool.everyone();
         for (Character character : everyone) {
             character.getStamina().fill();
             character.getArousal().empty();

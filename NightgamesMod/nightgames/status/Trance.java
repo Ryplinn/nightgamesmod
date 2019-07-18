@@ -84,7 +84,7 @@ public class Trance extends DurationStatus {
 
     @Override
     public Collection<Skill> allowedSkills(Combat c) {
-        return Arrays.asList((Skill) new Masturbate(affected), new Thrust(affected), new Piston(affected));
+        return Arrays.asList(new Masturbate(affected), new Thrust(affected), new Piston(affected));
     }
 
     @Override

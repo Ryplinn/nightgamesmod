@@ -8,9 +8,10 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 
-public class HeldPaizuri extends AbstractFacingStance {
+public class HeldPaizuri extends Position {
     public HeldPaizuri(Character top, Character bottom) {
         super(top, bottom, Stance.paizuripin);
+        facingType = FacingType.FACING;
     }
 
     @Override
@@ -155,7 +156,6 @@ public class HeldPaizuri extends AbstractFacingStance {
                         "{self:SUBJECT-ACTION:try} to remove {self:possessive} cock from between {other:name-possessive} impressive cleavage, but {other:pronoun-action:have} other ideas. "
                       + "Using {other:possessive} hands to press her soft breasts together, the impish {other:girl} follows {self:possessive} attempts to escape and {other:action:manage} "
                       + "to titfuck {self:direct-object} even as {self:pronoun-action:struggle}.");
-        super.struggle(c, struggler);
     }
 
     @Override
@@ -165,6 +165,5 @@ public class HeldPaizuri extends AbstractFacingStance {
                         "{self:SUBJECT-ACTION:try} to sneak out of {other:name-possessive} breast-press, but {other:pronoun-action:have} other ideas. "
                       + "The well-endowed {other:girl} presses {other:possessive} chest against {self:possessive} crotch and slides it back and forth around {self:possessive} shaft. "
                       + "Not only does it cut off {self:possessive} escape, but it also has the beneficial consequence of arousing the hell out of {self:direct-object}.");
-        super.escape(c, escapee);
     }
 }

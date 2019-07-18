@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -11,7 +12,7 @@ import nightgames.status.Stsflag;
 
 public class Undress extends Skill {
 
-    public Undress(Character self) {
+    public Undress(CharacterType self) {
         super("Undress", self);
         addTag(SkillTag.undressing);
     }
@@ -66,7 +67,7 @@ public class Undress extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Undress(user);
+        return new Undress(user.getType());
     }
 
     @Override

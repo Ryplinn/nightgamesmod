@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -11,7 +12,7 @@ import nightgames.status.Horny;
 
 public class NeedleThrow extends Skill {
 
-    public NeedleThrow(Character self) {
+    NeedleThrow(CharacterType self) {
         super("Needle Throw", self);
     }
 
@@ -62,7 +63,7 @@ public class NeedleThrow extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new NeedleThrow(user);
+        return new NeedleThrow(user.getType());
     }
 
     public int accuracy() {

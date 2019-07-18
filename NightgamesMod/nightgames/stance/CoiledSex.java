@@ -4,6 +4,8 @@ import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
+import java.util.Optional;
+
 public class CoiledSex extends FemdomSexStance {
 
     public CoiledSex(Character top, Character bottom) {
@@ -74,7 +76,7 @@ public class CoiledSex extends FemdomSexStance {
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return new Mount(top, bottom);
     }
 

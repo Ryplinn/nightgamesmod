@@ -21,8 +21,8 @@ import java.util.Optional;
 public class BodyShop extends Activity {
     private List<ShopSelection> selection;
 
-    BodyShop(Player player) {
-        super("Body Shop", player);
+    BodyShop() {
+        super("Body Shop");
         selection = new ArrayList<>();
         populateSelection();
     }
@@ -545,9 +545,9 @@ public class BodyShop extends Activity {
     }
 
     private void displaySelection(List<LabeledValue<String>> nextChoices) {
-        GUI.gui.message("You have :$" + player.money + " to spend.");
+        GUI.gui.message("You have :$" + getPlayer().money + " to spend.");
         for (ShopSelection s : selection) {
-            if (s.available(player) && player.money >= s.price) {
+            if (s.available(getPlayer()) && getPlayer().money >= s.price) {
                 choose(s.choice, "Price: $" + s.price, nextChoices);
                 GUI.gui.message(s.choice + ": $" + s.price);
             }
@@ -568,8 +568,8 @@ public class BodyShop extends Activity {
             if (s.choice.equals(choice)) {
                 GUI.gui.message("<br/>You've selected " + s.choice
                                 + ". While wondering if this was such a great idea, you follow the proprietor into the back room...");
-                s.buy(player);
-                player.money -= s.price;
+                s.buy(getPlayer());
+                getPlayer().money -= s.price;
                 done(true, instance);
                 return;
             }

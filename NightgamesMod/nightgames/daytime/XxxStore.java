@@ -14,8 +14,8 @@ import nightgames.items.clothing.ClothingTable;
 import java.util.List;
 
 public class XxxStore extends Store {
-    XxxStore(Player player) {
-        super("XXX Store", player);
+    XxxStore() {
+        super("XXX Store");
         ClothingTable.getAllBuyableFrom("XxxStore").forEach(this::add);
         add(Item.Dildo);
         add(Item.Onahole);
@@ -42,11 +42,11 @@ public class XxxStore extends Store {
             return;
         } else if (choice.startsWith("Learn to be Submissive")) {
             GUI.gui.message("Your curiosity gets the best of you as you look over the leather collars on display. You were trying to figure out whether you could use on of these on an opponent, but clearly some of them are designed for men. You're idly wondering how uncomfortable they would be, when you suddenly feel something wrap around your neck.<br/><br/>You jump away in alarm and turn to face your attacker. There's a slim girl standing behind you, holding a black leather collar. She's less than intimidating. She's shorter than you, with blonde hair, short pigtails, and thick glasses. She has a friendly smile, that should suit her cute features, but there's something wrong with it. It must be her eyes, which are strangely hollow, like a doll's. She hands you the collar she just tried to put around your neck.<br/><br/>\"You should try this one. Most of those chokers are designed for gimps, or for pet play. You're not that kind of sub, are you? You should stick with something more comfortable.\" The collar is soft and supple, clearly higher quality than the ones you were looking at earlier. Is she an employee? That would explain why she's trying to sell you something. However, it is very presumptuous of her to assume you are a sub, just because you're looking at bondage gear. Her smile doesn't change, almost as if it's a mask. \"You're not much of a sub yet, but you have some aptitude for it. If you put in a little effort, I think you could become an amazing bottom.\"<br/><br/>She's kinda missing the point. You aren't trying to become a sub, you're looking for a way to gain an advantage. Sexfighting favors the dom. If you're going to win the Games, you need to overpower your opponents, not be at their mercy. The girl's expression still remains unchanged. For just a moment, though, her smile looks more like a sneer of contempt. \"Such a shallow understanding of power...\"<br/><br/>She starts to walk past you, but suddenly grabs your "
-                            + player.getOutfit().getTopOfSlot(ClothingSlot.top)
+                            + getPlayer().getOutfit().getTopOfSlot(ClothingSlot.top)
                             + " and pulls you off balance. You catch yourself before you fall completely onto the smaller girl, but you're "
                             + "still pressed closely against her. With her slumped meekly against the wall and you leaning over her, she looks pretty helpless. However, you feel her hand gripping "
                             + "your balls through your "
-                            + player.getOutfit().getTopOfSlot(ClothingSlot.bottom)
+                            + getPlayer().getOutfit().getTopOfSlot(ClothingSlot.bottom)
                             + ", preventing you from moving away from her. \"A dom can only be as strong as his sub is weak.\" She's whispering so softly that you "
                             + "need to lean closer to hear her. \"Therefore it is the sub who really controls the relationship. If you really want to understand your relationships, you shouldn't "
                             + "worry so much about winning or losing.\"<br/><br/>"
@@ -58,7 +58,7 @@ public class XxxStore extends Store {
                             + "After a long pause, you squeeze her small, but obviously corporeal breast. She lets out a girly yelp, which earns you some more looks from customers. \"It was just a "
                             + "joke. You didn't have to grope me so roughly. My name is Alice.\"<br/><br/>");
             Flag.flag(Flag.metAlice);
-            player.modAttributeDontSaveData(Attribute.submission, 1);
+            getPlayer().modAttributeDontSaveData(Attribute.submission, 1);
             Flag.flag("Trained" + Attribute.submission.name());
             acted = true;
         } else if (choice.startsWith("Talk to Alice")) {
@@ -253,7 +253,7 @@ public class XxxStore extends Store {
                                     + "always just give me a call instead of going through all this trouble.\"</i>");
             }
             Flag.unflag(Flag.AliceAvailable);
-            player.modAttributeDontSaveData(Attribute.submission, 1);
+            getPlayer().modAttributeDontSaveData(Attribute.submission, 1);
             acted = true;
         } else {
             attemptBuy(choice);
@@ -261,51 +261,51 @@ public class XxxStore extends Store {
 
         GUI.gui.message("The adult specialty store stocks several items that could be useful during a match.");
         for (Item i : stock.keySet()) {
-            if (!player.has(i)) {
+            if (!getPlayer().has(i)) {
                 GUI.gui.message(i.getName() + ": $" + i.getPrice());
             } else {
                 GUI.gui.message(i.getName() + ": $" + i.getPrice() + " (you have: "
-                                + player.getInventory().get(i) + ")");
+                                + getPlayer().getInventory().get(i) + ")");
             }
         }
         nextChoices.add(sale(Item.Lubricant));
 
-        if (player.has(Item.Dildo)) {
+        if (getPlayer().has(Item.Dildo)) {
             GUI.gui.message("You already have a perfectly serviceable dildo. You don't need another.");
         } else {
             nextChoices.add(sale(Item.Dildo));
         }
 
-        if (player.has(Item.Onahole)) {
+        if (getPlayer().has(Item.Onahole)) {
             GUI.gui.message("You already have the best onahole in stock. You don't need another.");
-        } else if (player.has(Item.Onahole2)) {
+        } else if (getPlayer().has(Item.Onahole2)) {
             GUI.gui.message("You already have the best onahole you can dream of.");
         } else {
             nextChoices.add(sale(Item.Onahole));
         }
 
-        if (player.has(Item.Crop)) {
+        if (getPlayer().has(Item.Crop)) {
             GUI.gui.message("You already have a riding crop. You don't need two.");
-        } else if (player.has(Item.Crop2)) {
+        } else if (getPlayer().has(Item.Crop2)) {
             GUI.gui.message("Your current riding crop is already overkill.");
         } else {
             nextChoices.add(sale(Item.Crop));
         }
 
-        if (player.has(Item.Tickler)) {
+        if (getPlayer().has(Item.Tickler)) {
             GUI.gui.message("Your current tickler is at least as good as anything they are selling.");
-        } else if (player.has(Item.Tickler2)) {
+        } else if (getPlayer().has(Item.Tickler2)) {
             GUI.gui.message("Nothing on sale is half as good as your current tickler.");
         } else {
             nextChoices.add(sale(Item.Tickler));
         }
 
-        if (player.hasDick()) {
+        if (getPlayer().hasDick()) {
             GUI.gui.message("You see a strap-on dildo for sale. It's no use to you since you have "
                             + "the real thing, but you should watch your ass if the girls start buying these.");
-        } else if (player.has(Item.Strapon)) {
+        } else if (getPlayer().has(Item.Strapon)) {
             GUI.gui.message("You are plenty satisfied with the strap-on you already have.");
-        } else if (player.has(Item.Strapon2)) {
+        } else if (getPlayer().has(Item.Strapon2)) {
             GUI.gui.message("Your strapon is even better than the real thing already.");
         } else {
             nextChoices.add(sale(Item.Strapon));
@@ -314,17 +314,17 @@ public class XxxStore extends Store {
 
         GUI.gui.message("<br/>They also sell a selection of salacious clothing:");
         clothingstock.keySet().forEach(clothing -> GUI.gui.message(String.format("%s: $%d%s", clothing.getName(), clothing.getPrice(),
-                                        player.has(clothing) ? " (Owned)" : "")));
+                                        getPlayer().has(clothing) ? " (Owned)" : "")));
         nextChoices.addAll(displayClothes());
 
-        GUI.gui.message("You have $" + player.money + " to spend.");
+        GUI.gui.message("You have $" + getPlayer().money + " to spend.");
 
         if (Flag.checkFlag(Flag.AliceAvailable)) {
             GUI.gui.message("You see Alice hanging around near the bondage gear. You aren't sure whether "
                             + "she's waiting for you or not.");
             choose("Talk to Alice", nextChoices);
         }
-        if (player.getLevel() >= 5 && !Flag.checkFlag(Flag.metAlice) && !Flag.checkFlag(Flag.victory)) {
+        if (getPlayer().getLevel() >= 5 && !Flag.checkFlag(Flag.metAlice) && !Flag.checkFlag(Flag.victory)) {
             choose("Learn to be Submissive", nextChoices);
         }
         choose("Leave", nextChoices);

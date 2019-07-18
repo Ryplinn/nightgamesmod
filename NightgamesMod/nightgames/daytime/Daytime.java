@@ -7,7 +7,7 @@ import nightgames.characters.Player;
 import nightgames.global.*;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
-import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.Addiction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +15,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 public class Daytime {
-    private final int MORNING_TIME = 10;
-    private final int NEXT_MATCH_TIME = 22;
-    private final int LONG_DAY_LENGTH = 10;
-    private final int SHORT_DAY_LENGTH = 7;
-    private final int NOON = 12;
-    private final int AFTER_CLASS = 15;
+    private static final int MORNING_TIME = 10;
+    private static final int NEXT_MATCH_TIME = 22;
+    private static final int LONG_DAY_LENGTH = 10;
+    private static final int SHORT_DAY_LENGTH = 7;
+    private static final int NOON = 12;
+    private static final int AFTER_CLASS = 15;
     public static Daytime day;
     private ArrayList<Activity> activities;
     private Player player;
@@ -62,8 +62,8 @@ public class Daytime {
 
     private void morning() {
         GUI.gui.clearText();
-        player.getAddictions().forEach(AddictionSymptom::clearDaytime);
-        player.getAddictions().stream().map(AddictionSymptom::describeMorning)
+        player.getAddictions().forEach(Addiction::clearDaytime);
+        player.getAddictions().stream().map(Addiction::describeMorning)
                         .map(description -> Formatter.format(description, player, null))
                         .forEach(s -> GUI.gui.message(s));
         if (eventMgr.playMorningScene()) {
@@ -159,7 +159,7 @@ public class Daytime {
                 time++;
             }
         }
-        for (NPC npc : GameState.gameState.characterPool.allNPCs()) {
+        for (NPC npc : GameState.getGameState().characterPool.allNPCs()) {
             npcDaytime(npc);
         }
     }
@@ -173,36 +173,36 @@ public class Daytime {
 
     private void buildActivities() {
         activities = new ArrayList<>();
-        activities.add(new Exercise(player));
-        activities.add(new Porn(player));
-        activities.add(new VideoGames(player));
-        activities.add(new Informant(player));
-        activities.add(new BlackMarket(player));
-        activities.add(new BodyShop(player));
-        activities.add(new XxxStore(player));
-        activities.add(new HWStore(player));
-        activities.add(new Bookstore(player));
-        activities.add(new Meditation(player));
-        activities.add(new AngelTime(player));
-        activities.add(new AiriTime(player));
-        activities.add(new CassieTime(player));
-        activities.add(new JewelTime(player));
-        activities.add(new MaraTime(player));
+        activities.add(new Exercise());
+        activities.add(new Porn());
+        activities.add(new VideoGames());
+        activities.add(new Informant());
+        activities.add(new BlackMarket());
+        activities.add(new BodyShop());
+        activities.add(new XxxStore());
+        activities.add(new HWStore());
+        activities.add(new Bookstore());
+        activities.add(new Meditation());
+        activities.add(new AngelTime());
+        activities.add(new AiriTime());
+        activities.add(new CassieTime());
+        activities.add(new JewelTime());
+        activities.add(new MaraTime());
         if (Flag.checkFlag(Flag.Kat)) {
-            activities.add(new KatTime(player));
+            activities.add(new KatTime());
         }
-        activities.add(new Closet(player));
-        activities.add(new ClothingStore(player));
-        activities.add(new Boutique(player));
+        activities.add(new Closet());
+        activities.add(new ClothingStore());
+        activities.add(new Boutique());
         if (Flag.checkFlag(Flag.Reyka)) {
-            activities.add(new ReykaTime(player));
+            activities.add(new ReykaTime());
         }
         if (Flag.checkFlag(Flag.YuiLoyalty)) {
-            activities.add(new YuiTime(player));
+            activities.add(new YuiTime());
         }
-        activities.add(new MagicTraining(player));
-        activities.add(new Workshop(player));
-        activities.add(new AddictionRemoval(player));
+        activities.add(new MagicTraining());
+        activities.add(new Workshop());
+        activities.add(new AddictionRemoval());
     }
 
     public String getTime() {
@@ -268,4 +268,7 @@ public class Daytime {
         }
     }
 
+    public String dump() {
+        return null;
+    }
 }

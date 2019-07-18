@@ -11,8 +11,8 @@ import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
 
 public class Bookstore extends Store {
-    public Bookstore(Player player) {
-        super("Bookstore", player);
+    public Bookstore() {
+        super("Bookstore");
         add(Item.EnergyDrink);
         add(Item.ZipTie);
         add(Item.Phone);
@@ -35,10 +35,10 @@ public class Bookstore extends Store {
         } else {
             attemptBuy(choice);
         }
-        if (player.human()) {
+        if (getPlayer().human()) {
             GUI.gui.message(
                             "In addition to textbooks, the campus bookstore sells assorted items for everyday use.");
-            Map<Item, Integer> MyInventory = this.player.getInventory();
+            Map<Item, Integer> MyInventory = this.getPlayer().getInventory();
             for (Item i : stock.keySet()) {
                 if (MyInventory.get(i) == null || MyInventory.get(i) == 0) {
                     GUI.gui.message(i.getName() + ": $" + i.getPrice());
@@ -47,7 +47,7 @@ public class Bookstore extends Store {
                                     i.getName() + ": $" + i.getPrice() + " (you have: " + MyInventory.get(i) + ")");
                 }
             }
-            GUI.gui.message("You have : $" + player.money + " to spend.");
+            GUI.gui.message("You have : $" + getPlayer().money + " to spend.");
 
             displayGoods(nextChoices);
             choose("Leave", nextChoices);

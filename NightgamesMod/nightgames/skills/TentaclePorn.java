@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.TentaclePart;
@@ -15,7 +16,7 @@ import nightgames.status.Stsflag;
 
 public class TentaclePorn extends Skill {
 
-    public TentaclePorn(Character self) {
+    TentaclePorn(CharacterType self) {
         super("Tentacle Porn", self);
     }
 
@@ -82,7 +83,7 @@ public class TentaclePorn extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new TentaclePorn(user);
+        return new TentaclePorn(user.getType());
     }
 
     @Override

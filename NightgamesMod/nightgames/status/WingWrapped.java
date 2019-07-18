@@ -3,6 +3,7 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -14,50 +15,54 @@ import java.util.Optional;
 
 public class WingWrapped extends Status {
 
-    private final Character wrapper;
+    private final CharacterType wrapper;
     private final int strength;
     private Position initialPosition;
 
-    public WingWrapped(Character affected, Character wrapper, int strength) {
+    private WingWrapped(CharacterType affected, CharacterType wrapper, int strength) {
         super("Wing Wrapped", affected);
         this.wrapper = wrapper;
         this.strength = strength;
         flag(Stsflag.wrapped);
     }
     
-    public WingWrapped(Character affected, Character wrapper) {
-        this(affected, wrapper, calcStrength(wrapper));
+    public WingWrapped(CharacterType affected, Character wrapper) {
+        this(affected, wrapper.getType(), calcStrength(wrapper));
     }
 
     private static int calcStrength(Character wrapper) {
         return wrapper.get(Attribute.power) / 4 + wrapper.get(Attribute.darkness) / 6;
     }
 
+    private Character getWrapper() {
+        return wrapper.fromPoolGuaranteed();
+    }
+
     @Override
     public String initialMessage(Combat c, Optional<Status> replacement) {
         String msg = "{other:NAME-POSSESSIVE} powerful {other:body-part:wings} are holding"
                         + " {self:name-do} in place";
-        if (wrapper.has(Trait.VampireWings) && affected.outfit.slotEmpty(ClothingSlot.top)) {
-            if (wrapper.human()) {
+        if (getWrapper().has(Trait.VampireWings) && getAffected().outfit.slotEmpty(ClothingSlot.top)) {
+            if (getWrapper().human()) {
                 msg += ", and they are feeding you {self:possessive} power";
             } else {
                 msg += ", and every bit of {self:possessive} skin they touch seems to go numb with weakness";
             }
         }
-        return Formatter.format(msg + ".", affected, wrapper);
+        return Formatter.format(msg + ".", getAffected(), getWrapper());
     }
 
     @Override
     public String describe(Combat c) {
         String msg = "{self:SUBJECT-ACTION:are|is} held tightly by {other:name-possessive} {other:body-part:wings}";
-        if (wrapper.has(Trait.VampireWings) && affected.outfit.slotEmpty(ClothingSlot.top)) {
-            if (wrapper.human()) {
+        if (getWrapper().has(Trait.VampireWings) && getAffected().outfit.slotEmpty(ClothingSlot.top)) {
+            if (getWrapper().human()) {
                 msg += ", and they are feeding you {self:possessive} power";
             } else {
                 msg += ", and every bit of {self:possessive} skin they touch seems to go numb with weakness";
             }
         }
-        return Formatter.format(msg + ".", affected, wrapper);
+        return Formatter.format(msg + ".", getAffected(), getWrapper());
     }
 
     @Override
@@ -73,29 +78,29 @@ public class WingWrapped extends Status {
         if (initialPosition == null) {
             initialPosition = c.getStance();
         } else if (!c.getStance().equals(initialPosition) && !canPersist(c)) {
-            c.write(wrapper, Formatter.format("Lacking sufficient purchase to keep"
+            c.write(getWrapper(), Formatter.format("Lacking sufficient purchase to keep"
                             + " {self:name-do} in check any longer, {other:name-possessive}"
                             + " {other:body-part:wings} return to their regular place behind"
-                            + " {other:possessive} back.", affected, wrapper));
-            affected.removelist.add(this);
+                            + " {other:possessive} back.", getAffected(), getWrapper()));
+            getAffected().removelist.add(this);
             return;
         }
-        if (!wrapper.body.has("wings")) {
+        if (!getWrapper().body.has("wings")) {
             c.write(Formatter.format("Now that {other:name-possessive} wings are gone,"
-                            + " they can no longer confine {self:name-do}.", affected, wrapper));
-            affected.removelist.add(this);
-        } else if (wrapper.has(Trait.VampireWings) && affected.outfit.slotEmpty(ClothingSlot.top)) {
-            if (affected.get(Attribute.power) < 6) {
-                c.write(wrapper, Formatter.format("{other:NAME-POSSESSIVE} {other:body-part:wings}, pressed"
+                            + " they can no longer confine {self:name-do}.", getAffected(), getWrapper()));
+            getAffected().removelist.add(this);
+        } else if (getWrapper().has(Trait.VampireWings) && getAffected().outfit.slotEmpty(ClothingSlot.top)) {
+            if (getAffected().get(Attribute.power) < 6) {
+                c.write(getWrapper(), Formatter.format("{other:NAME-POSSESSIVE} {other:body-part:wings}, pressed"
                                 + " against {self:name-possessive} bare skin, try to reel in"
                                 + " {self:possessive} power, but they fail to draw on what little"
-                                + " remains within {self:direct-object}.", affected, wrapper));
+                                + " remains within {self:direct-object}.", getAffected(), getWrapper()));
             } else {
-                c.write(wrapper, Formatter.format("{other:NAME-POSSESSIVE} {other:body-part:wings}, pressed"
+                c.write(getWrapper(), Formatter.format("{other:NAME-POSSESSIVE} {other:body-part:wings}, pressed"
                                 + " against {self:name-possessive} bare skin, leech {self:possessive}"
                                 + " power from {self:possessive} body, letting it flow back into"
-                                + " {other:direct-object}.", affected, wrapper));
-                Drained.drain(c, wrapper, affected, Attribute.power, 3, 20, true);
+                                + " {other:direct-object}.", getAffected(), getWrapper()));
+                Drained.drain(c, getWrapper(), getAffected(), Attribute.power, 3, 20, true);
             }
         }
     }
@@ -161,7 +166,7 @@ public class WingWrapped extends Status {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new WingWrapped(newAffected, newOther, strength);
+        return new WingWrapped(newAffected.getType(), newOther.getType(), strength);
     }
 
     @Override

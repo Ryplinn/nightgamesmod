@@ -2,6 +2,8 @@ package nightgames.areas;
 
 import nightgames.actions.Movement;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterPool.CharacterNotFoundException;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Encounter;
 import nightgames.global.Match;
 import nightgames.status.Stsflag;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Area implements Serializable {
     /**
@@ -22,7 +25,7 @@ public class Area implements Serializable {
     public HashSet<Area> adjacent;
     public HashSet<Area> shortcut;
     public HashSet<Area> jump;
-    public List<Character> present;
+    public List<CharacterType> present;
     public String description;
     public Encounter activeEncounter;
     public boolean alarm;
@@ -53,7 +56,7 @@ public class Area implements Serializable {
         adjacent.add(adj);
     }
 
-    public void shortcut(Area sc) {
+    void shortcut(Area sc) {
         shortcut.add(sc);
     }
     
@@ -96,11 +99,16 @@ public class Area implements Serializable {
         return enumerator == Movement.la || enumerator == Movement.ftcOak;
     }
 
+    public List<Character> getPresent() {
+        return present.stream().map(CharacterType::fromPool).filter(Optional::isPresent).map(Optional::get)
+                        .collect(Collectors.toList());
+    }
+
     public boolean ping(int perception) {
         if (activeEncounter != null) {
             return true;
         }
-        for (Character c : present) {
+        for (Character c : getPresent()) {
             if (!c.stealthCheck(perception) || open()) {
                 return true;
             }
@@ -109,7 +117,7 @@ public class Area implements Serializable {
     }
 
     public void enter(Character p) {
-        present.add(p);
+        present.add(p.getType());
         System.out.printf("%s enters %s: %s\n", p.getTrueName(), name, env);
         List<Deployable> deps = new ArrayList<>(env);
         for (Deployable dep : deps) {
@@ -127,7 +135,8 @@ public class Area implements Serializable {
         if (!hasEncounter() && present.size() > 1) {
             activeEncounter = Match.getMatch().buildEncounter(this);
         } else if (present.size() > 2) {
-            Character intruder = present.get(2);
+            Character intruder =
+                            present.get(2).fromPoolGuaranteed();
             if (activeEncounter.checkIntrudePossible(intruder)) {
                 intruder.decideIntervene(activeEncounter, activeEncounter.getP1(), activeEncounter.getP2());
             }
@@ -137,7 +146,7 @@ public class Area implements Serializable {
 
     public boolean opportunity(Character target, Trap trap) {
         if (present.size() > 1) {
-            for (Character opponent : present) {
+            for (Character opponent : getPresent()) {
                 if (opponent != target) {
                     if (target.eligible(opponent) && opponent.eligible(target) && activeEncounter == null) {
                         activeEncounter = Match.getMatch().buildEncounter(this);
@@ -152,7 +161,7 @@ public class Area implements Serializable {
     }
 
     public boolean humanPresent() {
-        for (Character player : present) {
+        for (Character player : getPresent()) {
             if (player.human()) {
                 return true;
             }
@@ -165,7 +174,7 @@ public class Area implements Serializable {
     }
 
     public void exit(Character p) {
-        present.remove(p);
+        present.remove(p.getType());
     }
 
     public void endEncounter() {
@@ -209,7 +218,7 @@ public class Area implements Serializable {
     }
 
     public boolean isDetected() {
-        return present.stream().anyMatch(c -> c.is(Stsflag.detected));
+        return getPresent().stream().anyMatch(c -> c.is(Stsflag.detected));
     }
 
     public boolean isTrapped() {

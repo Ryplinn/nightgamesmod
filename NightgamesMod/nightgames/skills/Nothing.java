@@ -1,12 +1,13 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 
 public class Nothing extends Skill {
 
-    public Nothing(Character self) {
+    public Nothing(CharacterType self) {
         super("Nothing", self);
     }
 
@@ -32,7 +33,7 @@ public class Nothing extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Nothing(user);
+        return new Nothing(user.getType());
     }
 
     @Override

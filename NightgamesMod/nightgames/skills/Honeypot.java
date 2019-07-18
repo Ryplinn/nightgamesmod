@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -11,7 +12,7 @@ import nightgames.global.Random;
 import nightgames.pet.PetCharacter;
 
 public class Honeypot extends Skill {
-    public Honeypot(Character self) {
+    Honeypot(CharacterType self) {
         super("Honeypot", self);
     }
 
@@ -54,7 +55,7 @@ public class Honeypot extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Honeypot(user);
+        return new Honeypot(user.getType());
     }
 
     @Override

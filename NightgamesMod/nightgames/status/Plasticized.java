@@ -4,10 +4,8 @@ import java.util.Optional;
 
 import com.google.gson.JsonObject;
 
-import nightgames.characters.Attribute;
+import nightgames.characters.*;
 import nightgames.characters.Character;
-import nightgames.characters.Emotion;
-import nightgames.characters.NPC;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -16,11 +14,11 @@ import nightgames.global.Formatter;
  * A special stun
  */
 public class Plasticized extends DurationStatus {
-    public Plasticized(Character affected) {
+    Plasticized(CharacterType affected) {
         this(affected, 4);
     }
 
-    public Plasticized(Character affected, int duration) {
+    private Plasticized(CharacterType affected, int duration) {
         super("Plasticized", affected, duration);
         flag(Stsflag.stunned);
         flag(Stsflag.plasticized);
@@ -31,19 +29,19 @@ public class Plasticized extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "You completely immobilized in a skin of hard plastic.";
         } else {
-            return affected.getName() + " is completedly immobilized in a suit of hard plastic.";
+            return getAffected().getName() + " is completely immobilized in a suit of hard plastic.";
         }
     }
 
     @Override
     public String initialMessage(Combat c, Optional<Status> replacement) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "<b>You are wrapped in a layer of hard plastic and are completely immobilized!</b>";
         } else {
-            return "<b>" + affected.getName() + " is completedly immobilized in a coating of hard plastic!</b>";
+            return "<b>" + getAffected().getName() + " is completely immobilized in a coating of hard plastic!</b>";
         }
     }
 
@@ -59,18 +57,18 @@ public class Plasticized extends DurationStatus {
 
     @Override
     public void onRemove(Combat c, Character other) {
-        Formatter.writeFormattedIfCombat(c, "{self:SUBJECT-ACTION:are|is} finally freed of {self:possessive} plastic prison!", affected, other);
+        Formatter.writeFormattedIfCombat(c, "{self:SUBJECT-ACTION:are|is} finally freed of {self:possessive} plastic prison!", getAffected(), other);
     }
 
     @Override
     public int regen(Combat c) {
         super.regen(c);
-        if (c != null && c.getStance().mobile(affected)) {
-        	c.write(affected, Formatter
-                            .format("It's impossible for {self:name-do} to stay on {self:possessive} feet.", affected, c.getOpponent(affected)));
-        	affected.add(c, new Falling(affected));
+        if (c != null && c.getStance().mobile(getAffected())) {
+        	c.write(getAffected(), Formatter
+                            .format("It's impossible for {self:name-do} to stay on {self:possessive} feet.", getAffected(), c.getOpponent(getAffected())));
+        	getAffected().add(c, new Falling(affected));
         }
-        affected.emote(Emotion.nervous, 5);
+        getAffected().emote(Emotion.nervous, 5);
         return 0;
     }
 
@@ -126,7 +124,7 @@ public class Plasticized extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Plasticized(newAffected, getDuration());
+        return new Plasticized(newAffected.getType(), getDuration());
     }
 
     @Override public JsonObject saveToJson() {
@@ -137,6 +135,6 @@ public class Plasticized extends DurationStatus {
     }
 
     @Override public Status loadFromJson(JsonObject obj) {
-        return new Plasticized(NPC.noneCharacter(), obj.get("duration").getAsInt());
+        return new Plasticized(NPC.noneCharacter().getType(), obj.get("duration").getAsInt());
     }
 }

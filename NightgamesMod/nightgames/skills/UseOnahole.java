@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -11,7 +12,7 @@ import nightgames.stance.Stance;
 
 public class UseOnahole extends Skill {
 
-    public UseOnahole(Character self) {
+    UseOnahole(CharacterType self) {
         super(Item.Onahole.getName(), self);
         addTag(SkillTag.usesToy);
     }
@@ -55,7 +56,7 @@ public class UseOnahole extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new UseOnahole(user);
+        return new UseOnahole(user.getType());
     }
 
     @Override

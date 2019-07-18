@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.nskills.tags.SkillTag;
@@ -8,7 +9,7 @@ import nightgames.stance.Mount;
 
 public class Straddle extends Skill {
 
-    public Straddle(Character self) {
+    public Straddle(CharacterType self) {
         super("Mount", self);
         addTag(SkillTag.positioning);
         addTag(SkillTag.petDisallowed);
@@ -35,7 +36,7 @@ public class Straddle extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Straddle(user);
+        return new Straddle(user.getType());
     }
 
     @Override

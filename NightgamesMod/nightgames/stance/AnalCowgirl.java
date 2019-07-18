@@ -1,50 +1,52 @@
 package nightgames.stance;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class AnalCowgirl extends AnalSexStance {
 
-    public AnalCowgirl(Character top, Character bottom) {
+    public AnalCowgirl(CharacterType top, CharacterType bottom) {
         super(top, bottom, Stance.anal);
     }
 
     @Override
     public String describe(Combat c) {
-        if (top.human()) {
+        if (getTop().human()) {
             return String.format("You're sitting on top of %s with your ass squeezing her cock.",
-                            bottom.nameDirectObject());
+                            getBottom().nameDirectObject());
         } else {
             return String.format("%s flat on %s back with %s cock buried inside %s ass.",
-                            bottom.subjectAction("are", "is"), bottom.possessiveAdjective(),
-                            bottom.possessiveAdjective(), top.nameOrPossessivePronoun());
+                            getBottom().subjectAction("are", "is"), getBottom().possessiveAdjective(),
+                            getBottom().possessiveAdjective(), getTop().nameOrPossessivePronoun());
         }
     }
 
     @Override
     public boolean mobile(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
     public boolean kiss(Character c, Character target) {
-        return c != top && c != bottom;
+        return c.getType() != top && c.getType() != bottom;
     }
 
     @Override
     public boolean dom(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
     public boolean sub(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
@@ -54,12 +56,12 @@ public class AnalCowgirl extends AnalSexStance {
 
     @Override
     public boolean reachBottom(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
     public boolean prone(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
@@ -69,11 +71,11 @@ public class AnalCowgirl extends AnalSexStance {
 
     @Override
     public boolean inserted(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return new Mount(top, bottom);
     }
 
@@ -83,55 +85,40 @@ public class AnalCowgirl extends AnalSexStance {
     }
 
     @Override
-    public void checkOngoing(Combat c) {
-        Character inserter = inserted(top) ? top : bottom;
-        Character inserted = inserted(top) ? bottom : top;
+    public Optional<Position> checkOngoing(Combat c) {
+        Character inserter = inserted(getTop()) ? getTop() : getBottom();
+        Character inserted = inserted(getTop()) ? getBottom() : getTop();
 
-        if (!inserter.hasInsertable()) {
-            if (inserter.human()) {
-                c.write("With " + inserter.possessiveAdjective()
-                                + " pole gone, you groan in frustration and cease your merciless movements.");
-            } else {
-                c.write(inserted.getName() + " groans with frustration with the sudden disappearance of "
-                                + inserter.nameOrPossessivePronoun() + " pole.");
-            }
-            c.setStance(insertRandom(c));
+        Optional<Position> newStance = dickMissing(c, inserter, inserted);
+        if (!newStance.isPresent()) {
+            newStance = assholeMissing(c, inserter, inserted);
         }
-        if (inserted.body.getRandom("ass") == null) {
-            if (inserted.human()) {
-                c.write("With your asshole suddenly disappearing, you can't continue riding " + inserter.getName()
-                                + " anymore.");
-            } else {
-                c.write(inserted.getName() + " groans with frustration with the sudden disappearance of "
-                                + inserted.possessiveAdjective() + " asshole.");
-            }
-            c.setStance(insertRandom(c));
-        }
+        return newStance;
     }
 
     @Override
     public boolean anallyPenetrated(Combat combat, Character self) {
-        return self == top;
+        return self.getType() == top;
     }
 
     @Override
     public List<BodyPart> topParts(Combat c) {
-        return Arrays.asList(top.body.getRandomAss()).stream().filter(part -> part != null && part.present())
+        return Stream.of(getTop().body.getRandomAss()).filter(part -> part != null && part.present())
                         .collect(Collectors.toList());
     }
 
     @Override
     public List<BodyPart> bottomParts() {
-        return Arrays.asList(bottom.body.getRandomInsertable()).stream().filter(part -> part != null && part.present())
+        return Stream.of(getBottom().body.getRandomInsertable()).filter(part -> part != null && part.present())
                         .collect(Collectors.toList());
     }
     
     @Override
     public Position reverse(Combat c, boolean writeMessage) {
         if (writeMessage) {
-            c.write(bottom, Formatter
+            c.write(getBottom(), Formatter
                             .format("{self:SUBJECT-ACTION:manage|manages} to unbalance {other:name-do} and push {other:direct-object} forward onto {other:possessive} hands and knees. {self:SUBJECT-ACTION:follow|follows} {other:direct-object}, still inside {other:possessive} tight ass, and {self:SUBJECT-ACTION:continue|continues} "
-                                            + "to fuck {other:direct-object} from behind.", bottom, top));
+                                            + "to fuck {other:direct-object} from behind.", getBottom(), getTop()));
         }
         return new Anal(bottom, top);
     }

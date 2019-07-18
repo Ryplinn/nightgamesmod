@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -13,7 +14,7 @@ import nightgames.status.Falling;
 
 public class HipThrow extends Skill {
 
-    public HipThrow(Character self) {
+    HipThrow(CharacterType self) {
         super("Hip Throw", self);
         addTag(SkillTag.hurt);
         addTag(SkillTag.staminaDamage);
@@ -54,7 +55,7 @@ public class HipThrow extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new HipThrow(user);
+        return new HipThrow(user.getType());
     }
 
     @Override

@@ -3,14 +3,15 @@ package nightgames.skills;
 import java.util.Optional;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.custom.CustomStringEntry;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 
 public class CustomSkill extends Skill {
-    LoadedSkillData data;
+    private LoadedSkillData data;
 
-    public CustomSkill(LoadedSkillData data, Character self) {
+    public CustomSkill(LoadedSkillData data, CharacterType self) {
         super(data.name, self, data.cooldown);
         this.data = data;
     }
@@ -42,7 +43,7 @@ public class CustomSkill extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new CustomSkill(data, user);
+        return new CustomSkill(data, user.getType());
     }
 
     @Override

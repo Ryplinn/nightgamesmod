@@ -4,6 +4,8 @@ import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
+import java.util.Optional;
+
 public class UpsideDownFemdom extends FemdomSexStance {
     public UpsideDownFemdom(Character top, Character bottom) {
         super(top, bottom, Stance.upsidedownfemdom);
@@ -77,7 +79,7 @@ public class UpsideDownFemdom extends FemdomSexStance {
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return new StandingOver(top, bottom);
     }
 

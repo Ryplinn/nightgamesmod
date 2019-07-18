@@ -16,8 +16,8 @@ import java.util.List;
 
 public class Exercise extends Activity {
 
-    public Exercise(Player player) {
-        super("Exercise", player);
+    public Exercise() {
+        super("Exercise");
     }
 
     @Override
@@ -29,7 +29,7 @@ public class Exercise extends Activity {
     public void visit(String choice, int page, List<LabeledValue<String>> nextChoices, ActivityInstance instance) {
         GUI.gui.clearText();
         if (choice.equals("Start")) {
-            int gain = gainStamina(player);
+            int gain = gainStamina(getPlayer());
             showScene(pickScene(gain));
             if (gain > 0) {
                 GUI.gui.message("<b>Your maximum stamina has increased by " + gain + ".</b>");
@@ -81,15 +81,15 @@ public class Exercise extends Activity {
                 GUI.gui.message(
                                 "You head over to the campus gym and coincidentally run into Cassie there. <i>\"Hi. I'm not really much of a fitness enthusiast, but I need to get into better shape if I'm going to stay competitive.\"</i><br/>The two of you spend some time doing light exercise and chatting.");
 
-                GameState.gameState.characterPool.getNPC("Cassie").gainAffection(player, 1);
-                player.gainAffection(GameState.gameState.characterPool.getNPC("Cassie"), 1);
+                GameState.getGameState().characterPool.getNPC("Cassie").gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(GameState.getGameState().characterPool.getNPC("Cassie"), 1);
                 break;
             case jewel1:
                 GUI.gui.message(
                                 "You're going for a run around the campus and run into Jewel doing the same. She makes an immediate beeline towards you. <i>\"You're not getting out of running today, no matter how tempting the alternative is. We're going to get some real exercise.\"</i> She pushes you a lot harder than you had planned and you're exhausted by the end of it, but you did manage to keep up with her.");
 
-                GameState.gameState.characterPool.getNPC("Jewel").gainAffection(player, 1);
-                player.gainAffection(GameState.gameState.characterPool.getNPC("Jewel"), 1);
+                GameState.getGameState().characterPool.getNPC("Jewel").gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(GameState.getGameState().characterPool.getNPC("Jewel"), 1);
                 break;
             case yuiintro1:
                 GUI.gui.message("For a change of pace, you decide to try a different jogging route today that takes you outside the campus. There's less foot traffic to worry about here, "
@@ -114,7 +114,7 @@ public class Exercise extends Activity {
                         + "She gives you a little bow before she walks away. After she's gone, you kinda regret not at getting at least her name. Oh well, maybe you'll run into her again.");
                 Flag.flag(Flag.metYui);
                 Flag.flag(Flag.YuiUnlocking);
-                GameState.gameState.characterPool.getNPC("Yui").gainAffection(player, 1);
+                GameState.getGameState().characterPool.getNPC("Yui").gainAffection(getPlayer(), 1);
                 break;
             case yuiintro2:
                 GUI.gui.message("As you jog around the campus, you stumble onto a wallet sitting on the ground. It's right next to a bench, so it probably fell out of the owner's pocket "
@@ -135,7 +135,7 @@ public class Exercise extends Activity {
                         + "trouble you needlessly after you've helped me so much. Besides, now that I have my ID back, I need to finish my registration.\"</i> She gives you a small, Japanese-style "
                         + "bow, but seems hesistant to leave right away. <i>\"This is the first time I've really regretted not owning a cell phone. If I ever buy one, I promise I'll give you my "
                         + "number.\"</i> She smiles brightly. <i>\"We've had two serendipitous meetings in such a short period of time. I'm sure we'll meet again soon.\"</i>");
-                GameState.gameState.characterPool.getNPC("Yui").gainAffection(player, 1);
+                GameState.getGameState().characterPool.getNPC("Yui").gainAffection(getPlayer(), 1);
                 Flag.flag(Flag.YuiWalletReturned);
                 Flag.flag(Flag.YuiUnlocking);
                 break;
@@ -144,7 +144,8 @@ public class Exercise extends Activity {
                         + "her other than hoping to run into her by chance. Does she really not own a cell phone? She didn't seem to be lying. Aesop, being an information broker, could probably find "
                         + "out more about her, but it feels wrong to ask him to investigate someone unrelated to the Games just to satisfy your curiosity. That would be like hiring a private detective "
                         + "to look into a girl you barely know. Oh well, maybe you'll get lucky and run into her again.<br/><br/>"
-                        + "Your luck proves remarkable a few minutes later. You spot Yui sitting alone on a bench. She jumps up with an excited grin when she sees you. <i>\""+player.getTrueName()+"! I was "
+                        + "Your luck proves remarkable a few minutes later. You spot Yui sitting alone on a bench. She jumps up with an excited grin when she sees you. <i>\""+ getPlayer()
+                                .getTrueName()+"! I was "
                         + "hoping to see you again. This really must be fate!\"</i> She blushes a bit at her own overexcitement and regains her self-control. She seems quite nervous. <i>\"Do you have "
                         + "some time to talk? I have something important I want to tell you... and something to show you.\"</i> She sounds as nervous as she looks. Whatever she wants to talk about, "
                         + "she's obviously worried how you'll react. The rest of your workout can wait.<br/><br/>"
@@ -181,7 +182,7 @@ public class Exercise extends Activity {
                         + "People will assume you're in a kinky relationship.<br/><br/>"
                         + "Yui blushes again, but looks determined. <i>\"Please let me call you Master. It's really important to me to show you my commitment. I'll... try not to say it in front of "
                         + "other people.\"</i> Her expression is too sincere to turn down. Fine, she can call you whatever she wants." );
-                GameState.gameState.characterPool.getNPC("Yui").gainAffection(player, 1);
+                GameState.getGameState().characterPool.getNPC("Yui").gainAffection(getPlayer(), 1);
                 Flag.flag(Flag.YuiLoyalty);
                 break;
         }
@@ -189,7 +190,7 @@ public class Exercise extends Activity {
 
     private Scene pickScene(int gain) {
         ArrayList<Scene> available = new ArrayList<Scene>();
-        if(player.getRank()>=1&&!Flag.checkFlag(Flag.metYui)){
+        if(getPlayer().getRank()>=1&&!Flag.checkFlag(Flag.metYui)){
             available.add(Scene.yuiintro1);
         }
 
@@ -206,10 +207,10 @@ public class Exercise extends Activity {
             available.add(Scene.basic1);
             available.add(Scene.basic2);
             available.add(Scene.basic3);
-            if (GameState.gameState.characterPool.getNPC("Cassie").getAffection(player) >= 5) {
+            if (GameState.getGameState().characterPool.getNPC("Cassie").getAffection(getPlayer()) >= 5) {
                 available.add(Scene.cassie1);
             }
-            if (GameState.gameState.characterPool.getNPC("Jewel").getAffection(player) >= 5 && player.getStamina().max() >= 35) {
+            if (GameState.getGameState().characterPool.getNPC("Jewel").getAffection(getPlayer()) >= 5 && getPlayer().getStamina().max() >= 35) {
                 available.add(Scene.jewel1);
             }
         }

@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.AssPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -20,7 +21,7 @@ import java.util.Set;
 public class Anilingus extends Skill {
     private static final String worshipString = "Ass Worship";
 
-    public Anilingus(Character self) {
+    public Anilingus(CharacterType self) {
         super("Lick Ass", self);
         addTag(SkillTag.usesMouth);
         addTag(SkillTag.pleasure);
@@ -44,7 +45,7 @@ public class Anilingus extends Skill {
 
     @Override
     public boolean usable(Combat c, Character target) {
-        boolean canUse = c.getStance().isBeingFaceSatBy(c, getSelf(), target) && getSelf().canRespond()
+        boolean canUse = c.getStance().isBeingFaceSatBy(getSelf(), target) && getSelf().canRespond()
                         || getSelf().canAct();
         boolean titsBlocking = c.getStance().enumerate() == Stance.paizuripin
                         || c.getStance().enumerate() == Stance.titfucking;
@@ -69,7 +70,7 @@ public class Anilingus extends Skill {
             m += 4 + Random.random(6);
             n = 20;
             selfm = 20;
-        } else if (c.getStance().isBeingFaceSatBy(c, getSelf(), target)) {
+        } else if (c.getStance().isBeingFaceSatBy(getSelf(), target)) {
             result = Result.reverse;
             m += Random.random(6);
             n = 10;
@@ -113,7 +114,7 @@ public class Anilingus extends Skill {
 
     @Override
     public int accuracy(Combat c, Character target) {
-        return !c.getStance().isBeingFaceSatBy(c, getSelf(), target) && c.getStance().reachTop(target)? 75 : 200;
+        return !c.getStance().isBeingFaceSatBy(getSelf(), target) && c.getStance().reachTop(target)? 75 : 200;
     }
 
     @Override

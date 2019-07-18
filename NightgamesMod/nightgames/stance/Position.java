@@ -1,39 +1,46 @@
 package nightgames.stance;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.Body;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
-import nightgames.global.Random;
 import nightgames.skills.Skill;
-import nightgames.skills.damage.DamageType;
 import nightgames.status.InsertedStatus;
+import nightgames.utilities.ProseUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class Position implements Cloneable {
-    public Character top;
-    public Character bottom;
+    public CharacterType top;
+    public CharacterType bottom;
     public int time;
     public Stance en;
+    protected FacingType facingType;
+    protected DomType domType;
 
-    public Position(Character top, Character bottom, Stance stance) {
+    public Position(CharacterType top, CharacterType bottom, Stance stance) {
         this.top = top;
         this.bottom = bottom;
         en = stance;
         time = 0;
     }
 
+    public Character getTop() {
+        return top.fromPoolGuaranteed();
+    }
+
+    public Character getBottom() {
+        return bottom.fromPoolGuaranteed();
+    }
+
     public void setOtherCombatants(List<? extends Character> others) {}
 
-    public Character domSexCharacter(Combat c) {
-        return top;
+    public Character getDomSexCharacter() {
+        return getTop();
     }
 
     public int pinDifficulty(Combat c, Character self) {
@@ -52,8 +59,14 @@ public abstract class Position implements Cloneable {
         time++;
     }
 
-    public void checkOngoing(Combat c) {
-
+    /**
+     * Checks for validity of current stance.
+     *
+     * @param c The ongoing combat.
+     * @return The stance to change into, if applicable.
+     */
+    public Optional<Position> checkOngoing(Combat c) {
+        return Optional.empty();
     }
 
     public float getSubDomBonus(Character self, float bonus) {
@@ -93,7 +106,7 @@ public abstract class Position implements Cloneable {
     public abstract boolean behind(Character c);
 
     public boolean getUp(Character c) {
-        return mobile(c) && c == top;
+        return mobile(c) && c == getTop();
     }
 
     public boolean front(Character c) {
@@ -112,15 +125,15 @@ public abstract class Position implements Cloneable {
     public abstract String image();
 
     public boolean inserted() {
-        return inserted(top) || inserted(bottom);
+        return inserted(getTop()) || inserted(getBottom());
     }
 
-    public Position insert(Combat c, Character pitcher, Character dom) {
-        return this;
+    public Optional<Position> insert(Combat c, Character pitcher, Character dom) {
+        return facingType.insert(this, c, pitcher, dom);
     }
 
-    public Position insertRandom(Combat c) {
-        return insertRandomDom(c, top);
+    public Optional<Position> insertRandom(Combat c) {
+        return insertRandomDom(c, getTop());
     }
 
     public Collection<Skill> availSkills(Combat c, Character self) {
@@ -128,11 +141,11 @@ public abstract class Position implements Cloneable {
     }
 
     public boolean canthrust(Combat c, Character self) {
-        return domSexCharacter(c) == self;
+        return getDomSexCharacter() == self;
     }
 
     public boolean facing(Character c, Character target) {
-        return (!behind(top) && !behind(bottom)) || (c != bottom && c != top) || (target != bottom && target != top);
+        return (!behind(getTop()) && !behind(getBottom())) || (c != getBottom() && c != getTop()) || (target != getBottom() && target != getTop());
     }
 
     public float priorityMod(Character self) {
@@ -142,10 +155,10 @@ public abstract class Position implements Cloneable {
     public boolean fuckable(Character self) {
         Character target;
 
-        if (self == top) {
-            target = bottom;
+        if (self == getTop()) {
+            target = getBottom();
         } else {
-            target = top;
+            target = getTop();
         }
         return (self.crotchAvailable() || self.has(Trait.strapped) && target.hasPussy()) && target.crotchAvailable()
                         && mobile(self) && !mobile(target)
@@ -164,10 +177,10 @@ public abstract class Position implements Cloneable {
     }
 
     public Character other(Character character) {
-        if (character.getTrueName().equals(top.getTrueName())) {
-            return bottom;
-        } else if (character.getTrueName().equals(bottom.getTrueName())) {
-            return top;
+        if (character.getType().equals(top)) {
+            return getBottom();
+        } else if (character.getType().equals(bottom)) {
+            return getTop();
         }
         return null;
     }
@@ -179,15 +192,13 @@ public abstract class Position implements Cloneable {
         } catch (CloneNotSupportedException e) {
             newStance = this;
         }
-        Character nbot = top;
-        Character ntop = bottom;
-        newStance.bottom = nbot;
-        newStance.top = ntop;
+        newStance.bottom = top;
+        newStance.top = bottom;
         return newStance;
     }
 
     public boolean anallyPenetrated(Combat combat) {
-        return anallyPenetrated(combat, top) || anallyPenetrated(combat, bottom);
+        return anallyPenetrated(combat, getTop()) || anallyPenetrated(combat, getBottom());
     }
 
     public boolean anallyPenetrated(Combat combat, Character self) {
@@ -198,15 +209,15 @@ public abstract class Position implements Cloneable {
         return BodyPart.hasType(parts, "ass") || self.getInsertedStatus().stream().anyMatch(status -> status.getReceiver().equals(self) && status.getHolePart() != null && status.getHolePart().isType("ass"));
     }
 
-    public Position insertRandomDom(Combat c, Character target) {
-        return this;
+    public Optional<Position> insertRandomDom(Combat c, Character target) {
+        return facingType.insertRandomDom(this, c, target);
     }
 
     public Character getPartner(Combat c, Character self) {
-        if (self == top) {
-            return bottom;
+        if (self == getTop()) {
+            return getBottom();
         } else {
-            return top;
+            return getTop();
         }
     }
 
@@ -249,11 +260,11 @@ public abstract class Position implements Cloneable {
         }
     }
 
-    public BodyPart pussyPartFor(Combat combat, Character self, Character other) {
+    private BodyPart pussyPartFor(Combat combat, Character self, Character other) {
         return partsForStanceOnly(combat, self, other).stream().filter(part -> part.isType("pussy")).findAny().orElse(Body.nonePart);
     }
 
-    public BodyPart assPartFor(Combat combat, Character self, Character other) {
+    private BodyPart assPartFor(Combat combat, Character self, Character other) {
         return partsForStanceOnly(combat, self, other).stream().filter(part -> part.isType("ass")).findAny().orElse(Body.nonePart);
     }
 
@@ -272,9 +283,9 @@ public abstract class Position implements Cloneable {
     }
 
     public List<BodyPart> partsForStanceOnly(Combat combat, Character self, Character other) {
-        if (self.equals(top)) {
+        if (self.equals(getTop())) {
             return topParts(combat);
-        } else if (self.equals(bottom)) {
+        } else if (self.equals(getBottom())) {
             return bottomParts();
         } else {
             return Collections.emptyList();
@@ -282,7 +293,7 @@ public abstract class Position implements Cloneable {
     }
 
     public boolean vaginallyPenetrated(Combat c) {
-        return vaginallyPenetrated(c, top) || vaginallyPenetrated(c, bottom);
+        return vaginallyPenetrated(c, getTop()) || vaginallyPenetrated(c, getBottom());
     }
 
     public boolean penetrated(Combat combat, Character c) {
@@ -307,16 +318,16 @@ public abstract class Position implements Cloneable {
     }
 
     public boolean havingSexNoStrapped(Combat c) {
-        return (penetratedBy(c, top, bottom) && !bottom.has(Trait.strapped)
-                        || penetratedBy(c, bottom, top)) && !top.has(Trait.strapped);
+        return (penetratedBy(c, getTop(), getBottom()) && !getBottom().has(Trait.strapped)
+                        || penetratedBy(c, getBottom(), getTop())) && !getTop().has(Trait.strapped);
     }
 
     public boolean havingSex(Combat c) {
-        return penetratedBy(c, domSexCharacter(c), bottom) || penetratedBy(c, bottom, domSexCharacter(c)) || en == Stance.trib;
+        return penetratedBy(c, getDomSexCharacter(), getBottom()) || penetratedBy(c, getBottom(), getDomSexCharacter()) || en == Stance.trib;
     }
 
     public boolean havingSex(Combat c, Character self) {
-        if (domSexCharacter(c) == self || bottom == self) {
+        if (getDomSexCharacter() == self || getBottom() == self) {
             return havingSex(c);
         }
         return false;
@@ -401,7 +412,7 @@ public abstract class Position implements Cloneable {
         return Math.max(0, stanceDominance);
     }
 
-    public boolean isBeingFaceSatBy(Combat c, Character self, Character target) {
+    public boolean isBeingFaceSatBy(Character self, Character target) {
         return isFacesatOn(self) && isFaceSitting(target);
     }
 
@@ -417,15 +428,9 @@ public abstract class Position implements Cloneable {
         return reverse(c, false) != this;
     }
 
-    public void struggle(Combat c, Character struggler) {
-        time += 2;
-        Character partner = getPartner(c, struggler);
-        partner.weaken(c, (int) DamageType.stance.modifyDamage(struggler, partner, Random.random(6, 11)));
-    }
+    public abstract void struggle(Combat c, Character struggler);
 
-    public void escape(Combat c, Character escapee) {
-        time += 2;
-    }
+    public abstract void escape(Combat combat, Character escapee);
 
     public boolean isPartFuckingPartInserted(Combat c, Character inserter, BodyPart stick, Character inserted, BodyPart hole) {
         if (c == null || inserter == null || stick == null || inserted == null || hole == null) {
@@ -443,5 +448,47 @@ public abstract class Position implements Cloneable {
         }
         List<InsertedStatus> insertedStatus = Stream.concat(inserter.getInsertedStatus().stream(), inserted.getInsertedStatus().stream()).collect(Collectors.toList());
         return insertedStatus.stream().anyMatch(is -> hole.equals(is.getHolePart()) && inserted.equals(is.getReceiver()) && inserter.equals(is.getPitcher()) && stick.equals(is.getStickPart()));
+    }
+
+    Optional<Position> dickMissing(Combat c, Character inserter, Character inserted) {
+        if (inserter.hasInsertable()) {
+            if (inserter.human()) {
+                c.write(String.format("With %s %s gone, you groan in frustration and cease your merciless movements.",
+                                inserter.possessiveAdjective(), ProseUtils.getDickWord()));
+            } else {
+                c.write(String.format("%s groans with frustration with the sudden disappearance of %s %s.",
+                                inserted.getName(), inserter.nameOrPossessivePronoun(), ProseUtils.getDickWord()));
+            }
+            return insertRandom(c);
+        }
+        return Optional.empty();
+    }
+
+    Optional<Position> pussyMissing(Combat c, Character inserter, Character inserted) {
+        if (!inserted.hasPussy() && !anallyPenetratedBy(c, inserted, inserter)) {
+            if (inserted.human()) {
+                c.write(String.format("With your %s suddenly disappearing, %s can't continue fucking you anymore.",
+                                ProseUtils.getPussyWord(), inserter.subject()));
+            } else {
+                c.write(String.format("You groan with frustration with the sudden disappearance of %s %s.",
+                                inserted.nameOrPossessivePronoun(), ProseUtils.getPussyWord()));
+            }
+            return insertRandom(c);
+        }
+        return Optional.empty();
+    }
+
+    Optional<Position> assholeMissing(Combat c, Character inserter, Character inserted) {
+        if (inserted.body.getRandom("ass") == null) {
+            if (inserted.human()) {
+                c.write(String.format("With your %s suddenly disappearing, you can't continue riding %s anymore.",
+                                ProseUtils.getAssholeWord(), inserter.getName()));
+            } else {
+                c.write(String.format("%s groans with frustration with the sudden disappearance of %s %s.",
+                                inserted.getName(), inserted.possessiveAdjective(), ProseUtils.getAssholeWord()));
+            }
+            return insertRandom(c);
+        }
+        return Optional.empty();
     }
 }

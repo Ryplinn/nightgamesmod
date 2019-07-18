@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -13,7 +14,7 @@ import nightgames.skills.damage.DamageType;
 
 public class UseCrop extends Skill {
 
-    public UseCrop(Character self) {
+    UseCrop(CharacterType self) {
         super(Item.Crop.getName(), self);
         addTag(SkillTag.usesToy);
         addTag(SkillTag.positioning);
@@ -75,7 +76,7 @@ public class UseCrop extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new UseCrop(user);
+        return new UseCrop(user.getType());
     }
 
     @Override

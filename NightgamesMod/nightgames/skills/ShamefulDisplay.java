@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -9,12 +10,12 @@ import nightgames.combat.Result;
 import nightgames.global.Formatter;
 import nightgames.status.Horny;
 import nightgames.status.Shamed;
-import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
 public class ShamefulDisplay extends Skill {
 
-    public ShamefulDisplay(Character self) {
+    ShamefulDisplay(CharacterType self) {
         super("Shameful Display", self);
     }
 
@@ -43,18 +44,18 @@ public class ShamefulDisplay extends Skill {
         }
         if (getSelf().checkAddiction(AddictionType.MIND_CONTROL, target)) {
             getSelf().unaddictCombat(AddictionType.MIND_CONTROL, 
-                            target, AddictionSymptom.LOW_INCREASE, c);
+                            target, Addiction.LOW_INCREASE, c);
             c.write(getSelf(), "Acting submissively voluntarily reduces Mara's control over " + getSelf().nameDirectObject());
         }
         getSelf().add(c, new Shamed(getSelf()));
         int divisor = target.getMood() == Emotion.dominant ? 3 : 4;
-        target.add(c, Horny.getWithPsycologicalType(getSelf(), target, getSelf().get(Attribute.submission) / divisor, 2, " (Dominant Thrill)"));
+        target.add(c, Horny.getWithPsychologicalType(getSelf(), target, getSelf().get(Attribute.submission) / divisor, 2, " (Dominant Thrill)"));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new ShamefulDisplay(user);
+        return new ShamefulDisplay(user.getType());
     }
 
     @Override

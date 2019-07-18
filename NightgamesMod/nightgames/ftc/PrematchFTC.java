@@ -78,7 +78,7 @@ public class PrematchFTC extends Prematch {
         try {
             Response response = GUI.gui.promptFuture(choices).get();
             if (response == Response.volunteer) {
-                prey = GameState.gameState.characterPool.getPlayer();
+                prey = GameState.getGameState().characterPool.getPlayer();
                 if (!Flag.checkFlag(Flag.didFTC)) {
                     message = "\"That's the spirit! Oh, did I mention the Prey has to be naked"
                                     + " for the duration of the match and can't use any items?\" Lilly grins mischievously as she"

@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
@@ -8,7 +9,7 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.Skill;
 
 public class FairyHeal extends SimpleMasterSkill {
-    public FairyHeal(Character self) {
+    public FairyHeal(CharacterType self) {
         super("Fairy Heal", self);
         addTag(SkillTag.heal);
     }
@@ -38,6 +39,6 @@ public class FairyHeal extends SimpleMasterSkill {
 
     @Override
     public Skill copy(Character user) {
-        return new FairyHeal(user);
+        return new FairyHeal(user.getType());
     }
 }

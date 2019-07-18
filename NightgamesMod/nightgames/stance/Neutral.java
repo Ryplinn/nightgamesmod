@@ -1,22 +1,25 @@
 package nightgames.stance;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Random;
 
+import java.util.Optional;
+
 public class Neutral extends Position {
 
-    public Neutral(Character top, Character bottom) {
+    public Neutral(CharacterType top, CharacterType bottom) {
         super(top, bottom, Stance.neutral);
     }
 
     @Override
     public String describe(Combat c) {
-        if (top.human()) {
-            return "You and " + bottom.getName() + " circle each other cautiously";
+        if (getTop().human()) {
+            return "You and " + getBottom().getName() + " circle each other cautiously";
         } else {
             return String.format("%s and %s circle each other cautiously",
-                            top.subject(), bottom.subject());
+                            getTop().subject(), getBottom().subject());
         }
     }
 
@@ -81,7 +84,7 @@ public class Neutral extends Position {
     }
 
     @Override
-    public Position insertRandomDom(Combat c, Character dom) {
+    public Optional<Position> insertRandomDom(Combat c, Character dom) {
         Character other = getPartner(c, dom);
         boolean fuckPossible = dom.hasDick() && other.hasPussy();
         boolean reversePossible = other.hasDick() && dom.hasPussy();
@@ -101,7 +104,7 @@ public class Neutral extends Position {
     }
 
     @Override
-    public Position insert(Combat c, Character pitcher, Character dom) {
+    public Optional<Position> insert(Combat c, Character pitcher, Character dom) {
         Character catcher = getPartner(c, pitcher);
         Character sub = getPartner(c, pitcher);
         if (pitcher.body.getRandomInsertable() == null || !catcher.hasPussy()) {

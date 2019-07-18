@@ -1,6 +1,6 @@
 package nightgames.global;
 
-import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 
 import java.util.*;
 
@@ -159,15 +159,15 @@ public enum Flag {
         counters.put(f.name(), val);
     }
 
-    public static boolean checkCharacterDisabledFlag(Character self) {
-        return checkFlag(String.format(DISABLED_FORMAT, self.getTrueName()));
+    public static boolean checkCharacterDisabledFlag(CharacterType type) {
+        return checkFlag(String.format(DISABLED_FORMAT, type));
     }
 
-    public static void setCharacterDisabledFlag(Character self) {
-        flag(String.format(DISABLED_FORMAT, self.getTrueName()));
+    public static void setCharacterDisabledFlag(CharacterType type) {
+        flag(String.format(DISABLED_FORMAT, type));
     }
 
-    public static void unsetCharacterDisabledFlag(Character self) {
-        unflag(String.format(DISABLED_FORMAT, self.getTrueName()));
+    public static void unsetCharacterDisabledFlag(CharacterType type) {
+        unflag(String.format(DISABLED_FORMAT, type));
     }
 }

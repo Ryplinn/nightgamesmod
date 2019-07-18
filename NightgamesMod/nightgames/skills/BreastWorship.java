@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -12,7 +13,7 @@ import nightgames.status.BodyFetish;
 import java.util.Optional;
 
 public class BreastWorship extends Skill {
-    public BreastWorship(Character self) {
+    public BreastWorship(CharacterType self) {
         super("Breast Worship", self);
         addTag(SkillTag.usesMouth);
         addTag(SkillTag.pleasure);

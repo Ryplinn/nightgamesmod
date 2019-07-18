@@ -14,8 +14,8 @@ import java.util.List;
 public class YuiTime extends BaseNPCTime {
     private boolean acted;
 
-    YuiTime(Player player) {
-        super(player, GameState.gameState.characterPool.getNPC("Yui"));
+    YuiTime() {
+        super(GameState.getGameState().characterPool.getNPC("Yui"));
         knownFlag = "YuiLoyalty";
         giftedString = "\"Thanks! You're a pretty nice you know?\"";
         giftString = "\"A present? I'm not going to go easy on you even if you bribe me, you know?\"";
@@ -49,17 +49,17 @@ public class YuiTime extends BaseNPCTime {
                                           + "innocence, your conscience won't let you take advantage of her loyalty.");
                 }
                 choose("Train with Yui", nextChoices);
-                npc.gainAffection(player, Math.min(Math.max(0, 20 - npc.getAffection(player)), 5));
-                player.gainAffection(npc, Math.min(Math.max(0, 20 - player.getAffection(npc)), 5));
+                npc.gainAffection(getPlayer(), Math.min(Math.max(0, 20 - npc.getAffection(getPlayer())), 5));
+                getPlayer().gainAffection(npc, Math.min(Math.max(0, 20 - getPlayer().getAffection(npc)), 5));
                 Flag.unflag(Flag.YuiAvailable);
                 acted = true;
-                player.gain(Item.Tripwire);
-                player.gain(Item.Rope);
-                if (player.getPure(Attribute.ninjutsu) >= 1) {
-                    player.gain(Item.Needle, 3);
+                getPlayer().gain(Item.Tripwire);
+                getPlayer().gain(Item.Rope);
+                if (getPlayer().getPure(Attribute.ninjutsu) >= 1) {
+                    getPlayer().gain(Item.Needle, 3);
                 }
-                if (player.getPure(Attribute.ninjutsu) >= 3) {
-                    player.gain(Item.SmokeBomb, 2);
+                if (getPlayer().getPure(Attribute.ninjutsu) >= 3) {
+                    getPlayer().gain(Item.SmokeBomb, 2);
                 }
             } else {
                 GUI.gui.message("You head to Yui's hideout, but find it empty. She must be out doing something. It would be a lot easier to track her down if she "
@@ -71,7 +71,7 @@ public class YuiTime extends BaseNPCTime {
         } else if (choice.startsWith("Train")) {
             GUI.gui.message("Yui's skills at subterfuge turn out to be as strong as she claimed. She's also quite a good teacher. Apparently she helped train her "
                                   + "younger sister, so she's used to it. Nothing she teaches you is overtly sexual, but you can see some useful applications for the Games.");
-            player.modAttributeDontSaveData(Attribute.ninjutsu, 1);
+            getPlayer().modAttributeDontSaveData(Attribute.ninjutsu, 1);
             Flag.flag("Trained" + Attribute.ninjutsu.name());
             choose("Leave", nextChoices);
         }

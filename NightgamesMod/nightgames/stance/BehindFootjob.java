@@ -5,9 +5,10 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 
-public class BehindFootjob extends AbstractBehindStance {
+public class BehindFootjob extends Position {
     public BehindFootjob(Character top, Character bottom) {
         super(top, bottom, Stance.behindfootjob);
+        this.facingType = FacingType.BEHIND;
     }
 
     @Override
@@ -135,7 +136,6 @@ public class BehindFootjob extends AbstractBehindStance {
             struggler.body.pleasure(top, top.body.getRandom("feet"), struggler.body.getRandomPussy(), Random
                             .random(6, 11), c);
         }
-        super.struggle(c, struggler);
     }
 
     @Override
@@ -143,6 +143,5 @@ public class BehindFootjob extends AbstractBehindStance {
         c.write(escapee, Formatter.format("{self:SUBJECT-ACTION:try} to escape {other:name-possessive} hold, but with"
                         + " {other:direct-object} behind {self:direct-object} with {other:possessive} long legs wrapped around {self:possessive} waist securely, there is nothing {self:pronoun} can do.",
                         escapee, top));
-        super.escape(c, escapee);
     }
 }

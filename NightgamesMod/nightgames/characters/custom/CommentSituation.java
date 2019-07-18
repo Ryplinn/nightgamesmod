@@ -27,6 +27,7 @@ import com.google.gson.JsonParseException;
 
 import nightgames.Resources.ResourceLoader;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.json.JsonUtils;
 import nightgames.requirements.Requirement;
@@ -133,7 +134,7 @@ public enum CommentSituation {
                         .max(Comparator.comparingInt(CommentSituation::getPriority)).orElse(NO_COMMENT);
     }
 
-    public static Map<CommentSituation, String> getDefaultComments(String npcType) {
+    public static Map<CommentSituation, String> getDefaultComments(CharacterType npcType) {
         return DEFAULT_COMMENTS.getOrDefault(npcType, Collections.emptyMap());
     }
 }

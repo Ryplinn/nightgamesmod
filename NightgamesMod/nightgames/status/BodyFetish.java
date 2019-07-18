@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -30,11 +31,11 @@ import nightgames.skills.Thrust;
 import nightgames.skills.WildThrust;
 
 public class BodyFetish extends DurationStatus {
-    Character origin;
+    private CharacterType origin;
     public String part;
     public double magnitude;
 
-    public BodyFetish(Character affected, Character origin, String part, double magnitude) {
+    public BodyFetish(CharacterType affected, CharacterType origin, String part, double magnitude) {
         super(Formatter.capitalizeFirstLetter(part) + " Fetish", affected, 10);
         flag(Stsflag.bodyfetish);
         this.origin = origin;
@@ -42,6 +43,10 @@ public class BodyFetish extends DurationStatus {
         this.magnitude = magnitude;
         flag(Stsflag.debuff);
         flag(Stsflag.purgable);
+    }
+
+    private Character getOrigin() {
+        return origin.fromPoolGuaranteed();
     }
 
     @Override
@@ -60,7 +65,7 @@ public class BodyFetish extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        String desc = "";
+        String desc;
         if (magnitude < .26) {
             desc = "slight ";
         } else if (magnitude < .51) {
@@ -71,17 +76,17 @@ public class BodyFetish extends DurationStatus {
             desc = "overwhelming ";
         }
         String magString = Formatter.formatDecimal(magnitude);
-        if (affected.human()) {
-            if (origin != null && c != null && c.getOpponent(affected) == origin) {
+        if (getAffected().human()) {
+            if (origin != null && c != null && c.getOpponent(getAffected()).equals(getOrigin())) {
                 return Formatter.capitalizeFirstLetter(
-                                desc + "fantasies of worshipping " + origin.nameOrPossessivePronoun() + " " + part
+                                desc + "fantasies of worshipping " + getOrigin().nameOrPossessivePronoun() + " " + part
                                                 + " run through your mind (" + magString + ").");
             } else {
                 return Formatter.capitalizeFirstLetter(desc + "fantasies of worshipping " + part
                                 + " run through your mind (" + magString + ").");
             }
         } else {
-            return affected.getName() + " is affected by " + desc + part + " fetish (" + magString + ").";
+            return getAffected().getName() + " is affected by " + desc + part + " fetish (" + magString + ").";
         }
     }
 
@@ -90,15 +95,15 @@ public class BodyFetish extends DurationStatus {
         if (magnitude <= .99) {
             return Collections.emptySet();
         } else if (part.equals("pussy")) {
-            return Arrays.asList((Skill) new PussyWorship(affected));
+            return Collections.singletonList(new PussyWorship(affected));
         } else if (part.equals("breasts")) {
-            return Arrays.asList((Skill) new BreastWorship(affected));
+            return Collections.singletonList(new BreastWorship(affected));
         } else if (part.equals("feet")) {
-            return Arrays.asList((Skill) new FootWorship(affected));
+            return Collections.singletonList(new FootWorship(affected));
         } else if (part.equals("ass")) {
-            return Arrays.asList((Skill) new Anilingus(affected));
+            return Collections.singletonList(new Anilingus(affected));
         } else if (part.equals("cock")) {
-            return Arrays.asList((Skill) new Blowjob(affected), new ReverseAssFuck(affected), new ReverseFly(affected),
+            return Arrays.asList(new Blowjob(affected), new ReverseAssFuck(affected), new ReverseFly(affected),
                             new ReverseCarry(affected), new Invitation(affected), new Thrust(affected),
                             new Piston(affected), new Grind(affected), new SpiralThrust(affected),
                             new CockWorship(affected), new WildThrust(affected));
@@ -183,7 +188,7 @@ public class BodyFetish extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new BodyFetish(newAffected, newOther, part, magnitude);
+        return new BodyFetish(newAffected.getType(), newOther.getType(), part, magnitude);
     }
 
     @Override  public JsonObject saveToJson() {

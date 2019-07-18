@@ -74,7 +74,7 @@ public class Drained extends AttributeBuff {
         if (newValue < 0) {
             return "";
         } else {
-            String message = "";
+            String message;
             List<String> stolenSynonyms = Arrays.asList("stolen", "robbed", "plundered", "hijacked", "drained", "diverted");
             List<String> boostingSynonyms = Arrays.asList("augmenting", "boosting", "bolstering", "reinforcing", "strengthing", "improving");
             if (newValue <= 2) {
@@ -87,8 +87,8 @@ public class Drained extends AttributeBuff {
                 // large
                 message = "{self:subject-action:have} %s some of {other:name-possessive} %s, greatly %s {self:possessive} %s.";
             }
-            return Formatter.format(message, affected, other, Random.pickRandom(stolenSynonyms).get(), modded.getDrainedDO(),
-                            Random.pickRandom(boostingSynonyms).get(), modded.getDrainerOwnDO());
+            return Formatter.format(message, affected, other, Random.pickRandomGuaranteed(stolenSynonyms), modded.getDrainedDO(),
+                            Random.pickRandomGuaranteed(boostingSynonyms), modded.getDrainerOwnDO());
         }
     }
 
@@ -140,7 +140,7 @@ public class Drained extends AttributeBuff {
         assert other.modded == modded;
         setDuration(Math.max(other.getDuration(), getDuration()));
         value += other.value;
-        name = String.format("%s %+d", modded.toString(), value);
+        name = String.format("%s %+d", modded.displayName(), value);
     }
 
     @Override

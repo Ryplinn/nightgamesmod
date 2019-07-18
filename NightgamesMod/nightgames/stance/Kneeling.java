@@ -3,9 +3,10 @@ package nightgames.stance;
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
 
-public class Kneeling extends AbstractFacingStance {
+public class Kneeling extends Position {
     public Kneeling(Character top, Character bottom) {
         super(top, bottom, Stance.kneeling);
+        facingType = FacingType.FACING;
     }
 
     @Override

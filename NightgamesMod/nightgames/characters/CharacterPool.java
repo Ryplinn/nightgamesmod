@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
  * Tracks Characters in current game.
  */
 public class CharacterPool {
-    public Map<String, NPC> characterPool;   // All starting and unlockable characters
-    public Set<NPC> debugChars;
+    public Map<CharacterType, NPC> characterPool;   // All starting and unlockable characters
+    public Set<CharacterType> debugChars;
     public Player human;
 
     protected CharacterPool() {
@@ -93,19 +93,14 @@ public class CharacterPool {
         this(player, npcs, new HashSet<>());
     }
 
-    public CharacterPool(Player player, Collection<NPC> npcs, Collection<NPC> debugNpcs) {
+    private CharacterPool(Player player, Collection<NPC> npcs, Collection<CharacterType> debugNpcs) {
         human = player;
         characterPool = npcs.stream().collect(Collectors.toMap(NPC::getType, npc -> npc));
-        debugChars = new HashSet<>();
         debugChars = new HashSet<>(debugNpcs);
     }
 
     public Set<NPC> availableNpcs() {
         return characterPool.values().stream().filter(npc -> npc.available).collect(Collectors.toSet());
-    }
-
-    private Optional<NpcConfiguration> findNpcConfig(String type, Optional<StartConfiguration> startConfig) {
-        return startConfig.flatMap(config -> config.findNpcConfig(type));
     }
 
     public Set<Character> everyone() {
@@ -115,9 +110,12 @@ public class CharacterPool {
     }
 
     public void newChallenger(NPC challenger) {
+        newChallenger(challenger, human.getLevel());
+    }
+
+    public void newChallenger(NPC challenger, int targetLevel) {
         if (!availableNpcs().contains(challenger)) {
             challenger.available = true;
-            int targetLevel = human.getLevel();
             if (challenger.has(Trait.leveldrainer)) {
                 targetLevel -= 4;
             }
@@ -127,7 +125,7 @@ public class CharacterPool {
 
     public NPC getNPC(String name) {
         for (Character c : allNPCs()) {
-            if (c.getType().equalsIgnoreCase(name)) {
+            if (c.getType().hasType(name)) {
                 return (NPC) c;
             }
         }
@@ -136,7 +134,7 @@ public class CharacterPool {
     }
 
     public boolean characterTypeInGame(String type) {
-        return availableNpcs().stream().anyMatch(c -> type.equals(c.getType()));
+        return availableNpcs().stream().anyMatch(c -> c.getType().hasType(type));
     }
 
     public Collection<NPC> allNPCs() {
@@ -148,14 +146,22 @@ public class CharacterPool {
                         .orElseThrow(() -> new NoSuchElementException("Could not find particpant " + name));
     }
 
-    public Character getCharacterByType(String type) {
-        if (type.equals(human.getType())) {
+    public Character getCharacterByType(String typeName) {
+        return getCharacterByType(CharacterType.get(typeName));
+    }
+
+    Character getCharacterByType(CharacterType type) {
+        if (human.getType().equals(type)) {
             return human;
         }
         return getNPCByType(type);
     }
 
-    public NPC getNPCByType(String type) {
+    public NPC getNPCByType(String typeName) {
+        return getNPCByType(CharacterType.get(typeName));
+    }
+
+    private NPC getNPCByType(CharacterType type) {
         NPC results = characterPool.get(type);
         if (results == null) {
             System.err.println("failed to find NPC for type " + type);
@@ -185,5 +191,17 @@ public class CharacterPool {
 
     public void updatePlayer(Player player) {
         human = player;
+    }
+
+    public List<NPC> debugChars() {
+        return debugChars.stream().map(this::getNPCByType).collect(Collectors.toList());
+    }
+
+    public static class CharacterNotFoundException extends RuntimeException {
+        private static final long serialVersionUID = 4849211069716366301L;
+
+        public CharacterNotFoundException(CharacterType type) {
+            super("Character type " + type + " not found in character pool!");
+        }
     }
 }

@@ -12,8 +12,12 @@ import nightgames.items.clothing.ClothingSlot;
 import nightgames.status.AttributeBuff;
 import nightgames.status.Charmed;
 import nightgames.status.Stsflag;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class BreastsPart extends GenericBodyPart {
     public static BreastsPart flat = (BreastsPart) new BreastsPart().applyMod(new SizeMod(0));
@@ -70,7 +74,7 @@ public class BreastsPart extends GenericBodyPart {
         return (.75 + getSize() * .2) * super.getSensitivity(self, target);
     }
 
-    public static BreastsPart maximumSize() {
+    static BreastsPart maximumSize() {
         return h;
     }
 
@@ -86,18 +90,18 @@ public class BreastsPart extends GenericBodyPart {
         }
     }
 
-    public static String synonyms[] = {"breasts", "tits", "boobs"};
+    private static List<String> synonyms = Arrays.asList("breasts", "tits", "boobs");
 
     @Override
     public void describeLong(StringBuilder b, Character c) {
         if (c.hasPussy() || getSize() > 0) {
             b.append(Formatter.capitalizeFirstLetter(fullDescribe(c)));
-            b.append(" adorn " + c.nameOrPossessivePronoun() + " chest.");
+            b.append(" adorn ").append(c.nameOrPossessivePronoun()).append(" chest.");
         }
     }
 
     protected String modlessDescription(Character c) {
-        return Random.pickRandom(synonyms).get();
+        return Random.pickRandomGuaranteed(synonyms);
     }
 
     @Override
@@ -118,11 +122,13 @@ public class BreastsPart extends GenericBodyPart {
         if (self.has(Trait.lactating) && target.isType("mouth")) {
             if (self.has(Trait.magicmilk)) {
                 float addictionLevel;
-                AddictionSymptom addiction;
-                opponent.addict(c, AddictionType.MAGIC_MILK, self, AddictionSymptom.LOW_INCREASE);
-                addiction = opponent.getAddiction(AddictionType.MAGIC_MILK).get();
-                addictionLevel = addiction.getMagnitude();
-                if (addictionLevel < AddictionSymptom.LOW_THRESHOLD) {
+                AddictionSymptom symptom;
+                opponent.addict(c, AddictionType.MAGIC_MILK, self, Addiction.LOW_INCREASE);
+                Addiction addiction = opponent.getAddiction(AddictionType.MAGIC_MILK, self)
+                                .orElseThrow(() -> new RuntimeException("Couldn't find the addiction we just created!"));
+                symptom = addiction.createTrackingSymptom();
+                addictionLevel = symptom.getCombatMagnitude();
+                if (addictionLevel < Addiction.Severity.LOW.threshold) {
                     // not addicted
                     c.write(opponent,
                                     Formatter.format("{self:NAME-POSSESSIVE} milk makes the blood surge from {other:name-possessive} head into {other:possessive} crotch, leaving {other:direct-object} light-headed and horny",
@@ -135,9 +141,9 @@ public class BreastsPart extends GenericBodyPart {
                 } else if (addictionLevel < .45f) {
                     // addicted
                     c.write(opponent,
-                                    Formatter.format("As Cassie's milk dribbles down her breasts, you awake to a powerful need for her cream. Ignoring the potential aphrodisiac effectes, you quickly capture her nipples in your lips and relieve your parched throat with her delicious milk.",
+                                    Formatter.format("As Cassie's milk dribbles down her breasts, you awake to a powerful need for her cream. Ignoring the potential aphrodisiac effects, you quickly capture her nipples in your lips and relieve your parched throat with her delicious milk.",
                                                     self, opponent));
-                } else if (addictionLevel < AddictionSymptom.HIGH_THRESHOLD) {
+                } else if (addictionLevel < Addiction.Severity.HIGH.threshold) {
                     // dependent
                     c.write(opponent,
                                     Formatter.format("{other:NAME} desperately {other:action:suck|sucks} at {self:name-possessive} milky teats as soon as they're in front of {other:direct-object}. "
@@ -155,12 +161,11 @@ public class BreastsPart extends GenericBodyPart {
                                     self, opponent));
     
                 }
-                if (addiction != null)
-                    opponent.temptNoSkill(c, self, this, (int) (15 + addiction.getMagnitude() * 35));
+                opponent.temptNoSkill(c, self, this, (int) (15 + symptom.getCombatMagnitude() * 35));
     
                 if (opponent.is(Stsflag.magicmilkcraving)) {
                     // temporarily relieve craving
-                    addiction.alleviateCombat(c, AddictionSymptom.LOW_INCREASE);
+                    symptom.alleviateCombat(c, Addiction.LOW_INCREASE);
                 }
                 if (c.getCombatantData(opponent) != null) {
                     int timesDrank = c.getCombatantData(opponent)
@@ -175,7 +180,7 @@ public class BreastsPart extends GenericBodyPart {
                                 Formatter.format("The power seems to leave {other:name-possessive} body as {other:pronoun-action:sip|sips} {self:possessive} cloying cream.",
                                                 self, opponent));
                 opponent.weaken(c, opponent.getStamina().max() / 10);
-                opponent.add(c, new AttributeBuff(opponent, Attribute.power, -Random.random(1, 3), 20));
+                opponent.add(c, new AttributeBuff(opponent.getType(), Attribute.power, -Random.random(1, 3), 20));
             }
             if (self.has(Trait.Pacification)) {
                 c.write(opponent,
@@ -183,7 +188,7 @@ public class BreastsPart extends GenericBodyPart {
                                                 + " {self:pronoun} seems more and more impossibly beautiful to {other:possessive} eyes."
                                                 + " Why would {other:pronoun} want to mar such perfect beauty?",
                                                 self, opponent));
-                opponent.add(c, new Charmed(opponent, 2).withFlagRemoved(Stsflag.mindgames));
+                opponent.add(c, new Charmed(opponent.getType(), 2).withFlagRemoved(Stsflag.mindgames));
             }
             if (self.has(Trait.PheromonedMilk) && !opponent.has(Trait.Rut)) {
                 c.write(opponent, Formatter.format("<b>Drinking {self:possessive} breast milk sends {other:direct-object} into a chemically induced rut!</b>",

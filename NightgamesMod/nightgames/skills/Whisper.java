@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -12,7 +13,7 @@ import nightgames.status.Enthralled;
 
 public class Whisper extends Skill {
 
-    public Whisper(Character self) {
+    public Whisper(CharacterType self) {
         super("Whisper", self);
     }
 
@@ -45,7 +46,7 @@ public class Whisper extends Skill {
         if (getSelf().has(Trait.darkpromises) && roll == 4 && getSelf().canSpend(15) && !target.wary()) {
             getSelf().spendMojo(c, 15);
             writeOutput(c, Result.special, target);
-            target.add(c, new Enthralled(target, getSelf(), 4));
+            target.add(c, new Enthralled(target.getType(), getSelf(), 4));
         } else {
             writeOutput(c, Result.normal, target);
         }
@@ -61,7 +62,7 @@ public class Whisper extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Whisper(user);
+        return new Whisper(user.getType());
     }
 
     @Override

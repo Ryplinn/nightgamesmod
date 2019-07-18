@@ -5,12 +5,13 @@ import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
 import nightgames.nskills.tags.SkillTag;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 public class DarkKiss extends Skill {
 
-    public DarkKiss(Character self) {
+    DarkKiss(Character self) {
         super("Dark Kiss", self, 3);
         addTag(SkillTag.dark);
     }
@@ -27,7 +28,7 @@ public class DarkKiss extends Skill {
 
     @Override
     public boolean usable(Combat c, Character target) {
-        return getSelf().checkAddiction(AddictionType.CORRUPTION)
+        return getSelf().checkAnyAddiction(AddictionType.CORRUPTION)
                         && c.getStance().kiss(getSelf(), target)
                         && getSelf().canAct();
     }
@@ -44,14 +45,15 @@ public class DarkKiss extends Skill {
                         + " has imbued you with stirs, and greedily draws %s willpower in through your connection, growing"
                         + " more powerful.", target.nameOrPossessivePronoun(), target.possessiveAdjective()));
 
-        AddictionSymptom add = getSelf().getAddiction(AddictionType.CORRUPTION).orElseThrow(() -> new SkillUnusableException(this));
-        float mag = add.getMagnitude();
+        Addiction add = getSelf().getAnyAddiction(AddictionType.CORRUPTION).orElseThrow(() -> new SkillUnusableException(this));
+        // TODO: Review Corruption's use of combat magnitude. I'm not sure its effect are consistent.
+        float mag = add.activeTracker().map(AddictionSymptom::getCombatMagnitude).orElse(0.f);
         int min = (int) (mag * 3);
         int mod = (int) (mag * 8);
         int amt = min + Random.random(mod);
         target.loseWillpower(c, amt, false);
-        add.alleviateCombat(c, AddictionSymptom.HIGH_INCREASE);
-        getSelf().addict(c, AddictionType.CORRUPTION, add.getCause(), AddictionSymptom.LOW_INCREASE);
+        add.activeTracker().ifPresent(symptom -> symptom.alleviateCombat(c, Addiction.HIGH_INCREASE));
+        getSelf().addict(c, AddictionType.CORRUPTION, add.getCause(), Addiction.LOW_INCREASE);
         return true;
     }
 

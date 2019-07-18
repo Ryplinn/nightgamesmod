@@ -7,12 +7,13 @@ import nightgames.combat.Result;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.status.Hypersensitive;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 public class DemandArousal extends Skill {
 
-    public DemandArousal(Character self) {
+    DemandArousal(Character self) {
         super("Demand Arousal", self, 4);
     }
 
@@ -34,9 +35,10 @@ public class DemandArousal extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        AddictionSymptom addict = target.getAddiction(AddictionType.MIND_CONTROL)
-                            .get();
-        int dmg = (int) ((20 + Random.randomdouble() * 20) * addict.getMagnitude());
+        Addiction addict = target.getAddiction(AddictionType.MIND_CONTROL, getSelf())
+                        .orElseThrow(() -> new SkillUnusableException(this));
+        int dmg = (int) ((20 + Random.randomdouble() * 20) * addict.activeTracker()
+                        .map(AddictionSymptom::getCombatMagnitude).orElse(0.f));
         float alleviation;
 
         String msg = Formatter.format("\"<i><b>{other:name}. Listen to me.</b></i>\" {self:NAME-POSSESSIVE}"
@@ -51,7 +53,7 @@ public class DemandArousal extends Skill {
                                 + " skin becomes incredibly sensitive. Once {self:name} has stopped speaking,"
                                 + " {other:pronoun-action:are|is} aroused out of {other:possessive} mind."
                                 , getSelf(), target);
-                alleviation = AddictionSymptom.MED_INCREASE;
+                alleviation = Addiction.MED_INCREASE;
                 target.add(c, new Hypersensitive(target, 2));
                 break;
             case LOW:
@@ -62,18 +64,18 @@ public class DemandArousal extends Skill {
                                 + " {self:subject-action:speak|speaks}.", getSelf(), target,
                                 target.hasDick() ? "dick getting hard" : target.hasPussy()
                                                 ? "pussy getting wet" : "nipples tingling");
-                alleviation = AddictionSymptom.LOW_INCREASE;
+                alleviation = Addiction.LOW_INCREASE;
                 break;
             case MED:
                 msg = Formatter.format("resonate powerfully in your mind. \"<i>You are getting"
                                 + " very excited, {other:name}. Your {other:main-genitals} obey me."
                                 + " You </i>will<i> cum for me, {other:name}.</i>\"", getSelf(), target);
-                alleviation = AddictionSymptom.MED_INCREASE * .67f;
+                alleviation = Addiction.MED_INCREASE * .67f;
                 break;
             case NONE:
             default:
                 alleviation = 0.f;
-                msg = Formatter.format("<b>[[[DemandArousal executed even though the player isn't noticably addicted...]]]</b>",
+                msg = Formatter.format("<b>[[[DemandArousal executed even though the player isn't noticeably addicted...]]]</b>",
                                 getSelf(), target);
                 break;
         }

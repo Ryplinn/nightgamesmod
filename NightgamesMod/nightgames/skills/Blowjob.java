@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.mods.ExtendedTonguedMod;
 import nightgames.characters.trait.Trait;
@@ -18,7 +19,7 @@ public class Blowjob extends Skill {
         super(name, self);
     }
 
-    public Blowjob(Character self) {
+    public Blowjob(CharacterType self) {
         this("Blow", self);
         addTag(SkillTag.usesMouth);
         addTag(SkillTag.pleasure);
@@ -27,7 +28,7 @@ public class Blowjob extends Skill {
 
     @Override
     public boolean usable(Combat c, Character target) {
-        boolean canUse = !c.getStance().isBeingFaceSatBy(c, getSelf(), target) && getSelf().canAct();
+        boolean canUse = !c.getStance().isBeingFaceSatBy(getSelf(), target) && getSelf().canAct();
         return ((target.crotchAvailable() && target.hasDick() && c.getStance().oral(getSelf(), target)
                         && c.getStance().front(getSelf()) && canUse)
                         || (getSelf().canRespond() && isVaginal(c, target)));
@@ -54,14 +55,14 @@ public class Blowjob extends Skill {
     }
 
     public boolean isFacesitting(Combat c, Character target) {
-        return c.getStance().isBeingFaceSatBy(c, getSelf(), target);
+        return c.getStance().isBeingFaceSatBy(getSelf(), target);
     }
 
     @Override
     public int getMojoBuilt(Combat c) {
         if (isVaginal(c, c.getOpponent(getSelf()))) {
             return 10;
-        } else if (c.getStance().isBeingFaceSatBy(c, getSelf(), c.getOpponent(getSelf()))) {
+        } else if (c.getStance().isBeingFaceSatBy(getSelf(), c.getOpponent(getSelf()))) {
             return 0;
         } else {
             return 5;

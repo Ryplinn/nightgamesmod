@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.arms.skills.Grab;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -15,7 +16,7 @@ import nightgames.status.Stsflag;
 import java.util.Optional;
 
 public class Escape extends Skill {
-    public Escape(Character self) {
+    public Escape(CharacterType self) {
         super("Escape", self);
         addTag(SkillTag.positioning);
         addTag(SkillTag.escaping);
@@ -35,7 +36,7 @@ public class Escape extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        if (blockedByCollar(c, target)) {
+        if (blockedByCollar(c)) {
             return false;
         }
         if (getSelf().bound()) {
@@ -86,14 +87,14 @@ public class Escape extends Skill {
             }
             c.setStance(new Neutral(getSelf(), c.getOpponent(getSelf())), getSelf(), true);
         } else {
-            c.getStance().struggle(c, getSelf());
+            c.escape(getSelf(), c.getStance());
             getSelf().struggle();
             return false;
         }
         return true;
     }
 
-    private boolean blockedByCollar(Combat c, Character target) {
+    private boolean blockedByCollar(Combat c) {
         Optional<String> compulsion = Compulsive.describe(c, getSelf(), Situation.PREVENT_ESCAPE);
         if (compulsion.isPresent()) {
             c.write(getSelf(), compulsion.get());
@@ -111,7 +112,7 @@ public class Escape extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Escape(user);
+        return new Escape(user.getType());
     }
 
     @Override

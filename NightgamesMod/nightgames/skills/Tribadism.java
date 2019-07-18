@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -11,27 +12,26 @@ import nightgames.stance.TribadismStance;
 
 public class Tribadism extends Skill {
 
-    public Tribadism(String name, Character self, int cooldown) {
+    public Tribadism(String name, CharacterType self, int cooldown) {
         super(name, self, cooldown);
         addTag(SkillTag.pleasure);
         addTag(SkillTag.fucking);
         addTag(SkillTag.petDisallowed);
     }
 
-    public Tribadism(Character self) {
+    public Tribadism(CharacterType self) {
         this("Tribadism", self, 0);
     }
 
     public BodyPart getSelfOrgan() {
-        BodyPart res = getSelf().body.getRandomPussy();
-        return res;
+        return getSelf().body.getRandomPussy();
     }
 
     public BodyPart getTargetOrgan(Character target) {
         return target.body.getRandomPussy();
     }
 
-    public boolean fuckable(Combat c, Character target) {
+    private boolean fuckable(Combat c, Character target) {
         BodyPart selfO = getSelfOrgan();
         BodyPart targetO = getTargetOrgan(target);
         boolean possible = selfO != null && targetO != null;
@@ -75,7 +75,7 @@ public class Tribadism extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Tribadism(user);
+        return new Tribadism(user.getType());
     }
 
     @Override
@@ -103,12 +103,11 @@ public class Tribadism extends Skill {
         BodyPart selfO = getSelfOrgan();
         BodyPart targetO = getTargetOrgan(target);
         if (modifier == Result.normal) {
-            String message = String.format("%s grabs %s leg and slides her crotch against %s."
+            return String.format("%s grabs %s leg and slides her crotch against %s."
                             + " She then grinds her %s against %s wet %s.", getSelf().subject(),
                             target.nameOrPossessivePronoun(), target.possessivePronoun(),
                             selfO.describe(getSelf()), target.possessiveAdjective(),
                             targetO.describe(getSelf()));
-            return message;
         }
         return "Bad stuff happened";
     }

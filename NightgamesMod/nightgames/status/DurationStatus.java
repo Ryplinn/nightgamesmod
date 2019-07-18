@@ -1,6 +1,6 @@
 package nightgames.status;
 
-import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.requirements.DurationRequirement;
@@ -8,9 +8,9 @@ import nightgames.requirements.DurationRequirement;
 public abstract class DurationStatus extends Status {
     private DurationRequirement req;
 
-    public DurationStatus(String name, Character affected, int duration) {
+    public DurationStatus(String name, CharacterType affected, int duration) {
         super(name, affected);
-        if (affected != null && affected.has(Trait.PersonalInertia)) {
+        if (getAffected().has(Trait.PersonalInertia)) {
             duration = Math.round(1.33f * duration);
         }
         req = new DurationRequirement(duration);
@@ -33,7 +33,8 @@ public abstract class DurationStatus extends Status {
     }
 
     public void tick(int i) {
-        if (affected.has(Trait.QuickRecovery) && flags.contains(Stsflag.disabling)) {
+        if (affected != null && getAffected().has(Trait.QuickRecovery) && flags
+                        .contains(Stsflag.disabling)) {
             i *= 2;
         }
         req.tick(i);

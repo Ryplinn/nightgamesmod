@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
@@ -14,7 +15,7 @@ import nightgames.combat.Combat;
  */
 public class Detected extends DurationStatus {
 
-    public Detected(Character affected, int duration) {
+    public Detected(CharacterType affected, int duration) {
         super("Detected", affected, duration);
         flag(Stsflag.detected);
     }
@@ -91,7 +92,7 @@ public class Detected extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Detected(newAffected, getDuration());
+        return new Detected(newAffected.getType(), getDuration());
     }
 
      @Override public JsonObject saveToJson() {

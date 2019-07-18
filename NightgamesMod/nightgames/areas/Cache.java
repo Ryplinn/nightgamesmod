@@ -320,7 +320,7 @@ public class Cache implements Deployable {
     }
 
     @Override
-    public Character owner() {
+    public Character getOwner() {
         // TODO Auto-generated method stub
         return null;
     }

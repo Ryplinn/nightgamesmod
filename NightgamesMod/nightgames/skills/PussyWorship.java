@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 public class PussyWorship extends Skill {
 
-    public PussyWorship(Character self) {
+    public PussyWorship(CharacterType self) {
         super("Pussy Worship", self);
         addTag(SkillTag.usesMouth);
         addTag(SkillTag.pleasure);
@@ -75,7 +76,7 @@ public class PussyWorship extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new PussyWorship(user);
+        return new PussyWorship(user.getType());
     }
 
     @Override
@@ -95,7 +96,7 @@ public class PussyWorship extends Skill {
                                         + "You carefully form a seal with your mouth and {other:possessive} netherlips, and stick your tongue into {other:possessive} moist slit. "
                                         + "Minutes pass and you lose yourself alternating between tonguing {other:name-possessive} divine cunt while idly playing with yourself and "
                                         + "sucking on {other:possessive} fleshy nib. Finally, {other:subject} "
-                                        + "pushes your head away from {other:possessive} drentched hole and you finally regain your senses.",
+                                        + "pushes your head away from {other:possessive} drenched hole and you finally regain your senses.",
                         getSelf(), target);
     }
 

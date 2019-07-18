@@ -6,7 +6,7 @@ import nightgames.global.Flag;
 import nightgames.global.GameState;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
-import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.Addiction;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,20 +18,20 @@ public class AddictionRemoval extends Activity {
     private static final String NO_ADDICTION = "The woman refuses your money. \"You clearly don't have any addictions. "
                     + "Would you like a referral to counseling instead?\"";
 
-    AddictionRemoval(Player player) {
-        super("Addiction Removal", player);
+    AddictionRemoval() {
+        super("Addiction Removal");
     }
 
     @Override
     public boolean known() {
-        return Flag.checkFlag(Flag.AddictionAdvice) && GameState.gameState.characterPool.getPlayer().checkAddiction();
+        return Flag.checkFlag(Flag.AddictionAdvice) && GameState.getGameState().characterPool.getPlayer().checkAnyAddiction();
     }
 
     @Override
     public void visit(String choice, int page, List<LabeledValue<String>> nextChoices, ActivityInstance instance) {
         GUI.gui.clearText();
         GUI.gui.clearCommand();
-        Optional<AddictionSymptom> addiction = player.getStrongestAddiction();
+        Optional<Addiction> addiction = getPlayer().getStrongestAddiction();
         switch (choice) {
             case "Start":
                 GUI.gui.message("You walk to the place Aesop told you about "
@@ -43,9 +43,9 @@ public class AddictionRemoval extends Activity {
                                 + " without side-effects, although very strong addictions may require several treatments."
                                 + "\n\n(this is a placeholder -- note that these treatments only affect your current"
                                 + " strongest addiction)");
-                if (player.money >= 5000) {
+                if (getPlayer().money >= 5000) {
                     choose(UNSAFE_OPT, nextChoices);
-                    if (player.money >= 15000) {
+                    if (getPlayer().money >= 15000) {
                         choose(SAFE_OPT, nextChoices);
                     } else {
                         GUI.gui.message("\n\nA quick look at your finances reveal that only the risky option is"
@@ -57,7 +57,7 @@ public class AddictionRemoval extends Activity {
                 break;
             case UNSAFE_OPT:
                 if (addiction.isPresent()) {
-                    player.money -= 5000;
+                    getPlayer().money -= 5000;
                     GUI.gui.message("Nervously, you handed over the money for the overload treatment. You don't "
                                     + "remember what happened next, but you do know that now your addiction is far "
                                     + "stronger than before. Let's hope this works.");
@@ -68,10 +68,10 @@ public class AddictionRemoval extends Activity {
                 break;
             case SAFE_OPT:
                 if (addiction.isPresent()) {
-                    player.money -= 15000;
+                    getPlayer().money -= 15000;
                     GUI.gui.message("You dole out the mountain of cash and are taken to the back for your treatment."
                                     + " When you emerge, you are completely free of your addiction.");
-                    player.removeStatusImmediately(addiction.get());
+                    getPlayer().removeAddiction(addiction.get());
                 } else {
                     GUI.gui.message(NO_ADDICTION);
                 }

@@ -2,6 +2,7 @@ package nightgames.stance;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -34,9 +35,10 @@ public class IncubusEmbrace extends MaledomSexStance {
     }
 
     @Override
-    public void checkOngoing(Combat c) {
+    public Optional<Position> checkOngoing(Combat c) {
         super.checkOngoing(c);
-        if (c.getStance() != this) return;
+        if (c.getStance() != this)
+            return null;
         
         if (flag != null && statusBuilder != null && !bottom.is(flag)) {
             bottom.add(c, statusBuilder.get());
@@ -46,6 +48,7 @@ public class IncubusEmbrace extends MaledomSexStance {
                 fb.resolve(c, bottom);
             }
         }
+        return null;
     }
     
     @Override

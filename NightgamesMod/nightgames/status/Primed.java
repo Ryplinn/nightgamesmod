@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
@@ -13,7 +14,7 @@ public class Primed extends Status {
 
     private int charges;
     
-    public Primed(Character affected, int charges) {
+    public Primed(CharacterType affected, int charges) {
         super("Primed", affected);
         this.charges = charges;
         flag(Stsflag.primed);
@@ -28,19 +29,19 @@ public class Primed extends Status {
     @Override
     public void tick(Combat c) {
         if (charges <= 0)
-            affected.removelist.add(this);
+            getAffected().removelist.add(this);
     }
     
     @Override
     public String initialMessage(Combat c, Optional<Status> replacement) {
-        if (isPrimed(affected, 1))
+        if (isPrimed(getAffected(), 1))
             return "";
-        return String.format("%s storing time charges.", affected.subjectAction("are", "is"));
+        return String.format("%s storing time charges.", getAffected().subjectAction("are", "is"));
     }
 
     @Override
     public String describe(Combat c) {
-        if(affected.human()){
+        if(getAffected().human()){
             return "You have "+charges+" time charges primed.";
         }else{
             return ""; // hide
@@ -121,7 +122,7 @@ public class Primed extends Status {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Primed(newAffected, charges);
+        return new Primed(newAffected.getType(), charges);
     }
 
     @Override

@@ -2,6 +2,7 @@ package nightgames.stance;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import nightgames.characters.Character;
@@ -83,7 +84,7 @@ public class TribadismStance extends Position {
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return new Mount(top, bottom);
     }
 
@@ -144,7 +145,6 @@ public class TribadismStance extends Position {
                         + "regain {other:possessive} grip on {self:possessive} leg.",
                         struggler, opponent, c.bothPossessive(opponent)));
         strugglePleasure(c, struggler, opponent);
-        super.struggle(c, struggler);
     }
 
     @Override
@@ -155,6 +155,5 @@ public class TribadismStance extends Position {
                         + "Sadly, it doesn't accomplish much other than arousing the hell out of both of %s.",
                         escapee, opponent, c.bothDirectObject(opponent)));
         strugglePleasure(c, escapee, opponent);
-        super.escape(c, escapee);
     }
 }

@@ -1,11 +1,12 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.pet.PetCharacter;
 
 public class PetInitiatedThreesome extends PetThreesome {
-    public PetInitiatedThreesome(Character self) {
+    public PetInitiatedThreesome(CharacterType self) {
         super("Initiate Threesome", self, 0);
     }
 
@@ -16,7 +17,7 @@ public class PetInitiatedThreesome extends PetThreesome {
 
     @Override
     public Skill copy(Character user) {
-        return new PetInitiatedThreesome(user);
+        return new PetInitiatedThreesome(user.getType());
     }
 
     protected Character getFucker(Combat c) {

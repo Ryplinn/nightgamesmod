@@ -30,7 +30,7 @@ public class MimicCat extends Skill {
 
     @Override
     public boolean usable(Combat c, Character target) {
-        return getSelf().canRespond() && !getSelf().is(Stsflag.mimicry) && GameState.gameState.characterPool.characterTypeInGame(Kat.class.getSimpleName());
+        return getSelf().canRespond() && !getSelf().is(Stsflag.mimicry) && GameState.getGameState().characterPool.characterTypeInGame(Kat.class.getSimpleName());
     }
 
     @Override

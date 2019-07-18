@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
@@ -13,7 +14,7 @@ import nightgames.stance.FlyingCowgirl;
 import nightgames.status.Falling;
 
 public class ReverseFly extends Fly {
-    public ReverseFly(Character self) {
+    public ReverseFly(CharacterType self) {
         super("ReverseFly", self);
     }
 

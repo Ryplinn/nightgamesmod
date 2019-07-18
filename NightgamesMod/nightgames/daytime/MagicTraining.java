@@ -14,8 +14,8 @@ import java.util.List;
 public class MagicTraining extends Activity {
     private boolean acted;
 
-    public MagicTraining(Player player) {
-        super("Magic Training", player);
+    MagicTraining() {
+        super("Magic Training");
     }
 
     @Override
@@ -31,7 +31,7 @@ public class MagicTraining extends Activity {
             GUI.gui.message("Aisha apparently spends most of her time in a mostly abandoned creative writing reference room in the back of the liberal arts building. On paper, she "
                             + "apparently runs a fantasy writing workshop. You're not sure if she is serious about writing, but it makes a good cover.<br/><br/>When you get to the reference room, she's the "
                             + "only one there. She's slightly taller than you with large, soft breasts. She has coffee colored skin and dark brown, long, wavy hair. When you introduce yourself she "
-                            + "gives you a gentle, charming smile. <i>\"Hello " + player.getTrueName()
+                            + "gives you a gentle, charming smile. <i>\"Hello " + getPlayer().getTrueName()
                             + ". I know who you are of course. The videos of your fights have been fascinating.\"</i> That catches you off "
                             + "guard. It's no real surprise that your matches are being secretly recorded, but the idea that this woman has been watching you sex-fight before you even knew she existed is "
                             + "somehow unnerving. She continues as if to distract you from your discomfort. <i>\"I'm pleased that you have an interest in learning magic. I haven't had many opportunities "
@@ -52,7 +52,7 @@ public class MagicTraining extends Activity {
                             + "we go. I've tasted some of your essence and you've tasted some of mine.\"</i> What was that about? <i>\"Oh this wasn't just a demonstration. I also took the liberty of creating a magic "
                             + "link between us. It'll make your training easier.\"</i>");
             Flag.flag(Flag.metAisha);
-            choose("Lesson: $" + 1000 * (player.getPure(Attribute.spellcasting) + 1), nextChoices);
+            choose("Lesson: $" + 1000 * (getPlayer().getPure(Attribute.spellcasting) + 1), nextChoices);
             choose("Leave", nextChoices);
             acted = true;
         } else if (choice.equals("Start")) {
@@ -61,24 +61,24 @@ public class MagicTraining extends Activity {
         } else if (choice.equals("Leave")) {
             done(acted, instance);
         } else if (choice.startsWith("Lesson")) {
-            if (player.money >= 1000 * (player.getPure(Attribute.spellcasting) + 1)) {
+            if (getPlayer().money >= 1000 * (getPlayer().getPure(Attribute.spellcasting) + 1)) {
                 int scene;
-                if(player.getPure(Attribute.spellcasting)>18){
+                if(getPlayer().getPure(Attribute.spellcasting)>18){
                     scene = Random.random(4);
                 }
-                else if(player.getPure(Attribute.spellcasting)==18){
+                else if(getPlayer().getPure(Attribute.spellcasting)==18){
                     scene = 3;
                 }
-                else if(player.getPure(Attribute.spellcasting)>15){
+                else if(getPlayer().getPure(Attribute.spellcasting)>15){
                     scene = Random.random(3);
                 }
-                else if(player.getPure(Attribute.spellcasting)==15){
+                else if(getPlayer().getPure(Attribute.spellcasting)==15){
                     scene = 2;
                 }
-                else if(player.getPure(Attribute.spellcasting)>3){
+                else if(getPlayer().getPure(Attribute.spellcasting)>3){
                     scene = Random.random(2);
                 }
-                else if(player.getPure(Attribute.spellcasting)==3){
+                else if(getPlayer().getPure(Attribute.spellcasting)==3){
                     scene = 1;
                 }
                 else{
@@ -108,7 +108,7 @@ public class MagicTraining extends Activity {
                                         + "is simple and Aisha is an extremely supportive teacher. Within the hour, you think you have it down and you're able to hit the targets "
                                         + "with relative ease. Aisha smiles once you hit the last target and, with a wave of her hand, you return to the campus. The nausea returns but its "
                                         + "not so bad this time. You thank Aisha and make your way back to your dorm.");
-                        player.gainIfAbsent("cloak");
+                        getPlayer().gainIfAbsent("cloak");
                         break;
                     case 1:
                         GUI.gui.message("After you give Aisha the money she asked for she once again brings both of you to the same training room you were in before except "
@@ -216,8 +216,8 @@ public class MagicTraining extends Activity {
                                         + "<i>\"It happens when two mages cum at the same time. Good, right?\"</i> You can only nod. After lounging in bed for a while you finally excuse yourself. "
                                         + "You walk back to your dorm, thinking about the awesome applications of magic.");
                 }
-                player.money -= 1000 * (player.getPure(Attribute.spellcasting) + 1);
-                player.modAttributeDontSaveData(Attribute.spellcasting, 1);
+                getPlayer().money -= 1000 * (getPlayer().getPure(Attribute.spellcasting) + 1);
+                getPlayer().modAttributeDontSaveData(Attribute.spellcasting, 1);
                 Flag.flag("Trained" + Attribute.spellcasting.name());
                 acted = true;
             } else {
@@ -225,15 +225,15 @@ public class MagicTraining extends Activity {
             }
             choose("Leave", nextChoices);
         } else if (choice.startsWith("Animism")) {
-            if (player.money >= 500 + 500 * (player.getPure(Attribute.animism) + 1)) {
-                player.money -= 500 + 500 * (player.getPure(Attribute.animism) + 1);
+            if (getPlayer().money >= 500 + 500 * (getPlayer().getPure(Attribute.animism) + 1)) {
+                getPlayer().money -= 500 + 500 * (getPlayer().getPure(Attribute.animism) + 1);
                 GUI.gui.message("Kat comes in again to help you practice tapping "
                                 + "into your animal side. As per Kat's suggestion, you both spend "
                                 + "the entire training session naked, so as to distance yourselves "
                                 + "from civilized habits. Aisha volunteers to help out by teasing"
                                 + " you to sufficient arousal for your instincts to come out. She "
                                 + "also provides some actual help by monitoring your spirit's power.");
-                player.modAttributeDontSaveData(Attribute.animism, 1);
+                getPlayer().modAttributeDontSaveData(Attribute.animism, 1);
                 acted = true;
             } else {
                 GUI.gui.message("You don't have enough money for training.");
@@ -272,7 +272,7 @@ public class MagicTraining extends Activity {
                             + " to you alone. If you really want this power, you'll probably "
                             + "need to rely on Kat's help.");
             choose("Get Animal Spirit", nextChoices);
-            choose("Lesson: $" + (500 + 500 * (player.getPure(Attribute.spellcasting) + 1)), nextChoices);
+            choose("Lesson: $" + (500 + 500 * (getPlayer().getPure(Attribute.spellcasting) + 1)), nextChoices);
             choose("Leave", nextChoices);
         } else if (choice.startsWith("Get Animal Spirit")) {
             GUI.gui.message("Kat agrees to come to the creative writing reference"
@@ -290,7 +290,7 @@ public class MagicTraining extends Activity {
                             + "smiles reassuringly. \"<i>These things aren't so bad. Sure they're"
                             + " a little inconvenient to hide, but my cat powers have given me so "
                             + "many wonderful things. I'm so grateful for what you've done for me. If"
-                            + " spirit magic gives " + player.getTrueName()
+                            + " spirit magic gives " + getPlayer().getTrueName()
                             + " even half as much happiness as it's given me, I'm "
                             + "sure he won't regret it.\"</i><br/><br/>"
                             + "Aisha finally relents and instructs you to get undressed while she leaves "
@@ -341,16 +341,16 @@ public class MagicTraining extends Activity {
                             + "tone. <i>\"I think we can consider that a success. If Kat is willing to "
                             + "continue to help you out, you should ask her to train you to control your new powers. "
                             + "I want you to do it here, so I can continue to watch you... just to be safe, of course.\"</i>");
-            player.modAttributeDontSaveData(Attribute.animism, 1);
+            getPlayer().modAttributeDontSaveData(Attribute.animism, 1);
             Flag.flag("Trained" + Attribute.animism.name());
             acted = true;
             choose("Leave", nextChoices);
         } else if (choice.startsWith("Buy a minor scroll: $200")) {
             GUI.gui.message("You purchase a minor scroll. With the correct spell, "
                             + "you can use it to summon a team of fairies.");
-            player.money -= 200;
-            assert player.money >= 0;
-            player.gain(Item.MinorScroll);
+            getPlayer().money -= 200;
+            assert getPlayer().money >= 0;
+            getPlayer().gain(Item.MinorScroll);
             acted = true;
             presentOptions(nextChoices);
         }
@@ -369,17 +369,17 @@ public class MagicTraining extends Activity {
     }
 
     private void presentOptions(List<LabeledValue<String>> nextChoices) {
-        choose("Lesson: $" + 1000 * (player.getPure(Attribute.spellcasting) + 1), nextChoices);
-        if (player.getPure(Attribute.animism) >= 1) {
-            choose("Animism training: $" + (500 + 500 * (player.getPure(Attribute.animism) + 1)), nextChoices);
+        choose("Lesson: $" + 1000 * (getPlayer().getPure(Attribute.spellcasting) + 1), nextChoices);
+        if (getPlayer().getPure(Attribute.animism) >= 1) {
+            choose("Animism training: $" + (500 + 500 * (getPlayer().getPure(Attribute.animism) + 1)), nextChoices);
         }
         if (Flag.checkFlag(Flag.catspirit) && !Flag.checkFlag(Flag.furry)) {
             choose("Ask about Animal Spirit", nextChoices);
         }
-        if (Flag.checkFlag(Flag.furry) && player.getPure(Attribute.animism) == 0) {
+        if (Flag.checkFlag(Flag.furry) && getPlayer().getPure(Attribute.animism) == 0) {
             choose("Get Animal Spirit", nextChoices);
         }
-        if (player.getPure(Attribute.spellcasting) >= 2 && player.money >= 200) {
+        if (getPlayer().getPure(Attribute.spellcasting) >= 2 && getPlayer().money >= 200) {
             choose("Buy a minor scroll: $200", nextChoices);
         }
         choose("Leave", nextChoices);

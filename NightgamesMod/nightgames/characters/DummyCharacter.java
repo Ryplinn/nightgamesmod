@@ -71,7 +71,7 @@ public class DummyCharacter extends Character {
 
     @Override
     public Optional<Action> move() {
-        return null;
+        return Optional.empty();
     }
 
     @Override
@@ -111,8 +111,8 @@ public class DummyCharacter extends Character {
     }
 
     @Override
-    public String getType() {
-        return type;
+    public CharacterType getType() {
+        return CharacterType.get(type);
     }
 
     @Override

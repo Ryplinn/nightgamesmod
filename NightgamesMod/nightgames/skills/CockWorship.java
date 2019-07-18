@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -14,7 +15,7 @@ import java.util.Optional;
 
 public class CockWorship extends Skill {
 
-    public CockWorship(Character self) {
+    public CockWorship(CharacterType self) {
         super("Cock Worship", self);
         addTag(SkillTag.pleasureSelf);
         addTag(SkillTag.usesMouth);

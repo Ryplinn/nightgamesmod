@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -12,15 +13,15 @@ import nightgames.stance.StandingOver;
 import nightgames.status.BodyFetish;
 import nightgames.status.CockBound;
 import nightgames.status.Stsflag;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionSymptom;
-import nightgames.status.addiction.AddictionSymptom.Severity;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.Optional;
 
 public class PullOut extends Skill {
 
-    public PullOut(Character self) {
+    PullOut(CharacterType self) {
         super("Pull Out", self);
     }
 
@@ -35,16 +36,17 @@ public class PullOut extends Skill {
                         || c.getStance().havingSex(c, getSelf()) && c.getStance().dom(getSelf())) && !blockedByAddiction(getSelf());
     }
 
-    public static boolean blockedByAddiction(Character user) {
+    static boolean blockedByAddiction(Character user) {
         if (!user.human()) {
             return false;
         }
-        Optional<AddictionSymptom> addiction = user.getAddiction(AddictionType.BREEDER);
+        Optional<Addiction> addiction = user.getAnyAddiction(AddictionType.BREEDER);
         if (!addiction.isPresent()) {
             return false;
         }
-        AddictionSymptom add = addiction.get();
-        return add.atLeast(Severity.HIGH) || add.combatAtLeast(Severity.HIGH);
+        Addiction add = addiction.get();
+        return add.atLeast(Addiction.Severity.HIGH) || add.activeTracker().map(AddictionSymptom::getCombatSeverity)
+                        .map(severity -> severity.atLeast(Addiction.Severity.HIGH)).orElse(false);
     }
 
     @Override
@@ -184,7 +186,7 @@ public class PullOut extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new PullOut(user);
+        return new PullOut(user.getType());
     }
 
     @Override

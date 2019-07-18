@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -12,7 +13,7 @@ import nightgames.status.Stsflag;
 
 public class HeightenSenses extends Skill {
 
-    public HeightenSenses(Character self) {
+    public HeightenSenses(CharacterType self) {
         super("Heighten Senses", self);
     }
 
@@ -50,21 +51,21 @@ public class HeightenSenses extends Skill {
             } else {
                 c.write(getSelf(), receive(c, 0, Result.strong, target));
             }
-            target.add(c, new AttributeBuff(target, Attribute.perception, 1, 20));
+            target.add(c, new AttributeBuff(target.getType(), Attribute.perception, 1, 20));
         } else {
             if (getSelf().human()) {
                 c.write(getSelf(), deal(c, 0, Result.normal, target));
             } else {
                 c.write(getSelf(), receive(c, 0, Result.normal, target));
             }
-            target.add(c, new Hypersensitive(target));
+            target.add(c, new Hypersensitive(target.getType()));
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new HeightenSenses(user);
+        return new HeightenSenses(user.getType());
     }
 
     @Override
@@ -77,17 +78,17 @@ public class HeightenSenses extends Skill {
         if (modifier == Result.strong) {
             return String.format(
                             "You plant a suggestion in %s's head to increase %s sensitivity. %s accepts the suggestion so easily and strongly that you suspect it may have had a permanent effect.",
-                            new Object[] {target.getName(), target.possessiveAdjective(), target.pronoun()});
+                            target.getName(), target.possessiveAdjective(), target.pronoun());
         }
         if (modifier == Result.miss) {
             return String.format(
                             "You plant a suggestion in %s's head to increase %s sensitivity. Unfortunately, it didn't seem to affect %s much.",
-                            new Object[] {target.getName(), target.possessiveAdjective(), target.directObject()});
+                            target.getName(), target.possessiveAdjective(), target.directObject());
         }
         return String.format(
                         "You plant a suggestion in %s's head to increase %s sensitivity. %s shivers as %s sense of touch is amplified",
-                        new Object[] {getSelf().getName(), target.possessiveAdjective(), target.pronoun(),
-                                        target.possessiveAdjective()});
+                        getSelf().getName(), target.possessiveAdjective(), target.pronoun(),
+                        target.possessiveAdjective());
     }
 
     @Override

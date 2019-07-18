@@ -5,7 +5,9 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.skills.damage.DamageType;
 
-public class Standing extends MaledomSexStance {
+import java.util.Optional;
+
+public class Standing extends Position implements MaledomSexStance {
     public Standing(Character top, Character bottom) {
         super(top, bottom, Stance.standing);
     }
@@ -72,7 +74,7 @@ public class Standing extends MaledomSexStance {
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return new Neutral(top, bottom);
     }
 
@@ -83,20 +85,21 @@ public class Standing extends MaledomSexStance {
     }
 
     @Override
-    public void checkOngoing(Combat c) {
+    public Optional<Position> checkOngoing(Combat c) {
         if (top.getStamina().get() < 10) {
             if (top.human()) {
                 c.write("Your legs give out and you fall on the floor. " + bottom.getName()
                                 + " lands heavily on your lap.");
-                c.setStance(new Cowgirl(bottom, top));
+                return Optional.of(new Cowgirl(bottom, top));
             } else {
                 c.write(Formatter.format("{self:SUBJECT-ACTION:lose} {self:possessive} balance and {self:action:fall}, "
                                 + "pulling {other:name-do} down on top of {self:direct-object}.", top, bottom));
-                c.setStance(new Cowgirl(bottom, top));
+                return Optional.of(new Cowgirl(bottom, top));
             }
         } else {
             super.checkOngoing(c);
         }
+        return null;
     }
 
     @Override

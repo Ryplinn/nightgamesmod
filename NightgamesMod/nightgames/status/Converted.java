@@ -3,6 +3,7 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
@@ -14,7 +15,7 @@ import java.util.Optional;
 public class Converted extends AttributeBuff {
     private Attribute converted;
 
-    public Converted(Character affected, Attribute att, Attribute converted, int value, int duration) {
+    public Converted(CharacterType affected, Attribute att, Attribute converted, int value, int duration) {
         super(String.format("%s->%s (%d)", converted.displayName(), att.displayName(), value), affected, att, value, duration);
         this.converted = converted;
         unflag(Stsflag.purgable);
@@ -31,7 +32,7 @@ public class Converted extends AttributeBuff {
         if (newValue < 0) {
             return "";
         } else {
-            String message = "";
+            String message;
             List<String> synonyms = Arrays.asList("converted", "transformed", "changed", "altered", "transmuted");
             if (newValue <= 2) {
                 // small
@@ -43,28 +44,28 @@ public class Converted extends AttributeBuff {
                 // large
                 message = "Much of {self:name-possessive} %s has been %s into %s.";
             }
-            return Formatter.format(message, affected, affected, converted.getDrainedDO(), Random.pickRandom(synonyms).get(), modded.getDrainerDO());
+            return Formatter.format(message, getAffected(), getAffected(), converted.getDrainedDO(), Random.pickRandomGuaranteed(synonyms), modded.getDrainerDO());
         }
     }
 
     @Override
     public String describe(Combat c) {
-        String message = "";
+        String message;
         List<String> synonyms = Arrays.asList("converted", "transformed", "changed", "altered", "transmuted");
-        if (value <= affected.getPure(converted) / 5) {
+        if (value <= getAffected().getPure(converted) / 5) {
             // small
             message = "A bit of {self:name-possessive} %s has been %s into %s.";
-        } else if (value <= affected.getPure(converted) / 3) {
+        } else if (value <= getAffected().getPure(converted) / 3) {
             // medium
             message = "Some of {self:name-possessive} %s has been %s into %s.";
-        } else if (value <= affected.getPure(converted) * 2 / 3) {
+        } else if (value <= getAffected().getPure(converted) * 2 / 3) {
             // large
             message = "Much of {self:name-possessive} %s has been %s into %s.";
         } else {
             // large
             message = "Almost all of {self:name-possessive} %s has been %s into %s.";
         }
-        return Formatter.format(message, affected, affected, converted.getDrainedDO(), Random.pickRandom(synonyms).get(), modded.getDrainerDO());
+        return Formatter.format(message, getAffected(), getAffected(), converted.getDrainedDO(), Random.pickRandomGuaranteed(synonyms), modded.getDrainerDO());
     }
 
     @Override
@@ -98,7 +99,7 @@ public class Converted extends AttributeBuff {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Converted(newAffected, modded, converted, value, getDuration());
+        return new Converted(newAffected.getType(), modded, converted, value, getDuration());
     }
 
     @Override

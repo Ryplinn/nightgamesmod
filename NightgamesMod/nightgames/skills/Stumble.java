@@ -8,7 +8,7 @@ import nightgames.global.Random;
 import nightgames.stance.Mount;
 import nightgames.stance.ReverseMount;
 import nightgames.stance.Stance;
-import nightgames.status.addiction.AddictionSymptom;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
 public class Stumble extends Skill {
@@ -46,7 +46,7 @@ public class Stumble extends Skill {
         }
         if (getSelf().checkAddiction(AddictionType.MIND_CONTROL, target)) {
             getSelf().unaddictCombat(AddictionType.MIND_CONTROL, 
-                            target, AddictionSymptom.LOW_INCREASE, c);
+                            target, Addiction.LOW_INCREASE, c);
             c.write(getSelf(), "Acting submissively voluntarily reduces Mara's control over " + getSelf().nameDirectObject());
         }
         return true;

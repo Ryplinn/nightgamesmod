@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -14,7 +15,7 @@ import nightgames.status.BodyFetish;
 
 public class AssJob extends Skill {
 
-    public AssJob(Character self) {
+    AssJob(CharacterType self) {
         super("Assjob", self);
         addTag(SkillTag.anal);
     }
@@ -66,7 +67,7 @@ public class AssJob extends Skill {
             target.body.pleasure(getSelf(), getSelf().body.getRandomAss(), target.body.getRandomCock(), m, c, this);
 
             if (Random.random(100) < fetishChance) {
-                target.add(c, new BodyFetish(target, getSelf(), "ass", .1 + getSelf().get(Attribute.fetishism) * .05));
+                target.add(c, new BodyFetish(target.getType(), self, "ass", .1 + getSelf().get(Attribute.fetishism) * .05));
             }
         } else if (target.roll(getSelf(), accuracy(c, target))) {
             if (c.getStance().en == Stance.reversemount) {
@@ -92,7 +93,7 @@ public class AssJob extends Skill {
                 }
 
                 if (Random.random(100) < fetishChance) {
-                    target.add(c, new BodyFetish(target, getSelf(), "ass", .1 + getSelf().get(Attribute.fetishism) * .05));
+                    target.add(c, new BodyFetish(target.getType(), self, "ass", .1 + getSelf().get(Attribute.fetishism) * .05));
                 }
             } else {
                 writeOutput(c, Result.normal, target);
@@ -115,7 +116,7 @@ public class AssJob extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new AssJob(user);
+        return new AssJob(user.getType());
     }
 
     @Override

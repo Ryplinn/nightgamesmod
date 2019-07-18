@@ -25,6 +25,7 @@ import java.util.stream.Stream;
  */
 public class Main {
     private static volatile boolean exit = false;
+    volatile static GameState gameState;
 
     public static void main(String[] args) {
         Map<Boolean, List<String>> splitArgs =
@@ -96,8 +97,8 @@ public class Main {
     private static void run() throws InterruptedException {
         try {
             // Blocks until a game state is loaded into the GUI
-            GameState.gameState = GUI.gui.getGameState();
-            GameState.gameState.gameLoop();
+            GameState.setGameState(GUI.gui.getGameState());
+            GameState.getGameState().gameLoop();
         } finally {
             GameState.closeCurrentGame();
             GUI.gui.purgeGameState();

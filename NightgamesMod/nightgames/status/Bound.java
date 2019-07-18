@@ -3,11 +3,8 @@ package nightgames.status;
 import java.util.Optional;
 
 import com.google.gson.JsonObject;
-
-import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.Emotion;
-import nightgames.characters.NPC;
+import nightgames.characters.*;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.DebugFlags;
@@ -20,14 +17,14 @@ public class Bound extends Status {
     protected String binding;
     protected Optional<Trap> trap;
 
-    public Bound(Character affected, double dc, String binding) {
+    public Bound(CharacterType affected, double dc, String binding) {
         this(affected, dc, binding, null);
     }
-    public Bound(Character affected, double dc, String binding, Trap trap) {
+    public Bound(CharacterType affected, double dc, String binding, Trap trap) {
         this("Bound", affected, dc, binding, trap);
     }
 
-    public Bound(String type, Character affected, double dc, String binding, Trap trap) {
+    public Bound(String type, CharacterType affected, double dc, String binding, Trap trap) {
         super(type, affected);
         toughness = dc;
         this.binding = binding;
@@ -43,10 +40,10 @@ public class Bound extends Status {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "Your hands are bound by " + binding + ".";
         } else {
-            return affected.possessiveAdjective() + " hands are restrained by " + binding + ".";
+            return getAffected().possessiveAdjective() + " hands are restrained by " + binding + ".";
         }
     }
 
@@ -67,8 +64,8 @@ public class Bound extends Status {
 
     @Override
     public int regen(Combat c) {
-        affected.emote(Emotion.desperate, 10);
-        affected.emote(Emotion.nervous, 10);
+        getAffected().emote(Emotion.desperate, 10);
+        getAffected().emote(Emotion.nervous, 10);
         return 0;
     }
 
@@ -106,7 +103,7 @@ public class Bound extends Status {
     public void struggle(Character self) {
         int struggleAmount = (int) (5 + Math.sqrt((self.getLevel() + self.get(Attribute.power) + self.get(Attribute.cunning))));
         if (DebugFlags.isDebugOn(DebugFlags.DEBUG_DAMAGE)) {
-            System.out.println("Strugged for " + struggleAmount);
+            System.out.println("Struggled for " + struggleAmount);
         }
         toughness = Math.max(toughness - struggleAmount, 0);
     }
@@ -147,7 +144,7 @@ public class Bound extends Status {
                 GUI.gui.message(Formatter.format("{self:SUBJECT-ACTION:are|is} still trapped by the %s.", affected, NPC
                                 .noneCharacter(), trap.get().getName().toLowerCase()));
             }
-            affected.location().opportunity(affected, trap.get());
+            getAffected().location().opportunity(getAffected(), trap);
         }
     }
 

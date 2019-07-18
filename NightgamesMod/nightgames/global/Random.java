@@ -45,6 +45,18 @@ public class Random {
         }
     }
 
+    /**
+     * Like pickRandom, but an element is guaranteed to be chosen.
+     *
+     * @param list A list of non-zero size
+     * @param <T> The type of element to be chosen
+     * @return One of the elements of the list
+     */
+    public static <T> T pickRandomGuaranteed(List<T> list) {
+        assert list.size() > 0;
+        return pickRandom(list).orElseThrow(() -> new RuntimeException("Bad pick from list."));
+    }
+
     public static double randomdouble() {
         return rng.nextDouble();
     }

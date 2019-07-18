@@ -14,8 +14,7 @@ import nightgames.global.Random;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
-import nightgames.status.addiction.AddictionSymptom;
-import nightgames.status.addiction.AddictionSymptom.Severity;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.ArrayList;
@@ -25,10 +24,10 @@ import java.util.Optional;
 import static nightgames.requirements.RequirementShortcuts.*;
 
 public class CassieTime extends BaseNPCTime {
-    CassieTime(Player player) {
-        super(player, GameState.gameState.characterPool.getNPC("Cassie"));
+    CassieTime() {
+        super(GameState.getGameState().characterPool.getNPC("Cassie"));
         knownFlag = "CassieKnown";
-        giftedString = "\"Awww thanks!\"";
+        giftedString = "\"Awww, thanks!\"";
         giftString = "\"A present? You shouldn't have!\"";
         transformationOptionString = "Enchantments";
         transformationIntro = "[Placeholder]<br/>Cassie tells you she could perhaps enchant some of your body.";
@@ -40,7 +39,7 @@ public class CassieTime extends BaseNPCTime {
                         + "she says without looking at you. <i>\"You're cute, funny, and we got along so well whenever we talked. I tried to think of ways to flirt with you so you'd see me as more than "
                         + "a friend, but I don't think I'd have ever worked up the courage to try. When I saw that we had both joined the games, I can't properly describe what I felt. Embarrassed"
                         + " of course - maybe more embarrassed than I've been in years - to be seen at a sexfighting competition by someone I knew. I was also really excited about the possibility "
-                        + "of being intimate with the " + player.boyOrGirl() + " I liked. Most of all, I was scared that you might look down on me when you found out what a horny girl I am.\"</i> She grasps your hand and you "
+                        + "of being intimate with the " + getPlayer().boyOrGirl() + " I liked. Most of all, I was scared that you might look down on me when you found out what a horny girl I am.\"</i> She grasps your hand and you "
                         + "squeeze it reassuringly. You pull her towards you and kiss her softly. <i>\"I guess it turned out better than I could have hoped.\"</i><br/><br/>She sits up and looks at you, blushing "
                         + "deeply. <i>\"We can't keep lying here with my embarrassing story in the air, let's do some training.\"</i>";
         advTrait = Trait.witch;
@@ -55,7 +54,7 @@ public class CassieTime extends BaseNPCTime {
             growCock.ingredients.put(Item.PriapusDraft, 3);
             growCock.addRequirement(rev(not(bodypart("cock"))), "Has no penis");
             growCock.option = "Cassie: Grow a cock";
-            growCock.scene = "[Placeholder]<br/>Cassie hesistantly drinks the 3 priapus drafts and grows a large runic cock.";
+            growCock.scene = "[Placeholder]<br/>Cassie hesitantly drinks the 3 priapus drafts and grows a large runic cock.";
             growCock.effect = (c, self, other) -> {
                 other.body.add(new CockPart().applyMod(new SizeMod(SizeMod.COCK_SIZE_BIG)).applyMod(CockMod.runic));
                 return true;
@@ -67,7 +66,7 @@ public class CassieTime extends BaseNPCTime {
             removeCock.ingredients.put(Item.FemDraft, 3);
             removeCock.addRequirement(rev(bodypart("cock")), "Has a Penis");
             removeCock.option = "Cassie: Remove her cock";
-            removeCock.scene = "[Placeholder]<br/>Cassie hesistantly drinks the three femdrafts and her runic cock shrinks into her normal clitoris.";
+            removeCock.scene = "[Placeholder]<br/>Cassie hesitantly drinks the three femdrafts and her runic cock shrinks into her normal clitoris.";
             removeCock.effect = (c, self, other) -> {
                 other.body.removeAll("cock");
                 return true;
@@ -129,12 +128,12 @@ public class CassieTime extends BaseNPCTime {
                             + "I almost came from feeling the ridges on my tongue! It was super intense. It's a bit of a double edged sword. Or rather a double edged sheath if you know my drift,\"</i> Cassie chuckles softly."
                             + "<br/>You ask if she could maybe try the spell on you as well"
                             + "Cassie seems a bit surprised with your request, but agrees pretty quickly. She takes the ingredients from you and inscribes a few runes on the dildo you brought along."
-                            + "<i>\"Uhh I think this may be a bit late, but would you mind not watching me? Sorry this is a bit embarassing for me.\"</i>"
+                            + "<i>\"Uhh I think this may be a bit late, but would you mind not watching me? Sorry this is a bit embarrassing for me.\"</i>"
                             + "<br/>You reassure her that whatever she's doing, it can't be too bad compared to the night games. Cassie sighs and waves for you to sit down."
                             + "She starts the ritual by coating the inscribed dildo with all the potions you brought along. After starting a incomprehensible chant, she unbuttons her pants and starts fingering her pussy. "
-                            + "<i>\"I... uhhgh told you... that this would be, aah, embarassing... Nhhh!\"</i> Cassie grunts as she's masturbating. As she's nearing orgasm, she sticks the inscribed dildo inside her and clamps down on it hard."
-                            + "You can see a soft purple glow transfering itself from her body into the plastic rod. After taking a few seconds to calm down, Cassie beckons you over, <i>\"Your turn "
-                            + player.getTrueName() + ", say Ahh.\"</i>"
+                            + "<i>\"I... uhhgh told you... that this would be, aah, embarrassing... Nhhh!\"</i> Cassie grunts as she's masturbating. As she's nearing orgasm, she sticks the inscribed dildo inside her and clamps down on it hard."
+                            + "You can see a soft purple glow transferring itself from her body into the plastic rod. After taking a few seconds to calm down, Cassie beckons you over, <i>\"Your turn "
+                            + getPlayer().getTrueName() + ", say Ahh.\"</i>"
                             + "<br/>You obediently sit down on the couch, and open your mouth. As expected, Cassie takes the glowing fake phallus, still coated with her juices, and starts putting it in your mouth. "
                             + "At first, you gag a bit from having a large foreign object stuffed into your throat, but after a few moments, you start feeling your entire oral cavity reforming itself around the false cock. "
                             + "Your teeth recede a bit back into your gums, and you feel walls of soft muscle line your mouth. Your tongue feels like it's on fire as it rapidly lengthens, filling your maw, and spilling out of your expanded lips. "
@@ -148,7 +147,7 @@ public class CassieTime extends BaseNPCTime {
 
     @Override
     public void subVisitIntro(String choice, List<LabeledValue<String>> nextChoices) {
-        if (npc.getAffection(player) > 0) {
+        if (npc.getAffection(getPlayer()) > 0) {
             GUI.gui.message("You text Cassie and suggest meeting up to spend some time together. You get to the meeting place first and settle down on a bench to wait for her. "
                                             + "You don't end up waiting long, but you manage to get distracted by something on your phone and don't notice Cassie approaching until she's right next to you. Before "
                                             + "you can stand up, she leans over you and kisses you on the mouth. She cuddles up next to you on the bench and happily rests her head on your shoulder. You're a little "
@@ -158,10 +157,10 @@ public class CassieTime extends BaseNPCTime {
             choose("Games", nextChoices);
             choose("Sparring", nextChoices);
             choose("Sex", nextChoices);
-            if (npc.has(Trait.magicmilk) && player.checkAddiction(AddictionType.MAGIC_MILK)) {
+            if (npc.has(Trait.magicmilk) && getPlayer().checkAnyAddiction(AddictionType.MAGIC_MILK)) {
                 choose("Ask for milk", nextChoices);
             }
-        } else if (player.checkAddiction(AddictionType.MAGIC_MILK)) {
+        } else if (getPlayer().checkAnyAddiction(AddictionType.MAGIC_MILK)) {
             GUI.gui.message("You find Cassie studying in the library, a ways out of earshot of the other students. She catches your eye and smiles knowingly. "
                             + "Putting down her book, she walks to you and whispers in your ear, <i>Give me five minutes, then meet me in the girls bathroom on the third floor. Don't worry, it's always empty.</i>"
                             + "You're shocked at her unexpected forwardness, but your pulsing need for milk distracts you from her uncharacteristic attitude."
@@ -170,24 +169,25 @@ public class CassieTime extends BaseNPCTime {
                             + "The third floor of the library is a part of the archives, where old books go to die if they're not asked for, for over 5 years. "
                             + "You wander around for a bit and find the girls bathroom hidden in a little corner by the classic slavic literature section. No wonder why it's mostly unused. "
                             + "While idly speculating at why Cassie even knows of such a place, you open the door and step inside. The moment you enter, you see Cassie sitting by the sink. She looks up at the noise and smiles as you step inside. "
-                            + "She looks at you knowingly and teases while cupping her generous chest, <i>\""+player.getTrueName()+", what's up? Was there something... you wanted?\"</i>");
-            if (npc.getAttraction(player) < 15) {
-                npc.gainAttraction(player, 2);
-                player.gainAttraction(npc, 2);
+                            + "She looks at you knowingly and teases while cupping her generous chest, <i>\""+ getPlayer()
+                            .getTrueName()+", what's up? Was there something... you wanted?\"</i>");
+            if (npc.getAttraction(getPlayer()) < 15) {
+                npc.gainAttraction(getPlayer(), 2);
+                getPlayer().gainAttraction(npc, 2);
             } else {
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
                 choose("Games", nextChoices);
                 choose("Sparring", nextChoices);
                 choose("Sex", nextChoices);
             }
             choose("Ask for milk", nextChoices);
-        } else if (npc.getAttraction(player) < 15) {
+        } else if (npc.getAttraction(getPlayer()) < 15) {
             GUI.gui.message("You find Cassie studying in the library, a ways out of earshot of the other students. You give her a friendly greeting and sit down next to her. "
                                             + "But after a little bit of awkward small talk she excuses herself and practically runs away, red faced. The two of you weren't particularly close friends, but "
                                             + "you always used to be able to have a friendly conversation with her. It's a little lonely having her avoid you so blatantly.");
-            npc.gainAttraction(player, 2);
-            player.gainAttraction(npc, 2);
+            npc.gainAttraction(getPlayer(), 2);
+            getPlayer().gainAttraction(npc, 2);
         } else {
             GUI.gui.message("You're in the library, looking around to see if Cassie is around. Soon you spot her entering a private study room. When you follow her in, she jumps "
                                             + "like a frightened animal, but forces a friendly smile. As the two of you chat, she doesn't try to flee, but is still acting uncomfortable and avoids making eye "
@@ -199,14 +199,15 @@ public class CassieTime extends BaseNPCTime {
                                             + "out together or practicing for the night games, but it won't change who she is. There's surely enough overlap between her two worlds for you to fit. She's quiet "
                                             + "for another short while, then stands up on her toes and presses her mouth softly against yours. You've tasted her lips before, but this is something different. this "
                                             + "is hesitant and innocent, like a lover's first kiss.<br/><br/><i>\"If I can pretend to be anyone, can I pretend to be your girlfriend?\"</i> You answer by wrapping your arms "
-                                            + "around her and kissing her tenderly. <i>\"Hanging out with a cute " + player.boyOrGirl() + " interspersed with wild sex games? Sounds like a great date,\"</i> she says, face flushed but "
+                                            + "around her and kissing her tenderly. <i>\"Hanging out with a cute " + getPlayer()
+                            .boyOrGirl() + " interspersed with wild sex games? Sounds like a great date,\"</i> she says, face flushed but "
                                             + "lit up in a genuine smile. <i>\"What exactly do you have in mind?\"</i>");
-            npc.gainAffection(player, 1);
-            player.gainAffection(npc, 1);
+            npc.gainAffection(getPlayer(), 1);
+            getPlayer().gainAffection(npc, 1);
             choose("Games", nextChoices);
             choose("Sparring", nextChoices);
             choose("Sex", nextChoices);
-            if (npc.has(Trait.magicmilk) && player.getAddictionSeverity(AddictionType.MAGIC_MILK) != Severity.NONE) {
+            if (npc.has(Trait.magicmilk) && getPlayer().getAnyAddictionSeverity(AddictionType.MAGIC_MILK) != Addiction.Severity.NONE) {
                 choose("Ask for milk", nextChoices);
             }
         }
@@ -217,9 +218,9 @@ public class CassieTime extends BaseNPCTime {
     public void subVisit(String choice, List<LabeledValue<String>> nextChoices) {
         switch (choice) {
             case "Ask for milk":
-                if (npc.getAffection(player) > 0) {
+                if (npc.getAffection(getPlayer()) > 0) {
                     String msg;
-                    switch (player.getAddictionSeverity(AddictionType.MAGIC_MILK)) {
+                    switch (getPlayer().getAnyAddictionSeverity(AddictionType.MAGIC_MILK)) {
                         case HIGH:
                             msg = "You haven't been able to think of anything but Cassie all day, whether simply because of"
                                             + " her milk or because of some deeper feelings. She seems to understand the"
@@ -228,7 +229,7 @@ public class CassieTime extends BaseNPCTime {
                                             + " to hold back the thirst. Once inside, Cassie turns to you with a wide grin"
                                             + " and starts to speak. <i>\"So for today, I was thinking... Hey!\" </i>You don't let"
                                             + " her finish, instead you pick her up and deposit her swiftly on the dinner "
-                                            + "table. <i>\"" + player.getTrueName()
+                                            + "table. <i>\"" + getPlayer().getTrueName()
                                             + "! What are you doing?\"</i> No time for words. Time for milk. "
                                             + "You yank her shirt over her head and pull her bra down to expose her tits. "
                                             + "Then you dive in, drinking greedily. Ah! So alive! The bit she left you was"
@@ -248,7 +249,7 @@ public class CassieTime extends BaseNPCTime {
                                             + "of a problem?\"</i> A problem? You can't think of anything you'd like to do"
                                             + " more! And this time you're sure it's not just the milk, either. You walk"
                                             + " back up to her and embrace her, telling her this. <i>\"Oh, "
-                                            + player.getTrueName() + "!\"</i> She grabs "
+                                            + getPlayer().getTrueName() + "!\"</i> She grabs "
                                             + "your head and pulls you in for a deep kiss. The kiss grows more and more"
                                             + " passionate, and she starts leaking milk on your chest. Through supreme "
                                             + "force of will, you ignore it. Instead you reach down to get rid of her "
@@ -339,7 +340,7 @@ public class CassieTime extends BaseNPCTime {
                                             + " and licks you through the fabric. She pays special attention to the emerging "
                                             + "head, and it's not long before you are fully hard. <i>\"There's something I want"
                                             + " to try. Something I wasn't able to do, before. But now with these babies...\""
-                                            + "</i> She gestures towards her recently-expanded busom and then removes your wet "
+                                            + "</i> She gestures towards her recently-expanded bosom and then removes your wet "
                                             + "boxers. Your cock makes an audible smack against your stomach, causing Cassie"
                                             + " to giggle slightly. She then grabs hold of it and places it firmly in her "
                                             + "deep valley, wrapping her breasts around you. The head still pokes out, and "
@@ -393,13 +394,13 @@ public class CassieTime extends BaseNPCTime {
                 }
 
                 choose("Leave", nextChoices);
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
-                player.addict(null, AddictionType.MAGIC_MILK, npc, AddictionSymptom.MED_INCREASE);
-                player.getAddiction(AddictionType.MAGIC_MILK).ifPresent(AddictionSymptom::flagDaytime);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
+                getPlayer().addict(null, AddictionType.MAGIC_MILK, npc, Addiction.MED_INCREASE);
+                getPlayer().getAddiction(AddictionType.MAGIC_MILK, npc).ifPresent(Addiction::flagDaytime);
                 break;
             case "Sex":
-                if (npc.getAffection(player) >= 12 && (!player.has(Trait.silvertongue) || Random.random(2) == 1)) {
+                if (npc.getAffection(getPlayer()) >= 12 && (!getPlayer().has(Trait.silvertongue) || Random.random(2) == 1)) {
                     GUI.gui.message("Cassie eagerly invites you to her room for some intimate time. The room is quite tidy, though you're surprised to see a couple anime "
                                     + "posters on the wall. Cassie gets a little embarrassed as you look around, but she kisses you softly and leads you to the bed. You quickly strip each other "
                                     + "naked, sharing quick kisses when you get the chance. When you then start to fondle her breasts, she stops you gently. <i>\"Can we try something a little different "
@@ -411,8 +412,9 @@ public class CassieTime extends BaseNPCTime {
                                     + "When she tongues you just under the glans and applies a little suction, it pushes you over the edge. You give a low groan and shoot your load into her mouth.<br/><br/>"
                                     + "Cassie swallows your semen and giggles. <i>\"I think I found a sensitive spot. I'll have to remember that.\"</i> She doesn't move away from your groin, watching with a smile "
                                     + "as your dick starts to soften. This isn't the first time she's seen a penis. Is it really that fascinating? Her cheeks grow slightly redder than they already were. "
-                                    + "<i>\"Girls are interested in sex too. I've spent a lot of nights thinking about " + player.boyOrGirl()
-                                    + "s since puberty. You're the closest I've ever had to an actual " + player.boyOrGirl() + "friend.\"</i> So she was a virgin "
+                                    + "<i>\"Girls are interested in sex too. I've spent a lot of nights thinking about " + getPlayer()
+                                    .boyOrGirl()
+                                    + "s since puberty. You're the closest I've ever had to an actual " + getPlayer().boyOrGirl() + "friend.\"</i> So she was a virgin "
                                     + "when she first joined the night games? She fidgets a bit at the question, which you notice makes her hips wiggle in quite an attractive way. <i>\"Not quite a virgin. "
                                     + "In high school, I had a close friend like that, but in the end we were just friends. One day as it's getting close to graduation, we end up talking about how we both want to lose "
                                     + "our virginities before we get to college, so we decide to help each other out.\"</i> She's bright red with embarrassment, but continues. <i>\"It was kinda awkward, but a lot of fun, "
@@ -423,9 +425,9 @@ public class CassieTime extends BaseNPCTime {
                                     + "<i>\"O-ok tha-mmm... I don't mind if you do that for a while.\"</i> She takes your cock into her mouth again and continues pleasuring you. Fair enough. If she's going to become better "
                                     + "acquainted with your manhood, you might as well learn the ins and outs of her most sensitive area.<br/><br/>The two of you keep up your oral activities until your tongues are too "
                                     + "tired to continue and both of you have orgasmed more times than you can count.");
-                    if (!player.has(Trait.silvertongue)) {
+                    if (!getPlayer().has(Trait.silvertongue)) {
                         GUI.gui.message("<br/><br/><b>Through diligent practice, you and Cassie have gotten more skilled at oral sex.</b>");
-                        player.add(Trait.silvertongue);
+                        getPlayer().add(Trait.silvertongue);
                         npc.getGrowth().addTrait(0, Trait.silvertongue);
                     }
                 } else {
@@ -450,12 +452,12 @@ public class CassieTime extends BaseNPCTime {
                                     + "You shoot your load into her hot depths, feeding the intensity of her orgasm. The two of you collapse on the bed, still joined below the waist and completely spent.");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.seduction);
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
+                Daytime.train(getPlayer(), npc, Attribute.seduction);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
                 break;
             case "Games":
-                if (npc.getAffection(player) >= 16 && (!player.has(Trait.misdirection) || Random.random(2) == 1)) {
+                if (npc.getAffection(getPlayer()) >= 16 && (!getPlayer().has(Trait.misdirection) || Random.random(2) == 1)) {
                     GUI.gui.message("Cassie continues to impress you with her gaming prowess, but right now, you've got a decisive advantage. You're at match point, so if either of you can "
                                     + "score again, that'll almost certainly be the game. Unfortunately for her, you've got her R&D completely locked down. If she doesn't have the agenda she needs in her "
                                     + "hand, you're going to see it before she does. On her turn she installs one card face down, then plays Mushin No Shin to install another on a naked server with three advancement "
@@ -473,9 +475,9 @@ public class CassieTime extends BaseNPCTime {
                                     + "which are clearly still on. Cassie suddenly closes the distance between you and kisses you passionately. She presses her body against yours and you embrace her gently. <i>\"Ok, so "
                                     + "I admit your pants are still on,\"</i> she whispers as you break for air. <i>\"Neither of us wants that. Maybe we should work together to remove the pants?\"</i> Perhaps some of her clothes need "
                                     + "to be removed too? <i>\"I agree, we're both wearing far too much clothing for the bedroom.\"</i> She's already got your belt off as you kiss her again and lead her to the bed.");
-                    if (!player.has(Trait.misdirection)) {
+                    if (!getPlayer().has(Trait.misdirection)) {
                         GUI.gui.message("<br/><br/><b>You've learned the art of using a diversion to distract your opponent.</b>");
-                        player.add(Trait.misdirection);
+                        getPlayer().add(Trait.misdirection);
                         npc.getGrowth().addTrait(0, Trait.misdirection);
                     }
                 } else {
@@ -496,12 +498,12 @@ public class CassieTime extends BaseNPCTime {
                                     + "the favor.\"</i> You are a bit horny, but more than that, you're comfortable. For now you decide to just relax and enjoy Cassie's warmth.");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.cunning);
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
+                Daytime.train(getPlayer(), npc, Attribute.cunning);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
                 break;
             case "Sparring":
-                if (npc.getAffection(player) >= 8 && (!player.has(Trait.judonovice) || Random.random(2) == 1)) {
+                if (npc.getAffection(getPlayer()) >= 8 && (!getPlayer().has(Trait.judonovice) || Random.random(2) == 1)) {
                     GUI.gui.message("You and Cassie manage to procure an actual fitness room with actual wrestling mats for your sparring practice. No more rolling around in couch cushions and pillows. "
                                     + "the downside it that you don't have the same level of privacy as in your dorm room, so today you'll need to stick with just sparring. Cassie seems a lot more confident than usual "
                                     + "and the two of you complete your warm ups in good spirits. You start the match with some simple lunges and takedowns. You notice that she's gotten much better at maintaining her "
@@ -514,9 +516,9 @@ public class CassieTime extends BaseNPCTime {
                                     + "help with tuition. After a few matches, I started really wanting to see if I could win. Each time I lost a fight, I wanted to figure out if I could have done better. I guess this "
                                     + "is my answer to that.\"</i><br/><br/>She extends her hand to help you up, but instead you pull her down on top of you and kiss her tenderly. She blushes and grins at you when you break the kiss. "
                                     + "<i>\"That's not a judo technique.\"</i> She stands back up and motions for you to do the same. <i>\"Come on, I'll show you what I've learned.\"</i>");
-                    if (!player.has(Trait.judonovice)) {
+                    if (!getPlayer().has(Trait.judonovice)) {
                         GUI.gui.message("<br/><br/><b>By training with Cassie, you learned the Hip Throw skill.</b>");
-                        player.add(Trait.judonovice);
+                        getPlayer().add(Trait.judonovice);
                         npc.getGrowth().addTrait(0, Trait.judonovice);
                     }
                 } else {
@@ -541,9 +543,9 @@ public class CassieTime extends BaseNPCTime {
                                     + "down and she goes limp from exhaustion. Looks like you're done sparring for now.");
                 }
                 choose("Leave", nextChoices);
-                Daytime.train(player, npc, Attribute.power);
-                npc.gainAffection(player, 1);
-                player.gainAffection(npc, 1);
+                Daytime.train(getPlayer(), npc, Attribute.power);
+                npc.gainAffection(getPlayer(), 1);
+                getPlayer().gainAffection(npc, 1);
                 break;
         }
     }
@@ -559,6 +561,6 @@ public class CassieTime extends BaseNPCTime {
 
     @Override
     public Optional<String> getAddictionOption() {
-        return player.checkAddiction(AddictionType.MAGIC_MILK) ? Optional.of("Ask for milk") : Optional.empty();
+        return getPlayer().checkAnyAddiction(AddictionType.MAGIC_MILK) ? Optional.of("Ask for milk") : Optional.empty();
     }
 }

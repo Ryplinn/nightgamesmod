@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -10,11 +11,8 @@ import nightgames.global.Random;
 import nightgames.nskills.tags.SkillTag;
 
 public class OrgasmicThrust extends Thrust {
-    public OrgasmicThrust(String name, Character self) {
-        super(name, self);
-    }
 
-    public OrgasmicThrust(Character self) {
+    public OrgasmicThrust(CharacterType self) {
         super("Orgasmic Thrust", self);
         addTag(SkillTag.pleasureSelf);
     }
@@ -33,7 +31,7 @@ public class OrgasmicThrust extends Thrust {
     }
 
     public int[] getDamage(Combat c, Character target) {
-        int results[] = new int[2];
+        int[] results = new int[2];
 
         int m = Random.random(25, 40);
         if (c.getStance().anallyPenetrated(c, target) && getSelf().has(Trait.assmaster)) {
@@ -41,7 +39,6 @@ public class OrgasmicThrust extends Thrust {
         }
 
         results[0] = m;
-        results[1] = 0;
 
         return results;
     }
@@ -53,7 +50,7 @@ public class OrgasmicThrust extends Thrust {
 
     @Override
     public Skill copy(Character user) {
-        return new OrgasmicThrust(user);
+        return new OrgasmicThrust(user.getType());
     }
 
     @Override

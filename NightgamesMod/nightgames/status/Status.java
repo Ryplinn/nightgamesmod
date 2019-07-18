@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 import nightgames.actions.Action;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.requirements.Requirement;
@@ -20,11 +21,11 @@ import nightgames.skills.Skill;
 
 public abstract class Status implements Cloneable {
     public String name;
-    public transient Character affected;
+    public transient CharacterType affected;
     protected transient Set<Stsflag> flags;
     protected transient List<Requirement> requirements;
 
-    public Status(String name, Character affected) {
+    public Status(String name, CharacterType affected) {
         this.name = name;
         this.affected = affected;
         requirements = new ArrayList<>();
@@ -160,11 +161,15 @@ public abstract class Status implements Cloneable {
 
     public void onApply(Combat c, Character other) {}
 
+    public void endCombat(Combat c, Character opp) {}
+
     public abstract JsonObject saveToJson();
 
     public abstract Status loadFromJson(JsonObject obj);
 
     public void tick(Combat c) {}
-    
-    public boolean isAddiction() { return false; }
+
+    public Character getAffected() {
+        return affected.fromPoolGuaranteed();
+    }
 }

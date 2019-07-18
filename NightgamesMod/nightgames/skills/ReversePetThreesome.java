@@ -1,15 +1,16 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class ReversePetThreesome extends PetThreesome {
-    public ReversePetThreesome(String name, Character self, int cooldown) {
+    ReversePetThreesome(String name, CharacterType self, int cooldown) {
         super(name, self, cooldown);
     }
 
-    public ReversePetThreesome(Character self) {
+    ReversePetThreesome(CharacterType self) {
         super("Reverse Threesome", self, 0);
     }
 
@@ -19,8 +20,7 @@ public class ReversePetThreesome extends PetThreesome {
     }
 
     public BodyPart getSelfOrgan(Character fucker, Combat c) {
-        BodyPart res = fucker.body.getRandomPussy();
-        return res;
+        return fucker.body.getRandomPussy();
     }
 
     public BodyPart getTargetOrgan(Character target) {
@@ -32,6 +32,6 @@ public class ReversePetThreesome extends PetThreesome {
 
     @Override
     public Skill copy(Character user) {
-        return new ReversePetThreesome(user);
+        return new ReversePetThreesome(user.getType());
     }
 }

@@ -11,6 +11,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import nightgames.Resources.ResourceLoader;
+import nightgames.characters.CharacterType;
 import nightgames.global.Flag;
 import nightgames.json.JsonUtils;
 import nightgames.skills.Skill;
@@ -113,7 +114,7 @@ public class AiModifiers {
         this.oppStatusMods = oppStatusMods;
     }
 
-    public static AiModifiers getDefaultModifiers(String personality) {
+    public static AiModifiers getDefaultModifiers(CharacterType personality) {
         if (!DEFAULTS.containsKey(personality)) {
             System.err.println("No default AI modifications for " + personality + "!");
         }

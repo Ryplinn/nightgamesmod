@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -14,7 +15,7 @@ public class Shamed extends DurationStatus {
 
     private int magnitude;
 
-    public Shamed(Character affected) {
+    public Shamed(CharacterType affected) {
         super("Shamed", affected, 4);
         flag(Stsflag.shamed);
         flag(Stsflag.debuff);
@@ -25,16 +26,16 @@ public class Shamed extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "You're a little distracted by self-consciousness, and it's throwing you off your game.";
         } else {
-            return affected.getName() + " is red faced from embarrassment as much as arousal.";
+            return getAffected().getName() + " is red faced from embarrassment as much as arousal.";
         }
     }
 
     @Override
     public String initialMessage(Combat c, Optional<Status> replacement) {
-        return String.format("%s now shamed.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now shamed.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -44,14 +45,14 @@ public class Shamed extends DurationStatus {
 
     @Override
     public void onRemove(Combat c, Character other) {
-        affected.addlist.add(new Cynical(affected));
+        getAffected().addlist.add(new Cynical(affected));
     }
 
     @Override
     public int mod(Attribute a) {
         if (a == Attribute.seduction || a == Attribute.cunning) {
-            return Math.min(-2 * magnitude, -affected.getPure(a) * magnitude / 5);
-        } else if (a == Attribute.submission && affected.getPure(Attribute.submission) > 0) {
+            return Math.min(-2 * magnitude, -getAffected().getPure(a) * magnitude / 5);
+        } else if (a == Attribute.submission && getAffected().getPure(Attribute.submission) > 0) {
             return magnitude;
         } else {
             return 0;
@@ -60,11 +61,11 @@ public class Shamed extends DurationStatus {
 
     @Override
     public void tick(Combat c) {
-        affected.emote(Emotion.nervous, 20);
-        if (affected.getPure(Attribute.submission) > 0) {
-            affected.buildMojo(c, 3 * magnitude, " (Shamed)");
+        getAffected().emote(Emotion.nervous, 20);
+        if (getAffected().getPure(Attribute.submission) > 0) {
+            getAffected().buildMojo(c, 3 * magnitude, " (Shamed)");
         } else {
-            affected.loseMojo(c, 5 * magnitude, " (Shamed)");
+            getAffected().loseMojo(c, 5 * magnitude, " (Shamed)");
         }
     }
 
@@ -120,7 +121,7 @@ public class Shamed extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Shamed(newAffected);
+        return new Shamed(newAffected.getType());
     }
 
     @Override

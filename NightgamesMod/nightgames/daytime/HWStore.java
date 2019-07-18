@@ -13,8 +13,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HWStore extends Store {
-    HWStore(Player player) {
-        super("Hardware Store", player);
+    HWStore() {
+        super("Hardware Store");
         add(Item.Tripwire);
         add(Item.Rope);
         add(Item.Spring);
@@ -38,11 +38,11 @@ public class HWStore extends Store {
         } else {
             attemptBuy(choice);
         }
-        if (player.human()) {
+        if (getPlayer().human()) {
             GUI.gui.message(
                             "Nothing at the hardware store is designed for the sort of activities you have in mind, but there are components you could use to make some "
                                             + "effective traps.");
-            Map<Item, Integer> MyInventory = this.player.getInventory();
+            Map<Item, Integer> MyInventory = this.getPlayer().getInventory();
             for (Item i : stock.keySet()) {
                 if (MyInventory.get(i) == null || MyInventory.get(i) == 0) {
                     GUI.gui.message(i.getName() + ": $" + i.getPrice());
@@ -51,7 +51,7 @@ public class HWStore extends Store {
                                     i.getName() + ": $" + i.getPrice() + " (you have: " + MyInventory.get(i) + ")");
                 }
             }
-            GUI.gui.message("You have : $" + player.money + " to spend.");
+            GUI.gui.message("You have : $" + getPlayer().money + " to spend.");
             displayGoods(nextChoices);
             choose("Leave", nextChoices);
         }
@@ -60,7 +60,7 @@ public class HWStore extends Store {
     @Override
     protected List<LabeledValue<String>> displayItems() {
         // Empty bottles are only purchaseable if the player's rank is at least 1.
-        return stock.keySet().stream().filter(item -> !(item == Item.EmptyBottle && player.getRank() < 1)).map(this::sale).collect(
+        return stock.keySet().stream().filter(item -> !(item == Item.EmptyBottle && getPlayer().getRank() < 1)).map(this::sale).collect(
                         Collectors.toList());
     }
 

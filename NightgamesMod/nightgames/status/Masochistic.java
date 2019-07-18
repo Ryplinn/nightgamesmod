@@ -6,12 +6,13 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class Masochistic extends DurationStatus {
-    public Masochistic(Character affected) {
+    public Masochistic(CharacterType affected) {
         super("Masochism", affected, 10);
         flag(Stsflag.masochism);
         flag(Stsflag.purgable);
@@ -20,16 +21,16 @@ public class Masochistic extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "Arousing fantasies of being hurt continue to tempt you.";
         } else {
-            return affected.getName() + " is still flushed with arousal at the idea of being struck.";
+            return getAffected().getName() + " is still flushed with arousal at the idea of being struck.";
         }
     }
 
     @Override
     public String initialMessage(Combat c, Optional<Status> replacement) {
-        return String.format("%s now affected by masochistic tendencies.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now affected by masochistic tendencies.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -45,8 +46,8 @@ public class Masochistic extends DurationStatus {
     @Override
     public int regen(Combat c) {
         super.regen(c);
-        affected.emote(Emotion.nervous, 5);
-        affected.emote(Emotion.horny, 5);
+        getAffected().emote(Emotion.nervous, 5);
+        getAffected().emote(Emotion.horny, 5);
         return 0;
     }
 
@@ -102,7 +103,7 @@ public class Masochistic extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Masochistic(newAffected);
+        return new Masochistic(newAffected.getType());
     }
 
     @Override  public JsonObject saveToJson() {

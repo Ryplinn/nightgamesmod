@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -11,7 +12,7 @@ import nightgames.status.Bound;
 
 public class ImaginaryBonds extends Skill {
 
-    public ImaginaryBonds(Character self) {
+    public ImaginaryBonds(CharacterType self) {
         super("Binding", self, 4);
         addTag(SkillTag.positioning);
     }
@@ -48,7 +49,7 @@ public class ImaginaryBonds extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new ImaginaryBonds(user);
+        return new ImaginaryBonds(user.getType());
     }
 
     @Override

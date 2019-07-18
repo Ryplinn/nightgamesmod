@@ -1,10 +1,8 @@
 package nightgames.status;
 
 import com.google.gson.JsonObject;
-import nightgames.characters.Attribute;
+import nightgames.characters.*;
 import nightgames.characters.Character;
-import nightgames.characters.Emotion;
-import nightgames.characters.NPC;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -31,7 +29,7 @@ public class Frenzied extends DurationStatus {
         FUCK_SKILLS.add(new Tear(p));
         FUCK_SKILLS.add(new Undress(p));
         FUCK_SKILLS.add(new Fly(p));
-        FUCK_SKILLS.add(new Fuck(p));
+        FUCK_SKILLS.add(new Fuck(p.getType()));
         FUCK_SKILLS.add(new Invitation(p));
         FUCK_SKILLS.add(new WildThrust(p));
         FUCK_SKILLS.add(new ReverseAssFuck(p));
@@ -43,14 +41,14 @@ public class Frenzied extends DurationStatus {
     }
 
     private boolean selfInflicted;
-    public Frenzied(Character affected, int duration) {
+    public Frenzied(CharacterType affected, int duration) {
         this(affected, duration, false);
     }
 
-    public Frenzied(Character affected, int duration, boolean selfInflicted) {
+    public Frenzied(CharacterType affected, int duration, boolean selfInflicted) {
         super("Frenzied", affected, duration);
         flag(Stsflag.frenzied);
-        if (!selfInflicted && !affected.has(Trait.NaturalHeat)) {
+        if (!selfInflicted && !getAffected().has(Trait.NaturalHeat)) {
             flag(Stsflag.debuff);
             flag(Stsflag.mindgames);
         }
@@ -60,25 +58,25 @@ public class Frenzied extends DurationStatus {
 
     @Override
     public String initialMessage(Combat c, Optional<Status> replacement) {
-        if (affected.has(Trait.Rut) && !affected.human()) {
+        if (getAffected().has(Trait.Rut) && !getAffected().human()) {
             return Formatter.format("There's a frenzied look in {self:name-possessive} eyes as they zero in on {other:name-possessive} crotch. "
-                            + "This could be bad.", affected, c.getOpponent(affected));
+                            + "This could be bad.", getAffected(), c.getOpponent(getAffected()));
         }
         return String.format("%s mind blanks, leaving only the bestial need to breed.",
-                        affected.nameOrPossessivePronoun());
+                        getAffected().nameOrPossessivePronoun());
     }
 
     @Override
     public String describe(Combat c) {
         String msg;
-        if (affected.human()) {
+        if (getAffected().human()) {
             msg = "You cannot think about anything other than fucking all that moves.";
         } else {
             msg = String.format("%s has a frenzied look in %s eyes, interested in nothing but raw, hard sex.",
-                            affected.getName(), affected.possessiveAdjective());
+                            getAffected().getName(), getAffected().possessiveAdjective());
         }
-        if (affected.has(Trait.PrimalHeat)) {
-            msg += Formatter.format(" Somehow {self:possessive} crazed animal desperation makes {self:direct-object} seem more attractive than ever.", affected, c.getOpponent(affected));
+        if (getAffected().has(Trait.PrimalHeat)) {
+            msg += Formatter.format(" Somehow {self:possessive} crazed animal desperation makes {self:direct-object} seem more attractive than ever.", getAffected(), c.getOpponent(getAffected()));
         }
         return msg;
     }
@@ -100,15 +98,15 @@ public class Frenzied extends DurationStatus {
     @Override
     public void onRemove(Combat c, Character other) {
         if (!selfInflicted) {
-            affected.addlist.add(new Cynical(affected));
+            getAffected().addlist.add(new Cynical(affected));
         }
     }
 
     @Override
     public int regen(Combat c) {
         super.regen(c);
-        affected.buildMojo(c, 25);
-        affected.emote(Emotion.horny, 15);
+        getAffected().buildMojo(c, 25);
+        getAffected().emote(Emotion.horny, 15);
         return 0;
     }
 
@@ -165,22 +163,22 @@ public class Frenzied extends DurationStatus {
     @Override
     public void tick(Combat c) {
         if (c == null) {
-            affected.removelist.add(this);
-            affected.removeStatusNoSideEffects();
+            getAffected().removelist.add(this);
+            getAffected().removeStatusNoSideEffects();
         }
     }
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Frenzied(newAffected, getDuration());
+        return new Frenzied(newAffected.getType(), getDuration());
     }
 
     @Override
     public Collection<Skill> allowedSkills(Combat c) {
         // Gather the preferred skills for which the character meets the
         // requirements
-        return FUCK_SKILLS.stream().filter(s -> s.requirements(c, affected, c.getOpponent(affected)))
-                        .map(s -> s.copy(affected)).collect(Collectors.toSet());
+        return FUCK_SKILLS.stream().filter(s -> s.requirements(c, getAffected(), c.getOpponent(getAffected())))
+                        .map(s -> s.copy(getAffected())).collect(Collectors.toSet());
     }
 
     @Override  public JsonObject saveToJson() {

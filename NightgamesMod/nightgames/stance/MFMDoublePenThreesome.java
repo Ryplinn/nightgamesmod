@@ -1,9 +1,6 @@
 package nightgames.stance;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import nightgames.characters.Character;
@@ -22,7 +19,7 @@ public class MFMDoublePenThreesome extends MaledomSexStance {
     }
 
     @Override
-    public Character domSexCharacter(Combat c) {
+    public Character getDomSexCharacter() {
         return domSexCharacter;
     }
 
@@ -33,15 +30,16 @@ public class MFMDoublePenThreesome extends MaledomSexStance {
 
     @Override
     public boolean canthrust(Combat c, Character self) {
-        return domSexCharacter(c) == self || top == self;
+        return getDomSexCharacter() == self || top == self;
     }
 
     @Override
-    public void checkOngoing(Combat c) {
-        if (!c.getOtherCombatants().contains(domSexCharacter)) {
+    public Optional<Position> checkOngoing(Combat c) {
+        if (!c.otherCombatantsContains(getDomSexCharacter())) {
             c.write(bottom, Formatter.format("With the disappearance of {self:name-do}, {other:subject-action:manage|manages} to escape.", domSexCharacter, bottom));
             c.setStance(new Neutral(top, bottom));
         }
+        return null;
     }
 
     @Override
@@ -60,7 +58,7 @@ public class MFMDoublePenThreesome extends MaledomSexStance {
 
     @Override
     public List<BodyPart> partsForStanceOnly(Combat combat, Character self, Character other) {
-        if (self == domSexCharacter(combat) && other == bottom) {
+        if (self == getDomSexCharacter() && other == bottom) {
             return topParts(combat);
         } else if (self == top && other == bottom) {
             return Arrays.asList(top.body.getRandomInsertable()).stream().filter(part -> part != null && part.present())
@@ -88,7 +86,7 @@ public class MFMDoublePenThreesome extends MaledomSexStance {
     }
 
     public Character getPartner(Combat c, Character self) {
-        Character domSex = domSexCharacter(c);
+        Character domSex = getDomSexCharacter();
         if (self == top) {
             return bottom;
         } else if (domSex == self) {
@@ -108,7 +106,7 @@ public class MFMDoublePenThreesome extends MaledomSexStance {
     @Override
     public String describe(Combat c) {
             return String.format("%s is fucking %s ass while %s pounding away at %s pussy.",
-                            top.subject(), bottom.nameOrPossessivePronoun(), domSexCharacter(c).subjectAction("are", "is"), bottom.possessiveAdjective());
+                            top.subject(), bottom.nameOrPossessivePronoun(), getDomSexCharacter().subjectAction("are", "is"), bottom.possessiveAdjective());
     }
 
     @Override
@@ -160,7 +158,7 @@ public class MFMDoublePenThreesome extends MaledomSexStance {
     }
 
     @Override
-    public Position insertRandom(Combat c) {
+    public Optional<Position> insertRandom(Combat c) {
         return new Mount(top, bottom);
     }
 

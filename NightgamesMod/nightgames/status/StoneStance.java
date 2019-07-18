@@ -6,19 +6,20 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class StoneStance extends DurationStatus {
-    public StoneStance(Character affected) {
+    public StoneStance(CharacterType affected) {
         super("Stone Form", affected, 10);
         flag(Stsflag.form);
     }
 
     @Override
     public String initialMessage(Combat c, Optional<Status> replacement) {
-        return String.format("%s now in a Stone stance.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now in a Stone stance.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -42,7 +43,7 @@ public class StoneStance extends DurationStatus {
     @Override
     public int regen(Combat c) {
         super.regen(c);
-        affected.emote(Emotion.confident, 5);
+        getAffected().emote(Emotion.confident, 5);
         return 0;
     }
 
@@ -98,7 +99,7 @@ public class StoneStance extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new StoneStance(newAffected);
+        return new StoneStance(newAffected.getType());
     }
 
     @Override  public JsonObject saveToJson() {

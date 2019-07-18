@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -10,7 +11,7 @@ import nightgames.skills.damage.DamageType;
 
 public class BunshinAssault extends Skill {
 
-    public BunshinAssault(Character self) {
+    BunshinAssault(CharacterType self) {
         super("Bunshin Assault", self);
         addTag(SkillTag.hurt);
         addTag(SkillTag.staminaDamage);
@@ -36,13 +37,13 @@ public class BunshinAssault extends Skill {
                              .penetrated(c, getSelf());
     }
 
-    private int numberOfClones(Combat c) {
+    private int numberOfClones() {
         return Math.min(Math.min(getSelf().getMojo().get()/2, getSelf().get(Attribute.ninjutsu)/2), 15);
     }
 
     @Override
     public int getMojoCost(Combat c) {
-        return numberOfClones(c) * 2;
+        return numberOfClones() * 2;
     }
 
     @Override
@@ -57,7 +58,7 @@ public class BunshinAssault extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        int clones = numberOfClones(c);
+        int clones = numberOfClones();
         Result r;
         if(getSelf().human()){
             c.write(getSelf(), String.format("You form %d shadow clones and rush forward.",clones));
@@ -101,7 +102,7 @@ public class BunshinAssault extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new BunshinAssault(user);
+        return new BunshinAssault(user.getType());
     }
 
     @Override
