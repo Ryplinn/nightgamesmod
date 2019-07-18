@@ -9,7 +9,7 @@ import java.lang.reflect.Type;
 /**
  * Gson TypeAdapter for Clothing that serializes and deserializes based on the Clothing's ID.
  */
-public class ClothingAdaptor implements JsonSerializer<Clothing>, JsonDeserializer<Clothing> {
+public class ClothingAdapter implements JsonSerializer<Clothing>, JsonDeserializer<Clothing> {
 
     @Override public Clothing deserialize(JsonElement jsonElement, Type type,
                     JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {

@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
 /**
  * Gson adaptor that accounts for legacy Attribute member names.
  */
-public class AttributeAdaptor implements JsonDeserializer<Attribute> {
+public class AttributeAdapter implements JsonDeserializer<Attribute> {
     @Override public Attribute deserialize(JsonElement jsonElement, Type type,
                     JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         return Attribute.fromLegacyName(jsonElement.getAsString());

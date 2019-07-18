@@ -8,6 +8,7 @@ import nightgames.global.Random;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.items.clothing.ClothingTrait;
 import nightgames.status.*;
+import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
@@ -487,7 +488,10 @@ public enum Trait {
     }), // currently wearing a strapon
 
     event("event", "special character"),
-    mindcontrolresistance("", "temporary resistance to mind games - hidden"),
+    // Mind control resistance was hiding itself with a display name of "", but was still showing up on the status
+    // display as a leading comma. If you want this trait to remain hidden, Player.displayStatus() can be modified to
+    // skip traits with empty names.
+    mindcontrolresistance("Occupied Mind", "Resistance to mind games from amateurs"),
     none("", "");
 
     public static Set<Trait> featPool;
@@ -637,12 +641,15 @@ public enum Trait {
             return "";
         });
         resistances.put(Trait.mindcontrolresistance, (combat, c, s) -> {
-           if (s.mindgames() && combat != null && combat.getOpponent(c).has(Trait.mindcontroller)) {
-               float magnitude = c.getAddiction(AddictionType.MIND_CONTROL).map(AddictionSymptom::getMagnitude)
-                                               .orElse(0f);
+            // The Mind Control addiction grants resistance to mental effects from non-specialists.
+           if (s.mindgames() && combat != null && !combat.getOpponent(c).has(Trait.mindcontroller)) {
+               Optional<Addiction> addiction = c.getStrongestAddiction(AddictionType.MIND_CONTROL);
+               String controller = addiction.map(Addiction::getCause).map(Character::getName).orElse("Someone");
+               float magnitude = addiction.flatMap(Addiction::activeTracker).map(AddictionSymptom::getCombatMagnitude)
+                               .orElse(0f);
                float threshold = 40 * magnitude;
                if (Random.random(100) < threshold) {
-                   return "Mara's Control";
+                   return controller + "'s Control";
                }
            }
            return "";

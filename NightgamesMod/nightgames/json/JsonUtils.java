@@ -2,6 +2,7 @@ package nightgames.json;
 
 import com.google.gson.*;
 import nightgames.characters.Attribute;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.mods.PartMod;
 import nightgames.items.clothing.Clothing;
@@ -92,10 +93,11 @@ public class JsonUtils {
     public static Gson getGson() {
         if (gson == null) {
             gson = new GsonBuilder().setPrettyPrinting()
-                            .registerTypeAdapter(Clothing.class, new ClothingAdaptor())
+                            .registerTypeAdapter(Clothing.class, new ClothingAdapter())
                             .registerTypeAdapter(BodyPart.class, new BodyPartAdapter())
                             .registerTypeAdapter(PartMod.class, new PartModAdapter())
-                            .registerTypeAdapter(Attribute.class, new AttributeAdaptor())
+                            .registerTypeAdapter(Attribute.class, new AttributeAdapter())
+                            .registerTypeAdapter(CharacterType.class, new CharacterTypeAdapter())
                             .create();
         }
         return gson;
