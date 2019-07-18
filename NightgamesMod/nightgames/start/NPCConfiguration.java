@@ -6,34 +6,32 @@ import nightgames.characters.CharacterSex;
 import nightgames.characters.NPC;
 import nightgames.json.JsonUtils;
 
-import java.util.Optional;
+import static nightgames.start.ConfigurationUtils.merge;
 
-import static nightgames.start.ConfigurationUtils.mergeOptionals;
-
-public class NpcConfiguration extends CharacterConfiguration {
+public class NPCConfiguration extends CharacterConfiguration {
     // Optional because NpcConfiguration is used for both NPCs and adjustments common to all NPCs
     protected String type;
-    public Optional<Boolean> isStartCharacter;
+    private Boolean isStartCharacter;
 
-    public NpcConfiguration() {
-        isStartCharacter = Optional.empty();
+    private NPCConfiguration() {
+        isStartCharacter = null;
     }
 
     /** Makes a new NpcConfiguration from merging two others.
      * @param primaryConfig Will override field values from secondaryConfig.
      * @param secondaryConfig Field values will be overridden by primaryConfig.
      */
-    public NpcConfiguration(NpcConfiguration primaryConfig, NpcConfiguration secondaryConfig) {
+    NPCConfiguration(NPCConfiguration primaryConfig, NPCConfiguration secondaryConfig) {
         super(primaryConfig, secondaryConfig);
-        isStartCharacter = mergeOptionals(primaryConfig.isStartCharacter, secondaryConfig.isStartCharacter);
+        isStartCharacter = merge(primaryConfig.isStartCharacter, secondaryConfig.isStartCharacter);
         type = primaryConfig.type;
     }
 
-    public static Optional<NpcConfiguration> mergeOptionalNpcConfigs(Optional<NpcConfiguration> primaryConfig,
-                    Optional<NpcConfiguration> secondaryConfig) {
-        if (primaryConfig.isPresent()) {
-            if (secondaryConfig.isPresent()) {
-                return Optional.of(new NpcConfiguration(primaryConfig.get(), secondaryConfig.get()));
+    public static NPCConfiguration mergeNPCConfigs(NPCConfiguration primaryConfig,
+                    NPCConfiguration secondaryConfig) {
+        if (primaryConfig != null) {
+            if (secondaryConfig != null) {
+                return new NPCConfiguration(primaryConfig, secondaryConfig);
             } else {
                 return primaryConfig;
             }
@@ -43,8 +41,8 @@ public class NpcConfiguration extends CharacterConfiguration {
     }
 
     public final void apply(NPC base) {
-        if (gender.isPresent()) {
-            CharacterSex sex = gender.get();
+        if (gender != null) {
+            CharacterSex sex = gender;
             base.initialGender = sex;
             // If gender is present in config, make genitals conform to it. This will be overridden if config also supplies genitals.
             if (!sex.hasCock()) {
@@ -58,9 +56,9 @@ public class NpcConfiguration extends CharacterConfiguration {
             base.body.makeGenitalOrgans(base.initialGender);
         }
         super.apply(base);
-        if (isStartCharacter.isPresent()) {
-            base.isStartCharacter = isStartCharacter.get();
-            base.available = isStartCharacter.get();
+        if (isStartCharacter != null) {
+            base.isStartCharacter = isStartCharacter;
+            base.available = isStartCharacter;
         }
     }
 
@@ -68,9 +66,9 @@ public class NpcConfiguration extends CharacterConfiguration {
      * @param object The configuration from the JSON config file.
      * @return A new NpcConfiguration as specified in the config file.
      */
-    public static NpcConfiguration parseAllNpcs(JsonObject object) {
-        NpcConfiguration config = new NpcConfiguration();
-        config.isStartCharacter = JsonUtils.getOptional(object, "start").map(JsonElement::getAsBoolean);
+    static NPCConfiguration parseAllNPCs(JsonObject object) {
+        NPCConfiguration config = new NPCConfiguration();
+        config.isStartCharacter = JsonUtils.getOptional(object, "start").map(JsonElement::getAsBoolean).orElse(null);
         config.parseCommon(object);
         return config;
     }
@@ -79,8 +77,8 @@ public class NpcConfiguration extends CharacterConfiguration {
      * @param object The configuration from the JSON config file.
      * @return A new NpcConfiguration as specified in the config file.
      */
-    public static NpcConfiguration parse(JsonObject object) {
-        NpcConfiguration config = NpcConfiguration.parseAllNpcs(object);
+    public static NPCConfiguration parse(JsonObject object) {
+        NPCConfiguration config = NPCConfiguration.parseAllNPCs(object);
         config.type = JsonUtils.getOptional(object, "type").map(JsonElement::getAsString)
                         .orElseThrow(() -> new RuntimeException("Tried parsing NPC without a type."));
 

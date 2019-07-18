@@ -10,7 +10,6 @@ import nightgames.global.Random;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 public class Converted extends AttributeBuff {
     private Attribute converted;
@@ -22,10 +21,10 @@ public class Converted extends AttributeBuff {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         int newValue;
-        if (replacement.isPresent()) {
-            newValue = ((Converted)replacement.get()).value;
+        if (replacement != null) {
+            newValue = ((Converted) replacement).value;
         } else {
             newValue = this.value;
         }

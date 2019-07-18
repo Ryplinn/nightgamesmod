@@ -461,29 +461,29 @@ public class CreationGUI extends JPanel {
         configs.addItemListener(e -> setupConfig((StartConfiguration) e.getItem()));
         Arrays.stream(btnStart.getActionListeners())
               .forEach(btnStart::removeActionListener);
-        btnStart.addActionListener(e -> makeGame(Optional.of((StartConfiguration) configs.getSelectedItem())));
+        btnStart.addActionListener(e -> makeGame((StartConfiguration) configs.getSelectedItem()));
     }
 
     private void makeGame() {
-        makeGame(Optional.empty());
+        makeGame(null);
     }
 
-    private boolean playerCanChooseTraits(Optional<StartConfiguration> startConfig) {
+    private boolean playerCanChooseTraits(StartConfiguration startConfig) {
         boolean allowed = true;
-        if (startConfig.isPresent()) {
-            allowed = startConfig.get().playerCanChooseTraits();
+        if (startConfig != null) {
+            allowed = startConfig.playerCanChooseTraits();
         }
         return allowed;
     }
 
 
-    protected void makeGame(Optional<StartConfiguration> startConfig) {
+    protected void makeGame(StartConfiguration startConfig) {
         if (!namefield.getText()
                         .isEmpty()) {
             String name = namefield.getText();
             CharacterSex sex = (CharacterSex) sexBox.getSelectedItem();
             List<Trait> traits = Collections.emptyList();
-            if (playerCanChooseTraits(startConfig)) {
+            if (startConfig == null || playerCanChooseTraits(startConfig)) {
                 traits = Arrays.asList((Trait) StrengthBox.getSelectedItem(), (Trait) WeaknessBox.getSelectedItem());
             }
             if (rdbtnDumb.isSelected()) {

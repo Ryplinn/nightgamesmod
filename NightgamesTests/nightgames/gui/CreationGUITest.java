@@ -7,8 +7,6 @@ import org.hamcrest.core.IsCollectionContaining;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Optional;
-
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
@@ -17,8 +15,8 @@ import static org.junit.Assert.assertThat;
  * Tests involving the CreationGUI.
  */
 public class CreationGUITest {
-    TestGUI testGUI;
-    @Before public void setUp() throws Exception {
+    private TestGUI testGUI;
+    @Before public void setUp() {
         testGUI = new TestGUI();
         testGUI.showGameCreation();
     }
@@ -31,7 +29,7 @@ public class CreationGUITest {
         creationGUI.power = 5;
         creationGUI.seduction = 11;
         creationGUI.cunning = 9;
-        creationGUI.makeGame(Optional.empty());
+        creationGUI.makeGame(null);
         GameState gameState = testGUI.loadedState.take();
         assertThat(gameState.characterPool.human.att, allOf(hasEntry(Attribute.power, 5), hasEntry(Attribute.seduction, 11),
                         hasEntry(Attribute.cunning, 9)));

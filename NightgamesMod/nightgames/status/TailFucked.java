@@ -2,8 +2,6 @@ package nightgames.status;
 
 import static nightgames.requirements.RequirementShortcuts.eitherinserted;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
@@ -28,7 +26,7 @@ public class TailFucked extends Status implements InsertedStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         BodyPart hole = affected.body.getRandom(target);
         BodyPart tail = other.body.getRandom("tail");
         if (hole == null || tail == null) {

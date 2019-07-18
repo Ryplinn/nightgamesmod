@@ -1,7 +1,5 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 
 import nightgames.characters.*;
@@ -38,7 +36,7 @@ public class Stunned extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         return String.format("%s now stunned.\n", affected.subjectAction("are", "is"));
     }
 

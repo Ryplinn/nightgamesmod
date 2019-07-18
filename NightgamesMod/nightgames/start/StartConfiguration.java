@@ -25,8 +25,8 @@ public class StartConfiguration {
     private String name, summary;
     private boolean enabled;
     public PlayerConfiguration player;
-    private Collection<NpcConfiguration> npcs;
-    public NpcConfiguration npcCommon;
+    private Collection<NPCConfiguration> npcs;
+    public NPCConfiguration npcCommon;
     private Collection<String> flags;
 
     private StartConfiguration() {
@@ -49,7 +49,7 @@ public class StartConfiguration {
     }
 
     public boolean playerCanChooseGender() {
-        return !player.gender.isPresent();
+        return player == null || player.gender == null;
     }
 
     public boolean playerCanChooseTraits() {
@@ -65,7 +65,11 @@ public class StartConfiguration {
     }
     
     public CharacterSex chosenPlayerGender() {
-        return player.gender.orElseThrow(() -> new RuntimeException("No gender specified in this configuration"));
+        if (player == null || player.gender == null) {
+            throw new RuntimeException("No gender specified in this configuration");
+        } else {
+            return player.gender;
+        }
     }
 
     @Override
@@ -80,13 +84,13 @@ public class StartConfiguration {
         cfg.summary = root.get("summary").getAsString();
         cfg.enabled = root.get("enabled").getAsBoolean();
         cfg.player = PlayerConfiguration.parse(root.getAsJsonObject("player"));
-        cfg.npcCommon = NpcConfiguration.parseAllNpcs(root.getAsJsonObject("all_npcs"));
+        cfg.npcCommon = NPCConfiguration.parseAllNPCs(root.getAsJsonObject("all_npcs"));
 
         cfg.npcs = new HashSet<>();
         JsonArray npcs = root.getAsJsonArray("npcs");
         npcs.forEach(element -> {
             try {
-                cfg.npcs.add(NpcConfiguration.parse(element.getAsJsonObject()));
+                cfg.npcs.add(NPCConfiguration.parse(element.getAsJsonObject()));
             } catch (IllegalStateException e) {
                 e.printStackTrace();
             }
@@ -96,7 +100,7 @@ public class StartConfiguration {
         return cfg;
     }
 
-    public Optional<NpcConfiguration> findNpcConfig(String type) {
+    public Optional<NPCConfiguration> findNpcConfig(String type) {
         return npcs.stream().filter(npc -> type.equals(npc.type)).findAny();
     }
 

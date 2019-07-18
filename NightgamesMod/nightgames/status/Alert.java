@@ -1,7 +1,5 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
@@ -11,6 +9,7 @@ import nightgames.characters.NPC;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
+// TODO: Alert status is unused!
 public class Alert extends DurationStatus {
 
     /**
@@ -31,7 +30,7 @@ public class Alert extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         return String.format("%s now more alert\n", affected.subjectAction("are", "is"));
     }
 

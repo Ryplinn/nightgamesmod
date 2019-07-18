@@ -1,7 +1,5 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 
 import nightgames.characters.*;
@@ -37,7 +35,7 @@ public class Plasticized extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         if (getAffected().human()) {
             return "<b>You are wrapped in a layer of hard plastic and are completely immobilized!</b>";
         } else {

@@ -11,7 +11,6 @@ import nightgames.skills.*;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Frenzied extends DurationStatus {
@@ -57,7 +56,7 @@ public class Frenzied extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         if (getAffected().has(Trait.Rut) && !getAffected().human()) {
             return Formatter.format("There's a frenzied look in {self:name-possessive} eyes as they zero in on {other:name-possessive} crotch. "
                             + "This could be bad.", getAffected(), c.getOpponent(getAffected()));

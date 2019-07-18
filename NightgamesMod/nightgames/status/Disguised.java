@@ -9,8 +9,6 @@ import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.GameState;
 
-import java.util.Optional;
-
 public class Disguised extends Status {
     private NPC disguisedTarget;
 
@@ -30,7 +28,7 @@ public class Disguised extends Status {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         return "";
     }
 

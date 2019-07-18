@@ -1,8 +1,6 @@
 package nightgames.status;
 
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
@@ -30,7 +28,7 @@ public class Blinded extends Status {
     }
     
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         return Formatter.capitalizeFirstLetter(String.format("%s eyes are now blocked by %s", affected.nameOrPossessivePronoun(), cause));
     }
 

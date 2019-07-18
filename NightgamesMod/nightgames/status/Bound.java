@@ -1,7 +1,5 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 import nightgames.characters.Character;
 import nightgames.characters.*;
@@ -15,7 +13,7 @@ import nightgames.trap.Trap;
 public class Bound extends Status {
     protected double toughness;
     protected String binding;
-    protected Optional<Trap> trap;
+    protected Trap trap;
 
     public Bound(CharacterType affected, double dc, String binding) {
         this(affected, dc, binding, null);
@@ -28,14 +26,14 @@ public class Bound extends Status {
         super(type, affected);
         toughness = dc;
         this.binding = binding;
-        this.trap = Optional.ofNullable(trap);
+        this.trap = trap;
         flag(Stsflag.bound);
         flag(Stsflag.debuff);
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
-        return String.format("%s now bound by %s.\n", affected.subjectAction("are", "is"), binding);
+    public String initialMessage(Combat c, Status replacement) {
+        return String.format("%s now bound by %s.\n", getAffected().subjectAction("are", "is"), binding);
     }
 
     @Override
@@ -139,10 +137,10 @@ public class Bound extends Status {
     }
 
     public void tick(Combat c) {
-        if (c == null && trap.isPresent()) {
-            if (affected.human()) {
-                GUI.gui.message(Formatter.format("{self:SUBJECT-ACTION:are|is} still trapped by the %s.", affected, NPC
-                                .noneCharacter(), trap.get().getName().toLowerCase()));
+        if (c == null && trap != null) {
+            if (getAffected().human()) {
+                GUI.gui.message(Formatter.format("{self:SUBJECT-ACTION:are|is} still trapped by the %s.", getAffected(), NPC
+                                .noneCharacter(), trap.getName().toLowerCase()));
             }
             getAffected().location().opportunity(getAffected(), trap);
         }
@@ -150,7 +148,7 @@ public class Bound extends Status {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Bound(newAffected, toughness, binding, trap.orElse(null));
+        return new Bound(newAffected.getType(), toughness, binding, trap);
     }
 
     @Override  public JsonObject saveToJson() {

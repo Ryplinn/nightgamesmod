@@ -1,7 +1,5 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
@@ -39,7 +37,7 @@ public class FiredUp extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         return String.format("%s really getting into using %s %s.", getAffected().subjectAction("are", "is"),
                         getAffected().possessiveAdjective(), part);
     }

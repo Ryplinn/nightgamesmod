@@ -1,7 +1,5 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
@@ -33,7 +31,7 @@ public class PartSucked extends Status implements InsertedStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         BodyPart stick = getAffected().body.getRandom(target);
         if (stick == null || penetrated == null) {
             return "";

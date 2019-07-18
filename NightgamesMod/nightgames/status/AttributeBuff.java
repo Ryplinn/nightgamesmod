@@ -9,8 +9,6 @@ import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
-import java.util.Optional;
-
 public class AttributeBuff extends DurationStatus {
     Attribute modded;
     protected int value;
@@ -34,9 +32,13 @@ public class AttributeBuff extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         int newValue;
-        newValue = replacement.map(status -> ((AttributeBuff) status).value).orElseGet(() -> this.value);
+        if (replacement == null) {
+            newValue = this.value;
+        } else {
+            newValue = replacement.value();
+        }
         if (newValue < 0) {
             return Formatter.format("{self:pronoun-action:feel|seems} %s{self:if-human: than before}{self:if-nonhuman: now}", getAffected(), getAffected(), modded.getLowerPhrase());
         } else {

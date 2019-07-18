@@ -26,18 +26,18 @@ public class GameState {
     public CharacterPool characterPool;
     private volatile Thread loopThread;
 
-    public GameState(String playerName, Optional<StartConfiguration> config, List<Trait> pickedTraits,
+    public GameState(String playerName, StartConfiguration config, List<Trait> pickedTraits,
                 CharacterSex pickedGender, Map<Attribute, Integer> selectedAttributes) {
         this(playerName, config, pickedTraits, pickedGender, selectedAttributes, DEFAULT_XP_RATE, DEFAULT_MONEY_RATE);
     }
 
-    public GameState(String playerName, Optional<StartConfiguration> config, List<Trait> pickedTraits,
+    public GameState(String playerName, StartConfiguration config, List<Trait> pickedTraits,
                     CharacterSex pickedGender, Map<Attribute, Integer> selectedAttributes, double xpRate, double moneyRate) {
         characterPool = new CharacterPool(config);
         this.xpRate = xpRate;
         this.moneyRate = moneyRate;
-        Optional<PlayerConfiguration> playerConfig = config.map(c -> c.player);
-        Collection<String> cfgFlags = config.map(StartConfiguration::getFlags).orElse(new ArrayList<>());
+        PlayerConfiguration playerConfig = Optional.ofNullable(config).map(c -> c.player).orElse(null);
+        Collection<String> cfgFlags = Optional.ofNullable(config).map(StartConfiguration::getFlags).orElse(new ArrayList<>());
         characterPool.human = new Player(playerName, pickedGender, playerConfig, pickedTraits, selectedAttributes);
         if(characterPool.human.has(Trait.largereserves)) {
             characterPool.human.getWillpower().gain(20);
@@ -61,7 +61,7 @@ public class GameState {
         moneyRate = data.moneyRate;
         // legacy support: previously we only saved unlocked NPCs.
         if (Flag.checkFlag(Flag.LegacyCharAvailableSave)) {
-            characterPool = new CharacterPool(Optional.empty());
+            characterPool = new CharacterPool(null);
             characterPool.updateNPCs(data.npcs);
             characterPool.updatePlayer(data.player);
         } else {

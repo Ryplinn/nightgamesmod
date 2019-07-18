@@ -1,7 +1,9 @@
 package nightgames.characters.trait;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.global.Formatter;
+import nightgames.global.GameState;
 import nightgames.global.Random;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.items.clothing.ClothingTrait;

@@ -1,7 +1,5 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
@@ -33,7 +31,7 @@ public class Primed extends Status {
     }
     
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         if (isPrimed(getAffected(), 1))
             return "";
         return String.format("%s storing time charges.", getAffected().subjectAction("are", "is"));

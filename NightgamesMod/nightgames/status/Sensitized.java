@@ -1,7 +1,5 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
@@ -33,8 +31,8 @@ public class Sensitized extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
-        if (replacement.isPresent())
+    public String initialMessage(Combat c, Status replacement) {
+        if (replacement != null)
             return "";
         return Formatter.format(String.format("{self:NAME-POSSESSIVE} groans as {self:possessive} %s grows hot.",
                         part.describe(affected)), affected, c.getOpponent(affected));

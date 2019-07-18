@@ -1,7 +1,5 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
@@ -16,7 +14,7 @@ public class IgnoreOrgasm extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         if (affected.getArousal().isFull()) {
             return affected.subjectAction("are", "is") + " overpowering the urge to cum";
         }

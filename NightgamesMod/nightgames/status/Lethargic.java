@@ -7,8 +7,6 @@ import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 
-import java.util.Optional;
-
 public class Lethargic extends DurationStatus {
     double magnitude;
 
@@ -41,7 +39,7 @@ public class Lethargic extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         return String.format("%s lethargic.\n", affected.subjectAction("are", "is"));
     }
 

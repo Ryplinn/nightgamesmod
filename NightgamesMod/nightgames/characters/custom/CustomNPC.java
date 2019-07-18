@@ -25,7 +25,7 @@ public class CustomNPC extends BasePersonality {
         this(data, Optional.empty(), Optional.empty());
     }
 
-    public CustomNPC(NPCData data, Optional<NpcConfiguration> charConfig, Optional<NpcConfiguration> commonConfig) {
+    public CustomNPC(NPCData data, NPCConfiguration charConfig, NPCConfiguration commonConfig) {
         super(data.getName(), data.isStartCharacter());
         this.data = data;
         setupCharacter(charConfig, commonConfig);

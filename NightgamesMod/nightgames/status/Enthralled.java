@@ -1,7 +1,5 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 
 import nightgames.characters.*;
@@ -38,9 +36,10 @@ public class Enthralled extends DurationStatus {
     private Character getMaster() {
         return master.fromPoolGuaranteed();
     }
+
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
-        if (replacement.isPresent()) {
+    public String initialMessage(Combat c, Status replacement) {
+        if (replacement != null) {
             return String.format("%s %s control of %s.\n", getMaster().subjectAction("reinforce", "reinforces"),
                             getMaster().possessiveAdjective(), getAffected().nameDirectObject());
         } else {

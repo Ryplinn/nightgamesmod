@@ -10,8 +10,6 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.skills.damage.DamageType;
 
-import java.util.Optional;
-
 public class Horny extends DurationStatus {
     private float magnitude;
     protected String source;
@@ -76,7 +74,7 @@ public class Horny extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         return String.format("%s%s aroused by %s.\n", getAffected().subjectAction("are", "is"),
                         replacement == null ? " now" : "",
                         source + " (" + Formatter.formatDecimal(magnitude) + " x " + getDuration() + ")");

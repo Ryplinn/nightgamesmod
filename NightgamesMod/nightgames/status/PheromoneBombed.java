@@ -1,7 +1,5 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
@@ -19,7 +17,7 @@ public class PheromoneBombed extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         return Formatter.format("{self:SUBJECT} now {self:action:have|has} a %s sticking"
                         + " onto {self:possessive} chest.", affected, c.getOpponent(affected),
                         c.getOpponent(affected).human() ? "primed pheromone bomb" : "creepy-looking sphere");

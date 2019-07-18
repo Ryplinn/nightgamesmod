@@ -19,31 +19,22 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static nightgames.start.ConfigurationUtils.mergeCollections;
-import static nightgames.start.ConfigurationUtils.mergeOptionals;
+import static nightgames.start.ConfigurationUtils.*;
 
 public abstract class CharacterConfiguration {
 
-    protected Optional<String> name;
-    protected Optional<CharacterSex> gender;
+    protected String name;
+    protected CharacterSex gender;
     protected Map<Attribute, Integer> attributes;
-    protected Optional<Integer> money;
-    protected Optional<Integer> level;
-    protected Optional<Integer> xp;
-    protected Optional<Collection<Trait>> traits;
-    protected Optional<BodyConfiguration> body;
-    protected Optional<Collection<String>> clothing;
+    protected Integer money;
+    protected Integer level;
+    protected Integer xp;
+    protected Collection<Trait> traits;
+    protected BodyConfiguration body;
+    protected Collection<String> clothing;
 
-    public CharacterConfiguration() {
-        name = Optional.empty();
-        gender = Optional.empty();
-        attributes = new HashMap<>();
-        money = Optional.empty();
-        level = Optional.empty();
-        xp = Optional.empty();
-        traits = Optional.empty();
-        body = Optional.empty();
-        clothing = Optional.empty();
+    CharacterConfiguration() {
+
     }
 
     /**
@@ -52,16 +43,14 @@ public abstract class CharacterConfiguration {
      * @param primaryConfig   The primary configuration.
      * @param secondaryConfig The secondary configuration. Field values will be overridden by values in primaryConfig. return
      */
-    protected CharacterConfiguration(CharacterConfiguration primaryConfig, CharacterConfiguration secondaryConfig) {
-        this();
-        name = mergeOptionals(primaryConfig.name, secondaryConfig.name);
-        gender = mergeOptionals(primaryConfig.gender, secondaryConfig.gender);
-        attributes.putAll(secondaryConfig.attributes);
-        attributes.putAll(primaryConfig.attributes);
-        money = mergeOptionals(primaryConfig.money, secondaryConfig.money);
-        level = mergeOptionals(primaryConfig.level, secondaryConfig.level);
-        xp = mergeOptionals(primaryConfig.xp, secondaryConfig.xp);
-        clothing = mergeOptionals(primaryConfig.clothing, secondaryConfig.clothing);
+    CharacterConfiguration(CharacterConfiguration primaryConfig, CharacterConfiguration secondaryConfig) {
+        name = merge(primaryConfig.name, secondaryConfig.name);
+        gender = merge(primaryConfig.gender, secondaryConfig.gender);
+        attributes = mergeMaps(primaryConfig.attributes, secondaryConfig.attributes);
+        money = merge(primaryConfig.money, secondaryConfig.money);
+        level = merge(primaryConfig.level, secondaryConfig.level);
+        xp = merge(primaryConfig.xp, secondaryConfig.xp);
+        clothing = merge(primaryConfig.clothing, secondaryConfig.clothing);
         traits = mergeCollections(primaryConfig.traits, secondaryConfig.traits);
         body = BodyConfiguration.merge(primaryConfig.body, secondaryConfig.body);
     }
@@ -91,8 +80,8 @@ public abstract class CharacterConfiguration {
                 Optional<Attribute> attToTrain = Random.pickRandom(attsToTrain);
                 // put it into the level plan.
                 attToTrain.ifPresent(att -> {
-                    attsForLevel.compute(att, (key, old) -> old == null? 1 : old + 1);
-                    deltaAtts.compute(att, (key, old) -> old - 1);
+                    attsForLevel.compute(att, (key, old) -> old == null ? 1 : old + 1);
+                    deltaAtts.compute(att, (key, old) -> old == null ? 0 : old - 1);
                 });
             }
         }
@@ -100,36 +89,47 @@ public abstract class CharacterConfiguration {
     }
 
     protected final void apply(Character base) {
-        name.ifPresent(base::setName);
-        money.ifPresent(m -> base.money = m);
-        traits.ifPresent(t -> {
+        if (name != null) {
+            base.setName(name);
+        }
+        if (money != null) {
+            base.money = money;
+        }
+        if (traits != null) {
             base.clearTraits();
-            t.forEach(base::addTraitDontSaveData);
-            t.forEach(trait -> base.getGrowth().addTrait(0, trait));
-        });
-        level.ifPresent(desiredLevel -> {
-            Map<Integer, Map<Attribute, Integer>> attributeLevelPlan = calculateAttributeLevelPlan(base, desiredLevel, attributes);
-            System.out.println(attributeLevelPlan);
-            while (base.level < desiredLevel) {
-                base.level += 1;
-                modMeters(base, 1); // multiplication to compensate for missed daytime gains
-                attributeLevelPlan.get(base.level).forEach((a, val) -> {
-                    if (val > 0) {
-                        base.mod(a, val, true);
-                    }
-                });
-                base.getGrowth().addOrRemoveTraits(base);
-            }
-        });
-        base.att.putAll(attributes);
-        xp.ifPresent(base::gainXPPure);
-        clothing.ifPresent(ids -> {
-            List<Clothing> clothes = ClothingTable.getIDs(ids);
+            traits.forEach(base::addTraitDontSaveData);
+            traits.forEach(trait -> base.getGrowth().addTrait(0, trait));
+        }
+        if (level != null) {
+            Map<Integer, Map<Attribute, Integer>> attributeLevelPlan =
+                            calculateAttributeLevelPlan(base, level, attributes);
+                System.out.println(attributeLevelPlan);
+                while (base.level < level) {
+                    base.level += 1;
+                    modMetersOnce(base); // multiplication to compensate for missed daytime gains
+                    attributeLevelPlan.get(base.level).forEach((a, val) -> {
+                        if (val > 0) {
+                            base.mod(a, val, true);
+                        }
+                    });
+                    base.getGrowth().addOrRemoveTraits(base);
+                }
+        }
+        if (attributes != null) {
+            base.att.putAll(attributes);
+        }
+        if (xp != null) {
+            base.gainXPPure(xp);
+        }
+        if (clothing != null) {
+            List<Clothing> clothes = ClothingTable.getIDs(clothing);
             base.outfitPlan = new OutfitPlan(clothes);
             base.closet = new HashSet<>(clothes);
             base.change();
-        });
-        body.ifPresent(b -> b.apply(base.body));
+        }
+        if (body != null) {
+            body.apply(base.body);
+        }
         base.spendXP();
     }
 
@@ -138,33 +138,31 @@ public abstract class CharacterConfiguration {
      *
      * @param object The configuration read from the JSON config file.
      */
-    protected void parseCommon(JsonObject object) {
-        name = JsonUtils.getOptional(object, "name").map(JsonElement::getAsString);
+    void parseCommon(JsonObject object) {
+        name = JsonUtils.getOptional(object, "name").map(JsonElement::getAsString).orElse(null);
         gender = JsonUtils.getOptional(object, "gender").map(JsonElement::getAsString).map(String::toLowerCase)
-                        .map(CharacterSex::valueOf);
+                        .map(CharacterSex::valueOf).orElse(null);
         traits = JsonUtils.getOptionalArray(object, "traits")
-                        .map(array -> JsonUtils.collectionFromJson(array, Trait.class));
-        body = JsonUtils.getOptionalObject(object, "body").map(BodyConfiguration::parse);
-        clothing = JsonUtils.getOptionalArray(object, "clothing").map(JsonUtils::stringsFromJson);
-        money = JsonUtils.getOptional(object, "money").map(JsonElement::getAsInt);
-        level = JsonUtils.getOptional(object, "level").map(JsonElement::getAsInt);
-        xp = JsonUtils.getOptional(object, "xp").map(JsonElement::getAsInt);
+                        .map(array -> JsonUtils.collectionFromJson(array, Trait.class)).orElse(null);
+        body = JsonUtils.getOptionalObject(object, "body").map(BodyConfiguration::parse).orElse(null);
+        clothing = JsonUtils.getOptionalArray(object, "clothing").map(JsonUtils::stringsFromJson).orElse(null);
+        money = JsonUtils.getOptional(object, "money").map(JsonElement::getAsInt).orElse(null);
+        level = JsonUtils.getOptional(object, "level").map(JsonElement::getAsInt).orElse(null);
+        xp = JsonUtils.getOptional(object, "xp").map(JsonElement::getAsInt).orElse(null);
         attributes = JsonUtils.getOptionalObject(object, "attributes")
-                        .map(obj -> JsonUtils.mapFromJson(obj, Attribute.class, Integer.class)).orElse(new HashMap<>());
+                        .map(obj -> JsonUtils.mapFromJson(obj, Attribute.class, Integer.class)).orElse(null);
     }
 
-    private static void modMeters(Character character, int levels) {
+    private static void modMetersOnce(Character character) {
         Growth growth = character.getGrowth();
         boolean hard = Flag.checkFlag(Flag.hardmode);
-        for (int i = 0; i < levels; i++) {
-            character.getStamina().gain(growth.stamina);
-            character.getArousal().gain(growth.arousal);
-            character.getWillpower().gain(growth.willpower);
-            if (hard) {
-                character.getStamina().gain(growth.bonusStamina);
-                character.getArousal().gain(growth.bonusArousal);
-                character.getWillpower().gain(growth.bonusWillpower);
-            }
+        character.getStamina().gain(growth.stamina);
+        character.getArousal().gain(growth.arousal);
+        character.getWillpower().gain(growth.willpower);
+        if (hard) {
+            character.getStamina().gain(growth.bonusStamina);
+            character.getArousal().gain(growth.bonusArousal);
+            character.getWillpower().gain(growth.bonusWillpower);
         }
     }
 }

@@ -1,7 +1,5 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
@@ -25,7 +23,7 @@ public class PressurePointed extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         return Formatter.format("An indescribable feeling settles inside {self:name-possessive} crotch. "
                         + "While {self:pronoun-action:aren't|isn't} necessarily aroused, "
                         + "it's all {self:pronoun} can do to tighten up {self:possessive} "

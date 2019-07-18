@@ -53,8 +53,8 @@ public class DivineCharge extends Status {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
-        if (!replacement.isPresent()) {
+    public String initialMessage(Combat c, Status replacement) {
+        if (replacement != null) {
             return String.format("%s concentrating divine energy in %s %s.\n", affected.subjectAction("are", "is"),
                             affected.possessiveAdjective(), getPart(c));
         }
@@ -64,7 +64,7 @@ public class DivineCharge extends Status {
     @Override
     public void onApply(Combat c, Character other) {
         affected.usedAttribute(Attribute.divinity, c, .25);
-    };
+    }
 
     @Override
     public String describe(Combat c) {

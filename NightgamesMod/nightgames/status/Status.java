@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import com.google.gson.JsonObject;
@@ -53,10 +52,10 @@ public abstract class Status implements Cloneable {
      * Message to print when status is applied in combat.
      *
      * @param c The active combat.
-     * @param replacement The status this status replaces, if any.
+     * @param replacement The status this status replaces. Null if it's not replacing anything.
      * @return The application description.
      */
-    public abstract String initialMessage(Combat c, Optional<Status> replacement);
+    public abstract String initialMessage(Combat c, Status replacement);
 
     /**
      * Message to print when describing ongoing status in combat.

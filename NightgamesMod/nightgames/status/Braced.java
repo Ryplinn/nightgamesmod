@@ -2,7 +2,6 @@ package nightgames.status;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import com.google.gson.JsonObject;
 
@@ -26,7 +25,7 @@ public class Braced extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         return String.format("%s now braced.\n", affected.subjectAction("are", "is"));
     }
 

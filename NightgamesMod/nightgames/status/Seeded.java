@@ -12,8 +12,6 @@ import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.gui.GUI;
 
-import java.util.Optional;
-
 public class Seeded extends Status implements InsertedStatus {
     private String target;
     private CharacterType other;
@@ -33,7 +31,7 @@ public class Seeded extends Status implements InsertedStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         BodyPart hole = getAffected().body.getRandom(target);
         if (hole == null) {
             return "";

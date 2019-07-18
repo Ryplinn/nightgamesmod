@@ -9,7 +9,6 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.skills.damage.DamageType;
 
-import java.util.Optional;
 public class Atrophy extends DurationStatus {
     private float magnitude;
     protected String source;
@@ -72,8 +71,8 @@ public class Atrophy extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
-        return String.format("%s %sweakening from %s.\n", affected.subjectAction("are", "is"), replacement.isPresent() ? "" : "now ",
+    public String initialMessage(Combat c, Status replacement) {
+        return String.format("%s %sweakening from %s.\n", affected.subjectAction("are", "is"), replacement != null ? "" : "now ",
                         source + " (" + Formatter.formatDecimal(magnitude) + " x " + getDuration() + ")");
     }
 

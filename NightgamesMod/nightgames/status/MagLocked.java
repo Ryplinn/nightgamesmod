@@ -8,8 +8,6 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.items.Item;
 
-import java.util.Optional;
-
 public class MagLocked extends Status {
 
     private int count;
@@ -35,7 +33,7 @@ public class MagLocked extends Status {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         return "";
     }
 

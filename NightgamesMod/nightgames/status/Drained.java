@@ -10,7 +10,6 @@ import nightgames.global.Random;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 public class Drained extends AttributeBuff {
     public static void drain(Combat c, Character drainer, Character drained, 
@@ -64,10 +63,10 @@ public class Drained extends AttributeBuff {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         int newValue;
-        if (replacement.isPresent()) {
-            newValue = ((Drained)replacement.get()).value;
+        if (replacement != null) {
+            newValue = ((Drained)replacement).value;
         } else {
             newValue = this.value;
         }

@@ -11,8 +11,6 @@ import nightgames.global.Formatter;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.stance.Position;
 
-import java.util.Optional;
-
 public class WingWrapped extends Status {
 
     private final CharacterType wrapper;
@@ -39,7 +37,7 @@ public class WingWrapped extends Status {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         String msg = "{other:NAME-POSSESSIVE} powerful {other:body-part:wings} are holding"
                         + " {self:name-do} in place";
         if (getWrapper().has(Trait.VampireWings) && getAffected().outfit.slotEmpty(ClothingSlot.top)) {

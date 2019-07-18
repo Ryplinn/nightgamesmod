@@ -9,7 +9,7 @@ import nightgames.characters.custom.JsonSourceNPCDataLoader;
 import nightgames.characters.custom.NPCData;
 import nightgames.characters.trait.Trait;
 import nightgames.json.JsonUtils;
-import nightgames.start.NpcConfiguration;
+import nightgames.start.NPCConfiguration;
 import nightgames.start.StartConfiguration;
 
 import java.io.IOException;
@@ -34,9 +34,9 @@ public class CharacterPool {
      * Creates a CharacterPool at the start of a new game.
      * @param startConfig The config of the new game.
      */
-    public CharacterPool(Optional<StartConfiguration> startConfig) {
+    public CharacterPool(StartConfiguration startConfig) {
         this();
-        Optional<NpcConfiguration> commonConfig = startConfig.map(startConfiguration -> startConfiguration.npcCommon);
+        NPCConfiguration commonConfig = startConfig != null ? startConfig.npcCommon : null;
 
         try (InputStreamReader reader = new InputStreamReader(
                         ResourceLoader.getFileResourceAsStream("characters/included.json"))) {
@@ -46,8 +46,6 @@ public class CharacterPool {
                 try {
                     NPCData data = JsonSourceNPCDataLoader
                                     .load(ResourceLoader.getFileResourceAsStream("characters/" + name));
-                    Optional<NpcConfiguration> npcConfig =
-                                    findNpcConfig(CustomNPC.TYPE_PREFIX + data.getName(), startConfig);
                     Personality npc = new CustomNPC(data, npcConfig, commonConfig);
                     characterPool.put(npc.getCharacter().getType(), npc.getCharacter());
                     System.out.println("Loaded " + name);

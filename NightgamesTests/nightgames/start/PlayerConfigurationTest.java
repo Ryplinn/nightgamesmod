@@ -22,8 +22,8 @@ import static org.junit.Assert.assertThat;
  *
  */
 public class PlayerConfigurationTest {
-    StartConfiguration startConfig;
-    PlayerConfiguration playerConfig;
+    private StartConfiguration startConfig;
+    private PlayerConfiguration playerConfig;
 
     @Before public void setUp() throws Exception {
         Path file = new File("NightgamesTests/nightgames/start/TestStartConfig.json").toPath();
@@ -31,13 +31,13 @@ public class PlayerConfigurationTest {
         playerConfig = startConfig.player;
     }
 
-    @Test public void testPlayerCreation() throws Exception {
+    @Test public void testPlayerCreation() {
         Map<Attribute, Integer> chosenAttributes = new HashMap<>();
         List<Trait> pickedTraits = Arrays.asList(Trait.romantic, Trait.insatiable);
         chosenAttributes.put(Attribute.power, 5);
         chosenAttributes.put(Attribute.seduction, 6);
         chosenAttributes.put(Attribute.cunning, 7);
-        Player malePlayer = new Player("dude", CharacterSex.male, Optional.of(playerConfig), pickedTraits,
+        Player malePlayer = new Player("dude", CharacterSex.male, playerConfig, pickedTraits,
                         chosenAttributes);
         assertEquals(5, malePlayer.level);
         assertEquals(15000, malePlayer.money);

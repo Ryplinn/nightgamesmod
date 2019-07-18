@@ -1,8 +1,6 @@
 package nightgames.start;
 
-import nightgames.characters.Attribute;
-import nightgames.characters.CharacterSex;
-import nightgames.characters.TestAngel;
+import nightgames.characters.*;
 import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingTable;
 import nightgames.json.JsonUtils;
@@ -23,8 +21,8 @@ import static org.junit.Assert.*;
  *
  */
 public class NpcConfigurationTest {
-    StartConfiguration startConfig;
-    NpcConfiguration angelConfig;
+    private StartConfiguration startConfig;
+    private NPCConfiguration angelConfig;
 
     @Before public void setUp() throws Exception {
         Path file = new File("NightgamesTests/nightgames/start/TestStartConfig.json").toPath();
@@ -33,8 +31,8 @@ public class NpcConfigurationTest {
                         .orElseThrow(() -> new NoSuchElementException("TestAngel not found in test config."));
     }
 
-    @Test public void testConfigMerge() throws Exception {
-        NpcConfiguration mergedConfig = new NpcConfiguration(angelConfig, startConfig.npcCommon);
+    @Test public void testConfigMerge() {
+        NPCConfiguration mergedConfig = new NPCConfiguration(angelConfig, startConfig.npcCommon);
         assertThat(mergedConfig.type, equalTo("TestAngel"));
         assertThat(mergedConfig.gender, is(Optional.empty()));
         assertThat(mergedConfig.attributes, allOf(IsMapContaining.hasEntry(Attribute.power, 13),
@@ -49,7 +47,7 @@ public class NpcConfigurationTest {
         assertThat(mergedConfig.money.orElse(0), equalTo(5000));
     }
 
-    @Test public void testNpcCreation() throws Exception {
+    @Test public void testNpcCreation() {
         TestAngel angel = new TestAngel(Optional.of(angelConfig), Optional.of(startConfig.npcCommon));
         assertThat(angel.character.getType(), equalTo("TestAngel"));
         assertThat(angel.character.att, allOf(Arrays.asList(IsMapContaining.hasEntry(Attribute.power, 13),
@@ -63,7 +61,7 @@ public class NpcConfigurationTest {
         assertThat(angel.character.money, equalTo(5000));
     }
 
-    @Test public void testBodyMerge() throws Exception {
+    @Test public void testBodyMerge() {
         TestAngel angel = new TestAngel(Optional.of(angelConfig), Optional.of(startConfig.npcCommon));
 
         // Starting stats should match config but breasts should be the same as base Angel if not overwritten in config.
@@ -74,7 +72,7 @@ public class NpcConfigurationTest {
                         angel.getCharacter().body.getLargestBreasts());
     }
     
-    @Test public void testGenderChange() throws Exception {
+    @Test public void testGenderChange() {
         angelConfig.gender = Optional.of(CharacterSex.male);
         TestAngel angel = new TestAngel(Optional.of(angelConfig), Optional.of(startConfig.npcCommon));
 
@@ -85,7 +83,7 @@ public class NpcConfigurationTest {
                         equalTo(TestAngel.baseTestAngelChar.body.getLargestBreasts()));
     }
 
-    @Test public void testClothing() throws Exception {
+    @Test public void testClothing() {
         NpcConfiguration mergedConfig = new NpcConfiguration(angelConfig, startConfig.npcCommon);
         TestAngel angel = new TestAngel(Optional.of(angelConfig), Optional.of(startConfig.npcCommon));
         Clothing[] expectedClothing = ClothingTable.getIDs(mergedConfig.clothing

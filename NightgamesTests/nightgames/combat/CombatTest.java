@@ -3,6 +3,7 @@ package nightgames.combat;
 import nightgames.actions.Movement;
 import nightgames.areas.Area;
 import nightgames.characters.BlankPersonality;
+import nightgames.characters.CharacterType;
 import nightgames.characters.NPC;
 import nightgames.characters.trait.Trait;
 import nightgames.global.GameState;
@@ -22,7 +23,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.*;
 
 /**
- * TODO: Write class-level documentation.
+ * Unit tests for combat methods.
  */
 public class CombatTest {
     private NPC self;

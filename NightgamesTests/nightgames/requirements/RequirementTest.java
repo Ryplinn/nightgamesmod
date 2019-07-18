@@ -44,7 +44,7 @@ public class RequirementTest {
     private NPC other;
     private Combat combat;
 
-    @Before public void setUp() throws Exception {
+    @Before public void setUp() {
         self = new BlankPersonality("SelfTestNPC").character;
         other = new BlankPersonality("OtherTestNPC").character;
         Area area = new Area("TestArea", "TestArea description", Movement.beer);
@@ -52,13 +52,13 @@ public class RequirementTest {
         combat = new Combat(self, other, area);
     }
 
-    @Test public void analTest() throws Exception {
+    @Test public void analTest() {
         combat.setStance(new Anal(other, self));
         assertThat(anal().meets(combat, self, other), is(true));
         assertThat(anal().meets(combat, other, self), is(false));
     }
 
-    @Test public void andTest() throws Exception {
+    @Test public void andTest() {
         // truth table tests
         assertThat(and().meets(combat, self, other), is(false));
         assertThat(and(trueReq()).meets(combat, self, other), is(true));
@@ -77,7 +77,7 @@ public class RequirementTest {
         assertThat(and(falseReq(), falseReq(), falseReq()).meets(combat, self, other), is(false));
     }
 
-    @Test public void attributeTest() throws Exception {
+    @Test public void attributeTest() {
         self.att.put(Attribute.seduction, 20);
         other.att.put(Attribute.seduction, 18);
         AttributeRequirement req = attribute(Attribute.seduction, 19);
@@ -87,7 +87,7 @@ public class RequirementTest {
         assertThat(req.meets(combat, other, self), is(true));
     }
 
-    @Test public void bodypartTest() throws Exception {
+    @Test public void bodypartTest() {
         self.body.addReplace(PussyPart.generic, 1);
         other.body.addReplace(PussyPart.generic.applyMod(FieryMod.INSTANCE), 1);
         assertThat(bodypart("pussy").meets(combat, self, other), is(true));
@@ -96,13 +96,13 @@ public class RequirementTest {
         assertThat(bodypart("pussy").meets(combat, other, self), is(false));
     }
 
-    @Test public void domTest() throws Exception {
+    @Test public void domTest() {
         combat.setStance(new HeldOral(self, other));
         assertThat(dom().meets(combat, self, other), is(true));
         assertThat(dom().meets(combat, other, self), is(false));
     }
 
-    @Test public void durationTest() throws Exception {
+    @Test public void durationTest() {
         DurationRequirement duration = duration(5);
         assertThat(duration.meets(combat, self, other), is(true));
         duration.tick(4);
@@ -116,7 +116,7 @@ public class RequirementTest {
         assertThat(duration.meets(combat, self, other), is(true));
     }
 
-    @Test public void insertedTest() throws Exception {
+    @Test public void insertedTest() {
         self.body.addReplace(new CockPart().applyMod(new SizeMod(SizeMod.COCK_SIZE_HUGE)), 1);
         combat.setStance(new FlyingCarry(self, other));
         assertThat(inserted().meets(combat, self, other), is(true));
@@ -128,7 +128,7 @@ public class RequirementTest {
         assertThat(eitherinserted().meets(combat, other, self), is(false));
     }
 
-    @Test public void itemTest() throws Exception {
+    @Test public void itemTest() {
         self.gain(Item.Beer, 6);
         other.gain(Item.Beer, 1);
         ItemRequirement sixpack = item(Item.Beer.amount(6));
@@ -140,7 +140,7 @@ public class RequirementTest {
         assertThat(sixpack.meets(null, self, null), is(false));
     }
 
-    @Test public void levelTest() throws Exception {
+    @Test public void levelTest() {
         LevelRequirement sophomore = level(2);
         assertThat(sophomore.meets(combat, self, other), is(false));
         assertThat(sophomore.meets(combat, other, self), is(false));
@@ -149,7 +149,7 @@ public class RequirementTest {
         assertThat(sophomore.meets(combat, other, self), is(false));
     }
 
-    @Test public void moodTest() throws Exception {
+    @Test public void moodTest() {
         MoodRequirement inTheMood = mood(Emotion.horny);
         self.mood = Emotion.horny;
         other.mood = Emotion.nervous;
@@ -163,19 +163,19 @@ public class RequirementTest {
         assertThat(inTheMood.meets(combat, other, self), is(true));
     }
 
-    @Test public void noneTest() throws Exception {
+    @Test public void noneTest() {
         assertThat(none().meets(combat, self, other), is(true));
         assertThat(none().meets(combat, other, self), is(true));
     }
 
-    @Test public void notTest() throws Exception {
+    @Test public void notTest() {
         assertThat(not(trueReq()).meets(combat, self, other), is(false));
         assertThat(not(trueReq()).meets(combat, other, self), is(false));
         assertThat(not(falseReq()).meets(combat, self, other), is(true));
         assertThat(not(falseReq()).meets(combat, other, self), is(true));
     }
 
-    @Test public void orgasmTest() throws Exception {
+    @Test public void orgasmTest() {
         assertThat(orgasms(1).meets(combat, self, other), is(false));
         assertThat(orgasms(1).meets(combat, other, self), is(false));
         self.doOrgasm(combat, other, self.body.getRandomPussy(), other.body.get("hands").get(0));
@@ -183,7 +183,7 @@ public class RequirementTest {
         assertThat(orgasms(1).meets(combat, other, self), is(false));
     }
 
-    @Test public void orTest() throws Exception {
+    @Test public void orTest() {
         // truth table tests
         assertThat(or().meets(combat, self, other), is(false));
         assertThat(or(trueReq()).meets(combat, self, other), is(true));
@@ -202,7 +202,7 @@ public class RequirementTest {
         assertThat(or(falseReq(), falseReq(), falseReq()).meets(combat, self, other), is(false));
     }
 
-    @Test public void positionTest() throws Exception {
+    @Test public void positionTest() {
         self.body.addReplace(new CockPart(), 1);
         PositionRequirement flyfuck = position("FlyingCarry");
         combat.setStance(new FlyingCarry(self, other));
@@ -214,7 +214,7 @@ public class RequirementTest {
         assertThat(flyfuck.meets(combat, other, self), is(false));
     }
 
-    @Test public void proneTest() throws Exception {
+    @Test public void proneTest() {
         assertThat(prone().meets(combat, self, other), is(false));
         assertThat(prone().meets(combat, other, self), is(false));
         combat.setStance(new FaceSitting(self, other));
@@ -222,7 +222,7 @@ public class RequirementTest {
         assertThat(prone().meets(combat, other, self), is(true));
     }
 
-    @Test public void resultTest() throws Exception {
+    @Test public void resultTest() {
         ResultRequirement strappedOn = result(Result.strapon);
         assertThat(strappedOn.meets(combat, self, other), is(false));
         assertThat(strappedOn.meets(combat, other, self), is(false));
@@ -231,13 +231,13 @@ public class RequirementTest {
         assertThat(strappedOn.meets(combat, self, other), is(true));
     }
 
-    @Test public void reverseTest() throws Exception {
+    @Test public void reverseTest() {
         combat.setStance(new Anal(other, self));
         assertThat(rev(anal()).meets(combat, self, other), is(false));
         assertThat(rev(anal()).meets(combat, other, self), is(true));
     }
 
-    @Test public void specificBodyPartTest() throws Exception {
+    @Test public void specificBodyPartTest() {
         self.body.addReplace(PussyPart.generic, 1);
         other.body.addReplace(PussyPart.generic.applyMod(FieryMod.INSTANCE), 1);
         SpecificBodyPartRequirement fierypussy = specificpart(PussyPart.generic.applyMod(FieryMod.INSTANCE));
@@ -247,32 +247,32 @@ public class RequirementTest {
         assertThat(fierypussy.meets(combat, other, self), is(false));
     }
 
-    @Test public void statusTest() throws Exception {
+    @Test public void statusTest() {
         StatusRequirement caffeinated = status(Stsflag.alert);
         self.add(combat, new Alert(self));
         assertThat(caffeinated.meets(combat, self, other), is(true));
         assertThat(caffeinated.meets(combat, other, self), is(false));
     }
 
-    @Test public void subTest() throws Exception {
+    @Test public void subTest() {
         combat.setStance(new HeldOral(self, other));
         assertThat(sub().meets(combat, self, other), is(false));
         assertThat(sub().meets(combat, other, self), is(true));
     }
 
-    @Test public void traitTest() throws Exception {
+    @Test public void traitTest() {
         self.add(Trait.alwaysready);
         TraitRequirement dtf = trait(Trait.alwaysready);
         assertThat(dtf.meets(combat, self, other), is(true));
         assertThat(dtf.meets(combat, other, self), is(false));
     }
 
-    @Test public void winningEvenFootingTest() throws Exception {
+    @Test public void winningEvenFootingTest() {
         assertThat(winning().meets(combat, self, other), is(false));
         assertThat(winning().meets(combat, other, self), is(false));
     }
 
-    @Test public void winningSelfAheadTest() throws Exception {
+    @Test public void winningSelfAheadTest() {
         self.getWillpower().setMax(100);
         self.getWillpower().set(100);
         other.getWillpower().setMax(200);
@@ -281,7 +281,7 @@ public class RequirementTest {
         assertThat(winning().meets(combat, other, self), is(false));
     }
 
-    @Test public void winningOtherAheadTest() throws Exception {
+    @Test public void winningOtherAheadTest() {
         self.getWillpower().setMax(100);
         self.getWillpower().set(50);
         other.getWillpower().setMax(50);

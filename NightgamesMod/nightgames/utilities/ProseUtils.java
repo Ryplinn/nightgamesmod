@@ -1,9 +1,8 @@
 package nightgames.utilities;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import nightgames.global.Random;
+
+import java.util.*;
 
 public class ProseUtils {
     private static Map<String, String> FIRST_PERSON_TO_THIRD_PERSON = new HashMap<>();
@@ -35,5 +34,35 @@ public class ProseUtils {
             return verb.substring(0, verb.length() - 1) + "ies";
         }
         return verb + "s";
+    }
+
+    private static String getWord(List<String> words) {
+        return Random.pickRandomGuaranteed(words);
+    }
+
+    private static final List<String> DICK_SYNONYMS = new ArrayList<>();
+    static {
+        DICK_SYNONYMS.add("pole");
+        DICK_SYNONYMS.add("phallus");
+        DICK_SYNONYMS.add("dick");
+    }
+    public static String getDickWord() {
+        return getWord(DICK_SYNONYMS);
+    }
+
+    private static final List<String> PUSSY_SYNONYMS = new ArrayList<>();
+    static {
+        PUSSY_SYNONYMS.add("pussy");
+    }
+    public static String getPussyWord() {
+        return getWord(PUSSY_SYNONYMS);
+    }
+
+    private static final List<String> ASSHOLE_SYNONYMS = new ArrayList<>();
+    static {
+        ASSHOLE_SYNONYMS.add("asshole");
+    }
+    public static String getAssholeWord() {
+        return getWord(ASSHOLE_SYNONYMS);
     }
 }

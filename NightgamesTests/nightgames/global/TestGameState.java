@@ -14,8 +14,8 @@ import java.util.Optional;
  */
 public class TestGameState extends GameState {
     public TestGameState() {
-        super("TestPlayer", Optional.empty(), new ArrayList<>(), CharacterSex.male, new HashMap<>());
-        GameState.gameState = this;
+        super("TestPlayer", null, new ArrayList<>(), CharacterSex.male, new HashMap<>());
+        GameState.setGameState(this);
     }
 
     @Override public void closeGame() {

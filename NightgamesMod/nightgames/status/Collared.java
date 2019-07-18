@@ -7,8 +7,6 @@ import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
-import java.util.Optional;
-
 public class Collared extends Status implements Compulsive {
 
     private int charges;
@@ -35,7 +33,7 @@ public class Collared extends Status implements Compulsive {
     }
     
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         return Formatter.format("{self:SUBJECT} now {self:action:have|has} a metallic collar around"
                         + " {self:possessive} neck!", affected, c.getOpponent(affected));
     }

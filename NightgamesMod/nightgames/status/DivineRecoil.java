@@ -1,7 +1,5 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
@@ -21,8 +19,8 @@ public class DivineRecoil extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
-        if (!replacement.isPresent()) {
+    public String initialMessage(Combat c, Status replacement) {
+        if (replacement != null) {
             return String.format(
                             "Some leftover divine energy is rampaging through %s body, leaving %s incredibly sensitive.\n",
                             affected.nameOrPossessivePronoun(), affected.directObject());

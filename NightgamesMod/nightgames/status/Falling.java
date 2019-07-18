@@ -10,8 +10,6 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.stance.StandingOver;
 
-import java.util.Optional;
-
 public class Falling extends Status {
     public Falling(CharacterType affected) {
         super("Falling", affected);
@@ -35,7 +33,7 @@ public class Falling extends Status {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         return String.format("%s knocked off balance.\n", getAffected().subjectAction("are", "is"));
     }
 

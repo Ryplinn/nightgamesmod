@@ -27,7 +27,7 @@ public class DarkChaos extends Status {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         return ""; // explained in withdrawal message
     }
 

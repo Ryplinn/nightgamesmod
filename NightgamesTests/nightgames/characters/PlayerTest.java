@@ -21,12 +21,12 @@ public class PlayerTest {
         selectedAttributes.put(Attribute.seduction, 6);
         selectedAttributes.put(Attribute.cunning, 7);
         Player playerMale =
-                        new Player("dude", CharacterSex.male, Optional.empty(), new ArrayList<>(), selectedAttributes);
-        Player playerFemale = new Player("chick", CharacterSex.female, Optional.empty(), new ArrayList<>(),
+                        new Player("dude", CharacterSex.male, null, new ArrayList<>(), selectedAttributes);
+        Player playerFemale = new Player("chick", CharacterSex.female, null, new ArrayList<>(),
                         selectedAttributes);
         Player playerHerm =
-                        new Player("futa", CharacterSex.herm, Optional.empty(), new ArrayList<>(), selectedAttributes);
-        Player playerAsexual = new Player("ace", CharacterSex.asexual, Optional.empty(), new ArrayList<>(),
+                        new Player("futa", CharacterSex.herm, null, new ArrayList<>(), selectedAttributes);
+        Player playerAsexual = new Player("ace", CharacterSex.asexual, null, new ArrayList<>(),
                         selectedAttributes);
 
         assertTrue("Male player has no cock!", playerMale.body.has("cock"));

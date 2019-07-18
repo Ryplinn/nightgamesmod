@@ -2,7 +2,6 @@ package nightgames.status;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import com.google.gson.JsonObject;
 
@@ -40,7 +39,7 @@ public class Parasited extends Status {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         return Formatter.format(
                         "{other:SUBJECT-ACTION:have|has} planted a part of {other:reflective} in {self:name-possessive} head!\n", affected, other);
     }

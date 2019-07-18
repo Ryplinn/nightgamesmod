@@ -1,7 +1,5 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
@@ -31,8 +29,8 @@ public class Buzzed extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
-        return String.format("%s now buzzed.\n", affected.subjectAction("are", "is"));
+    public String initialMessage(Combat c, Status replacement) {
+        return String.format("%s now buzzed.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override

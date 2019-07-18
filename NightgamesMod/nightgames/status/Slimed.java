@@ -9,8 +9,6 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.utilities.MathUtils;
 
-import java.util.Optional;
-
 public class Slimed extends DurationStatus {
     private static final int MAX_STACKS = 10;
     private Character origin;
@@ -28,9 +26,9 @@ public class Slimed extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
-    	if (replacement.isPresent()) {
-    	    if (((Slimed)replacement.get()).stacks < 0) {
+    public String initialMessage(Combat c, Status replacement) {
+    	if (replacement != null) {
+    	    if (((Slimed)replacement).stacks < 0) {
                 return Formatter.format("Some of the slime covering {self:direct-object} fall off {self:name-possessive} body.\n", affected, origin);
     	    } else {
     	        return Formatter.format("More pieces of {other:name-possessive} slime are getting stuck to {self:name-possessive} body.\n", affected, origin);

@@ -1,7 +1,5 @@
 package nightgames.status;
 
-import java.util.Optional;
-
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
@@ -22,7 +20,7 @@ public class Glamour extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         return String.format("%s surrounded %s with a arcane glamour.\n", affected.subjectAction("have", "has"), affected.reflectivePronoun());
     }
 

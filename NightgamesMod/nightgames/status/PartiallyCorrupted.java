@@ -10,8 +10,6 @@ import nightgames.global.Formatter;
 import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
-import java.util.Optional;
-
 public class PartiallyCorrupted extends DurationStatus {
     private static final int THRESHOLD = 4;
 
@@ -28,7 +26,7 @@ public class PartiallyCorrupted extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         if (counter > THRESHOLD) {
             affected.addict(c, AddictionType.CORRUPTION,
                             cause, cause.has(Trait.Subversion) ? Addiction.HIGH_INCREASE : Addiction.MED_INCREASE);
