@@ -1,10 +1,7 @@
 package nightgames.status.addiction;
 
-import com.google.gson.JsonObject;
-import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.NPC;
-import nightgames.characters.body.BodyPart;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.status.Masochistic;
 import nightgames.status.Status;
@@ -12,59 +9,58 @@ import nightgames.status.Stsflag;
 
 import java.util.Optional;
 
-public class Dominance extends AddictionSymptom {
-    private int originalWill;
+public class Dominance extends Addiction {
+    private Integer originalWill;
 
-    public Dominance(Character affected, String cause, float magnitude) {
-        super(affected, "Dominance", cause, magnitude);
-        flags.add(Stsflag.victimComplex);
-        originalWill = -1;
+    public Dominance(CharacterType afflicted, CharacterType cause, float magnitude) {
+        super("Dominance", afflicted, cause, magnitude);
     }
 
-    public Dominance(Character affected, String cause) {
-        this(affected, cause, .01f);
+    public Dominance(CharacterType afflicted, CharacterType cause) {
+        this(afflicted, cause, .01f);
     }
+
+    private class DominanceTrackerSymptom extends AddictionSymptom {
+        DominanceTrackerSymptom(Dominance source, float initialMagnitude) {
+            super(source.afflicted, "Induced Submission", source, initialMagnitude);
+            flags.add(Stsflag.victimComplex);
+        }
+    }
+
 
     public static boolean mojoIsBlocked(Character affected, Combat c) {
         if (c == null)
             return false;
-        Character player = affected;
-        Character opp = c.getOpponent(player);
+        Character opp = c.getOpponent(affected);
         if (!affected.checkAddiction(AddictionType.DOMINANCE, opp))
             return false;
-        int sev = player.getAddictionSeverity(AddictionType.DOMINANCE)
+        int sev = affected.getAnyAddictionSeverity(AddictionType.DOMINANCE)
                         .ordinal();
         int dom = c.getStance().getDominanceOfStance(opp);
 
         return sev >= 5 - dom;
     }
 
-    @Override
-    protected Optional<Status> withdrawalEffects() {
-        if (originalWill < 0) {
+    @Override public Optional<Status> withdrawalEffects() {
+        if (originalWill == null) {
+            // TODO: review these calculations
             double mod = Math.min(1.0, 1.0 / (double) getSeverity().ordinal() + .4);
-            originalWill = affected.getWillpower()
+            originalWill = getAfflicted().getWillpower()
                                     .max();
-            affected.getWillpower().setTemporaryMax((int) (originalWill * mod));
+            getAfflicted().getWillpower().setTemporaryMax((int) (originalWill * mod));
         }
-        return Optional.of(new Masochistic(affected));
-    }
-
-    @Override
-    protected Optional<Status> addictionEffects() {
-        return Optional.of(this);
+        return Optional.of(new Masochistic(afflicted));
     }
 
     @Override
     public void endNight() {
         super.endNight();
 
-        affected.getWillpower().setTemporaryMax(originalWill);
-        originalWill = -1;
+        getAfflicted().getWillpower().setTemporaryMax(originalWill);
+        originalWill = null;
     }
 
-    @Override
-    protected String describeIncrease() {
+    @Override public String describeIncrease() {
         switch (getSeverity()) {
             case HIGH:
                 return "Held down by " + getCause().getName() + ", you feel completely powerless to resist.";
@@ -78,8 +74,7 @@ public class Dominance extends AddictionSymptom {
         }
     }
 
-    @Override
-    protected String describeDecrease() {
+    @Override public String describeDecrease() {
         switch (getSeverity()) {
             case LOW:
                 return "More and more of your strength is returning since escaping from " + getCause().getName() + ". ";
@@ -94,19 +89,16 @@ public class Dominance extends AddictionSymptom {
         }
     }
 
-    @Override
-    protected String describeWithdrawal() {
+    @Override public String describeWithdrawal() {
         return "Your body longs for the exquisite pain and submission " + getCause().getName() + " can bring you,"
-                        + " reducing your stamina and causing masochisitic tendencies.";
+                        + " reducing your stamina and causing masochistic tendencies.";
     }
 
-    @Override
-    protected String describeCombatIncrease() {
+    @Override public String describeCombatIncrease() {
         return "Being hurt so well just makes you want to submit even more.";
     }
 
-    @Override
-    protected String describeCombatDecrease() {
+    @Override public String describeCombatDecrease() {
         return "Some of the submissiveness clears from your mind, allowing you to focus" + " more on the fight.";
     }
 
@@ -116,7 +108,7 @@ public class Dominance extends AddictionSymptom {
                         + " streak? Well, sure, I can see how it would be a problem. Being held down does not"
                         + " help your chances in a fight, and if you actually enjoy it you are not at all"
                         + " likely to win. Basically, if " + getCause().pronoun() + " gets you down and tied up or something, you're going"
-                        + " to lose, because you subconciously don't actually want to win.\"</i> That does sound"
+                        + " to lose, because you subconsciously don't actually want to win.\"</i> That does sound"
                         + " pretty bad... Any upsides? <i>\"Well, I suppose that being on the receiving end of such"
                         + " a powerful dominance, the stuff other people do won't make as much of an impression."
                         + " Personally, I wouldn't go for it, but if you like getting hurt and humiliated, go right"
@@ -128,13 +120,17 @@ public class Dominance extends AddictionSymptom {
         return "";
     }
 
+    @Override public AddictionSymptom createTrackingSymptom(float initialCombatMagnitude) {
+        return new DominanceTrackerSymptom(this, initialCombatMagnitude);
+    }
+
     @Override
     public AddictionType getType() {
         return AddictionType.DOMINANCE;
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         if (inWithdrawal) {
             return getCause().getName() + " is looking meaner than ever after you neglected to visit today. Equal"
                             + " parts of fear and desire well up inside of you at the thought of what "
@@ -147,78 +143,7 @@ public class Dominance extends AddictionSymptom {
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Severity severity) {
         return "";
-    }
-
-    @Override
-    public int mod(Attribute a) {
-        return 0;
-    }
-
-    @Override
-    public int regen(Combat c) {
-        return 0;
-    }
-
-    @Override
-    public int damage(Combat c, int x) {
-        return 0;
-    }
-
-    @Override
-    public double pleasure(Combat c, BodyPart withPart, BodyPart targetPart, double x) {
-        return 0;
-    }
-
-    @Override
-    public int weakened(Combat c, int x) {
-        return 0;
-    }
-
-    @Override
-    public int tempted(Combat c, int x) {
-        return 0;
-    }
-
-    @Override
-    public int evade() {
-        return 0;
-    }
-
-    @Override
-    public int escape() {
-        return 0;
-    }
-
-    @Override
-    public int gainmojo(int x) {
-        return 0;
-    }
-
-    @Override
-    public int spendmojo(int x) {
-        return 0;
-    }
-
-    @Override
-    public int counter() {
-        return 0;
-    }
-
-    @Override
-    public int value() {
-        return 0;
-    }
-
-    @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new Dominance(newAffected, newOther.getType(), magnitude);
-    }
-
-    @Override
-    public Status loadFromJson(JsonObject obj) {
-        return new Dominance(NPC.noneCharacter(), obj.get("cause").getAsString(),
-                        (float) obj.get("magnitude").getAsInt());
     }
 }

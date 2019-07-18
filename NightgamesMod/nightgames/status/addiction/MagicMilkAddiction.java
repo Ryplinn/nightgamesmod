@@ -1,10 +1,6 @@
 package nightgames.status.addiction;
 
-import com.google.gson.JsonObject;
-import nightgames.characters.Attribute;
-import nightgames.characters.Character;
-import nightgames.characters.NPC;
-import nightgames.characters.body.BodyPart;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
@@ -13,40 +9,68 @@ import nightgames.status.Stsflag;
 
 import java.util.Optional;
 
-public class MagicMilkAddiction extends AddictionSymptom {
+import static nightgames.status.addiction.Addiction.Severity.*;
+
+public class MagicMilkAddiction extends Addiction {
     private int originalMaxWill;
 
-    public MagicMilkAddiction(Character affected, String cause, float magnitude) {
-        super(affected, "Magic Milk Addiction", cause, magnitude);
-        flag(Stsflag.magicmilkcraving);
-        flag(Stsflag.tolerance); // immune to regular addiction
+    public MagicMilkAddiction(CharacterType afflicted, CharacterType cause, float magnitude) {
+        super("Magic Milk Addiction", afflicted, cause, magnitude);
     }
 
-    public MagicMilkAddiction(Character affected, String cause) {
-        this(affected, cause, .01f);
+    public MagicMilkAddiction(CharacterType afflicted, CharacterType cause) {
+        this(afflicted, cause, .01f);
     }
 
-    @Override
-    protected Optional<Status> withdrawalEffects() {
+    private class MagicMilkTrackingSymptom extends AddictionSymptom {
+        MagicMilkTrackingSymptom(MagicMilkAddiction source, float initialMagnitude) {
+            super(afflicted, "Milk Cravings", source, initialMagnitude);
+            flag(Stsflag.magicmilkcraving);
+            flag(Stsflag.tolerance); // immune to regular addiction
+        }
+
+        @Override
+        public int tempted(Combat c, int x) {
+            return (int) (x * (combatAtLeast(MED) ? combatAtLeast(HIGH) ? 1.5 : 1.25 : 1));
+        }
+
+        @Override
+        public void tick(Combat c) {
+            super.tick(c);
+            if (combatAtLeast(LOW)) {
+                int loss;
+                switch (getCombatSeverity()) {
+                    case LOW:
+                        loss = Random.random(1, 3);
+                        break;
+                    case MED:
+                        loss = Random.random(3, 6);
+                        break;
+                    case HIGH:
+                        loss = Random.random(5, 8);
+                        break;
+                    default:
+                        throw new IllegalStateException();
+                }
+                getAfflicted().loseWillpower(c, loss, 0, false, " due to your Milk Addiction");
+            }
+        }
+    }
+
+    @Override public Optional<Status> withdrawalEffects() {
         double mod = 1.0 / (double) getSeverity().ordinal();
-        originalMaxWill = affected.getWillpower().max();
-        affected.getWillpower().setTemporaryMax((int) (originalMaxWill * mod));
+        originalMaxWill = getAfflicted().getWillpower().max();
+        getAfflicted().getWillpower().setTemporaryMax((int) (originalMaxWill * mod));
         return Optional.empty();
     }
 
     @Override
     public void endNight() {
         super.endNight();
-        affected.getWillpower().setTemporaryMax(originalMaxWill);
+        getAfflicted().getWillpower().setTemporaryMax(originalMaxWill);
     }
 
-    @Override
-    protected Optional<Status> addictionEffects() {
-        return Optional.of(this);
-    }
-
-    @Override
-    protected String describeIncrease() {
+    @Override public String describeIncrease() {
         switch (getSeverity()) {
             case HIGH:
                 return "You feel empty without " + getCause().getName() + "'s milk flowing down your throat. You need more!";
@@ -60,8 +84,7 @@ public class MagicMilkAddiction extends AddictionSymptom {
         }
     }
 
-    @Override
-    protected String describeDecrease() {
+    @Override public String describeDecrease() {
         switch (getSeverity()) {
             case LOW:
                 return "The desire for " + getCause().getName() + "'s milk has calmed down somewhat.";
@@ -76,8 +99,7 @@ public class MagicMilkAddiction extends AddictionSymptom {
         }
     }
 
-    @Override
-    protected String describeWithdrawal() {
+    @Override public String describeWithdrawal() {
         switch (getSeverity()) {
             case HIGH:
                 return "<b>You haven't had any of " + getCause().getName() + "'s milk today, and the thirst threatens"
@@ -95,20 +117,18 @@ public class MagicMilkAddiction extends AddictionSymptom {
         }
     }
 
-    @Override
-    protected String describeCombatIncrease() {
+    @Override public String describeCombatIncrease() {
         return "The swaying of " + getCause().getName() + "'s breasts causes "
                         + "you to remember vividly the taste of " + getCause().directObject() + " milk. You know you want more.";
     }
 
-    @Override
-    protected String describeCombatDecrease() {
+    @Override public String describeCombatDecrease() {
         return "Having drank some of " + getCause().getName() + "'s sweet nectar, the thirst fades into the background. A part"
                         + " of you is already looking forward to more, though.";
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         if (inWithdrawal) {
             return "The burning thirst wells up at the sight of " + getCause().getName() + ". It would be so easy to subdue,"
                         + " just a little sip...";
@@ -118,8 +138,8 @@ public class MagicMilkAddiction extends AddictionSymptom {
     }
 
     @Override
-    public String describe(Combat c) {
-        switch (getCombatSeverity()) {
+    public String describe(Combat c, Severity severity) {
+        switch (severity) {
             case HIGH:
                 return "You are desperate for more milk and can't even think of resisting " + getCause().directObject() + ".";
             case LOW:
@@ -135,119 +155,6 @@ public class MagicMilkAddiction extends AddictionSymptom {
     }
 
     @Override
-    public int mod(Attribute a) {
-        return 0;
-    }
-
-    @Override
-    public int regen(Combat c) {
-        return 0;
-    }
-
-    @Override
-    public int damage(Combat c, int x) {
-        return 0;
-    }
-
-    @Override
-    public double pleasure(Combat c, BodyPart withPart, BodyPart targetPart, double x) {
-        return 0;
-    }
-
-    @Override
-    public int weakened(Combat c, int x) {
-        return 0;
-    }
-
-    @Override
-    public int tempted(Combat c, int x) {
-        return (int) (x * (combatAtLeast(Severity.MED) ? combatAtLeast(Severity.HIGH) ? 1.5 : 1.25 : 1));
-    }
-
-    @Override
-    public int evade() {
-        return 0;
-    }
-
-    @Override
-    public int escape() {
-        return 0;
-    }
-
-    @Override
-    public int gainmojo(int x) {
-        return 0;
-    }
-
-    @Override
-    public int spendmojo(int x) {
-        return 0;
-    }
-
-    @Override
-    public int counter() {
-        return 0;
-    }
-
-    @Override
-    public int value() {
-        return 0;
-    }
-
-    @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new MagicMilkAddiction(newAffected, newOther.getType(), magnitude);
-    }
-
-    @Override public Status loadFromJson(JsonObject obj) {
-        return new MagicMilkAddiction(NPC.noneCharacter(), obj.get("cause").getAsString(),
-                        (float) obj.get("magnitude").getAsInt());
-    }
-
-    @Override
-    public boolean overrides(Status s) {
-        return false;
-    }
-
-    @Override
-    public void replace(Status s) {
-        assert s instanceof MagicMilkAddiction;
-        magnitude = 0;
-    }
-
-    @Override
-    public String getVariant() {
-        return "Addiction";
-    }
-
-    @Override
-    public float fitnessModifier() {
-        return -combatMagnitude;
-    }
-
-    @Override
-    public void tick(Combat c) {
-        super.tick(c);
-        if (combatAtLeast(Severity.LOW)) {
-            int loss;
-            switch (getCombatSeverity()) {
-                case LOW:
-                    loss = Random.random(1, 3);
-                    break;
-                case MED:
-                    loss = Random.random(3, 6);
-                    break;
-                case HIGH:
-                    loss = Random.random(5, 8);
-                    break;
-                default:
-                    throw new IllegalStateException();
-            }
-            affected.loseWillpower(c, loss, 0, false, " due to your Milk Addiction");
-        }
-    }
-
-    @Override
     public AddictionType getType() {
         return AddictionType.MAGIC_MILK;
     }
@@ -256,7 +163,7 @@ public class MagicMilkAddiction extends AddictionSymptom {
     public String describeMorning() {
         switch (getSeverity()) {
             case HIGH:
-                aggravate(null, MED_INCREASE);
+                aggravate(null, Addiction.MED_INCREASE);
                 flagDaytime();
                 return "You wake up in the morning with a burning need for " + getCause().getName() + "'s milk. The thought of resisting the urge doesn't even enter your mind. You quickly whip out your cellphone and dial " + getCause()
                                 .getName() + "'s number. "
@@ -266,7 +173,7 @@ public class MagicMilkAddiction extends AddictionSymptom {
                                 .getName() + " enters your room and sits down on your bed. "
                                 + Formatter.capitalizeFirstLetter(getCause().pronoun()) + " pats " + getCause().directObject() + " lap and motions for you to strip and lie down. You quickly comply and lay in " + getCause()
                                 .directObject() + " lap facing the ceiling, giddy for more milk. <br/>"
-                                + "With a coying grin, " + getCause().getName() + " strips off " + getCause().directObject() + " top and lets " + getCause()
+                                + "With a coy grin, " + getCause().getName() + " strips off " + getCause().directObject() + " top and lets " + getCause()
                                 .directObject() + " bountiful breasts bounce free of " + getCause().directObject() + " bra. Your eyes immediately zeroes into " + getCause()
                                 .directObject() + " nipples, already dripping with opalescent white fluids. "
                                 + getCause().getName() + " lowers " + getCause().directObject() + " breasts into your face, and you happily start drinking " + getCause()
@@ -288,6 +195,10 @@ public class MagicMilkAddiction extends AddictionSymptom {
                 return "You wake up in the morning with your throat feeling strangely parched. You step into the kitchen and take out a carton of milk to attempt to slake your thirst. "
                                 + "Five minutes and a empty carton later, you still don't feel much better. You decide to ignore it and head to class.<br/><br/>";
         }
+    }
+
+    @Override public AddictionSymptom createTrackingSymptom(float initialCombatMagnitude) {
+        return new MagicMilkTrackingSymptom(this, initialCombatMagnitude);
     }
 
     @Override

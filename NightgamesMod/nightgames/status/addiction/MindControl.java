@@ -3,7 +3,7 @@ package nightgames.status.addiction;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.NPC;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -19,29 +19,40 @@ import nightgames.status.Stsflag;
 
 import java.util.Optional;
 
-public class MindControl extends AddictionSymptom {
+public class MindControl extends Addiction {
 
-    public MindControl(Character affected, String cause, float magnitude) {
-        super(affected, "Mind Control", cause, magnitude);
+    public MindControl(CharacterType afflicted, CharacterType cause, float magnitude) {
+        super("Mind Control", afflicted, cause, magnitude);
+        getAfflicted().add(Trait.mindcontrolresistance);
     }
 
-    public MindControl(Character affected, String cause) {
-        this(affected, cause, .01f);
+    public MindControl(CharacterType afflicted, CharacterType cause) {
+        this(afflicted, cause, .01f);
     }
 
-    @Override
-    protected Optional<Status> withdrawalEffects() {
-        return Optional.of(new MindControlWithdrawal(affected));
+    private class MindControlTrackerSymptom extends AddictionSymptom {
+        MindControlTrackerSymptom(Addiction source, float initialMagnitude) {
+            super(afflicted, "Cybernetic Compulsion", source, initialMagnitude);
+        }
+
+        @Override
+        public void tick(Combat c) {
+            super.tick(c);
+            if (c != null && !getAffected().is(Stsflag.enthralled) && c.getOpponent(getAffected()).equals(source.getCause())
+                            && Random.randomdouble() < magnitude / 3) {
+
+                getAffected().addlist.add(new Enthralled(affected, getCause(), 3));
+                Formatter.writeIfCombat(c, getCause(), getCause().getName()
+                                + "'s constant urging overcomes your defences, washing away all of your resistance.");
+            }
+        }
     }
 
-    @Override
-    protected Optional<Status> addictionEffects() {
-        affected.add(Trait.mindcontrolresistance);
-        return Optional.of(this);
+    @Override public Optional<Status> withdrawalEffects() {
+        return Optional.of(new MindControlWithdrawal(afflicted));
     }
 
-    @Override
-    protected String describeIncrease() {
+    @Override public String describeIncrease() {
         switch (getSeverity()) {
             case HIGH:
                 return getCause().getName() + " has you completely in " + getCause().directObject() + " grasp. Your body moves "
@@ -57,12 +68,11 @@ public class MindControl extends AddictionSymptom {
         }
     }
 
-    @Override
-    protected String describeDecrease() {
+    @Override public String describeDecrease() {
         switch (getSeverity()) {
             case LOW:
                 return getCause().getName() + "'s control is weakening, and only " + getCause().directObject() + " strongest commands"
-                        + " have a noticable effect.";
+                        + " have a noticeable effect.";
             case MED:
                 return "You feel as if " + getCause().getName() + "'s words do not bury themselves as deeply into your psyche as before."
                         + " Can you resist " + getCause().directObject() + "?";
@@ -75,8 +85,7 @@ public class MindControl extends AddictionSymptom {
         }
     }
 
-    @Override
-    protected String describeWithdrawal() {
+    @Override public String describeWithdrawal() {
         switch (getSeverity()) {
             case HIGH:
                 return "<b>You are now constantly fighting your own body to keep from doing " + getCause().getName() + "'s will.</b>";
@@ -92,13 +101,11 @@ public class MindControl extends AddictionSymptom {
         }
     }
 
-    @Override
-    protected String describeCombatIncrease() {
+    @Override public String describeCombatIncrease() {
         return getCause().getName() + "'s words weigh increasingly heavily on you, and it's getting harder to resist.";
     }
 
-    @Override
-    protected String describeCombatDecrease() {
+    @Override public String describeCombatDecrease() {
         return "Doing " + getCause().getName() + "'s bidding relieves some of the pressure in your mind.";
     }
 
@@ -120,6 +127,14 @@ public class MindControl extends AddictionSymptom {
                 + " of " + getCause().directObject() + " again while " + getCause().pronoun() + " can look you in the eyes. It's that simple.";
     }
 
+    @Override public void removeImmediately() {
+        super.removeImmediately();
+        // If this is the last Mind Control addiction, remove the resistance it grants.
+        if (getAfflicted().getAllAddictions(AddictionType.MIND_CONTROL).count() > 1) {
+            getAfflicted().remove(Trait.mindcontrolresistance);
+        }
+    }
+
     @Override
     public String describeMorning() {
         return "Your hand shoots to your hardening dick as soon as you wake up. You have know idea how,"
@@ -129,13 +144,17 @@ public class MindControl extends AddictionSymptom {
                 + " can persuade " + getCause().getName() + " to go a little easier on you? Then again, maybe not.";
     }
 
+    @Override public AddictionSymptom createTrackingSymptom(float initialCombatMagnitude) {
+        return new MindControlTrackerSymptom(this, initialCombatMagnitude);
+    }
+
     @Override
     public AddictionType getType() {
         return AddictionType.MIND_CONTROL;
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         if (inWithdrawal) {
             return "There " + getCause().pronoun() + " is! " + getCause().getName() + " does not look pleased after you haven't visited "
                     + getCause().directObject() + " all day.";
@@ -146,8 +165,8 @@ public class MindControl extends AddictionSymptom {
     }
 
     @Override
-    public String describe(Combat c) {
-        switch (getCombatSeverity()) {
+    public String describe(Combat c, Severity severity) {
+        switch (severity) {
             case HIGH:
                 return "Every word " + getCause().getName() + " speaks rings of truth to you, even though " + getCause()
                                 .pronoun() + "'s"
@@ -163,85 +182,6 @@ public class MindControl extends AddictionSymptom {
                 return "";
 
         }
-    }
-
-    @Override
-    public void tick(Combat c) {
-        super.tick(c);
-        if (!affected.is(Stsflag.enthralled) && Random.randomdouble() < magnitude / 3) {
-            affected.addlist.add(new Enthralled(affected, getCause(), 3));
-            Formatter.writeIfCombat(c, getCause(), getCause().getName() + "'s constant urging overcomes your defences, washing away all of your resistance.");
-        }
-    }
-
-    @Override
-    public int mod(Attribute a) {
-        return 0;
-    }
-
-    @Override
-    public int regen(Combat c) {
-        return 0;
-    }
-
-    @Override
-    public int damage(Combat c, int x) {
-        return 0;
-    }
-
-    @Override
-    public double pleasure(Combat c, BodyPart withPart, BodyPart targetPart, double x) {
-        return 0;
-    }
-
-    @Override
-    public int weakened(Combat c, int x) {
-        return 0;
-    }
-
-    @Override
-    public int tempted(Combat c, int x) {
-        return 0;
-    }
-
-    @Override
-    public int evade() {
-        return 0;
-    }
-
-    @Override
-    public int escape() {
-        return 0;
-    }
-
-    @Override
-    public int gainmojo(int x) {
-        return 0;
-    }
-
-    @Override
-    public int spendmojo(int x) {
-        return 0;
-    }
-
-    @Override
-    public int counter() {
-        return 0;
-    }
-
-    @Override
-    public int value() {
-        return 0;
-    }
-
-    @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new MindControl(newAffected, newOther.getType(), magnitude);
-    }
-
-    @Override public Status loadFromJson(JsonObject obj) {
-        return new MindControl(NPC.noneCharacter(), obj.get("cause").getAsString(),
-                        obj.get("magnitude").getAsInt());
     }
 
     public static class Result {
@@ -380,29 +320,27 @@ public class MindControl extends AddictionSymptom {
                     return false;
             } else if (!description.equals(other.description))
                 return false;
-            if (succeeded != other.succeeded)
-                return false;
-            return true;
+            return succeeded == other.succeeded;
         }
     }
 
     public class MindControlWithdrawal extends Status {
-        public MindControlWithdrawal(Character affected) {
+        MindControlWithdrawal(CharacterType affected) {
             super("Mind Control Withdrawal", affected);
         }
 
         @Override
         public void tick(Combat c) {
-            if (affected.getStamina()
+            if (getAffected().getStamina()
                         .percent() > 5) {
                 int amt = getSeverity().ordinal() * (Random.random(6) + 1);
-                affected.weaken(c, (int) DamageType.temptation.modifyDamage(getCause(), affected, amt));
-                Formatter.writeIfCombat(c, affected, "You keep fighting your own body to do as you want, and it's tiring you rapidly.");
+                getAffected().weaken(c, (int) DamageType.temptation.modifyDamage(getCause(), getAffected(), amt));
+                Formatter.writeIfCombat(c, getAffected(), "You keep fighting your own body to do as you want, and it's tiring you rapidly.");
             }
         }
 
         @Override
-        public String initialMessage(Combat c, Optional<Status> replacement) {
+        public String initialMessage(Combat c, Status replacement) {
             return ""; // handled by withdrawal message
         }
 
@@ -473,7 +411,7 @@ public class MindControl extends AddictionSymptom {
 
         @Override
         public Status instance(Character newAffected, Character newOther) {
-            return new MindControlWithdrawal(newAffected);
+            return new MindControlWithdrawal(newAffected.getType());
         }
 
         @Override public JsonObject saveToJson() {

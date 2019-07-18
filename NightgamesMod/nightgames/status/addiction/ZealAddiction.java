@@ -1,9 +1,7 @@
 package nightgames.status.addiction;
 
-import com.google.gson.JsonObject;
-import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.body.BodyPart;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
@@ -15,83 +13,69 @@ import nightgames.status.CrisisOfFaith;
 import nightgames.status.DivineCharge;
 import nightgames.status.Status;
 
-import javax.naming.OperationNotSupportedException;
 import java.util.Optional;
 
-public class ZealAddiction extends AddictionSymptom {
+public class ZealAddiction extends Addiction {
 
-    private boolean shouldApplyDivineCharge;
-    
-    public ZealAddiction(Character affected, String cause, float magnitude) {
-        super(affected, "Zeal", cause, magnitude);
-        shouldApplyDivineCharge = false;
+    ZealAddiction(CharacterType afflicted, CharacterType cause, float magnitude) {
+        super("Zeal", afflicted, cause, magnitude);
     }
 
-    public ZealAddiction(Character affected, String cause) {
-        this(affected, cause, .01f);
-    }
-
-    @Override
-    protected Optional<Status> withdrawalEffects() {
-        return Optional.of(new CrisisOfFaith(affected));
-    }
-
-    @Override
-    protected Optional<Status> addictionEffects() {
-        return Optional.of(this);
-    }
-    
-    @Override
-    public Optional<Status> startNight() {
-        Optional<Status> s = super.startNight();
-        if (!inWithdrawal && isActive()) {
-            shouldApplyDivineCharge = true;
+    private class ZealTrackingSymptom extends AddictionSymptom {
+        ZealTrackingSymptom(ZealAddiction source, float initialMagnitude) {
+            super(afflicted, "Zealous Rapture", source, initialMagnitude);
         }
-        return s;
+
+        @Override
+        public void tick(Combat c) {
+            super.tick(c);
+            if (c != null && (c.getStance().en == Stance.neutral || c.getStance().en == Stance.behind)
+                            && Random.randomdouble() < Math.min(.5f, combatMagnitude / 2.0)) {
+                c.write(getAffected(), "Overcome by your desire to serve " + getCause().getName() + ", you get on the ground "
+                                + "and prostrate yourself in front of " + getCause().directObject() + ".");
+                boolean behindPossible = getCause().hasDick();
+                Position pos;
+                if (!behindPossible || Random.random(2) == 0) {
+                    pos = new Mount(cause, affected);
+                    c.write(getCause(), String.format(
+                                    "%s tells you to roll over, and once you have done so %s sets"
+                                                    + " %s down on your stomach.",
+                                    getCause().getName(), getCause().pronoun(), getCause().reflectivePronoun()));
+                } else {
+                    pos = new Behind(cause, affected);
+                    c.write(getCause(), String.format("%s motions for you to get up and then casually walks around you"
+                                    + ", grabbing you from behind.", getCause().getName()));
+                }
+                c.setStance(pos);
+            }
+        }
+
+        @Override
+        public int value() {
+            return -3;
+        }
     }
-    
-    @Override
-    public void endNight() {
-        super.endNight();
-        shouldApplyDivineCharge = false;
+
+
+    @Override public Optional<Status> withdrawalEffects() {
+        return Optional.of(new CrisisOfFaith(afflicted));
     }
-    
+
     @Override
-    public Optional<Status> startCombat(Combat c, Character opp) {
-        Optional<Status> s = super.startCombat(c, opp);
-        if (shouldApplyDivineCharge && opp.equals(getCause())) {
+    public Optional<AddictionSymptom> startCombat(Combat c, Character opp) {
+        Optional<AddictionSymptom> s = super.startCombat(c, opp);
+        if (shouldApplyDivineCharge() && opp.equals(getCause())) {
             int sev = getSeverity().ordinal();
             opp.status.add(new DivineCharge(opp, sev * .75f));
         }
         return s;
     }
 
-    @Override
-    public void tick(Combat c) {
-        super.tick(c);
-        if (c != null && (c.getStance().en == Stance.neutral || c.getStance().en == Stance.behind)
-                        && Random.randomdouble() < Math.min(.5f, combatMagnitude / 2.0)) {
-            c.write(affected, "Overcome by your desire to serve " + getCause().getName() + ", you get on the ground "
-                            + "and prostrate yourself in front of " + getCause().directObject() + ".");
-            boolean behindPossible = getCause().hasDick();
-            Position pos;
-            if (!behindPossible || Random.random(2) == 0) {
-                pos = new Mount(getCause(), affected);
-                c.write(getCause(), String.format(
-                                "%s tells you to roll over, and once you have done so %s sets"
-                                                + " %s down on your stomach.",
-                                getCause().getName(), getCause().pronoun(), getCause().reflectivePronoun()));
-            } else {
-                pos = new Behind(getCause(), affected);
-                c.write(getCause(), String.format("%s motions for you to get up and then casually walks around you"
-                                + ", grabbing you from behind.", getCause().getName()));
-            }
-            c.setStance(pos);
-        }
+    private boolean shouldApplyDivineCharge() {
+        return !isInWithdrawal() && isActive();
     }
 
-    @Override
-    protected String describeIncrease() {
+    @Override public String describeIncrease() {
         switch (getSeverity()) {
             case HIGH:
                 return getCause().getName()
@@ -108,16 +92,15 @@ public class ZealAddiction extends AddictionSymptom {
         }
     }
 
-    @Override
-    protected String describeDecrease() {
+    @Override public String describeDecrease() {
         switch (getSeverity()) {
             case LOW:
-                return "Your faith is shaking, is " + getCause().getName() + " really so divine?";
+                return "Your faith is shaking. Is " + getCause().getName() + " really so divine?";
             case MED:
                 return "Your faith in " + getCause().getName() + " has wavered a bit, but " + getCause().pronoun() + "'s still"
                                 + " your goddess! Right?";
             case NONE:
-                return "You don't konw what possessed you before, but you no longer see " + getCause().getName()
+                return "You don't know what possessed you before, but you no longer see " + getCause().getName()
                                 + " as <i>actually</i> divine.";
             case HIGH:
             default:
@@ -125,8 +108,7 @@ public class ZealAddiction extends AddictionSymptom {
         }
     }
 
-    @Override
-    protected String describeWithdrawal() {
+    @Override public String describeWithdrawal() {
         switch (getSeverity()) {
             case HIGH:
                 return "<b>Your mind is completely preoccupied by " + getCause().getName() + ". You didn't worship today!"
@@ -146,14 +128,12 @@ public class ZealAddiction extends AddictionSymptom {
         }
     }
 
-    @Override
-    protected String describeCombatIncrease() {
+    @Override public String describeCombatIncrease() {
         return "You feel an increasingly strong desire to do whatever " + getCause().getName()
                         + " wants. " + Formatter.capitalizeFirstLetter(getCause().pronoun()) + "'s a goddess, after all!";
     }
 
-    @Override
-    protected String describeCombatDecrease() {
+    @Override public String describeCombatDecrease() {
         return "Doing " + getCause().getName() + "'s bidding clears your mind a bit. Why are you really doing this?"
                         + " One look at her reaffirms " + getCause().directObject() + " divinity in your mind, though.";
     }
@@ -165,13 +145,17 @@ public class ZealAddiction extends AddictionSymptom {
                         + getCause().directObject() + " and support you in the day to come.";
     }
 
+    @Override public AddictionSymptom createTrackingSymptom(float initialCombatMagnitude) {
+        return new ZealTrackingSymptom(this, initialCombatMagnitude);
+    }
+
     @Override
     public AddictionType getType() {
         return AddictionType.ZEAL;
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         if (inWithdrawal) {
             return "You tremble as " + getCause().getName()
                             + " steps into view. Will " + getCause().pronoun() + " punish you for not being pious enough?"
@@ -182,8 +166,8 @@ public class ZealAddiction extends AddictionSymptom {
     }
 
     @Override
-    public String describe(Combat c) {
-        switch (getCombatSeverity()) {
+    public String describe(Combat c, Severity severity) {
+        switch (severity) {
             case HIGH:
                 return "Your knees tremble with your desire to offer yourself to your goddess.";
             case MED:
@@ -198,74 +182,6 @@ public class ZealAddiction extends AddictionSymptom {
         }
     }
 
-    @Override
-    public int mod(Attribute a) {
-        return 0;
-    }
-
-    @Override
-    public int regen(Combat c) {
-        return 0;
-    }
-
-    @Override
-    public int damage(Combat c, int x) {
-        return 0;
-    }
-
-    @Override
-    public double pleasure(Combat c, BodyPart withPart, BodyPart targetPart, double x) {
-        return 0;
-    }
-
-    @Override
-    public int weakened(Combat c, int x) {
-        return 0;
-    }
-
-    @Override
-    public int tempted(Combat c, int x) {
-        return 0;
-    }
-
-    @Override
-    public int evade() {
-        return 0;
-    }
-
-    @Override
-    public int escape() {
-        return 0;
-    }
-
-    @Override
-    public int gainmojo(int x) {
-        return 0;
-    }
-
-    @Override
-    public int spendmojo(int x) {
-        return 0;
-    }
-
-    @Override
-    public int counter() {
-        return 0;
-    }
-
-    @Override
-    public int value() {
-        return -3;
-    }
-
-    @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new ZealAddiction(newAffected, newOther.getType(), magnitude);
-    }
-
-    @Override public Status loadFromJson(JsonObject obj) {
-        throw new RuntimeException(new OperationNotSupportedException("not supported yet"));
-    }
 
     @Override
     public String informantsOverview() {

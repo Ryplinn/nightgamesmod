@@ -1,11 +1,6 @@
 package nightgames.status.addiction;
 
-import com.google.gson.JsonObject;
-import nightgames.characters.Attribute;
-import nightgames.characters.Character;
-import nightgames.characters.Emotion;
-import nightgames.characters.NPC;
-import nightgames.characters.body.BodyPart;
+import nightgames.characters.*;
 import nightgames.combat.Combat;
 import nightgames.status.Horny;
 import nightgames.status.Status;
@@ -13,31 +8,45 @@ import nightgames.status.Stsflag;
 
 import java.util.Optional;
 
-public class Breeder extends AddictionSymptom {
-    public Breeder(Character affected, String cause, float magnitude) {
-        super(affected, "Breeder", cause, magnitude);
+public class Breeder extends Addiction {
+    public Breeder(CharacterType afflicted, CharacterType cause, float magnitude) {
+        super("Breeder", afflicted, cause, magnitude);
     }
 
-    public Breeder(Character affected, String cause) {
-        this(affected, cause, .01f);
+    public Breeder(CharacterType afflicted, CharacterType cause) {
+        this(afflicted, cause, .01f);
     }
 
-    @Override
-    protected Optional<Status> withdrawalEffects() {
-        return Optional.of(new Horny(affected, 5.f * getSeverity().ordinal(), 999, affected.possessiveAdjective() + " animal instincts"));
+    private class BreederTrackingSymptom extends AddictionSymptom {
+        BreederTrackingSymptom(Addiction source, float initialMagnitude) {
+            super(afflicted, "Breeding Drive", source, initialMagnitude);
+            if (source.getSeverity().atLeast(Severity.HIGH)) {
+                flag(Stsflag.feral);
+            } else {
+                unflag(Stsflag.feral);
+            }
+        }
+
+        @Override
+        public int mod(Attribute a) {
+            return a == Attribute.animism ? getSeverity().ordinal() * 2 : 0;
+        }
+
+        @Override
+        public void tick(Combat c) {
+            super.tick(c);
+            if (inWithdrawal) {
+                getAffected().arouse(Math.round(magnitude * 5), c, " (Breeding Instincts)");
+                getAffected().emote(Emotion.horny, 20);
+            }
+        }
     }
 
-    @Override
-    protected Optional<Status> addictionEffects() {
-        if (atLeast(Severity.HIGH))
-            flag(Stsflag.feral);
-        else
-            unflag(Stsflag.feral);
-        return Optional.of(this);
+    @Override public Optional<Status> withdrawalEffects() {
+        return Optional.of(new Horny(afflicted, 5.f * getSeverity().ordinal(), 999, getAfflicted().possessiveAdjective() + " animal instincts"));
     }
 
-    @Override
-    protected String describeIncrease() {
+    @Override public String describeIncrease() {
         switch (getSeverity()) {
             case HIGH:
                 return "All you can think about while fucking " + getCause().getName() + " is filling up "
@@ -56,8 +65,7 @@ public class Breeder extends AddictionSymptom {
         }
     }
 
-    @Override
-    protected String describeDecrease() {
+    @Override public String describeDecrease() {
         switch (getSeverity()) {
             case LOW:
                 return "You still feel a desire to fuck " + getCause().getName() + " silly, but it's no longer a driving force"
@@ -74,8 +82,7 @@ public class Breeder extends AddictionSymptom {
         }
     }
 
-    @Override
-    protected String describeWithdrawal() {
+    @Override public String describeWithdrawal() {
         switch (getSeverity()) {
             case HIGH:
                 return "<b>Finding and seeding a willing pussy is foremost in your mind after not"
@@ -94,13 +101,11 @@ public class Breeder extends AddictionSymptom {
         }
     }
 
-    @Override
-    protected String describeCombatIncrease() {
+    @Override public String describeCombatIncrease() {
         return "Your unnatural breeding instincts are slowly but steadily bubbling up in your mind.";
     }
 
-    @Override
-    protected String describeCombatDecrease() {
+    @Override public String describeCombatDecrease() {
         return "You relish at letting loose inside of " + getCause().getName() + ", subduing the instinctive needs for now.";
     }
 
@@ -115,7 +120,7 @@ public class Breeder extends AddictionSymptom {
                         + " this feedback effect, basically driving you into a rut. The good news is that you'll"
                         + " be able to cum more often, the bad news is that you WILL cum more often when fucking " + getCause()
                         .getName() + "."
-                        + " As in all the time. Other contenstants won't be as prepared for your ferocity, though,"
+                        + " As in all the time. Other contestants won't be as prepared for your ferocity, though,"
                         + " so you may have an advantage there. If you </i>don't<i> go and fuck someone, well, you"
                         + " might just go crazy. Best not take the risk.\"</i>";
     }
@@ -127,23 +132,27 @@ public class Breeder extends AddictionSymptom {
                         + " can do. " + getCause().getName() + " is clearly the cause, so maybe " + getCause().pronoun() + " can help?";
     }
 
+    @Override public AddictionSymptom createTrackingSymptom(float initialCombatMagnitude) {
+        return new BreederTrackingSymptom(this, initialCombatMagnitude);
+    }
+
     @Override
     public AddictionType getType() {
         return AddictionType.BREEDER;
     }
 
     @Override
-    public String initialMessage(Combat c, Optional<Status> replacement) {
+    public String initialMessage(Combat c, Status replacement) {
         if (inWithdrawal) {
-            return "Arousal rages through your body at the sight of " + c.getOpponent(affected).getName() 
+            return "Arousal rages through your body at the sight of " + c.getOpponent(getAfflicted()).getName()
                             + ", expecting a well-earned fuck.";
         }
         return "Your instincts howl at the sight of " + getCause().getName() + ", urging you to fuck " + getCause().directObject() + " as soon as possible.";
     }
 
     @Override
-    public String describe(Combat c) {
-        switch (getCombatSeverity()) {
+    public String describe(Combat c, Severity severity) {
+        switch (severity) {
             case HIGH:
                 return "The animal part of your brain cultivated by " + getCause().getName() + " is screaming for"
                                 + " you to sink your cock into " + getCause().directObject() + " and fill "
@@ -158,84 +167,5 @@ public class Breeder extends AddictionSymptom {
                 return "";
 
         }
-    }
-
-    @Override
-    public int mod(Attribute a) {
-        return a == Attribute.animism ? getSeverity().ordinal() * 2 : 0;
-    }
-
-    @Override
-    public void tick(Combat c) {
-        super.tick(c);
-        if (inWithdrawal) {
-            affected.arouse(Math.round(magnitude * 5), c, " (Breeding Instincts)");
-            affected.emote(Emotion.horny, 20);
-        }
-    }
-    
-    @Override
-    public int regen(Combat c) {
-        return 0;
-    }
-
-    @Override
-    public int damage(Combat c, int x) {
-        return 0;
-    }
-
-    @Override
-    public double pleasure(Combat c, BodyPart withPart, BodyPart targetPart, double x) {
-        return 0;
-    }
-
-    @Override
-    public int weakened(Combat c, int x) {
-        return 0;
-    }
-
-    @Override
-    public int tempted(Combat c, int x) {
-        return 0;
-    }
-
-    @Override
-    public int evade() {
-        return 0;
-    }
-
-    @Override
-    public int escape() {
-        return 0;
-    }
-
-    @Override
-    public int gainmojo(int x) {
-        return 0;
-    }
-
-    @Override
-    public int spendmojo(int x) {
-        return 0;
-    }
-
-    @Override
-    public int counter() {
-        return 0;
-    }
-
-    @Override
-    public int value() {
-        return 0;
-    }
-
-    @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new Breeder(newAffected, newOther.getType(), magnitude);
-    }
-
-    @Override public Status loadFromJson(JsonObject obj) {
-        return new Breeder(NPC.noneCharacter(), obj.get("cause").getAsString(),
-                        (float) obj.get("magnitude").getAsInt());
     }
 }
