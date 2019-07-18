@@ -14,11 +14,11 @@ import java.util.Optional;
  * TODO: Write class-level documentation.
  */
 public class TestCharacter extends Character {
-    public TestCharacter() {
+    TestCharacter() {
         this(1);
     }
 
-    public TestCharacter(int level) {
+    private TestCharacter(int level) {
         super("TestCharacter", level);
     }
 
@@ -70,7 +70,7 @@ public class TestCharacter extends Character {
         return false;
     }
 
-    @Override public Optional<Action> move() throws InterruptedException {
+    @Override public Optional<Action> move() {
         return Optional.empty();
     }
 
@@ -106,8 +106,8 @@ public class TestCharacter extends Character {
         return Encs.wait;
     }
 
-    @Override public String getType() {
-        return "TestCharacter";
+    @Override public CharacterType getType() {
+        return CharacterType.get("TestCharacter");
     }
 
     @Override public void afterParty() {

@@ -15,7 +15,6 @@ import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.items.Item;
 import nightgames.skills.strategy.*;
-import nightgames.start.NpcConfiguration;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -31,87 +30,82 @@ public class Reyka extends BasePersonality {
     private static final String REYKA_CORRUPTION_FOCUS = "ReykaCorruptionFocus";
 
     public Reyka() {
-        this(Optional.empty(), Optional.empty());
-    }
-
-    public Reyka(Optional<NpcConfiguration> charConfig, Optional<NpcConfiguration> commonConfig) {
-        super("Reyka", charConfig, commonConfig, false);
-        constructLines();
+        super(false);
     }
 
     @Override
-    public void applyStrategy(NPC self) {
-        self.plan = Plan.hunting;
-        self.mood = Emotion.confident;
+    public void applyStrategy(NPC selfNPC) {
+        selfNPC.plan = Plan.hunting;
+        selfNPC.mood = Emotion.confident;
 
-        self.addPersonalStrategy(new OralStrategy());
-        self.addPersonalStrategy(new FootjobStrategy());
-        self.addPersonalStrategy(new FacesitStrategy());
-        self.addPersonalStrategy(new KnockdownStrategy());
-        self.addPersonalStrategy(new DisablingStrategy());
+        selfNPC.addPersonalStrategy(new OralStrategy());
+        selfNPC.addPersonalStrategy(new FootjobStrategy());
+        selfNPC.addPersonalStrategy(new FacesitStrategy());
+        selfNPC.addPersonalStrategy(new KnockdownStrategy());
+        selfNPC.addPersonalStrategy(new DisablingStrategy());
     }
 
     @Override
-    public void applyBasicStats(Character self) {
+    public void applyBasicStats(NPC selfNPC) {
         preferredCockMod = CockMod.incubus;
-        self.outfitPlan.addByID("tanktop");
-        self.outfitPlan.addByID("miniskirt");
-        self.outfitPlan.addByID("garters");
-        self.outfitPlan.addByID("stilettopumps");
-        self.change();
-        self.modAttributeDontSaveData(Attribute.darkness, 2);
-        self.modAttributeDontSaveData(Attribute.seduction, 3);
-        self.modAttributeDontSaveData(Attribute.cunning, 2);
-        self.setTrophy(Item.ReykaTrophy);
+        selfNPC.outfitPlan.addByID("tanktop");
+        selfNPC.outfitPlan.addByID("miniskirt");
+        selfNPC.outfitPlan.addByID("garters");
+        selfNPC.outfitPlan.addByID("stilettopumps");
+        selfNPC.change();
+        selfNPC.modAttributeDontSaveData(Attribute.darkness, 2);
+        selfNPC.modAttributeDontSaveData(Attribute.seduction, 3);
+        selfNPC.modAttributeDontSaveData(Attribute.cunning, 2);
+        selfNPC.setTrophy(Item.ReykaTrophy);
 
-        self.adjustTraits();
-        self.getStamina().setMax(50);
-        self.getArousal().setMax(120);
-        self.getMojo().setMax(110);
+        selfNPC.adjustTraits();
+        selfNPC.getStamina().setMax(50);
+        selfNPC.getArousal().setMax(120);
+        selfNPC.getMojo().setMax(110);
 
-        self.body.add(BreastsPart.dd);
-        self.body.add(PussyPart.generic.applyMod(DemonicMod.INSTANCE));
-        self.body.add(TailPart.demonic);
-        self.body.add(WingsPart.demonic);
-        self.body.add(EarPart.pointed);
-        self.body.add(new FacePart(0.5, 5));
-        self.initialGender = CharacterSex.female;
+        selfNPC.body.add(BreastsPart.dd);
+        selfNPC.body.add(PussyPart.generic.applyMod(DemonicMod.INSTANCE));
+        selfNPC.body.add(TailPart.demonic);
+        selfNPC.body.add(WingsPart.demonic);
+        selfNPC.body.add(EarPart.pointed);
+        selfNPC.body.add(new FacePart(0.5, 5));
+        selfNPC.initialGender = CharacterSex.female;
     }
 
     @Override
-    public void setGrowth() {
-        character.getGrowth().stamina = 1;
-        character.getGrowth().arousal = 10;
-        character.getGrowth().bonusStamina = 1;
-        character.getGrowth().bonusArousal = 3;
+    public void setGrowth(NPC selfNPC) {
+        selfNPC.getGrowth().stamina = 1;
+        selfNPC.getGrowth().arousal = 10;
+        selfNPC.getGrowth().bonusStamina = 1;
+        selfNPC.getGrowth().bonusArousal = 3;
         preferredAttributes.add(c -> c.get(Attribute.darkness) < 50 && c.get(Attribute.darkness) <= c.get(Attribute.fetishism) + 10
                         ? Optional.of(Attribute.darkness) : Optional.empty());
         preferredAttributes.add(c -> c.get(Attribute.darkness) > c.get(Attribute.fetishism) + 10 && c.get(Attribute.fetishism) < 50
                                         ? Optional.of(Attribute.fetishism) : Optional.empty());
         preferredAttributes.add(c -> Optional.of(Attribute.seduction));
 
-        character.getGrowth().addTrait(0, Trait.succubus);
-        character.getGrowth().addTrait(0, Trait.proheels);
-        character.getGrowth().addTrait(0, Trait.masterheels);
-        character.getGrowth().addTrait(0, Trait.darkpromises);
-        character.getGrowth().addTrait(0, Trait.Confident);
-        character.getGrowth().addTrait(0, Trait.shameless);
-        character.getGrowth().addTrait(3, Trait.sexTraining1);
-        character.getGrowth().addTrait(6, Trait.tongueTraining1);
-        character.getGrowth().addTrait(9, Trait.expertGoogler);
-        character.getGrowth().addTrait(15, Trait.lacedjuices);
-        character.getGrowth().addTrait(18, Trait.graceful);
-        character.getGrowth().addTrait(24, Trait.spiritphage);
-        character.getGrowth().addTrait(33, Trait.magicEyeTrance);
-        character.getGrowth().addTrait(36, Trait.addictivefluids);
-        character.getGrowth().addTrait(43, Trait.energydrain);
-        character.getGrowth().addTrait(46, Trait.sexTraining2);
-        character.getGrowth().addBodyPartMod(46, "pussy", ExtendedTonguedMod.INSTANCE);
-        character.getGrowth().addTrait(49, Trait.soulsucker);
-        character.getGrowth().addTrait(55, Trait.desensitized2);
-        character.getGrowth().addTrait(58, Trait.carnalvirtuoso);
+        selfNPC.getGrowth().addTrait(0, Trait.succubus);
+        selfNPC.getGrowth().addTrait(0, Trait.proheels);
+        selfNPC.getGrowth().addTrait(0, Trait.masterheels);
+        selfNPC.getGrowth().addTrait(0, Trait.darkpromises);
+        selfNPC.getGrowth().addTrait(0, Trait.Confident);
+        selfNPC.getGrowth().addTrait(0, Trait.shameless);
+        selfNPC.getGrowth().addTrait(3, Trait.sexTraining1);
+        selfNPC.getGrowth().addTrait(6, Trait.tongueTraining1);
+        selfNPC.getGrowth().addTrait(9, Trait.expertGoogler);
+        selfNPC.getGrowth().addTrait(15, Trait.lacedjuices);
+        selfNPC.getGrowth().addTrait(18, Trait.graceful);
+        selfNPC.getGrowth().addTrait(24, Trait.spiritphage);
+        selfNPC.getGrowth().addTrait(33, Trait.magicEyeTrance);
+        selfNPC.getGrowth().addTrait(36, Trait.addictivefluids);
+        selfNPC.getGrowth().addTrait(43, Trait.energydrain);
+        selfNPC.getGrowth().addTrait(46, Trait.sexTraining2);
+        selfNPC.getGrowth().addBodyPartMod(46, "pussy", ExtendedTonguedMod.INSTANCE);
+        selfNPC.getGrowth().addTrait(49, Trait.soulsucker);
+        selfNPC.getGrowth().addTrait(55, Trait.desensitized2);
+        selfNPC.getGrowth().addTrait(58, Trait.carnalvirtuoso);
 
-        character.addCombatScene(new CombatScene(and(level(12), not(flag(REYKA_DISABLING_FOCUS)),
+        selfNPC.addCombatScene(new CombatScene(and(level(12), not(flag(REYKA_DISABLING_FOCUS)),
                         not(flag(REYKA_SEDUCTION_FOCUS))), (c, self, other) -> Formatter
                         .format("You had turned your back to Reyka after your fight."
                                         + " Big mistake. Out of nowhere, {self:pronoun} crashes into"
@@ -132,7 +126,7 @@ public class Reyka extends BasePersonality {
                                             + " yourself, but you can't.\"</i> Without another word, Reyka"
                                             + " disentangles {self:reflective} from you and walks off, leaving"
                                             + " you bewildered on the ground, staring after {self:direct-object}.", self, other));
-                            useSeduction();
+                            useSeduction(selfNPC);
                             return true;
                         }), new CombatSceneChoice("Helplessness", (c, self, other) -> {
                             c.write(Formatter.format("You're not about to just roll over and give up. Maybe you can"
@@ -146,7 +140,7 @@ public class Reyka extends BasePersonality {
                                             + " gives you a quick peck on your lips and flies off. After a few"
                                             + " seconds, you get back up and ready to go. It might be a good"
                                             + " idea to take {self:possessive} advice to heart...", self, other));
-                            useDisabling();
+                            useDisabling(selfNPC);
                             return true;
                         }), new CombatSceneChoice("What? You're just going to win! [Hard Mode]", (c, self, other) -> {
                             c.write(Formatter.format("{self:PRONOUN} is talking like {self:pronoun}'s already won!"
@@ -160,12 +154,12 @@ public class Reyka extends BasePersonality {
                                             + " that way there will be that much more for me to take! Oh, I just"
                                             + " can't wait to see if you can back up your talk! You'd better"
                                             + " not dissapoint me, {other:name}!\"</i>", self, other));
-                            useSeduction();
-                            useDisabling();
+                            useSeduction(selfNPC);
+                            useDisabling(selfNPC);
                             return true;
                         }))));
 
-        character.addCombatScene(new CombatScene(and(level(22),
+        selfNPC.addCombatScene(new CombatScene(and(level(22),
                         not(flag(REYKA_DRAINING_FOCUS)),
                         not(flag(REYKA_CORRUPTION_FOCUS)),
                         or(flag(REYKA_DISABLING_FOCUS), flag(REYKA_SEDUCTION_FOCUS))),
@@ -189,7 +183,7 @@ public class Reyka extends BasePersonality {
                                             + " Now, if you'll excuse me, I need to go find a virgin or two"
                                             + " for the ritual. Maybe three, just to be safe.\"</i> Right."
                                             + " Not all that bad. Right?", self, other));
-                            useCorruption();
+                            useCorruption(selfNPC);
                             return true;
                         }), new CombatSceneChoice("'Tweaking' sounds really bad...", (c, self, other) -> {
                             c.write(Formatter.format("You don't know what Reyka means by 'tweaking you',"
@@ -203,7 +197,7 @@ public class Reyka extends BasePersonality {
                                             + " worth of ecstasy.\"</i> {self:PRONOUN} blows you a kiss which"
                                             + " impacts with physical force, and before you fully recover she's"
                                             + " already walked off.", self, other));
-                            useDraining();
+                            useDraining(selfNPC);
                             return true;
                         }), new CombatSceneChoice("Why not let Reyka help you, instead? [Hard Mode]",
                                         (c, self, other) -> {
@@ -225,168 +219,153 @@ public class Reyka extends BasePersonality {
                                                                                             "Your"
                                                                                                             + " determination is getting be all worked up!"
                                                                                                             + " It's about time I got a proper rival!"));
-                                            useCorruption();
-                                            useDraining();
+                                            useCorruption(selfNPC);
+                                            useDraining(selfNPC);
                                             return true;
                                         }))));
     }
 
-    private void useDisabling() {
+    private void useDisabling(NPC selfNPC) {
         Flag.flag(REYKA_DISABLING_FOCUS);
-        character.getGrowth().addTrait(12, Trait.SuccubusWarmth);
-        character.getGrowth().addTrait(19, Trait.lactating);
-        character.getGrowth().addTrait(19, Trait.Pacification);
-        character.getGrowth().addTrait(28, Trait.DemonsEmbrace);
-        character.getGrowth().addTrait(39, Trait.VampireWings);
+        selfNPC.getGrowth().addTrait(12, Trait.SuccubusWarmth);
+        selfNPC.getGrowth().addTrait(19, Trait.lactating);
+        selfNPC.getGrowth().addTrait(19, Trait.Pacification);
+        selfNPC.getGrowth().addTrait(28, Trait.DemonsEmbrace);
+        selfNPC.getGrowth().addTrait(39, Trait.VampireWings);
     }
 
-    private void useSeduction() {
+    private void useSeduction(NPC selfNPC) {
         Flag.flag(REYKA_SEDUCTION_FOCUS);
-        character.getGrowth().addTrait(12, Trait.MelodiousInflection);
-        character.getGrowth().addTrait(19, Trait.ComeHither);
-        character.getGrowth().addTrait(28, Trait.TenderKisses);
-        character.getGrowth().addTrait(39, Trait.PinkHaze);
+        selfNPC.getGrowth().addTrait(12, Trait.MelodiousInflection);
+        selfNPC.getGrowth().addTrait(19, Trait.ComeHither);
+        selfNPC.getGrowth().addTrait(28, Trait.TenderKisses);
+        selfNPC.getGrowth().addTrait(39, Trait.PinkHaze);
     }
 
-    private void useCorruption() {
+    private void useCorruption(NPC selfNPC) {
         Flag.flag(REYKA_CORRUPTION_FOCUS);
-        character.getGrowth().addTrait(21, Trait.Corrupting);
-        character.getGrowth().addTrait(30, Trait.InfernalAllegiance);
-        character.getGrowth().addTrait(40, Trait.LastingCorruption);
+        selfNPC.getGrowth().addTrait(21, Trait.Corrupting);
+        selfNPC.getGrowth().addTrait(30, Trait.InfernalAllegiance);
+        selfNPC.getGrowth().addTrait(40, Trait.LastingCorruption);
         if (Flag.checkFlag(REYKA_DISABLING_FOCUS)) {
-            character.getGrowth().addTrait(52, Trait.TotalSubjugation);
+            selfNPC.getGrowth().addTrait(52, Trait.TotalSubjugation);
         } else if (Flag.checkFlag(REYKA_SEDUCTION_FOCUS)) {
-            character.getGrowth().addTrait(52, Trait.Subversion);
+            selfNPC.getGrowth().addTrait(52, Trait.Subversion);
         }
     }
 
-    private void useDraining() {
+    private void useDraining(NPC selfNPC) {
         Flag.flag(REYKA_DRAINING_FOCUS);
-        character.getGrowth().addTrait(21, Trait.Greedy);
-        character.getGrowth().addTrait(30, Trait.RaptorMentis);
-        character.getGrowth().addTrait(40, Trait.BottomlessPit);
+        selfNPC.getGrowth().addTrait(21, Trait.Greedy);
+        selfNPC.getGrowth().addTrait(30, Trait.RaptorMentis);
+        selfNPC.getGrowth().addTrait(40, Trait.BottomlessPit);
         if (Flag.checkFlag(REYKA_DISABLING_FOCUS)) {
-            character.getGrowth().addTrait(52, Trait.SpecificSapping);
+            selfNPC.getGrowth().addTrait(52, Trait.SpecificSapping);
         } else if (Flag.checkFlag(REYKA_SEDUCTION_FOCUS)) {
-            character.getGrowth().addTrait(52, Trait.WillingSacrifice);
+            selfNPC.getGrowth().addTrait(52, Trait.WillingSacrifice);
         }
     }
 
     @Override
-    public void rest(int time) {
-        super.rest(time);
-        if (!(character.has(Item.Dildo) || character.has(Item.Dildo2)) && character.money >= 250) {
-            character.gain(Item.Dildo);
-            character.money -= 250;
+    public void rest(int time, NPC selfNPC) {
+        super.rest(time, selfNPC);
+        if (!(selfNPC.has(Item.Dildo) || selfNPC.has(Item.Dildo2)) && selfNPC.money >= 250) {
+            selfNPC.gain(Item.Dildo);
+            selfNPC.money -= 250;
         }
-        if (!(character.has(Item.Tickler) || character.has(Item.Tickler2)) && character.money >= 300) {
-            character.gain(Item.Tickler);
-            character.money -= 300;
+        if (!(selfNPC.has(Item.Tickler) || selfNPC.has(Item.Tickler2)) && selfNPC.money >= 300) {
+            selfNPC.gain(Item.Tickler);
+            selfNPC.money -= 300;
         }
-        if (!(character.has(Item.Strapon) || character.has(Item.Strapon2)) && character.money >= 600) {
-            character.gain(Item.Strapon);
-            character.money -= 600;
+        if (!(selfNPC.has(Item.Strapon) || selfNPC.has(Item.Strapon2)) && selfNPC.money >= 600) {
+            selfNPC.gain(Item.Strapon);
+            selfNPC.money -= 600;
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("Body Shop", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("Body Shop", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("XXX Store", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("XXX Store", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("Black Market", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("Black Market", selfNPC, Random.random(selfNPC.money));
         }
-        Decider.visit(character);
+        Decider.visit(selfNPC);
         int r;
         for (int i = 0; i < time; i++) {
             r = Random.random(8);
             if (r == 1) {
-                Daytime.getDay().visit("Exercise", this.character, 0);
+                Daytime.getDay().visit("Exercise", selfNPC, 0);
             } else if (r == 0) {
-                Daytime.getDay().visit("Browse Porn Sites", this.character, 0);
+                Daytime.getDay().visit("Browse Porn Sites", selfNPC, 0);
             }
         }
-        character.gain(Item.semen, Random.random(3) + 1);
-        buyUpTo(Item.semen, 5);
+        selfNPC.gain(Item.semen, Random.random(3) + 1);
+        buyUpTo(Item.semen, 5, selfNPC);
     }
     
-    private void constructLines() {
-        character.addLine(CharacterLine.BB_LINER, (c, self, other) -> {
-            return "Reyka looks at you with a pang of regret: <i>\"In hindsight, damaging"
-                            + " the source of my meal might not have been the best idea...\"</i>";
-        });
+    @Override public void constructLines(NPC selfNPC) {
+        selfNPC.addLine(CharacterLine.BB_LINER, (c, self, other) ->
+                        "Reyka looks at you with a pang of regret: <i>\"In hindsight, damaging"
+                                        + " the source of my meal might not have been the best idea...\"</i>");
 
-        character.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> {
-            return "<i>\"You could have just asked, you know.\"</i> As you gaze upon her naked form,"
-                            + " noticing the radiant ruby ardorning her bellybutton, you feel"
-                            + " sorely tempted to just give in to your desires. The hungry look"
-                            + " on her face as she licks her lips, though, quickly dissuades you" + " from doing so";
-        });
+        selfNPC.addLine(CharacterLine.NAKED_LINER, (c, self, other) ->
+                        "<i>\"You could have just asked, you know.\"</i> As you gaze upon her naked form,"
+                                        + " noticing the radiant ruby ardorning her bellybutton, you feel"
+                                        + " sorely tempted to just give in to your desires. The hungry look"
+                                        + " on her face as she licks her lips, though, quickly dissuades you" + " from doing so");
 
-        character.addLine(CharacterLine.STUNNED_LINER, (c, self, other) -> {
-            return "Reyka is laying on the floor, her wings spread out behind her, panting for breath";
-        });
+        selfNPC.addLine(CharacterLine.STUNNED_LINER, (c, self, other) -> "Reyka is laying on the floor, her wings spread out behind her, panting for breath");
 
-        character.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> {
-            return "\"You look like you will taste nice. Maybe if you let me have a taste, I will be nice to you too.\"";
-        });
+        selfNPC.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> "\"You look like you will taste nice. Maybe if you let me have a taste, I will be nice to you too.\"");
 
-        character.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> {
-            return "\"Why keep fighting? Wouldn't it just feel SO much better just to let me do what I do best?\"";
-        });
+        selfNPC.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> "\"Why keep fighting? Wouldn't it just feel SO much better just to let me do what I do best?\"");
 
-        character.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> {
-            return "You feel exhausted after yet another night of sexfighting. You're not complaining, of course; "
-                            + "what " + other.guyOrGirl()
-                            + " would when having this much sex with several different girls? Still, a weekend would "
-                            + "be nice sometime... About half way to your room, Reyka steps in front of you. Where did she come from? "
-                            + "<i>\"Listen, " + other.getName()
-                            + ", I've been doing some thinking lately. You know very well I've had sex with a lot "
-                            + "of " + other.guyOrGirl()
-                            + "s and a fair amount of girls, too, right?\"</i> You just nod, wondering where this is going. <i>\"Well, "
-                            + "in all that time no one has ever made me feel the way you can. I don't know why, really, but I can't help "
-                            + "feeling there's something special about you.\"</i> You stand there, paralyzed, with a look of amazement "
-                            + "on your face. Reyka intimidates you. Hell, she is downright terrifying at times. To see and hear "
-                            + "her like this is like nothing you had ever expected from her. For a moment, you think this is all some "
-                            + "elaborate trick of some sort, but that thought vanishes the instant you see tears welling in her eyes. "
-                            + "<i>\"I just... We demons aren't supposed to feel like this, you know? We don't form relationships. It's all "
-                            + "just a constant power struggle, constant scheming and looking over your shoulder and sleeping with a "
-                            + "knife under your pillow. It has never bothered me before; it's simply what I am. That's what I used to "
-                            + "think, anyway. Now, I'm not so sure... about anything...\"</i> She quitely sobs while saying this, and you "
-                            + "embrace her. You hold her there for some time, before inviting her to spend the night at your place. "
-                            + "You don't even have sex when you get there, you just both lay down in your single bed, close to "
-                            + "each other, and enjoy a peaceful sleep together with your arms around her and her head on your shoulder.";
-        });
+        selfNPC.addLine(CharacterLine.NIGHT_LINER, (c, self, other) ->
+                        "You feel exhausted after yet another night of sexfighting. You're not complaining, of course; "
+                                        + "what " + other.guyOrGirl()
+                                        + " would when having this much sex with several different girls? Still, a weekend would "
+                                        + "be nice sometime... About half way to your room, Reyka steps in front of you. Where did she come from? "
+                                        + "<i>\"Listen, " + other.getName()
+                                        + ", I've been doing some thinking lately. You know very well I've had sex with a lot "
+                                        + "of " + other.guyOrGirl()
+                                        + "s and a fair amount of girls, too, right?\"</i> You just nod, wondering where this is going. <i>\"Well, "
+                                        + "in all that time no one has ever made me feel the way you can. I don't know why, really, but I can't help "
+                                        + "feeling there's something special about you.\"</i> You stand there, paralyzed, with a look of amazement "
+                                        + "on your face. Reyka intimidates you. Hell, she is downright terrifying at times. To see and hear "
+                                        + "her like this is like nothing you had ever expected from her. For a moment, you think this is all some "
+                                        + "elaborate trick of some sort, but that thought vanishes the instant you see tears welling in her eyes. "
+                                        + "<i>\"I just... We demons aren't supposed to feel like this, you know? We don't form relationships. It's all "
+                                        + "just a constant power struggle, constant scheming and looking over your shoulder and sleeping with a "
+                                        + "knife under your pillow. It has never bothered me before; it's simply what I am. That's what I used to "
+                                        + "think, anyway. Now, I'm not so sure... about anything...\"</i> She quitely sobs while saying this, and you "
+                                        + "embrace her. You hold her there for some time, before inviting her to spend the night at your place. "
+                                        + "You don't even have sex when you get there, you just both lay down in your single bed, close to "
+                                        + "each other, and enjoy a peaceful sleep together with your arms around her and her head on your shoulder.");
 
-        character.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> {
-            return "Reyka shudders, <i>\"Mmm it's been a while since I've felt that. Here, I'll return the favor\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> "Reyka shudders, <i>\"Mmm it's been a while since I've felt that. Here, I'll return the favor\"</i>");
 
-        character.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> {
-            return "With a devilish smile, Reyka brings her face close to yours <i>\"Mmmmm that smells great! Too bad I'm still pretty hungry.\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> "With a devilish smile, Reyka brings her face close to yours <i>\"Mmmmm that smells great! Too bad I'm still pretty hungry.\"</i>");
 
-        character.addLine(CharacterLine.CHALLENGE, (c, self, other) -> {
-            return "<i>\"Yum, I was just looking for a tasty little morsel.\"</i><br/><br/>"
-                            + "Reyka strikes a seductive pose and the devilish smile"
-                            + " on her face reveals just what, or more specifically,"
-                            + " who she intends that morsel to be.";
-        });
+        selfNPC.addLine(CharacterLine.CHALLENGE, (c, self, other) ->
+                        "<i>\"Yum, I was just looking for a tasty little morsel.\"</i><br/><br/>"
+                                        + "Reyka strikes a seductive pose and the devilish smile"
+                                        + " on her face reveals just what, or more specifically,"
+                                        + " who she intends that morsel to be.");
 
-        character.addLine(CharacterLine.DESCRIBE_LINER, (c, self, other) -> {
-            return "Reyka the succubus stands before you, six feet tall with"
-                            + " the most stunningly beautiful body you have ever seen."
-                            + " Her long black hair enshrines her perfect face like a priceless"
-                            + " painting. Her arms are slim and end in long-fingered,"
-                            + " soft hands, nails polished shining red. Underneath, her long and"
-                            + " perfectly formed legs and delicate feet stand in an imposing posture."
-                            + " Behind her, you see a pair of relatively small but powerful-looking bat wings.<br/>"
-                            + " Her gaze speaks of indescribable pleasure, but your mind reminds you"
-                            + " of the cost of indulging in a succubus' body: Give her half a chance"
-                            + " and she will suck out your very soul.";
-        });
+        selfNPC.addLine(CharacterLine.DESCRIBE_LINER, (c, self, other) ->
+                        "Reyka the succubus stands before you, six feet tall with"
+                                        + " the most stunningly beautiful body you have ever seen."
+                                        + " Her long black hair enshrines her perfect face like a priceless"
+                                        + " painting. Her arms are slim and end in long-fingered,"
+                                        + " soft hands, nails polished shining red. Underneath, her long and"
+                                        + " perfectly formed legs and delicate feet stand in an imposing posture."
+                                        + " Behind her, you see a pair of relatively small but powerful-looking bat wings.<br/>"
+                                        + " Her gaze speaks of indescribable pleasure, but your mind reminds you"
+                                        + " of the cost of indulging in a succubus' body: Give her half a chance"
+                                        + " and she will suck out your very soul.");
 
-        character.addLine(CharacterLine.LEVEL_DRAIN_LINER, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.LEVEL_DRAIN_LINER, (c, self, other) -> {
             String part = Random.pickRandom(c.getStance().getPartsFor(c, self, other)).map(bp -> bp.describe(self)).orElse("pussy");
             if (other.getLevel() < self.getLevel() - 5) {
                 if (c.getStance().vaginallyPenetratedBy(c, other, self)) {
@@ -409,8 +388,8 @@ public class Reyka extends BasePersonality {
     }
 
     @Override
-    public String victory(Combat c, Result flag) {
-        Character opponent = character.equals(c.p1) ? c.p2 : c.p1;
+    public String victory(Combat c, Result flag, NPC selfNPC) {
+        Character opponent = selfNPC.equals(c.p1) ? c.p2 : c.p1;
         if (c.getStance().anallyPenetrated(c, opponent)) {
             return "Reyka alternates between long hard thrusts and sensual grinding to keep you from getting used to the stimulation, and the pleasure it is "
                             + "inflicting on you stops you from mustering the resolve to fight back. <i>\"I do love a good bit of pegging.\"</i> Reyka comments as she begins "
@@ -425,7 +404,7 @@ public class Reyka extends BasePersonality {
                             + "smiling. You shake your head; you don't think that sort of thing would really suit you. Her smile deflates some but she nods her head and "
                             + "turns to go. <i>\"Let me know if that ever changes, I'd definitely enjoy opening your mind,\"</i> she calls over her shoulder as she leaves.";
         }
-        character.arousal.empty();
+        selfNPC.arousal.empty();
         return "With a final cry of defeat (and pleasure) you erupt under Reyka's"
                         + " attentions. She immediatly pounces on you and draws your lips to hers."
                         + " As does so, she inhales deeply, drawing more than just air out of you."
@@ -455,9 +434,9 @@ public class Reyka extends BasePersonality {
     }
 
     @Override
-    public String defeat(Combat paramCombat, Result flag) {
-        character.arousal.empty();
-        if (character.has(Trait.lacedjuices) && Random.random(3) == 0 ) {
+    public String defeat(Combat paramCombat, Result flag, NPC selfNPC) {
+        selfNPC.arousal.empty();
+        if (selfNPC.has(Trait.lacedjuices) && Random.random(3) == 0 ) {
             return "Reyka shivers as she approaches her climax and her legs fall open defenselessly. You can't resist taking advantage of this opening to deliver the "
                             + "coup de grace. You grab hold of her thighs and run your tongue across her wet pussy. Her love juice is surprisingly sweet and almost intoxicating, "
                             + "but you stay focused on your goal. You ravage her vulnerable love button with your tongue and a flood of tasty wetness hits you as she cums. You "
@@ -506,7 +485,7 @@ public class Reyka extends BasePersonality {
     }
 
     @Override
-    public String victory3p(Combat c, Character target, Character assist) {
+    public String victory3p(Combat c, Character target, Character assist, NPC selfNPC) {
         if (target.human()) {
             return "<i>\"How kind of you to hold him for me, dear.\"</i> Reyka bows her head ever so slightly towards "
                             + assist.getName() + " and then turns her gaze upon you prone form. "
@@ -540,13 +519,13 @@ public class Reyka extends BasePersonality {
                         + target.getName() + " loudly over the edge. Her screams of pleasure are almost deafening, "
                         + "and you have to work really hard to restrain her convlusing body. After a minute or so, the orgasm subsides and "
                         + target.getName() + " falls asleep and you gently lay her " + "down. When you turn to look at "
-                        + character.getName()
+                        + selfNPC.getName()
                         + ", you are startled by the predatory look in her eyes. <i>\"I'm afraid all the excitement has left me a tad peckish. Be a "
                         + "dear and help me out with that, will you?\"</i> You ponder whether or not you made a mistake in helping her.";
     }
 
     @Override
-    public String intervene3p(Combat c, Character target, Character assist) {
+    public String intervene3p(Combat c, Character target, Character assist, NPC selfNPC) {
         if (target.human()) {
             return "Your fight with " + assist.getName() + " starts out poorly; she already"
                             + " has you naked and aroused, wheras she seems as cool and calm as when"
@@ -572,7 +551,7 @@ public class Reyka extends BasePersonality {
     }
 
     @Override
-    public String draw(Combat paramCombat, Result flag) {
+    public String draw(Combat paramCombat, Result flag, NPC selfNPC) {
         return "As you and Reyka are both thrusting against each other for all you're worth, you feel your inevitable climax approaching very rapidly. Just "
                         + "before you erupt into her, you notice a strange change come over her. Her tail and wings seem to evaporate before you and her white skin gains "
                         + "a slight tan. The challenging look in her eyes and confident little smile are replaced by an expression of surprise and shock. But you don't notice "
@@ -591,13 +570,13 @@ public class Reyka extends BasePersonality {
     }
 
     @Override
-    public boolean fightFlight(Character paramCharacter) {
-        return !character.mostlyNude() || Random.random(3) == 1;
+    public boolean fightFlight(Character paramCharacter, NPC selfNPC) {
+        return !selfNPC.mostlyNude() || Random.random(3) == 1;
     }
 
     @Override
-    public boolean attack(Character paramCharacter) {
-        return !character.mostlyNude() || Random.random(3) == 1;
+    public boolean attack(Character paramCharacter, NPC selfNPC) {
+        return !selfNPC.mostlyNude() || Random.random(3) == 1;
     }
 
     public double dickPreference() {
@@ -605,13 +584,13 @@ public class Reyka extends BasePersonality {
     }
 
     @Override
-    public boolean fit() {
-        return (!character.mostlyNude() || Random.random(3) == 1) && character.getStamina().percent() >= 50
-                        && character.getArousal().percent() <= 50;
+    public boolean fit(NPC selfNPC) {
+        return (!selfNPC.mostlyNude() || Random.random(3) == 1) && selfNPC.getStamina().percent() >= 50
+                        && selfNPC.getArousal().percent() <= 50;
     }
 
     @Override
-    public boolean checkMood(Combat c, Emotion mood, int value) {
+    public boolean checkMood(Combat c, Emotion mood, int value, NPC selfNPC) {
         switch (mood) {
             case dominant:
                 return value >= 50;

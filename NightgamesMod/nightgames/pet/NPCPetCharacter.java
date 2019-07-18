@@ -19,10 +19,10 @@ public class NPCPetCharacter extends PetCharacter {
     private NPC prototype;
     private Map<String, List<CharacterLine>> lines;
 
-    public NPCPetCharacter(String name, Pet self, NPC prototypeCharacter, int level) throws CloneNotSupportedException {
+    NPCPetCharacter(String name, Pet self, NPC prototypeCharacter, int level) throws CloneNotSupportedException {
         super(self, name, prototypeCharacter.getType() + "Pet", prototypeCharacter.getGrowth(), 1);
         prototype = prototypeCharacter.clone();
-        prototype.ai.applyBasicStats(this);
+        prototype.ai.applyBasicStats(prototype);
         for (int i = 1; i < level; i++) {
             this.level += 1;
             getGrowth().levelUp(this);
@@ -96,6 +96,6 @@ public class NPCPetCharacter extends PetCharacter {
 
     @Override
     public String getPortrait(Combat c) {
-        return prototype.ai.image(c);
+        return prototype.ai.image(c, prototype);
     }
 }

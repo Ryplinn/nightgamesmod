@@ -30,6 +30,7 @@ import nightgames.stance.Neutral;
 import nightgames.stance.Position;
 import nightgames.start.PlayerConfiguration;
 import nightgames.status.*;
+import nightgames.status.addiction.Addiction;
 import nightgames.trap.Trap;
 
 import java.util.*;
@@ -42,18 +43,17 @@ import static nightgames.requirements.RequirementShortcuts.item;
 public class Player extends Character {
     public GUI gui;
     public int traitPoints;
-    private String type;
+    private CharacterType type;
 
     private Player() {
         this("Dummy");
     }
 
     public Player(String name) {
-        this(name, CharacterSex.male, Optional.empty(), new ArrayList<>(), new HashMap<>());
+        this(name, CharacterSex.male, null, new ArrayList<>(), new HashMap<>());
     }
 
-    // TODO(Ryplinn): This initialization pattern is very close to that of BasePersonality. I think it makes sense to make NPC the primary parent of characters instead of BasePersonality.
-    public Player(String name, CharacterSex sex, Optional<PlayerConfiguration> config, List<Trait> pickedTraits,
+    public Player(String name, CharacterSex sex, PlayerConfiguration config, List<Trait> pickedTraits,
                     Map<Attribute, Integer> selectedAttributes) {
         super(name, 1);
         initialGender = sex;
@@ -62,9 +62,9 @@ public class Player extends Character {
 
         body.makeGenitalOrgans(initialGender);
 
-        config.ifPresent(this::applyConfigStats);
+        Optional.ofNullable(config).ifPresent(this::applyConfigStats);
         finishCharacter(pickedTraits, selectedAttributes);
-        this.type = getClass().getSimpleName();
+        this.type = CharacterType.get(getClass().getSimpleName());
     }
 
     public Player(JsonObject playerJson) {
@@ -118,7 +118,7 @@ public class Player extends Character {
             body.describeBodyText(b, this, false);
         }
         if (getTraits().size() > 0) {
-            b.append("<br/>Traits:<br/>");
+            b.append("<br/><br/>Traits:<br/>");
             List<Trait> traits = new ArrayList<>(getTraits());
             traits.removeIf(t -> t.isOverridden(this));
             traits.sort(Comparator.comparing(Trait::toString));
@@ -126,10 +126,17 @@ public class Player extends Character {
                            .map(Object::toString)
                            .collect(Collectors.joining(", ")));
         }
+        if (addictions.size() > 0) {
+            b.append("<br/><br/>Addictions:<br/>");
+            List<Addiction> addictions = new ArrayList<>(getAddictions());
+            addictions.stream().filter(addiction -> addiction.atLeast(Addiction.Severity.LOW))
+                            .sorted(Comparator.comparing(addiction -> addiction.getCause().getName()))
+                            .forEach(addiction -> b.append(addiction.describeStatus()).append("<br/>"));
+        }
         if (status.size() > 0) {
             b.append("<br/><br/>Statuses:<br/>");
             List<Status> statuses = new ArrayList<>(status);
-            statuses.sort((first, second) -> first.name.compareTo(second.name));
+            statuses.sort(Comparator.comparing(status -> status.name));
             b.append(statuses.stream()
                              .map(s -> s.name)
                              .collect(Collectors.joining(", ")));
@@ -139,20 +146,20 @@ public class Player extends Character {
 
     @Override
     public String describe(int per, Combat c) {
-        String description = "<i>";
+        StringBuilder description = new StringBuilder("<i>");
         for (Status s : status) {
-            description = description + s.describe(c) + "<br/>";
+            description.append(s.describe(c)).append("<br/>");
         }
-        description = description + "</i>";
-        description = description + outfit.describe(this);
+        description.append("</i>");
+        description.append(outfit.describe(this));
         if (per >= 5 && status.size() > 0) {
-            description += "<br/>List of statuses:<br/><i>";
-            description += status.stream().map(Status::toString).collect(Collectors.joining(", "));
-            description += "</i><br/>";
+            description.append("<br/>List of statuses:<br/><i>");
+            description.append(status.stream().map(Status::toString).collect(Collectors.joining(", ")));
+            description.append("</i><br/>");
         }
-        description += Stage.describe(this);
+        description.append(Stage.describe(this));
         
-        return description;
+        return description.toString();
     }
 
     @Override
@@ -354,7 +361,7 @@ public class Player extends Character {
             }
             gui.message(location.description + "<br/><br/>");
             for (Deployable trap : location.env) {
-                if (trap.owner() == this) {
+                if (trap.getOwner() == this) {
                     gui.message("You've set a " + trap.toString() + " here.");
                 }
             }
@@ -460,7 +467,7 @@ public class Player extends Character {
 
     @Override
     public void flee(Area location2) {
-        Area[] adjacent = location2.adjacent.toArray(new Area[location2.adjacent.size()]);
+        Area[] adjacent = location2.adjacent.toArray(new Area[0]);
         Area destination = adjacent[Random.random(adjacent.length)];
         gui.message("You dash away and escape into the <b>" + destination.name + ".</b>");
         travel(destination);
@@ -709,7 +716,7 @@ public class Player extends Character {
         assessOpponent(target);
         gui.message("<br/>");
 
-        GameState.gameState.characterPool.getPlayer().promptOpportunity(target, trap, gui, enc);
+        GameState.getGameState().characterPool.getPlayer().promptOpportunity(target, trap, gui, enc);
     }
 
     @Override
@@ -895,7 +902,7 @@ public class Player extends Character {
     }
 
     @Override
-    public String getType() {
+    public CharacterType getType() {
         return type;
     }
 
@@ -965,7 +972,7 @@ public class Player extends Character {
         }
     }
 
-    public void promptOpportunity(Character target, Trap trap, GUI gui, Encounter encounter) {
+    private void promptOpportunity(Character target, Trap trap, GUI gui, Encounter encounter) {
         List<LabeledValue<String>> choices = new ArrayList<>();
         choices.add(new LabeledValue<>("Attack", "Attack" + target.getName()));
         choices.add(new LabeledValue<>("Wait", "Wait"));

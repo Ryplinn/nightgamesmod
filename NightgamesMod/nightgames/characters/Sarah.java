@@ -12,7 +12,6 @@ import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.items.Item;
-import nightgames.start.NpcConfiguration;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -21,127 +20,106 @@ public class Sarah extends BasePersonality {
     private static final long serialVersionUID = 8601852023164119671L;
 
     public Sarah() {
-        this(Optional.empty(), Optional.empty());
-    }
-
-    public Sarah(Optional<NpcConfiguration> charConfig, Optional<NpcConfiguration> commonConfig) {
-        super("Sarah", charConfig, commonConfig, false);
-        constructLines();
+        super(false);
     }
 
     @Override
-    public void applyStrategy(NPC self) {}
+    public void applyStrategy(NPC selfNPC) {}
 
     @Override
-    public void applyBasicStats(Character self) {
+    public void applyBasicStats(NPC selfNPC) {
         preferredCockMod = CockMod.error;
-        character.outfitPlan.addByID("frillybra");
-        character.outfitPlan.addByID("frillypanties");
+        selfNPC.outfitPlan.addByID("frillybra");
+        selfNPC.outfitPlan.addByID("frillypanties");
 
-        character.change();
-        character.modAttributeDontSaveData(Attribute.power, 2);
-        character.modAttributeDontSaveData(Attribute.cunning, 1);
-        character.modAttributeDontSaveData(Attribute.perception, 1);
-        character.modAttributeDontSaveData(Attribute.speed, 2);
-        character.getStamina().setMax(150);
-        character.getArousal().setMax(100);
-        character.rank = 1;
-        character.adjustTraits();
+        selfNPC.change();
+        selfNPC.modAttributeDontSaveData(Attribute.power, 2);
+        selfNPC.modAttributeDontSaveData(Attribute.cunning, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.perception, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.speed, 2);
+        selfNPC.getStamina().setMax(150);
+        selfNPC.getArousal().setMax(100);
+        selfNPC.rank = 1;
+        selfNPC.adjustTraits();
 
-        character.getMojo().setMax(90);
+        selfNPC.getMojo().setMax(90);
 
-        character.setTrophy(Item.HolyWater);
-        character.body.add(BreastsPart.d);
-        character.initialGender = CharacterSex.female;
+        selfNPC.setTrophy(Item.HolyWater);
+        selfNPC.body.add(BreastsPart.d);
+        selfNPC.initialGender = CharacterSex.female;
     }
 
     @Override
-    public void setGrowth() {
-        character.getGrowth().stamina = 5;
-        character.getGrowth().arousal = 6;
-        character.getGrowth().willpower = .8f;
-        character.getGrowth().bonusStamina = 2;
-        character.getGrowth().bonusArousal = 2;
+    public void setGrowth(NPC selfNPC) {
+        selfNPC.getGrowth().stamina = 5;
+        selfNPC.getGrowth().arousal = 6;
+        selfNPC.getGrowth().willpower = .8f;
+        selfNPC.getGrowth().bonusStamina = 2;
+        selfNPC.getGrowth().bonusArousal = 2;
 
-        character.getGrowth().addTrait(0, Trait.imagination);
-        character.getGrowth().addTrait(0, Trait.pimphand);
-        character.getGrowth().addTrait(10, Trait.QuickRecovery);
-        character.getGrowth().addTrait(15, Trait.sadist);
-        character.getGrowth().addTrait(20, Trait.disablingblows);
-        character.getGrowth().addTrait(25, Trait.nimbletoes);
-        character.getGrowth().addBodyPartMod(30, "pussy", FieryMod.INSTANCE);
-        character.getGrowth().addBodyPart(30, WingsPart.angelic);
-        character.getGrowth().addTrait(30, Trait.valkyrie);
-        character.getGrowth().addTrait(35, Trait.overwhelmingPresence);
-        character.getGrowth().addTrait(40, Trait.bitingwords);
-        character.getGrowth().addTrait(45, Trait.commandingvoice);
-        character.getGrowth().addTrait(50, Trait.oblivious);
-        character.getGrowth().addTrait(55, Trait.resurrection);
+        selfNPC.getGrowth().addTrait(0, Trait.imagination);
+        selfNPC.getGrowth().addTrait(0, Trait.pimphand);
+        selfNPC.getGrowth().addTrait(10, Trait.QuickRecovery);
+        selfNPC.getGrowth().addTrait(15, Trait.sadist);
+        selfNPC.getGrowth().addTrait(20, Trait.disablingblows);
+        selfNPC.getGrowth().addTrait(25, Trait.nimbletoes);
+        selfNPC.getGrowth().addBodyPartMod(30, "pussy", FieryMod.INSTANCE);
+        selfNPC.getGrowth().addBodyPart(30, WingsPart.angelic);
+        selfNPC.getGrowth().addTrait(30, Trait.valkyrie);
+        selfNPC.getGrowth().addTrait(35, Trait.overwhelmingPresence);
+        selfNPC.getGrowth().addTrait(40, Trait.bitingwords);
+        selfNPC.getGrowth().addTrait(45, Trait.commandingvoice);
+        selfNPC.getGrowth().addTrait(50, Trait.oblivious);
+        selfNPC.getGrowth().addTrait(55, Trait.resurrection);
 
         preferredAttributes.add(c -> Optional.of(Attribute.power));
         preferredAttributes.add(c -> c.getLevel() >= 30 ? Optional.of(Attribute.ki) : Optional.empty());
-        character.body.add(new FacePart(.1, 2.9));
+        selfNPC.body.add(new FacePart(.1, 2.9));
     }
 
     @Override
-    public Action move(Collection<Action> available, Collection<Movement> radar) {
-        Action proposed = Decider.parseMoves(available, radar, character);
-        return proposed;
+    public Action move(Collection<Action> available, Collection<Movement> radar, NPC selfNPC) {
+        return Decider.parseMoves(available, radar, selfNPC);
     }
 
     @Override
-    public void rest(int time) {}
+    public void rest(int time, NPC selfNPC) {}
 
     @Override
-    public String victory(Combat c, Result flag) {
+    public String victory(Combat c, Result flag, NPC selfNPC) {
         return "";
     }
 
     @Override
-    public String defeat(Combat c, Result flag) {
+    public String defeat(Combat c, Result flag, NPC selfNPC) {
         return "";
     }
 
     @Override
-    public String draw(Combat c, Result flag) {
+    public String draw(Combat c, Result flag, NPC selfNPC) {
         return "";
     }
     
-    private void constructLines() {
-        character.addLine(CharacterLine.BB_LINER, (c, self, other) -> {
-            return "<i>\"...\"</i> Sarah silently looks at you, with no hint of remorse in her eyes.";
-        });
+    @Override public void constructLines(NPC selfNPC) {
+        selfNPC.addLine(CharacterLine.BB_LINER, (c, self, other) -> "<i>\"...\"</i> Sarah silently looks at you, with no hint of remorse in her eyes.");
 
-        character.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> {
-            return "Sarah looks unfazed at being undressed, but you can clearly see a flush creeping into her face.";
-        });
+        selfNPC.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> "Sarah looks unfazed at being undressed, but you can clearly see a flush creeping into her face.");
 
-        character.addLine(CharacterLine.STUNNED_LINER, (c, self, other) -> {
-            return "<i>\"..!\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.STUNNED_LINER, (c, self, other) -> "<i>\"..!\"</i>");
 
-        character.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> {
-            return "Sarah simply eyes you with a disdainful look. If looks could kill... well this still probably wouldn't kill you. But it definitely hurts your pride.";
-        });
+        selfNPC.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> "Sarah simply eyes you with a disdainful look. If looks could kill... well this still probably wouldn't kill you. But it definitely hurts your pride.");
 
-        character.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> {
-            return "Sarah cups her large breasts and gives you a show. The gap between her placid face and her lewd actions is surprisingly arousing.";
-        });
+        selfNPC.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> "Sarah cups her large breasts and gives you a show. The gap between her placid face and her lewd actions is surprisingly arousing.");
 
-        character.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> {
-            return "";
-        });
+        selfNPC.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> "");
 
-        character.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> {
-            return "Sarah's eyes slam shut in a blissful silent orgasm. "
-                            + "You can clearly tell she's turned on like hell, but her face remains impassive as usual.";
-        });
+        selfNPC.addLine(CharacterLine.ORGASM_LINER, (c, self, other) ->
+                        "Sarah's eyes slam shut in a blissful silent orgasm. "
+                                        + "You can clearly tell she's turned on like hell, but her face remains impassive as usual.");
 
-        character.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> {
-            return "Sarah looks a bit flushed as {other:subject-action:cum|cums} hard. However she does changes neither her blank demeanor nor her stance.";
-        });
+        selfNPC.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> "Sarah looks a bit flushed as {other:subject-action:cum|cums} hard. However she does changes neither her blank demeanor nor her stance.");
         
-        character.addLine(CharacterLine.CHALLENGE, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.CHALLENGE, (c, self, other) -> {
             int sarahFought = other.getFlag(FOUGHT_SARAH_PET);
             if (other.human()) {
                 if (sarahFought == 0)  {
@@ -172,12 +150,12 @@ public class Sarah extends BasePersonality {
     }
 
     @Override
-    public boolean fightFlight(Character opponent) {
+    public boolean fightFlight(Character opponent, NPC selfNPC) {
         return true;
     }
 
     @Override
-    public boolean attack(Character opponent) {
+    public boolean attack(Character opponent, NPC selfNPC) {
         return true;
     }
 
@@ -186,30 +164,28 @@ public class Sarah extends BasePersonality {
     }
 
     @Override
-    public String victory3p(Combat c, Character target, Character assist) {
+    public String victory3p(Combat c, Character target, Character assist, NPC selfNPC) {
         return "";
     }
 
     @Override
-    public String intervene3p(Combat c, Character target, Character assist) {
+    public String intervene3p(Combat c, Character target, Character assist, NPC selfNPC) {
         return "";
     }
 
     private static String FOUGHT_SARAH_PET = "FOUGHT_SARAH_PET";
 
     @Override
-    public boolean fit() {
+    public boolean fit(NPC selfNPC) {
         return true;
     }
 
     @Override
-    public boolean checkMood(Combat c, Emotion mood, int value) {
-        switch (mood) {
-            case angry:
-                return value >= 80;
-            default:
-                return value >= 100;
+    public boolean checkMood(Combat c, Emotion mood, int value, NPC selfNPC) {
+        if (mood == Emotion.angry) {
+            return value >= 80;
         }
+        return value >= 100;
     }
 
 }

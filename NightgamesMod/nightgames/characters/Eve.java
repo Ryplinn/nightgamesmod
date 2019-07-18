@@ -9,7 +9,6 @@ import nightgames.combat.Result;
 import nightgames.daytime.Daytime;
 import nightgames.global.Random;
 import nightgames.items.Item;
-import nightgames.start.NpcConfiguration;
 
 import java.util.Optional;
 
@@ -20,155 +19,138 @@ public class Eve extends BasePersonality {
     private static final long serialVersionUID = -8169646189131720872L;
 
     public Eve() {
-        this(Optional.empty(), Optional.empty());
-    }
-
-    public Eve(Optional<NpcConfiguration> charConfig, Optional<NpcConfiguration> commonConfig) {
-        super("Eve", charConfig, commonConfig, false);
-        constructLines();
+        super(false);
     }
 
     @Override
-    public void applyStrategy(NPC self) {
-        self.plan = Plan.hunting;
-        self.mood = Emotion.confident;
+    public void applyStrategy(NPC selfNPC) {
+        selfNPC.plan = Plan.hunting;
+        selfNPC.mood = Emotion.confident;
     }
 
     @Override
-    public void applyBasicStats(Character self) {
-        self.outfitPlan.addByID("tanktop");
-        self.outfitPlan.addByID("crotchlesspanties");
-        self.outfitPlan.addByID("jeans");
-        self.outfitPlan.addByID("stilettopumps");
-        self.outfitPlan.addByID("garters");
+    public void applyBasicStats(NPC selfNPC) {
+        selfNPC.outfitPlan.addByID("tanktop");
+        selfNPC.outfitPlan.addByID("crotchlesspanties");
+        selfNPC.outfitPlan.addByID("jeans");
+        selfNPC.outfitPlan.addByID("stilettopumps");
+        selfNPC.outfitPlan.addByID("garters");
 
-        self.change();
-        self.modAttributeDontSaveData(Attribute.power, 1);
-        self.modAttributeDontSaveData(Attribute.fetishism, 1);
-        self.modAttributeDontSaveData(Attribute.cunning, 1);
-        self.modAttributeDontSaveData(Attribute.speed, 1);
-        self.modAttributeDontSaveData(Attribute.seduction, 2);
-        self.adjustTraits();
-        self.setTrophy(Item.EveTrophy);
-        self.body.add(BreastsPart.d);
-        self.body.add(new CockPart().applyMod(new SizeMod(SizeMod.COCK_SIZE_BIG)));
-        self.body.add(PussyPart.generic);
-        self.getMojo().setMax(120);
+        selfNPC.change();
+        selfNPC.modAttributeDontSaveData(Attribute.power, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.fetishism, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.cunning, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.speed, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.seduction, 2);
+        selfNPC.adjustTraits();
+        selfNPC.setTrophy(Item.EveTrophy);
+        selfNPC.body.add(BreastsPart.d);
+        selfNPC.body.add(new CockPart().applyMod(new SizeMod(SizeMod.COCK_SIZE_BIG)));
+        selfNPC.body.add(PussyPart.generic);
+        selfNPC.getMojo().setMax(120);
 
-        self.getStamina().setMax(90);
-        self.getArousal().setMax(80);
+        selfNPC.getStamina().setMax(90);
+        selfNPC.getArousal().setMax(80);
         // somewhat androgynous face
-        self.body.add(new FacePart(.1, .9));
-        self.initialGender = CharacterSex.shemale;
+        selfNPC.body.add(new FacePart(.1, .9));
+        selfNPC.initialGender = CharacterSex.shemale;
         preferredCockMod = CockMod.error;
     }
 
     @Override
-    public void setGrowth() {
-        character.getGrowth().stamina = 2;
-        character.getGrowth().arousal = 6;
-        character.getGrowth().bonusStamina = 1;
-        character.getGrowth().bonusArousal = 3;
+    public void setGrowth(NPC selfNPC) {
+        selfNPC.getGrowth().stamina = 2;
+        selfNPC.getGrowth().arousal = 6;
+        selfNPC.getGrowth().bonusStamina = 1;
+        selfNPC.getGrowth().bonusArousal = 3;
         preferredAttributes.add(c -> c.get(Attribute.fetishism) < 80 ? Optional.of(Attribute.fetishism) : Optional.empty());
         preferredAttributes.add(c -> Optional.of(Attribute.seduction));
-        character.getGrowth().addTrait(0, Trait.exhibitionist);
-        character.getGrowth().addTrait(0, Trait.proheels);
-        character.getGrowth().addTrait(0, Trait.insatiable);
-        character.getGrowth().addTrait(0, Trait.assmaster);
-        character.getGrowth().addTrait(0, Trait.analFanatic);
+        selfNPC.getGrowth().addTrait(0, Trait.exhibitionist);
+        selfNPC.getGrowth().addTrait(0, Trait.proheels);
+        selfNPC.getGrowth().addTrait(0, Trait.insatiable);
+        selfNPC.getGrowth().addTrait(0, Trait.assmaster);
+        selfNPC.getGrowth().addTrait(0, Trait.analFanatic);
 
-        character.getGrowth().addTrait(2, Trait.alwaysready);
-        character.getGrowth().addTrait(5, Trait.limbTraining1);
-        character.getGrowth().addTrait(8, Trait.expertGoogler);
-        character.getGrowth().addTrait(11, Trait.sexTraining1);
-        character.getGrowth().addTrait(14, Trait.testosterone);
-        character.getGrowth().addTrait(17, Trait.experienced);
-        character.getGrowth().addTrait(20, Trait.asshandler);
-        character.getGrowth().addTrait(23, Trait.sexTraining2);
-        character.getGrowth().addTrait(26, Trait.limbTraining2);
-        character.getGrowth().addTrait(29, Trait.dickhandler);
-        character.getGrowth().addTrait(32, Trait.polecontrol);
-        character.getGrowth().addTrait(35, Trait.desensitized);
-        character.getGrowth().addTrait(38, Trait.powerfulhips);
-        character.getGrowth().addTrait(41, Trait.responsive);
-        character.getGrowth().addTrait(44, Trait.strongwilled);
-        character.getGrowth().addTrait(47, Trait.insertion);
-        character.getGrowth().addTrait(50, Trait.sexTraining3);
-        character.getGrowth().addTrait(53, Trait.limbTraining3);
-        character.getGrowth().addTrait(56, Trait.desensitized2);
+        selfNPC.getGrowth().addTrait(2, Trait.alwaysready);
+        selfNPC.getGrowth().addTrait(5, Trait.limbTraining1);
+        selfNPC.getGrowth().addTrait(8, Trait.expertGoogler);
+        selfNPC.getGrowth().addTrait(11, Trait.sexTraining1);
+        selfNPC.getGrowth().addTrait(14, Trait.testosterone);
+        selfNPC.getGrowth().addTrait(17, Trait.experienced);
+        selfNPC.getGrowth().addTrait(20, Trait.asshandler);
+        selfNPC.getGrowth().addTrait(23, Trait.sexTraining2);
+        selfNPC.getGrowth().addTrait(26, Trait.limbTraining2);
+        selfNPC.getGrowth().addTrait(29, Trait.dickhandler);
+        selfNPC.getGrowth().addTrait(32, Trait.polecontrol);
+        selfNPC.getGrowth().addTrait(35, Trait.desensitized);
+        selfNPC.getGrowth().addTrait(38, Trait.powerfulhips);
+        selfNPC.getGrowth().addTrait(41, Trait.responsive);
+        selfNPC.getGrowth().addTrait(44, Trait.strongwilled);
+        selfNPC.getGrowth().addTrait(47, Trait.insertion);
+        selfNPC.getGrowth().addTrait(50, Trait.sexTraining3);
+        selfNPC.getGrowth().addTrait(53, Trait.limbTraining3);
+        selfNPC.getGrowth().addTrait(56, Trait.desensitized2);
     }
 
     @Override
-    public void rest(int time) {
-        super.rest(time);
-        if (!(character.has(Item.Dildo) || character.has(Item.Dildo2)) && character.money >= 250) {
-            character.gain(Item.Dildo);
-            character.money -= 250;
+    public void rest(int time, NPC selfNPC) {
+        super.rest(time, selfNPC);
+        if (!(selfNPC.has(Item.Dildo) || selfNPC.has(Item.Dildo2)) && selfNPC.money >= 250) {
+            selfNPC.gain(Item.Dildo);
+            selfNPC.money -= 250;
         }
-        if (!(character.has(Item.Onahole) || character.has(Item.Onahole2)) && character.money >= 300) {
-            character.gain(Item.Onahole);
-            character.money -= 300;
+        if (!(selfNPC.has(Item.Onahole) || selfNPC.has(Item.Onahole2)) && selfNPC.money >= 300) {
+            selfNPC.gain(Item.Onahole);
+            selfNPC.money -= 300;
         }
-        if (!character.has(Item.Onahole2) && character.has(Item.Onahole) && character.money >= 300) {
-            character.remove(Item.Onahole);
-            character.gain(Item.Onahole2);
-            character.money -= 300;
+        if (!selfNPC.has(Item.Onahole2) && selfNPC.has(Item.Onahole) && selfNPC.money >= 300) {
+            selfNPC.remove(Item.Onahole);
+            selfNPC.gain(Item.Onahole2);
+            selfNPC.money -= 300;
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("XXX Store", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("XXX Store", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("Black Market", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("Black Market", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("Bookstore", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("Bookstore", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("Hardware Store", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("Hardware Store", selfNPC, Random.random(selfNPC.money));
         }
-        Decider.visit(character);
+        Decider.visit(selfNPC);
         int r;
 
         for (int i = 0; i < time; i++) {
             r = Random.random(8);
             if (r == 1) {
-                Daytime.getDay().visit("Exercise", this.character, 0);
+                Daytime.getDay().visit("Exercise", selfNPC, 0);
             } else if (r == 0) {
-                Daytime.getDay().visit("Browse Porn Sites", this.character, 0);
+                Daytime.getDay().visit("Browse Porn Sites", selfNPC, 0);
             }
         }
     }
 
-    private void constructLines() {
-        character.addLine(CharacterLine.BB_LINER, (c, self, other) -> {
-            return "Eve grins at you and pats her own groin. <i>\"Better you than me, " + other.boyOrGirl() + ".\"</i>";
-        });
+    @Override public void constructLines(NPC selfNPC) {
+        selfNPC.addLine(CharacterLine.BB_LINER, (c, self, other) ->
+                        "Eve grins at you and pats her own groin. <i>\"Better you than me, " + other.boyOrGirl() + ".\"</i>");
 
-        character.addLine(CharacterLine.CHALLENGE, (c, self, other) -> {
-            return "{self:SUBJECT} gives {other:name-do} a dominant grin and cracks {self:possessive} knuckles. <i>\"Come on {other:name}, let's play.\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.CHALLENGE, (c, self, other) -> "{self:SUBJECT} gives {other:name-do} a dominant grin and cracks {self:possessive} knuckles. <i>\"Come on {other:name}, let's play.\"</i>");
 
-        character.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> {
-            return "Eve seems more comfortable with her cock and balls hanging out than she was with her clothes on. <i>\"Like what you see? We're just getting started.\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> "Eve seems more comfortable with her cock and balls hanging out than she was with her clothes on. <i>\"Like what you see? We're just getting started.\"</i>");
 
-        character.addLine(CharacterLine.STUNNED_LINER, (c, self, other) -> {
-            return "Eve lets out a soft growl as she lays flat on the floor. <i>\"Enjoy it while you can, " + other.boyOrGirl() + ". As soon as I catch my breath, your ass is mine.\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.STUNNED_LINER, (c, self, other) ->
+                        "Eve lets out a soft growl as she lays flat on the floor. <i>\"Enjoy it while you can, " + other.boyOrGirl() + ". As soon as I catch my breath, your ass is mine.\"</i>");
 
-        character.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> {
-            return "Eve grins sadistically. <i>\"If you're intimidated by my cock, don't worry. Size isn't everything.\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> "Eve grins sadistically. <i>\"If you're intimidated by my cock, don't worry. Size isn't everything.\"</i>");
 
-        character.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> {
-            return "Eve grins sadistically. <i>\"I'm an expert at making people like you squeal.\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> "Eve grins sadistically. <i>\"I'm an expert at making people like you squeal.\"</i>");
 
-        character.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> {
-            return "";
-        });
+        selfNPC.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> "");
 
-        character.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> {
             if (c.getStance().anallyPenetrated(c, other)) {
                 return "<i>\"Oh fuck! You are one tight little cum bucket! Let's go again!\"</i>"
                                 + " Eve immediately resumes her thrusting.";
@@ -176,7 +158,7 @@ public class Eve extends BasePersonality {
             return "<i>\"Ahhh shit! Wouldn't it have been sooo much better to have " + "taken that load up your ass?\"</i>";
         });
 
-        character.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> {
             if (c.getStance().anallyPenetrated(c, self)) {
                 return "Eve laughs maniacally as you cum. <i>\"I knew you'd like it"
                                 + ", you little ass slut! But you're not done yet!\"</i>";
@@ -184,17 +166,16 @@ public class Eve extends BasePersonality {
             return "<i>\"That's it! Now, how about you return the favor?\"</i>";
         });
 
-        character.addLine(CharacterLine.DESCRIBE_LINER, (c, self, other) -> {
-            return "If there's one word to describe Eve's appearance, it would have to be 'wild'. Her face is quite pretty, though her eyes are an unnerving silver color. "
-                            + "She has bright purple hair gathered in a messy ponytail, a variety of tattoos decorating her extremely shapely body, and of couse it's "
-                            + "impossible to miss the larger than average cock and balls hanging between between her legs.";
-        });
+        selfNPC.addLine(CharacterLine.DESCRIBE_LINER, (c, self, other) ->
+                        "If there's one word to describe Eve's appearance, it would have to be 'wild'. Her face is quite pretty, though her eyes are an unnerving silver color. "
+                                        + "She has bright purple hair gathered in a messy ponytail, a variety of tattoos decorating her extremely shapely body, and of couse it's "
+                                        + "impossible to miss the larger than average cock and balls hanging between between her legs.");
     }
 
     @Override
-    public String victory(Combat c, Result flag) {
-        character.arousal.empty();
-        if (c.getStance().anallyPenetratedBy(c, c.getOpponent(character), character)) {
+    public String victory(Combat c, Result flag, NPC selfNPC) {
+        selfNPC.arousal.empty();
+        if (c.getStance().anallyPenetratedBy(c, c.getOpponent(selfNPC), selfNPC)) {
             return "As Eve pounds you mercilessly in the ass, your body is overwhelmed"
                             + " by the strange sensations radiating from your insides. <i>\"How"
                             + " does your prostate feel? I could probably milk you like this, but"
@@ -216,7 +197,7 @@ public class Eve extends BasePersonality {
                             + "pain causes your ass to clench up involuntarily. Eve buries her "
                             + "cock deep in your ass and you feel her hot seed fill you. You slump "
                             + "to the floor as she releases you, defeated and spent. <i>\"You make"
-                            + " a pretty good cocksleeve, " + c.getOpponent(character).boyOrGirl() + ". Let's do this again sometime.\"</i>";
+                            + " a pretty good cocksleeve, " + c.getOpponent(selfNPC).boyOrGirl() + ". Let's do this again sometime.\"</i>";
         }
 
         return "You try valiantly to outlast Eve, but it's no good. She's got you right "
@@ -260,23 +241,24 @@ public class Eve extends BasePersonality {
                         + " Through the haze of pain, you're vaguely aware that Eve is jerking "
                         + "off while watching your reaction, and she soon adds her ejaculation "
                         + "to the pool of semen you shot out. <i>\"You sure put on a hell of a "
-                        + "show, " + c.getOpponent(character).boyOrGirl() + ". Don't worry, I didn't hit you nearly as hard as it must have"
+                        + "show, " + c.getOpponent(selfNPC).boyOrGirl() + ". Don't worry, I didn't hit you nearly as hard as it must have"
                         + " felt. You'll be ok in a couple minutes.\"</i>";
     }
 
     @Override
-    public String defeat(Combat c, Result flag) {
+    public String defeat(Combat c, Result flag, NPC selfNPC) {
         return "As you pleasure Eve, she gradually stops fighting back, apparently more interested in enjoying her orgasm than in the outcome of the fight. You grab her throbbing "
                         + "cock and pump it rapidly. She lets out a scream of pleasure as she cums and fires powerful jets of semen into the air. She relaxes on the floor with a blissful "
                         + "expression, idly playing with her own fluids and occasionally licking them off her fingers. <br/><br/>You wave your unsatisfied erection in front of her face to remind her "
-                        + "that she still owes you an orgasm. Eve smiles up at you lewdly. <i>\"Don't worry, " + c.getOpponent(character).boyOrGirl() + ". I'll get you off properly, but I don't want you just sitting back and enjoying "
+                        + "that she still owes you an orgasm. Eve smiles up at you lewdly. <i>\"Don't worry, " + c.getOpponent(
+                        selfNPC).boyOrGirl() + ". I'll get you off properly, but I don't want you just sitting back and enjoying "
                         + "it. Sucking you dry is bound to get me all hot and bothered again, and I don't plan to walk away with a boner. Make sure you give as good as you get.\"</i> She's pretty "
                         + "demanding for a loser. Fortunately for her, you're in a generous mood. Eve seems eager to hold up her side of the deal. She takes most of your cock into her mouth "
                         + "without much difficulty and begins to explore your length with her tongue. You watch her dick harden again, sooner than you would have expected.";
     }
 
     @Override
-    public String draw(Combat c, Result flag) {
+    public String draw(Combat c, Result flag, NPC selfNPC) {
         return "You feel like you've got Eve pretty aroused, but you can't keep up"
                         + " with her amazing handjob. She's just too damn good at handling "
                         + "a cock. Just as you've given up, she grabs your wrist with her"
@@ -308,7 +290,8 @@ public class Eve extends BasePersonality {
                         + " same as a win. Eve probably doesn't care about losing her clothes, "
                         + "but giving you a free point isn't the way to win a match. She lets out "
                         + "surprisingly girly giggle in response. <i>\"You're adorably naive if "
-                        + "you think winning is the point of all this. I like seeing dumb " + c.getOpponent(character).boyOrGirl() + "s "
+                        + "you think winning is the point of all this. I like seeing dumb " + c.getOpponent(
+                        selfNPC).boyOrGirl() + "s "
                         + "like you try your hardest.\"</i> She sits up and smiles at you in pure "
                         + "amusement. <i>\"Go on then Tiger. Let's see you win this match and "
                         + "prove you're the best sexfighter on campus. Keep imagining it makes a "
@@ -316,17 +299,17 @@ public class Eve extends BasePersonality {
     }
 
     @Override
-    public boolean fightFlight(Character opponent) {
-        return !character.mostlyNude() || opponent.mostlyNude();
+    public boolean fightFlight(Character opponent, NPC selfNPC) {
+        return !selfNPC.mostlyNude() || opponent.mostlyNude();
     }
 
     @Override
-    public boolean attack(Character opponent) {
+    public boolean attack(Character opponent, NPC selfNPC) {
         return true;
     }
 
     @Override
-    public String victory3p(Combat c, Character target, Character assist) {
+    public String victory3p(Combat c, Character target, Character assist, NPC selfNPC) {
         if (target.human()) {
             return "Eve lifts up your legs, putting you in an extremely undignified position."
                             + " She pulls open your ass cheeks and starts to probe at your puckered"
@@ -350,8 +333,8 @@ public class Eve extends BasePersonality {
                             + "let up until she ejaculates onto you.";
         }
 
-        if (assist.eligible(character)) {
-            assist.defeated(character);
+        if (assist.eligible(selfNPC)) {
+            assist.defeated(selfNPC);
             assist.nudify();
         }
         return "Eve kneels between " + target.getName()
@@ -372,7 +355,7 @@ public class Eve extends BasePersonality {
     }
 
     @Override
-    public String intervene3p(Combat c, Character target, Character assist) {
+    public String intervene3p(Combat c, Character target, Character assist, NPC selfNPC) {
         if (target.human()) {
             return "Your fight with " + assist.getName()
                             + " is interrupted when you're suddenly grabbed from behind. The big breasts pressed against your back don't narrow down the "
@@ -395,12 +378,12 @@ public class Eve extends BasePersonality {
     }
 
     @Override
-    public boolean fit() {
-        return !character.mostlyNude() && character.getStamina().percent() >= 50;
+    public boolean fit(NPC selfNPC) {
+        return !selfNPC.mostlyNude() && selfNPC.getStamina().percent() >= 50;
     }
 
     @Override
-    public boolean checkMood(Combat c, Emotion mood, int value) {
+    public boolean checkMood(Combat c, Emotion mood, int value, NPC selfNPC) {
         switch (mood) {
             case horny:
             case dominant:

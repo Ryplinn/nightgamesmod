@@ -1,6 +1,5 @@
 package nightgames.gui;
 
-import nightgames.characters.BlankPersonality;
 import nightgames.characters.NPC;
 import nightgames.characters.Player;
 import nightgames.pet.FGoblin;
@@ -18,7 +17,7 @@ public class GUIColorTest {
 
     @Test public void characterColorTest() {
         Player summonerPlayer = new Player("SummonerPlayer");
-        NPC summonerNPC = new BlankPersonality("SummonerNPC").getCharacter();
+        NPC summonerNPC = new NPC("SummonerNPC");
         PetCharacter playerPet = new FGoblin(summonerPlayer, 1, 1).getSelf();
         PetCharacter npcPet = new FairyFem(summonerNPC).getSelf();
 

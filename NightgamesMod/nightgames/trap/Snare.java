@@ -2,6 +2,7 @@ package nightgames.trap;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Encounter;
 import nightgames.gui.GUI;
@@ -13,7 +14,7 @@ public class Snare extends Trap {
         this(null);
     }
 
-    public Snare(Character owner) {
+    public Snare(CharacterType owner) {
         super("Snare", owner);
     }
 
@@ -29,7 +30,7 @@ public class Snare extends Trap {
             }
             target.location().remove(this);
         } else {
-            target.addNonCombat(new Bound(target, 30 + getStrength() / 2, "snare"));
+            target.addNonCombat(new Bound(target.getType(), 30 + getStrength() / 2, "snare"));
             if (target.human()) {
                 GUI.gui.message(
                                 "You hear a sudden snap and you're suddenly overwhelmed by a blur of ropes. The tangle of ropes trip you up and firmly bind your arms.");
@@ -48,7 +49,7 @@ public class Snare extends Trap {
 
     @Override
     public String setup(Character owner) {
-        this.owner = owner;
+        this.owner = owner.getType();
         owner.consume(Item.Tripwire, 1);
         owner.consume(Item.Rope, 1);
         return "You carefully rig up a complex and delicate system of ropes on a tripwire. In theory, it should be able to bind whoever triggers it.";

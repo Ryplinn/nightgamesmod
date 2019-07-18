@@ -1,6 +1,7 @@
 package nightgames.trap;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Encounter;
 import nightgames.gui.GUI;
@@ -11,11 +12,11 @@ import nightgames.status.Oiled;
 
 public class TentacleTrap extends Trap {
 
-    public TentacleTrap() {
+    TentacleTrap() {
         this(null);
     }
     
-    public TentacleTrap(Character owner) {
+    private TentacleTrap(CharacterType owner) {
         super("Tentacle Trap", owner);
     }
 
@@ -25,7 +26,7 @@ public class TentacleTrap extends Trap {
             if (target.human()) {
                 GUI.gui.message(
                                 "An unearthly glow appears from the floor surrounding you and at least a dozen tentacles burst from the floor. Before you can react, you're lifted helpless "
-                                                + "into the air. The tentacles assault you front and back, wriggling around you nipples and cock, while one persistant tentacle forces its way into your ass. The overwhelming "
+                                                + "into the air. The tentacles assault you front and back, wriggling around you nipples and cock, while one persistent tentacle forces its way into your ass. The overwhelming "
                                                 + "sensations and violation keep you from thinking clearly and you can't even begin to mount a reasonable resistance. Just as suddenly as they attacked you, the tentacles "
                                                 + "are gone, dumping you unceremoniously to the floor. You're left coated in a slimy liquid that, based on your rock-hard erection, seems to be a powerful aphrodisiac. Holy "
                                                 + "fucking hell....");
@@ -37,10 +38,10 @@ public class TentacleTrap extends Trap {
                                 + "back into the floor. She'll left shivering, sticky, and unsatisfied. In effect, she's already defeated.");
             }
             target.tempt(target.getArousal().max());
-            target.getWillpower().set(target.getWillpower().max() / 3);;
+            target.getWillpower().set(target.getWillpower().max() / 3);
             target.calm(null, 1);
-            target.addNonCombat(new Oiled(target));
-            target.addNonCombat(new Hypersensitive(target));
+            target.addNonCombat(new Oiled(target.getType()));
+            target.addNonCombat(new Hypersensitive(target.getType()));
             target.location().opportunity(target, this);
         } else {
             if (target.human()) {
@@ -68,7 +69,7 @@ public class TentacleTrap extends Trap {
 
     @Override
     public String setup(Character owner) {
-        this.owner = owner;
+        this.owner = owner.getType();
         owner.consume(Item.Totem, 1);
         return "You need to activate this phallic totem before it can be used as a trap. You stroke the small totem with your hand, which is... weird, but effective. You "
                         + "quickly place the totem someplace out of sight and hurriedly get out of range. You're not sure whether this will actually discriminate before attacking.";
@@ -76,7 +77,7 @@ public class TentacleTrap extends Trap {
 
     @Override
     public void capitalize(Character attacker, Character victim, Encounter enc) {
-        victim.addNonCombat(new Flatfooted(victim, 1));
+        victim.addNonCombat(new Flatfooted(victim.getType(), 1));
         enc.engage(new Combat(attacker, victim, attacker.location()));
         attacker.location().remove(this);
     }

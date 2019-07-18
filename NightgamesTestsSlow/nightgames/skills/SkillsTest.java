@@ -17,40 +17,39 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SkillsTest {
-	List<NPC> npcs1;
-	List<NPC> npcs2;
-	List<Position> stances;
-	Area area;
+	private List<NPC> npcs1;
+	private List<NPC> npcs2;
+	private List<Position> stances;
+	private Area area;
 
 	@Before
-	public void prepare() throws JsonParseException, IOException {
+	public void prepare() throws JsonParseException {
 		GUI.gui = new TestGUI();
 		TestGameState gameState = new TestGameState();
 		npcs1 = new ArrayList<>();
 		npcs2 = new ArrayList<>();
 		try {
-			npcs1.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("hermtestnpc.js"))).getCharacter());
-			npcs1.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("femaletestnpc.js"))).getCharacter());
-			npcs1.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("maletestnpc.js"))).getCharacter());
-			npcs1.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("asextestnpc.js"))).getCharacter());
+			npcs1.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("hermtestnpc.js"))));
+			npcs1.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("femaletestnpc.js"))));
+			npcs1.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("maletestnpc.js"))));
+			npcs1.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("asextestnpc.js"))));
 			// don't set fake human right now because there are a lot of casts being done
-			//npcs1.forEach(npc -> npc.getCharacter().setFakeHuman(true));
+			//npcs1.forEach(npc -> npc.setFakeHuman(true));
 
-			npcs2.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("hermtestnpc.js"))).getCharacter());
-			npcs2.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("femaletestnpc.js"))).getCharacter());
-			npcs2.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("maletestnpc.js"))).getCharacter());
-			npcs2.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("asextestnpc.js"))).getCharacter());
+			npcs2.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("hermtestnpc.js"))));
+			npcs2.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("femaletestnpc.js"))));
+			npcs2.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("maletestnpc.js"))));
+			npcs2.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("asextestnpc.js"))));
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 			Assert.fail();
 		}
 		area = new Area("Test Area","Area for testing", Movement.quad);
-		stances = new ArrayList<Position>();
+		stances = new ArrayList<>();
 		stances.add(new Anal(npcs1.get(0), npcs1.get(1)));
 		stances.add(new AnalCowgirl(npcs1.get(0), npcs1.get(1)));
 		stances.add(new AnalProne(npcs1.get(0), npcs1.get(1)));
@@ -84,7 +83,7 @@ public class SkillsTest {
         gameState.makeMatch(new ArrayList<>(npcs1));
 	}
 
-	public void testSkill(Character npc1, Character npc2, Position pos) throws CloneNotSupportedException {
+	private void testSkill(Character npc1, Character npc2, Position pos) throws CloneNotSupportedException {
 		Combat c = new Combat(npc1, npc2, area, pos);
 		pos.checkOngoing(c);
 		if (c.getStance() == pos) {
@@ -102,7 +101,7 @@ public class SkillsTest {
 	}
 
 	// TODO: May need to clone npc1 and npc2 here too, depending on how skills affect characters.
-	public void testCombo(Character npc1, Character npc2, Position pos) throws CloneNotSupportedException {
+	private void testCombo(Character npc1, Character npc2, Position pos) throws CloneNotSupportedException {
 		pos.top = npc1;
 		pos.bottom = npc2;
 		testSkill(npc1, npc2, pos);

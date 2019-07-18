@@ -10,7 +10,6 @@ import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.items.Item;
-import nightgames.start.NpcConfiguration;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -19,126 +18,121 @@ public class Mei extends BasePersonality {
     private static final long serialVersionUID = 8601852023164119671L;
 
     public Mei() {
-        this(Optional.empty(), Optional.empty());
-    }
-
-    public Mei(Optional<NpcConfiguration> charConfig, Optional<NpcConfiguration> commonConfig) {
-        super("Mei", charConfig, commonConfig, false);
-        constructLines();
+        super(false);
     }
 
     @Override
-    public void applyStrategy(NPC self) {}
+    public void applyStrategy(NPC selfNPC) {}
 
     @Override
-    public void applyBasicStats(Character self) {
+    public void applyBasicStats(NPC selfNPC) {
         preferredCockMod = CockMod.error;
-        character.outfitPlan.addByID("negligee");
-        character.outfitPlan.addByID("lacythong");
-        character.outfitPlan.addByID("garters");
+        selfNPC.outfitPlan.addByID("negligee");
+        selfNPC.outfitPlan.addByID("lacythong");
+        selfNPC.outfitPlan.addByID("garters");
 
-        character.change();
-        character.modAttributeDontSaveData(Attribute.power, 1);
-        character.modAttributeDontSaveData(Attribute.seduction, 1);
-        character.modAttributeDontSaveData(Attribute.cunning, 1);
-        character.modAttributeDontSaveData(Attribute.perception, 1);
-        character.modAttributeDontSaveData(Attribute.speed, 1);
-        character.getStamina().setMax(100);
-        character.getArousal().setMax(150);
-        character.rank = 1;
-        character.adjustTraits();
+        selfNPC.change();
+        selfNPC.modAttributeDontSaveData(Attribute.power, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.seduction, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.cunning, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.perception, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.speed, 1);
+        selfNPC.getStamina().setMax(100);
+        selfNPC.getArousal().setMax(150);
+        selfNPC.rank = 1;
+        selfNPC.adjustTraits();
 
-        character.getMojo().setMax(110);
+        selfNPC.getMojo().setMax(110);
 
-        character.setTrophy(Item.ExtremeAphrodisiac);
-        character.body.add(BreastsPart.b);
-        character.initialGender = CharacterSex.female;
+        selfNPC.setTrophy(Item.ExtremeAphrodisiac);
+        selfNPC.body.add(BreastsPart.b);
+        selfNPC.initialGender = CharacterSex.female;
     }
 
     @Override
-    public void setGrowth() {
-        character.getGrowth().stamina = 3;
-        character.getGrowth().arousal = 8;
-        character.getGrowth().willpower = .8f;
-        character.getGrowth().bonusStamina = 2;
-        character.getGrowth().bonusArousal = 2;
+    public void setGrowth(NPC selfNPC) {
+        selfNPC.getGrowth().stamina = 3;
+        selfNPC.getGrowth().arousal = 8;
+        selfNPC.getGrowth().willpower = .8f;
+        selfNPC.getGrowth().bonusStamina = 2;
+        selfNPC.getGrowth().bonusArousal = 2;
 
-        character.getGrowth().addTrait(0, Trait.hairtrigger);
-        character.getGrowth().addTrait(0, Trait.petite);
-        character.getGrowth().addTrait(10, Trait.cute);
-        character.getGrowth().addTrait(15, Trait.lacedjuices);
-        character.getGrowth().addTrait(20, Trait.tight);
-        character.getGrowth().addTrait(25, Trait.sexTraining1);
-        character.getGrowth().addBodyPartMod(30, "pussy", DemonicMod.INSTANCE);
-        character.getGrowth().addBodyPart(30, TailPart.demonic);
-        character.getGrowth().addBodyPart(30, WingsPart.fallenangel);
-        character.getGrowth().addTrait(30, Trait.fallenAngel);
-        character.getGrowth().addTrait(35, Trait.energydrain);
-        character.getGrowth().addTrait(40, Trait.soulsucker);
-        character.getGrowth().addTrait(45, Trait.gluttony);
-        character.getGrowth().addBodyPartMod(50, "pussy", ExtendedTonguedMod.INSTANCE);
-        character.getGrowth().addTrait(55, Trait.carnalvirtuoso);
+        selfNPC.getGrowth().addTrait(0, Trait.hairtrigger);
+        selfNPC.getGrowth().addTrait(0, Trait.petite);
+        selfNPC.getGrowth().addTrait(10, Trait.cute);
+        selfNPC.getGrowth().addTrait(15, Trait.lacedjuices);
+        selfNPC.getGrowth().addTrait(20, Trait.tight);
+        selfNPC.getGrowth().addTrait(25, Trait.sexTraining1);
+        selfNPC.getGrowth().addBodyPartMod(30, "pussy", DemonicMod.INSTANCE);
+        selfNPC.getGrowth().addBodyPart(30, TailPart.demonic);
+        selfNPC.getGrowth().addBodyPart(30, WingsPart.fallenangel);
+        selfNPC.getGrowth().addTrait(30, Trait.fallenAngel);
+        selfNPC.getGrowth().addTrait(35, Trait.energydrain);
+        selfNPC.getGrowth().addTrait(40, Trait.soulsucker);
+        selfNPC.getGrowth().addTrait(45, Trait.gluttony);
+        selfNPC.getGrowth().addBodyPartMod(50, "pussy", ExtendedTonguedMod.INSTANCE);
+        selfNPC.getGrowth().addTrait(55, Trait.carnalvirtuoso);
         preferredAttributes.add(c -> Optional.of(Attribute.seduction));
 
         preferredAttributes.add(c -> c.getLevel() >= 30 ? Optional.of(Attribute.darkness) : Optional.empty());
         // mostly feminine face, cute but not quite at Angel's level
-        character.body.add(new FacePart(.1, 2.9));
+        selfNPC.body.add(new FacePart(.1, 2.9));
     }
 
     @Override
-    public Action move(Collection<Action> available, Collection<Movement> radar) {
-        Action proposed = Decider.parseMoves(available, radar, character);
+    public Action move(Collection<Action> available, Collection<Movement> radar, NPC selfNPC) {
+        Action proposed = Decider.parseMoves(available, radar, selfNPC);
         return proposed;
     }
 
     @Override
-    public void rest(int time) {}
+    public void rest(int time, NPC selfNPC) {}
 
     @Override
-    public String victory(Combat c, Result flag) {
+    public String victory(Combat c, Result flag, NPC selfNPC) {
         return "";
     }
 
     @Override
-    public String defeat(Combat c, Result flag) {
+    public String defeat(Combat c, Result flag, NPC selfNPC) {
         return "";
     }
 
     @Override
-    public String draw(Combat c, Result flag) {
+    public String draw(Combat c, Result flag, NPC selfNPC) {
         return "";
     }
-    
-    private void constructLines() {
-        character.addLine(CharacterLine.BB_LINER, (c, self, other) -> {
+
+    @Override public void constructLines(NPC selfNPC) {
+        selfNPC.addLine(CharacterLine.BB_LINER, (c, self, other) -> {
             return "<i>They taught that one in self-defense class!</i>";
        });
 
-        character.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> {
             return "While covering herself with her arms, Mei fake-screams <i>What do you think you're doing!?</i> Her lewd smile however speaks volumes about her true thoughts.";
        });
 
-        character.addLine(CharacterLine.STUNNED_LINER, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.STUNNED_LINER, (c, self, other) -> {
             return "<i>Angel... Sorry...</i>";
        });
 
-        character.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> {
             return "<i>\"That's right, you're just a little " + other.boyOrGirl() + "toy for us. So why don't you just stay still?\"</i>";
        });
 
-        character.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> {
             return "Mei runs her hands all over her body while teasing you, <i>\"Mmmm you want some of this? Just ask and we'll do as you please.\"</i>";
        });
 
-        character.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> {
             return "Mei yelps as she cums <i>\"Oh fuuuuckk!\"</i>";
        });
 
-        character.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> {
             return "<i>Try a little harder wont you? At this rate there's no way you'll be suitable for her!</i>";
        });
         
-       character.addLine(CharacterLine.CHALLENGE, (c, self, other) -> {
+       selfNPC.addLine(CharacterLine.CHALLENGE, (c, self, other) -> {
            int meiFought = other.getFlag(FOUGHT_MEI_PET);
            if (other.human()) {
                if (meiFought == 0)  {
@@ -171,12 +165,12 @@ public class Mei extends BasePersonality {
     }
 
     @Override
-    public boolean fightFlight(Character opponent) {
+    public boolean fightFlight(Character opponent, NPC selfNPC) {
         return true;
     }
 
     @Override
-    public boolean attack(Character opponent) {
+    public boolean attack(Character opponent, NPC selfNPC) {
         return true;
     }
 
@@ -185,24 +179,24 @@ public class Mei extends BasePersonality {
     }
 
     @Override
-    public String victory3p(Combat c, Character target, Character assist) {
+    public String victory3p(Combat c, Character target, Character assist, NPC selfNPC) {
         return "";
     }
 
     @Override
-    public String intervene3p(Combat c, Character target, Character assist) {
+    public String intervene3p(Combat c, Character target, Character assist, NPC selfNPC) {
         return "";
     }
 
     private static String FOUGHT_MEI_PET = "FOUGHT_MEI_PET";
 
     @Override
-    public boolean fit() {
+    public boolean fit(NPC selfNPC) {
         return true;
     }
 
     @Override
-    public boolean checkMood(Combat c, Emotion mood, int value) {
+    public boolean checkMood(Combat c, Emotion mood, int value, NPC selfNPC) {
         switch (mood) {
             case horny:
                 return value >= 50;

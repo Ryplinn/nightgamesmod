@@ -11,7 +11,7 @@ import nightgames.daytime.Daytime;
 import nightgames.global.*;
 import nightgames.items.Item;
 import nightgames.stance.Engulfed;
-import nightgames.start.NpcConfiguration;
+import nightgames.start.NPCConfiguration;
 import nightgames.status.Flatfooted;
 import nightgames.status.SlimeMimicry;
 import nightgames.status.Stsflag;
@@ -34,54 +34,53 @@ public class Airi extends BasePersonality {
         this(Optional.empty(), Optional.empty());
     }
 
-    public Airi(Optional<NpcConfiguration> charConfig, Optional<NpcConfiguration> commonConfig) {
-        super("Airi", charConfig, commonConfig, false);
-        constructLines();
+    public Airi(Optional<NPCConfiguration> charConfig, Optional<NPCConfiguration> commonConfig) {
+        super(false);
     }
 
     @Override
-    public void applyStrategy(NPC self) {
-        self.plan = Plan.retreating;
-        self.mood = Emotion.nervous;
+    public void applyStrategy(NPC selfNPC) {
+        selfNPC.plan = Plan.retreating;
+        selfNPC.mood = Emotion.nervous;
     }
 
     @Override
-    public void applyBasicStats(Character self) {
-        self.change();
-        self.setTrophy(Item.AiriTrophy);
+    public void applyBasicStats(NPC selfNPC) {
+        selfNPC.change();
+        selfNPC.setTrophy(Item.AiriTrophy);
         preferredCockMod = CockMod.error;
 
-        self.outfitPlan.addByID("shirt");
-        self.outfitPlan.addByID("bra");
-        self.outfitPlan.addByID("panties");
-        self.outfitPlan.addByID("skirt");
-        self.outfitPlan.addByID("pantyhose");
-        self.outfitPlan.addByID("shoes");
-        self.change();
-        self.rank = 1;
-        self.modAttributeDontSaveData(Attribute.power, -1);
-        self.modAttributeDontSaveData(Attribute.slime, 1);
-        self.modAttributeDontSaveData(Attribute.cunning, 2);
-        self.modAttributeDontSaveData(Attribute.speed, -1);
-        self.modAttributeDontSaveData(Attribute.seduction, 6);
-        self.getStamina().setMax(50);
-        self.getArousal().setMax(80);
-        self.getMojo().setMax(100);
-        self.getWillpower().setMax(80);
-        self.initialGender = CharacterSex.female;
-        self.body.add(new FacePart(.1, 3.0));
-        self.body.add(AssPart.generateGeneric().upgrade());
+        selfNPC.outfitPlan.addByID("shirt");
+        selfNPC.outfitPlan.addByID("bra");
+        selfNPC.outfitPlan.addByID("panties");
+        selfNPC.outfitPlan.addByID("skirt");
+        selfNPC.outfitPlan.addByID("pantyhose");
+        selfNPC.outfitPlan.addByID("shoes");
+        selfNPC.change();
+        selfNPC.rank = 1;
+        selfNPC.modAttributeDontSaveData(Attribute.power, -1);
+        selfNPC.modAttributeDontSaveData(Attribute.slime, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.cunning, 2);
+        selfNPC.modAttributeDontSaveData(Attribute.speed, -1);
+        selfNPC.modAttributeDontSaveData(Attribute.seduction, 6);
+        selfNPC.getStamina().setMax(50);
+        selfNPC.getArousal().setMax(80);
+        selfNPC.getMojo().setMax(100);
+        selfNPC.getWillpower().setMax(80);
+        selfNPC.initialGender = CharacterSex.female;
+        selfNPC.body.add(new FacePart(.1, 3.0));
+        selfNPC.body.add(AssPart.generateGeneric().upgrade());
     }
 
-    private void constructLines() {
-        character.addLine(CharacterLine.BB_LINER, (c, self, other) -> self.has(Trait.slime) ? "Airi grimaces as you fall. <i>\"Apologies... but necessary.... Please understand...\"</i>" : "<i>\"Sorry... I hope it didn't hurt too badly...\"</i>");
-        character.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> self.has(Trait.slime) ? "" : "<i>Nooo! Don't look at me!</i>");
-        character.addLine(CharacterLine.STUNNED_LINER, (c, self, other) -> self.has(Trait.slime) ? "Airi glares at you from the puddle she formed on the floor. <i>\"Unforgivable...\"</i>" : "<i>\"Unforgivable...\"</i>");
-        character.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> self.has(Trait.slime) ? "Airi coos to you <i>\"About to cum..? ...even trying..?\"</i>" : "<i><b>Airi giggles, </b> \"Try a bit harder okay?\"</i>");
-        character.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> self.has(Trait.slime) ? "<i>\"Fill me... now...\"</i>" : "<i>\"Uhm, it's okay, you can come inside...\"</i>");
-        character.addLine(CharacterLine.ENGULF_LINER, (c, self, other) -> "\n<i>\"It's done... over... stop struggling... cum.\"</i>");
+    @Override public void constructLines(NPC selfNPC) {
+        selfNPC.addLine(CharacterLine.BB_LINER, (c, self, other) -> self.has(Trait.slime) ? "Airi grimaces as you fall. <i>\"Apologies... but necessary.... Please understand...\"</i>" : "<i>\"Sorry... I hope it didn't hurt too badly...\"</i>");
+        selfNPC.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> self.has(Trait.slime) ? "" : "<i>Nooo! Don't look at me!</i>");
+        selfNPC.addLine(CharacterLine.STUNNED_LINER, (c, self, other) -> self.has(Trait.slime) ? "Airi glares at you from the puddle she formed on the floor. <i>\"Unforgivable...\"</i>" : "<i>\"Unforgivable...\"</i>");
+        selfNPC.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> self.has(Trait.slime) ? "Airi coos to you <i>\"About to cum..? ...even trying..?\"</i>" : "<i><b>Airi giggles, </b> \"Try a bit harder okay?\"</i>");
+        selfNPC.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> self.has(Trait.slime) ? "<i>\"Fill me... now...\"</i>" : "<i>\"Uhm, it's okay, you can come inside...\"</i>");
+        selfNPC.addLine(CharacterLine.ENGULF_LINER, (c, self, other) -> "\n<i>\"It's done... over... stop struggling... cum.\"</i>");
 
-        character.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> {
             if (self.has(Trait.slime)) {
                 return "<i>\"Ahhnn... forgot how good... feels... Will return favor...\"</i>.";
             } else if (self.getWillpower().percent() > 90) {
@@ -92,21 +91,21 @@ public class Airi extends BasePersonality {
                 return "<i>\"I need more... Give me more...\"</i>";
             }
         });
-        character.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> self.has(Trait.slime) ? "<i>\"...Feels good..? I'll suck more out... I'll milk you dry...\"</i>" : "<i>\"Hyaa! Oh please warn me next time...\"</i>");
-        character.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> "You walk back to your dorm after the match, and decide to take a shower after all that exertion. Who knew sex fighting a bunch of girls would be so exhausting? You strip off your shirt and boxers and head straight into the bathroom. As you flip on the lights, you notice that the tub seems already filled with water. Just as you wonder if you forgot to drain the tub from last night, the liquid in the tub quivers and… stands up. "
+        selfNPC.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> self.has(Trait.slime) ? "<i>\"...Feels good..? I'll suck more out... I'll milk you dry...\"</i>" : "<i>\"Hyaa! Oh please warn me next time...\"</i>");
+        selfNPC.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> "You walk back to your dorm after the match, and decide to take a shower after all that exertion. Who knew sex fighting a bunch of girls would be so exhausting? You strip off your shirt and boxers and head straight into the bathroom. As you flip on the lights, you notice that the tub seems already filled with water. Just as you wonder if you forgot to drain the tub from last night, the liquid in the tub quivers and… stands up. "
                         + "<br/><br/>It’s Airi. What’s she doing here? You ask her how did get in, since you were sure the door was locked. <i>Followed you… flowed under door… No problem…</i> Well, that explains it. Noticing the time, you let her know that you really need to take your shower now and head to bed or you won’t make it tomorrow for your morning classes. Airi looks at you for a second and nods. <i>Un… will help you clean…</i> Wait what? Oh n-! Airi pulls you into the tub with her gooey appendages and submerges you inside her body. <i>Relax… I’ll clean you up… Inside and out…</i>");
-        character.addLine(CharacterLine.CHALLENGE, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.CHALLENGE, (c, self, other) -> {
             if (other.human()) {
-                return character.has(Trait.slime)
+                return selfNPC.has(Trait.slime)
                                 ? "Airi's main body rises up from her slime blob and forms the demure beauty you're used to seeing. <i>\"Delicious... Quickly... Give me your seed...\"</i>"
                                 : "You're fighting Airi, a rather mysterious asian girl. She looks pretty normal for now, but you know she's holding a secret.";
             } else {
                 return "<i>You... will do...</i>";
             }
         });
-        character.addLine(CharacterLine.LEVEL_DRAIN_LINER, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.LEVEL_DRAIN_LINER, (c, self, other) -> {
             String part = Random.pickRandom(c.getStance().getPartsFor(c, self, other)).map(bp -> bp.describe(self)).orElse("pussy");
-            if (character.has(Trait.slime)) {
+            if (selfNPC.has(Trait.slime)) {
                 if (other.getLevel() < self.getLevel() - 5) {
                     return "{self:SUBJECT} tousles {other:possessive} hair fondly as {other:subject} cum, \"<i>How does it feel... reduced to mere prey...? You're just food... for me now...</i>\"";
                 } else if (other.getLevel() >= self.getLevel()) {
@@ -125,8 +124,8 @@ public class Airi extends BasePersonality {
             }
         });
 
-        character.addLine(CharacterLine.DESCRIBE_LINER, (c, self, other) -> {
-            return character.has(Trait.slime) ? "A crystal blue figure stands before you. Well, \"stands\" might be slightly incorrect. "
+        selfNPC.addLine(CharacterLine.DESCRIBE_LINER, (c, self, other) -> {
+            return selfNPC.has(Trait.slime) ? "A crystal blue figure stands before you. Well, \"stands\" might be slightly incorrect. "
             + "Airi sports a cute face and a tight body, but her thighs end in a giant ball of slime. "
             + "Indeed, while her body might look human at a distance, she seems to be composed of a soft, translucent gel."
             : "Airi looks at you cautiously. The lithe Japanese girl sports a cute face and a tight body with shoulder length black hair "
@@ -136,13 +135,13 @@ public class Airi extends BasePersonality {
     }
 
     @Override
-    public void setGrowth() {
-        character.getGrowth().stamina = 1;
-        character.getGrowth().arousal = 5;
-        character.getGrowth().willpower = 2.5f;
-        character.getGrowth().bonusStamina = 1;
-        character.getGrowth().bonusArousal = 1;
-        character.addCombatScene(new CombatScene(and(level(13), trait(Trait.slime), not(flag(AIRI_SLIME_FOCUS)),
+    public void setGrowth(NPC selfNPC) {
+        selfNPC.getGrowth().stamina = 1;
+        selfNPC.getGrowth().arousal = 5;
+        selfNPC.getGrowth().willpower = 2.5f;
+        selfNPC.getGrowth().bonusStamina = 1;
+        selfNPC.getGrowth().bonusArousal = 1;
+        selfNPC.addCombatScene(new CombatScene(and(level(13), trait(Trait.slime), not(flag(AIRI_SLIME_FOCUS)),
                         not(flag(AIRI_MIMICRY_FOCUS))), (c, self, player) -> Formatter.format("After the match, you spend a few minutes examining the slime girl, much to her disconcertment. "
                         + "It's quite curious how she can easily transform between slime and human form. "
                         + "Somehow, she can solidify her fluid composition into something indistinguishable from normal flesh and skin. "
@@ -168,39 +167,41 @@ public class Airi extends BasePersonality {
                                             + "Even though you expected something, Airi simply reforms her body and leaves after taunting you. "
                                             + "Wondering what that was all about, you try getting up only to find that she left a huge amount of slime still stuck to your skin. "
                                             + "What's worse, it's already beginning to harden, leaving you completely immobilized in what feels like a thin layer of plastic. Well shit.");
-                            useSlime();
+                            useSlime(selfNPC);
                             return true;
                         }), new CombatSceneChoice("Transform?", (c, self, other) -> {
                             List<Character> lovers = Match.getMatchParticipantsInAffectionOrder().stream()
-                                            .filter(pa -> !pa.getType().equals(getType())).collect(Collectors.toList());
-                            Character lover = GameState.gameState.characterPool.getCharacterByType(new Angel().getType());
+                                            .filter(pa -> !pa.getType().equals(selfNPC.getType())).collect(Collectors.toList());
+                            Character lover;
                             if (!lovers.isEmpty()) {
                                 lover = lovers.get(0);
+                            } else {
+                                lover = CharacterType.get("Angel").fromPoolGuaranteed();
                             }
                             String loverBodyString = "face";
                             String loverFormString = "familiar young {other:man}";
                             String loverTalkString = "says in a perfect replica of {other:name-possessive} voice,";
-                            if (lover.getType().equals(Angel.class.getSimpleName())) {
+                            if (lover.getType().equals(CharacterType.get("Angel"))) {
                                 loverBodyString = "glamorous body";
                                 loverFormString = "blonde beauty";
                                 loverTalkString = "purrs in {other:name-possessive} haughty voice,";
-                            } else if (lover.getType().equals(Cassie.class.getSimpleName())) {
+                            } else if (lover.getType().equals(CharacterType.get("Cassie"))) {
                                 loverBodyString = "soft, lovely body";
                                 loverFormString = "brown haired {other:girl}";
                                 loverTalkString = "speaks in {other:name-possessive} soft voice,";
-                            } else if (lover.getType().equals(Jewel.class.getSimpleName())) {
+                            } else if (lover.getType().equals(CharacterType.get("Jewel"))) {
                                 loverBodyString = "sleek, trained form";
                                 loverFormString = "powerful redhead";
                                 loverTalkString = "demands in {other:name-possessive} confident alto,";
-                            } else if (lover.getType().equals(Mara.class.getSimpleName())) {
+                            } else if (lover.getType().equals(CharacterType.get("Mara"))) {
                                 loverBodyString = "petite lithe limbs";
                                 loverFormString = "black beauty";
                                 loverTalkString = "asks in {other:name-possessive} mischevious voice,";
-                            } else if (lover.getType().equals(Kat.class.getSimpleName())) {
+                            } else if (lover.getType().equals(CharacterType.get("Kat"))) {
                                 loverBodyString = "cute cat ears";
                                 loverFormString = "lovely kitten";
                                 loverTalkString = "inquires in {other:name-possessive} hesistant voice,";
-                            } else if (lover.getType().equals(Reyka.class.getSimpleName())) {
+                            } else if (lover.getType().equals(CharacterType.get("Reyka"))) {
                                 loverBodyString = "devilishly beautiful visage";
                                 loverFormString = "familiar seductive form";
                                 loverTalkString = "tempts in {other:name-possessive} melodious voice,";
@@ -223,21 +224,21 @@ public class Airi extends BasePersonality {
                                             + "<i>\"Ah ah, I'll be sure to teach you not to cheat... Just remember, the next time you try sleeping with another {self:guy}, "
                                             + "it might just be me... And I'll make sure to pay you back...\"</i>"
                                             + "<br/><br/>" + "Okay. Now that is just creepy.", self, lover, loverBodyString, loverFormString, loverTalkString));
-                            useMimicry();
+                            useMimicry(selfNPC);
                             return true;
                         }), new CombatSceneChoice("Both? [Hard Mode]", (c, self, other) -> {
                             c.write("You ask Airi if she would mind showing you everything she can do. After all, it's impossible not to ask when faced with such a mysterious body right?"
                                             + "Sadly that seemed to be the wrong thing to ask. The blue girl doesn't seem too happy with your probing and trips you with a errant tentacle pseudopod she formed on the spot. "
                                             + "Looming over you, the asian girl speaks <i>\"Share my secrets...? No. Have to... find out yourself...\"</i> Uh oh, seems like you pissed her off. This could be bad.");
-                            useSlime();
-                            useMimicry();
-                            character.getGrowth().extraAttributes += 1;
+                            useSlime(selfNPC);
+                            useMimicry(selfNPC);
+                            selfNPC.getGrowth().extraAttributes += 1;
                             // some compensation for the added difficulty. She gets 6 traits and 2 attribute points/level, and you only get 2 traits, but you are fighting more people than just her.
-                            GameState.gameState.characterPool.getPlayer().getGrowth()
-                                            .addTraitPoints(new int[] {12, 39}, GameState.gameState.characterPool.getPlayer());
+                            GameState.getGameState().characterPool.getPlayer().getGrowth()
+                                            .addTraitPoints(new int[] {12, 39}, GameState.getGameState().characterPool.getPlayer());
                             return true;
                         }))));
-        character.addCombatScene(new CombatScene(and(level(22), trait(Trait.slime), not(flag(AIRI_REPLICATION_FOCUS)),
+        selfNPC.addCombatScene(new CombatScene(and(level(22), trait(Trait.slime), not(flag(AIRI_REPLICATION_FOCUS)),
                         not(flag(AIRI_TENTACLES_FOCUS)), or(flag(AIRI_SLIME_FOCUS), flag(AIRI_MIMICRY_FOCUS))),
                         (c, self, player) ->
                                         "It's been a while since Airi has joined you in the games and it definitely shows. "
@@ -285,7 +286,7 @@ public class Airi extends BasePersonality {
                                                             + "and both of them starts chuckling in her disconcertingly breathy voice. The two girls seems to press together, and with a small audiable pop, merge back into one being. "
                                                             + "<i>\"Hah... hah... Don't worry, not a father... <b>yet</b>... But I'll have you... take responsibility...\"</i> Oh boy, you'll have to be a bit careful from now on.";
                             c.write(msg);
-                            useReplication();
+                            useReplication(selfNPC);
                             return true;
                         }), new CombatSceneChoice("Tentacles?", (c, self, other) -> {
                             c.write(Formatter.format("You note the extra mass that Airi now has, and wonder what she could do with them. Now if you were being honest with yourself, you've always been a fan of "
@@ -298,86 +299,86 @@ public class Airi extends BasePersonality {
                                                                             + "but shakes it off after a minute. Sighing again, she closes her eyes and quickly forms four tentacle arms out of her amorphous torso. "
                                                                             + "<i>\"Happy? The things... I do for you...\"</i> Grumbling, the slime girl crawls away."
                                                                             + "<br/><br/>" + "Well look who's a sourpuss.", self, other));
-                            useTentacles();
+                            useTentacles(selfNPC);
                             return true;
                         }), new CombatSceneChoice("Getting Fat? [Hard Mode]", (c, self, other) -> {
                             c.write("You ask Airi if she's getting putting on some pounds. Judging by the positively murderous look the crystal blue girl is giving you, that was <b>NOT</b> the correct "
                                             + "thing to say. Seriously though, what made you ask that? Why would you think that was a good idea? Airi starts chuckling maliciously, "
                                             + "<i>Hah... hah... fat... I am...? I'll have you... eat your words... You will... pay...</i> Okay definitely not a good idea. NOT A GOOD IDEA.");
-                            useReplication();
-                            useTentacles();
-                            character.getGrowth().extraAttributes += 1;
+                            useReplication(selfNPC);
+                            useTentacles(selfNPC);
+                            selfNPC.getGrowth().extraAttributes += 1;
                             // some compensation for the added difficulty. She gets 5 traits and 1 attribute point/level, and you only get 2 traits, but you are fighting more people than just her.
-                            GameState.gameState.characterPool.getPlayer().getGrowth().addTraitPoints(new int[] {21, 48},
-                                            GameState.gameState.characterPool.getPlayer());
+                            GameState.getGameState().characterPool.getPlayer().getGrowth().addTraitPoints(new int[] {21, 48},
+                                            GameState.getGameState().characterPool.getPlayer());
                             return true;
                         }))));
 
-        character.getGrowth().addTrait(0, Trait.dexterous);
-        character.getGrowth().addTrait(0, Trait.imagination);
-        character.getGrowth().addTrait(0, Trait.softheart);
-        character.getGrowth().addTrait(0, Trait.repressed);
-        character.getGrowth().addTrait(3, Trait.Sneaky);
-        character.getGrowth().addTrait(6, Trait.limbTraining1);
-        character.getGrowth().addTrait(10, Trait.defthands);
-        character.getGrowth().addTrait(16, Trait.calm);
-        character.getGrowth().addTrait(31, Trait.nimbletoes);
-        character.getGrowth().addTrait(37, Trait.sexTraining1);
-        character.getGrowth().addTrait(46, Trait.responsive);
-        character.getGrowth().addTrait(61, Trait.desensitized);
+        selfNPC.getGrowth().addTrait(0, Trait.dexterous);
+        selfNPC.getGrowth().addTrait(0, Trait.imagination);
+        selfNPC.getGrowth().addTrait(0, Trait.softheart);
+        selfNPC.getGrowth().addTrait(0, Trait.repressed);
+        selfNPC.getGrowth().addTrait(3, Trait.Sneaky);
+        selfNPC.getGrowth().addTrait(6, Trait.limbTraining1);
+        selfNPC.getGrowth().addTrait(10, Trait.defthands);
+        selfNPC.getGrowth().addTrait(16, Trait.calm);
+        selfNPC.getGrowth().addTrait(31, Trait.nimbletoes);
+        selfNPC.getGrowth().addTrait(37, Trait.sexTraining1);
+        selfNPC.getGrowth().addTrait(46, Trait.responsive);
+        selfNPC.getGrowth().addTrait(61, Trait.desensitized);
 
         preferredAttributes.add(c -> c.getPure(Attribute.slime) < c.getLevel() * 1.5 ? Optional.of(Attribute.slime) : Optional.empty());
     }
 
-    private void useMimicry() {
+    private void useMimicry(NPC selfNPC) {
         Flag.setFlag(AIRI_MIMICRY_FOCUS, true);
-        character.getGrowth().addTrait(13, Trait.Imposter);
-        character.getGrowth().addTrait(19, Trait.ImitatedStrength);
-        character.getGrowth().addTrait(34, Trait.ThePrestige);
-        character.getGrowth().addTrait(55, Trait.Masquerade);
+        selfNPC.getGrowth().addTrait(13, Trait.Imposter);
+        selfNPC.getGrowth().addTrait(19, Trait.ImitatedStrength);
+        selfNPC.getGrowth().addTrait(34, Trait.ThePrestige);
+        selfNPC.getGrowth().addTrait(55, Trait.Masquerade);
     }
 
-    private void useSlime() {
+    private void useSlime(NPC selfNPC) {
         Flag.setFlag(AIRI_SLIME_FOCUS, true);
-        character.getGrowth().addTrait(13, Trait.VolatileSubstrate);
-        character.getGrowth().addTrait(19, Trait.ParasiticBond);
-        character.getGrowth().addTrait(34, Trait.PetrifyingPolymers);
-        character.getGrowth().addTrait(55, Trait.EnduringAdhesive);
+        selfNPC.getGrowth().addTrait(13, Trait.VolatileSubstrate);
+        selfNPC.getGrowth().addTrait(19, Trait.ParasiticBond);
+        selfNPC.getGrowth().addTrait(34, Trait.PetrifyingPolymers);
+        selfNPC.getGrowth().addTrait(55, Trait.EnduringAdhesive);
     }
 
-    private void useReplication() {
+    private void useReplication(NPC selfNPC) {
         Flag.setFlag(AIRI_REPLICATION_FOCUS, true);
-        character.getGrowth().addTrait(22, Trait.BinaryFission);
-        character.getGrowth().addTrait(28, Trait.RapidMeiosis);
+        selfNPC.getGrowth().addTrait(22, Trait.BinaryFission);
+        selfNPC.getGrowth().addTrait(28, Trait.RapidMeiosis);
         if (Flag.checkFlag(AIRI_MIMICRY_FOCUS)) {
-            character.getGrowth().addTrait(43, Trait.StickyFinale);
+            selfNPC.getGrowth().addTrait(43, Trait.StickyFinale);
         }
         if (Flag.checkFlag(AIRI_SLIME_FOCUS)) {
-            character.getGrowth().addTrait(43, Trait.MimicBodyPart);
+            selfNPC.getGrowth().addTrait(43, Trait.MimicBodyPart);
         }
-        character.getGrowth().addTrait(49, Trait.HiveMind);
-        character.getGrowth().addTrait(58, Trait.NoblesseOblige);
+        selfNPC.getGrowth().addTrait(49, Trait.HiveMind);
+        selfNPC.getGrowth().addTrait(58, Trait.NoblesseOblige);
     }
 
-    private void useTentacles() {
+    private void useTentacles(NPC selfNPC) {
         Flag.setFlag(AIRI_TENTACLES_FOCUS, true);
-        character.getGrowth().addTrait(22, Trait.Pseudopod);
+        selfNPC.getGrowth().addTrait(22, Trait.Pseudopod);
     }
 
     @Override
-    public void eot(Combat c, Character opponent) {
-        if (character.has(Trait.slime)) {
-            if (character.hasPussy() && !character.body.getRandomPussy().moddedPartCountsAs(character, GooeyMod.INSTANCE)) {
-                character.body.temporaryAddPartMod("pussy", GooeyMod.INSTANCE, 999);
-                c.write(character, 
-                                Formatter.format("{self:NAME-POSSESSIVE} %s re-slime-ified.",
-                                                character, opponent, character.body.getRandomPussy().describe(character)));
+    public void eot(Combat c, NPC selfNPC, Character opponent) {
+        if (selfNPC.has(Trait.slime)) {
+            if (selfNPC.hasPussy() && !selfNPC.body.getRandomPussy().moddedPartCountsAs(selfNPC, GooeyMod.INSTANCE)) {
+                selfNPC.body.temporaryAddPartMod("pussy", GooeyMod.INSTANCE, 999);
+                c.write(selfNPC,
+                                Formatter.format("{self:NAME-POSSESSIVE} %s re-slime-ified.", selfNPC, opponent, selfNPC.body.getRandomPussy().describe(
+                                                selfNPC)));
             }
-            if (character.hasDick() && !character.body.getRandomCock().moddedPartCountsAs(character, CockMod.slimy)) {
-                character.body.temporaryAddPartMod("cock", CockMod.slimy, 999);
-                c.write(character,
-                                Formatter.format("{self:NAME-POSSESSIVE} %s re-slime-ified.",
-                                                character, opponent, character.body.getRandomCock().describe(character)));
+            if (selfNPC.hasDick() && !selfNPC.body.getRandomCock().moddedPartCountsAs(selfNPC, CockMod.slimy)) {
+                selfNPC.body.temporaryAddPartMod("cock", CockMod.slimy, 999);
+                c.write(selfNPC,
+                                Formatter.format("{self:NAME-POSSESSIVE} %s re-slime-ified.", selfNPC, opponent, selfNPC.body.getRandomCock().describe(
+                                                selfNPC)));
             }
         }
     }
@@ -446,31 +447,31 @@ public class Airi extends BasePersonality {
     }
 
     @Override
-    public void rest(int time) {
-        super.rest(time);
-        Decider.visit(character);
+    public void rest(int time, NPC selfNPC) {
+        super.rest(time, selfNPC);
+        Decider.visit(selfNPC);
         int r;
         for (int i = 0; i < time; i++) {
             r = Random.random(8);
             if (r == 1) {
-                Daytime.getDay().visit("Exercise", this.character, 0);
+                Daytime.getDay().visit("Exercise", selfNPC, 0);
             } else if (r == 0) {
-                Daytime.getDay().visit("Browse Porn Sites", this.character, 0);
+                Daytime.getDay().visit("Browse Porn Sites", selfNPC, 0);
             }
         }
     }
 
     @Override
-    public String victory(Combat c, Result flag) {
+    public String victory(Combat c, Result flag, NPC selfNPC) {
         Character opponent;
-        if (c.p1 == character) {
+        if (c.p1 == selfNPC) {
             opponent = c.p2;
         } else {
             opponent = c.p1;
         }
-        character.arousal.empty();
+        selfNPC.arousal.empty();
         opponent.arousal.empty();
-        if (character.is(Stsflag.disguised)) {
+        if (selfNPC.is(Stsflag.disguised)) {
             StringBuilder sb = new StringBuilder();
             sb.append(Formatter.format("Just as {self:subject-action:are} about to bring you to mind bending orgasm, {self:possessive} face shifts and melts. "
                             + "One moment was staring at you haughtily like {self:pronoun} usually does, and the next, {self:possessive} entire body melts into a familiar cerulean goo. "
@@ -483,9 +484,9 @@ public class Airi extends BasePersonality {
                             + "How can she only--Oh right. She can transform. Airi's crystalline body <i>shudders</i> and starts to regain a fleshy tone and texture "
                             + "starting from her feet. Slowly the change creeps up her body and stops at her neckline. From the neck up, Airi retains her slime-girl look complete with her piercing ruby eyes. "
                             + "However, below that, she reverted into a carbon-copy of {self:name}! The transformed girl leers at you and asserts <i>\"I'll show you... how much better I can be...\"</i>"
-                            + "<br/><br/>", character, opponent));
+                            + "<br/><br/>", selfNPC, opponent));
             if (opponent.hasDick()) {
-                if (!character.hasPussy()) {
+                if (!selfNPC.hasPussy()) {
                     sb.append("Airi furrows her faux-eyebrows in a look of intense concentration. A split second later, a newly form slit opens between her legs with an audiable pop. "
                                     + "Seeing your shocked expression, the lithe Japanese girl climbs ontop of you with an almost malicious grin. ");
                 }
@@ -499,15 +500,16 @@ public class Airi extends BasePersonality {
                                 + "<i>\"Say it {other:name}... Who is better... me or {self:name}..?\"</i> At this point, you're deliriously aroused and cannot not but help screaming Airi's name into the night, "
                                 + "hoping she'll take mercy on your poor abused dick. The gelatinous girl seems happy with your answer. She finally starts moving her hips and starts fucking you in earnest. "
                                 + "After a few good pumps, Airi releases her death grip on your cock, and your thick sperm floods her emulated {self:body-part:pussy}. "
-                                + "She nods happily and leans close to give you a peck on the lips, <i>\"Good... And don't forget it...\"</i>.", character, opponent));
+                                + "She nods happily and leans close to give you a peck on the lips, <i>\"Good... And don't forget it...\"</i>.",
+                                selfNPC, opponent));
             } else if (opponent.hasPussy()) {
-                if (character.hasDick()) {
+                if (selfNPC.hasDick()) {
                     sb.append(Formatter.format("You almost lose it right there as Airi penetrates you. Her mimicked {self:body-part:cock} pierces your {other:body-part:pussy} with ease, ",
-                                    character, opponent));
+                                    selfNPC, opponent));
                 } else {
                     sb.append(Formatter.format("Airi furrows her faux-eyebrows in a look of intense concentration. A split second later, an huge slime-dong erupts from her crotch. "
                                     + "Grinning with a barely concealed malicious glee, Airi pulls your legs apart and penetrates your soaked depths with her turgid penis. "
-                                    + "Her new cock pierces your {other:body-part:pussy} with ease, ", character, opponent));
+                                    + "Her new cock pierces your {other:body-part:pussy} with ease, ", selfNPC, opponent));
                 }
                 sb.append(Formatter.format("and immediately <i>expands</i> inside your drenched love canal. You gasp as her transformed cock completely fills your pussy, "
                                 + "grinding against every bit of you. You beg her to stop, but the smug asian girl just shakes her head and replies <i>\"No... this is your... punishment.\"</i>"
@@ -519,11 +521,12 @@ public class Airi extends BasePersonality {
                                 + "She starts moving her hips again and finally fucks you in earnest. The piston action makes you cum almost instantly and continuously, shuddering on almost every return stroke. "
                                 + "After a few dozen good pumps, Airi shudders as well and floods your {other:body-part:pussy} with her thick pseudo-sperm. "
                                 + "Her scalding cum triggers a final climax from you and your arms desperately try to find a good place to grip as you cum hard around her pole yet again. "
-                                + "After she confirms that you came, she nods happily and leans close to give you a peck on the lips, <i>\"Good... And don't forget it...\"</i>.", character, opponent));
+                                + "After she confirms that you came, she nods happily and leans close to give you a peck on the lips, <i>\"Good... And don't forget it...\"</i>.",
+                                selfNPC, opponent));
             }
             return sb.toString();
         }
-        if (character.has(Trait.slime)) {
+        if (selfNPC.has(Trait.slime)) {
             return "Airi crawls over to you at an agonizing pace. Her slime rapidly flows on top of your penis and covers it in a sticky bulb. <i>\"Time… for you to cum…\"</i><br/><br/>"
                             + "Her previously still slime suddenly starts to frantically squeeze and knead your cock, pulsating in waves of sticky goo on top of you. Startled by the sudden stimulation, you barely manage to hold on. Unfortunately--or perhaps fortunately--for you, Airi is not finished. She also covers your chest with her own sticky breasts and engulfs your nipples inside hers. Although it’s just slime, you feel as if her lips are on your nipples, sucking them and rolling the tips around inside her mouth.<br/><br/>"
                             + "As you’re being overloaded with sensations, Airi brings her face close to yours and whispers in your ear.<i>\"Cum… cum… cum…\"</i> With a groan of agonising pleasure, you come hard, firing ropes of your seed inside her translucent depths.<br/><br/>"
@@ -548,11 +551,12 @@ public class Airi extends BasePersonality {
                         + "<i>\"Now please... a little help here?\"</i>"
                         + "<br/><br/>"
                         + "You weren't about to refuse the winner's orders, so you dutifully play with her soaked cunt until she shudders quietly and cums as well. "
-                        + "You're a bit peeved that you didn't even make Airi transform this time, but you can only try to do better when you meet her again.", character, opponent);
+                        + "You're a bit peeved that you didn't even make Airi transform this time, but you can only try to do better when you meet her again.",
+                        selfNPC, opponent);
     }
 
     @Override
-    public String defeat(Combat c, Result flag) {
+    public String defeat(Combat c, Result flag, NPC selfNPC) {
         return "Fighting Airi is not easy. Her stickiness makes it"
                         + " quite difficult for you to accomplish much of anything. Still, "
                         + "considering her incoherent babbling she's probably not got much fight left in her. "
@@ -583,23 +587,23 @@ public class Airi extends BasePersonality {
     }
 
     @Override
-    public String draw(Combat c, Result flag) {
+    public String draw(Combat c, Result flag, NPC selfNPC) {
         return "[Placeholder] You make each other cum at the same time. Sorry.";
 
     }
 
     @Override
-    public boolean fightFlight(Character opponent) {
-        return !character.mostlyNude() || opponent.mostlyNude();
+    public boolean fightFlight(Character opponent, NPC selfNPC) {
+        return !selfNPC.mostlyNude() || opponent.mostlyNude();
     }
 
     @Override
-    public boolean attack(Character opponent) {
+    public boolean attack(Character opponent, NPC selfNPC) {
         return true;
     }
 
     @Override
-    public String victory3p(Combat c, Character target, Character assist) {
+    public String victory3p(Combat c, Character target, Character assist, NPC selfNPC) {
         if (target.human()) {
             return "Airi crawls over to you at an agonizing pace. Her slime rapidly flows on top of your penis and covers it in a sticky bulb. <i>\"Time… for you to cum…\"</i><br/><br/>"
                             + "Her previously still slime suddenly starts to frantically squeeze and knead your cock, pulsating in waves of sticky goo on top of you. Startled by the sudden stimulation, you cum in seconds, spilling the proof of your defeat inside her tendril.<br/><br/>";
@@ -612,24 +616,24 @@ public class Airi extends BasePersonality {
     }
 
     @Override
-    public String intervene3p(Combat c, Character target, Character assist) {
+    public String intervene3p(Combat c, Character target, Character assist, NPC selfNPC) {
         if (target.human()) {
             return Formatter.format(
                             "Your fight with {other:name} seemed to have ran into a stalemate. Neither of you is willing to get close enough to each other for anything substantial to happen. You just continue to trade taunts whilst waiting for an opportunity.<br/><br/>"
                                             + "Suddenly, you feel something grasp your ankles and pull you off balance. You brace yourself for the fall, but after a second, you only feel softness on your back. It’s Airi. She somehow snuck up on you and tripped you into falling on top of her. She quickly engulfs your hands and legs in her slime and presents your helpless body to {other:name}’s ministrations.",
-                            character, assist);
+                            selfNPC, assist);
         } else {
             return Formatter.format(
                             "Your fight with {other:name} seemed to have ran into a stalemate. Neither of you is willing to get close enough to each other for anything substantial to happen. You just continue to trade taunts whilst waiting for an opportunity.<br/><br/>"
                                             + "Suddenly, a blue blob appears in your line of sight. It’s Airi! More swiftly than you would expect, Airi moves to {other:name}’s side and engulfs her body in her own. After dissolving her clothing with her slime, Airi surfaces only {other:name-possessive} torso and sex, presenting her to you. Well, presented with a gift on a silver platter, you’re not going to refuse!",
-                            character, target);
+                            selfNPC, target);
         }
     }
 
     @Override
-    public boolean fit() {
-        return !character.mostlyNude() && character.getStamina().percent() >= 50
-                        || character.getArousal().percent() > 50;
+    public boolean fit(NPC selfNPC) {
+        return !selfNPC.mostlyNude() && selfNPC.getStamina().percent() >= 50
+                        || selfNPC.getArousal().percent() > 50;
     }
 
     public void advance() {
@@ -637,7 +641,7 @@ public class Airi extends BasePersonality {
     }
 
     @Override
-    public boolean checkMood(Combat c, Emotion mood, int value) {
+    public boolean checkMood(Combat c, Emotion mood, int value, NPC selfNPC) {
         switch (mood) {
             case confident:
                 return value >= 50;
@@ -649,17 +653,17 @@ public class Airi extends BasePersonality {
     }
 
     @Override
-    public String image(Combat c) {
-        if (character.has(Trait.slime)) {
-            SlimeMimicry mimicry = (SlimeMimicry) character.getStatus(Stsflag.mimicry);
+    public String image(Combat c, NPC selfNPC) {
+        if (selfNPC.has(Trait.slime)) {
+            SlimeMimicry mimicry = (SlimeMimicry) selfNPC.getStatus(Stsflag.mimicry);
             if (mimicry != null) {
                 return "airi_" + mimicry.getMimickedName() + "_slime.jpg";
             } else {
-                return super.image(c);
+                return super.image(c, selfNPC);
             }
-        } else if (character.getWillpower().percent() > 90) {
+        } else if (selfNPC.getWillpower().percent() > 90) {
             return "airi_human.jpg";
-        } else if (character.getWillpower().percent() > 75) {
+        } else if (selfNPC.getWillpower().percent() > 75) {
             return "airi_mostly_human.jpg";
         } else {
             return "airi_mostly_slime.jpg";

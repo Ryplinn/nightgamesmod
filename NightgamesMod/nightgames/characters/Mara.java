@@ -18,7 +18,6 @@ import nightgames.global.Random;
 import nightgames.items.Item;
 import nightgames.items.clothing.ClothingTable;
 import nightgames.skills.strategy.*;
-import nightgames.start.NpcConfiguration;
 import nightgames.status.Hypersensitive;
 import nightgames.status.Oiled;
 
@@ -39,55 +38,38 @@ public class Mara extends BasePersonality {
     private static final String MARA_MIND_CONTROL_FOCUS = "MaraMindControlFocus";
 
     public Mara() {
-        this(Optional.empty(), Optional.empty());
+        super(true);
     }
 
-    public Mara(Optional<NpcConfiguration> charConfig, Optional<NpcConfiguration> commonConfig) {
-        super("Mara", charConfig, commonConfig, true);
-        constructLines();
-    }
+    @Override public void constructLines(NPC selfNPC) {
+        selfNPC.addLine(CharacterLine.BB_LINER, (c, self, other) ->
+                        "{self:SUBJECT} gives you a look of not quite genuine concern. <i>\"That must have really hurt. Sorry for scrambling your eggs. I feel really bad about that. Also for "
+                                        + "lying just now. I'm not actually that sorry.\"</i>");
+        selfNPC.addLine(CharacterLine.CHALLENGE, (c, self, other) -> "{self:SUBJECT} smiles and faces {other:name-do}, practically daring {other:direct-object} to attack.");
 
-    private void constructLines () {
-        character.addLine(CharacterLine.BB_LINER, (c, self, other) -> { 
-            return "{self:SUBJECT} gives you a look of not quite genuine concern. <i>\"That must have really hurt. Sorry for scrambling your eggs. I feel really bad about that. Also for "
-                            + "lying just now. I'm not actually that sorry.\"</i>";
-        });
-        character.addLine(CharacterLine.CHALLENGE, (c, self, other) -> {
-            return "{self:SUBJECT} smiles and faces {other:name-do}, practically daring {other:direct-object} to attack.";
-        });
+        selfNPC.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> "{self:SUBJECT} gives an exaggerated squeal and covers herself. <i>\"You brute! You rapist! What are you trying to do to a helpless, innocent girl?\"</i>");
 
-        character.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> { 
-            return "{self:SUBJECT} gives an exaggerated squeal and covers herself. <i>\"You brute! You rapist! What are you trying to do to a helpless, innocent girl?\"</i>";
-         });
+        selfNPC.addLine(CharacterLine.STUNNED_LINER, (c, self, other) -> "{self:SUBJECT} lets out a slightly pained whimper. <i>\"Go easy on me. I'm not really the masochistic type.\"</i>");
 
-        character.addLine(CharacterLine.STUNNED_LINER, (c, self, other) -> { 
-            return "{self:SUBJECT} lets out a slightly pained whimper. <i>\"Go easy on me. I'm not really the masochistic type.\"</i>";
-         });
+        selfNPC.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> "<i>\"If you want me to get you off so badly,\"</i> {self:SUBJECT} teases coyly. <i>\"You should have just said so from the start. You don't need to put up this token resistance.\"</i>");
 
-        character.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> { 
-            return "<i>\"If you want me to get you off so badly,\"</i> {self:SUBJECT} teases coyly. <i>\"You should have just said so from the start. You don't need to put up this token resistance.\"</i>";
-         });
+        selfNPC.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> "<i>\"If you want me to get you off so badly,\"</i> {self:SUBJECT} teases coyly. <i>\"You should have just said so from the start. You don't need to put up this token resistance.\"</i>");
 
-        character.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> { 
-            return "<i>\"If you want me to get you off so badly,\"</i> {self:SUBJECT} teases coyly. <i>\"You should have just said so from the start. You don't need to put up this token resistance.\"</i>";
-         });
+        selfNPC.addLine(CharacterLine.NIGHT_LINER, (c, self, other) ->
+                        "On your way back to your dorm after the match, you feel a sudden weight on your back that almost knocks you off your feet. It turns out to be {self:name-do}, who jumped "
+                                        + "on your back in {self:possessive} enthusiasm to spend the night together. You give {self:possessive} a piggyback ride back to the dorm, and per {self:possessive} request, head up to the roof. Unsurprisingly, "
+                                        + "there's no one here this late at night and there's a good view of the stars. {self:SUBJECT} strips off {self:possessive} clothes and dances naked onto the rooftop. <i>\"There's nothing like "
+                                        + "being naked in the moonlight. Come on!\"</i> You undress and put your clothes in a neat pile, taking the time to gather up hers as well. You walk up behind {self:possessive} and hold "
+                                        + "{self:possessive} while enjoying the view. The night air is slightly cool, but {self:possessive} nude body is warm in your arms. {self:PRONOUN} turns {self:possessive} head to give you a tender kiss before stepping out of "
+                                        + "your embrace. <i>\"Have you ever danced naked under the stars?\"</i> It's a strange question, but {self:pronoun} looks too lovely in this light to refuse. The two of you dance without any "
+                                        + "hint of style or rhythm, not caring how rediculous you'd look to a third party. When you've both tired, you spend some time just looking at the stars together. You "
+                                        + "never would have imagined this is how you'd be spending your night, but {self:subject} always finds ways to surprise you. You suddenly realize {self:pronoun}'s no longer standing next to "
+                                        + "you. You spot {self:possessive} back by the door, holding your clothes. {self:PRONOUN} winks mischeviously and dashes into the building. You give chase, still naked. You manage to catch {self:possessive} just "
+                                        + "as {self:pronoun} reaches your room. You consider it a minor miracle no one saw the two of you streaking through the dorm building. You're going to have to find a way to pay {self:possessive} back "
+                                        + "before morning.");
 
-        character.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> { 
-            return "On your way back to your dorm after the match, you feel a sudden weight on your back that almost knocks you off your feet. It turns out to be {self:name-do}, who jumped "
-                            + "on your back in {self:possessive} enthusiasm to spend the night together. You give {self:possessive} a piggyback ride back to the dorm, and per {self:possessive} request, head up to the roof. Unsurprisingly, "
-                            + "there's no one here this late at night and there's a good view of the stars. {self:SUBJECT} strips off {self:possessive} clothes and dances naked onto the rooftop. <i>\"There's nothing like "
-                            + "being naked in the moonlight. Come on!\"</i> You undress and put your clothes in a neat pile, taking the time to gather up hers as well. You walk up behind {self:possessive} and hold "
-                            + "{self:possessive} while enjoying the view. The night air is slightly cool, but {self:possessive} nude body is warm in your arms. {self:PRONOUN} turns {self:possessive} head to give you a tender kiss before stepping out of "
-                            + "your embrace. <i>\"Have you ever danced naked under the stars?\"</i> It's a strange question, but {self:pronoun} looks too lovely in this light to refuse. The two of you dance without any "
-                            + "hint of style or rhythm, not caring how rediculous you'd look to a third party. When you've both tired, you spend some time just looking at the stars together. You "
-                            + "never would have imagined this is how you'd be spending your night, but {self:subject} always finds ways to surprise you. You suddenly realize {self:pronoun}'s no longer standing next to "
-                            + "you. You spot {self:possessive} back by the door, holding your clothes. {self:PRONOUN} winks mischeviously and dashes into the building. You give chase, still naked. You manage to catch {self:possessive} just "
-                            + "as {self:pronoun} reaches your room. You consider it a minor miracle no one saw the two of you streaking through the dorm building. You're going to have to find a way to pay {self:possessive} back "
-                            + "before morning.";
-         });
-
-        character.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> { 
-            final String finalLines[] =
+        selfNPC.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> {
+            final String[] finalLines =
                             {"<i>\"NNnnnn..! Oh man I can't take much more!\"</i>", "<i>\"Ngh! Slow down! please!\"</i>",
                                             "{self:SUBJECT} groans as {self:possessive} climax subsides, <i>\"Again! I deman a rematch!\"</i>",};
             switch (self.orgasms) {
@@ -98,13 +80,12 @@ public class Mara extends BasePersonality {
                 case 2:
                     return "<i>\"AAAHHH!\"</i> {self:subject} tries to catch {self:possessive} breath, \"There's... no way... you can keep this up!\"";
                 default:
-                    return Random.pickRandom(Arrays.asList(finalLines))
-                                 .get();
+                    return Random.pickRandomGuaranteed(Arrays.asList(finalLines));
              }
          });
 
-        character.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> { 
-            final String finalLines[] = {"<i>\"Cumming again? You " + other.boyOrGirl() + "s are too easy.\"</i>",
+        selfNPC.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> {
+            final String[] finalLines = {"<i>\"Cumming again? You " + other.boyOrGirl() + "s are too easy.\"</i>",
                             "<i>\"You're simply inexhaustible aren't you? Let's test that theory... for science.\"</i>",
                             "{self:SUBJECT} laughs triumphantly, <i>\"Again! Again!\"</i>",};
             switch (other.orgasms) {
@@ -115,12 +96,11 @@ public class Mara extends BasePersonality {
                 case 2:
                     return "<i>\"Oh man, not many people lasted to three. I got more coming for you though!\"</i>";
                 default:
-                    return Random.pickRandom(Arrays.asList(finalLines))
-                                 .get();
+                    return Random.pickRandomGuaranteed(Arrays.asList(finalLines));
              }
          });
 
-        character.addLine(CharacterLine.LEVEL_DRAIN_LINER, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.LEVEL_DRAIN_LINER, (c, self, other) -> {
             String part = Random.pickRandom(c.getStance().getPartsFor(c, self, other)).map(bp -> bp.describe(self)).orElse("pussy");
             if (other.getLevel() < self.getLevel() - 5) {
                 return "\"<i>Annddd... here it comes!</i>\" {self:SUBJECT} happily squeals as the now familiar sensation of your strength entering {self:possessive} flows through the petite girl. "
@@ -136,8 +116,8 @@ public class Mara extends BasePersonality {
             }
         });
 
-        character.addLine(CharacterLine.DESCRIBE_LINER, (c, self, other) -> {
-            if (character.has(Trait.madscientist)) {
+        selfNPC.addLine(CharacterLine.DESCRIBE_LINER, (c, self, other) -> {
+            if (selfNPC.has(Trait.madscientist)) {
                 return "{self:SUBJECT} has gone high tech. {self:PRONOUN} has a rig of equipment on harnesses that seem carefully placed so as not to interfere with clothing removal. The glasses {self:pronoun}'s wearing appear to be "
                                 + "computerized rather than prescription. {self:PRONOUN} also has a device of unknown purpose strapped to {self:possessive} arm. Underneath all of that, {self:pronoun} has the same cute, mischievous expression {self:pronoun} "
                                 + "you're used to.";
@@ -149,48 +129,48 @@ public class Mara extends BasePersonality {
     }
 
     @Override
-    public void applyStrategy(NPC self) {
-        self.plan = Plan.hunting;
-        self.mood = Emotion.confident;
+    public void applyStrategy(NPC selfNPC) {
+        selfNPC.plan = Plan.hunting;
+        selfNPC.mood = Emotion.confident;
 
-        self.addPersonalStrategy(new FootjobStrategy());
-        self.addPersonalStrategy(new UseToyStrategy());
-        self.addPersonalStrategy(new StraponStrategy());
-        self.addPersonalStrategy(new WindUpStrategy());
-        self.addPersonalStrategy(new TechStrategy());
+        selfNPC.addPersonalStrategy(new FootjobStrategy());
+        selfNPC.addPersonalStrategy(new UseToyStrategy());
+        selfNPC.addPersonalStrategy(new StraponStrategy());
+        selfNPC.addPersonalStrategy(new WindUpStrategy());
+        selfNPC.addPersonalStrategy(new TechStrategy());
     }
 
     @Override
-    public void applyBasicStats(Character self) {
+    public void applyBasicStats(NPC selfNPC) {
         preferredCockMod = CockMod.bionic;
-        self.outfitPlan.addByID("bra");
-        self.outfitPlan.addByID("Tshirt");
-        self.outfitPlan.addByID("underwear");
-        self.outfitPlan.addByID("shorts");
-        self.outfitPlan.addByID("pantyhose");
-        self.outfitPlan.addByID("boots");
-        self.change();
-        self.modAttributeDontSaveData(Attribute.cunning, 2);
-        self.modAttributeDontSaveData(Attribute.perception, 2);
-        self.getStamina().setMax(80);
-        self.getArousal().setMax(80);
-        self.getMojo().setMax(120);
+        selfNPC.outfitPlan.addByID("bra");
+        selfNPC.outfitPlan.addByID("Tshirt");
+        selfNPC.outfitPlan.addByID("underwear");
+        selfNPC.outfitPlan.addByID("shorts");
+        selfNPC.outfitPlan.addByID("pantyhose");
+        selfNPC.outfitPlan.addByID("boots");
+        selfNPC.change();
+        selfNPC.modAttributeDontSaveData(Attribute.cunning, 2);
+        selfNPC.modAttributeDontSaveData(Attribute.perception, 2);
+        selfNPC.getStamina().setMax(80);
+        selfNPC.getArousal().setMax(80);
+        selfNPC.getMojo().setMax(120);
 
-        self.adjustTraits();
-        self.setTrophy(Item.MaraTrophy);
-        self.body.add(new FacePart(.1, 1.1));
-        self.body.add(AssPart.generateGeneric().upgrade());
-        self.initialGender = CharacterSex.female;
+        selfNPC.adjustTraits();
+        selfNPC.setTrophy(Item.MaraTrophy);
+        selfNPC.body.add(new FacePart(.1, 1.1));
+        selfNPC.body.add(AssPart.generateGeneric().upgrade());
+        selfNPC.initialGender = CharacterSex.female;
     }
 
     @Override
-    public void setGrowth() {
-        character.getGrowth().stamina = 2;
-        character.getGrowth().arousal = 7;
-        character.getGrowth().bonusStamina = 1;
-        character.getGrowth().bonusArousal = 2;
+    public void setGrowth(NPC selfNPC) {
+        selfNPC.getGrowth().stamina = 2;
+        selfNPC.getGrowth().arousal = 7;
+        selfNPC.getGrowth().bonusStamina = 1;
+        selfNPC.getGrowth().bonusArousal = 2;
 
-        character.addCombatScene(new CombatScene(and(level(10), not(flag(MARA_GENERAL_TECH_FOCUS)),
+        selfNPC.addCombatScene(new CombatScene(and(level(10), not(flag(MARA_GENERAL_TECH_FOCUS)),
                         not(flag(MARA_HARPOON_FOCUS))),
                         (c, self, other) -> Formatter.format(
                                         "You see {self:name} fiddling with the device on her arm"
@@ -217,7 +197,7 @@ public class Mara extends BasePersonality {
                                                             : "{self:PRONOUN} reaches down and sticks a finger into"
                                                                             + " your still-bare, still-wet {other:body-part:pussy},"
                                                                             + " wriggling it around a bit inside."));
-                            useHarpoon();
+                            useHarpoon(selfNPC);
                             return true;
                         }), new CombatSceneChoice("Quantity", (c, self, other) -> {
                             c.write(Formatter.format(
@@ -229,7 +209,7 @@ public class Mara extends BasePersonality {
                                                             + " delightfully naughty. You'll help me beta-test, right? Ah,"
                                                             + " who am I kidding. Like you have any choice in the matter!</i>\"",
                                             self, other));
-                            useGeneralTech();
+                            useGeneralTech(selfNPC);
                             return true;
                         }), new CombatSceneChoice("You have faith she can do both [Hard Mode]", (c, self, other) -> {
                             c.write(Formatter.format(
@@ -246,15 +226,15 @@ public class Mara extends BasePersonality {
                                                             + " you did no such thing. Your words fall on deaf ears, though. Have"
                                                             + " you perhaps shot yourself in the foot there?",
                                             self, other));
-                            useGeneralTech();
-                            useHarpoon();
-                            character.getGrowth().extraAttributes += 1;
-                            GameState.gameState.characterPool.getPlayer()
-                                  .getGrowth().addTraitPoints(new int[] {12, 39}, GameState.gameState.characterPool.getPlayer());
+                            useGeneralTech(selfNPC);
+                            useHarpoon(selfNPC);
+                            selfNPC.getGrowth().extraAttributes += 1;
+                            GameState.getGameState().characterPool.getPlayer()
+                                  .getGrowth().addTraitPoints(new int[] {12, 39}, GameState.getGameState().characterPool.getPlayer());
                             return true;
                         }))));
 
-        character.addCombatScene(new CombatScene(
+        selfNPC.addCombatScene(new CombatScene(
                         and(level(20), not(flag(MARA_OCTO_FOCUS)), not(flag(MARA_MIND_CONTROL_FOCUS)), or(flag(MARA_HARPOON_FOCUS), flag(MARA_GENERAL_TECH_FOCUS))),
                         (c, self, other) -> Formatter.format(
                                         "You and {self:name} are both getting back up after your match,"
@@ -273,7 +253,7 @@ public class Mara extends BasePersonality {
                                                             + " sure your surprised look will be something I want to see more than once..."
                                                             + " Decisions, decisions.\"</i> What... exactly did you just sign up for?",
                                             self, other));
-                            useMindControl();
+                            useMindControl(selfNPC);
                             return true;
                         }), new CombatSceneChoice("Doctor Octopus", (c, self, other) -> {
                             c.write(Formatter.format(
@@ -287,7 +267,7 @@ public class Mara extends BasePersonality {
                                                             + " as well! See you soon!</i>\" Well, shit. As if the two hands she"
                                                             + " has right now weren't dangerous enough...",
                                             self, other));
-                            useOcto();
+                            useOcto(selfNPC);
                             return true;
                         }), new CombatSceneChoice("What are these strange things you speak of? [Hard Mode]",
                                         (c, self, other) -> {
@@ -303,12 +283,13 @@ public class Mara extends BasePersonality {
                                                                             + " Uhhh. Ok. That was weird. {self:name} walks away, arms raised over"
                                                                             + " {self:possessive} head and laughing maniacally. This is going to"
                                                                             + " be interesting, that's for sure.",
-                                                            self, other, character.useFemalePronouns() ? "ess" : ""));
-                                            useMindControl();
-                                            useOcto();
-                                            character.getGrowth().extraAttributes += 1;
-                                            GameState.gameState.characterPool.getPlayer()
-                                                  .getGrowth().addTraitPoints(new int[] {21, 48}, GameState.gameState.characterPool.getPlayer());
+                                                            self, other, selfNPC.useFemalePronouns() ? "ess" : ""));
+                                            useMindControl(selfNPC);
+                                            useOcto(selfNPC);
+                                            selfNPC.getGrowth().extraAttributes += 1;
+                                            GameState.getGameState().characterPool.getPlayer()
+                                                  .getGrowth().addTraitPoints(new int[] {21, 48}, GameState
+                                                            .getGameState().characterPool.getPlayer());
                                             return true;
                                         }))));
 
@@ -319,52 +300,52 @@ public class Mara extends BasePersonality {
                         ? Optional.of(Attribute.fetishism) : Optional.empty());
         preferredAttributes.add(
                         c -> c.get(Attribute.cunning) < 100 ? Optional.of(Attribute.cunning) : Optional.empty());
-        character.getGrowth().addTrait(0, Trait.petite);
-        character.getGrowth().addTrait(0, Trait.dexterous);
-        character.getGrowth().addTrait(0, Trait.ticklish);
-        character.getGrowth().addTrait(3, Trait.cautious);
-        character.getGrowth().addTrait(6, Trait.freeSpirit);
-        character.getGrowth().addTrait(9, Trait.limbTraining1);
-        character.getGrowth().addTrait(12, Trait.dickhandler);
-        character.getGrowth().addTrait(15, Trait.sexTraining1);
-        character.getGrowth().addTrait(18, Trait.pussyhandler);
-        character.getGrowth().addTrait(21, Trait.tongueTraining1);
-        character.getGrowth().addTrait(24, Trait.limbTraining2);
-        character.getGrowth().addTrait(27, Trait.tight);
-        character.getGrowth().addTrait(30, Trait.limbTraining3);
-        character.getGrowth().addTrait(33, Trait.defthands);
-        character.getGrowth().addTrait(36, Trait.toymaster);
-        character.getGrowth().addTrait(39, Trait.calm);
-        character.getGrowth().addTrait(42, Trait.nimbletoes);
-        character.getGrowth().addTrait(45, Trait.dickhandler);
-        character.getGrowth().addTrait(48, Trait.skeptical);
-        character.getGrowth().addTrait(51, Trait.desensitized2);
+        selfNPC.getGrowth().addTrait(0, Trait.petite);
+        selfNPC.getGrowth().addTrait(0, Trait.dexterous);
+        selfNPC.getGrowth().addTrait(0, Trait.ticklish);
+        selfNPC.getGrowth().addTrait(3, Trait.cautious);
+        selfNPC.getGrowth().addTrait(6, Trait.freeSpirit);
+        selfNPC.getGrowth().addTrait(9, Trait.limbTraining1);
+        selfNPC.getGrowth().addTrait(12, Trait.dickhandler);
+        selfNPC.getGrowth().addTrait(15, Trait.sexTraining1);
+        selfNPC.getGrowth().addTrait(18, Trait.pussyhandler);
+        selfNPC.getGrowth().addTrait(21, Trait.tongueTraining1);
+        selfNPC.getGrowth().addTrait(24, Trait.limbTraining2);
+        selfNPC.getGrowth().addTrait(27, Trait.tight);
+        selfNPC.getGrowth().addTrait(30, Trait.limbTraining3);
+        selfNPC.getGrowth().addTrait(33, Trait.defthands);
+        selfNPC.getGrowth().addTrait(36, Trait.toymaster);
+        selfNPC.getGrowth().addTrait(39, Trait.calm);
+        selfNPC.getGrowth().addTrait(42, Trait.nimbletoes);
+        selfNPC.getGrowth().addTrait(45, Trait.dickhandler);
+        selfNPC.getGrowth().addTrait(48, Trait.skeptical);
+        selfNPC.getGrowth().addTrait(51, Trait.desensitized2);
     }
 
-    private void useGeneralTech() {
+    private void useGeneralTech(NPC selfNPC) {
         Flag.flag(MARA_GENERAL_TECH_FOCUS);
-        character.getGrowth().addTrait(10, Trait.bomber);
-        character.getGrowth().addTrait(19, Trait.maglocks);
-        character.getGrowth().addTrait(26, Trait.trainingcollar);
-        character.getGrowth().addTrait(37, Trait.roboweb);
+        selfNPC.getGrowth().addTrait(10, Trait.bomber);
+        selfNPC.getGrowth().addTrait(19, Trait.maglocks);
+        selfNPC.getGrowth().addTrait(26, Trait.trainingcollar);
+        selfNPC.getGrowth().addTrait(37, Trait.roboweb);
     }
 
-    private void useHarpoon() {
+    private void useHarpoon(NPC selfNPC) {
         Flag.flag(MARA_HARPOON_FOCUS);
-        character.getGrowth().addTrait(10, Trait.harpoon);
-        character.getGrowth().addTrait(19, Trait.yank);
-        character.getGrowth().addTrait(26, Trait.conducivetoy);
-        character.getGrowth().addTrait(37, Trait.intensesuction);
+        selfNPC.getGrowth().addTrait(10, Trait.harpoon);
+        selfNPC.getGrowth().addTrait(19, Trait.yank);
+        selfNPC.getGrowth().addTrait(26, Trait.conducivetoy);
+        selfNPC.getGrowth().addTrait(37, Trait.intensesuction);
     }
 
-    private void useOcto() {
+    private void useOcto(NPC selfNPC) {
         Flag.flag(MARA_OCTO_FOCUS);
-        character.getGrowth().addTrait(20, Trait.octo); // upgrades itself (in RoboArmManager)
+        selfNPC.getGrowth().addTrait(20, Trait.octo); // upgrades itself (in RoboArmManager)
     }
 
-    private void useMindControl() {
+    private void useMindControl(NPC selfNPC) {
         Flag.flag(MARA_MIND_CONTROL_FOCUS);
-        Growth growth = character.getGrowth();
+        Growth growth = selfNPC.getGrowth();
         growth.addTrait(20, Trait.mindcontroller);
         growth.addTrait(29, Trait.infrasound);
         ClothingTable.getByID("infrasoundnecklace").ifPresent(clothing -> growth.addClothing(29, clothing));
@@ -378,104 +359,101 @@ public class Mara extends BasePersonality {
 
     @Override
     protected void onLevelUp(Character self) {
-        if (self.rank >= 4) {
-
-        }
     }
 
     @Override
-    public void rest(int time) {
-        if (character.rank >= 1 && !character.has(Trait.madscientist) &&
+    public void rest(int time, NPC selfNPC) {
+        if (selfNPC.rank >= 1 && !selfNPC.has(Trait.madscientist) &&
                         (Flag.checkFlag(MARA_GENERAL_TECH_FOCUS) || Flag.checkFlag(MARA_HARPOON_FOCUS))) {
-            advance();
+            advance(selfNPC);
         }
-        super.rest(time);
-        if (!(character.has(Item.Onahole) || character.has(Item.Onahole2)) && character.money >= 300) {
-            character.gain(Item.Onahole);
-            character.money -= 300;
+        super.rest(time, selfNPC);
+        if (!(selfNPC.has(Item.Onahole) || selfNPC.has(Item.Onahole2)) && selfNPC.money >= 300) {
+            selfNPC.gain(Item.Onahole);
+            selfNPC.money -= 300;
         }
-        if (!(character.has(Item.Tickler) || character.has(Item.Tickler)) && character.money >= 300) {
-            character.gain(Item.Tickler);
-            character.money -= 300;
+        if (!(selfNPC.has(Item.Tickler) || selfNPC.has(Item.Tickler)) && selfNPC.money >= 300) {
+            selfNPC.gain(Item.Tickler);
+            selfNPC.money -= 300;
         }
-        if (!(character.has(Item.Dildo) || character.has(Item.Dildo)) && character.money >= 250) {
-            character.gain(Item.Dildo);
-            character.money -= 250;
+        if (!(selfNPC.has(Item.Dildo) || selfNPC.has(Item.Dildo)) && selfNPC.money >= 250) {
+            selfNPC.gain(Item.Dildo);
+            selfNPC.money -= 250;
         }
-        if (!(character.has(Item.Crop) || character.has(Item.Crop)) && character.money >= 200) {
-            character.gain(Item.Crop);
-            character.money -= 200;
+        if (!(selfNPC.has(Item.Crop) || selfNPC.has(Item.Crop)) && selfNPC.money >= 200) {
+            selfNPC.gain(Item.Crop);
+            selfNPC.money -= 200;
         }
-        if (!(character.has(Item.Strapon) || character.has(Item.Strapon)) && character.money >= 600) {
-            character.gain(Item.Strapon);
-            character.money -= 600;
+        if (!(selfNPC.has(Item.Strapon) || selfNPC.has(Item.Strapon)) && selfNPC.money >= 600) {
+            selfNPC.gain(Item.Strapon);
+            selfNPC.money -= 600;
         }
-        if (character.money > 0 && character.rank >= 1) {
+        if (selfNPC.money > 0 && selfNPC.rank >= 1) {
             Daytime.getDay()
-                  .visit("Body Shop", character, Random.random(character.money));
+                  .visit("Body Shop", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0 && character.rank >= 1) {
+        if (selfNPC.money > 0 && selfNPC.rank >= 1) {
             Daytime.getDay()
-                  .visit("Workshop", character, Random.random(character.money));
+                  .visit("Workshop", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
+        if (selfNPC.money > 0) {
             Daytime.getDay()
-                  .visit("Hardware Store", character, Random.random(character.money));
+                  .visit("Hardware Store", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
+        if (selfNPC.money > 0) {
             Daytime.getDay()
-                  .visit("Black Market", character, Random.random(character.money));
+                  .visit("Black Market", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
+        if (selfNPC.money > 0) {
             Daytime.getDay()
-                  .visit("XXX Store", character, Random.random(character.money));
+                  .visit("XXX Store", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
+        if (selfNPC.money > 0) {
             Daytime.getDay()
-                  .visit("Bookstore", character, Random.random(character.money));
+                  .visit("Bookstore", selfNPC, Random.random(selfNPC.money));
         }
-        Decider.visit(character);
+        Decider.visit(selfNPC);
         int r;
 
         for (int i = 0; i < time; i++) {
             r = Random.random(8);
             if (r == 1) {
                 Daytime.getDay()
-                      .visit("Exercise", this.character, 0);
+                      .visit("Exercise", selfNPC, 0);
             } else if (r == 0) {
                 Daytime.getDay()
-                      .visit("Browse Porn Sites", this.character, 0);
+                      .visit("Browse Porn Sites", selfNPC, 0);
             }
         }
     }
 
-    private void advance() {
-        character.getGrowth().addTrait(10, Trait.madscientist);
-        if (character.hasPussy()) {
-            character.body.addReplace(character.body.getRandomPussy().applyMod(CyberneticMod.INSTANCE), 1);
+    private void advance(NPC selfNPC) {
+        selfNPC.getGrowth().addTrait(10, Trait.madscientist);
+        if (selfNPC.hasPussy()) {
+            selfNPC.body.addReplace(selfNPC.body.getRandomPussy().applyMod(CyberneticMod.INSTANCE), 1);
         }
-        if (character.hasDick()) {
-            character.body.addReplace(character.body.getRandomCock()
+        if (selfNPC.hasDick()) {
+            selfNPC.body.addReplace(selfNPC.body.getRandomCock()
                                                     .applyMod(CockMod.bionic),
                             1);
         }
-        character.unequipAllClothing();
-        character.outfitPlan.addByID("bra");
-        character.outfitPlan.addByID("shirt");
-        character.outfitPlan.addByID("labcoat");
-        character.outfitPlan.addByID("underwear");
-        character.outfitPlan.addByID("pants");
-        character.outfitPlan.addByID("pantyhose");
-        character.outfitPlan.addByID("boots");
-        character.modAttributeDontSaveData(Attribute.science, 1);
-        character.getGrowth()
-                 .addOrRemoveTraits(character);
+        selfNPC.unequipAllClothing();
+        selfNPC.outfitPlan.addByID("bra");
+        selfNPC.outfitPlan.addByID("shirt");
+        selfNPC.outfitPlan.addByID("labcoat");
+        selfNPC.outfitPlan.addByID("underwear");
+        selfNPC.outfitPlan.addByID("pants");
+        selfNPC.outfitPlan.addByID("pantyhose");
+        selfNPC.outfitPlan.addByID("boots");
+        selfNPC.modAttributeDontSaveData(Attribute.science, 1);
+        selfNPC.getGrowth()
+                 .addOrRemoveTraits(selfNPC);
     }
 
     @Override
-    public String victory(Combat c, Result flag) {
-        Character target = c.getOpponent(character);
-        character.arousal.empty();
+    public String victory(Combat c, Result flag, NPC selfNPC) {
+        Character target = c.getOpponent(selfNPC);
+        selfNPC.arousal.empty();
         if (c.getStance()
              .anallyPenetrated(c, target)) {
             return "The sensations coming from your prostate are too much as your arms give out below you. Mara doesn't let up either, grinding the head of the strap on over your "
@@ -487,7 +465,7 @@ public class Mara extends BasePersonality {
                             + "know how to give as well as take.\"</i> She jokes as she begins to work up a steady rhythm. Not to be outdone you quickly shift yourself and begin to thrust into her "
                             + "earnestly, intent on showing just how well you can 'give'. Soon Mara is collapsed on top of you breathing hard and her eyes unfocused. You stand and take your leave. You may have lost the battle but the war is far from over.";
         }
-        if (character.has(Trait.madscientist) && character.has(Item.Lubricant)) {
+        if (selfNPC.has(Trait.madscientist) && selfNPC.has(Item.Lubricant)) {
             target.add(c, new Oiled(target));
             return "You've fallen completely into Mara's hands now. Her nimble fingers dance over your dick and balls, playing you like an instrument. You grit your teeth and "
                             + "try to endure her touch until you can finger her to orgasm. It's a lost cause though, and you groan as you inevitably feel your pleasure building to a peak. Just before "
@@ -497,7 +475,7 @@ public class Mara extends BasePersonality {
                             + "as she goes, stopping from time to time to place light kisses. Between her enticing behavior and her naked body pressed against you, your erection recovers in record "
                             + "time.<br/><br/>Mara makes herself comfortable sitting on your lap and slides your lubed up dick between her thighs. As she leans against your chest, you can feel her hot slit "
                             + "pressing against your member. Her finger teases the head of your penis, which is poking out of her lap. <i>\"It's a good thing you're such a horny "
-                            + c.getOpponent(character)
+                            + c.getOpponent(selfNPC)
                                .boyOrGirl()
                             + ". If you couldn't get it "
                             + "up again, I would have to settle for grinding on your leg.\"</i> As she says this, she starts to rub her clit along the length of your penis. She keeps her legs clamped "
@@ -512,8 +490,8 @@ public class Mara extends BasePersonality {
                             + "cover her hands with your seed. Mara breaks the kiss and leaves you completely exhausted.";
         }
         if (c.getStance()
-             .vaginallyPenetrated(c, character)) {
-            if (character.has(Item.ShockGlove) && Random.random(2) == 0) {
+             .vaginallyPenetrated(c, selfNPC)) {
+            if (selfNPC.has(Item.ShockGlove) && Random.random(2) == 0) {
                 return "You've got Mara just where you want her. Your arms are wrapped around her, holding her in place as you thrust your cock into her tight pussy over and over. Her moans are getting louder and louder, and you can feel her breath "
                                 + "quickening. You're getting close to cumming, but she's definitely closer. She returns your embrace, squeezing her body against yours, stroking your back with her hands. Her hands creep down to grasp your buttocks. "
                                 + "All of a sudden, she grins deviously, and she whispers...<br/><br/>"
@@ -555,10 +533,10 @@ public class Mara extends BasePersonality {
     }
 
     @Override
-    public String defeat(Combat c, Result flag) {
-        Character other = c.getOpponent(character);
-        if (character.has(Trait.madscientist) && character.has(Item.SPotion)) {
-            character.add(c, new Hypersensitive(character));
+    public String defeat(Combat c, Result flag, NPC selfNPC) {
+        Character other = c.getOpponent(selfNPC);
+        if (selfNPC.has(Trait.madscientist) && selfNPC.has(Item.SPotion)) {
+            selfNPC.add(c, new Hypersensitive(selfNPC));
             return "Mara begins to panic as she realizes she's on the verge of defeat. She grabs a small bottle of liquid from pouch on her belt, but it slips from her fingers "
                             + "as she shudders in orgasm. You finger her pussy until she goes limp. While you're waiting for her to recover, you take a look at the bottle she dropped. "
                             + "You recognize this stuff, it greatly heightens sensitivity when absorbed into skin. It seems like a shame not to use it.<br/><br/>Mara sits up, looking at you "
@@ -578,21 +556,21 @@ public class Mara extends BasePersonality {
                             + "in the chest. <i>\"You jerk! Do you have any idea how long this stuff lasts? How am I suppose to win my next fight when I'm this sensitive?\"</i> She pulls your head down "
                             + "to her height and kisses you passionately before storming off.";
         } else if (c.getStance()
-                    .vaginallyPenetrated(c, character)) {
+                    .vaginallyPenetrated(c, selfNPC)) {
             return "You bury yourself deep into Mara's tight pussy as she screams in pleasure. Her hot folds shudder and squeeze your cock, confirming she's reached her climax. "
                             + "The sensation is amazing, but you're not in danger of cumming with her. You gently stroke her head while spasms of pleasure continue to run through her small body. "
                             + "It occurs to you -not for the first time- that she's really cute, even when she's not trying to be.<br/><br/>As Mara catches her breath, you see realization slowly dawn "
                             + "on her. <i>\"You didn't cum? Why not?\"</i> She actually looks a little hurt. <i>\"Every "
-                            + c.getOpponent(character)
+                            + c.getOpponent(selfNPC)
                                .boyOrGirl()
                             + " I've been with said it feels really good and tight inside me. They never outlast "
-                            + "me.\"</i> Every " + c.getOpponent(character)
+                            + "me.\"</i> Every " + c.getOpponent(selfNPC)
                                                     .boyOrGirl()
                             + " she's been with? Mara struck you as a bit of an introvert. How many "
-                            + c.getOpponent(character)
+                            + c.getOpponent(selfNPC)
                                .guyOrGirl()
                             + "s has she been with? <br/>She gives you a flick on the forehead. <i>\"Don't be mean. "
-                            + "I've only slept with a few " + c.getOpponent(character)
+                            + "I've only slept with a few " + c.getOpponent(selfNPC)
                                                                .boyOrGirl()
                             + "s. It's not like you're a virgin either.\"</i> Fair enough, but if she's upset that you didn't cum inside her, you're eager to remedy that. "
                             + "\n\nYou pull most of the way out in preparation for a big thrust, but Mara yelps in alarm. <i>\"Wait!\"</i> She slides her butt backward, causing your dick to fall out completely, "
@@ -634,9 +612,9 @@ public class Mara extends BasePersonality {
     }
 
     @Override
-    public String draw(Combat c, Result flag) {
+    public String draw(Combat c, Result flag, NPC selfNPC) {
         Character target;
-        if (c.p1 == character) {
+        if (c.p1 == selfNPC) {
             target = c.p2;
         } else {
             target = c.p1;
@@ -668,12 +646,12 @@ public class Mara extends BasePersonality {
     }
 
     @Override
-    public boolean fightFlight(Character opponent) {
-        return !character.mostlyNude() || opponent.mostlyNude();
+    public boolean fightFlight(Character opponent, NPC selfNPC) {
+        return !selfNPC.mostlyNude() || opponent.mostlyNude();
     }
 
     @Override
-    public boolean attack(Character opponent) {
+    public boolean attack(Character opponent, NPC selfNPC) {
         return true;
     }
 
@@ -682,7 +660,7 @@ public class Mara extends BasePersonality {
     }
 
     @Override
-    public String victory3p(Combat c, Character target, Character assist) {
+    public String victory3p(Combat c, Character target, Character assist, NPC selfNPC) {
         if (target.human()) {
             if (target.hasDick()) {
                 return "Mara settles between your legs, holding your dick between her bare feet. Her soft, smooth soles begin to stroke the length of your shaft. She frequently "
@@ -739,7 +717,7 @@ public class Mara extends BasePersonality {
     }
 
     @Override
-    public String intervene3p(Combat c, Character target, Character assist) {
+    public String intervene3p(Combat c, Character target, Character assist, NPC selfNPC) {
         if (target.human()) {
             return "You face off with " + assist.getName()
                             + ", looking for any opening. Her eyes dart momentarily past you, but before you can decide if her distraction is "
@@ -760,16 +738,16 @@ public class Mara extends BasePersonality {
     }
 
     @Override
-    public boolean fit() {
-        return character.getStamina()
+    public boolean fit(NPC selfNPC) {
+        return selfNPC.getStamina()
                         .percent() >= 75
-                        && character.getArousal()
+                        && selfNPC.getArousal()
                                     .percent() <= 10
-                        && !character.mostlyNude();
+                        && !selfNPC.mostlyNude();
     }
 
     @Override
-    public boolean checkMood(Combat c, Emotion mood, int value) {
+    public boolean checkMood(Combat c, Emotion mood, int value, NPC selfNPC) {
         switch (mood) {
             case confident:
                 return value >= 50;

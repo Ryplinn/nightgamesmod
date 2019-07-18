@@ -3,7 +3,6 @@ package nightgames.requirements;
 import nightgames.actions.Movement;
 import nightgames.areas.Area;
 import nightgames.characters.Attribute;
-import nightgames.characters.BlankPersonality;
 import nightgames.characters.Emotion;
 import nightgames.characters.NPC;
 import nightgames.characters.body.CockPart;
@@ -45,8 +44,8 @@ public class RequirementTest {
     private Combat combat;
 
     @Before public void setUp() {
-        self = new BlankPersonality("SelfTestNPC").character;
-        other = new BlankPersonality("OtherTestNPC").character;
+        self = new NPC("SelfTestNPC");
+        other = new NPC("OtherTestNPC");
         Area area = new Area("TestArea", "TestArea description", Movement.beer);
         new Match(Arrays.asList(self, other), new NoModifier());
         combat = new Combat(self, other, area);

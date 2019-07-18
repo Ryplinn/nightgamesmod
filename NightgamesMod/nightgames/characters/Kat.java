@@ -15,7 +15,6 @@ import nightgames.global.GameState;
 import nightgames.global.Random;
 import nightgames.items.Item;
 import nightgames.skills.strategy.FacesitStrategy;
-import nightgames.start.NpcConfiguration;
 import nightgames.status.Feral;
 import nightgames.status.Pheromones;
 import nightgames.status.Stsflag;
@@ -32,107 +31,102 @@ public class Kat extends BasePersonality {
     private static final long serialVersionUID = -8169646189131720872L;
 
     public Kat() {
-        this(Optional.empty(), Optional.empty());
-    }
-
-    public Kat(Optional<NpcConfiguration> charConfig, Optional<NpcConfiguration> commonConfig) {
-        super("Kat", charConfig, commonConfig, false);
-        constructLines();
+        super(false);
     }
 
     @Override
-    public void applyStrategy(NPC self) {
-        self.plan = Plan.retreating;
-        self.mood = Emotion.confident;
-        self.addPersonalStrategy(new FacesitStrategy());
+    public void applyStrategy(NPC selfNPC) {
+        selfNPC.plan = Plan.retreating;
+        selfNPC.mood = Emotion.confident;
+        selfNPC.addPersonalStrategy(new FacesitStrategy());
     }
 
     @Override
-    public void applyBasicStats(Character self) {
+    public void applyBasicStats(NPC selfNPC) {
         preferredCockMod = CockMod.primal;
-        self.outfitPlan.addByID("bra");
-        self.outfitPlan.addByID("Tshirt");
-        self.outfitPlan.addByID("panties");
-        self.outfitPlan.addByID("skirt");
-        self.outfitPlan.addByID("sneakers");
-        self.outfitPlan.addByID("socks");
-        self.change();
-        self.setTrophy(Item.KatTrophy);
-        self.modAttributeDontSaveData(Attribute.power, 1);
-        self.modAttributeDontSaveData(Attribute.animism, 1);
-        self.modAttributeDontSaveData(Attribute.cunning, 1);
-        self.modAttributeDontSaveData(Attribute.speed, 1);
-        self.getStamina().setMax(100);
-        self.getArousal().setMax(100);
-        self.getMojo().setMax(80);
+        selfNPC.outfitPlan.addByID("bra");
+        selfNPC.outfitPlan.addByID("Tshirt");
+        selfNPC.outfitPlan.addByID("panties");
+        selfNPC.outfitPlan.addByID("skirt");
+        selfNPC.outfitPlan.addByID("sneakers");
+        selfNPC.outfitPlan.addByID("socks");
+        selfNPC.change();
+        selfNPC.setTrophy(Item.KatTrophy);
+        selfNPC.modAttributeDontSaveData(Attribute.power, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.animism, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.cunning, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.speed, 1);
+        selfNPC.getStamina().setMax(100);
+        selfNPC.getArousal().setMax(100);
+        selfNPC.getMojo().setMax(80);
 
-        self.body.add(BreastsPart.a);
-        self.body.add(PussyPart.generic.applyMod(FeralMod.INSTANCE));
-        self.body.add(AssPart.generateGeneric().upgrade());
-        self.body.add(TailPart.cat);
-        self.body.add(EarPart.cat);
+        selfNPC.body.add(BreastsPart.a);
+        selfNPC.body.add(PussyPart.generic.applyMod(FeralMod.INSTANCE));
+        selfNPC.body.add(AssPart.generateGeneric().upgrade());
+        selfNPC.body.add(TailPart.cat);
+        selfNPC.body.add(EarPart.cat);
         // mostly feminine face
-        self.body.add(new FacePart(.1, 2.3));
-        self.initialGender = CharacterSex.female;
+        selfNPC.body.add(new FacePart(.1, 2.3));
+        selfNPC.initialGender = CharacterSex.female;
     }
 
     private static final String KAT_SPEED_FOCUS = "KatSpeedFocus";
     private static final String KAT_POWER_FOCUS = "KatPowerFocus";
     private static final String KAT_PHEROMONE_FOCUS = "KatPheromoneFocus";
     private static final String KAT_FRENZY_FOCUS = "KatFrenzyFocus";
-    private void useSpeed() {
+    private void useSpeed(NPC selfNPC) {
         Flag.flag(KAT_SPEED_FOCUS);
-        character.getGrowth().addTrait(13, Trait.FeralAgility);
-        character.getGrowth().addTrait(19, Trait.NimbleRecovery);
-        character.getGrowth().addTrait(34, Trait.CrossCounter);
-        character.getGrowth().addTrait(54, Trait.Catwalk);
+        selfNPC.getGrowth().addTrait(13, Trait.FeralAgility);
+        selfNPC.getGrowth().addTrait(19, Trait.NimbleRecovery);
+        selfNPC.getGrowth().addTrait(34, Trait.CrossCounter);
+        selfNPC.getGrowth().addTrait(54, Trait.Catwalk);
 
     }
 
-    private void usePower() {
+    private void usePower(NPC selfNPC) {
         Flag.flag(KAT_POWER_FOCUS);
-        character.getGrowth().addTrait(13, Trait.FeralStrength);
-        character.getGrowth().addTrait(19, Trait.Unwavering);
-        character.getGrowth().addTrait(34, Trait.Untamed);
-        character.getGrowth().addTrait(54, Trait.strongwilled);
+        selfNPC.getGrowth().addTrait(13, Trait.FeralStrength);
+        selfNPC.getGrowth().addTrait(19, Trait.Unwavering);
+        selfNPC.getGrowth().addTrait(34, Trait.Untamed);
+        selfNPC.getGrowth().addTrait(54, Trait.strongwilled);
     }
 
-    private void usePheromones() {
+    private void usePheromones(NPC selfNPC) {
         Flag.flag(KAT_PHEROMONE_FOCUS);
-        character.getGrowth().addTrait(22, Trait.lacedjuices);
-        character.getGrowth().addTrait(28, Trait.BefuddlingFragrance);
+        selfNPC.getGrowth().addTrait(22, Trait.lacedjuices);
+        selfNPC.getGrowth().addTrait(28, Trait.BefuddlingFragrance);
         if (Flag.checkFlag(KAT_SPEED_FOCUS)) {
-            character.getGrowth().addTrait(43, Trait.FastDiffusion);
+            selfNPC.getGrowth().addTrait(43, Trait.FastDiffusion);
         }
         if (Flag.checkFlag(KAT_POWER_FOCUS)){
-            character.getGrowth().addTrait(43, Trait.PiercingOdor);
+            selfNPC.getGrowth().addTrait(43, Trait.PiercingOdor);
         }
-        character.getGrowth().addTrait(49, Trait.ComplexAroma);
-        character.getGrowth().addTrait(58, Trait.FrenzyScent);
+        selfNPC.getGrowth().addTrait(49, Trait.ComplexAroma);
+        selfNPC.getGrowth().addTrait(58, Trait.FrenzyScent);
     }
 
-    private void useFrenzy() {
+    private void useFrenzy(NPC selfNPC) {
         Flag.flag(KAT_FRENZY_FOCUS);
-        character.getGrowth().addTrait(22, Trait.Rut);
-        character.getGrowth().addTrait(22, Trait.NaturalHeat);
-        character.getGrowth().addTrait(28, Trait.PrimalHeat);
+        selfNPC.getGrowth().addTrait(22, Trait.Rut);
+        selfNPC.getGrowth().addTrait(22, Trait.NaturalHeat);
+        selfNPC.getGrowth().addTrait(28, Trait.PrimalHeat);
         if (Flag.checkFlag(KAT_SPEED_FOCUS)) {
-            character.getGrowth().addTrait(43, Trait.Jackhammer);
+            selfNPC.getGrowth().addTrait(43, Trait.Jackhammer);
         }
         if (Flag.checkFlag(KAT_POWER_FOCUS)){
-            character.getGrowth().addTrait(43, Trait.Piledriver);
+            selfNPC.getGrowth().addTrait(43, Trait.Piledriver);
         }
-        character.getGrowth().addTrait(49, Trait.MindlessDesire);
-        character.getGrowth().addTrait(58, Trait.Unsatisfied);
+        selfNPC.getGrowth().addTrait(49, Trait.MindlessDesire);
+        selfNPC.getGrowth().addTrait(58, Trait.Unsatisfied);
     }
 
     @Override
-    public void setGrowth() {
-        character.getGrowth().stamina = 2;
-        character.getGrowth().arousal = 7;
-        character.getGrowth().bonusStamina = 1;
-        character.getGrowth().bonusArousal = 2;
-        character.addCombatScene(new CombatScene(and(level(13), not(flag(KAT_POWER_FOCUS)), not(flag(KAT_SPEED_FOCUS))),
+    public void setGrowth(NPC selfNPC) {
+        selfNPC.getGrowth().stamina = 2;
+        selfNPC.getGrowth().arousal = 7;
+        selfNPC.getGrowth().bonusStamina = 1;
+        selfNPC.getGrowth().bonusArousal = 2;
+        selfNPC.addCombatScene(new CombatScene(and(level(13), not(flag(KAT_POWER_FOCUS)), not(flag(KAT_SPEED_FOCUS))),
                         (c, self, player) -> Formatter.format("Exhilarated after the fight, Kat pounces on you once again. "
                                         + "She doesn't seem too keen on having more sex, so you just hold her in your lap and pet her cute cat ears. "
                                         + "Kat narrows her eyes and purrs, <i>\"So what do you think nya? I've gotten better right?\"</i> "
@@ -149,7 +143,7 @@ public class Kat extends BasePersonality {
                                             .getName() + ", nya! "
                                             + "Next time we fight, you will nyat catch me!\"</i>." + "<br/><br/>"
                                             + "Looks like you've got your work cut out for you.");
-                            useSpeed();
+                            useSpeed(selfNPC);
                             return true;
                         }), new CombatSceneChoice("You're strong like a tiger!", (c, self, other) -> {
                             c.write("<i>\"A tigerrr? Nyahahaha you can nyat be serious!\"</i> Kat laughs after hearing your response, "
@@ -159,7 +153,7 @@ public class Kat extends BasePersonality {
                                             + "<br/><br/>"
                                             + "<i>\"Mrrr..! Don't laugh nya! I'll show you, I can be strong too!\"</i> "
                                             + "She stalks off in an angry but cute way, leaving you wondering if that was the right thing to say.");
-                            usePower();
+                            usePower(selfNPC);
                             return true;
                         }), new CombatSceneChoice("You're cute like a housecat! You can be my pet! [Hard Mode]",
                                         (c, self, other) -> {
@@ -167,16 +161,16 @@ public class Kat extends BasePersonality {
                                                             + "I'll show you I can be just as fast and strong as everyone else!\"</i> "
                                                             + "She gets up angrily and stomps away. Okay you <b>PROBABLY</b> shouldn't have done that. "
                                                             + "Her new resolve could be... <i>troubling</i>.");
-                                            useSpeed();
-                                            usePower();
-                                            character.getGrowth().extraAttributes += 1;
-                                            GameState.gameState.characterPool.getPlayer().getGrowth()
+                                            useSpeed(selfNPC);
+                                            usePower(selfNPC);
+                                            selfNPC.getGrowth().extraAttributes += 1;
+                                            GameState.getGameState().characterPool.getPlayer().getGrowth()
                                                             .addTraitPoints(new int[] {12, 39},
-                                                                            GameState.gameState.characterPool
+                                                                            GameState.getGameState().characterPool
                                                                                             .getPlayer());
                                             return true;
                                         }))));
-        character.addCombatScene(
+        selfNPC.addCombatScene(
                         new CombatScene(and(level(22), not(flag(KAT_FRENZY_FOCUS)), not(flag(KAT_PHEROMONE_FOCUS)),
                                         or(flag(KAT_POWER_FOCUS), flag(KAT_SPEED_FOCUS))), (c, self, player) ->
                                         "Kat smells like an animal in heat, and her scent is driving you wild. "
@@ -209,7 +203,7 @@ public class Kat extends BasePersonality {
                                                                             + "<br/><br/>"
                                                                             + "Kat dusts herself off and gives you a big kiss on the lips. <i>I did nyat know you had a smell fetish... "
                                                                             + "Don't worry, I wont tell anyone-nyaa. J-just... next time you feel the nyeed, come see me won't you?</i>");
-                                                            usePheromones();
+                                                            usePheromones(selfNPC);
                                                             return true;
                                                         }), new CombatSceneChoice("Fuck her like she asked",
                                                         (c, self, other) -> {
@@ -237,7 +231,7 @@ public class Kat extends BasePersonality {
                                                                                             + ", that myeans a lot to m-meowrr. If you l-liked it, I'll see if I can control it nya-ext time!\"</i> "
                                                                                             + "You smile wryly as Kat leaves. You feel that she'll be a force to be reckoned with the next time you see her.",
                                                                             self, other));
-                                                            useFrenzy();
+                                                            useFrenzy(selfNPC);
                                                             return true;
                                                         }), new CombatSceneChoice(
                                                         "Sex, but continue indulging in her scent [Hard Mode]",
@@ -254,82 +248,78 @@ public class Kat extends BasePersonality {
                                                                             + "<br/><br/>"
                                                                             + "Kat grins with a flushed face, <i>\"T-that was amazing! Y-you know, if that's what it takes to get you going, I'll do whatever I can-nya!\"</i> "
                                                                             + "You show a trouble face when she leaves. Having sex with a hungry sex kitten while high on pheromones did feel great, but you're not sure if you can last the night again.", self, other));
-                                                            usePheromones();
-                                                            useFrenzy();
-                                                            character.getGrowth().extraAttributes += 1;
+                                                            usePheromones(selfNPC);
+                                                            useFrenzy(selfNPC);
+                                                            selfNPC.getGrowth().extraAttributes += 1;
                                                             // some compensation for the added difficulty. She gets 6 traits and 1 attribute point/level, and you only get 2 traits, but you are fighting more people than just her.
-                                                            GameState.gameState.characterPool.getPlayer().getGrowth()
+                                                            GameState.getGameState().characterPool.getPlayer().getGrowth()
                                                                             .addTraitPoints(new int[] {21, 48},
-                                                                                            GameState.gameState.characterPool
+                                                                                            GameState.getGameState().characterPool
                                                                                                             .getPlayer());
                                                             return true;
                                                         }))));
         preferredAttributes.add(c -> Optional.of(Attribute.animism));
-        character.getGrowth().addTrait(0, Trait.dexterous);
-        character.getGrowth().addTrait(0, Trait.pheromones);
-        character.getGrowth().addTrait(0, Trait.shy);
-        character.getGrowth().addTrait(0, Trait.petite);
-        character.getGrowth().addTrait(10, Trait.sympathetic);
-        character.getGrowth().addTrait(16, Trait.cute);
-        character.getGrowth().addTrait(20, Trait.breeder);
-        character.getGrowth().addTrait(25, Trait.nymphomania);
-        character.getGrowth().addTrait(31, Trait.tight);
-        character.getGrowth().addTrait(37, Trait.catstongue);
-        character.getGrowth().addTrait(40, Trait.graceful);
-        character.getGrowth().addTrait(46, Trait.sexTraining1);
-        character.getGrowth().addTrait(55, Trait.responsive);
-        character.getGrowth().addTrait(61, Trait.sexTraining2);
+        selfNPC.getGrowth().addTrait(0, Trait.dexterous);
+        selfNPC.getGrowth().addTrait(0, Trait.pheromones);
+        selfNPC.getGrowth().addTrait(0, Trait.shy);
+        selfNPC.getGrowth().addTrait(0, Trait.petite);
+        selfNPC.getGrowth().addTrait(10, Trait.sympathetic);
+        selfNPC.getGrowth().addTrait(16, Trait.cute);
+        selfNPC.getGrowth().addTrait(20, Trait.breeder);
+        selfNPC.getGrowth().addTrait(25, Trait.nymphomania);
+        selfNPC.getGrowth().addTrait(31, Trait.tight);
+        selfNPC.getGrowth().addTrait(37, Trait.catstongue);
+        selfNPC.getGrowth().addTrait(40, Trait.graceful);
+        selfNPC.getGrowth().addTrait(46, Trait.sexTraining1);
+        selfNPC.getGrowth().addTrait(55, Trait.responsive);
+        selfNPC.getGrowth().addTrait(61, Trait.sexTraining2);
     }
 
     @Override
-    public void rest(int time) {
-        super.rest(time);
-        if (!(character.has(Item.Dildo) || character.has(Item.Dildo2)) && character.money >= 250) {
-            character.gain(Item.Dildo);
-            character.money -= 250;
+    public void rest(int time, NPC selfNPC) {
+        super.rest(time, selfNPC);
+        if (!(selfNPC.has(Item.Dildo) || selfNPC.has(Item.Dildo2)) && selfNPC.money >= 250) {
+            selfNPC.gain(Item.Dildo);
+            selfNPC.money -= 250;
         }
-        if (!(character.has(Item.Onahole) || character.has(Item.Onahole2)) && character.money >= 300) {
-            character.gain(Item.Onahole);
-            character.money -= 300;
+        if (!(selfNPC.has(Item.Onahole) || selfNPC.has(Item.Onahole2)) && selfNPC.money >= 300) {
+            selfNPC.gain(Item.Onahole);
+            selfNPC.money -= 300;
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("Body Shop", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("Body Shop", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("XXX Store", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("XXX Store", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("Black Market", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("Black Market", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("Bookstore", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("Bookstore", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("Hardware Store", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("Hardware Store", selfNPC, Random.random(selfNPC.money));
         }
-        Decider.visit(character);
+        Decider.visit(selfNPC);
         int r;
 
         for (int i = 0; i < time; i++) {
             r = Random.random(8);
             if (r == 1) {
-                Daytime.getDay().visit("Exercise", this.character, 0);
+                Daytime.getDay().visit("Exercise", selfNPC, 0);
             } else if (r == 0) {
-                Daytime.getDay().visit("Browse Porn Sites", this.character, 0);
+                Daytime.getDay().visit("Browse Porn Sites", selfNPC, 0);
             }
         }
     }
 
-    private void constructLines() {
-        character.addLine(CharacterLine.BB_LINER, (c, self, other) -> {
-            return "Kat gives you a look of concern and sympathy. <i>\"Nya... Are you ok? I didn't mean to hit you that hard.\"</i>";
-        });
+    @Override public void constructLines(NPC selfNPC) {
+        selfNPC.addLine(CharacterLine.BB_LINER, (c, self, other) -> "Kat gives you a look of concern and sympathy. <i>\"Nya... Are you ok? I didn't mean to hit you that hard.\"</i>");
 
-        character.addLine(CharacterLine.CHALLENGE, (c, self, other) -> {
-            return "Kat looks a bit nervous, but her tail wags slowly in anticipation. <i>\"Let's have some funNya.\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.CHALLENGE, (c, self, other) -> "Kat looks a bit nervous, but her tail wags slowly in anticipation. <i>\"Let's have some funNya.\"</i>");
 
-        character.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> {
             if (self.getArousal()
                     .percent() >= 50) {
                 return "Kat makes no effort to hide the moisture streaming down her thighs. <i>\"You want my pussy? I'm nyot going to myake it easy for you.\"</i>";
@@ -338,45 +328,33 @@ public class Kat extends BasePersonality {
             }
         });
 
-        character.addLine(CharacterLine.STUNNED_LINER, (c, self, other) -> {
-            return "Kat mews pitifully on the floor. <i>\"Don't be so meaNya.\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.STUNNED_LINER, (c, self, other) -> "Kat mews pitifully on the floor. <i>\"Don't be so meaNya.\"</i>");
 
-        character.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> {
-            return "Kat smiles excitedly and bats at your cock. <i>\"Are you already close to cumming? Nya! I want to play with you more!\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> "Kat smiles excitedly and bats at your cock. <i>\"Are you already close to cumming? Nya! I want to play with you more!\"</i>");
 
-        character.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> {
-            return "Kat winks at you and looks at your crotch, <i>\"MmM! That looks tasty nya!\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> "Kat winks at you and looks at your crotch, <i>\"MmM! That looks tasty nya!\"</i>");
 
-        character.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> {
-            return "You walk back to your dorm after the match, but something is bothering you the whole way. You feel like you're being watched, but there's no menace to the sensation. "
-                            + "You hear a rustling behind you and look back just in time to see someone duck behind a bush. 'Someone'.... The cat ears on that hat make your stalker's identity "
-                            + "pretty obvious. You pretend you didn't see anything and continue toward your dorm. So, a stray Kat is following you home tonight. It would make more sense for her "
-                            + "to just come out so you can walk together, but you know how shy she can be about things like this. On the other hand, she is following you back to your room at night "
-                            + "with obvious implications, so... does that count as being forward? <br/><br/>You reach the door to your dorm building and look back to see Kat clumsily attempting to hide behind a "
-                            + "tree. Oh good grief. How long is she planning to stay hidden? The door to the building locks automatically, so if you go inside she'll be stuck out here. Besides, the closer "
-                            + "you get to your room, the harder it's going to be for her to work up to courage to approach you. You walk over to where she's hiding and she freezes in panic. Before she "
-                            + "can run off, you catch her and gently pat her on the head. It's starting to get chilly out here. She should just come inside with you. Kat blushes furiously, but looks "
-                            + "delighted as you lead her to your room.";
-        });
+        selfNPC.addLine(CharacterLine.NIGHT_LINER, (c, self, other) ->
+                        "You walk back to your dorm after the match, but something is bothering you the whole way. You feel like you're being watched, but there's no menace to the sensation. "
+                                        + "You hear a rustling behind you and look back just in time to see someone duck behind a bush. 'Someone'.... The cat ears on that hat make your stalker's identity "
+                                        + "pretty obvious. You pretend you didn't see anything and continue toward your dorm. So, a stray Kat is following you home tonight. It would make more sense for her "
+                                        + "to just come out so you can walk together, but you know how shy she can be about things like this. On the other hand, she is following you back to your room at night "
+                                        + "with obvious implications, so... does that count as being forward? <br/><br/>You reach the door to your dorm building and look back to see Kat clumsily attempting to hide behind a "
+                                        + "tree. Oh good grief. How long is she planning to stay hidden? The door to the building locks automatically, so if you go inside she'll be stuck out here. Besides, the closer "
+                                        + "you get to your room, the harder it's going to be for her to work up to courage to approach you. You walk over to where she's hiding and she freezes in panic. Before she "
+                                        + "can run off, you catch her and gently pat her on the head. It's starting to get chilly out here. She should just come inside with you. Kat blushes furiously, but looks "
+                                        + "delighted as you lead her to your room.");
 
-        character.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> {
-            return "<i>\"NYAAAH! uuu...\"</i> Kat glares at you reproachfully as she comes down from her high.";
-        });
+        selfNPC.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> "<i>\"NYAAAH! uuu...\"</i> Kat glares at you reproachfully as she comes down from her high.");
 
-        character.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> {
-            return "<i>\"Nyahaha! I gotcha! Hey hey, do you think you can cum again-nyaa? Let's try it out!\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> "<i>\"Nyahaha! I gotcha! Hey hey, do you think you can cum again-nyaa? Let's try it out!\"</i>");
 
-        character.addLine(CharacterLine.DESCRIBE_LINER, (c, self, other) -> {
-            return "It's easy to forget that Kat's older than you when she looks like she's about to start high school. She's a very short and slim, though you know she's "
-                            + "stronger than she looks. Adorable cat ears poke through her short, strawberry blonde hair. She "
-                            + "looks a bit timid, but there's a gleam of desire in her eyes.";
-        });
+        selfNPC.addLine(CharacterLine.DESCRIBE_LINER, (c, self, other) ->
+                        "It's easy to forget that Kat's older than you when she looks like she's about to start high school. She's a very short and slim, though you know she's "
+                                        + "stronger than she looks. Adorable cat ears poke through her short, strawberry blonde hair. She "
+                                        + "looks a bit timid, but there's a gleam of desire in her eyes.");
 
-        character.addLine(CharacterLine.LEVEL_DRAIN_LINER, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.LEVEL_DRAIN_LINER, (c, self, other) -> {
             if (other.getLevel() < self.getLevel() - 5) {
                 return "You don't even think Kat notices your meager strength draining into her much larger pool as she passionately fucks you in her bestial lust. <i>\"Nyahaha! Can't stop... WONT stop!\"</i>";
             } else if (other.getLevel() >= self.getLevel()) {
@@ -390,11 +368,11 @@ public class Kat extends BasePersonality {
     }
 
     @Override
-    public String victory(Combat c, Result flag) {
-        Character opponent = c.getOpponent(character);
-        character.arousal.empty();
-        if (c.getStance().vaginallyPenetrated(c, character)) {
-            opponent.add(c, Pheromones.getWith(character, opponent, 5, 10));
+    public String victory(Combat c, Result flag, NPC selfNPC) {
+        Character opponent = c.getOpponent(selfNPC);
+        selfNPC.arousal.empty();
+        if (c.getStance().vaginallyPenetrated(c, selfNPC)) {
+            opponent.add(c, Pheromones.getWith(selfNPC, opponent, 5, 10));
             return "She pounces at you, pushing you onto your back and holds you down with the weight of her body. A cute mew of a smile crosses her face, and her tongue sticks "
                             + "out slightly from between her lips. She is riding your cock in a regular rhythm now, not worried as she knows you are much closer to your climax than her.<br/><br/>"
                             + "As you gasp and wriggle, trying to escape from a loss she reaches out and gently scratching and tickling your nipples.<br/><br/>"
@@ -423,8 +401,8 @@ public class Kat extends BasePersonality {
                             + "<i>\"Wow\"</i> she remarks, easing her grip around your back as you slowly withdraw your fingers. Her tail tickles your side as it curls back around. She "
                             + "stands up and puts her clothes back on before rushing away down the corridor, <i>\"See you around!\"</i>";
         } else {
-            opponent.add(c, Pheromones.getWith(character, opponent, 5, 10));
-            opponent.add(c, Pheromones.getWith(character, opponent, 20, 5, " feral musk"));
+            opponent.add(c, Pheromones.getWith(selfNPC, opponent, 5, 10));
+            opponent.add(c, Pheromones.getWith(selfNPC, opponent, 20, 5, " feral musk"));
             opponent.arousal.restore(opponent.arousal.max() / 3);
             return "As Kat pleasures you, you're quickly reaching the limit of your control. You try to put some distance between you and her to catch your breath. The familiar "
                             + "tightness in your groin warns you that any stimulation will probably set you off right now. Eager to finish you off, Kat pounces on you and grabs your "
@@ -448,10 +426,10 @@ public class Kat extends BasePersonality {
     }
 
     @Override
-    public String defeat(Combat c, Result flag) {
-        Character opponent = c.getOpponent(character);
-        if (c.getStance().vaginallyPenetrated(c, character)) {
-            opponent.add(c, Pheromones.getWith(character, opponent, 5, 10));
+    public String defeat(Combat c, Result flag, NPC selfNPC) {
+        Character opponent = c.getOpponent(selfNPC);
+        if (c.getStance().vaginallyPenetrated(c, selfNPC)) {
+            opponent.add(c, Pheromones.getWith(selfNPC, opponent, 5, 10));
             return "Kat squeaks as you pump your cock inside her over and over, penetrating her deeper with each thrust. She seems to be particularly vulnerable to being fucked"
                             + " doggy style; perhaps it makes her g-spot easier to hit each time you thrust into her.<br/>"
                             + "<i>\"Ah ahhhh eeeepppp!\"</i><br/>"
@@ -468,8 +446,8 @@ public class Kat extends BasePersonality {
                             + "This seems to satisfy her as much, if not more than her first orgasm. Perhaps some primal instinct to breed? Sliding off your cock she plants a quick kiss "
                             + "on your forehead and scurries out of the room, leaving you gasping and pulling yourself back to your feet.";
         } else {
-            opponent.add(c, Pheromones.getWith(character, opponent, 5, 10));
-            opponent.add(c, Pheromones.getWith(character, opponent, 20, 5, " feral musk"));
+            opponent.add(c, Pheromones.getWith(selfNPC, opponent, 5, 10));
+            opponent.add(c, Pheromones.getWith(selfNPC, opponent, 20, 5, " feral musk"));
             return "Kat whimpers in pleasure and drops limp to the floor, either too aroused to resist or simply realizing it's futile. Your hand busily works between her "
                             + "open thighs as she moans and squirms erotically. Her pert, round breasts jiggle with her movements and you can't resist covering them in wet kisses. You "
                             + "part her lower lips with your fingers and gently tickle her sensitive love button. Her back arches and she lets out a loud meow as she climaxes."
@@ -491,10 +469,10 @@ public class Kat extends BasePersonality {
     }
 
     @Override
-    public String draw(Combat c, Result flag) {
-        Character opponent = c.getOpponent(character);
+    public String draw(Combat c, Result flag, NPC selfNPC) {
+        Character opponent = c.getOpponent(selfNPC);
         if (flag == Result.intercourse) {
-            opponent.add(c, Pheromones.getWith(character, opponent, 5, 10));
+            opponent.add(c, Pheromones.getWith(selfNPC, opponent, 5, 10));
             return "Kat lets out a near-constant mewing of pleasure as you thrust repeatedly into her tight pussy. You feel yourself rapidly approaching orgasm and judging by "
                             + "how she's desperately clinging to you and thrashing her tail, she's probably in a similar state. As you feel the pressure building up in your abdomen, you "
                             + "suck on her neck hard enough to give her a hickey. Your cock spurts inside her and she yowls as she hits her climax. <br/><br/>You enjoy your afterglow, holding her "
@@ -508,8 +486,8 @@ public class Kat extends BasePersonality {
                             + "signalling her second climax, you press your lips firmly against hers. <i>\"Thanks,\"</i> She whispers shyly after she recovers. <i>\"You're really sweet. I still can't "
                             + "let you win without a fight, but if we met during the day....\"</i> She blushes deeply and quickly excuses herself.";
         } else {
-            opponent.add(c, Pheromones.getWith(character, opponent, 5, 10));
-            opponent.add(c, Pheromones.getWith(character, opponent, 20, 5, " feral musk"));
+            opponent.add(c, Pheromones.getWith(selfNPC, opponent, 5, 10));
+            opponent.add(c, Pheromones.getWith(selfNPC, opponent, 20, 5, " feral musk"));
             return "Kat has you backed up against a wall, your lips locked in a passionate kiss. Her nimble fingers are wrapped around your stiff cock, pumping on your member as "
                             + "quickly as she can. The feeling of her tongue dancing in your mouth, is driving you to the brink of an orgasm. You're almost certain you're not going to make it.<br/><br/>"
                             + "You reach down, fumbling desperately between her thighs, trying to find her clitoris and make a comeback. It's difficult to concentrate though, as she starts "
@@ -527,17 +505,17 @@ public class Kat extends BasePersonality {
     }
 
     @Override
-    public boolean fightFlight(Character opponent) {
-        return !character.mostlyNude() || opponent.mostlyNude();
+    public boolean fightFlight(Character opponent, NPC selfNPC) {
+        return !selfNPC.mostlyNude() || opponent.mostlyNude();
     }
 
     @Override
-    public boolean attack(Character opponent) {
+    public boolean attack(Character opponent, NPC selfNPC) {
         return true;
     }
 
     @Override
-    public String victory3p(Combat c, Character target, Character assist) {
+    public String victory3p(Combat c, Character target, Character assist, NPC selfNPC) {
         if (target.human()) {
             return "Kat crouches between your legs, watching your erect penis twitch and gently bob. She playfully bats it back and forth, clearly enjoying herself. That is "
                             + "most definitely not a toy, but she seems to disagree. As your boner wags from side to side, she catches it with her mouth, fortunately displaying the "
@@ -565,7 +543,7 @@ public class Kat extends BasePersonality {
     }
 
     @Override
-    public String intervene3p(Combat c, Character target, Character assist) {
+    public String intervene3p(Combat c, Character target, Character assist, NPC selfNPC) {
         if (target.human()) {
             return "Your fight with " + assist.getName()
                             + " goes back and forth for several minutes, leaving you both naked and aroused, but without a clear winner. You back off "
@@ -585,20 +563,20 @@ public class Kat extends BasePersonality {
     }
 
     @Override
-    public boolean fit() {
-        return !character.mostlyNude() && character.getStamina().percent() >= 50
-                        || character.getArousal().percent() > 50;
+    public boolean fit(NPC selfNPC) {
+        return !selfNPC.mostlyNude() && selfNPC.getStamina().percent() >= 50
+                        || selfNPC.getArousal().percent() > 50;
     }
 
     @Override
-    public boolean checkMood(Combat c, Emotion mood, int value) {
-        if (character.getArousal().percent() >= 50) {
-            if (!character.is(Stsflag.feral)) {
-                character.add(c, new Feral(character));
+    public boolean checkMood(Combat c, Emotion mood, int value, NPC selfNPC) {
+        if (selfNPC.getArousal().percent() >= 50) {
+            if (!selfNPC.is(Stsflag.feral)) {
+                selfNPC.add(c, new Feral(selfNPC));
             }
-            if (!character.has(Trait.shameless)) {
-                character.add(Trait.shameless);
-                character.remove(Trait.shy);
+            if (!selfNPC.has(Trait.shameless)) {
+                selfNPC.add(Trait.shameless);
+                selfNPC.remove(Trait.shy);
             }
             switch (mood) {
                 case horny:
@@ -609,10 +587,10 @@ public class Kat extends BasePersonality {
                     return value >= 100;
             }
         } else {
-            if (!character.has(Trait.shy)) {
-                character.add(Trait.shy);
-                character.remove(Trait.shameless);
-                character.removeStatus(Stsflag.feral);
+            if (!selfNPC.has(Trait.shy)) {
+                selfNPC.add(Trait.shy);
+                selfNPC.remove(Trait.shameless);
+                selfNPC.removeStatus(Stsflag.feral);
             }
             switch (mood) {
                 case nervous:

@@ -27,6 +27,8 @@ import nightgames.skills.strategy.DefaultStrategy;
 import nightgames.stance.Behind;
 import nightgames.stance.Neutral;
 import nightgames.stance.Position;
+import nightgames.start.NPCConfiguration;
+import nightgames.start.StartConfiguration;
 import nightgames.status.*;
 import nightgames.trap.Trap;
 
@@ -34,22 +36,28 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class NPC extends Character {
-    public static final NPC noneCharacter = new NPC("none", 1, null);
+    public static final NPC noneCharacter = new NPC("none");
     public Personality ai;
-    public HashMap<Emotion, Integer> emotes;
+    private HashMap<Emotion, Integer> emotes;
     public Emotion mood;
     public Plan plan;
     private boolean fakeHuman;
-    public boolean isStartCharacter = false;
+    public boolean isStartCharacter;
     public boolean available;   // True when the character has been unlocked, whether at the start or by fulfilling unlock requirements.
     private List<CombatStrategy> personalStrategies;
     private List<CombatScene> postCombatScenes;
     private Map<String, List<CharacterLine>> lines;
+    private final CharacterType type;
 
-    public NPC(String name, int level, Personality ai) {
+    public NPC(CharacterType type, String name, int level, Personality ai, NPCConfiguration charConfig,
+                    NPCConfiguration commonConfig) {
         super(name, level);
+        this.type = type;
         this.ai = ai;
+        this.isStartCharacter = ai instanceof BasePersonality && ((BasePersonality) ai).isStartCharacter;
+        this.available = isStartCharacter;
         this.lines = new HashMap<>();
+        ai.constructLines(this);
         fakeHuman = false;
         emotes = new HashMap<>();
         for (Emotion e : Emotion.values()) {
@@ -59,17 +67,44 @@ public class NPC extends Character {
         initialGender = CharacterSex.female;
         personalStrategies = new ArrayList<>();
         postCombatScenes = new ArrayList<>();
+        setupCharacter(charConfig, commonConfig);
+    }
+
+    public NPC(CharacterType type, Personality ai, StartConfiguration startConfiguration) {
+        this(type, ai, startConfiguration != null ?
+                        startConfiguration.findNpcConfig(type.toString()).orElse(null) :
+                        null, startConfiguration != null ? startConfiguration.npcCommon : null);
+    }
+
+    public NPC(CharacterType type, String name, int level, Personality ai) {
+        this(type, name, level, ai, null, null);
+    }
+
+    public NPC(CharacterType type, Personality ai) {
+        this(type, type.toString(), 1, ai);
+    }
+
+    public NPC(String type, Personality ai) {
+        this(CharacterType.get(type), ai);
+    }
+
+    public NPC(String type) {
+        this(type, new BlankPersonality());
+    }
+
+    public NPC(CharacterType type, Personality ai, NPCConfiguration charConfig, NPCConfiguration commonConfig) {
+        this(type, type.toString(), 1, ai, charConfig, commonConfig);
     }
 
     public static Character noneCharacter() {
         return noneCharacter;
     }
 
-    protected void addPersonalStrategy(CombatStrategy strategy) {
+    void addPersonalStrategy(CombatStrategy strategy) {
         personalStrategies.add(strategy);
     }
 
-    protected void addCombatScene(CombatScene scene) {
+    void addCombatScene(CombatScene scene) {
         postCombatScenes.add(scene);
     }
     
@@ -183,7 +218,7 @@ public class NPC extends Character {
         gainTrophy(c, target);
 
         target.defeated(this);
-        c.write(ai.victory(c, flag));
+        c.write(ai.victory(c, flag, this));
         gainAttraction(target, 1);
         target.gainAttraction(this, 2);
     }
@@ -213,7 +248,7 @@ public class NPC extends Character {
         undress(c);
         target.gainTrophy(c, this);
         defeated(target);
-        c.write(ai.defeat(c, flag));
+        c.write(ai.defeat(c, flag, this));
         gainAttraction(target, 2);
         target.gainAttraction(this, 1);
     }
@@ -222,7 +257,7 @@ public class NPC extends Character {
     public void intervene3p(Combat c, Character target, Character assist) {
         gainXP(getAssistXP(target));
         target.defeated(this);
-        c.write(ai.intervene3p(c, target, assist));
+        c.write(ai.intervene3p(c, target, assist, this));
         assist.gainAttraction(this, 1);
     }
 
@@ -238,7 +273,7 @@ public class NPC extends Character {
         target.undress(c);
         gainTrophy(c, target);
         target.defeated(this);
-        c.write(ai.victory3p(c, target, assist));
+        c.write(ai.victory3p(c, target, assist, this));
         gainAttraction(target, 1);
     }
 
@@ -252,7 +287,7 @@ public class NPC extends Character {
     }
 
     @Override
-    public boolean chooseSkill(Combat c) throws InterruptedException {
+    public boolean chooseSkill(Combat c) {
         Character target = c.getOpponent(this);
         if (target.human() && DebugFlags.isDebugOn(DebugFlags.DEBUG_SKILL_CHOICES)) {
             return chooseSkillInteractive(c);
@@ -297,9 +332,9 @@ public class NPC extends Character {
         }
         Skill.filterAllowedSkills(c, available, this, target);
         if (available.size() == 0) {
-            available.add(new Nothing(this));
+            available.add(new Nothing(this.getType()));
         }
-        c.chooseSkill(this, ai.chooseSkill(available, c));
+        c.chooseSkill(this, ai.chooseSkill(available, c, this));
         return false;
     }
 
@@ -353,9 +388,9 @@ public class NPC extends Character {
         }
         Skill.filterAllowedSkills(c, available, this, target);
         if (available.size() == 0) {
-            available.add(new Nothing(this));
+            available.add(new Nothing(this.getType()));
         }
-        return ai.chooseSkill(available, c);
+        return ai.chooseSkill(available, c, this);
     }
 
     @Override
@@ -391,7 +426,7 @@ public class NPC extends Character {
         gainTrophy(c, target);
         target.defeated(this);
         defeated(target);
-        c.write(ai.draw(c, flag));
+        c.write(ai.draw(c, flag, this));
         gainAttraction(target, 4);
         target.gainAttraction(this, 4);
         if (getAffection(target) > 0) {
@@ -544,7 +579,7 @@ public class NPC extends Character {
             available.addAll(moves);
         }
         available.removeIf(a -> a == null || !a.usable(this));
-        return ai.move(available, radar);
+        return ai.move(available, radar, this);
     }
 
     @Override public void doAction(Action action) {
@@ -562,15 +597,15 @@ public class NPC extends Character {
         }
         available.removeIf(a -> a == null || !a.usable(this));
         if (location.humanPresent()) {
-            GUI.gui.message("You notice " + getName() + ai.move(available, radar).execute(this).describe());
+            GUI.gui.message("You notice " + getName() + ai.move(available, radar, this).execute(this).describe());
         } else {
-            ai.move(available, radar).execute(this);
+            ai.move(available, radar, this).execute(this);
         }
     }
 
     @Override
     public FightIntent faceOff(Character opponent, Encounter enc) {
-        if (ai.fightFlight(opponent)) {
+        if (ai.fightFlight(opponent, this)) {
             return FightIntent.fight;
         } else if (has(Item.SmokeBomb)) {
             return FightIntent.smoke;
@@ -581,7 +616,7 @@ public class NPC extends Character {
 
     @Override
     public Encs spy(Character opponent, Encounter enc) {
-        if (ai.attack(opponent)) {
+        if (ai.attack(opponent, this)) {
             return Encs.ambush;
         } else {
             return Encs.wait;
@@ -636,7 +671,7 @@ public class NPC extends Character {
 
     @Override
     public void promptTrap(Encounter enc, Character target, Trap trap) {
-        if (ai.attack(target) && (!target.human() || !DebugFlags.isDebugOn(DebugFlags.DEBUG_SPECTATE))) {
+        if (ai.attack(target, this) && (!target.human() || !DebugFlags.isDebugOn(DebugFlags.DEBUG_SPECTATE))) {
             enc.trap(this, target, trap);
         } else {
             location.endEncounter();
@@ -650,11 +685,11 @@ public class NPC extends Character {
 
     @Override
     public void afterParty() {
-        GUI.gui.message(getRandomLineFor(CharacterLine.NIGHT_LINER, null, GameState.gameState.characterPool.getPlayer()));
+        GUI.gui.message(getRandomLineFor(CharacterLine.NIGHT_LINER, null, GameState.getGameState().characterPool.getPlayer()));
     }
 
     public void daytime(int time) {
-        ai.rest(time);
+        ai.rest(time, this);
     }
 
     @Override
@@ -736,7 +771,7 @@ public class NPC extends Character {
         }
     }
 
-    public Skill prioritize(ArrayList<WeightedSkill> plist) {
+    Skill prioritize(ArrayList<WeightedSkill> plist) {
         if (plist.isEmpty()) {
             return null;
         }
@@ -780,7 +815,7 @@ public class NPC extends Character {
     public Emotion moodSwing(Combat c) {
         Emotion current = mood;
         for (Emotion e : emotes.keySet()) {
-            if (ai.checkMood(c, e, emotes.get(e))) {
+            if (ai.checkMood(c, e, emotes.get(e), this)) {
                 emotes.put(e, 0);
                 // cut all the other emotions by half so that the new mood
                 // persists for a bit
@@ -803,7 +838,7 @@ public class NPC extends Character {
     @Override
     public void eot(Combat c, Character opponent) {
         super.eot(c, opponent);
-        ai.eot(c, opponent);
+        ai.eot(c, this, opponent);
         if (opponent.has(Trait.pheromones) && opponent.getArousal().percent() >= 20 && opponent.rollPheromones(c)) {
             c.write(opponent, Formatter.format("<br/>{other:SUBJECT-ACTION:see} {self:subject} swoon slightly "
                             + "as {self:pronoun-action:get} close to {other:direct-object}. "
@@ -876,14 +911,14 @@ public class NPC extends Character {
     public String getPortrait(Combat c) {
         Disguised disguised = (Disguised) getStatus(Stsflag.disguised);
         if (disguised != null && !c.isEnded()) {
-            return disguised.getTarget().ai.image(c);
+            return disguised.getTarget().ai.image(c, this);
         }
-        return ai.image(c);
+        return ai.image(c, this);
     }
 
     @Override
-    public String getType() {
-        return ai.getType();
+    public CharacterType getType() {
+        return this.type;
     }
 
     @Override public void load(JsonObject object) {
@@ -898,7 +933,7 @@ public class NPC extends Character {
     }
 
     public RecruitmentData getRecruitmentData() {
-        return ai.getRecruitmentData();
+        return ai.getRecruitmentData(this);
     }
 
     @Override
@@ -914,7 +949,7 @@ public class NPC extends Character {
         Set<CommentSituation> applicable = CommentSituation.getApplicableComments(c, this, c.getOpponent(this));
         Set<CommentSituation> forbidden = EnumSet.allOf(CommentSituation.class);
         forbidden.removeAll(applicable);
-        Map<CommentSituation, String> comments = ai.getComments(c);
+        Map<CommentSituation, String> comments = ai.getComments(c, this);
         forbidden.forEach(comments::remove);
         if (comments.isEmpty() || comments.size() == 1 && comments.containsKey(CommentSituation.NO_COMMENT))
             return Optional.empty();
@@ -963,4 +998,26 @@ public class NPC extends Character {
         return lines;
     }
 
+    protected void setupCharacter(NPCConfiguration charConfig, NPCConfiguration commonConfig) {
+        ai.setGrowth(this);
+        ai.applyBasicStats(this);
+        ai.applyStrategy(this);
+
+        // Apply config changes
+        NPCConfiguration mergedConfig = NPCConfiguration.mergeNPCConfigs(charConfig, commonConfig);
+        if (mergedConfig != null) {
+            mergedConfig.apply(this);
+        }
+
+        if (Flag.checkFlag("FutaTime") && initialGender == CharacterSex.female) {
+            initialGender = CharacterSex.herm;
+        }
+        body.makeGenitalOrgans(initialGender);
+        body.finishBody(initialGender);
+        for (int i = 1; i < getLevel(); i++) {
+            getGrowth().levelUp(this);
+        }
+        distributePoints(ai.getPreferredAttributes());
+        getGrowth().addOrRemoveTraits(this);
+    }
 }

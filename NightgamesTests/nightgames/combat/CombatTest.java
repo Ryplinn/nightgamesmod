@@ -32,8 +32,8 @@ public class CombatTest {
 
     @Before public void setUp() throws Exception {
         GameState testState = new TestGameState();
-        self = new BlankPersonality("SelfTestNPC").character;
-        other = new BlankPersonality("OtherTestNPC").character;
+        self = new NPC("SelfTestNPC");
+        other = new NPC("OtherTestNPC");
         Match.match = new Match(Arrays.asList(self, other), new NoModifier());
         Area area = new Area("TestArea", "TestArea description", Movement.beer);
         combat = new Combat(self, other, area);

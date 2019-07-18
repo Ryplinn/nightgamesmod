@@ -46,8 +46,11 @@ public class CharacterPool {
                 try {
                     NPCData data = JsonSourceNPCDataLoader
                                     .load(ResourceLoader.getFileResourceAsStream("characters/" + name));
-                    Personality npc = new CustomNPC(data, npcConfig, commonConfig);
-                    characterPool.put(npc.getCharacter().getType(), npc.getCharacter());
+                    NPCConfiguration npcConfig = startConfig != null ?
+                                    startConfig.findNpcConfig(CustomNPC.TYPE_PREFIX + data.getName()).orElse(null) :
+                                    null;
+                    CustomNPC customNPC = new CustomNPC(data, npcConfig, commonConfig);
+                    characterPool.put(customNPC.getType(), customNPC);
                     System.out.println("Loaded " + name);
                 } catch (JsonParseException e1) {
                     System.err.println("Failed to load NPC " + name);
@@ -60,26 +63,26 @@ public class CharacterPool {
         }
 
         // TODO: Refactor into function and unify with CustomNPC handling.
-        Personality cassie = new Cassie(findNpcConfig("Cassie", startConfig), commonConfig);
-        Personality angel = new Angel(findNpcConfig("Angel", startConfig), commonConfig);
-        Personality reyka = new Reyka(findNpcConfig("Reyka", startConfig), commonConfig);
-        Personality kat = new Kat(findNpcConfig("Kat", startConfig), commonConfig);
-        Personality mara = new Mara(findNpcConfig("Mara", startConfig), commonConfig);
-        Personality jewel = new Jewel(findNpcConfig("Jewel", startConfig), commonConfig);
-        Personality airi = new Airi(findNpcConfig("Airi", startConfig), commonConfig);
-        Personality eve = new Eve(findNpcConfig("Eve", startConfig), commonConfig);
-        Personality maya = new Maya(1, findNpcConfig("Maya", startConfig), commonConfig);
-        Personality yui = new Yui(findNpcConfig("Yui", startConfig), commonConfig);
-        characterPool.put(cassie.getCharacter().getType(), cassie.getCharacter());
-        characterPool.put(angel.getCharacter().getType(), angel.getCharacter());
-        characterPool.put(reyka.getCharacter().getType(), reyka.getCharacter());
-        characterPool.put(kat.getCharacter().getType(), kat.getCharacter());
-        characterPool.put(mara.getCharacter().getType(), mara.getCharacter());
-        characterPool.put(jewel.getCharacter().getType(), jewel.getCharacter());
-        characterPool.put(airi.getCharacter().getType(), airi.getCharacter());
-        characterPool.put(eve.getCharacter().getType(), eve.getCharacter());
-        characterPool.put(maya.getCharacter().getType(), maya.getCharacter());
-        characterPool.put(yui.getCharacter().getType(), yui.getCharacter());
+        NPC cassie = new NPC(CharacterType.get("Cassie"), new Cassie(), startConfig);
+        NPC angel = new NPC(CharacterType.get("Angel"), new Angel(), startConfig);
+        NPC reyka = new NPC(CharacterType.get("Reyka"), new Reyka(), startConfig);
+        NPC kat = new NPC(CharacterType.get("Kat"), new Kat(), startConfig);
+        NPC mara = new NPC(CharacterType.get("Mara"), new Mara(), startConfig);
+        NPC jewel = new NPC(CharacterType.get("Jewel"), new Jewel(), startConfig);
+        NPC airi = new NPC(CharacterType.get("Airi"), new Airi(), startConfig);
+        NPC eve = new NPC(CharacterType.get("Eve"), new Eve(), startConfig);
+        NPC maya = new NPC(CharacterType.get("Maya"), new Maya(1), startConfig);
+        NPC yui = new NPC(CharacterType.get("Yui"), new Yui(), startConfig);
+        characterPool.put(cassie.getType(), cassie);
+        characterPool.put(angel.getType(), angel);
+        characterPool.put(reyka.getType(), reyka);
+        characterPool.put(kat.getType(), kat);
+        characterPool.put(mara.getType(), mara);
+        characterPool.put(jewel.getType(), jewel);
+        characterPool.put(airi.getType(), airi);
+        characterPool.put(eve.getType(), eve);
+        characterPool.put(maya.getType(), maya);
+        characterPool.put(yui.getType(), yui);
     }
 
     /**

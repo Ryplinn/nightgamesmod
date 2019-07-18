@@ -8,11 +8,8 @@ import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Flag;
 import nightgames.items.Item;
-import nightgames.start.NpcConfiguration;
 import nightgames.status.Drowsy;
 import nightgames.status.Energized;
-
-import java.util.Optional;
 
 public class Maya extends BasePersonality {
 
@@ -20,92 +17,84 @@ public class Maya extends BasePersonality {
 
     // For loading from save
     public Maya() {
-        super("Maya", Optional.empty(), Optional.empty(), false);
+        this(1);
     }
 
     public Maya(int playerLevel) {
-        this(playerLevel, Optional.empty(), Optional.empty());
-    }
-
-    public Maya(int playerLevel, Optional<NpcConfiguration> charConfig, Optional<NpcConfiguration> commonConfig) {
-        super("Maya", charConfig, commonConfig, false);
-        character.addLevelsImmediate(null, playerLevel + 20 - character.getLevel());
-        constructLines();
+        super(false);
     }
 
     @Override
-    public void applyStrategy(NPC self) {
-        self.plan = Plan.hunting;
-        self.mood = Emotion.confident;
+    public void applyStrategy(NPC selfNPC) {
+        selfNPC.plan = Plan.hunting;
+        selfNPC.mood = Emotion.confident;
     }
 
     @Override
-    public void applyBasicStats(Character self) {
-        self.outfitPlan.addByID("camisole");
-        self.outfitPlan.addByID("blouse");
-        self.outfitPlan.addByID("lacepanties");
-        self.outfitPlan.addByID("skirt");
-        self.outfitPlan.addByID("sneakers");
-        self.outfitPlan.addByID("socks");
-        self.change();
-        self.modAttributeDontSaveData(Attribute.darkness, 10);
-        self.modAttributeDontSaveData(Attribute.seduction, 15);
-        self.modAttributeDontSaveData(Attribute.cunning, 15);
-        self.modAttributeDontSaveData(Attribute.speed, 2);
-        self.modAttributeDontSaveData(Attribute.power, 7);
-        self.modAttributeDontSaveData(Attribute.hypnotism, 5);
-        self.getStamina().setMax(90);
-        self.getArousal().setMax(150);
-        self.getMojo().setMax(150);
-        self.getWillpower().setMax(100);
+    public void applyBasicStats(NPC selfNPC) {
+        selfNPC.outfitPlan.addByID("camisole");
+        selfNPC.outfitPlan.addByID("blouse");
+        selfNPC.outfitPlan.addByID("lacepanties");
+        selfNPC.outfitPlan.addByID("skirt");
+        selfNPC.outfitPlan.addByID("sneakers");
+        selfNPC.outfitPlan.addByID("socks");
+        selfNPC.change();
+        selfNPC.modAttributeDontSaveData(Attribute.darkness, 10);
+        selfNPC.modAttributeDontSaveData(Attribute.seduction, 15);
+        selfNPC.modAttributeDontSaveData(Attribute.cunning, 15);
+        selfNPC.modAttributeDontSaveData(Attribute.speed, 2);
+        selfNPC.modAttributeDontSaveData(Attribute.power, 7);
+        selfNPC.modAttributeDontSaveData(Attribute.hypnotism, 5);
+        selfNPC.getStamina().setMax(90);
+        selfNPC.getArousal().setMax(150);
+        selfNPC.getMojo().setMax(150);
+        selfNPC.getWillpower().setMax(100);
 
-        self.adjustTraits();
-        self.setTrophy(Item.MayaTrophy);
+        selfNPC.adjustTraits();
+        selfNPC.setTrophy(Item.MayaTrophy);
 
-        self.body.add(BreastsPart.d);
-        self.initialGender = CharacterSex.female;
+        selfNPC.body.add(BreastsPart.d);
+        selfNPC.initialGender = CharacterSex.female;
         preferredCockMod = CockMod.error;
     }
 
     @Override
-    public void setGrowth() {
-        character.getGrowth().stamina = 2;
-        character.getGrowth().arousal = 10;
-        character.getGrowth().willpower = 2.0f;
-        character.getGrowth().bonusStamina = 2;
-        character.getGrowth().bonusArousal = 5;
-        character.getGrowth().addTrait(0, Trait.darkpromises);
-        character.getGrowth().addTrait(0, Trait.tongueTraining1);
-        character.getGrowth().addTrait(0, Trait.tongueTraining2);
-        character.getGrowth().addTrait(0, Trait.limbTraining1);
-        character.getGrowth().addTrait(0, Trait.limbTraining2);
-        character.getGrowth().addTrait(0, Trait.sexTraining1);
-        character.getGrowth().addTrait(0, Trait.sexTraining2);
-        character.getGrowth().addTrait(0, Trait.sexTraining3);
-        character.getGrowth().addTrait(0, Trait.analTraining1);
-        character.getGrowth().addTrait(0, Trait.analTraining2);
-        character.getGrowth().addTrait(0, Trait.Confident);
-        character.getGrowth().addTrait(0, Trait.dickhandler);
-        character.getGrowth().addTrait(0, Trait.tight);
-        character.getGrowth().addTrait(0, Trait.insertion);
-        character.getGrowth().addTrait(0, Trait.holecontrol);
-        character.getGrowth().addTrait(0, Trait.autonomousPussy);
-        character.getGrowth().addTrait(0, Trait.experienced);
-        character.getGrowth().addTrait(0, Trait.responsive);
-        character.getGrowth().addTrait(0, Trait.powerfulhips);
+    public void setGrowth(NPC selfNPC) {
+        selfNPC.getGrowth().stamina = 2;
+        selfNPC.getGrowth().arousal = 10;
+        selfNPC.getGrowth().willpower = 2.0f;
+        selfNPC.getGrowth().bonusStamina = 2;
+        selfNPC.getGrowth().bonusArousal = 5;
+        selfNPC.getGrowth().addTrait(0, Trait.darkpromises);
+        selfNPC.getGrowth().addTrait(0, Trait.tongueTraining1);
+        selfNPC.getGrowth().addTrait(0, Trait.tongueTraining2);
+        selfNPC.getGrowth().addTrait(0, Trait.limbTraining1);
+        selfNPC.getGrowth().addTrait(0, Trait.limbTraining2);
+        selfNPC.getGrowth().addTrait(0, Trait.sexTraining1);
+        selfNPC.getGrowth().addTrait(0, Trait.sexTraining2);
+        selfNPC.getGrowth().addTrait(0, Trait.sexTraining3);
+        selfNPC.getGrowth().addTrait(0, Trait.analTraining1);
+        selfNPC.getGrowth().addTrait(0, Trait.analTraining2);
+        selfNPC.getGrowth().addTrait(0, Trait.Confident);
+        selfNPC.getGrowth().addTrait(0, Trait.dickhandler);
+        selfNPC.getGrowth().addTrait(0, Trait.tight);
+        selfNPC.getGrowth().addTrait(0, Trait.insertion);
+        selfNPC.getGrowth().addTrait(0, Trait.holecontrol);
+        selfNPC.getGrowth().addTrait(0, Trait.autonomousPussy);
+        selfNPC.getGrowth().addTrait(0, Trait.experienced);
+        selfNPC.getGrowth().addTrait(0, Trait.responsive);
+        selfNPC.getGrowth().addTrait(0, Trait.powerfulhips);
 
-        character.getGrowth().addTrait(0, Trait.enchantingVoice);
-        character.getGrowth().addTrait(0, Trait.unnaturalgrowth);
-        character.getGrowth().addTrait(0, Trait.event);
-        character.getGrowth().addTrait(0, Trait.cursed);
+        selfNPC.getGrowth().addTrait(0, Trait.enchantingVoice);
+        selfNPC.getGrowth().addTrait(0, Trait.unnaturalgrowth);
+        selfNPC.getGrowth().addTrait(0, Trait.event);
+        selfNPC.getGrowth().addTrait(0, Trait.cursed);
     }
 
-    private void constructLines() {
-        character.addLine(CharacterLine.BB_LINER, (c, self, other) -> {
-            return "Maya looks at you sympathetically. <i>\"Was that painful? Don't worry, you aren't seriously injured. Our Benefactor protects us.\"</i>";
-        });
+    @Override public void constructLines(NPC selfNPC) {
+        selfNPC.addLine(CharacterLine.BB_LINER, (c, self, other) -> "Maya looks at you sympathetically. <i>\"Was that painful? Don't worry, you aren't seriously injured. Our Benefactor protects us.\"</i>");
 
-        character.addLine(CharacterLine.CHALLENGE, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.CHALLENGE, (c, self, other) -> {
             if (other.human()) {
                 return "Maya smiles softly as she confidently steps toward you. <i>\"Are you simply unfortunate or were you actually hoping to challenge me? What a brave "
                                 + other.boyOrGirl() + ". I'll try not to disappoint you.\"</i>";
@@ -114,51 +103,37 @@ public class Maya extends BasePersonality {
             }
         });
 
-        character.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> {
-            return "Maya smiles, unashamed of her nudity. <i>\"Well done. Not many participants are able to get my clothes off anymore. You'll at least be able to look at a naked woman while you orgasm.\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> "Maya smiles, unashamed of her nudity. <i>\"Well done. Not many participants are able to get my clothes off anymore. You'll at least be able to look at a naked woman while you orgasm.\"</i>");
 
-        character.addLine(CharacterLine.STUNNED_LINER, (c, self, other) -> {
-            return "You think you see something dangerous flicker in Maya's eyes. <i>\"Well done. I may need to get a little serious.\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.STUNNED_LINER, (c, self, other) -> "You think you see something dangerous flicker in Maya's eyes. <i>\"Well done. I may need to get a little serious.\"</i>");
 
-        character.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> {
-            return "Maya gives you a look of gentle disapproval. <i>\"You aren't putting up much of a fight, are you? Aren't you a little overeager to cum?\"</i>";
-        });
-        character.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> {
-            return "";
-        });
+        selfNPC.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> "Maya gives you a look of gentle disapproval. <i>\"You aren't putting up much of a fight, are you? Aren't you a little overeager to cum?\"</i>");
+        selfNPC.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> "");
 
-        character.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> {
-            return "Maya lowers her voice to a smokey tone as she speaks. <i>\"Shall"
-                            + " I show you what experience can do for a sexfighter?\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.TEMPT_LINER, (c, self, other) ->
+                        "Maya lowers her voice to a smokey tone as she speaks. <i>\"Shall"
+                                        + " I show you what experience can do for a sexfighter?\"</i>");
 
-        character.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> {
-            return "<i>\"Oh.. SHIT! Did I just actually... Fuck! Come here and let me return the favor, stud!\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> "<i>\"Oh.. SHIT! Did I just actually... Fuck! Come here and let me return the favor, stud!\"</i>");
 
-        character.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> {
-            return "<i>\"Aaaand there we are. Think you can go again?\"</i>";
-        });
-        character.addLine(CharacterLine.DESCRIBE_LINER, (c, self, other) -> {
-            return "Maya is a beautiful young woman in her early twenties, though she carries"
-                            + " herself with the grace of a more mature lady. She has soft, shapely "
-                            + "breasts, larger than her slim frame would imply. Her waist length, raven "
-                            + "black hair is tied in a single braid down her back. She wears elbow-length"
-                            + " silk gloves, giving the appearance of sensual elegance. Her eyes are a "
-                            + "beautiful dark blue, behind her red-framed glasses, but every so often the "
-                            + "light catches them in a way that makes you think there might "
-                            + "be something dangerous inside.";
-        });
+        selfNPC.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> "<i>\"Aaaand there we are. Think you can go again?\"</i>");
+        selfNPC.addLine(CharacterLine.DESCRIBE_LINER, (c, self, other) ->
+                        "Maya is a beautiful young woman in her early twenties, though she carries"
+                                        + " herself with the grace of a more mature lady. She has soft, shapely "
+                                        + "breasts, larger than her slim frame would imply. Her waist length, raven "
+                                        + "black hair is tied in a single braid down her back. She wears elbow-length"
+                                        + " silk gloves, giving the appearance of sensual elegance. Her eyes are a "
+                                        + "beautiful dark blue, behind her red-framed glasses, but every so often the "
+                                        + "light catches them in a way that makes you think there might "
+                                        + "be something dangerous inside.");
     }
 
     @Override
-    public String victory(Combat c, Result flag) {
-        Character target = c.getOpponent(character);
+    public String victory(Combat c, Result flag, NPC selfNPC) {
+        Character target = c.getOpponent(selfNPC);
         target.add(c, new Drowsy(target));
-        character.arousal.empty();
-        character.add(c, new Energized(character, 10));
+        selfNPC.arousal.empty();
+        selfNPC.add(c, new Energized(selfNPC, 10));
         return "Maya completely outmatches you. How were you suppose to deal with"
                         + " someone this skilled? Your cock spurts a sticky white flag in her hands "
                         + "as you cum. You slump down to the floor as you catch your breath. Maya "
@@ -173,7 +148,7 @@ public class Maya extends BasePersonality {
     }
 
     @Override
-    public String defeat(Combat c, Result flag) {
+    public String defeat(Combat c, Result flag, NPC selfNPC) {
         return "As you pleasure and caress Maya's body, she lets out a lovely gasp. You've "
                         + "finally got her on the ropes, and she knows it. Despite her experience, "
                         + "her body is still subject to her sexual needs. She grasps for your dick "
@@ -198,7 +173,7 @@ public class Maya extends BasePersonality {
     }
 
     @Override
-    public String victory3p(Combat c, Character target, Character assist) {
+    public String victory3p(Combat c, Character target, Character assist, NPC selfNPC) {
         if (target.human()) {
             return "<i>\"Oh my. I don't think the " + assist.boyOrGirl() + " had much of a chance to start with,"
                             + " but now the other girls are picking on him too.\"</i> She looks over "
@@ -213,8 +188,8 @@ public class Maya extends BasePersonality {
                             + "her foot. You can't hold on any more. Your cock throbs and you shoot "
                             + "your seed onto her foot.";
         }
-        if (assist.eligible(character)) {
-            assist.defeated(character);
+        if (assist.eligible(selfNPC)) {
+            assist.defeated(selfNPC);
         }
         return "Maya looks a bit surprised as you restrain her opponent. <i>\"You're going to "
                         + "side with me? I appreciate the thought.\"</i> She kneels down in front of " + target.getName()
@@ -235,7 +210,7 @@ public class Maya extends BasePersonality {
     }
 
     @Override
-    public String intervene3p(Combat c, Character target, Character assist) {
+    public String intervene3p(Combat c, Character target, Character assist, NPC selfNPC) {
         if (target.human()) {
             return "In the middle of your fight with " + assist.getName()
                             + ", you feel an overwhelming presence approach from behind. "
@@ -269,8 +244,8 @@ public class Maya extends BasePersonality {
     }
 
     @Override
-    public String draw(Combat c, Result flag) {
-        Character target = c.getOpponent(character);
+    public String draw(Combat c, Result flag, NPC selfNPC) {
+        Character target = c.getOpponent(selfNPC);
         if (target.human()) {
             Flag.flag(Flag.Clue1);
         }
@@ -331,22 +306,22 @@ public class Maya extends BasePersonality {
     }
 
     @Override
-    public boolean fightFlight(Character opponent) {
-        return fit();
+    public boolean fightFlight(Character opponent, NPC selfNPC) {
+        return fit(selfNPC);
     }
 
     @Override
-    public boolean attack(Character opponent) {
+    public boolean attack(Character opponent, NPC selfNPC) {
         return true;
     }
 
     @Override
-    public boolean fit() {
-        return !character.outfit.isNude();
+    public boolean fit(NPC selfNPC) {
+        return !selfNPC.outfit.isNude();
     }
 
     @Override
-    public boolean checkMood(Combat c, Emotion mood, int value) {
+    public boolean checkMood(Combat c, Emotion mood, int value, NPC selfNPC) {
         switch (mood) {
             case horny:
                 return value >= 50;

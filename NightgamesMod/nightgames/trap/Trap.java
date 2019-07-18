@@ -2,6 +2,7 @@ package nightgames.trap;
 
 import nightgames.areas.Deployable;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Encounter;
 
 import java.util.HashSet;
@@ -10,10 +11,10 @@ import java.util.Set;
 public abstract class Trap implements Deployable {
 
     public static Set<Trap> trapPool;
-    protected Character owner;
+    protected CharacterType owner;
     private final String name;
     private int strength;
-    protected Trap(String name, Character owner) {
+    protected Trap(String name, CharacterType owner) {
         this.name = name;
         this.owner = owner;
         this.setStrength(0);
@@ -49,7 +50,7 @@ public abstract class Trap implements Deployable {
     public abstract String setup(Character owner);
 
     public boolean resolve(Character active) {
-        if (active != owner) {
+        if (active.getType() != owner) {
             trigger(active);
             return true;
         }
@@ -69,8 +70,8 @@ public abstract class Trap implements Deployable {
     }
 
     @Override
-    public final Character owner() {
-        return owner;
+    public final Character getOwner() {
+        return owner.fromPoolGuaranteed();
     }
 
     @Override
@@ -80,7 +81,7 @@ public abstract class Trap implements Deployable {
 
     @Override
     public final boolean equals(Object obj) {
-        return obj != null && getName().equals(obj.toString());
+        return obj instanceof Trap && getName().equals(obj.toString());
     }
     
     public void capitalize(Character attacker, Character victim, Encounter enc) {

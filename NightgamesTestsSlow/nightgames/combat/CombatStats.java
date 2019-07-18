@@ -3,7 +3,6 @@ package nightgames.combat;
 import nightgames.areas.Area;
 import nightgames.characters.*;
 import nightgames.characters.Character;
-import nightgames.combat.Combat;
 import nightgames.daytime.Daytime;
 import nightgames.global.*;
 import nightgames.global.Random;
@@ -88,8 +87,6 @@ public class CombatStats {
     }
 
     private void fight(Character c1, Character c2) throws InterruptedException {
-        ((BasePersonality) ((NPC) c1).ai).character = (NPC) c1;
-        ((BasePersonality) ((NPC) c2).ai).character = (NPC) c2;
         Combat cbt = new Combat(c1, c2, NULL_AREA);
         cbt.runCombatNoDelay();
         counter.incrementAndGet();
@@ -124,7 +121,8 @@ public class CombatStats {
 
         // Thread.sleep(10000);
         for (int i = 5; i < 75; i += 5) {
-            Setup s3 = new Setup(i, new Reyka(), new Kat(), new Eve());
+            Setup s3 = new Setup(i, new NPC("Reyka", new Reyka()), new NPC("Kat", new Kat()),
+                            new NPC("Eve", new Eve()));
             setupTestRun(s3);
             doTestRun();
         }
@@ -177,9 +175,9 @@ public class CombatStats {
     public static class Setup {
 
         private int level;
-        private List<Personality> extraChars;
+        private List<NPC> extraChars;
 
-        public Setup(int level, Personality... extraChars) {
+        public Setup(int level, NPC... extraChars) {
             this.level = level;
             this.extraChars = Arrays.asList(extraChars);
         }
@@ -191,8 +189,7 @@ public class CombatStats {
         }
 
         public List<Character> execute() {
-            extraChars.forEach(
-                            personality -> GameState.gameState.characterPool.newChallenger(personality.getCharacter()));
+            extraChars.forEach(npc -> GameState.getGameState().characterPool.newChallenger(npc));
             List<Character> combatants = new ArrayList<>(Match.getParticipants());
             combatants.removeIf(Character::human);
             combatants.forEach(c -> {
@@ -200,9 +197,9 @@ public class CombatStats {
                     c.addLevelsImmediate(null, 1);
                     Character partner;
                     do {
-                        partner = (Character) nightgames.global.Random.pickRandom(combatants.toArray()).get();
+                        partner = Random.pickRandomGuaranteed(combatants);
                     } while (c == partner);
-                    Daytime.train(partner, c, (Attribute) Random.pickRandom(c.att.keySet().toArray()).get());
+                    Daytime.train(partner, c, Random.pickRandomGuaranteed(new ArrayList<>(c.att.keySet())));
                 }
                 c.modMoney(level * 500);
                 Daytime.day = new Daytime(new Player("<player>"));

@@ -12,7 +12,6 @@ import nightgames.combat.Result;
 import nightgames.daytime.Daytime;
 import nightgames.global.Random;
 import nightgames.items.Item;
-import nightgames.start.NpcConfiguration;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -24,152 +23,146 @@ public class Yui extends BasePersonality {
     private static final long serialVersionUID = 8601852023164119671L;
 
     public Yui() {
-        this(Optional.empty(), Optional.empty());
-    }
-
-    public Yui(Optional<NpcConfiguration> charConfig, Optional<NpcConfiguration> commonConfig) {
         // Yui is a start character so that you can gain affection with her straight off the bat.
         // She is disabled when the game starts
-        super("Yui", charConfig, commonConfig, true);
-        constructLines();
+        super(true);
     }
 
     @Override
-    public void applyStrategy(NPC self) {
-        self.plan = Plan.hunting;
-        self.mood = Emotion.confident;
+    public void applyStrategy(NPC selfNPC) {
+        selfNPC.plan = Plan.hunting;
+        selfNPC.mood = Emotion.confident;
     }
 
     @Override
-    public void applyBasicStats(Character self) {
+    public void applyBasicStats(NPC selfNPC) {
         preferredCockMod = CockMod.error;
-        character.outfitPlan.addByID("sarashi");
-        character.outfitPlan.addByID("shinobigarb");
-        character.outfitPlan.addByID("loincloth");
-        character.outfitPlan.addByID("tabi");
+        selfNPC.outfitPlan.addByID("sarashi");
+        selfNPC.outfitPlan.addByID("shinobigarb");
+        selfNPC.outfitPlan.addByID("loincloth");
+        selfNPC.outfitPlan.addByID("tabi");
 
-        character.change();
-        character.modAttributeDontSaveData(Attribute.power, 1);
-        character.modAttributeDontSaveData(Attribute.seduction, 1);
-        character.modAttributeDontSaveData(Attribute.cunning, 1);
-        character.modAttributeDontSaveData(Attribute.perception, 1);
-        character.modAttributeDontSaveData(Attribute.ninjutsu, 1);
-        character.modAttributeDontSaveData(Attribute.speed, 2);
-        character.getStamina().setMax(100);
-        character.getArousal().setMax(90);
-        character.rank = 1;
-        character.adjustTraits();
+        selfNPC.change();
+        selfNPC.modAttributeDontSaveData(Attribute.power, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.seduction, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.cunning, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.perception, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.ninjutsu, 1);
+        selfNPC.modAttributeDontSaveData(Attribute.speed, 2);
+        selfNPC.getStamina().setMax(100);
+        selfNPC.getArousal().setMax(90);
+        selfNPC.rank = 1;
+        selfNPC.adjustTraits();
 
-        character.getMojo().setMax(130);
+        selfNPC.getMojo().setMax(130);
 
-        character.setTrophy(Item.YuiTrophy);
-        character.body.add(BreastsPart.c);
-        character.initialGender = CharacterSex.female;
+        selfNPC.setTrophy(Item.YuiTrophy);
+        selfNPC.body.add(BreastsPart.c);
+        selfNPC.initialGender = CharacterSex.female;
     }
 
     @Override
-    public void setGrowth() {
-        character.getGrowth().stamina = 3;
-        character.getGrowth().arousal = 7;
-        character.getGrowth().willpower = 1.4f;
-        character.getGrowth().bonusStamina = 2;
-        character.getGrowth().bonusArousal = 2;
+    public void setGrowth(NPC selfNPC) {
+        selfNPC.getGrowth().stamina = 3;
+        selfNPC.getGrowth().arousal = 7;
+        selfNPC.getGrowth().willpower = 1.4f;
+        selfNPC.getGrowth().bonusStamina = 2;
+        selfNPC.getGrowth().bonusArousal = 2;
         preferredAttributes.add(c -> c.get(Attribute.ninjutsu) < 60 && c.getLevel() >= 10 ? Optional.of(Attribute.ninjutsu)  : Optional.empty());
         preferredAttributes.add(c -> c.get(Attribute.cunning) < 50 ? Optional.of(Attribute.cunning) : Optional.empty());
 
-        character.getGrowth().addTrait(0, Trait.obedient);
-        character.getGrowth().addTrait(0, Trait.cute);
-        character.getGrowth().addTrait(0, Trait.lickable);
-        character.getGrowth().addTrait(2, Trait.Sneaky);
-        character.getGrowth().addTrait(5, Trait.dexterous);
-        character.getGrowth().addTrait(8, Trait.tongueTraining1);
-        character.getGrowth().addTrait(11, Trait.sexTraining1);
-        character.getGrowth().addTrait(14, Trait.limbTraining1);
-        character.getGrowth().addTrait(17, Trait.analTraining1);
-        character.getGrowth().addTrait(20, Trait.lacedjuices);
-        character.getGrowth().addTrait(23, Trait.responsive);
-        character.getGrowth().addTrait(26, Trait.graceful);
-        character.getGrowth().addTrait(29, Trait.tongueTraining2);
-        character.getGrowth().addTrait(32, Trait.sexTraining2);
-        character.getGrowth().addTrait(35, Trait.limbTraining2);
-        character.getGrowth().addTrait(38, Trait.analTraining2);
-        character.getGrowth().addTrait(41, Trait.calm);
-        character.getGrowth().addTrait(41, Trait.SexualGroove);
-        character.getGrowth().addTrait(41, Trait.alwaysready);
-        character.getGrowth().addTrait(44, Trait.tongueTraining3);
-        character.getGrowth().addTrait(47, Trait.sexTraining3);
-        character.getGrowth().addTrait(50, Trait.limbTraining3);
-        character.getGrowth().addTrait(53, Trait.analTraining3);
-        character.getGrowth().addTrait(56, Trait.tight);
-        character.getGrowth().addTrait(60, Trait.dickhandler);
+        selfNPC.getGrowth().addTrait(0, Trait.obedient);
+        selfNPC.getGrowth().addTrait(0, Trait.cute);
+        selfNPC.getGrowth().addTrait(0, Trait.lickable);
+        selfNPC.getGrowth().addTrait(2, Trait.Sneaky);
+        selfNPC.getGrowth().addTrait(5, Trait.dexterous);
+        selfNPC.getGrowth().addTrait(8, Trait.tongueTraining1);
+        selfNPC.getGrowth().addTrait(11, Trait.sexTraining1);
+        selfNPC.getGrowth().addTrait(14, Trait.limbTraining1);
+        selfNPC.getGrowth().addTrait(17, Trait.analTraining1);
+        selfNPC.getGrowth().addTrait(20, Trait.lacedjuices);
+        selfNPC.getGrowth().addTrait(23, Trait.responsive);
+        selfNPC.getGrowth().addTrait(26, Trait.graceful);
+        selfNPC.getGrowth().addTrait(29, Trait.tongueTraining2);
+        selfNPC.getGrowth().addTrait(32, Trait.sexTraining2);
+        selfNPC.getGrowth().addTrait(35, Trait.limbTraining2);
+        selfNPC.getGrowth().addTrait(38, Trait.analTraining2);
+        selfNPC.getGrowth().addTrait(41, Trait.calm);
+        selfNPC.getGrowth().addTrait(41, Trait.SexualGroove);
+        selfNPC.getGrowth().addTrait(41, Trait.alwaysready);
+        selfNPC.getGrowth().addTrait(44, Trait.tongueTraining3);
+        selfNPC.getGrowth().addTrait(47, Trait.sexTraining3);
+        selfNPC.getGrowth().addTrait(50, Trait.limbTraining3);
+        selfNPC.getGrowth().addTrait(53, Trait.analTraining3);
+        selfNPC.getGrowth().addTrait(56, Trait.tight);
+        selfNPC.getGrowth().addTrait(60, Trait.dickhandler);
         // mostly feminine face, cute but not quite at Angel's level
-        character.body.add(new FacePart(.1, 2.9));
+        selfNPC.body.add(new FacePart(.1, 2.9));
     }
 
     @Override
-    public Action move(Collection<Action> available, Collection<Movement> radar) {
+    public Action move(Collection<Action> available, Collection<Movement> radar, NPC selfNPC) {
         for (Action act : available) {
             if (act.consider() == Movement.mana) {
                 return act;
             }
         }
-        Action proposed = Decider.parseMoves(available, radar, character);
-        return proposed;
+        return Decider.parseMoves(available, radar, selfNPC);
     }
 
     @Override
-    public void rest(int time) {
-        super.rest(time);
-        if (!(character.has(Item.Tickler) || character.has(Item.Tickler2)) && character.money >= 300) {
-            character.gain(Item.Tickler);
-            character.money -= 300;
+    public void rest(int time, NPC selfNPC) {
+        super.rest(time, selfNPC);
+        if (!(selfNPC.has(Item.Tickler) || selfNPC.has(Item.Tickler2)) && selfNPC.money >= 300) {
+            selfNPC.gain(Item.Tickler);
+            selfNPC.money -= 300;
         }
-        if (!(character.has(Item.Onahole) || character.has(Item.Onahole2)) && character.money >= 300) {
-            character.gain(Item.Onahole);
-            character.money -= 300;
+        if (!(selfNPC.has(Item.Onahole) || selfNPC.has(Item.Onahole2)) && selfNPC.money >= 300) {
+            selfNPC.gain(Item.Onahole);
+            selfNPC.money -= 300;
         }
-        if (!character.has(Item.Onahole2) && character.has(Item.Onahole) && character.money >= 300) {
-            character.remove(Item.Onahole);
-            character.gain(Item.Onahole2);
-            character.money -= 300;
+        if (!selfNPC.has(Item.Onahole2) && selfNPC.has(Item.Onahole) && selfNPC.money >= 300) {
+            selfNPC.remove(Item.Onahole);
+            selfNPC.gain(Item.Onahole2);
+            selfNPC.money -= 300;
         }
-        if (character.rank >= 1) {
-            if (character.money > 0) {
-                Daytime.getDay().visit("Body Shop", character, Random.random(character.money));
+        if (selfNPC.rank >= 1) {
+            if (selfNPC.money > 0) {
+                Daytime.getDay().visit("Body Shop", selfNPC, Random.random(selfNPC.money));
             }
         }
 
-        if (character.money > 0) {
-            Daytime.getDay().visit("XXX Store", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("XXX Store", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("Bookstore", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("Bookstore", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("Hardware Store", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("Hardware Store", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("Black Market", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("Black Market", selfNPC, Random.random(selfNPC.money));
         }
         int r;
 
         for (int i = 0; i < time; i++) {
             r = Random.random(8);
             if (r == 1) {
-                Daytime.getDay().visit("Exercise", this.character, 0);
+                Daytime.getDay().visit("Exercise", selfNPC, 0);
             } else if (r == 0) {
-                Daytime.getDay().visit("Browse Porn Sites", this.character, 0);
+                Daytime.getDay().visit("Browse Porn Sites", selfNPC, 0);
             }
         }
-        Decider.visit(character);
+        Decider.visit(selfNPC);
     }
 
     @Override
-    public String victory(Combat c, Result flag) {
-        if (c.getStance().anallyPenetrated(c, c.getOpponent(character))) {
-            character.arousal.empty();
+    public String victory(Combat c, Result flag, NPC selfNPC) {
+        if (c.getStance().anallyPenetrated(c, c.getOpponent(selfNPC))) {
+            selfNPC.arousal.empty();
             return "Yui fucks you from behind.";
-        } else if (c.getStance().vaginallyPenetrated(c, character)) {
+        } else if (c.getStance().vaginallyPenetrated(c, selfNPC)) {
             return "Yui's expert control of her love canal forces you over the edge. You desperately buckle and moan while trying to at least even the playing field, but a quick squeeze from her well trained "
                             + "vaginal muscles destroys any self control you may have had. Yui looks proudly at you and inquires, <i>\"Master! How is it? The women of the Ishida clan are well trained in the arts of "
                             + "seduction in addition to martial arts. I've been told they're very effective in things like information extraction and subversion! In these peaceful times, it's a bit hard getting hands "
@@ -196,17 +189,17 @@ public class Yui extends BasePersonality {
     }
 
     @Override
-    public String defeat(Combat c, Result flag) {
+    public String defeat(Combat c, Result flag, NPC selfNPC) {
         return "Yui was defeated";
     }
 
     @Override
-    public String draw(Combat c, Result flag) {
+    public String draw(Combat c, Result flag, NPC selfNPC) {
         return "";
     }
 
-    private void constructLines() {
-        character.addLine(CharacterLine.BB_LINER, (c, self, other) -> {
+    @Override public void constructLines(NPC selfNPC) {
+        selfNPC.addLine(CharacterLine.BB_LINER, (c, self, other) -> {
             if (other.human()) {
                 return "Yui seems apologetic. <i>\"I'm sorry Master, but you did order a fair fight.\"</i>";
             } else {
@@ -214,15 +207,11 @@ public class Yui extends BasePersonality {
             }
         });
 
-        character.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> {
-            return "Yui doesn't seem too fazed. <i>\"If Master wanted to see my body, you need just to ask.\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> "Yui doesn't seem too fazed. <i>\"If Master wanted to see my body, you need just to ask.\"</i>");
 
-        character.addLine(CharacterLine.STUNNED_LINER, (c, self, other) -> {
-            return "Yui groans as she falls, <i>\"Master, you are pretty good at this!\"</i>.";
-        });
+        selfNPC.addLine(CharacterLine.STUNNED_LINER, (c, self, other) -> "Yui groans as she falls, <i>\"Master, you are pretty good at this!\"</i>.");
 
-        character.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> {
             if (other.human()) {
                 return "Yui blows you a kiss. <i>\"Master, your servant will comfort you soon!\"</i>";
             } else {
@@ -230,7 +219,7 @@ public class Yui extends BasePersonality {
             }
         });
 
-        character.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> {
+        selfNPC.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> {
             if (other.human()) {
                 return "Yui cups her breasts and looks at you slyly, <i>\"Master, keep your eyes on me.\"</i>";
             } else {
@@ -238,32 +227,24 @@ public class Yui extends BasePersonality {
             }
         });
 
-        character.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> {
-            return "<i>\"Aaahhhh! Masteeerrr!\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> "<i>\"Aaahhhh! Masteeerrr!\"</i>");
 
-        character.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> {
-            return "Yui smiles, <i>\"Don't worry Master, you just need to everything to your humble servant.\"</i>";
-        });
+        selfNPC.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> "Yui smiles, <i>\"Don't worry Master, you just need to everything to your humble servant.\"</i>");
 
-        character.addLine(CharacterLine.CHALLENGE, (c, self, other) -> {
-            return "{self:SUBJECT} bows respectifully towards {other:name-do} before sliding into an easy stance";
-        });
+        selfNPC.addLine(CharacterLine.CHALLENGE, (c, self, other) -> "{self:SUBJECT} bows respectifully towards {other:name-do} before sliding into an easy stance");
 
-        character.addLine(CharacterLine.DESCRIBE_LINER, (c, self, other) -> {
-            return character.subject()
-                            + " is a cute girl with her short blonde hair in a what's almost a pixie cut. However, her long bangs hangs over her blue eyes, and makes it hard for you to tell what's in her mind."
-                            + "She looks a bit strange dressed in what's obviously traditional eastern clothing while being very clearly white. Looking your way, she gives you a polite bow before taking her stance.";
-        });
+        selfNPC.addLine(CharacterLine.DESCRIBE_LINER, (c, self, other) -> selfNPC.subject()
+                        + " is a cute girl with her short blonde hair in a what's almost a pixie cut. However, her long bangs hangs over her blue eyes, and makes it hard for you to tell what's in her mind."
+                        + "She looks a bit strange dressed in what's obviously traditional eastern clothing while being very clearly white. Looking your way, she gives you a polite bow before taking her stance.");
     }
 
     @Override
-    public boolean fightFlight(Character opponent) {
+    public boolean fightFlight(Character opponent, NPC selfNPC) {
         return true;
     }
 
     @Override
-    public boolean attack(Character opponent) {
+    public boolean attack(Character opponent, NPC selfNPC) {
         return true;
     }
 
@@ -272,24 +253,24 @@ public class Yui extends BasePersonality {
     }
 
     @Override
-    public String victory3p(Combat c, Character target, Character assist) {
+    public String victory3p(Combat c, Character target, Character assist, NPC selfNPC) {
         if (target.human()) {
             return "Yui looks apologetic as she bends down and stokes your cock. <i>\"Sorry Master, the rules says a victory is a victory, and I cannot afford to lose with your orders.\"</i>";
         }
         if (target.hasDick()) {
             return String.format(
                             "Yui kneels between %s's legs and takes a hold of %s cock. "
-                                            + "<i>Master, thank you for assisting your servant. Don't worry, this will just take a second...</i> And indeed, %s blows %s load literally within a second of Yui touching her. Wow.",
+                                            + "<i>Master, thank you for assisting your servant. Don't worry, this will just take a second...</i> And indeed, %s blows %s load literally within a second of Yui touching %s. Wow.",
                             target.getName(), target.possessiveAdjective(), target.getName(), target.pronoun(), target.possessiveAdjective());
         }
         return String.format(
                         "Yui kneels between %s's legs and hooks two fingers inside %s pussy. "
-                                        + "<i>Master, thank you for assisting your servant. Don't worry, this will just take a second...</i> And indeed, %s back arches and lets out a wail within a second of Yui touching her. Wow.",
+                                        + "<i>Master, thank you for assisting your servant. Don't worry, this will just take a second...</i> And indeed, %s back arches and lets out a wail within a second of Yui touching %s. Wow.",
                                         target.getName(), target.possessiveAdjective(), target.getName(), target.possessiveAdjective());
 }
 
     @Override
-    public String intervene3p(Combat c, Character target, Character assist) {
+    public String intervene3p(Combat c, Character target, Character assist, NPC selfNPC) {
         return target.human()?"Your fight with " + assist.getName() + " has barely started when you hear a familiar voice call out to you. <i>\"Master! I was hoping you would be here.\"</i> " 
                         + "Before you can react, Yui grabs you and eagerly kisses you on the lips. Your surprise quickly gives way to extreme lightheadedness and drowsiness. " 
                         + "Your legs give out and you collapse into her arms. Did Yui drug you? <i>\"Please forgive this betrayal, Master. You work so hard fighting and training " 
@@ -306,13 +287,13 @@ public class Yui extends BasePersonality {
     }
 
     @Override
-    public boolean fit() {
-        return !character.mostlyNude() && character.getStamina().percent() >= 50
-                        && character.getArousal().percent() <= 50;
+    public boolean fit(NPC selfNPC) {
+        return !selfNPC.mostlyNude() && selfNPC.getStamina().percent() >= 50
+                        && selfNPC.getArousal().percent() <= 50;
     }
 
     @Override
-    public boolean checkMood(Combat c, Emotion mood, int value) {
+    public boolean checkMood(Combat c, Emotion mood, int value, NPC selfNPC) {
         switch (mood) {
             case nervous:
                 return value >= 50;

@@ -91,7 +91,7 @@ public class SaveData {
                     if (data == null) {
                         throw new FileNotFoundException("Could not find data file for custom NPC " + type);
                     }
-                    npcs.add(new CustomNPC(data, charJson).getCharacter());
+                    npcs.add(new CustomNPC(data, charJson));
                 } catch (FileNotFoundException | SaveFile.SaveFileException e) {
                     // TODO: warn the player in-game when NPCs are unable to be loaded.
                     e.printStackTrace();
@@ -105,7 +105,7 @@ public class SaveData {
                     Class<?> personalityClass = Class.forName("nightgames.characters." + type);
                     Constructor ctor = personalityClass.getConstructor();
                     // make new instance
-                    NPC npc = ((Personality) ctor.newInstance()).getCharacter();
+                    NPC npc = new NPC(type, (Personality) ctor.newInstance());
                     npc.load(charJson);
                     npcs.add(npc);
                 } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {

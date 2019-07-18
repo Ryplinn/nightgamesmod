@@ -15,9 +15,7 @@ import nightgames.global.Random;
 import nightgames.global.*;
 import nightgames.items.Item;
 import nightgames.skills.Skill;
-import nightgames.start.NpcConfiguration;
-import nightgames.status.addiction.AddictionSymptom;
-import nightgames.status.addiction.AddictionSymptom.Severity;
+import nightgames.status.addiction.Addiction;
 import nightgames.utilities.MathUtils;
 
 import java.util.*;
@@ -27,114 +25,73 @@ public abstract class BasePersonality implements Personality {
      *
      */
     private static final long serialVersionUID = 2279220186754458082L;
-    private String type;
-    public NPC character;
+    final boolean isStartCharacter;
     protected List<PreferredAttribute> preferredAttributes;
     protected CockMod preferredCockMod;
     protected AiModifiers mods;
 
-    protected BasePersonality(String name, boolean isStartCharacter) {
-        // Make the built-in character
-        type = getClass().getSimpleName();
-        character = new NPC(name, 1, this);
-        character.isStartCharacter = isStartCharacter;
-        character.available = isStartCharacter;
+    protected BasePersonality(boolean isStartCharacter) {
+        this.isStartCharacter = isStartCharacter;
         preferredCockMod = CockMod.error;
         preferredAttributes = new ArrayList<>();
     }
 
-    public BasePersonality(String name, Optional<NpcConfiguration> charConfig,
-                    Optional<NpcConfiguration> commonConfig, boolean isStartCharacter) {
-        this(name, isStartCharacter);
-        setupCharacter(charConfig, commonConfig);
-    }
-
-    protected void setupCharacter(Optional<NpcConfiguration> charConfig, Optional<NpcConfiguration> commonConfig) {
-        setGrowth();
-        applyBasicStats(character);
-        applyStrategy(character);
-
-        // Apply config changes
-        Optional<NpcConfiguration> mergedConfig = NpcConfiguration.mergeOptionalNpcConfigs(charConfig, commonConfig);
-        mergedConfig.ifPresent(cfg -> cfg.apply(character));
-
-        if (Flag.checkFlag("FutaTime") && character.initialGender == CharacterSex.female) {
-            character.initialGender = CharacterSex.herm;
-        }
-        character.body.makeGenitalOrgans(character.initialGender);
-        character.body.finishBody(character.initialGender);
-        for (int i = 1; i < character.getLevel(); i++) {
-            character.getGrowth().levelUp(character);
-        }
-        character.distributePoints(preferredAttributes);
-        character.getGrowth().addOrRemoveTraits(character);
-    }
-
-    public void setCharacter(NPC c) {
-        this.character = c;
-    }
-
-    abstract public void setGrowth();
+    abstract public void setGrowth(NPC selfNPC);
 
     @Override
-    public void rest(int time) {
-        if (!preferredCockMod.equals(CockMod.error) && character.rank > 0) {
-            Optional<BodyPart> optDick = character.body.get("cock")
+    public void rest(int time, NPC selfNPC) {
+        if (!preferredCockMod.equals(CockMod.error) && selfNPC.rank > 0) {
+            Optional<BodyPart> optDick = selfNPC.body.get("cock")
                                                        .stream()
-                                                       .filter(part -> part.moddedPartCountsAs(character, preferredCockMod))
+                                                       .filter(part -> part.moddedPartCountsAs(selfNPC, preferredCockMod))
                                                        .findAny();
             if (optDick.isPresent()) {
                 CockPart part = (CockPart) optDick.get();
-                character.body.remove(part);
-                character.body.add(part.applyMod(preferredCockMod));
+                selfNPC.body.remove(part);
+                selfNPC.body.add(part.applyMod(preferredCockMod));
             }
         }
-        for (AddictionSymptom addiction : character.getAddictions()) {
-            if (addiction.atLeast(Severity.LOW)) {
+        for (Addiction addiction : selfNPC.getAddictions()) {
+            if (addiction.atLeast(Addiction.Severity.LOW)) {
                 Character cause = addiction.getCause();
-                int affection = character.getAffection(cause);
-                int affectionDelta = affection - character.getAffection(GameState.gameState.characterPool.getPlayer());
+                int affection = selfNPC.getAffection(cause);
+                int affectionDelta = affection - selfNPC.getAffection(GameState.getGameState().characterPool.getPlayer());
                 // day 10, this would be (10 + sqrt(10) * 5) * .7 = 18 affection lead to max
                 // day 60, this would be (10 + sqrt(70) * 5) * .7 = 36 affection lead to max
                 double chanceToDoDaytime = .25 + (addiction.getMagnitude() / 2) + MathUtils
                                 .clamp((affectionDelta / (10 + Math.sqrt(Time.getDate()) * 5)), -.7, .7);
                 if (Random.randomdouble() < chanceToDoDaytime) {
-                    addiction.aggravate(null, AddictionSymptom.MED_INCREASE);
+                    addiction.aggravate(null, Addiction.MED_INCREASE);
                     addiction.flagDaytime();
-                    character.gainAffection(cause, 1);
+                    selfNPC.gainAffection(cause, 1);
                     DebugFlags.DEBUG_ADDICTION
-                                    .printf("%s did daytime for %s (%s), chance = %f\n", character.getTrueName(),
+                                    .printf("%s did daytime for %s (%s), chance = %f\n", selfNPC.getTrueName(),
                                                     addiction.getType().name(), cause.getTrueName(), chanceToDoDaytime);
                 }
             }
         }
     }
 
-    public void buyUpTo(Item item, int number) {
-        while (character.money > item.getPrice() && character.count(item) < number) {
-            character.money -= item.getPrice();
-            character.gain(item);
+    protected void buyUpTo(Item item, int number, NPC selfNPC) {
+        while (selfNPC.money > item.getPrice() && selfNPC.count(item) < number) {
+            selfNPC.money -= item.getPrice();
+            selfNPC.gain(item);
         }
     }
 
     @Override
-    public String getType() {
-        return type;
-    }
-
-    @Override
-    public Skill chooseSkill(HashSet<Skill> available, Combat c) {
+    public Skill chooseSkill(HashSet<Skill> available, Combat c, NPC selfNPC) {
         HashSet<Skill> tactic;
         Skill chosen;
-        ArrayList<WeightedSkill> priority = Decider.parseSkills(available, c, character);
+        ArrayList<WeightedSkill> priority = Decider.parseSkills(available, c, selfNPC);
         if (!Flag.checkFlag(Flag.dumbmode)) {
-            chosen = Decider.prioritizeNew(character, priority, c);
+            chosen = Decider.prioritizeNew(selfNPC, priority, c);
         } else {
-            chosen = character.prioritize(priority);
+            chosen = selfNPC.prioritize(priority);
         }
         if (chosen == null) {
             tactic = available;
-            Skill[] actions = tactic.toArray(new Skill[tactic.size()]);
+            Skill[] actions = tactic.toArray(new Skill[0]);
             return actions[Random.random(actions.length)];
         } else {
             return chosen;
@@ -142,35 +99,31 @@ public abstract class BasePersonality implements Personality {
     }
 
     @Override
-    public Action move(Collection<Action> available, Collection<Movement> radar) {
-        Action proposed = Decider.parseMoves(available, radar, character);
-        return proposed;
+    public Action move(Collection<Action> available, Collection<Movement> radar, NPC selfNPC) {
+        return Decider.parseMoves(available, radar, selfNPC);
     }
 
     @Override
-    public void pickFeat() {
-        ArrayList<Trait> available = new ArrayList<Trait>();
-        for (Trait feat : Trait.getFeats(character)) {
-            if (!character.has(feat)) {
+    public void pickFeat(NPC selfNPC) {
+        ArrayList<Trait> available = new ArrayList<>();
+        for (Trait feat : Trait.getFeats(selfNPC)) {
+            if (!selfNPC.has(feat)) {
                 available.add(feat);
             }
         }
         if (available.size() == 0) {
             return;
         }
-        character.add((Trait) available.toArray()[Random.random(available.size())]);
+        selfNPC.add((Trait) available.toArray()[Random.random(available.size())]);
     }
 
     @Override
-    public String image(Combat c) {
-        String fname = getType()
-                                .toLowerCase()
-                        + "_" + character.mood.name() + ".jpg";
-        return fname;
+    public String image(Combat c, NPC selfNPC) {
+        return selfNPC.getType().toString().toLowerCase() + "_" + selfNPC.mood.name() + ".jpg";
     }
 
-    public String defaultImage(Combat c) {
-        return character.getTrueName()
+    public String defaultImage(Combat c, NPC selfNPC) {
+        return selfNPC.getTrueName()
                         .toLowerCase() + "_confident.jpg";
     }
 
@@ -206,30 +159,25 @@ public abstract class BasePersonality implements Personality {
     }
 
     @Override
-    public NPC getCharacter() {
-        return character;
-    }
-
-    @Override
-    public RecruitmentData getRecruitmentData() {
+    public RecruitmentData getRecruitmentData(NPC selfNPC) {
         return null;
     }
 
     @Override
-    public AiModifiers getAiModifiers() {
+    public AiModifiers getAiModifiers(NPC selfNPC) {
         if (mods == null)
-            resetAiModifiers();
+            resetAiModifiers(selfNPC);
         return mods;
     }
     
     @Override
-    public void setAiModifiers(AiModifiers mods) {
+    public void setAiModifiers(AiModifiers mods, NPC selfNPC) {
         this.mods = mods;
     }
     
     @Override
-    public void resetAiModifiers() {
-        mods = AiModifiers.getDefaultModifiers(getType());
+    public void resetAiModifiers(NPC selfNPC) {
+        mods = AiModifiers.getDefaultModifiers(selfNPC.getType());
     }
     
     @Override
@@ -238,13 +186,13 @@ public abstract class BasePersonality implements Personality {
     }
 
     @Override
-    public Map<CommentSituation, String> getComments(Combat c) {
-        Map<CommentSituation, String> all = CommentSituation.getDefaultComments(getType());
+    public Map<CommentSituation, String> getComments(Combat c, NPC selfNPC) {
+        Map<CommentSituation, String> all = CommentSituation.getDefaultComments(selfNPC.getType());
         Map<CommentSituation, String> applicable = new HashMap<>();
         all.entrySet()
            .stream()
            .filter(e -> e.getKey()
-                         .isApplicable(c, character, c.getOpponent(character)))
+                         .isApplicable(c, selfNPC, c.getOpponent(selfNPC)))
            .forEach(e -> applicable.put(e.getKey(), e.getValue()));
         return applicable;
     }

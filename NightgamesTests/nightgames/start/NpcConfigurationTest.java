@@ -48,47 +48,47 @@ public class NpcConfigurationTest {
     }
 
     @Test public void testNpcCreation() {
-        TestAngel angel = new TestAngel(Optional.of(angelConfig), Optional.of(startConfig.npcCommon));
-        assertThat(angel.character.getType(), equalTo("TestAngel"));
-        assertThat(angel.character.att, allOf(Arrays.asList(IsMapContaining.hasEntry(Attribute.power, 13),
+        NPC angel = new NPC(CharacterType.get("TestAngel"), new TestAngel(), startConfig);
+        assertThat(angel.getType(), equalTo("TestAngel"));
+        assertThat(angel.att, allOf(Arrays.asList(IsMapContaining.hasEntry(Attribute.power, 13),
                         IsMapContaining.hasEntry(Attribute.seduction, 20),
                         IsMapContaining.hasEntry(Attribute.cunning, 15),
                         IsMapContaining.hasEntry(Attribute.divinity, 10), IsMapContaining.hasEntry(Attribute.spellcasting, 2),
                         IsMapContaining.hasEntry(Attribute.perception, 6),
                         IsMapContaining.hasEntry(Attribute.speed, 5))));
-        assertThat(angel.character.xp, equalTo(50));
-        assertThat(angel.character.level, equalTo(5));
-        assertThat(angel.character.money, equalTo(5000));
+        assertThat(angel.xp, equalTo(50));
+        assertThat(angel.level, equalTo(5));
+        assertThat(angel.money, equalTo(5000));
     }
 
     @Test public void testBodyMerge() {
-        TestAngel angel = new TestAngel(Optional.of(angelConfig), Optional.of(startConfig.npcCommon));
+        NPC angel = new NPC(CharacterType.get("TestAngel"), new TestAngel(), startConfig);
 
         // Starting stats should match config but breasts should be the same as base Angel if not overwritten in config.
-        assertThat(angel.character.get(Attribute.seduction), equalTo(angelConfig.attributes.get(Attribute.seduction)));
-        assertThat(angel.character.body.getLargestBreasts(),
+        assertThat(angel.get(Attribute.seduction), equalTo(angelConfig.attributes.get(Attribute.seduction)));
+        assertThat(angel.body.getLargestBreasts(),
                         equalTo(TestAngel.baseTestAngelChar.body.getLargestBreasts()));
         assertEquals(TestAngel.baseTestAngelChar.body.getLargestBreasts(),
-                        angel.getCharacter().body.getLargestBreasts());
+                        angel.body.getLargestBreasts());
     }
     
     @Test public void testGenderChange() {
         angelConfig.gender = Optional.of(CharacterSex.male);
-        TestAngel angel = new TestAngel(Optional.of(angelConfig), Optional.of(startConfig.npcCommon));
+        NPC angel = new NPC(CharacterType.get("TestAngel"), new TestAngel(), angelConfig, startConfig.npcCommon);
 
-        assertFalse(angel.character.body.has("pussy"));
-        assertTrue(angel.character.body.has("cock"));
+        assertFalse(angel.body.has("pussy"));
+        assertTrue(angel.body.has("cock"));
         // Changing gender should not change (e.g.) breast size.
-        assertThat(angel.character.body.getLargestBreasts(),
+        assertThat(angel.body.getLargestBreasts(),
                         equalTo(TestAngel.baseTestAngelChar.body.getLargestBreasts()));
     }
 
     @Test public void testClothing() {
-        NpcConfiguration mergedConfig = new NpcConfiguration(angelConfig, startConfig.npcCommon);
-        TestAngel angel = new TestAngel(Optional.of(angelConfig), Optional.of(startConfig.npcCommon));
+        NPCConfiguration mergedConfig = new NPCConfiguration(angelConfig, startConfig.npcCommon);
+        NPC angel = new NPC(CharacterType.get("TestAngel"), new TestAngel(), angelConfig, startConfig.npcCommon);
         Clothing[] expectedClothing = ClothingTable.getIDs(mergedConfig.clothing
                         .orElseThrow(() -> new AssertionError("Merged npc clothing config has no")))
                         .toArray(new Clothing[] {});
-        assertThat(angel.character.outfit.getEquipped(), hasItems(expectedClothing));
+        assertThat(angel.outfit.getEquipped(), hasItems(expectedClothing));
     }
 }

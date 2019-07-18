@@ -8,7 +8,6 @@ import nightgames.combat.Result;
 import nightgames.daytime.Daytime;
 import nightgames.global.Random;
 import nightgames.items.Item;
-import nightgames.start.NpcConfiguration;
 
 import java.util.Optional;
 
@@ -25,7 +24,7 @@ public class TestAngel extends BasePersonality {
      * @return basic TestAngel.
      */
     private static NPC makeBaseAngel() {
-        NPC baseChar = new NPC("TestAngel", 1, null);
+        NPC baseChar = new NPC("TestAngel", new TestAngel());
         baseChar.setName("TestAngel");
         baseChar.level = 1;
 
@@ -71,166 +70,166 @@ public class TestAngel extends BasePersonality {
     }
 
     public TestAngel() {
-        this(Optional.empty(), Optional.empty());
+        super(true);
     }
 
-    public TestAngel(Optional<NpcConfiguration> charConfig, Optional<NpcConfiguration> commonConfig) {
-        super("TestAngel", charConfig, commonConfig, true);
-    }
-
-    public void applyBasicStats(Character self) {
+    public void applyBasicStats(NPC selfNPC) {
         preferredCockMod = CockMod.blessed;
-        self.outfitPlan.addByID("Tshirt");
-        self.outfitPlan.addByID("bra");
-        self.outfitPlan.addByID("thong");
-        self.outfitPlan.addByID("miniskirt");
-        self.outfitPlan.addByID("sandals");
-        self.change();
-        self.att.put(Attribute.seduction, 7);
-        self.att.put(Attribute.perception, 6);
-        self.adjustTraits();
+        selfNPC.outfitPlan.addByID("Tshirt");
+        selfNPC.outfitPlan.addByID("bra");
+        selfNPC.outfitPlan.addByID("thong");
+        selfNPC.outfitPlan.addByID("miniskirt");
+        selfNPC.outfitPlan.addByID("sandals");
+        selfNPC.change();
+        selfNPC.att.put(Attribute.seduction, 7);
+        selfNPC.att.put(Attribute.perception, 6);
+        selfNPC.adjustTraits();
 
-        self.add(Trait.undisciplined);
-        self.add(Trait.lickable);
-        self.setTrophy(Item.AngelTrophy);
-        self.body.add(BreastsPart.dd);
+        selfNPC.add(Trait.undisciplined);
+        selfNPC.add(Trait.lickable);
+        selfNPC.setTrophy(Item.AngelTrophy);
+        selfNPC.body.add(BreastsPart.dd);
         // very feminine face
-        self.body.add(new FacePart(.1, 4.2));
-        self.body.add(PussyPart.generic);
-        self.initialGender = CharacterSex.female;
+        selfNPC.body.add(new FacePart(.1, 4.2));
+        selfNPC.body.add(PussyPart.generic);
+        selfNPC.initialGender = CharacterSex.female;
     }
 
-    @Override public void setGrowth() {
+    @Override public void setGrowth(NPC selfNPC) {
         // Design consideration: Does it make sense for characters modified by a StartConfig to gain attribute
         // points from their initial levels? It will lead to higher stats than specified in the config.
         // TODO: Answer the above question, then adjust tests as needed.
-        character.getGrowth().attributes = new int[]{0};  // Turn stat growth off
-        character.getGrowth().stamina = 1;
-        character.getGrowth().arousal = 5;
-        character.getGrowth().bonusStamina = 1;
-        character.getGrowth().bonusArousal = 4;
-        character.getGrowth().addTrait(3, Trait.alwaysready);
-        character.getGrowth().addTrait(9, Trait.sexTraining1);
-        character.getGrowth().addTrait(12, Trait.expertGoogler);
-        character.getGrowth().addTrait(15, Trait.experienced);
-        character.getGrowth().addTrait(18, Trait.erophage);
-        character.getGrowth().addTrait(20, Trait.skeptical);
-        character.getGrowth().addTrait(20, Trait.zealinspiring);
-        character.getGrowth().addTrait(21, Trait.holecontrol);
-        character.getGrowth().addTrait(24, Trait.insertion);
-        character.getGrowth().addTrait(27, Trait.lacedjuices);
-        character.getGrowth().addTrait(30, Trait.sexTraining2);
-        character.getGrowth().addTrait(33, Trait.RawSexuality);
-        character.getGrowth().addTrait(36, Trait.objectOfWorship);
-        character.getGrowth().addTrait(39, Trait.tight);
-        character.getGrowth().addTrait(42, Trait.desensitized);
-        character.getGrowth().addTrait(45, Trait.enthrallingjuices);
-        character.getGrowth().addTrait(48, Trait.magicEyeArousal);
-        character.getGrowth().addTrait(51, Trait.sexTraining3);
-        character.getGrowth().addTrait(54, Trait.desensitized2);
+        selfNPC.getGrowth().attributes = new int[]{0};  // Turn stat growth off
+        selfNPC.getGrowth().stamina = 1;
+        selfNPC.getGrowth().arousal = 5;
+        selfNPC.getGrowth().bonusStamina = 1;
+        selfNPC.getGrowth().bonusArousal = 4;
+        selfNPC.getGrowth().addTrait(3, Trait.alwaysready);
+        selfNPC.getGrowth().addTrait(9, Trait.sexTraining1);
+        selfNPC.getGrowth().addTrait(12, Trait.expertGoogler);
+        selfNPC.getGrowth().addTrait(15, Trait.experienced);
+        selfNPC.getGrowth().addTrait(18, Trait.erophage);
+        selfNPC.getGrowth().addTrait(20, Trait.skeptical);
+        selfNPC.getGrowth().addTrait(20, Trait.zealinspiring);
+        selfNPC.getGrowth().addTrait(21, Trait.holecontrol);
+        selfNPC.getGrowth().addTrait(24, Trait.insertion);
+        selfNPC.getGrowth().addTrait(27, Trait.lacedjuices);
+        selfNPC.getGrowth().addTrait(30, Trait.sexTraining2);
+        selfNPC.getGrowth().addTrait(33, Trait.RawSexuality);
+        selfNPC.getGrowth().addTrait(36, Trait.objectOfWorship);
+        selfNPC.getGrowth().addTrait(39, Trait.tight);
+        selfNPC.getGrowth().addTrait(42, Trait.desensitized);
+        selfNPC.getGrowth().addTrait(45, Trait.enthrallingjuices);
+        selfNPC.getGrowth().addTrait(48, Trait.magicEyeArousal);
+        selfNPC.getGrowth().addTrait(51, Trait.sexTraining3);
+        selfNPC.getGrowth().addTrait(54, Trait.desensitized2);
 
         preferredAttributes
                         .add(c -> c.get(Attribute.divinity) < 50 ? Optional.of(Attribute.divinity) : Optional.empty());
         preferredAttributes.add(c -> Optional.of(Attribute.seduction));
     }
 
-    @Override public void rest(int time) {
-        if (character.rank >= 1) {
-            if (!character.has(Trait.demigoddess) && character.money >= 1000) {
-                advance();
+    @Override public void rest(int time, NPC selfNPC) {
+        if (selfNPC.rank >= 1) {
+            if (!selfNPC.has(Trait.demigoddess) && selfNPC.money >= 1000) {
+                advance(selfNPC);
             }
         }
-        if (character.has(Trait.demigoddess) && !character.has(Trait.divinity)) {
-            character.add(Trait.divinity);
+        if (selfNPC.has(Trait.demigoddess) && !selfNPC.has(Trait.divinity)) {
+            selfNPC.add(Trait.divinity);
         }
-        super.rest(time);
-        if (!(character.has(Item.Dildo) || character.has(Item.Dildo2)) && character.money >= 250) {
-            character.gain(Item.Dildo);
-            character.money -= 250;
+        super.rest(time, selfNPC);
+        if (!(selfNPC.has(Item.Dildo) || selfNPC.has(Item.Dildo2)) && selfNPC.money >= 250) {
+            selfNPC.gain(Item.Dildo);
+            selfNPC.money -= 250;
         }
-        if (!(character.has(Item.Onahole) || character.has(Item.Onahole2)) && character.money >= 300) {
-            character.gain(Item.Onahole);
-            character.money -= 300;
+        if (!(selfNPC.has(Item.Onahole) || selfNPC.has(Item.Onahole2)) && selfNPC.money >= 300) {
+            selfNPC.gain(Item.Onahole);
+            selfNPC.money -= 300;
         }
-        if (!character.has(Item.Onahole2) && character.has(Item.Onahole) && character.money >= 300) {
-            character.remove(Item.Onahole);
-            character.gain(Item.Onahole2);
-            character.money -= 300;
+        if (!selfNPC.has(Item.Onahole2) && selfNPC.has(Item.Onahole) && selfNPC.money >= 300) {
+            selfNPC.remove(Item.Onahole);
+            selfNPC.gain(Item.Onahole2);
+            selfNPC.money -= 300;
         }
-        if (!(character.has(Item.Strapon) || character.has(Item.Strapon2)) && character.money >= 500) {
-            character.gain(Item.Strapon);
-            character.money -= 500;
+        if (!(selfNPC.has(Item.Strapon) || selfNPC.has(Item.Strapon2)) && selfNPC.money >= 500) {
+            selfNPC.gain(Item.Strapon);
+            selfNPC.money -= 500;
         }
-        if (!character.has(Item.Strapon2) && character.has(Item.Strapon) && character.money >= 500) {
-            character.remove(Item.Strapon);
-            character.gain(Item.Strapon2);
-            character.money -= 500;
+        if (!selfNPC.has(Item.Strapon2) && selfNPC.has(Item.Strapon) && selfNPC.money >= 500) {
+            selfNPC.remove(Item.Strapon);
+            selfNPC.gain(Item.Strapon2);
+            selfNPC.money -= 500;
         }
-        buyUpTo(Item.PriapusDraft, 3);
-        if (character.rank >= 1) {
-            if (!character.has(Trait.lacedjuices) && character.money >= 1000) {
-                character.money -= 1000;
-                character.add(Trait.lacedjuices);
+        buyUpTo(Item.PriapusDraft, 3, selfNPC);
+        if (selfNPC.rank >= 1) {
+            if (!selfNPC.has(Trait.lacedjuices) && selfNPC.money >= 1000) {
+                selfNPC.money -= 1000;
+                selfNPC.add(Trait.lacedjuices);
             }
-            if (character.money > 0) {
-                Daytime.getDay().visit("Body Shop", character, Random.random(character.money));
+            if (selfNPC.money > 0) {
+                Daytime.getDay().visit("Body Shop", selfNPC, Random.random(selfNPC.money));
             }
-            if (character.money > 0) {
-                Daytime.getDay().visit("Black Market", character, Random.random(character.money));
+            if (selfNPC.money > 0) {
+                Daytime.getDay().visit("Black Market", selfNPC, Random.random(selfNPC.money));
             }
-            if (character.money > 0) {
-                Daytime.getDay().visit("Workshop", character, Random.random(character.money));
+            if (selfNPC.money > 0) {
+                Daytime.getDay().visit("Workshop", selfNPC, Random.random(selfNPC.money));
             }
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("XXX Store", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("XXX Store", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("Black Market", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("Black Market", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("Bookstore", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("Bookstore", selfNPC, Random.random(selfNPC.money));
         }
-        if (character.money > 0) {
-            Daytime.getDay().visit("Hardware Store", character, Random.random(character.money));
+        if (selfNPC.money > 0) {
+            Daytime.getDay().visit("Hardware Store", selfNPC, Random.random(selfNPC.money));
         }
-        Decider.visit(character);
+        Decider.visit(selfNPC);
         int r;
         for (int i = 0; i < time; i++) {
             r = Random.random(4);
             if (r == 1) {
-                if (character.has(Trait.fitnessNut)) {
-                    character.getStamina().gain(1);
+                if (selfNPC.has(Trait.fitnessNut)) {
+                    selfNPC.getStamina().gain(1);
                 }
-                character.getStamina().gain(1);
+                selfNPC.getStamina().gain(1);
             } else if (r == 3) {
-                if (character.has(Trait.expertGoogler)) {
-                    character.getArousal().gain(4);
+                if (selfNPC.has(Trait.expertGoogler)) {
+                    selfNPC.getArousal().gain(4);
                 }
-                character.getArousal().gain(6);
+                selfNPC.getArousal().gain(6);
             } else if (r == 2) {
-                if (character.has(Trait.mojoMaster)) {
-                    character.getMojo().gain(1);
+                if (selfNPC.has(Trait.mojoMaster)) {
+                    selfNPC.getMojo().gain(1);
                 }
-                character.getMojo().gain(1);
+                selfNPC.getMojo().gain(1);
             }
         }
     }
 
-    @Override public String victory(Combat c, Result flag) {
-        character.arousal.empty();
-        Character opponent = character.equals(c.p1) ? c.p2 : c.p1;
-        String message = "";
+    @Override public void constructLines(NPC selfNPC) {
+
+    }
+
+    @Override public String victory(Combat c, Result flag, NPC selfNPC) {
+        selfNPC.arousal.empty();
+        Character opponent = selfNPC.equals(c.p1) ? c.p2 : c.p1;
+        String message;
         if (c.getStance().anallyPenetrated(c, opponent)) {
             message =
                             "Angel leans over you as she grinds her hips against yours. <i>\"You're going to come for me, aren't you?\"</i> she purrs into your ear. You shake your head; "
                                             + "no way could you live it down if you came while you had something in your ass. Angel frowns and gives your ass a firm slap. <i>\"No reach around for you "
                                             + "then,\"</i> she snaps. <i>\"We'll just do this the old fashion way.\"</i> She renews her assault on your poor ass and you feel your will slipping. Another solid slap "
                                             + "to ass sends you into a shuddering orgasm. Angel's triumphant laughter rings in your head as the shame makes you flush bright read.<br/><br/>Pulling her "
-                                            + (character.hasDick() ?
-                                            character.body.getRandomCock().describe(character) :
+                                            + (selfNPC.hasDick() ?
+                                            selfNPC.body.getRandomCock().describe(selfNPC) :
                                             "strapon") + " from your ass with a wet slurp Angel flips you over"
-                                            + (!character.hasDick() ? " and removes the strapon." : ". ")
+                                            + (!selfNPC.hasDick() ? " and removes the strapon." : ". ")
                                             + "She then squats down and lines your cock up with her now soaked pussy, <i>\"Do "
                                             + "a good enough good job and I might not tell my friends how you came like a whore while I fucked your ass.\"</i> She gloats with a smug grin on her face. "
                                             + "Appalled at the idea that she might share that information with anyone, you strengthen your resolve to fuck the woman above you.<br/><br/>Several minutes later, "
@@ -238,7 +237,7 @@ public class TestAngel extends BasePersonality {
                                             + "she could have been disappointed with that performance.  You can only gape as you look up to see Angel is gone along with your clothes. You sigh as you "
                                             + "stand and ready yourself to move on. You wouldn't put past Angel to tell her girlfriends regardless of how well you performed, you just hope that's as "
                                             + "far as that information goes.";
-        } else if (c.getStance().inserted(character)) {
+        } else if (c.getStance().inserted(selfNPC)) {
             message =
                             "Angel stares at you in the eye, while expertly thrusting in and out of your slobbering pussy. Your needy cunt quivers as she leans close and gives you a long steamy kiss, "
                                             + "tongue and all. You try to get away from her, but she holds you down and merciless pounds away at your overused pussy. You can tell she is turned on as well, but "
@@ -285,9 +284,9 @@ public class TestAngel extends BasePersonality {
         return message;
     }
 
-    @Override public String defeat(Combat c, Result flag) {
-        Character opponent = c.getOpponent(character);
-        if (c.getStance().vaginallyPenetrated(c, character)) {
+    @Override public String defeat(Combat c, Result flag, NPC selfNPC) {
+        Character opponent = c.getOpponent(selfNPC);
+        if (c.getStance().vaginallyPenetrated(c, selfNPC)) {
             return "You thrust your cock continously into Angel's dripping pussy. Her hot insides feel amazing, but you're sure you have enough of an advantage to risk "
                             + "it. She lets out breathy moans in time to your thrusts and her arms are trembling too much to hold herself up. She's clearly about to cum, you just "
                             + "need to push her over the edge. You maul her soft, heavy boobs and suck on her neck. Angel closes her eyes tightly and whimpers in pleasure. <br/><br/>You keep "
@@ -322,7 +321,7 @@ public class TestAngel extends BasePersonality {
         }
     }
 
-    @Override public String draw(Combat c, Result flag) {
+    @Override public String draw(Combat c, Result flag, NPC selfNPC) {
         if (flag == Result.intercourse) {
             return "Angel pins you on your back, riding you with passion. You're close to the edge, but she's too far gone to take advantage of it. She's fucking you "
                             + "for her own pleasure rather than trying to win. Just as you feel your climax hit, Angel cries out in ecstasy and her pussy tightens to milk your "
@@ -350,15 +349,15 @@ public class TestAngel extends BasePersonality {
                         + "worry if you can't keep up. As long as you keep making me cum, I'll let you be my pet.\"</i>";
     }
 
-    @Override public boolean fightFlight(Character opponent) {
-        return !character.mostlyNude() || opponent.mostlyNude();
+    @Override public boolean fightFlight(Character opponent, NPC selfNPC) {
+        return !selfNPC.mostlyNude() || opponent.mostlyNude();
     }
 
-    @Override public boolean attack(Character opponent) {
+    @Override public boolean attack(Character opponent, NPC selfNPC) {
         return true;
     }
 
-    @Override public String victory3p(Combat c, Character target, Character assist) {
+    @Override public String victory3p(Combat c, Character target, Character assist, NPC selfNPC) {
         if (target.human()) {
             return "Angel looks over your helpless body like a predator ready to feast. She kneels between your legs and teasingly licks your erection. She circles her "
                             + "tongue around the head, coating your penis thoroughly with saliva. When she's satisfied that it is sufficiently lubricated and twitching with need, "
@@ -396,7 +395,7 @@ public class TestAngel extends BasePersonality {
 
     }
 
-    @Override public String intervene3p(Combat c, Character target, Character assist) {
+    @Override public String intervene3p(Combat c, Character target, Character assist, NPC selfNPC) {
         if (target.human()) {
             return "You manage to overwhelm " + assist.getName()
                             + " and bring her to the floor. You're able to grab both her arms and pin her helplessly beneath you. "
@@ -416,25 +415,25 @@ public class TestAngel extends BasePersonality {
         }
     }
 
-    @Override public boolean fit() {
-        return !character.mostlyNude() && character.getStamina().percent() >= 50;
+    @Override public boolean fit(NPC selfNPC) {
+        return !selfNPC.mostlyNude() && selfNPC.getStamina().percent() >= 50;
     }
 
-    public void advance() {
-        character.add(Trait.demigoddess);
-        character.add(Trait.divinity);
-        character.add(Trait.proheels);
-        character.body.addReplace(PussyPart.generic.applyMod(DivineMod.INSTANCE), 1);
-        character.body.addReplace(WingsPart.angelic, 5);
-        character.unequipAllClothing();
-        character.outfitPlan.addByID("translucentshawl");
-        character.outfitPlan.addByID("bikinitop");
-        character.outfitPlan.addByID("bikinibottoms");
-        character.outfitPlan.addByID("highheels");
-        character.modAttributeDontSaveData(Attribute.divinity, 1);
+    private void advance(NPC selfNPC) {
+        selfNPC.add(Trait.demigoddess);
+        selfNPC.add(Trait.divinity);
+        selfNPC.add(Trait.proheels);
+        selfNPC.body.addReplace(PussyPart.generic.applyMod(DivineMod.INSTANCE), 1);
+        selfNPC.body.addReplace(WingsPart.angelic, 5);
+        selfNPC.unequipAllClothing();
+        selfNPC.outfitPlan.addByID("translucentshawl");
+        selfNPC.outfitPlan.addByID("bikinitop");
+        selfNPC.outfitPlan.addByID("bikinibottoms");
+        selfNPC.outfitPlan.addByID("highheels");
+        selfNPC.modAttributeDontSaveData(Attribute.divinity, 1);
     }
 
-    @Override public boolean checkMood(Combat c, Emotion mood, int value) {
+    @Override public boolean checkMood(Combat c, Emotion mood, int value, NPC selfNPC) {
         switch (mood) {
             case horny:
                 return value >= 50;
@@ -446,6 +445,6 @@ public class TestAngel extends BasePersonality {
     }
 
     @Override
-    public void applyStrategy(NPC self) {   
+    public void applyStrategy(NPC selfNPC) {
     }
 }
