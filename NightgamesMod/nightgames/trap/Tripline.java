@@ -2,6 +2,7 @@ package nightgames.trap;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Encounter;
 import nightgames.gui.GUI;
@@ -15,7 +16,7 @@ public class Tripline extends Trap {
         this(null);
     }
     
-    public Tripline(Character owner) {
+    public Tripline(CharacterType owner) {
         super("Tripline", owner);
     }
 
@@ -54,7 +55,7 @@ public class Tripline extends Trap {
 
     @Override
     public String setup(Character owner) {
-        this.owner = owner;
+        this.owner = owner.getType();
         owner.consume(Item.Rope, 1);
         return "You run a length of rope at ankle height. It should trip anyone who isn't paying much attention.";
     }
@@ -66,8 +67,8 @@ public class Tripline extends Trap {
 
     @Override
     public void capitalize(Character attacker, Character victim, Encounter enc) {
-        victim.addNonCombat(new Flatfooted(victim, 1));
-        enc.engage(new Combat(attacker, victim, attacker.location(), new StandingOver(attacker, victim)));
+        victim.addNonCombat(new Flatfooted(victim.getType(), 1));
+        enc.engage(new Combat(attacker, victim, attacker.location(), new StandingOver(attacker.getType(), victim.getType())));
         victim.location().remove(this);
     }
 

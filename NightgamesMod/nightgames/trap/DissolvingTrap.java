@@ -2,6 +2,7 @@ package nightgames.trap;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Encounter;
@@ -11,11 +12,11 @@ import nightgames.status.Flatfooted;
 
 public class DissolvingTrap extends Trap {
     
-    public DissolvingTrap() {
+    DissolvingTrap() {
         this(null);
     }
     
-    public DissolvingTrap(Character owner) {
+    private DissolvingTrap(CharacterType owner) {
         super("Dissolving Trap", owner);
     }
 
@@ -32,7 +33,7 @@ public class DissolvingTrap extends Trap {
             if (target.human()) {
                 if (target.reallyNude()) {
                     GUI.gui.message(
-                                    "Your bare foot hits a tripwire and you brace yourself as liquid rains down on you. You hastely do your best to brush the liquid off, "
+                                    "Your bare foot hits a tripwire and you brace yourself as liquid rains down on you. You hastily do your best to brush the liquid off, "
                                                     + "but after about a minute you realize nothing has happened. Maybe the trap was a dud.");
                 } else {
                     GUI.gui.message(
@@ -62,7 +63,7 @@ public class DissolvingTrap extends Trap {
 
     @Override
     public String setup(Character owner) {
-        this.owner = owner;
+        this.owner = owner.getType();
         owner.consume(Item.Tripwire, 1);
         owner.consume(Item.DisSol, 1);
         owner.consume(Item.Sprayer, 1);
@@ -76,7 +77,7 @@ public class DissolvingTrap extends Trap {
 
     @Override
     public void capitalize(Character attacker, Character victim, Encounter enc) {
-        victim.addNonCombat(new Flatfooted(victim, 1));
+        victim.addNonCombat(new Flatfooted(victim.getType(), 1));
         enc.engage(new Combat(attacker, victim, attacker.location()));
     }
 }

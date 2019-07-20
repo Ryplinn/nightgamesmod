@@ -1,6 +1,7 @@
 package nightgames.trap;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Encounter;
@@ -11,7 +12,7 @@ import nightgames.status.RemoteMasturbation;
 
 public class RemoteControl extends Trap {
 
-    public RemoteControl(Character owner) {
+    public RemoteControl(CharacterType owner) {
         super("Remote Control", owner);
     }
 
@@ -20,8 +21,8 @@ public class RemoteControl extends Trap {
         if (target.human()) {
             String msg = "You see a small, oblong object laying on the floor,"
                             + " and bend over to pick it up. It's black and shiny, but has no"
-                            + " real discernable features. Suddenly a ring of light appears around"
-                            + " the thing, and you freeze in place and hear " + owner.nameOrPossessivePronoun()
+                            + " real discernible features. Suddenly a ring of light appears around"
+                            + " the thing, and you freeze in place and hear " + getOwner().nameOrPossessivePronoun()
                             + " voice in your mind." + " <i>\"Is someone there? Who did I catch? Ah, it's you, "
                             + target.getName() + "! Wonderful!\"</i> Without warning, the hand not holding the weird device"
                             + " flies down towards your crotch and";
@@ -43,12 +44,12 @@ public class RemoteControl extends Trap {
             } else if (target.hasPussy()) {
                 msg += " strokes the outside of your " + target.body.getRandomPussy()
                                                                     .describe(target)
-                                + ". " + owner.nameOrPossessivePronoun() + " experienced, feather-light"
+                                + ". " + getOwner().nameOrPossessivePronoun() + " experienced, feather-light"
                                 + " touch soon gets you lubricated enough to allow your fingers passage"
                                 + " deeper into your folds and the hole in their center. You gasp as "
-                                + owner.subject() + ", by proxy, rubs your clit with 'your'"
+                                + getOwner().subject() + ", by proxy, rubs your clit with 'your'"
                                 + " thumb while probing your pussy with delicate thrusts of 'your' fingers.";
-                otherHand = "between your thighs, working dilligently on your pussy.";
+                otherHand = "between your thighs, working diligently on your pussy.";
             } else {
                 msg += " finds nothing there. <i>\"Oh, right. I forgot. You're really missing out," + target.getName()
                                 + ", you ought to do something about that. Still, this"
@@ -61,13 +62,11 @@ public class RemoteControl extends Trap {
             msg += " \"<i>I'm on my way to you now. Try not to cum before I get there, alright? The Remote Control"
                             + " is not very good at measuring how far along you are. See you soon!</i>\""
                             + " Your mind goes silent again, but your body is still out of your control,"
-                            + " one hand holding the 'Remote Control', as it is appearantly called,"
+                            + " one hand holding the 'Remote Control', as it is apparently called,"
                             + " the other " + otherHand;
             GUI.gui.message(msg);
-        } else {
-
         }
-        target.addNonCombat(new RemoteMasturbation(target, owner));
+        target.addNonCombat(new RemoteMasturbation(target.getType(), owner));
         target.location().opportunity(target, this);
         target.location().alarm = true;
     }
@@ -84,7 +83,7 @@ public class RemoteControl extends Trap {
 
     @Override
     public String setup(Character owner) {
-        this.owner = owner;
+        this.owner = owner.getType();
         owner.consume(Item.RemoteControl, 1);
         return "<b>RemoteControl setup text - should not be displayed.</b>";
     }

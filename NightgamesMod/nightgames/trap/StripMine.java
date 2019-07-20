@@ -2,6 +2,7 @@ package nightgames.trap;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Encounter;
 import nightgames.global.Random;
@@ -13,11 +14,11 @@ import java.util.stream.IntStream;
 
 public class StripMine extends Trap {
     
-    public StripMine() {
+    StripMine() {
         this(null);
     }
     
-    public StripMine(Character owner) {
+    private StripMine(CharacterType owner) {
         super("Strip Mine", owner);
     }
 
@@ -52,7 +53,7 @@ public class StripMine extends Trap {
 
     @Override
     public String setup(Character owner) {
-        this.owner = owner;
+        this.owner = owner.getType();
         owner.consume(Item.Tripwire, 1);
         owner.consume(Item.Battery, 3);
         return "Using the techniques Jett showed you, you rig up a one-time-use clothing destruction device.";
@@ -60,7 +61,7 @@ public class StripMine extends Trap {
 
     @Override
     public void capitalize(Character attacker, Character victim, Encounter enc) {
-        victim.addNonCombat(new Flatfooted(victim, 1));
+        victim.addNonCombat(new Flatfooted(victim.getType(), 1));
         enc.engage(new Combat(attacker, victim, attacker.location()));
         attacker.location().remove(this);
     }

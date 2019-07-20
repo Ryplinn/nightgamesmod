@@ -2,6 +2,7 @@ package nightgames.trap;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.gui.GUI;
 import nightgames.items.Item;
@@ -12,7 +13,7 @@ public class Decoy extends Trap {
         this(null);
     }
     
-    public Decoy(Character owner) {
+    public Decoy(CharacterType owner) {
         super("Decoy", owner);
     }
     
@@ -45,10 +46,10 @@ public class Decoy extends Trap {
 
     @Override
     public String setup(Character owner) {
-        this.owner = owner;
+        this.owner = owner.getType();
         owner.consume(Item.Phone, 1);
         if (owner.human()) {
-            return "Your program a phone to play a prerecorded audio track five minutes from now. It should be noticable from a reasonable distance until someone switches it "
+            return "Your program a phone to play a prerecorded audio track five minutes from now. It should be noticeable from a reasonable distance until someone switches it "
                             + "off.";
         } else {
             return null;

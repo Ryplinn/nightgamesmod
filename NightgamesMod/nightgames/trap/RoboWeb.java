@@ -1,6 +1,7 @@
 package nightgames.trap;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Encounter;
@@ -15,7 +16,7 @@ public class RoboWeb extends Trap {
         this(null);
     }
     
-    public RoboWeb(Character owner) {
+    public RoboWeb(CharacterType owner) {
         super("RoboWeb", owner);
     }
 
@@ -59,7 +60,7 @@ public class RoboWeb extends Trap {
                             Formatter.capitalizeFirstLetter(target.pronoun())));
         }
         target.outfit.undress();
-        target.addNonCombat(new RoboWebbed(target, 100 + getStrength(), this));
+        target.addNonCombat(new RoboWebbed(target.getType(), 100 + getStrength(), this));
         target.location().opportunity(target, this);
         target.location().alarm = true;
     }
@@ -76,7 +77,7 @@ public class RoboWeb extends Trap {
 
     @Override
     public String setup(Character owner) {
-        this.owner = owner;
+        this.owner = owner.getType();
         owner.consume(Item.Tripwire, 1);
         owner.consume(Item.Rope, 4);
         owner.consume(Item.Spring, 2);

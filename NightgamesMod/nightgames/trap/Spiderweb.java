@@ -2,6 +2,7 @@ package nightgames.trap;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.State;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Encounter;
@@ -16,7 +17,7 @@ public class Spiderweb extends Trap {
         this(null);
     }
     
-    public Spiderweb(Character owner) {
+    public Spiderweb(CharacterType owner) {
         super("Spiderweb", owner);
     }
 
@@ -60,7 +61,7 @@ public class Spiderweb extends Trap {
 
     @Override
     public String setup(Character owner) {
-        this.owner = owner;
+        this.owner = owner.getType();
         owner.consume(Item.Tripwire, 1);
         owner.consume(Item.Rope, 4);
         owner.consume(Item.Spring, 2);
@@ -87,7 +88,7 @@ public class Spiderweb extends Trap {
                             + "and sucking it until it's completely hard. Then the teasing starts. She strokes you, rubs you, and licks the head of your dick. She uses every technique to "
                             + "pleasure you, but stops just short of letting you ejaculate. It's maddening. Finally you have to swallow your pride and beg to cum. She pumps you dick in earnest "
                             + "now and fondles your balls. When you cum, you shoot your load onto her face and chest. You hang in the rope web, literally and figuratively drained. "
-                            + attacker.getName() + " " + "gratiously unties you and helps you down.");
+                            + attacker.getName() + " " + "graciously unties you and helps you down.");
         }
         if (victim.getOutfit().getBottomOfSlot(ClothingSlot.bottom) != null) {
             attacker.gain(victim.getTrophy());

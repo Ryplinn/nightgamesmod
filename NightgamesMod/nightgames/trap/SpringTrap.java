@@ -2,6 +2,7 @@ package nightgames.trap;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Encounter;
@@ -15,11 +16,11 @@ import nightgames.status.Winded;
 public class SpringTrap extends Trap {
     
 
-    public SpringTrap() {
+    SpringTrap() {
         this(null);
     }
     
-    public SpringTrap(Character owner) {
+    private SpringTrap(CharacterType owner) {
         super("Spring Trap", owner);
     }
 
@@ -44,7 +45,7 @@ public class SpringTrap extends Trap {
                     m += 20;
                 }
                 target.pain(null, null, m);
-                target.addNonCombat(new Winded(target));
+                target.addNonCombat(new Winded(target.getType()));
             }
             target.location().opportunity(target, this);
         } else if (target.human()) {
@@ -62,7 +63,7 @@ public class SpringTrap extends Trap {
 
     @Override
     public String setup(Character owner) {
-        this.owner = owner;
+        this.owner = owner.getType();
         owner.consume(Item.Rope, 1);
         owner.consume(Item.Spring, 1);
         return "You manage to rig up a makeshift booby trap, which should prove quite unpleasant to any who stumbles upon it.";
@@ -75,8 +76,8 @@ public class SpringTrap extends Trap {
 
     @Override
     public void capitalize(Character attacker, Character victim, Encounter enc) {
-        victim.addNonCombat(new Flatfooted(victim, 1));
-        enc.engage(new Combat(attacker, victim, attacker.location(), new StandingOver(attacker, victim)));
+        victim.addNonCombat(new Flatfooted(victim.getType(), 1));
+        enc.engage(new Combat(attacker, victim, attacker.location(), new StandingOver(attacker.getType(), victim.getType())));
         attacker.location().remove(this);
     }
 

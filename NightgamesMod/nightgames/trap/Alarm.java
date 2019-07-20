@@ -2,6 +2,7 @@ package nightgames.trap;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.gui.GUI;
 import nightgames.items.Item;
 
@@ -11,7 +12,7 @@ public class Alarm extends Trap {
         this(null);
     }
     
-    public Alarm(Character owner) {
+    public Alarm(CharacterType owner) {
         super("Alarm", owner);
     }
 
@@ -40,9 +41,9 @@ public class Alarm extends Trap {
 
     @Override
     public String setup(Character user) {
-        owner = user;
-        owner.consume(Item.Tripwire, 1);
-        owner.consume(Item.Phone, 1);
+        owner = user.getType();
+        getOwner().consume(Item.Tripwire, 1);
+        getOwner().consume(Item.Phone, 1);
         if (user.human()) {
             return "You rig up a disposable phone to a tripwire. When someone trips the wire, it should set of the phone's alarm.";
         } else {

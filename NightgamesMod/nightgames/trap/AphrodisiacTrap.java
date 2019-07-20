@@ -2,6 +2,7 @@ package nightgames.trap;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Encounter;
@@ -12,11 +13,11 @@ import nightgames.status.Horny;
 
 public class AphrodisiacTrap extends Trap {
 
-    public AphrodisiacTrap() {
+    AphrodisiacTrap() {
         this(null);
     }
     
-    public AphrodisiacTrap(Character owner) {
+    private AphrodisiacTrap(CharacterType owner) {
         super("Aphrodisiac Trap", owner);
     }
 
@@ -43,7 +44,7 @@ public class AphrodisiacTrap extends Trap {
                                 target.getName() + " is caught in your trap and sprayed with aphrodisiac. She flushes bright red and presses a hand against her crotch. It seems like "
                                                 + "she'll start masturbating even if you don't do anything.");
             }
-            target.addNonCombat(new Horny(target, (30 + getStrength()) / 10, 10, "Aphrodisiac Trap"));
+            target.addNonCombat(new Horny(target.getType(), (30 + getStrength()) / 10, 10, "Aphrodisiac Trap"));
             target.location().opportunity(target, this);
         }
     }
@@ -56,7 +57,7 @@ public class AphrodisiacTrap extends Trap {
 
     @Override
     public String setup(Character owner) {
-        this.owner = owner;
+        this.owner = owner.getType();
         owner.consume(Item.Tripwire, 1);
         owner.consume(Item.Aphrodisiac, 1);
         owner.consume(Item.Sprayer, 1);
@@ -70,7 +71,7 @@ public class AphrodisiacTrap extends Trap {
 
     @Override
     public void capitalize(Character attacker, Character victim, Encounter enc) {
-        victim.addNonCombat(new Flatfooted(victim, 1));
+        victim.addNonCombat(new Flatfooted(victim.getType(), 1));
         enc.engage(new Combat(attacker, victim, attacker.location()));
         attacker.location().remove(this);
     }

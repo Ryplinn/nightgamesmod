@@ -2,6 +2,7 @@ package nightgames.trap;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Encounter;
@@ -10,11 +11,11 @@ import nightgames.status.Flatfooted;
 
 public class IllusionTrap extends Trap {
 
-    public IllusionTrap() {
+    IllusionTrap() {
         this(null);
     }
     
-    public IllusionTrap(Character owner) {
+    private IllusionTrap(CharacterType owner) {
         super("Illusion Trap", owner);
     }
 
@@ -51,14 +52,14 @@ public class IllusionTrap extends Trap {
 
     @Override
     public String setup(Character owner) {
-        this.owner = owner;
+        this.owner = owner.getType();
         owner.spendMojo(null, 15);
         return "You cast a simple spell that will trigger when someone approaches; an illusion will seduce the trespasser.";
     }
 
     @Override
     public void capitalize(Character attacker, Character victim, Encounter enc) {
-        victim.addNonCombat(new Flatfooted(victim, 1));
+        victim.addNonCombat(new Flatfooted(victim.getType(), 1));
         enc.engage(new Combat(attacker,victim,attacker.location()));
         victim.location().remove(this);
     }
