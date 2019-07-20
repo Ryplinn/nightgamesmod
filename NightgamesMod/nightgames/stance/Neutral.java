@@ -90,16 +90,16 @@ public class Neutral extends Position {
         boolean reversePossible = other.hasDick() && dom.hasPussy();
         if (fuckPossible && reversePossible) {
             if (Random.random(2) == 0) {
-                return new Standing(dom, other);
+                return Optional.of(new Standing(dom.getType(), other.getType()));
             } else {
-                return new Jumped(dom, other);
+                return Optional.of(new Jumped(dom.getType(), other.getType()));
             }
         } else if (fuckPossible) {
-            return new Standing(dom, other);
+            return Optional.of(new Standing(dom.getType(), other.getType()));
         } else if (reversePossible) {
-            return new Jumped(dom, other);
+            return Optional.of(new Jumped(dom.getType(), other.getType()));
         } else {
-            return this;
+            return Optional.empty();
         }
     }
 
@@ -109,19 +109,19 @@ public class Neutral extends Position {
         Character sub = getPartner(c, pitcher);
         if (pitcher.body.getRandomInsertable() == null || !catcher.hasPussy()) {
             // invalid
-            return this;
+            return Optional.empty();
         }
         if (pitcher == dom) {
             // guy is holding girl down, and is the dominant one in the new
             // stance
-            return new Standing(pitcher, catcher);
+            return Optional.of(new Standing(pitcher.getType(), catcher.getType()));
         }
         if (pitcher == sub) {
             // guy is holding girl down, and is the submissive one in the new
             // stance
-            return new Jumped(catcher, pitcher);
+            return Optional.of(new Jumped(catcher.getType(), pitcher.getType()));
         }
-        return this;
+        return Optional.empty();
     }
 
     @Override

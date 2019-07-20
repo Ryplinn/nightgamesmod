@@ -1,15 +1,17 @@
 package nightgames.stance;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
 import java.util.Optional;
 
-public class CoiledSex extends FemdomSexStance {
+public class CoiledSex extends Position {
 
-    public CoiledSex(Character top, Character bottom) {
+    public CoiledSex(CharacterType top, CharacterType bottom) {
         super(top, bottom, Stance.coiled);
+        this.domType = DomType.FEMDOM;
     }
 
     @Override
@@ -19,14 +21,14 @@ public class CoiledSex extends FemdomSexStance {
 
     @Override
     public String describe(Combat c) {
-        if (top.human()) {
-            return "Your limbs are coiled around " + bottom.nameOrPossessivePronoun() + " body and "
-                            + bottom.possessiveAdjective() + " cock is inside you.";
+        if (getTop().human()) {
+            return "Your limbs are coiled around " + getBottom().nameOrPossessivePronoun() + " body and "
+                            + getBottom().possessiveAdjective() + " cock is inside you.";
         } else {
             return String.format("%s on top of %s with %s cock trapped in %s pussy and %s face smothered in %s cleavage.",
-                            bottom.subjectAction("are", "is"), top.nameDirectObject(),
-                            bottom.possessiveAdjective(), top.possessiveAdjective(),
-                            bottom.possessiveAdjective(), top.possessiveAdjective());
+                            getBottom().subjectAction("are", "is"), getTop().nameDirectObject(),
+                            getBottom().possessiveAdjective(), getTop().possessiveAdjective(),
+                            getBottom().possessiveAdjective(), getTop().possessiveAdjective());
         }
     }
 
@@ -37,7 +39,7 @@ public class CoiledSex extends FemdomSexStance {
 
     @Override
     public boolean mobile(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
@@ -47,27 +49,27 @@ public class CoiledSex extends FemdomSexStance {
 
     @Override
     public boolean dom(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
     public boolean sub(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
     public boolean reachTop(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
     public boolean reachBottom(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
     public boolean prone(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
@@ -77,15 +79,15 @@ public class CoiledSex extends FemdomSexStance {
 
     @Override
     public Optional<Position> insertRandom(Combat c) {
-        return new Mount(top, bottom);
+        return Optional.of(new Mount(top, bottom));
     }
 
     @Override
     public Position reverse(Combat c, boolean writeMessage) {
         if (writeMessage) {
-            c.write(bottom, Formatter.format(
+            c.write(getBottom(), Formatter.format(
                             "In a desperate gamble for dominance, {self:subject} piston wildly into {other:name-do}, making {other:direct-object} yelp and breaking {other:possessive} concentration. Shaking off {other:possessive} limbs coiled around {self:direct-object}, {self:subject} grab ahold of {other:possessive} legs and swing into a missionary position.",
-                            bottom, top));
+                            getBottom(), getTop()));
         }
         return new Missionary(bottom, top);
     }

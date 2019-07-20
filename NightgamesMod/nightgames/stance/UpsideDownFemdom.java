@@ -1,14 +1,16 @@
 package nightgames.stance;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
 import java.util.Optional;
 
-public class UpsideDownFemdom extends FemdomSexStance {
-    public UpsideDownFemdom(Character top, Character bottom) {
+public class UpsideDownFemdom extends Position {
+    public UpsideDownFemdom(CharacterType top, CharacterType bottom) {
         super(top, bottom, Stance.upsidedownfemdom);
+        this.domType = DomType.FEMDOM;
     }
 
     @Override
@@ -18,13 +20,13 @@ public class UpsideDownFemdom extends FemdomSexStance {
 
     @Override
     public String describe(Combat c) {
-        if (top.human()) {
-            return "You are holding " + bottom.getName()
-                            + " upsidedown by her legs while fucking her cock with your slit.";
+        if (getTop().human()) {
+            return "You are holding " + getBottom().getName()
+                            + " upside-down by her legs while fucking her cock with your slit.";
         } else {
-            return String.format("%s is holding %s upsidedown by %s legs while fucking %s cock with %s slit.",
-                            top.subject(), bottom.nameDirectObject(), bottom.possessiveAdjective(),
-                            bottom.possessiveAdjective(), top.possessiveAdjective());
+            return String.format("%s is holding %s upside-down by %s legs while fucking %s cock with %s slit.",
+                            getTop().subject(), getBottom().nameDirectObject(), getBottom().possessiveAdjective(),
+                            getBottom().possessiveAdjective(), getTop().possessiveAdjective());
         }
     }
 
@@ -35,32 +37,32 @@ public class UpsideDownFemdom extends FemdomSexStance {
 
     @Override
     public boolean mobile(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
     public boolean kiss(Character c, Character target) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
     public boolean dom(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
     public boolean sub(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
     public boolean reachTop(Character c) {
-        return c != top && c != bottom;
+        return c.getType() != top && c.getType() != bottom;
     }
 
     @Override
     public boolean facing(Character c, Character target) {
-        return (c != bottom && c != top) || (target != bottom && target != top);
+        return (c.getType() != bottom && c.getType() != top) || (target.getType() != bottom && target.getType() != top);
     }
 
     @Override
@@ -70,7 +72,7 @@ public class UpsideDownFemdom extends FemdomSexStance {
 
     @Override
     public boolean prone(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
@@ -80,23 +82,23 @@ public class UpsideDownFemdom extends FemdomSexStance {
 
     @Override
     public Optional<Position> insertRandom(Combat c) {
-        return new StandingOver(top, bottom);
+        return Optional.of(new StandingOver(top, bottom));
     }
 
     @Override
     public Position reverse(Combat c, boolean writeMessage) {
         if (writeMessage) {
-            if (bottom.human()) {
-                c.write(bottom, Formatter.format(
+            if (getBottom().human()) {
+                c.write(getBottom(), Formatter.format(
                                 "Summoning your remaining strength, you hold your arms up against the floor and use your hips to tip {other:name-do} off-balance with self dick still held inside of {other:possessive}. "
                                                 + "{other:SUBJECT} lands on the floor with you on top of {other:direct-object} in a missionary position.",
-                                bottom, top));
+                                getBottom(), getTop()));
             } else {
-                c.write(bottom, Formatter.format(
+                c.write(getBottom(), Formatter.format(
                                 "{self:SUBJECT} suddenly pushes against the floor and knocks {other:name-do} to the ground with {self:possessive} hips. "
                                                 + "{other:PRONOUN-ACTION:land} on the floor with {self:name-do} on top of"
                                                 + " {other:direct-object}, fucking {other:direct-object} in a missionary position.",
-                                bottom, top));
+                                getBottom(), getTop()));
             }
         }
         return new UpsideDownMaledom(bottom, top);

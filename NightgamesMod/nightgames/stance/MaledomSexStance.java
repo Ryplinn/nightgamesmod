@@ -1,7 +1,6 @@
 package nightgames.stance;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -14,15 +13,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class MaledomSexStance extends Position {
-    public MaledomSexStance(CharacterType top, CharacterType bottom, Stance stance) {
-        super(top, bottom, stance);
-    }
-
+public class MaledomSexStance implements DomHelper {
     @Override
-    public float priorityMod(Character self) {
+    public float priorityMod(Character self, Position position) {
         float priority = 0;
-        priority += getSubDomBonus(self, 4.0f);
+        priority += position.getSubDomBonus(self, 4.0f);
         if (self.hasPussy()) {
             priority += self.body.getRandomPussy().priority(self);
         }
@@ -33,57 +28,57 @@ public abstract class MaledomSexStance extends Position {
     }
 
     @Override
-    public Optional<Position> checkOngoing(Combat c) {
-        Character inserter = inserted(getTop()) ? getTop() : getBottom();
-        Character inserted = inserted(getTop()) ? getBottom() : getTop();
+    public Optional<Position> checkOngoing(Combat c, Position position) {
+        Character inserter = inserted(position.getTop(), position) ? position.getTop() : position.getBottom();
+        Character inserted = inserted(position.getTop(), position) ? position.getBottom() : position.getTop();
 
-        Optional<Position> newStance = dickMissing(c, inserter, inserted);
+        Optional<Position> newStance = position.dickMissing(c, inserter, inserted);
         if (!newStance.isPresent()) {
-            newStance = pussyMissing(c, inserter, inserted);
+            newStance = position.pussyMissing(c, inserter, inserted);
         }
         return newStance;
     }
 
     @Override
-    public boolean oral(Character c, Character target) {
+    public boolean oral(Character c, Character target, Position position) {
         return false;
     }
 
     @Override
-    public boolean inserted(Character c) {
-        return c.getType() == top;
+    public boolean inserted(Character c, Position position) {
+        return c.getType() == position.top;
     }
 
     @Override
-    public boolean feet(Character c, Character target) {
+    public boolean feet(Character c, Character target, Position position) {
         return false;
     }
 
     @Override
-    public List<BodyPart> topParts(Combat c) {
-        return Stream.of(getDomSexCharacter().body.getRandomInsertable()).filter(part -> part != null && part.present())
+    public List<BodyPart> topParts(Position position) {
+        return Stream.of(position.getDomSexCharacter().body.getRandomInsertable()).filter(part -> part != null && part.present())
                         .collect(Collectors.toList());
     }
 
     @Override
-    public List<BodyPart> bottomParts() {
-        return Stream.of(getBottom().body.getRandomPussy()).filter(part -> part != null && part.present())
+    public List<BodyPart> bottomParts(Position position) {
+        return Stream.of(position.getBottom().body.getRandomPussy()).filter(part -> part != null && part.present())
                         .collect(Collectors.toList());
     }
 
     @Override
-    public double pheromoneMod(Character self) {
+    public double pheromoneMod(Character self, Position position) {
         return 2;
     }
     
     @Override
-    public int distance() {
+    public int distance(Position position) {
         return 1;
     }
 
     @Override
-    public void struggle(Combat c, Character struggler) {
-        Character opponent = getPartner(c, struggler);
+    public void struggle(Combat c, Character struggler, Position position) {
+        Character opponent = position.getPartner(c, struggler);
         boolean knotted = opponent.is(Stsflag.knotted);
 
         int selfM = Random.random(6, 11);
@@ -104,12 +99,11 @@ public abstract class MaledomSexStance extends Position {
         if (!opponent.has(Trait.strapped)) {
             opponent.body.pleasure(struggler, struggler.body.getRandomPussy(), opponent.body.getRandomCock(), targM, c);            
         }
-        super.struggle(c, struggler);
     }
 
     @Override
-    public void escape(Combat c, Character escapee) {
-        Character opponent = getPartner(c, escapee);
+    public void escape(Combat c, Character escapee, Position position) {
+        Character opponent = position.getPartner(c, escapee);
         boolean knotted = opponent.is(Stsflag.knotted);
 
         int selfM = Random.random(6, 11);
@@ -131,6 +125,5 @@ public abstract class MaledomSexStance extends Position {
         if (!opponent.has(Trait.strapped)) {
             opponent.body.pleasure(escapee, escapee.body.getRandomPussy(), opponent.body.getRandomCock(), targM, c);            
         }
-        super.escape(c, escapee);
     }
 }

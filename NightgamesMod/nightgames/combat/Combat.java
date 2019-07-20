@@ -650,14 +650,16 @@ public class Combat extends Observable implements Cloneable {
                 // Drainer needs to get on top after winning.
                 if (!getStance().havingSex(this, drainer) || !getStance().dom(drainer)) {
                     Position mountStance = new Mount(drainer.getType(), drained.getType());
-                    if (mountStance.insert(this, drained, drainer) != mountStance) {
+                    Optional<Position> drainedDick = mountStance.insert(this, drained, drainer);
+                    Optional<Position> drainerDick = mountStance.insert(this, drainer, drainer);
+                    if (drainedDick.isPresent()) {
                         write(drainer, Formatter.format("With {other:name-do} defeated and unable to fight back, {self:subject-action:climb|climbs} "
                                         + "on top of {other:direct-object} and {self:action:insert} {other:possessive} cock into {self:reflective}.", drainer, drained));
-                        setStance(mountStance.insert(this, drained, drainer));
-                    } else if (mountStance.insert(this, drainer, drainer) != mountStance) {
+                        setStance(drainedDick.get());
+                    } else if (drainerDick.isPresent()) {
                         write(drainer, Formatter.format("With {other:name-do} defeated and unable to fight back, {self:subject-action:climb|climbs} "
                                         + "on top of {other:direct-object} and {self:action:insert} {self:reflective} into {other:possessive} soaking vagina.", drainer, drained));
-                        setStance(mountStance.insert(this, drainer, drainer));
+                        setStance(drainerDick.get());
                     } else if (drainer.hasPussy() && drained.hasPussy()) {
                         write(drainer, Formatter.format("With {other:name-do} defeated and unable to fight back, {self:subject-action:climb|climbs} "
                                         + "on top of {other:direct-object} and {self:action:press} {self:possessive} wet snatch on top of {other:poss-pronoun}.", drainer, drained));
@@ -1369,7 +1371,9 @@ public class Combat extends Observable implements Cloneable {
                 c.otherCombatants.add(pet.cloneWithOwner(c.p2));
             }
         }
-        c.getStance().setOtherCombatants(c.otherCombatants);
+        if (getStance() instanceof  Threesome) {
+            ((Threesome) c.getStance()).setOtherCombatants(c.otherCombatants);
+        }
         c.postCombatScenesSeen = this.postCombatScenesSeen;
         c.cloned = true;
         return c;

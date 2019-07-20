@@ -91,7 +91,7 @@ public class Anal extends AnalSexStance {
 
     @Override
     public Optional<Position> insertRandom(Combat c) {
-        return new Behind(top, bottom);
+        return Optional.of(new Behind(top, bottom));
     }
 
     @Override
@@ -107,7 +107,7 @@ public class Anal extends AnalSexStance {
                 c.write(inserted.getName() + " sighs with relief with "
                                 + inserter.nameOrPossessivePronoun() + " phallus gone.");
             }
-            newStance = Optional.ofNullable(insertRandom(c));
+            newStance = insertRandom(c);
         }
         if (inserted.body.getRandom("ass") == null) {
             if (inserted.human()) {
@@ -118,7 +118,7 @@ public class Anal extends AnalSexStance {
                                 " dick pops out of " + inserted.getName() 
                                 + " as "+inserted.possessiveAdjective()+" asshole shrinks and disappears.");
             }
-            newStance = Optional.ofNullable(insertRandom(c));
+            newStance = insertRandom(c);
         }
         return newStance;
     }

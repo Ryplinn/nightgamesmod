@@ -1,31 +1,32 @@
 package nightgames.stance;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class TribadismStance extends Position {
-    public TribadismStance(Character top, Character bottom) {
+    public TribadismStance(CharacterType top, CharacterType bottom) {
         super(top, bottom, Stance.trib);
     }
 
     @Override
     public String describe(Combat c) {
-        return top.subjectAction("are", "is") + " holding " + bottom.nameOrPossessivePronoun() + " legs across "
-                        + top.possessiveAdjective() + " chest while grinding " + top.possessiveAdjective()
-                        + " soaked cunt into " + bottom.possessiveAdjective() + " pussy.";
+        return getTop().subjectAction("are", "is") + " holding " + getBottom().nameOrPossessivePronoun() + " legs across "
+                        + getTop().possessiveAdjective() + " chest while grinding " + getTop().possessiveAdjective()
+                        + " soaked cunt into " + getBottom().possessiveAdjective() + " pussy.";
     }
 
     @Override
     public boolean mobile(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
@@ -45,12 +46,12 @@ public class TribadismStance extends Position {
 
     @Override
     public boolean dom(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
     public boolean sub(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
@@ -60,12 +61,12 @@ public class TribadismStance extends Position {
 
     @Override
     public boolean reachBottom(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
     public boolean prone(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
@@ -85,35 +86,35 @@ public class TribadismStance extends Position {
 
     @Override
     public Optional<Position> insertRandom(Combat c) {
-        return new Mount(top, bottom);
+        return Optional.of(new Mount(top, bottom));
     }
 
     @Override
     public List<BodyPart> bottomParts() {
-        return Arrays.asList(bottom.body.getRandomPussy()).stream().filter(part -> part != null && part.present())
+        return Stream.of(getBottom().body.getRandomPussy()).filter(part -> part != null && part.present())
                         .collect(Collectors.toList());
     }
 
     @Override
-    public List<BodyPart> topParts(Combat c) {
-        return Arrays.asList(top.body.getRandomPussy()).stream().filter(part -> part != null && part.present())
+    public List<BodyPart> topParts() {
+        return Stream.of(getTop().body.getRandomPussy()).filter(part -> part != null && part.present())
                         .collect(Collectors.toList());
     }
 
     @Override
     public Position reverse(Combat c, boolean writeMessage) {
         if (writeMessage) {
-            c.write(bottom, Formatter.format(
+            c.write(getBottom(), Formatter.format(
                             "In a desperate gamble for dominance, {self:subject} shakes {self:possessive} hips wildly, making {other:direct-object} yelp and breaking {other:possessive} concentration. "
                             + "Taking that chance, {self:pronoun-action:swing} {self:possessive} legs on top of {other:direct-object} and take control for {self:reflective}.",
-                            bottom, top));
+                            getBottom(), getTop()));
         }
         return new TribadismStance(bottom, top);
     }
 
     @Override
     public double pheromoneMod(Character self) {
-        if (self == bottom) {
+        if (self.getType() == bottom) {
             return 10;
         }
         return 2;

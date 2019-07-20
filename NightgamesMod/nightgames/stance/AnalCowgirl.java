@@ -76,7 +76,7 @@ public class AnalCowgirl extends AnalSexStance {
 
     @Override
     public Optional<Position> insertRandom(Combat c) {
-        return new Mount(top, bottom);
+        return Optional.of(new Mount(top, bottom));
     }
 
     @Override
@@ -102,7 +102,7 @@ public class AnalCowgirl extends AnalSexStance {
     }
 
     @Override
-    public List<BodyPart> topParts(Combat c) {
+    public List<BodyPart> topParts() {
         return Stream.of(getTop().body.getRandomAss()).filter(part -> part != null && part.present())
                         .collect(Collectors.toList());
     }

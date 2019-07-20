@@ -1,9 +1,5 @@
 package nightgames.stance;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
@@ -13,17 +9,14 @@ import nightgames.pet.PetCharacter;
 import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
-public class ReverseXHFDaisyChainThreesome extends FemdomSexStance {
-    private CharacterType domSexCharacter;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+public class ReverseXHFDaisyChainThreesome extends Threesome {
     public ReverseXHFDaisyChainThreesome(CharacterType domSexCharacter, CharacterType top, CharacterType bottom) {
-        super(top, bottom, Stance.cowgirl);
-        this.domSexCharacter = domSexCharacter;
-    }
-
-    @Override
-    public Character getDomSexCharacter() {
-        return domSexCharacter.fromPoolGuaranteed();
+        super(domSexCharacter,top, bottom, Stance.cowgirl);
+        this.domType = DomType.FEMDOM;
     }
 
     @Override
@@ -52,21 +45,12 @@ public class ReverseXHFDaisyChainThreesome extends FemdomSexStance {
                 return Optional.of(new Doggy(top, bottom));
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
     public float priorityMod(Character self) {
         return super.priorityMod(self) + 3;
-    }
-
-    @Override
-    public void setOtherCombatants(List<? extends Character> others) {
-        for (Character other : others) {
-            if (other.getType().equals(domSexCharacter)) {
-                domSexCharacter = other.getType();
-            }
-        }
     }
 
     @Override
@@ -170,7 +154,7 @@ public class ReverseXHFDaisyChainThreesome extends FemdomSexStance {
 
     @Override
     public Optional<Position> insertRandom(Combat c) {
-        return new Behind(top, bottom);
+        return Optional.of(new Behind(top, bottom));
     }
 
     @Override

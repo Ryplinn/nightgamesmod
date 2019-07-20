@@ -1,9 +1,5 @@
 package nightgames.stance;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
@@ -11,6 +7,10 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FFMFacesittingThreesome extends FFMCowgirlThreesome {
     public FFMFacesittingThreesome(CharacterType domSexCharacter, CharacterType top, CharacterType bottom) {
@@ -30,7 +30,7 @@ public class FFMFacesittingThreesome extends FFMCowgirlThreesome {
     @Override
     public List<BodyPart> partsForStanceOnly(Combat combat, Character self, Character other) {
         if (self == getDomSexCharacter() && other.getType() == bottom) {
-            return topParts(combat);
+            return topParts();
         }
         if (self.getType() == top) {
                 return Stream.of(getTop().body.getRandomPussy()).filter(part -> part != null && part.present())

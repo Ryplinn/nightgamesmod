@@ -1,17 +1,18 @@
 package nightgames.stance;
 
+import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
+import nightgames.characters.body.BodyPart;
+import nightgames.combat.Combat;
+import nightgames.global.Formatter;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import nightgames.characters.Character;
-import nightgames.characters.body.BodyPart;
-import nightgames.combat.Combat;
-import nightgames.global.Formatter;
-
 public class SixNine extends Position {
-    public SixNine(Character top, Character bottom) {
+    public SixNine(CharacterType top, CharacterType bottom) {
         super(top, bottom, Stance.sixnine);
         facingType = FacingType.BEHIND;
     }
@@ -25,20 +26,20 @@ public class SixNine extends Position {
 
     @Override
     public String describe(Combat c) {
-        String topParts = describeParts(top);
-        String bottomParts = describeParts(bottom);
-        if (top.human()) {
+        String topParts = describeParts(getTop());
+        String bottomParts = describeParts(getBottom());
+        if (getTop().human()) {
             return String.format("You are on top of %s in the 69 position. %s %s is right in front of your face "
-                            + "and you can feel %s breath on your %s.", bottom.nameDirectObject(),
-                            Formatter.capitalizeFirstLetter(bottom.possessiveAdjective()), bottomParts,
-                            bottom.possessiveAdjective(), topParts);
+                            + "and you can feel %s breath on your %s.", getBottom().nameDirectObject(),
+                            Formatter.capitalizeFirstLetter(getBottom().possessiveAdjective()), bottomParts,
+                            getBottom().possessiveAdjective(), topParts);
         } else {
             return String.format("%s and %s are on the floor in 69 position. "
                             + "%s sitting on top of %s with %s %s right in "
-                            + "front of %s face and %s %s next to %s mouth.", bottom.subject(),
-                            top.subject(), top.subjectAction("are", "is"), bottom.nameDirectObject(),
-                            top.possessiveAdjective(), topParts, bottom.possessiveAdjective(),
-                            bottom.possessiveAdjective(), bottomParts, top.possessiveAdjective());
+                            + "front of %s face and %s %s next to %s mouth.", getBottom().subject(),
+                            getTop().subject(), getTop().subjectAction("are", "is"), getBottom().nameDirectObject(),
+                            getTop().possessiveAdjective(), topParts, getBottom().possessiveAdjective(),
+                            getBottom().possessiveAdjective(), bottomParts, getTop().possessiveAdjective());
         }
     }
     
@@ -50,7 +51,7 @@ public class SixNine extends Position {
     }
 
     @Override
-    public List<BodyPart> topParts(Combat c) {
+    public List<BodyPart> topParts() {
         return Collections.emptyList();
     }
 
@@ -72,7 +73,7 @@ public class SixNine extends Position {
     
     @Override
     public boolean mobile(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
@@ -82,7 +83,7 @@ public class SixNine extends Position {
 
     @Override
     public String image() {
-        if (bottom.hasDick() || top.hasDick()) {
+        if (getBottom().hasDick() || getTop().hasDick()) {
             return "69.jpg";
         } else {
             return "les69.jpg";
@@ -96,12 +97,12 @@ public class SixNine extends Position {
 
     @Override
     public boolean dom(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
     public boolean sub(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
@@ -116,7 +117,7 @@ public class SixNine extends Position {
 
     @Override
     public boolean prone(Character c) {
-        return c == top || c == bottom;
+        return c.getType() == top || c.getType() == bottom;
     }
 
     @Override
@@ -126,7 +127,7 @@ public class SixNine extends Position {
 
     @Override
     public boolean oral(Character c, Character target) {
-        return c == top || c == bottom;
+        return c.getType() == top || c.getType() == bottom;
     }
 
     @Override
@@ -141,7 +142,7 @@ public class SixNine extends Position {
 
     @Override
     public Optional<Position> insertRandom(Combat c) {
-        return this;
+        return Optional.empty();
     }
 
     @Override
@@ -168,7 +169,7 @@ public class SixNine extends Position {
     public void struggle(Combat c, Character struggler) {
         c.write(struggler, String.format("%s to gain a more dominant position, but with"
                         + " %s on top of %s sitting on %s chest, there is nothing %s can do.",
-                        struggler.subjectAction("struggle"), top.subject(), struggler.directObject(),
+                        struggler.subjectAction("struggle"), getTop().subject(), struggler.directObject(),
                         struggler.possessiveAdjective(), struggler.pronoun()));
     }
 
@@ -176,6 +177,6 @@ public class SixNine extends Position {
     public void escape(Combat c, Character escapee) {
         c.write(escapee, Formatter.format("{self:SUBJECT-ACTION:try} to escape {other:name-possessive} hold, but with"
                         + " {other:direct-object} sitting firmly on {self:possessive} chest, there is nothing {self:pronoun} can do.",
-                        escapee, top));
+                        escapee, getTop()));
     }
 }

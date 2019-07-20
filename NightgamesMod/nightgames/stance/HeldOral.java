@@ -1,18 +1,19 @@
 package nightgames.stance;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 public class HeldOral extends Position {
-    public HeldOral(Character top, Character bottom) {
+    public HeldOral(CharacterType top, CharacterType bottom) {
         super(top, bottom, Stance.oralpin);
         facingType = FacingType.FACING;
     }
@@ -21,20 +22,20 @@ public class HeldOral extends Position {
     public String describe(Combat c) {
         return Formatter.format(
                         "{self:SUBJECT-ACTION:are|is} holding {other:name-do} down with {self:possessive} face nested between {other:possessive} legs.",
-                        top, bottom);
+                        getTop(), getBottom());
     }
 
     @Override
     public boolean mobile(Character c) {
-        return c != bottom && c != top;
+        return c.getType() != bottom && c.getType() != top;
     }
 
     @Override
     public boolean getUp(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
-    public List<BodyPart> topParts(Combat c) {
-        BodyPart part = top.body.getRandom("mouth");
+    public List<BodyPart> topParts() {
+        BodyPart part = getTop().body.getRandom("mouth");
         if (part != null) {
             return Collections.singletonList(part);
         } else {
@@ -43,21 +44,21 @@ public class HeldOral extends Position {
     }
 
     public List<BodyPart> bottomParts() {
-        if (bottom.hasDick()) {
-            return Collections.singletonList(bottom.body.getRandom("cock"));
-        } else if (bottom.hasPussy()){
-            return Collections.singletonList(bottom.body.getRandomPussy());
+        if (getBottom().hasDick()) {
+            return Collections.singletonList(getBottom().body.getRandom("cock"));
+        } else if (getBottom().hasPussy()){
+            return Collections.singletonList(getBottom().body.getRandomPussy());
         }
         return Collections.emptyList();
     }
 
     @Override
     public String image() {
-        if (bottom.hasDick()) {
+        if (getBottom().hasDick()) {
             return "oralhold_fm.jpg";
-        } else if (bottom.hasPussy() && top.hasPussy()) {
+        } else if (getBottom().hasPussy() && getTop().hasPussy()) {
             return "oralhold_ff.jpg";
-        } else if (bottom.hasPussy()) {
+        } else if (getBottom().hasPussy()) {
             return "oralhold_mf.jpg";
         }
         return "err.jpg";
@@ -65,17 +66,17 @@ public class HeldOral extends Position {
 
     @Override
     public boolean kiss(Character c, Character target) {
-        return c != top && target != top;
+        return c.getType() != top && target.getType() != top;
     }
 
     @Override
     public boolean dom(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
     public boolean sub(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
@@ -90,7 +91,7 @@ public class HeldOral extends Position {
 
     @Override
     public boolean prone(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
@@ -100,7 +101,7 @@ public class HeldOral extends Position {
 
     @Override
     public boolean oral(Character c, Character target) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
@@ -110,8 +111,8 @@ public class HeldOral extends Position {
 
     @Override
     public boolean inserted(Character c) {
-        if (bottom.hasDick()) {
-            return c == bottom;
+        if (getBottom().hasDick()) {
+            return c.getType() == bottom;
         } else {
             return false;
         }
@@ -126,20 +127,17 @@ public class HeldOral extends Position {
 
     @Override
     public Position reverse(Combat c, boolean writeMessage) {
-        if (writeMessage) {
-            
-        }
         return new Mount(bottom, top);
     }
 
     @Override
     public boolean faceAvailable(Character target) {
-        return target == bottom;
+        return target.getType() == bottom;
     }
 
     @Override
     public double pheromoneMod(Character self) {
-        if (self == bottom) {
+        if (self.getType() == bottom) {
             return 10;
         }
         return 2;
@@ -171,9 +169,7 @@ public class HeldOral extends Position {
             });
         }
         Optional<Runnable> action = Random.pickRandom(possibleActions);
-        if (action.isPresent()) {
-            action.get().run();
-        }
+        action.ifPresent(Runnable::run);
     }
 
     @Override
@@ -190,7 +186,7 @@ public class HeldOral extends Position {
                         + " but {other:pronoun-action:hold} on tightly. "
                       + "After thoroughly exhausting {self:possessive} attempts, {other:pronoun-action:smile} smugly"
                       + " and {other:action:run} {other:possessive} tongue "
-                      + "along {self:possessive} shaft to demostrate {other:possessive} victory.");
+                      + "along {self:possessive} shaft to demonstrate {other:possessive} victory.");
     }
 
     @Override
@@ -207,6 +203,6 @@ public class HeldOral extends Position {
                         + " but {other:pronoun-action:hold} on tightly. "
                       + "After thoroughly exhausting every angle, {self:pronoun} can only give up in defeat. "
                       + "{other:PRONOUN-ACTION:smile} smugly and {other:action:run} {other:possessive} tongue "
-                      + "along {self:possessive} shaft to demostrate {other:possessive} victory.");
+                      + "along {self:possessive} shaft to demonstrate {other:possessive} victory.");
     }
 }

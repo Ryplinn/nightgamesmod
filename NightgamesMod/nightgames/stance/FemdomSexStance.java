@@ -1,7 +1,6 @@
 package nightgames.stance;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -15,15 +14,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class FemdomSexStance extends Position {
-    public FemdomSexStance(CharacterType top, CharacterType bottom, Stance stance) {
-        super(top, bottom, stance);
-    }
-
+public class FemdomSexStance implements DomHelper {
     @Override
-    public float priorityMod(Character self) {
+    public float priorityMod(Character self, Position position) {
         float priority = 0;
-        priority += getSubDomBonus(self, 4.0f);
+        priority += position.getSubDomBonus(self, 4.0f);
         if (self.hasPussy()) {
             priority += self.body.getRandomPussy().priority(self);
         }
@@ -34,71 +29,56 @@ public abstract class FemdomSexStance extends Position {
     }
 
     @Override
-    public Optional<Position> checkOngoing(Combat c) {
-        Character inserter = inserted(getDomSexCharacter()) ? getDomSexCharacter() : getBottom();
-        Character inserted = inserted(getDomSexCharacter()) ? getBottom() : getDomSexCharacter();
+    public Optional<Position> checkOngoing(Combat c, Position position) {
+        Character inserter = inserted(position.getDomSexCharacter(), position) ? position.getDomSexCharacter() : position.getBottom();
+        Character inserted = inserted(position.getDomSexCharacter(), position) ? position.getBottom() : position.getDomSexCharacter();
 
-        if (!inserter.hasInsertable()) {
-            if (inserter.human()) {
-                c.write(inserted.getName() + " groans with frustration with the sudden disappearance of your pole.");
-            } else {
-                c.write(Formatter.format("With {self:name-possessive} {self:body-part:cock} gone,"
-                                + " {other:subject-action:groan} in frustration and {other:action:cease}"
-                                + " {other:possessive} merciless riding.", inserter, inserted));
-            }
-            c.setStance(insertRandom(c));
+        Optional<Position> newStance = position.dickMissing(c, inserter, inserted);
+        if (!newStance.isPresent()) {
+            newStance = position.pussyMissing(c, inserter, inserted);
         }
-        if (!inserted.hasPussy()) {
-            if (inserted.human()) {
-                c.write("With your pussy suddenly disappearing, you can't continue riding " + inserter.getName()
-                                + " anymore.");
-            } else {
-                c.write(inserted.getName() + " groans with frustration with the sudden disappearance of her pussy.");
-            }
-            c.setStance(insertRandom(c));
-        }
-        return null;
+        return newStance;
     }
 
     @Override
-    public List<BodyPart> topParts(Combat c) {
-        return Stream.of(getDomSexCharacter().body.getRandomPussy()).filter(part -> part != null && part.present())
+    public List<BodyPart> topParts(Position position) {
+        return Stream.of(position.getDomSexCharacter().body.getRandomPussy()).filter(part -> part != null && part.present())
                         .collect(Collectors.toList());
     }
 
     @Override
-    public List<BodyPart> bottomParts() {
-        return Stream.of(getBottom().body.getRandomInsertable()).filter(part -> part != null && part.present())
+    public List<BodyPart> bottomParts(Position position) {
+        return Stream.of(position.getBottom().body.getRandomInsertable()).filter(part -> part != null && part.present())
                         .collect(Collectors.toList());
     }
 
     @Override
-    public boolean inserted(Character c) {
-        return c.getType() == bottom;
+    public boolean inserted(Character c, Position position) {
+        return c.getType() == position.bottom;
     }
 
     @Override
-    public boolean oral(Character c, Character target) {
+    public boolean oral(Character c, Character target, Position position) {
         return false;
     }
 
     @Override
-    public boolean feet(Character c, Character target) {
+    public boolean feet(Character c, Character target, Position position) {
         return false;
     }
 
     @Override
-    public double pheromoneMod(Character self) {
+    public double pheromoneMod(Character self, Position position) {
         return 3;
     }
     @Override
-    public int distance() {
+    public int distance(Position position) {
         return 1;
     }
 
     @Override
-    public void struggle(Combat c, Character struggler) {
-        Character opponent = getPartner(c, struggler);
+    public void struggle(Combat c, Character struggler, Position position) {
+        Character opponent = position.getPartner(c, struggler);
         boolean cockbound = opponent.is(Stsflag.cockbound);
 
         int selfM = Random.random(6, 11);
@@ -125,8 +105,8 @@ public abstract class FemdomSexStance extends Position {
     }
 
     @Override
-    public void escape(Combat c, Character escapee) {
-        Character opponent = getPartner(c, escapee);
+    public void escape(Combat c, Character escapee, Position position) {
+        Character opponent = position.getPartner(c, escapee);
         boolean cockbound = opponent.is(Stsflag.cockbound);
 
         int selfM = Random.random(6, 11);

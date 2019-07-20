@@ -1,23 +1,24 @@
 package nightgames.stance;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 
 public class StandingOver extends Position {
 
-    public StandingOver(Character top, Character bottom) {
+    public StandingOver(CharacterType top, CharacterType bottom) {
         super(top, bottom, Stance.standingover);
         facingType = FacingType.FACING;
     }
 
     @Override
     public String describe(Combat c) {
-        if (top.human()) {
-            return "You are standing over " + bottom.getName() + ", who is helpless on the ground.";
+        if (getTop().human()) {
+            return "You are standing over " + getBottom().getName() + ", who is helpless on the ground.";
         } else {
             return String.format("%s flat on %s back, while %s stands over %s.",
-                            bottom.subjectAction("are", "is"), bottom.possessiveAdjective(),
-                            top.subject(), bottom.directObject());
+                            getBottom().subjectAction("are", "is"), getBottom().possessiveAdjective(),
+                            getTop().subject(), getBottom().directObject());
         }
     }
 
@@ -28,12 +29,12 @@ public class StandingOver extends Position {
 
     @Override
     public boolean kiss(Character c, Character target) {
-        return c != top && c != bottom;
+        return c.getType() != top && c.getType() != bottom;
     }
 
     @Override
     public String image() {
-        if (bottom.hasPussy()) {
+        if (getBottom().hasPussy()) {
             return "standing_m.jpg";
         } else {
             return "standing_f.jpg";
@@ -42,37 +43,37 @@ public class StandingOver extends Position {
 
     @Override
     public boolean dom(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
     public boolean sub(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
     public boolean reachTop(Character c) {
-        return c != top && c != bottom;
+        return c.getType() != top && c.getType() != bottom;
     }
 
     @Override
     public boolean reachBottom(Character c) {
-        return c != top && c != bottom;
+        return c.getType() != top && c.getType() != bottom;
     }
 
     @Override
     public boolean prone(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
     public boolean feet(Character c, Character target) {
-        return target == bottom;
+        return target.getType() == bottom;
     }
 
     @Override
     public boolean oral(Character c, Character target) {
-        return target == bottom && c != top;
+        return target.getType() == bottom && c.getType() != top;
     }
 
     @Override

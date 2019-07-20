@@ -19,8 +19,8 @@ public abstract class Position implements Cloneable {
     public CharacterType bottom;
     public int time;
     public Stance en;
-    protected FacingType facingType;
-    protected DomType domType;
+    protected FacingType facingType = FacingType.NONE;
+    protected DomType domType = DomType.NONE;
 
     public Position(CharacterType top, CharacterType bottom, Stance stance) {
         this.top = top;
@@ -36,8 +36,6 @@ public abstract class Position implements Cloneable {
     public Character getBottom() {
         return bottom.fromPoolGuaranteed();
     }
-
-    public void setOtherCombatants(List<? extends Character> others) {}
 
     public Character getDomSexCharacter() {
         return getTop();
@@ -63,10 +61,10 @@ public abstract class Position implements Cloneable {
      * Checks for validity of current stance.
      *
      * @param c The ongoing combat.
-     * @return The stance to change into, if applicable.
+     * @return The stance to change into. An empty optional indicates no change.
      */
     public Optional<Position> checkOngoing(Combat c) {
-        return Optional.empty();
+        return domType.helper.checkOngoing(c, this);
     }
 
     public float getSubDomBonus(Character self, float bonus) {
@@ -81,7 +79,9 @@ public abstract class Position implements Cloneable {
         return 0;
     }
 
-    public abstract int distance();
+    public int distance() {
+        return domType.helper.distance(this);
+    }
 
     public abstract String describe(Combat c);
 
@@ -99,9 +99,13 @@ public abstract class Position implements Cloneable {
 
     public abstract boolean prone(Character c);
 
-    public abstract boolean feet(Character c, Character target);
+    public boolean feet(Character c, Character target) {
+        return domType.helper.feet(c, target, this);
+    }
 
-    public abstract boolean oral(Character c, Character target);
+    public boolean oral(Character c, Character target) {
+        return domType.helper.oral(c, target, this);
+    }
 
     public abstract boolean behind(Character c);
 
@@ -113,7 +117,9 @@ public abstract class Position implements Cloneable {
         return !behind(c);
     }
 
-    public abstract boolean inserted(Character c);
+    public boolean inserted(Character c) {
+        return domType.helper.inserted(c, this);
+    }
 
     public boolean penisInserted(Character self) {
         if (self == null || self.body.getRandomCock() == null) {
@@ -149,7 +155,7 @@ public abstract class Position implements Cloneable {
     }
 
     public float priorityMod(Character self) {
-        return 0;
+        return domType.helper.priorityMod(self, this);
     }
 
     public boolean fuckable(Character self) {
@@ -229,21 +235,12 @@ public abstract class Position implements Cloneable {
         return oral(self, target);
     }
 
-    public List<BodyPart> topParts(Combat c) {
-        if (inserted()) {
-            throw new UnsupportedOperationException("Attempted to get topPart in position " + getClass().getSimpleName()
-                            + ", but that position does not override the appropriate method.");
-        }
-        return Collections.emptyList();
+    public List<BodyPart> topParts() {
+        return this.domType.helper.topParts(this);
     }
 
     public List<BodyPart> bottomParts() {
-        if (inserted()) {
-            throw new UnsupportedOperationException(
-                            "Attempted to get bottomPart in position " + getClass().getSimpleName()
-                                            + ", but that position does not override the appropriate method.");
-        }
-        return Collections.emptyList();
+        return this.domType.helper.bottomParts(this);
     }
 
     public BodyPart insertedPartFor(Combat combat, Character c) {
@@ -284,7 +281,7 @@ public abstract class Position implements Cloneable {
 
     public List<BodyPart> partsForStanceOnly(Combat combat, Character self, Character other) {
         if (self.equals(getTop())) {
-            return topParts(combat);
+            return topParts();
         } else if (self.equals(getBottom())) {
             return bottomParts();
         } else {
@@ -368,7 +365,7 @@ public abstract class Position implements Cloneable {
      * returns likelihood modification of applying pheromones. 1 is normal, 2 is twice as likely, .5 is half as likely, 0 is never
      */
     public double pheromoneMod(Character self) {
-        return 1;
+        return domType.helper.pheromoneMod(self, this);
     }
     
     /**
@@ -428,9 +425,13 @@ public abstract class Position implements Cloneable {
         return reverse(c, false) != this;
     }
 
-    public abstract void struggle(Combat c, Character struggler);
+    public void struggle(Combat c, Character struggler) {
+        domType.helper.struggle(c, struggler, this);
+    }
 
-    public abstract void escape(Combat combat, Character escapee);
+    public void escape(Combat combat, Character escapee) {
+        domType.helper.escape(combat, escapee, this);
+    }
 
     public boolean isPartFuckingPartInserted(Combat c, Character inserter, BodyPart stick, Character inserted, BodyPart hole) {
         if (c == null || inserter == null || stick == null || inserted == null || hole == null) {

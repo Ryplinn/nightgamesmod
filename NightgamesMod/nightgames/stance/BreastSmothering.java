@@ -1,6 +1,7 @@
 package nightgames.stance;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -12,7 +13,7 @@ import java.util.Collections;
 import java.util.HashSet;
 
 public class BreastSmothering extends Position {
-    public BreastSmothering(Character top, Character bottom) {
+    public BreastSmothering(CharacterType top, CharacterType bottom) {
         super(top, bottom, Stance.breastsmothering);
         facingType = FacingType.FACING;
     }
@@ -23,7 +24,7 @@ public class BreastSmothering extends Position {
 
     @Override
     public String describe(Combat c) {
-        return Formatter.format("{self:subject-action:keep} {other:name-possessive} face between {self:possessive} tits, with {self:possessive} large breasts fully encompassing {other:possessive} view. {other:SUBJECT} cannot even breathe except for the short pauses when {self:subject-action:allow|allows} {other:direct-object} to by loosening {self:possessive} grip.", top, bottom);
+        return Formatter.format("{self:subject-action:keep} {other:name-possessive} face between {self:possessive} tits, with {self:possessive} large breasts fully encompassing {other:possessive} view. {other:SUBJECT} cannot even breathe except for the short pauses when {self:subject-action:allow|allows} {other:direct-object} to by loosening {self:possessive} grip.", getTop(), getBottom());
     } 
 
     @Override
@@ -33,47 +34,47 @@ public class BreastSmothering extends Position {
 
     @Override
     public boolean mobile(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
     public boolean kiss(Character c, Character target) {
-        return target == top && c != bottom;
+        return target.getType() == top && c.getType() != bottom;
     }
 
     @Override
     public boolean dom(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
     public boolean sub(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
     public boolean reachTop(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
     public boolean reachBottom(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
     public boolean prone(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
     public boolean feet(Character c, Character target) {
-        return target == bottom && c != top && c != bottom;
+        return target.getType() == bottom && c.getType() != top && c.getType() != bottom;
     }
 
     @Override
     public boolean oral(Character c, Character target) {
-        return target == bottom && c != top && c != bottom;
+        return target.getType() == bottom && c.getType() != top && c.getType() != bottom;
     }
 
     @Override
@@ -89,16 +90,16 @@ public class BreastSmothering extends Position {
     @Override
     public void decay(Combat c) {
         time++;
-        bottom.weaken(c, (int) DamageType.temptation.modifyDamage(top, bottom, 3));
-        top.emote(Emotion.dominant, 10);
+        getBottom().weaken(c, (int) DamageType.temptation.modifyDamage(getTop(), getBottom(), 3));
+        getTop().emote(Emotion.dominant, 10);
     }
     
     @Override
     public Collection<Skill> availSkills(Combat c, Character self) {
-        if (self != bottom) {
+        if (self.getType() != bottom) {
             return Collections.emptySet();
         } else {
-            Collection<Skill> avail = new HashSet<Skill>();
+            Collection<Skill> avail = new HashSet<>();
             avail.add(new FondleBreasts(bottom));
             avail.add(new Suckle(bottom));
             avail.add(new Tickle(bottom));
@@ -114,7 +115,7 @@ public class BreastSmothering extends Position {
 
     @Override
     public boolean faceAvailable(Character target) {
-        return target == top;
+        return target.getType() == top;
     }
 
     @Override
@@ -125,14 +126,14 @@ public class BreastSmothering extends Position {
     @Override
     public void struggle(Combat c, Character struggler) {
         c.write(struggler, Formatter.format("{self:SUBJECT-ACTION:attempt} to struggle out of {other:name-possessive} {other:body-part:breasts}, "
-                        + "but {other:pronoun-action:have} other ideas.", struggler, top));
-        (new BreastSmother(top)).resolve(c, bottom);
+                        + "but {other:pronoun-action:have} other ideas.", struggler, getTop()));
+        (new BreastSmother(top)).resolve(c, getBottom());
     }
 
     @Override
     public void escape(Combat c, Character escapee) {
         c.write(escapee, Formatter.format("{self:SUBJECT-ACTION:attempt} to extract {self:reflective} out of {other:name-possessive} {other:body-part:breasts}, "
-                        + "but {other:pronoun-action:have} other ideas.", escapee, top));
-        (new BreastSmother(top)).resolve(c, bottom);
+                        + "but {other:pronoun-action:have} other ideas.", escapee, getTop()));
+        (new BreastSmother(top)).resolve(c, getBottom());
     }
 }

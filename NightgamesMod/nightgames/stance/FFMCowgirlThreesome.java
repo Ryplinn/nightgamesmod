@@ -1,11 +1,5 @@
 package nightgames.stance;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
@@ -14,12 +8,16 @@ import nightgames.global.Formatter;
 import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
-public class FFMCowgirlThreesome extends FemdomSexStance {
-    CharacterType domSexCharacter;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+public class FFMCowgirlThreesome extends Threesome {
     public FFMCowgirlThreesome(CharacterType domSexCharacter, CharacterType top, CharacterType bottom) {
-        super(top, bottom, Stance.reversecowgirl);
-        this.domSexCharacter = domSexCharacter;
+        super(domSexCharacter, top, bottom, Stance.reversecowgirl);
+        this.domType = DomType.FEMDOM;
     }
 
     @Override
@@ -28,18 +26,9 @@ public class FFMCowgirlThreesome extends FemdomSexStance {
     }
 
     @Override
-    public void setOtherCombatants(List<? extends Character> others) {
-        for (Character other : others) {
-            if (other.getType().equals(domSexCharacter)) {
-                domSexCharacter = other.getType();
-            }
-        }
-    }
-
-    @Override
     public List<BodyPart> partsForStanceOnly(Combat combat, Character self, Character other) {
         if (self == getDomSexCharacter() && other.getType() == bottom) {
-            return topParts(combat);
+            return topParts();
         }
         return self.getType().equals(bottom) ? bottomParts() : Collections.emptyList();
     }
@@ -116,7 +105,7 @@ public class FFMCowgirlThreesome extends FemdomSexStance {
 
     @Override
     public Optional<Position> insertRandom(Combat c) {
-        return new ReverseMount(top, bottom);
+        return Optional.of(new ReverseMount(top, bottom));
     }
 
     @Override
@@ -135,7 +124,7 @@ public class FFMCowgirlThreesome extends FemdomSexStance {
                             getDomSexCharacter(), getBottom()));
             return Optional.of(new Neutral(top, bottom));
         }
-        return null;
+        return super.checkOngoing(c);
     }
 
     @Override

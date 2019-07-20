@@ -1,8 +1,5 @@
 package nightgames.stance;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
@@ -12,20 +9,24 @@ import nightgames.global.Random;
 import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
-public class FFXTribThreesome extends Position {
-    private CharacterType domSexCharacter;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+public class FFXTribThreesome extends Threesome {
     public FFXTribThreesome(CharacterType domSexCharacter, CharacterType top, CharacterType bottom) {
-        super(top, bottom, Stance.trib);
-        this.domSexCharacter = domSexCharacter;
+        super(domSexCharacter, top, bottom, Stance.trib);
     }
 
     @Override
     public String describe(Combat c) {
-        return getDomSexCharacter().subjectAction("are", "is") + " holding " + bottom.nameOrPossessivePronoun() + " legs across "
-                        + top.possessiveAdjective() + " lap while grinding " + getDomSexCharacter()
+        return getDomSexCharacter().subjectAction("are", "is") + " holding " + getBottom().nameOrPossessivePronoun() + " legs across "
+                        + getTop().possessiveAdjective() + " lap while grinding " + getDomSexCharacter()
                         .possessiveAdjective()
-                        + " soaked cunt into " + bottom.possessiveAdjective() + " pussy.";
+                        + " soaked cunt into " + getBottom().possessiveAdjective() + " pussy.";
     }
 
     @Override
@@ -33,43 +34,33 @@ public class FFXTribThreesome extends Position {
         return super.priorityMod(self) + 3;
     }
 
-    @Override
-    public Character getDomSexCharacter() {
-        return domSexCharacter;
+    @Override public List<Character> getAllPartners(Combat c, Character self) {
+        return ((Position) this).getAllPartners(c, self);
     }
 
     @Override
     public Optional<Position> checkOngoing(Combat c) {
         if (!c.otherCombatantsContains(getDomSexCharacter())) {
-            c.write(bottom, Formatter.format("With the disappearance of {self:name-do}, {other:subject-action:manage|manages} to escape.", getDomSexCharacter(), bottom));
-            c.setStance(new Neutral(top, bottom));
+            c.write(getBottom(), Formatter.format("With the disappearance of {self:name-do}, {other:subject-action:manage|manages} to escape.", getDomSexCharacter(), getBottom()));
+            return Optional.of(new Neutral(top, bottom));
         }
-        return null;
-    }
-
-    @Override
-    public void setOtherCombatants(List<? extends Character> others) {
-        for (Character other : others) {
-            if (other.equals(domSexCharacter)) {
-                domSexCharacter = other;
-            }
-        }
+        return Optional.empty();
     }
 
     @Override
     public List<BodyPart> partsForStanceOnly(Combat combat, Character self, Character other) {
-        if (self == getDomSexCharacter() && other == bottom) {
-            return topParts(combat);
+        if (self == getDomSexCharacter() && other.getType() == bottom) {
+            return topParts();
         }
-        return self.equals(bottom) ? bottomParts() : Collections.emptyList();
+        return self.getType().equals(bottom) ? bottomParts() : Collections.emptyList();
     }
 
     public Character getPartner(Combat c, Character self) {
         Character domSex = getDomSexCharacter();
-        if (self == top) {
-            return bottom;
+        if (self.getType() == top) {
+            return getBottom();
         } else if (domSex == self) {
-            return bottom;
+            return getBottom();
         } else {
             return domSex;
         }
@@ -77,7 +68,7 @@ public class FFXTribThreesome extends Position {
 
     @Override
     public boolean mobile(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
@@ -92,7 +83,7 @@ public class FFXTribThreesome extends Position {
 
     @Override
     public String image() {
-        if (top.useFemalePronouns()) {
+        if (getTop().useFemalePronouns()) {
             return "ThreesomeFFFTrib.jpg";
         } else {
             return "ThreesomeMFFTrib.jpg";
@@ -101,12 +92,12 @@ public class FFXTribThreesome extends Position {
 
     @Override
     public boolean dom(Character c) {
-        return c == top || c == domSexCharacter;
+        return c.getType() == top || c.getType() == domSexCharacter;
     }
 
     @Override
     public boolean sub(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
@@ -121,7 +112,7 @@ public class FFXTribThreesome extends Position {
 
     @Override
     public boolean prone(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
@@ -141,39 +132,38 @@ public class FFXTribThreesome extends Position {
 
     @Override
     public Optional<Position> insertRandom(Combat c) {
-        return new Mount(top, bottom);
+        return Optional.of(new Mount(top, bottom));
     }
 
     @Override
     public List<BodyPart> bottomParts() {
-        return Arrays.asList(bottom.body.getRandomPussy()).stream().filter(part -> part != null && part.present())
+        return Stream.of(getBottom().body.getRandomPussy()).filter(part -> part != null && part.present())
                         .collect(Collectors.toList());
     }
 
     @Override
     public Position reverse(Combat c, boolean writeMessage) {
         if (writeMessage) {
-            c.write(bottom, Formatter.format("{self:SUBJECT-ACTION:manage|manages} to unbalance {other:name-do} and push {other:direct-object} off {self:reflective}.", bottom, top));
+            c.write(getBottom(), Formatter.format("{self:SUBJECT-ACTION:manage|manages} to unbalance {other:name-do} and push {other:direct-object} off {self:reflective}.", getBottom(), getTop()));
         }
         return new Neutral(bottom, top);
     }
 
     @Override
     public Collection<Skill> availSkills(Combat c, Character self) {
-        if (self != domSexCharacter) {
+        if (self.getType() != domSexCharacter) {
             return Collections.emptySet();
         } else {
-            Collection<Skill> avail = self.getSkills().stream()
-                            .filter(skill -> skill.requirements(c, self, bottom))
-                            .filter(skill -> Skill.skillIsUsable(c, skill, bottom))
+            return self.getSkills().stream()
+                            .filter(skill -> skill.requirements(c, self, getBottom()))
+                            .filter(skill -> Skill.skillIsUsable(c, skill, getBottom()))
                             .filter(skill -> skill.type(c) == Tactics.fucking).collect(Collectors.toSet());
-            return avail;
         }
     }
 
     @Override
-    public List<BodyPart> topParts(Combat c) {
-        return Arrays.asList(top.body.getRandomPussy()).stream().filter(part -> part != null && part.present())
+    public List<BodyPart> topParts() {
+        return Stream.of(getTop().body.getRandomPussy()).filter(part -> part != null && part.present())
                         .collect(Collectors.toList());
     }
 

@@ -12,7 +12,7 @@ import java.util.Optional;
  * TODO: Write class-level documentation.
  */
 public enum FacingType {
-    NEITHER,
+    NONE,
     FACING,
     BEHIND
     ;
@@ -32,7 +32,7 @@ public enum FacingType {
                     newPos.ifPresent(possibleResults::add);
                 }
                 return Random.pickRandom(possibleResults);
-            case NEITHER:
+            case NONE:
             default:
                 return Optional.empty();
         }
@@ -55,7 +55,7 @@ public enum FacingType {
                 if (pitcher == sub && pitcher.getType() == currentStance.top) {
                     // guy is holding girl down, and is the submissive one in the new
                     // stance
-                    return Optional.of(new CoiledSex(catcher, pitcher));
+                    return Optional.of(new CoiledSex(catcher.getType(), pitcher.getType()));
                 }
                 if (pitcher == dom && pitcher.getType() == currentStance.bottom) {
                     // girl is holding guy down, and is the submissive one in the new
@@ -94,7 +94,7 @@ public enum FacingType {
                     return Optional.of(new ReverseCowgirl(catcher.getType(), pitcher.getType()));
                 }
                 return Optional.empty();
-            case NEITHER:
+            case NONE:
             default:
                 return Optional.empty();
         }

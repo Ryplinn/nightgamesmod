@@ -491,7 +491,7 @@ public abstract class Character extends Observable implements Cloneable {
                 c.write(this, Formatter.format(
                                 "{other:SUBJECT-ACTION:well|wells} up with guilt at hurting such a holy being. {self:PRONOUN-ACTION:become|becomes} temporarily untouchable in {other:possessive} eyes.",
                                 this, other));
-                add(c, new Alluring(this, 1));
+                add(c, new Alluring(getType(), 1));
             }
             for (Status s : getStatuses()) {
                 bonus += s.damage(c, pain);
@@ -1772,15 +1772,17 @@ public abstract class Character extends Observable implements Cloneable {
                 purgedStatuses.forEach(this::removeStatus);
             }
         }
-
+        orgasms += 1;
+        if (opponent == null) {
+            return;
+        }
         if (checkAddiction(AddictionType.CORRUPTION, opponent) && selfPart != null && opponentPart != null) {
             if (c.getStance().havingSex(c, this) && (c.getCombatantData(this).getIntegerFlag("ChoseToFuck") == 1)) {
                 c.write(this, Formatter.format("{self:NAME-POSSESSIVE} willing sacrifice to {other:name-do} greatly reinforces"
                                 + " the corruption inside of {self:direct-object}.", this, opponent));
                 addict(c, AddictionType.CORRUPTION, opponent, Addiction.HIGH_INCREASE);
             }
-            if (opponent != null && opponent.has(Trait.TotalSubjugation)
-                            && c.getStance().en == Stance.succubusembrace) {
+            if (opponent.has(Trait.TotalSubjugation) && c.getStance().en == Stance.succubusembrace) {
                 c.write(this, Formatter.format(
                                 "The succubus takes advantage of {self:name-possessive} moment of vulnerability and overwhelms {self:possessive} mind with {other:possessive} soul-corroding lips.",
                                 this, opponent));
@@ -1803,12 +1805,9 @@ public abstract class Character extends Observable implements Cloneable {
             unaddictCombat(AddictionType.BREEDER, opponent, 1.f, c);
         }
         if (checkAddiction(AddictionType.DOMINANCE, opponent) && c.getStance().dom(opponent)) {
-            if (opponent != null) {
-                c.write(this, "Getting dominated by " + opponent.nameDirectObject() +" seems to excite " + nameDirectObject() + " even more.");
-            }
+            c.write(this, "Getting dominated by " + opponent.nameDirectObject() +" seems to excite " + nameDirectObject() + " even more.");
             addict(c, AddictionType.DOMINANCE, opponent, Addiction.LOW_INCREASE);
         }
-        orgasms += 1;
     }
 
     private void resolvePreOrgasmForSolo(Combat c, Character opponent, BodyPart selfPart, int times) {
@@ -1927,10 +1926,10 @@ public abstract class Character extends Observable implements Cloneable {
             c.write(Formatter.capitalizeFirstLetter("<b>" + opponent.subjectAction("flush", "flushes")
                             + " as the feedback from " + nameOrPossessivePronoun() + " orgasm feeds "
                             + opponent.possessiveAdjective() + " divine power.</b>"));
-            opponent.add(c, new Alluring(opponent, 5));
+            opponent.add(c, new Alluring(opponent.getType(), 5));
             opponent.buildMojo(c, 100);
             if (c.getStance().inserted(this) && opponent.has(Trait.divinity)) {
-                opponent.add(c, new DivineCharge(opponent, 1));
+                opponent.add(c, new DivineCharge(opponent.getType(), 1));
             }
         }
         if (opponent.has(Trait.sexualmomentum)) {
@@ -2162,7 +2161,7 @@ public abstract class Character extends Observable implements Cloneable {
             }
         }
         if (getPure(Attribute.animism) >= 4 && getArousal().percent() >= 50 && !is(Stsflag.feral)) {
-            add(c, new Feral(this));
+            add(c, new Feral(this.getType()));
         }
         
         if (opponent.has(Trait.temptingass) && !is(Stsflag.frenzied)) {
@@ -2179,7 +2178,7 @@ public abstract class Character extends Observable implements Cloneable {
                 chance += 20 * fetish.get().magnitude;
             }
             if (chance >= Random.random(100)) {
-                AssFuck fuck = new AssFuck(this);
+                AssFuck fuck = new AssFuck(this.getType());
                 if (fuck.requirements(c, opponent) && fuck.usable(c, opponent)) {
                     c.write(opponent,
                                     Formatter.format("<b>The look of {other:name-possessive} ass,"
@@ -3553,7 +3552,7 @@ public abstract class Character extends Observable implements Cloneable {
     public void usedAttribute(Attribute att, Combat c, double baseChance) {
         // divine recoil applies at 20% per magnitude
         if (att == Attribute.divinity && Random.randomdouble() < baseChance) {
-            add(c, new DivineRecoil(this, 1));
+            add(c, new DivineRecoil(this.getType(), 1));
         }
     }
 
@@ -3872,6 +3871,10 @@ public abstract class Character extends Observable implements Cloneable {
 
     private static final Set<AddictionType> NPC_ADDICTABLES = EnumSet.of(AddictionType.CORRUPTION);
     public void addict(Combat c, AddictionType type, Character cause, float mag) {
+        addict(c, type, cause.getType(), mag);
+    }
+
+    public void addict(Combat c, AddictionType type, CharacterType cause, float mag) {
         if (!human() && !NPC_ADDICTABLES.contains(type)) {
             DebugFlags.DEBUG_ADDICTION.printf("Skipping %s addiction on %s because it's not supported for NPCs", type.name(), getType());
         }
@@ -3881,7 +3884,7 @@ public abstract class Character extends Observable implements Cloneable {
             a.aggravate(c, mag);
         } else {
             DebugFlags.DEBUG_ADDICTION.printf("Creating initial %s on %s with %.3f\n", type.name(), getTrueName(), mag);
-            Addiction addict = type.build(this.getType(), cause.getType(), mag);
+            Addiction addict = type.build(this.getType(), cause, mag);
             addictions.add(addict);
             if (c != null) {
                 this.add(c, addict.createTrackingSymptom());

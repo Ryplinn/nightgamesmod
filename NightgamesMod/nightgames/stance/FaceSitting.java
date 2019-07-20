@@ -115,29 +115,29 @@ public class FaceSitting extends Position {
         Character sub = getPartner(c, pitcher);
         if (pitcher.body.getRandomInsertable() == null || !catcher.hasPussy()) {
             // invalid
-            return this;
+            return Optional.empty();
         }
         if (pitcher == dom && pitcher.getType() == top) {
             // guy is sitting on girl's face facing her feet, and is the
             // dominant one in the new stance
-            return new UpsideDownMaledom(pitcher, catcher);
+            return Optional.of(new UpsideDownMaledom(pitcher.getType(), catcher.getType()));
         }
         if (pitcher == sub && pitcher.getType() == top) {
             // guy is sitting on girl's face facing her feet, and is the
             // submissive one in the new stance
-            return Cowgirl.similarInstance(catcher, pitcher);
+            return Optional.of(Cowgirl.similarInstance(catcher, pitcher));
         }
         if (pitcher == dom && pitcher.getType() == bottom) {
             // girl is sitting on guy's face facing his feet, and is the
             // submissive one in the new stance
-            return new Doggy(pitcher, catcher);
+            return Optional.of(new Doggy(pitcher.getType(), catcher.getType()));
         }
         if (pitcher == sub && pitcher.getType() == bottom) {
             // girl is sitting on guy's face facing his feet, and is the
             // dominant one in the new stance
-            return new ReverseCowgirl(catcher, pitcher);
+            return Optional.of(new ReverseCowgirl(catcher.getType(), pitcher.getType()));
         }
-        return this;
+        return Optional.empty();
     }
 
     @Override

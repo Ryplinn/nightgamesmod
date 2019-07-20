@@ -1,6 +1,7 @@
 package nightgames.stance;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
@@ -8,14 +9,11 @@ import nightgames.skills.damage.DamageType;
 
 import java.util.Optional;
 
-public class FlyingCowgirl extends FemdomSexStance {
+public class FlyingCowgirl extends Position {
 
-    private Character top, bottom;
-
-    public FlyingCowgirl(Character succ, Character target) {
+    public FlyingCowgirl(CharacterType succ, CharacterType target) {
         super(succ, target, Stance.flying);
-        top = succ;
-        bottom = target;
+        this.domType = DomType.FEMDOM;
     }
 
     @Override
@@ -23,16 +21,16 @@ public class FlyingCowgirl extends FemdomSexStance {
         return String.format(
                         "%s are flying some twenty feet up in the air,"
                                         + " joined to %s by %s hips. %s on top of %s and %s %s is strangling %s %s.",
-                                        spectated() ? String.format("%s and %s", top.subject(), bottom.subject()) : "You",
-                                                        spectated() ? "eachother" : "your partner",
+                                        spectated() ? String.format("%s and %s", getTop().subject(), getBottom().subject()) : "You",
+                                                        spectated() ? "each other" : "your partner",
                                                         spectated() ? "their" : "your",
-                        top.subjectAction("are", "is"), bottom.subject(), top.possessiveAdjective(),
-                        top.body.getRandomPussy().describe(top), bottom.possessiveAdjective(),
-                        bottom.body.getRandomInsertable().describe(bottom));
+                        getTop().subjectAction("are", "is"), getBottom().subject(), getTop().possessiveAdjective(),
+                        getTop().body.getRandomPussy().describe(getTop()), getBottom().possessiveAdjective(),
+                        getBottom().body.getRandomInsertable().describe(getBottom()));
     }
     
     private boolean spectated() {
-        return !(top.human() || bottom.human());
+        return !(getTop().human() || getBottom().human());
     }
 
     @Override
@@ -42,37 +40,37 @@ public class FlyingCowgirl extends FemdomSexStance {
 
     @Override
     public boolean mobile(Character c) {
-        return top == c;
+        return c.getType() == top;
     }
 
     @Override
     public boolean kiss(Character c, Character target) {
-        return (c == top || c == bottom) && (target == top || target == bottom);
+        return (c.getType() == top || c.getType() == bottom) && (target.getType() == top || target.getType() == bottom);
     }
 
     @Override
     public boolean dom(Character c) {
-        return top == c;
+        return c.getType() == top;
     }
 
     @Override
     public boolean sub(Character c) {
-        return top == c;
+        return c.getType() == top;
     }
 
     @Override
     public boolean reachTop(Character c) {
-        return c == top || c == bottom;
+        return c.getType() == top || c.getType() == bottom;
     }
 
     @Override
     public boolean reachBottom(Character c) {
-        return top == c;
+        return c.getType() == top;
     }
 
     @Override
     public boolean prone(Character c) {
-        return bottom == c;
+        return c.getType() == bottom;
     }
 
     @Override
@@ -80,54 +78,53 @@ public class FlyingCowgirl extends FemdomSexStance {
         return false;
     }
 
-    public boolean flying(Character c) {
+    public boolean flying() {
         return true;
     }
 
     @Override
     public void decay(Combat c) {
         time++;
-        top.weaken(c, (int) DamageType.stance.modifyDamage(bottom, top, 3));
+        getTop().weaken(c, (int) DamageType.stance.modifyDamage(getBottom(), getTop(), 3));
     }
 
     @Override
     public Optional<Position> checkOngoing(Combat c) {
-        if (top.getStamina().get() < 5) {
-            if (top.human()) {
-                c.write("You're too tired to stay in the air. You plummet to the ground and " + bottom.getName()
+        if (getTop().getStamina().get() < 5) {
+            if (getTop().human()) {
+                c.write("You're too tired to stay in the air. You plummet to the ground and " + getBottom().getName()
                                 + " drops on you heavily, knocking the wind out of you.");
             } else {
-                c.write(top.getName()
+                c.write(getTop().getName()
                                 + " falls to the ground and so do you. Fortunately, her body cushions your fall, but you're not sure she appreciates that as much as you do.");
             }
-            top.pain(c, bottom, (int) DamageType.physical.modifyDamage(bottom, top, Random.random(50, 75)));
+            getTop().pain(c, getBottom(), (int) DamageType.physical.modifyDamage(getBottom(), getTop(), Random.random(50, 75)));
             return Optional.of(new Mount(bottom, top));
         } else {
-            super.checkOngoing(c);
+            return super.checkOngoing(c);
         }
-        return null;
     }
 
     @Override
     public Optional<Position> insertRandom(Combat c) {
-        return new Mount(top, bottom);
+        return Optional.of(new Mount(top, bottom));
     }
 
     @Override
     public Position reverse(Combat c, boolean writeMessage) {
-        if (bottom.body.getRandomWings() != null) {
+        if (getBottom().body.getRandomWings() != null) {
             if (writeMessage) {
-                c.write(bottom, Formatter.format(
+                c.write(getBottom(), Formatter.format(
                                 "In a desperate gamble for dominance, {self:subject-action:piston|pistons} wildly into {other:name-do}, making {other:direct-object} yelp and breaking {other:possessive} concentration. Shaking off {other:possessive} limbs coiled around {self:subject}, {self:subject-action:start|starts} flying on {self:possessive} own and starts fucking {other:direct-object} back in the air.",
-                                bottom, top));
+                                getBottom(), getTop()));
             }
             return new FlyingCarry(bottom, top);
         } else {
             if (writeMessage) {
                 c.write(Formatter.format("Weakened by {self:possessive} squirming, {other:SUBJECT-ACTION:fall|falls} to the ground and so {self:action:do|does} {self:name-do}. Fortunately, {other:possessive} body cushions {self:possessive} fall, but you're not sure {self:action:if she appreciates that as much as you do|if you appreciate that as much as she does}. "
-                                + "While {other:subject-action:are|is} dazed, {self:subject-action:mount|mounts} {other:direct-object} and {self:action:start|starts} fucking {other:direct-object} in a missionary position.", bottom, top));
+                                + "While {other:subject-action:are|is} dazed, {self:subject-action:mount|mounts} {other:direct-object} and {self:action:start|starts} fucking {other:direct-object} in a missionary position.", getBottom(), getTop()));
             }
-            top.pain(c, bottom, (int) DamageType.physical.modifyDamage(bottom, top, Random.random(50, 75)));
+            getTop().pain(c, getBottom(), (int) DamageType.physical.modifyDamage(getBottom(), getTop(), Random.random(50, 75)));
             return new Missionary(bottom, top);
         }
     }

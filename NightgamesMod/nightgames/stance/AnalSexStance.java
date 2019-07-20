@@ -1,9 +1,5 @@
 package nightgames.stance;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
@@ -11,6 +7,10 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.status.Stsflag;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class AnalSexStance extends Position {
     AnalSexStance(CharacterType top, CharacterType bottom, Stance stance) {
@@ -30,7 +30,7 @@ public abstract class AnalSexStance extends Position {
     }
 
     @Override
-    public List<BodyPart> topParts(Combat c) {
+    public List<BodyPart> topParts() {
         return Stream.of(getTop().body.getRandomInsertable()).filter(part -> part != null && part.present())
                         .collect(Collectors.toList());
     }
@@ -99,9 +99,9 @@ public abstract class AnalSexStance extends Position {
                             struggler.pronoun() + struggler.action(" attempt"), opponent.possessiveAdjective(), 
                             c.bothDirectObject(opponent)));
         }
-        getBottom().body.pleasure(getTop(), Random.pickRandom(topParts(c)).orElse(null), Random.pickRandom(bottomParts()).orElse(null),
+        getBottom().body.pleasure(getTop(), Random.pickRandom(topParts()).orElse(null), Random.pickRandom(bottomParts()).orElse(null),
                         Random.random(6, 10), c);
-        getTop().body.pleasure(getBottom(), Random.pickRandom(bottomParts()).orElse(null), Random.pickRandom(topParts(c)).orElse(null),
+        getTop().body.pleasure(getBottom(), Random.pickRandom(bottomParts()).orElse(null), Random.pickRandom(topParts()).orElse(null),
                         Random.random(6, 10), c);
     }
 
@@ -122,9 +122,9 @@ public abstract class AnalSexStance extends Position {
             c.write(escapee, Formatter.format("{self:SUBJECT-ACTION:try} to take advantage of an opening in {other:name-possessive} stance to slip away, "
                             + "but {other:pronoun-action:pounds} {other:possessive} cock into {self:possessive} ass, forcing {self:direct-object} to give up.", escapee, opponent));
         }
-        getBottom().body.pleasure(getTop(), Random.pickRandom(topParts(c)).orElse(null), Random.pickRandom(bottomParts()).orElse(null),
+        getBottom().body.pleasure(getTop(), Random.pickRandom(topParts()).orElse(null), Random.pickRandom(bottomParts()).orElse(null),
                         Random.random(6, 10), c);
-        getTop().body.pleasure(getBottom(), Random.pickRandom(bottomParts()).orElse(null), Random.pickRandom(topParts(c)).orElse(null),
+        getTop().body.pleasure(getBottom(), Random.pickRandom(bottomParts()).orElse(null), Random.pickRandom(topParts()).orElse(null),
                         Random.random(6, 10), c);
     }
 }

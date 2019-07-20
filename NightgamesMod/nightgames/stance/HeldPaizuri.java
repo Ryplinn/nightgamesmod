@@ -1,15 +1,17 @@
 package nightgames.stance;
 
-import java.util.Collections;
-import java.util.List;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 
+import java.util.Collections;
+import java.util.List;
+
 public class HeldPaizuri extends Position {
-    public HeldPaizuri(Character top, Character bottom) {
+    public HeldPaizuri(CharacterType top, CharacterType bottom) {
         super(top, bottom, Stance.paizuripin);
         facingType = FacingType.FACING;
     }
@@ -18,25 +20,25 @@ public class HeldPaizuri extends Position {
     public String describe(Combat c) {
         return Formatter.format(
                         "{self:SUBJECT-ACTION:are|is} holding {other:name-do} down with {self:possessive} breasts nested around {other:possessive} cock.",
-                        top, bottom);
+                        getTop(), getBottom());
     }
 
     @Override
     public boolean inserted(Character c) {
-        if (bottom.hasDick()) {
-            return c == bottom;
+        if (getBottom().hasDick()) {
+            return c.getType() == bottom;
         }
         return false;
     }
 
     @Override
     public boolean mobile(Character c) {
-        return c != bottom && c != top;
+        return c.getType() != bottom && c.getType() != top;
     }
 
     @Override
     public boolean getUp(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
@@ -46,17 +48,17 @@ public class HeldPaizuri extends Position {
 
     @Override
     public boolean kiss(Character c, Character target) {
-        return c != top && target != top;
+        return c.getType() != top && target.getType() != top;
     }
 
     @Override
     public boolean dom(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
     public boolean sub(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
@@ -71,11 +73,11 @@ public class HeldPaizuri extends Position {
 
     @Override
     public boolean prone(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
-    public List<BodyPart> topParts(Combat c) {
-        BodyPart part = top.body.getRandom("breasts");
+    public List<BodyPart> topParts() {
+        BodyPart part = getTop().body.getRandom("breasts");
         if (part != null) {
             return Collections.singletonList(part);
         } else {
@@ -84,8 +86,8 @@ public class HeldPaizuri extends Position {
     }
 
     public List<BodyPart> bottomParts() {
-        if (bottom.hasDick()) {
-            return Collections.singletonList(bottom.body.getRandom("cock"));
+        if (getBottom().hasDick()) {
+            return Collections.singletonList(getBottom().body.getRandom("cock"));
         }
         return Collections.emptyList();
     }
@@ -97,7 +99,7 @@ public class HeldPaizuri extends Position {
 
     @Override
     public boolean oral(Character c, Character target) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
@@ -114,20 +116,17 @@ public class HeldPaizuri extends Position {
 
     @Override
     public Position reverse(Combat c, boolean writeMessage) {
-        if (writeMessage) {
-            
-        }
         return new Mount(bottom, top);
     }
 
     @Override
     public boolean faceAvailable(Character target) {
-        return target == bottom;
+        return target.getType() == bottom;
     }
 
     @Override
     public double pheromoneMod(Character self) {
-        if (self == bottom) {
+        if (self.getType() == bottom) {
             return 10;
         }
         return 2;

@@ -1,15 +1,17 @@
 package nightgames.stance;
 
-import java.util.Collections;
-import java.util.List;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 
+import java.util.Collections;
+import java.util.List;
+
 public class Titfucking extends Position {
-    public Titfucking(Character top, Character bottom) {
+    public Titfucking(CharacterType top, CharacterType bottom) {
         super(top, bottom, Stance.titfucking);
         facingType = FacingType.FACING;
     }
@@ -18,22 +20,22 @@ public class Titfucking extends Position {
     public String describe(Combat c) {
         return Formatter.format(
                         "{self:SUBJECT-ACTION:are|is} sitting on top of {other:name-do} vigorously fucking {other:possessive} {other:body-part:breasts}.",
-                        top, bottom);
+                        getTop(), getBottom());
     }
 
     @Override
     public boolean inserted(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
     public boolean mobile(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
     public boolean getUp(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
@@ -43,22 +45,22 @@ public class Titfucking extends Position {
 
     @Override
     public boolean kiss(Character c, Character target) {
-        return c != top && c != bottom;
+        return c.getType() != top && c.getType() != bottom;
     }
 
     @Override
     public boolean dom(Character c) {
-        return c == top;
+        return c.getType() == top;
     }
 
     @Override
     public boolean sub(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
     public boolean reachTop(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
@@ -68,11 +70,11 @@ public class Titfucking extends Position {
 
     @Override
     public boolean prone(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
-    public List<BodyPart> topParts(Combat c) {
-        BodyPart part = top.body.getRandomCock();
+    public List<BodyPart> topParts() {
+        BodyPart part = getTop().body.getRandomCock();
         if (part != null) {
             return Collections.singletonList(part);
         } else {
@@ -81,7 +83,7 @@ public class Titfucking extends Position {
     }
 
     public List<BodyPart> bottomParts() {
-        BodyPart part = top.body.getRandomBreasts();
+        BodyPart part = getTop().body.getRandomBreasts();
         if (part != null) {
             return Collections.singletonList(part);
         } else {
@@ -96,7 +98,7 @@ public class Titfucking extends Position {
 
     @Override
     public boolean oral(Character c, Character target) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
@@ -107,7 +109,7 @@ public class Titfucking extends Position {
     @Override
     public float priorityMod(Character self) {
         float bonus = 0;
-        if (self == bottom) {
+        if (self.getType() == bottom) {
             bonus += 2 * self.body.getRandom("breasts").priority(self);
         }
         return bonus;
@@ -115,9 +117,6 @@ public class Titfucking extends Position {
 
     @Override
     public Position reverse(Combat c, boolean writeMessage) {
-        if (writeMessage) {
-            
-        }
         return new Mount(bottom, top);
     }
 
@@ -128,7 +127,7 @@ public class Titfucking extends Position {
 
     @Override
     public double pheromoneMod(Character self) {
-        if (self == top) {
+        if (self.getType() == top) {
             return 10;
         }
         return 2;

@@ -1,40 +1,35 @@
 package nightgames.stance;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
-public class MFMSpitroastThreesome extends MaledomSexStance {
-    protected Character domSexCharacter;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-    public MFMSpitroastThreesome(Character domSexCharacter, Character top, Character bottom) {
-        super(top, bottom, Stance.doggy);
-        this.domSexCharacter = domSexCharacter;
-    }
-
-    @Override
-    public Character getDomSexCharacter() {
-        return domSexCharacter;
+public class MFMSpitroastThreesome extends Threesome {
+    public MFMSpitroastThreesome(CharacterType domSexCharacter, CharacterType top, CharacterType bottom) {
+        super(domSexCharacter, top, bottom, Stance.doggy);
+        this.domType = DomType.MALEDOM;
     }
 
     @Override
     public boolean inserted(Character c) {
-        return c == domSexCharacter;
+        return c.getType() == domSexCharacter;
     }
 
     @Override
     public Optional<Position> checkOngoing(Combat c) {
         if (!c.otherCombatantsContains(getDomSexCharacter())) {
-            c.write(bottom, Formatter.format("With the disappearance of {self:name-do}, {other:subject-action:manage|manages} to escape.", domSexCharacter, bottom));
-            c.setStance(new Neutral(top, bottom));
+            c.write(getBottom(), Formatter.format("With the disappearance of {self:name-do}, {other:subject-action:manage|manages} to escape.", getDomSexCharacter(), getBottom()));
+            return Optional.of(new Neutral(top, bottom));
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
@@ -43,28 +38,19 @@ public class MFMSpitroastThreesome extends MaledomSexStance {
     }
 
     @Override
-    public void setOtherCombatants(List<? extends Character> others) {
-        for (Character other : others) {
-            if (other.equals(domSexCharacter)) {
-                domSexCharacter = other;
-            }
-        }
-    }
-
-    @Override
     public List<BodyPart> partsForStanceOnly(Combat combat, Character self, Character other) {
-        if (self == getDomSexCharacter() && other == bottom) {
-            return topParts(combat);
+        if (self == getDomSexCharacter() && other.getType() == bottom) {
+            return topParts();
         }
-        if (self == top) {
-                return Arrays.asList(top.body.getRandomInsertable()).stream().filter(part -> part != null && part.present())
+        if (self.getType() == top) {
+                return Stream.of(getTop().body.getRandomInsertable()).filter(part -> part != null && part.present())
                                 .collect(Collectors.toList());
-        } else if (self == bottom) {
-            if (other == top) {
-                return Arrays.asList(top.body.getRandom("mouth")).stream().filter(part -> part != null && part.present())
+        } else if (self.getType() == bottom) {
+            if (other.getType() == top) {
+                return Stream.of(getTop().body.getRandom("mouth")).filter(part -> part != null && part.present())
                                 .collect(Collectors.toList());
-            } else if (other == domSexCharacter) {
-                return Arrays.asList(top.body.getRandomPussy()).stream().filter(part -> part != null && part.present())
+            } else if (other.getType() == domSexCharacter) {
+                return Stream.of(getTop().body.getRandomPussy()).filter(part -> part != null && part.present())
                                 .collect(Collectors.toList());
             }
         }
@@ -73,10 +59,10 @@ public class MFMSpitroastThreesome extends MaledomSexStance {
 
     public Character getPartner(Combat c, Character self) {
         Character domSex = getDomSexCharacter();
-        if (self == top) {
-            return bottom;
+        if (self.getType() == top) {
+            return getBottom();
         } else if (domSex == self) {
-            return bottom;
+            return getBottom();
         } else {
             return domSex;
         }
@@ -84,24 +70,24 @@ public class MFMSpitroastThreesome extends MaledomSexStance {
 
     @Override
     public String describe(Combat c) {
-        if (top.human()) {
+        if (getTop().human()) {
             return "";
         } else {
             return String.format("%s is fucking %s face while %s taking %s from behind.",
-                            top.subject(), bottom.nameOrPossessivePronoun(), getDomSexCharacter().subjectAction("are", "is"), bottom.directObject());
+                            getTop().subject(), getBottom().nameOrPossessivePronoun(), getDomSexCharacter().subjectAction("are", "is"), getBottom().directObject());
         }
     }
 
     public List<Character> getAllPartners(Combat c, Character self) {
-        if (self == bottom) {
-            return Arrays.asList(top, domSexCharacter);
+        if (self.getType() == bottom) {
+            return Arrays.asList(getTop(), getDomSexCharacter());
         }
         return Collections.singletonList(getPartner(c, self));
     }
 
     @Override
     public boolean mobile(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
@@ -111,22 +97,22 @@ public class MFMSpitroastThreesome extends MaledomSexStance {
 
     @Override
     public boolean kiss(Character c, Character target) {
-        return c != bottom && target != bottom;
+        return c.getType() != bottom && target.getType() != bottom;
     }
 
     @Override
     public boolean dom(Character c) {
-        return c == top || c == domSexCharacter;
+        return c.getType() == top || c.getType() == domSexCharacter;
     }
 
     @Override
     public boolean sub(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
     public boolean reachTop(Character c) {
-        return c != bottom;
+        return c.getType() != bottom;
     }
 
     @Override
@@ -136,23 +122,23 @@ public class MFMSpitroastThreesome extends MaledomSexStance {
 
     @Override
     public boolean prone(Character c) {
-        return c == bottom;
+        return c.getType() == bottom;
     }
 
     @Override
     public boolean behind(Character c) {
-        return c == domSexCharacter;
+        return c.getType() == domSexCharacter;
     }
 
     @Override
     public Optional<Position> insertRandom(Combat c) {
-        return new Mount(top, bottom);
+        return Optional.of(new Mount(top, bottom));
     }
 
     @Override
     public Position reverse(Combat c, boolean writeMessage) {
         if (writeMessage) {
-            c.write(bottom, Formatter.format("{self:SUBJECT-ACTION:manage|manages} to unbalance {other:name-do} and push {other:direct-object} off {self:reflective}.", bottom, top));
+            c.write(getBottom(), Formatter.format("{self:SUBJECT-ACTION:manage|manages} to unbalance {other:name-do} and push {other:direct-object} off {self:reflective}.", getBottom(), getTop()));
         }
         return new Neutral(bottom, top);
     }
@@ -164,14 +150,13 @@ public class MFMSpitroastThreesome extends MaledomSexStance {
 
     @Override
     public Collection<Skill> availSkills(Combat c, Character self) {
-        if (self != domSexCharacter) {
+        if (self.getType() != domSexCharacter) {
             return Collections.emptySet();
         } else {
-            Collection<Skill> avail = self.getSkills().stream()
-                            .filter(skill -> skill.requirements(c, self, bottom))
-                            .filter(skill -> Skill.skillIsUsable(c, skill, bottom))
+            return self.getSkills().stream()
+                            .filter(skill -> skill.requirements(c, self, getBottom()))
+                            .filter(skill -> Skill.skillIsUsable(c, skill, getBottom()))
                             .filter(skill -> skill.type(c) == Tactics.fucking).collect(Collectors.toSet());
-            return avail;
         }
     }
 }
