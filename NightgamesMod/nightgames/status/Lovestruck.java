@@ -4,13 +4,14 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class Lovestruck extends DurationStatus {
     Character other;
 
-    public Lovestruck(Character affected, Character other, int duration) {
+    public Lovestruck(CharacterType affected, Character other, int duration) {
         super("Lovestruck", affected, duration);
         this.other = other;
         flag(Stsflag.lovestruck);
@@ -22,10 +23,10 @@ public class Lovestruck extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
-            return "You feel an irresistable attraction to " + other.nameDirectObject() + ".";
+        if (getAffected().human()) {
+            return "You feel an irresistible attraction to " + other.nameDirectObject() + ".";
         } else {
-            return affected.getName() + " is looking at "+other.nameDirectObject()+" like a lovestruck teenager.";
+            return getAffected().getName() + " is looking at "+other.nameDirectObject()+" like a lovestruck teenager.";
         }
     }
 
@@ -41,12 +42,12 @@ public class Lovestruck extends DurationStatus {
 
     @Override
     public void onRemove(Combat c, Character other) {
-        affected.addlist.add(new Cynical(affected));
+        getAffected().addlist.add(new Cynical(affected));
     }
 
     @Override
     public void tick(Combat c) {
-        affected.loseWillpower(c, 1, 0, false, " (Lovestruck)");
+        getAffected().loseWillpower(c, 1, 0, false, " (Lovestruck)");
     }
 
     @Override
@@ -61,7 +62,7 @@ public class Lovestruck extends DurationStatus {
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s now lovestruck.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now lovestruck.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -106,7 +107,7 @@ public class Lovestruck extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Lovestruck(newAffected, null, getDuration());
+        return new Lovestruck(newAffected.getType(), null, getDuration());
     }
 
     @Override  public JsonObject saveToJson() {

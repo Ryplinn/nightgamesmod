@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -12,10 +13,10 @@ import nightgames.json.JsonUtils;
 
 public class PartFucked extends Status implements InsertedStatus {
     private String target;
-    private Character other;
+    private CharacterType other;
     private BodyPart penetrator;
 
-    public PartFucked(Character affected, Character other, BodyPart stick, String hole) {
+    public PartFucked(CharacterType affected, CharacterType other, BodyPart stick, String hole) {
         super(Formatter.capitalizeFirstLetter(stick.getType()) + (hole.equals("ass") ? " Pegged" : " Fucked"), affected);
         target = hole;
         this.penetrator = stick;
@@ -24,26 +25,30 @@ public class PartFucked extends Status implements InsertedStatus {
         flag(Stsflag.debuff);
     }
 
+    public Character getOther() {
+        return other.fromPoolGuaranteed();
+    }
+
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        BodyPart hole = affected.body.getRandom(target);
+        BodyPart hole = getAffected().body.getRandom(target);
         if (hole == null || penetrator == null) {
             return "";
         }
         return Formatter.capitalizeFirstLetter(String.format("%s now fucking %s %s with %s %s\n",
-                        other.subjectAction("are", "is"), affected.nameOrPossessivePronoun(), hole.describe(affected),
-                        other.possessiveAdjective(), penetrator.describe(other)));
+                        getOther().subjectAction("are", "is"), getAffected().nameOrPossessivePronoun(), hole.describe(getAffected()),
+                        getOther().possessiveAdjective(), penetrator.describe(getOther())));
     }
 
     @Override
     public String describe(Combat c) {
-        BodyPart hole = affected.body.getRandom(target);
+        BodyPart hole = getAffected().body.getRandom(target);
         if (hole == null || penetrator == null) {
             return "";
         }
         return Formatter.capitalizeFirstLetter(String.format("%s fucking %s %s with %s %s\n",
-                            other.subjectAction("are", "is"), affected.nameOrPossessivePronoun(),
-                            hole.describe(affected), other.possessiveAdjective(), penetrator.describe(other)));
+                            getOther().subjectAction("are", "is"), getAffected().nameOrPossessivePronoun(),
+                            hole.describe(getAffected()), getOther().possessiveAdjective(), penetrator.describe(getOther())));
     }
 
     @Override
@@ -58,22 +63,22 @@ public class PartFucked extends Status implements InsertedStatus {
 
     @Override
     public void tick(Combat c) {
-        BodyPart hole = affected.body.getRandom(target);
+        BodyPart hole = getAffected().body.getRandom(target);
         if (hole == null || penetrator == null || c == null) {
-            affected.removelist.add(this);
+            getAffected().removelist.add(this);
             return;
         }
-        c.write(other, Formatter.capitalizeFirstLetter(
+        c.write(getOther(), Formatter.capitalizeFirstLetter(
                         Formatter.format("{other:name-possessive} %s relentlessly fucks {self:name-do} {self:possessive} {self:body-part:"
-                                        + target + "}.", affected, other, penetrator.describe(other))));
-        affected.body.pleasure(other, penetrator, hole, 10, c);
-        other.body.pleasure(affected, hole, penetrator, 2, c);
-        affected.emote(Emotion.desperate, 10);
-        affected.emote(Emotion.nervous, 10);
+                                        + target + "}.", getAffected(), getOther(), penetrator.describe(getOther()))));
+        getAffected().body.pleasure(getOther(), penetrator, hole, 10, c);
+        getOther().body.pleasure(getAffected(), hole, penetrator, 2, c);
+        getAffected().emote(Emotion.desperate, 10);
+        getAffected().emote(Emotion.nervous, 10);
     }
 
     public void onRemove(Combat c, Character other) {
-        c.write(other, Formatter.format("{other:NAME-POSSESSIVE} slick %s slips out of {self:direct-object} with an audible pop.", affected, other, penetrator.describe(other)));
+        c.write(other, Formatter.format("{other:NAME-POSSESSIVE} slick %s slips out of {self:direct-object} with an audible pop.", getAffected(), other, penetrator.describe(other)));
     }
 
     @Override
@@ -133,7 +138,7 @@ public class PartFucked extends Status implements InsertedStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new PartFucked(newAffected, newOther, penetrator, target);
+        return new PartFucked(newAffected.getType(), newOther.getType(), penetrator, target);
     }
 
     @Override  public JsonObject saveToJson() {
@@ -155,12 +160,12 @@ public class PartFucked extends Status implements InsertedStatus {
 
     @Override
     public BodyPart getHolePart() {
-        return affected.body.getRandom(target);
+        return getAffected().body.getRandom(target);
     }
 
     @Override
     public Character getReceiver() {
-        return affected;
+        return getAffected();
     }
 
     @Override
@@ -170,6 +175,6 @@ public class PartFucked extends Status implements InsertedStatus {
 
     @Override
     public Character getPitcher() {
-        return other;
+        return getOther();
     }
 }

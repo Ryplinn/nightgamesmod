@@ -4,12 +4,13 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class Nimble extends DurationStatus {
-    public Nimble(Character affected, int duration) {
+    public Nimble(CharacterType affected, int duration) {
         super("Nimble", affected, duration);
         flag(Stsflag.nimble);
         flag(Stsflag.purgable);
@@ -17,30 +18,27 @@ public class Nimble extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "You're as quick and nimble as a cat.";
         } else {
-            return affected.getName() + " darts around gracefully.";
+            return getAffected().getName() + " darts around gracefully.";
         }
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s now more nimble.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now more nimble.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
     public float fitnessModifier() {
-        return affected.get(Attribute.animism) / 10.0f;
+        return getAffected().get(Attribute.animism) / 10.0f;
     }
 
     @Override
     public int mod(Attribute a) {
-        switch (a) {
-            case speed:
-                return 2 + affected.getArousal().getReal() / 100;
-            default:
-                break;
+        if (a == Attribute.speed) {
+            return 2 + getAffected().getArousal().getReal() / 100;
         }
         return 0;
     }
@@ -48,7 +46,7 @@ public class Nimble extends DurationStatus {
     @Override
     public int regen(Combat c) {
         super.regen(c);
-        affected.emote(Emotion.confident, 5);
+        getAffected().emote(Emotion.confident, 5);
         return 0;
     }
 
@@ -74,12 +72,12 @@ public class Nimble extends DurationStatus {
 
     @Override
     public int evade() {
-        return affected.get(Attribute.animism) * affected.getArousal().percent() / 100;
+        return getAffected().get(Attribute.animism) * getAffected().getArousal().percent() / 100;
     }
 
     @Override
     public int escape() {
-        return affected.get(Attribute.animism) * affected.getArousal().percent() / 100;
+        return getAffected().get(Attribute.animism) * getAffected().getArousal().percent() / 100;
     }
 
     @Override
@@ -94,7 +92,7 @@ public class Nimble extends DurationStatus {
 
     @Override
     public int counter() {
-        return (affected.get(Attribute.animism) / 2) * affected.getArousal().percent() / 100;
+        return (getAffected().get(Attribute.animism) / 2) * getAffected().getArousal().percent() / 100;
     }
 
     @Override
@@ -104,7 +102,7 @@ public class Nimble extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Nimble(newAffected, getDuration());
+        return new Nimble(newAffected.getType(), getDuration());
     }
 
     @Override  public JsonObject saveToJson() {

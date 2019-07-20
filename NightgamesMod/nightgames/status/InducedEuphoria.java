@@ -4,11 +4,12 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class InducedEuphoria extends DurationStatus {
-    public InducedEuphoria(Character affected) {
+    public InducedEuphoria(CharacterType affected) {
         super("Induced Euphoria", affected, 20);
         flag(Stsflag.aphrodisiac);
         flag(Stsflag.debuff);
@@ -17,18 +18,18 @@ public class InducedEuphoria extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "Your entire body is flushed with chemically induced pleasure. Every sensation turns you on.";
         } else {
-            return affected.possessiveAdjective()
+            return getAffected().possessiveAdjective()
                             + " body is alight with chemically induced euphoria. Every sensation causes "
-                            + affected.pronoun() + " to moan softly.";
+                            + getAffected().pronoun() + " to moan softly.";
         }
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s now affected by an aphrodisiac.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now affected by an aphrodisiac.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -103,7 +104,7 @@ public class InducedEuphoria extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new InducedEuphoria(newAffected);
+        return new InducedEuphoria(newAffected.getType());
     }
 
      public JsonObject saveToJson() {

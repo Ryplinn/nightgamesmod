@@ -3,6 +3,7 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -10,7 +11,7 @@ import nightgames.combat.Combat;
 public class Lethargic extends DurationStatus {
     double magnitude;
 
-    public Lethargic(Character affected, int duration, double magnitude) {
+    public Lethargic(CharacterType affected, int duration, double magnitude) {
         super("Lethargic", affected, duration);
         this.magnitude = magnitude;
         flag(Stsflag.lethargic);
@@ -25,22 +26,22 @@ public class Lethargic extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "Your mojo gain is stopped.";
-        } else if (affected.has(Trait.lethargic)) {
-            if (affected.getMojo().get() < 40) {
-                return affected.getName() + " looks lethargic.";
+        } else if (getAffected().has(Trait.lethargic)) {
+            if (getAffected().getMojo().get() < 40) {
+                return getAffected().getName() + " looks lethargic.";
             } else {
-                return affected.getName() + " looks energized";
+                return getAffected().getName() + " looks energized";
             }
         } else {
-            return affected.getName() + " looks lethargic.";
+            return getAffected().getName() + " looks lethargic.";
         }
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s lethargic.\n", affected.subjectAction("are", "is"));
+        return String.format("%s lethargic.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -110,7 +111,7 @@ public class Lethargic extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Lethargic(newAffected, getDuration(), magnitude);
+        return new Lethargic(newAffected.getType(), getDuration(), magnitude);
     }
 
     @Override  public JsonObject saveToJson() {

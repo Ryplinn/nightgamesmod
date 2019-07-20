@@ -3,6 +3,7 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -23,8 +24,8 @@ public class Drained extends AttributeBuff {
         int realValue = Math.min(drained.getPure(att) - 
                         (Attribute.isBasic(att) ? 3 : 0), value);
         if (realValue > 0) {
-            drainer.add(c, new Drained(drainer, drained, att, realValue, duration));
-            drained.add(c, new Drained(drained, drainer, att, -realValue, duration));
+            drainer.add(c, new Drained(drainer.getType(), drained.getType(), att, realValue, duration));
+            drained.add(c, new Drained(drained.getType(), drainer.getType(), att, -realValue, duration));
             if (write) {
                 if (drainer.has(Trait.WillingSacrifice) && drained.is(Stsflag.charmed)) {
                     Formatter.writeIfCombat(c, drainer, Formatter.format("With {other:name-possessive} mental defences lowered as they are,"
@@ -51,15 +52,19 @@ public class Drained extends AttributeBuff {
         }
     }
 
-    private Character other;
+    private CharacterType other;
 
-    public Drained(Character affected, Character other, Attribute att, int value, int duration) {
+    public Drained(CharacterType affected, CharacterType other, Attribute att, int value, int duration) {
         super(affected, att, value, duration);
         this.other = other;
         unflag(Stsflag.purgable);
         if (value < 0) {
             flag(Stsflag.debuff);
         }
+    }
+
+    public Character getOther() {
+        return other.fromPoolGuaranteed();
     }
 
     @Override
@@ -75,7 +80,7 @@ public class Drained extends AttributeBuff {
         } else {
             String message;
             List<String> stolenSynonyms = Arrays.asList("stolen", "robbed", "plundered", "hijacked", "drained", "diverted");
-            List<String> boostingSynonyms = Arrays.asList("augmenting", "boosting", "bolstering", "reinforcing", "strengthing", "improving");
+            List<String> boostingSynonyms = Arrays.asList("augmenting", "boosting", "bolstering", "reinforcing", "strengthening", "improving");
             if (newValue <= 2) {
                 // small
                 message = "{self:subject-action:have} %s a bit of {other:name-possessive} %s, slightly %s {self:possessive} %s.";
@@ -86,7 +91,7 @@ public class Drained extends AttributeBuff {
                 // large
                 message = "{self:subject-action:have} %s some of {other:name-possessive} %s, greatly %s {self:possessive} %s.";
             }
-            return Formatter.format(message, affected, other, Random.pickRandomGuaranteed(stolenSynonyms), modded.getDrainedDO(),
+            return Formatter.format(message, getAffected(), getOther(), Random.pickRandomGuaranteed(stolenSynonyms), modded.getDrainedDO(),
                             Random.pickRandomGuaranteed(boostingSynonyms), modded.getDrainerOwnDO());
         }
     }
@@ -95,10 +100,10 @@ public class Drained extends AttributeBuff {
     public String describe(Combat c) {
         String person, adjective, modification;
 
-        if (affected.human()) {
+        if (getAffected().human()) {
             person = "You feel your";
         } else {
-            person = affected.getName() + "'s";
+            person = getAffected().getName() + "'s";
         }
         if (Math.abs(value) > 5) {
             adjective = "greatly";
@@ -124,7 +129,7 @@ public class Drained extends AttributeBuff {
 
     @Override
     public String getVariant() {
-        return "DRAINED:" + other.getTrueName() + ":" + modded.toString();
+        return "DRAINED:" + other + ":" + modded.toString();
     }
 
     @Override
@@ -144,12 +149,12 @@ public class Drained extends AttributeBuff {
 
     @Override
     public int escape() {
-        return other != null && other.has(Trait.SpecificSapping) && value < 0 ? Math.max(-10, -value) : 0;
+        return other != null && getOther().has(Trait.SpecificSapping) && value < 0 ? Math.max(-10, -value) : 0;
     }
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Drained(newAffected, newOther, modded, value, getDuration());
+        return new Drained(newAffected.getType(), newOther.getType(), modded, value, getDuration());
     }
 
     @Override

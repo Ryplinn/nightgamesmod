@@ -4,27 +4,28 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class Wary extends DurationStatus {
-    public Wary(Character affected, int duration) {
+    public Wary(CharacterType affected, int duration) {
         super("Wary", affected, duration);
         flag(Stsflag.wary);
     }
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "You're wary of your opponent.";
         } else {
-            return affected.getName() + " is wary of "+c.getOpponent(affected).nameDirectObject()+".";
+            return getAffected().getName() + " is wary of " + c.getOpponent(getAffected()).nameDirectObject() + ".";
         }
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s now wary.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now wary.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -89,7 +90,7 @@ public class Wary extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Wary(newAffected, getDuration());
+        return new Wary(newAffected.getType(), getDuration());
     }
 
     @Override public JsonObject saveToJson() {

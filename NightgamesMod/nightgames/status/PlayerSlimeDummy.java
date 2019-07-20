@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Player;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -11,7 +12,7 @@ import nightgames.combat.Combat;
 // Just for the description, really
 public class PlayerSlimeDummy extends Status {
 
-    public PlayerSlimeDummy(Player affected) {
+    public PlayerSlimeDummy(CharacterType affected) {
         super("Player Slime Dummy", affected);
     }
 
@@ -87,7 +88,8 @@ public class PlayerSlimeDummy extends Status {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new PlayerSlimeDummy((Player)newAffected);
+        assert newAffected instanceof Player;
+        return new PlayerSlimeDummy(newAffected.getType());
     }
 
     @Override

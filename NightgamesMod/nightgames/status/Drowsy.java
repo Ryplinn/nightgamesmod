@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
@@ -11,7 +12,7 @@ public class Drowsy extends DurationStatus {
 
     private int magnitude;
 
-    public Drowsy(Character affected) {
+    public Drowsy(CharacterType affected) {
         super("Drowsy", affected, 4);
         flag(Stsflag.drowsy);
         flag(Stsflag.purgable);
@@ -23,7 +24,7 @@ public class Drowsy extends DurationStatus {
         return -10;
     }
 
-    public Drowsy(Character affected, int magnitude, int duration) {
+    public Drowsy(CharacterType affected, int magnitude, int duration) {
         super("Drowsy", affected, duration);
         this.magnitude = magnitude;
     }
@@ -35,11 +36,11 @@ public class Drowsy extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "You feel lethargic and sluggish. You're struggling to remain standing";
         }
 
-        return affected.subject() + " looks extremely sleepy.";
+        return getAffected().subject() + " looks extremely sleepy.";
     }
 
     @Override
@@ -54,7 +55,7 @@ public class Drowsy extends DurationStatus {
 
     @Override
     public void tick(Combat c) {
-        affected.loseMojo(c, magnitude * -5);
+        getAffected().loseMojo(c, magnitude * -5);
     }
 
     @Override
@@ -84,7 +85,7 @@ public class Drowsy extends DurationStatus {
 
     @Override
     public int gainmojo(int x) {
-        return x * 1 / (1 + magnitude);
+        return x / (1 + magnitude);
     }
 
     @Override
@@ -104,7 +105,7 @@ public class Drowsy extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Drowsy(newAffected);
+        return new Drowsy(newAffected.getType());
     }
 
     @Override

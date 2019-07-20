@@ -4,12 +4,13 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class Distorted extends DurationStatus {
-    public Distorted(Character affected, int duration) {
+    public Distorted(CharacterType affected, int duration) {
         super("Distorted", affected, duration);
         flag(Stsflag.distorted);
         flag(Stsflag.purgable);
@@ -17,18 +18,18 @@ public class Distorted extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "Your image is distorted, making you hard to hit.";
         } else {
-            return "Multiple " + affected.getName()
+            return "Multiple " + getAffected().getName()
                             + "s appear in front of you. When you focus, you can tell "
-                            + "which one is real, but it's still screwing up "+affected.nameOrPossessivePronoun()+" accuracy.";
+                            + "which one is real, but it's still screwing up "+getAffected().nameOrPossessivePronoun()+" accuracy.";
         }
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s image is now distorted.\n", affected.nameOrPossessivePronoun());
+        return String.format("%s image is now distorted.\n", getAffected().nameOrPossessivePronoun());
     }
 
     @Override
@@ -44,7 +45,7 @@ public class Distorted extends DurationStatus {
     @Override
     public int regen(Combat c) {
         super.regen(c);
-        affected.emote(Emotion.confident, 5);
+        getAffected().emote(Emotion.confident, 5);
         return 0;
     }
 
@@ -100,7 +101,7 @@ public class Distorted extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Distorted(newAffected, getDuration());
+        return new Distorted(newAffected.getType(), getDuration());
     }
 
     @Override  public JsonObject saveToJson() {

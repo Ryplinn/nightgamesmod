@@ -393,7 +393,7 @@ public class Airi extends BasePersonality {
                 c.write(self, Formatter.format("<b>As {self:subject} orgasms, {self:possessive} whole body shimmers and seems to melt into a puddle of goo. "
                                 + "A human body rises from the slime and molds itself to a facsimile of an all-too-familiar Asian {self:boy} giving you a self satisfied little smirk. "
                                 + "Shit, {self:pronoun} tricked you, it was Airi all along!</b><br/>", self, opponent));
-                opponent.add(c, new Flatfooted(opponent, 2));
+                opponent.add(c, new Flatfooted(opponent.getType(), 2));
                 unmasked = true;
             } else {
                 c.write(self, Formatter.format("After {self:name-possessive} orgasm, her whole body shimmers and melts into a puddle of goo. A human body rises from the slime and molds itself to a facsimile of {self:reflective}. "
@@ -439,7 +439,7 @@ public class Airi extends BasePersonality {
             }
             if (unmasked && !self.equals(opponent) && self.has(Trait.ThePrestige) && c.getStance().distance() < 2) {
                 c.write(self, Formatter.format("<b>Taking advantage of {other:name-possessive} bewilderment, {self:subject-action:swoop} {self:possessive} slime onto {other:possessive} hapless form, swiftly engulfing it in {self:possessive} amorphous body.</b><br/>", self, opponent));
-                c.setStance(new Engulfed(self, opponent));
+                c.setStance(new Engulfed(self.getType(), opponent.getType()));
             }
             self.moodSwing(c);
             self.update();

@@ -4,11 +4,12 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class SapphicSeduction extends Status {
-    public SapphicSeduction(Character affected) {
+    public SapphicSeduction(CharacterType affected) {
         super("Sapphic Seduction", affected);
     }
 
@@ -25,7 +26,7 @@ public class SapphicSeduction extends Status {
     @Override
     public int mod(Attribute a) {
         if (a == Attribute.seduction) {
-            return affected.getLevel() / 2;
+            return getAffected().getLevel() / 2;
         }
         return 0;
     }
@@ -87,7 +88,7 @@ public class SapphicSeduction extends Status {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new SapphicSeduction(newAffected);
+        return new SapphicSeduction(newAffected.getType());
     }
 
     @Override  public JsonObject saveToJson() {

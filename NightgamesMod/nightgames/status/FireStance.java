@@ -4,12 +4,13 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class FireStance extends DurationStatus {
-    public FireStance(Character affected) {
+    public FireStance(CharacterType affected) {
         super("Fire Form", affected, 10);
         flag(Stsflag.form);
     }
@@ -21,15 +22,15 @@ public class FireStance extends DurationStatus {
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s now in a fire stance.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now in a fire stance.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "Your spirit burns in you, feeding your power";
         } else {
-            return affected.getName() + " is all fired up.";
+            return getAffected().getName() + " is all fired up.";
         }
     }
 
@@ -41,8 +42,8 @@ public class FireStance extends DurationStatus {
     @Override
     public int regen(Combat c) {
         super.regen(c);
-        affected.emote(Emotion.confident, 5);
-        affected.emote(Emotion.dominant, 5);
+        getAffected().emote(Emotion.confident, 5);
+        getAffected().emote(Emotion.dominant, 5);
         return -5;
     }
 
@@ -98,7 +99,7 @@ public class FireStance extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new FireStance(newAffected);
+        return new FireStance(newAffected.getType());
     }
 
     @Override  public JsonObject saveToJson() {

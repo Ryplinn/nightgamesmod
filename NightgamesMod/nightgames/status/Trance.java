@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -18,11 +19,11 @@ import nightgames.skills.Thrust;
 public class Trance extends DurationStatus {
     private boolean makesCynical;
 
-    public Trance(Character affected, int duration) {
+    public Trance(CharacterType affected, int duration) {
         this(affected, duration, duration > 1);
     }
 
-    public Trance(Character affected, int duration, boolean makesCynical) {
+    public Trance(CharacterType affected, int duration, boolean makesCynical) {
         super("Trance", affected, duration);
         flag(Stsflag.trance);
         flag(Stsflag.disabling);
@@ -31,25 +32,25 @@ public class Trance extends DurationStatus {
         this.makesCynical = makesCynical;
     }
 
-    public Trance(Character affected) {
+    public Trance(CharacterType affected) {
         this(affected, 3, true);
     }
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "You know that you should be fighting back, but it's so much easier to just surrender.";
         } else {
-            return affected.getName() + " is flush with desire and doesn't seem interested in fighting back.";
+            return getAffected().getName() + " is flush with desire and doesn't seem interested in fighting back.";
         }
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
         if (replacement != null) {
-            return String.format("%s now entranced.\n", affected.subjectAction("are", "is"));
+            return String.format("%s now entranced.\n", getAffected().subjectAction("are", "is"));
         } else {
-            return String.format("%s already entranced.\n", affected.subjectAction("are", "is"));
+            return String.format("%s already entranced.\n", getAffected().subjectAction("are", "is"));
         }
     }
 
@@ -65,14 +66,14 @@ public class Trance extends DurationStatus {
 
     @Override
     public void tick(Combat c) {
-        affected.loseWillpower(c, 1, 0, false, " (Trance)");
-        affected.emote(Emotion.horny, 15);
+        getAffected().loseWillpower(c, 1, 0, false, " (Trance)");
+        getAffected().emote(Emotion.horny, 15);
     }
 
     @Override
     public void onRemove(Combat c, Character other) {
         if (makesCynical) {
-            affected.addlist.add(new Cynical(affected));
+            getAffected().addlist.add(new Cynical(affected));
         }
     }
 
@@ -88,7 +89,7 @@ public class Trance extends DurationStatus {
 
     @Override
     public int damage(Combat c, int x) {
-        affected.removelist.add(this);
+        getAffected().removelist.add(this);
         return 0;
     }
 
@@ -139,7 +140,7 @@ public class Trance extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Trance(newAffected);
+        return new Trance(newAffected.getType(), this.getDuration(), this.makesCynical);
     }
 
     @Override  public JsonObject saveToJson() {

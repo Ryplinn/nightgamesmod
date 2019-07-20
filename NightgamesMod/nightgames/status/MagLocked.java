@@ -3,6 +3,7 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -12,7 +13,7 @@ public class MagLocked extends Status {
 
     private int count;
 
-    public MagLocked(Character affected) {
+    public MagLocked(CharacterType affected) {
         super("MagLocked", affected);
         flag(Stsflag.maglocked);
         count = 1;
@@ -43,18 +44,18 @@ public class MagLocked extends Status {
             return Formatter.format(
                             "A single inactive MagLock hangs around one of {self:name-possessive}"
                                             + " wrists. It's harmless for now, but any more would be dangerous.",
-                            affected, c.getOpponent(affected));
+                            getAffected(), c.getOpponent(getAffected()));
         } else if (count == 2) {
             return Formatter.format(
                             "{other:NAME-POSSESSIVE} two MagLocks, placed around {self:name-possessive}"
                                             + " wrists, have locked together behind {self:possessive} back and"
                                             + " are restraining {self:possessive} movement.",
-                            affected, c.getOpponent(affected));
+                            getAffected(), c.getOpponent(getAffected()));
         } else {
             return Formatter.format(
                             "Hogtied by {other:name-possessive} MagLocks,"
                                             + "{self:subject-action:are|is} completely immobilized.",
-                            affected, c.getOpponent(affected));
+                            getAffected(), c.getOpponent(getAffected()));
         }
     }
 
@@ -70,17 +71,17 @@ public class MagLocked extends Status {
     public void tick(Combat c) {
         if (count > 1) {
             flag(Stsflag.bound);
-            c.getOpponent(affected).consume(Item.Battery, count - 1);
+            c.getOpponent(getAffected()).consume(Item.Battery, count - 1);
             if (count == 3) {
                 flag(Stsflag.hogtied);
             }
         }
-        if (!c.getOpponent(affected).has(Item.Battery)) {
+        if (!c.getOpponent(getAffected()).has(Item.Battery)) {
             c.write(Formatter.format(
                             "<b>{other:NAME-POSSESSIVE} MagLocks have run out of power and "
                                             + "fall harmlessly off of {self:subject} and onto the ground.",
-                            affected, c.getOpponent(affected)));
-            affected.removelist.add(this);
+                            getAffected(), c.getOpponent(getAffected())));
+            getAffected().removelist.add(this);
         }
     }
 
@@ -141,7 +142,7 @@ public class MagLocked extends Status {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new MagLocked(newAffected);
+        return new MagLocked(newAffected.getType());
     }
 
     @Override

@@ -4,12 +4,13 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class Sore extends DurationStatus {
-    public Sore(Character affected, int duration) {
+    private Sore(CharacterType affected, int duration) {
         super("Sore", affected, duration);
 
         flag(Stsflag.purgable);
@@ -19,7 +20,7 @@ public class Sore extends DurationStatus {
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s now sore.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now sore.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -40,8 +41,8 @@ public class Sore extends DurationStatus {
     @Override
     public int regen(Combat c) {
         super.regen(c);
-        affected.emote(Emotion.nervous, 10);
-        return -affected.getStamina().max() / 20;
+        getAffected().emote(Emotion.nervous, 10);
+        return -getAffected().getStamina().max() / 20;
     }
 
     @Override
@@ -101,7 +102,7 @@ public class Sore extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Sore(newAffected, getDuration());
+        return new Sore(newAffected.getType(), getDuration());
     }
 
     @Override  public JsonObject saveToJson() {

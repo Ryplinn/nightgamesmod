@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -16,7 +17,7 @@ import nightgames.skills.Suckle;
 public class Suckling extends DurationStatus {
     private Suckle skill;
 
-    public Suckling(Character affected, Character opponent, int duration) {
+    public Suckling(CharacterType affected, CharacterType opponent, int duration) {
         super("Suckling", affected, duration);
         skill = new Suckle(opponent);
         flag(Stsflag.suckling);
@@ -27,22 +28,22 @@ public class Suckling extends DurationStatus {
 
     @Override
     public Collection<Skill> allowedSkills(Combat c) {
-        return Collections.singleton((Skill) new Suckle(affected));
+        return Collections.singleton(new Suckle(affected));
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s fighting an urge to drink from %s nipples.\n", affected.subjectAction("are", "is"),
+        return String.format("%s fighting an urge to drink from %s nipples.\n", getAffected().subjectAction("are", "is"),
                         skill.getSelf().nameOrPossessivePronoun());
     }
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
-            return "You feel an irresistable urge to suck on " + c.getOpponent(affected).nameOrPossessivePronoun() + " nipples.";
+        if (getAffected().human()) {
+            return "You feel an irresistible urge to suck on " + c.getOpponent(getAffected()).nameOrPossessivePronoun() + " nipples.";
         } else {
-            return affected.getName() + " is looking intently at "
-                            +c.getOpponent(affected).nameOrPossessivePronoun()+" breasts.";
+            return getAffected().getName() + " is looking intently at "
+                            +c.getOpponent(getAffected()).nameOrPossessivePronoun()+" breasts.";
         }
     }
 
@@ -59,7 +60,7 @@ public class Suckling extends DurationStatus {
     @Override
     public int regen(Combat c) {
         super.regen(c);
-        affected.emote(Emotion.horny, 5);
+        getAffected().emote(Emotion.horny, 5);
         return 0;
     }
 
@@ -115,12 +116,12 @@ public class Suckling extends DurationStatus {
 
     @Override
     public void onRemove(Combat c, Character other) {
-        affected.addlist.add(new Cynical(affected));
+        getAffected().addlist.add(new Cynical(affected));
     }
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Suckling(newAffected, newOther, getDuration());
+        return new Suckling(newAffected.getType(), newOther.getType(), getDuration());
     }
 
     @Override  public JsonObject saveToJson() {

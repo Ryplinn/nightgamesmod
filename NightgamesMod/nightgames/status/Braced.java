@@ -1,12 +1,14 @@
 package nightgames.status;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -14,19 +16,19 @@ import nightgames.global.Random;
 
 public class Braced extends DurationStatus {
 
-    public Braced(Character affected, int duration) {
+    Braced(CharacterType affected, int duration) {
         super("Braced", affected, duration);
         flag(Stsflag.braced);
     }
 
-    public Braced(Character affected) {
+    public Braced(CharacterType affected) {
         this(affected, 4);
         flag(Stsflag.braced);
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s now braced.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now braced.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -46,15 +48,16 @@ public class Braced extends DurationStatus {
 
     @Override
     public int damage(Combat c, int x) {
-        List<String> possibleStrings = Arrays.asList("Since {self:subject-action:are} already down, it doesn't make much of a difference.");
-        if (affected.canRespond()) {
+        List<String> possibleStrings = Collections.singletonList(
+                        "Since {self:subject-action:are} already down, it doesn't make much of a difference.");
+        if (getAffected().canRespond()) {
             possibleStrings = Arrays.asList(
                         "Prepared for the blow, {self:subject-action:manage} to avoid taking most of the damage.",
                         "Being wary now, {self:subject-action:avoid} most of the attack.",
                         "Once bitten twice shy, {self:subject} only {self:action:take} a glancing blow."
                         );
         }
-        c.write(affected, Formatter.format(Random.pickRandom(possibleStrings).get(), affected, affected));
+        c.write(getAffected(), Formatter.format(Random.pickRandomGuaranteed(possibleStrings), getAffected(), getAffected()));
         return -x * 3 / 4;
     }
 
@@ -65,27 +68,29 @@ public class Braced extends DurationStatus {
 
     @Override
     public int weakened(Combat c, int x) {
-        List<String> possibleStrings = Arrays.asList("Since {self:subject-action:are} already down, there's not much to weaken.");
-        if (affected.canRespond()) {
+        List<String> possibleStrings = Collections.singletonList(
+                        "Since {self:subject-action:are} already down, there's not much to weaken.");
+        if (getAffected().canRespond()) {
             possibleStrings = Arrays.asList(
                         "Being wary now, {self:subject-action:manage} to conserve most of {self:possessive} stamina.",
                         "Being more careful now, {self:subject-action:avoid} manages to conserve most of {self:possessive} stamina."
                         );
         }
-        c.write(affected, Formatter.format(Random.pickRandom(possibleStrings).get(), affected, affected));
+        c.write(getAffected(), Formatter.format(Random.pickRandomGuaranteed(possibleStrings), getAffected(), getAffected()));
         return -x * 3 / 4;
     }
 
     @Override
     public int drained(Combat c, int x) {
-        List<String> possibleStrings = Arrays.asList("Since {self:subject-action:are} already down, there's not much to drain.");
-        if (affected.canRespond()) {
+        List<String> possibleStrings = Collections.singletonList(
+                        "Since {self:subject-action:are} already down, there's not much to drain.");
+        if (getAffected().canRespond()) {
             possibleStrings = Arrays.asList(
                             "Being wary now, {self:subject-action:avoid} manages to hold on to most of {self:possessive} stamina.",
                             "Being more careful now, {self:subject-action:avoid} manages to prevent most of the theft of {self:possessive} stamina."
                             );
         }
-        c.write(affected, Formatter.format(Random.pickRandom(possibleStrings).get(), affected, affected));
+        c.write(getAffected(), Formatter.format(Random.pickRandomGuaranteed(possibleStrings), getAffected(), getAffected()));
         return -x * 3 / 4;
     }
 
@@ -126,7 +131,7 @@ public class Braced extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Braced(newAffected);
+        return new Braced(newAffected.getType());
     }
 
     @Override  public JsonObject saveToJson() {

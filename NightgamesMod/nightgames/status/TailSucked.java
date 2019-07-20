@@ -3,18 +3,22 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Random;
 import nightgames.skills.TailSuck;
 import nightgames.skills.damage.DamageType;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public class TailSucked extends Status implements InsertedStatus {
 
-    private Character sucker;
+    private CharacterType sucker;
     private int power;
 
-    public TailSucked(Character affected, Character sucker, int power) {
+    public TailSucked(CharacterType affected, CharacterType sucker, int power) {
         super("Tail Sucked", affected);
         this.sucker = sucker;
         this.power = power;
@@ -25,42 +29,48 @@ public class TailSucked extends Status implements InsertedStatus {
         flag(Stsflag.tailsucked);
     }
 
+    private Character getSucker() {
+        return sucker.fromPoolGuaranteed();
+    }
+
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s tail is sucking %s energy straight from %s %s.", sucker.nameOrPossessivePronoun(),
-                        affected.nameOrPossessivePronoun(), affected.possessiveAdjective(),
-                        affected.body.getRandomCock().describe(affected));
+        return String.format("%s tail is sucking %s energy straight from %s %s.", getSucker().nameOrPossessivePronoun(),
+                        getAffected().nameOrPossessivePronoun(), getAffected().possessiveAdjective(),
+                        getAffected().body.getRandomCock().describe(getAffected()));
     }
 
     @Override
     public String describe(Combat c) {
-        if (!affected.hasDick()) {
-            affected.removelist.add(this);
+        if (!getAffected().hasDick()) {
+            getAffected().removelist.add(this);
             return "";
         }
         return String.format("%s tail keeps churning around %s " + "%s, sucking in %s vital energies.",
-                        sucker.nameOrPossessivePronoun(), affected.nameOrPossessivePronoun(),
-                        affected.body.getRandomCock().describe(affected), affected.possessiveAdjective());
+                        getSucker().nameOrPossessivePronoun(), getAffected().nameOrPossessivePronoun(),
+                        getAffected().body.getRandomCock().describe(getAffected()), getAffected().possessiveAdjective());
     }
 
     @Override
     public void tick(Combat c) {
-        BodyPart cock = affected.body.getRandomCock();
-        BodyPart tail = sucker.body.getRandom("tail");
+        BodyPart cock = getAffected().body.getRandomCock();
+        BodyPart tail = getSucker().body.getRandom("tail");
         if (cock == null || tail == null || c == null) {
-            affected.removelist.add(this);
+            getAffected().removelist.add(this);
             return;
         }
 
-        c.write(sucker, String.format("%s tail sucks powerfully, and %s" + " some of %s strength being drawn in.",
-                        sucker.nameOrPossessivePronoun(), affected.subjectAction("feel", "feels"),
-                        affected.possessiveAdjective()));
+        c.write(getSucker(), String.format("%s tail sucks powerfully, and %s" + " some of %s strength being drawn in.",
+                        getSucker().nameOrPossessivePronoun(), getAffected().subjectAction("feel", "feels"),
+                        getAffected().possessiveAdjective()));
 
-        Attribute toDrain = Random.pickRandom(affected.att.entrySet().stream().filter(e -> e.getValue() != 0)
-                        .map(e -> e.getKey()).toArray(Attribute[]::new)).get();
-        Drained.drain(c, sucker, affected, toDrain, power, 20, true);
-        affected.drain(c, sucker, (int) DamageType.drain.modifyDamage(sucker, affected, 10), Character.MeterType.STAMINA);
-        affected.drain(c, sucker, 1 + Random.random(power * 3), Character.MeterType.MOJO);
+        Attribute toDrain = Random.pickRandomGuaranteed(
+                        getAffected().att.entrySet().stream().filter(e -> e.getValue() != 0).map(Map.Entry::getKey)
+                                        .collect(Collectors.toList()));
+
+        Drained.drain(c, getSucker(), getAffected(), toDrain, power, 20, true);
+        getAffected().drain(c, getSucker(), (int) DamageType.drain.modifyDamage(getSucker(), getAffected(), 10), Character.MeterType.STAMINA);
+        getAffected().drain(c, getSucker(), 1 + Random.random(power * 3), Character.MeterType.MOJO);
     }
 
     @Override
@@ -125,7 +135,7 @@ public class TailSucked extends Status implements InsertedStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new TailSucked(newAffected, newOther, power);
+        return new TailSucked(newAffected.getType(), newOther.getType(), power);
     }
 
     @Override public JsonObject saveToJson() {
@@ -142,27 +152,23 @@ public class TailSucked extends Status implements InsertedStatus {
         return 0;
     }
 
-    public Character getSucker() {
-        return sucker;
-    }
-
     @Override
     public BodyPart getHolePart() {
-        return sucker.body.getRandom("tail");
+        return getSucker().body.getRandom("tail");
     }
 
     @Override
     public Character getReceiver() {
-        return sucker;
+        return getSucker();
     }
 
     @Override
     public BodyPart getStickPart() {
-        return affected.body.getRandomCock();
+        return getAffected().body.getRandomCock();
     }
 
     @Override
     public Character getPitcher() {
-        return affected;
+        return getAffected();
     }
 }

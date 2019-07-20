@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.NPC;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -15,28 +16,28 @@ public class Alluring extends DurationStatus {
      * Default constructor for loading
      */
     public Alluring() {
-        this(NPC.noneCharacter());
+        this(NPC.noneCharacter().getType());
     }
 
-    public Alluring(Character affected, int duration) {
+    public Alluring(CharacterType affected, int duration) {
         super("Alluring", affected, duration);
         flag(Stsflag.alluring);
         flag(Stsflag.purgable);
     }
 
-    public Alluring(Character affected) {
+    public Alluring(CharacterType affected) {
         this(affected, 3);
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return Formatter.format("{self:SUBJECT-ACTION:are|is} now alluring.\n", affected, null);
+        return Formatter.format("{self:SUBJECT-ACTION:are|is} now alluring.\n", getAffected(), null);
     }
 
     @Override
     public String describe(Combat c) {
-        if (!affected.human()) {
-            return Formatter.format("{self:SUBJECT-ACTION:look|looks} impossibly beautiful to {other:name-possessive} eyes, {other:pronoun} can't bear to hurt {self:direct-object}.", affected, c.getOpponent(affected));
+        if (!getAffected().human()) {
+            return Formatter.format("{self:SUBJECT-ACTION:look|looks} impossibly beautiful to {other:name-possessive} eyes, {other:pronoun} can't bear to hurt {self:direct-object}.", getAffected(), c.getOpponent(getAffected()));
         }
         return "";
     }
@@ -103,7 +104,7 @@ public class Alluring extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Alluring(newAffected, getDuration());
+        return new Alluring(newAffected.getType(), getDuration());
     }
 
     @Override  public JsonObject saveToJson() {

@@ -3,6 +3,7 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -14,26 +15,33 @@ public class PartiallyCorrupted extends DurationStatus {
     private static final int THRESHOLD = 4;
 
     private int counter;
-    private final Character cause;
+    private final CharacterType cause;
 
-    public PartiallyCorrupted(Character affected, Character cause) {
-        super("Partially Corrupted", affected, cause.has(Trait.LastingCorruption) ? 6 : 4);
+    public PartiallyCorrupted(CharacterType affected, CharacterType cause) {
+        super("Partially Corrupted", affected, 4);
         counter = 1;
         this.cause = cause;
+        if (getCause().has(Trait.LastingCorruption)) {
+            setDuration(6);
+        }
         flag(Stsflag.partiallyCorrupted);
         flag(Stsflag.debuff);
         flag(Stsflag.purgable);
     }
 
+    private Character getCause() {
+        return cause.fromPoolGuaranteed();
+    }
+
     @Override
     public String initialMessage(Combat c, Status replacement) {
         if (counter > THRESHOLD) {
-            affected.addict(c, AddictionType.CORRUPTION,
-                            cause, cause.has(Trait.Subversion) ? Addiction.HIGH_INCREASE : Addiction.MED_INCREASE);
+            getAffected().addict(c, AddictionType.CORRUPTION,
+                            getCause(), getCause().has(Trait.Subversion) ? Addiction.HIGH_INCREASE : Addiction.MED_INCREASE);
             counter = 0;
-            return Formatter.format("{other:NAME-POSSESSIVE} lips have finally broke through {self:possessive} resistance and planted a bit of {other:possessive} darkness inside {self:possessive} very soul!", affected, cause);
+            return Formatter.format("{other:NAME-POSSESSIVE} lips have finally broke through {self:possessive} resistance and planted a bit of {other:possessive} darkness inside {self:possessive} very soul!", getAffected(), getCause());
         } else {
-            return Formatter.format("You {self:if-human:feel}{self:if-nonhuman:almost see} {other:NAME-POSSESSIVE} lips tug on {self:name-possessive} very soul. If this keeps up, {self:pronoun} could be in serious trouble!", affected, cause);
+            return Formatter.format("You {self:if-human:feel}{self:if-nonhuman:almost see} {other:NAME-POSSESSIVE} lips tug on {self:name-possessive} very soul. If this keeps up, {self:pronoun} could be in serious trouble!", getAffected(), getCause());
         }
     }
 
@@ -48,7 +56,7 @@ public class PartiallyCorrupted extends DurationStatus {
     @Override
     public String describe(Combat c) {
         if (counter > 0) {
-            return Formatter.format("The barriers protecting {self:name-possessive} soul are temporarily weakened by {other:name-possessive} lips.", affected, cause);
+            return Formatter.format("The barriers protecting {self:name-possessive} soul are temporarily weakened by {other:name-possessive} lips.", getAffected(), getCause());
         } else {
             return "";
         }
@@ -69,7 +77,7 @@ public class PartiallyCorrupted extends DurationStatus {
 
     public void tick(Combat c) {
         if (counter <= 0) {
-            affected.removelist.add(this);
+            getAffected().removelist.add(this);
         }
     }
 
@@ -135,7 +143,7 @@ public class PartiallyCorrupted extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new PartiallyCorrupted(newAffected, newOther);
+        return new PartiallyCorrupted(newAffected.getType(), newOther.getType());
     }
 
     @Override

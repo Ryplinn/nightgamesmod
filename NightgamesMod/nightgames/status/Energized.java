@@ -4,12 +4,13 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class Energized extends DurationStatus {
-    public Energized(Character affected, int duration) {
+    public Energized(CharacterType affected, int duration) {
         super("Energized", affected, duration);
         flag(Stsflag.energized);
         flag(Stsflag.purgable);
@@ -38,9 +39,9 @@ public class Energized extends DurationStatus {
 
     @Override
     public void tick(Combat c) {
-        affected.buildMojo(c, 10, " (Energized)");
-        affected.emote(Emotion.confident, 5);
-        affected.emote(Emotion.dominant, 10);
+        getAffected().buildMojo(c, 10, " (Energized)");
+        getAffected().emote(Emotion.confident, 5);
+        getAffected().emote(Emotion.dominant, 10);
     }
 
     @Override
@@ -60,7 +61,7 @@ public class Energized extends DurationStatus {
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s with energy.\n", affected.subjectAction("now pulse", "now pulses"));
+        return String.format("%s with energy.\n", getAffected().subjectAction("now pulse", "now pulses"));
     }
 
     @Override
@@ -105,7 +106,7 @@ public class Energized extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Energized(newAffected, getDuration());
+        return new Energized(newAffected.getType(), getDuration());
     }
 
     @Override  public JsonObject saveToJson() {

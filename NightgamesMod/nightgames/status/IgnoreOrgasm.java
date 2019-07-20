@@ -4,27 +4,28 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class IgnoreOrgasm extends DurationStatus {
-    public IgnoreOrgasm(Character affected, int duration) {
+    public IgnoreOrgasm(CharacterType affected, int duration) {
         super("Orgasm Ignored", affected, duration);
         flag(Stsflag.orgasmseal);
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        if (affected.getArousal().isFull()) {
-            return affected.subjectAction("are", "is") + " overpowering the urge to cum";
+        if (getAffected().getArousal().isFull()) {
+            return getAffected().subjectAction("are", "is") + " overpowering the urge to cum";
         }
         return "";
     }
 
     @Override
     public String describe(Combat c) {
-        if (affected.getArousal().isFull()) {
-            return affected.subjectAction("are", "is") + " overpowering the urge to cum";
+        if (getAffected().getArousal().isFull()) {
+            return getAffected().subjectAction("are", "is") + " overpowering the urge to cum";
         }
         return "";
     }
@@ -46,7 +47,7 @@ public class IgnoreOrgasm extends DurationStatus {
 
     @Override
     public double pleasure(Combat c, BodyPart withPart, BodyPart targetPart, double x) {
-        if (affected.getArousal().isFull()) {
+        if (getAffected().getArousal().isFull()) {
             return -x * 9 / 10;
         }
         return 0;
@@ -99,7 +100,7 @@ public class IgnoreOrgasm extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new IgnoreOrgasm(newAffected, getDuration());
+        return new IgnoreOrgasm(newAffected.getType(), getDuration());
     }
 
     @Override  public JsonObject saveToJson() {

@@ -4,13 +4,14 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class DivineRecoil extends DurationStatus {
     public double magnitude;
 
-    public DivineRecoil(Character affected, double magnitude) {
+    public DivineRecoil(CharacterType affected, double magnitude) {
         super("Divine Recoil", affected, 5);
         flag(Stsflag.divinerecoil);
         flag(Stsflag.purgable);
@@ -23,7 +24,7 @@ public class DivineRecoil extends DurationStatus {
         if (replacement != null) {
             return String.format(
                             "Some leftover divine energy is rampaging through %s body, leaving %s incredibly sensitive.\n",
-                            affected.nameOrPossessivePronoun(), affected.directObject());
+                            getAffected().nameOrPossessivePronoun(), getAffected().directObject());
         }
         return "";
     }
@@ -31,7 +32,7 @@ public class DivineRecoil extends DurationStatus {
     @Override
     public String describe(Combat c) {
         return String.format("Divine energy rampages through %s body, leaving %s incredibly sensitive.\n",
-                        affected.nameOrPossessivePronoun(), affected.directObject());
+                        getAffected().nameOrPossessivePronoun(), getAffected().directObject());
 
     }
 
@@ -115,7 +116,7 @@ public class DivineRecoil extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new DivineRecoil(newAffected, magnitude);
+        return new DivineRecoil(newAffected.getType(), magnitude);
     }
 
     @Override  public JsonObject saveToJson() {

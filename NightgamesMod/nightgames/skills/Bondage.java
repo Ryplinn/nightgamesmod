@@ -4,7 +4,7 @@ import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
-import nightgames.status.BD;
+import nightgames.status.BondageFetish;
 import nightgames.status.Stsflag;
 
 public class Bondage extends Skill {
@@ -32,8 +32,8 @@ public class Bondage extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        getSelf().add(c, new BD(getSelf()));
-        target.add(c, new BD(target));
+        getSelf().add(c, new BondageFetish(getSelf()));
+        target.add(c, new BondageFetish(target));
         return true;
     }
 

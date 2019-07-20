@@ -9,6 +9,7 @@ import nightgames.actions.Action;
 import nightgames.actions.ControlledMasturbation;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.NPC;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -17,14 +18,18 @@ import nightgames.skills.Skill;
 
 public class RemoteMasturbation extends DurationStatus {
 
-    private final Character controller;
+    private final CharacterType controller;
 
-    public RemoteMasturbation(Character affected, Character controller) {
+    public RemoteMasturbation(CharacterType affected, CharacterType controller) {
         super("Remote Masturbation", affected, 10);
         flag(Stsflag.trance);
         flag(Stsflag.purgable);
         flag(Stsflag.mindgames);
         this.controller = controller;
+    }
+
+    public Character getController() {
+        return controller.fromPoolGuaranteed();
     }
 
     @Override
@@ -44,7 +49,7 @@ public class RemoteMasturbation extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        return controller.subject() + " is remotely directing " + affected.nameOrPossessivePronoun()
+        return getController().subject() + " is remotely directing " + getAffected().nameOrPossessivePronoun()
                         + " hands to masturbate fiercely.";
     }
 
@@ -107,7 +112,7 @@ public class RemoteMasturbation extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new RemoteMasturbation(newAffected, newOther);
+        return new RemoteMasturbation(newAffected.getType(), newOther.getType());
     }
 
     @Override
@@ -120,7 +125,7 @@ public class RemoteMasturbation extends DurationStatus {
     @Override
     public Status loadFromJson(JsonObject obj) {
         int duration = obj.get("duration").getAsInt();
-        RemoteMasturbation instance = new RemoteMasturbation(NPC.noneCharacter(), NPC.noneCharacter());
+        RemoteMasturbation instance = new RemoteMasturbation(NPC.noneCharacter().getType(), NPC.noneCharacter().getType());
         instance.setDuration(duration);
         return instance;
     }

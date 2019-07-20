@@ -6,7 +6,7 @@ import nightgames.global.Formatter;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
-import nightgames.status.BD;
+import nightgames.status.BondageFetish;
 import nightgames.status.Stsflag;
 
 public class GoblinBondage extends SimpleEnemySkill {
@@ -30,8 +30,8 @@ public class GoblinBondage extends SimpleEnemySkill {
         c.write(getSelf(), Formatter.format("{self:SUBJECT} pulls the bondage straps tighter around herself. You can see the leather and latex digging into her skin as "
                         + "her bondage fascinatation begins to affect both of you.", getSelf(), target));
         getSelf().pain(c, getSelf(), 10);
-        c.p1.add(c, new BD(c.p1));
-        c.p2.add(c, new BD(c.p2));
+        c.p1.add(c, new BondageFetish(c.p1));
+        c.p2.add(c, new BondageFetish(c.p2));
         return true;
     }
 

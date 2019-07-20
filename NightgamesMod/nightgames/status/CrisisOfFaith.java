@@ -14,7 +14,7 @@ import nightgames.status.addiction.AddictionType;
 public class CrisisOfFaith extends Status {
     public CrisisOfFaith(CharacterType affected) {
         super("Crisis of Faith", affected);
-        assert affected == null || affected.human();
+        assert affected == null || getAffected().human();
         flag(Stsflag.debuff);
     }
 
@@ -75,7 +75,7 @@ public class CrisisOfFaith extends Status {
 
     @Override
     public int gainmojo(int x) {
-        return (int) (x * (1.0f - affected.getAnyAddiction(AddictionType.ZEAL).flatMap(Addiction::activeTracker)
+        return (int) (x * (1.0f - getAffected().getAnyAddiction(AddictionType.ZEAL).flatMap(Addiction::activeTracker)
                         .map(AddictionSymptom::getCombatMagnitude).orElse(0f)));
     }
 
@@ -96,7 +96,7 @@ public class CrisisOfFaith extends Status {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new CrisisOfFaith(newAffected);
+        return new CrisisOfFaith(newAffected.getType());
     }
 
      @Override public JsonObject saveToJson() {

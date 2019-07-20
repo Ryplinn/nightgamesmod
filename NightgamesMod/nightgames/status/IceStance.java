@@ -4,28 +4,29 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class IceStance extends DurationStatus {
-    public IceStance(Character affected) {
+    public IceStance(CharacterType affected) {
         super("Ice Form", affected, 10);
         flag(Stsflag.form);
     }
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "You're as frigid as a glacier";
         } else {
-            return affected.getName() + " is cool as ice.";
+            return getAffected().getName() + " is cool as ice.";
         }
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s now in a ice stance.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now in a ice stance.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -41,8 +42,8 @@ public class IceStance extends DurationStatus {
     @Override
     public int regen(Combat c) {
         super.regen(c);
-        affected.emote(Emotion.confident, 5);
-        affected.emote(Emotion.dominant, 5);
+        getAffected().emote(Emotion.confident, 5);
+        getAffected().emote(Emotion.dominant, 5);
         return 0;
     }
 
@@ -98,7 +99,7 @@ public class IceStance extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new IceStance(newAffected);
+        return new IceStance(newAffected.getType());
     }
 
     @Override  public JsonObject saveToJson() {

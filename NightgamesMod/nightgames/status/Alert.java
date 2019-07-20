@@ -2,10 +2,8 @@ package nightgames.status;
 
 import com.google.gson.JsonObject;
 
-import nightgames.characters.Attribute;
+import nightgames.characters.*;
 import nightgames.characters.Character;
-import nightgames.characters.Emotion;
-import nightgames.characters.NPC;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
@@ -16,9 +14,9 @@ public class Alert extends DurationStatus {
      * Default constructor for loading
      */
     public Alert() {
-        this(NPC.noneCharacter());
+        this(NPC.noneCharacter().getType());
     }
-    public Alert(Character affected) {
+    public Alert(CharacterType affected) {
         super("Alert", affected, 3);
         flag(Stsflag.alert);
         flag(Stsflag.purgable);
@@ -31,7 +29,7 @@ public class Alert extends DurationStatus {
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s now more alert\n", affected.subjectAction("are", "is"));
+        return String.format("%s now more alert\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -47,7 +45,7 @@ public class Alert extends DurationStatus {
     @Override
     public int regen(Combat c) {
         super.regen(c);
-        affected.emote(Emotion.confident, 5);
+        getAffected().emote(Emotion.confident, 5);
         return 0;
     }
 
@@ -103,7 +101,7 @@ public class Alert extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Alert(newAffected);
+        return new Alert(newAffected.getType());
     }
 
     @Override  public JsonObject saveToJson() {

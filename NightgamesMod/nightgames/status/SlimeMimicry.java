@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -11,7 +12,7 @@ import nightgames.global.Formatter;
 public class SlimeMimicry extends DurationStatus {
     private final String mimickedName;
 
-    public SlimeMimicry(String name, Character affected, int duration) {
+    public SlimeMimicry(String name, CharacterType affected, int duration) {
         super("Mimicry: " + Formatter.capitalizeFirstLetter(name), affected, duration);
         this.mimickedName = name;
         this.flag(Stsflag.mimicry);
@@ -20,12 +21,12 @@ public class SlimeMimicry extends DurationStatus {
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return Formatter.format("{self:SUBJECT} started mimicking a %s.", affected, c.getOpponent(affected), mimickedName);
+        return Formatter.format("{self:SUBJECT} started mimicking a %s.", getAffected(), c.getOpponent(getAffected()), mimickedName);
     }
 
     @Override
     public String describe(Combat c) {
-    	return Formatter.format("{self:SUBJECT-ACTION:are|is} mimicking a %s.", affected, c.getOpponent(affected), mimickedName);
+    	return Formatter.format("{self:SUBJECT-ACTION:are|is} mimicking a %s.", getAffected(), c.getOpponent(getAffected()), mimickedName);
     }
 
     @Override
@@ -85,7 +86,7 @@ public class SlimeMimicry extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new SlimeMimicry(getMimickedName(), newAffected, getDuration());
+        return new SlimeMimicry(getMimickedName(), newAffected.getType(), getDuration());
     }
 
     @Override public JsonObject saveToJson() {

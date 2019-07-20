@@ -4,31 +4,32 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class Glamour extends DurationStatus {
-    public Glamour(Character affected, int duration) {
+    public Glamour(CharacterType affected, int duration) {
         super("Glamour", affected, duration);
         flag(Stsflag.alluring);
         flag(Stsflag.glamour);
         flag(Stsflag.purgable);
     }
 
-    public Glamour(Character affected) {
+    public Glamour(CharacterType affected) {
         this(affected, 3);
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s surrounded %s with a arcane glamour.\n", affected.subjectAction("have", "has"), affected.reflectivePronoun());
+        return String.format("%s surrounded %s with a arcane glamour.\n", getAffected().subjectAction("have", "has"), getAffected().reflectivePronoun());
     }
 
     @Override
     public String describe(Combat c) {
-        if (!affected.human()) {
+        if (!getAffected().human()) {
             return String.format("%s inhumanly beautiful.",
-                            c.getOpponent(affected).subjectAction("look", "looks"));
+                            c.getOpponent(getAffected()).subjectAction("look", "looks"));
         }
         return "";
     }
@@ -95,7 +96,7 @@ public class Glamour extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Glamour(newAffected, getDuration());
+        return new Glamour(newAffected.getType(), getDuration());
     }
 
     @Override  public JsonObject saveToJson() {

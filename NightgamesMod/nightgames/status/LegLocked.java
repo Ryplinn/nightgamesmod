@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -12,7 +13,7 @@ import nightgames.requirements.RequirementShortcuts;
 public class LegLocked extends Status {
     private float toughness;
 
-    public LegLocked(Character affected, float dc) {
+    public LegLocked(CharacterType affected, float dc) {
         super("Leg Locked", affected);
         requirements.add(RequirementShortcuts.eitherinserted());
         requirements.add(RequirementShortcuts.dom());
@@ -25,18 +26,18 @@ public class LegLocked extends Status {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "Her legs are locked around your waist, preventing you from pulling out.";
         } else {
             return String.format("%s legs are wrapped around %s waist, preventing %s from pulling out.",
-                            c.getOpponent(affected).nameOrPossessivePronoun(), affected.nameOrPossessivePronoun(),
-                            affected.directObject());
+                            c.getOpponent(getAffected()).nameOrPossessivePronoun(), getAffected().nameOrPossessivePronoun(),
+                            getAffected().directObject());
         }
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s being held down.\n", affected.subjectAction("are", "is"));
+        return String.format("%s being held down.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -51,7 +52,7 @@ public class LegLocked extends Status {
 
     @Override
     public int regen(Combat c) {
-        affected.emote(Emotion.horny, 10);
+        getAffected().emote(Emotion.horny, 10);
         toughness -= 2;
         return 0;
     }
@@ -118,7 +119,7 @@ public class LegLocked extends Status {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new LegLocked(newAffected, toughness);
+        return new LegLocked(newAffected.getType(), toughness);
     }
 
     @Override  public JsonObject saveToJson() {

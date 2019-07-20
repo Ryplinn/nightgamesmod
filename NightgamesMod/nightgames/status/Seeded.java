@@ -95,7 +95,7 @@ public class Seeded extends Status implements InsertedStatus {
                 if (!c.shouldAutoresolve())
                     GUI.gui.message(c, getAffected(),
                                     Formatter.format("{other:name-possessive} seedling has finally flowered. A brilliant white lilly now covers {self:name-possessive} %s, displaying {self:possessive} verdant submission for everyone to see. "
-                                                    + "While the little seedling has finally stopped sapping your vitality, the now-matured root network has somehow integrated with your nervous system and bloodsteam. As pulses of chemical and electrical obedience wrack {self:possessive} body, "
+                                                    + "While the little seedling has finally stopped sapping your vitality, the now-matured root network has somehow integrated with your nervous system and bloodstream. As pulses of chemical and electrical obedience wrack {self:possessive} body, "
                                                     + "{self:subject-action:know|knows} that {self:pronoun} {self:action:have|has} lost this fight.",
                                     getAffected(), getOther(), hole.describe(getAffected()), hole.describe(getAffected())));
             }
@@ -122,7 +122,7 @@ public class Seeded extends Status implements InsertedStatus {
             }
             if (!c.shouldAutoresolve())
                 GUI.gui.message(c, getAffected(),
-                                Formatter.format("The thick tuber-like roots inside {self:direct-object} constantly shift and scrape against {self:possessive} %s, leaving {self:direct-object} both horny and lenthargic at the same time.",
+                                Formatter.format("The thick tuber-like roots inside {self:direct-object} constantly shift and scrape against {self:possessive} %s, leaving {self:direct-object} both horny and lethargic at the same time.",
                                                 getAffected(), getOther(), hole.describe(getAffected())));
             getAffected().drain(c, getOther(), Random.random(5, 11), Character.MeterType.STAMINA, Character.MeterType.MOJO, 1.0f);
             getAffected().body.pleasure(getOther(), seed, hole, Random.random(10, 20) + getOther().get(Attribute.bio) / 2, c);
@@ -131,7 +131,7 @@ public class Seeded extends Status implements InsertedStatus {
                 stage = 1;
                 if (!c.shouldAutoresolve())
                     GUI.gui.message(c, getAffected(),
-                                    Formatter.format("With a quiet rumble, the seed burried inside {self:name-possessive} %s sprouts thin spindly roots that reach into {self:possessive} innards.",
+                                    Formatter.format("With a quiet rumble, the seed buried inside {self:name-possessive} %s sprouts thin spindly roots that reach into {self:possessive} innards.",
                                                     getAffected(), getOther(), hole.describe(getAffected())));
             }
             if (!c.shouldAutoresolve())

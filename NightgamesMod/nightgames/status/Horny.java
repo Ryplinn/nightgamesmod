@@ -12,7 +12,7 @@ import nightgames.skills.damage.DamageType;
 
 public class Horny extends DurationStatus {
     private float magnitude;
-    protected String source;
+    protected String sourceSuffix;
 
     public static Status getWithPsychologicalType(Character from, Character target, float magnitude, int duration, String source) {
         return new Horny(target.getType(), (float) DamageType.temptation.modifyDamage(from, target, magnitude), duration, source);
@@ -21,9 +21,9 @@ public class Horny extends DurationStatus {
         return new Horny(target.getType(), (float) DamageType.biological.modifyDamage(from, target, magnitude), duration, source);
     }
     
-    public Horny(CharacterType affected, float magnitude, int duration, String source) {
+    public Horny(CharacterType affected, float magnitude, int duration, String sourceSuffix) {
         super("Horny", affected, duration);
-        this.source = source;
+        this.sourceSuffix = sourceSuffix;
         this.magnitude = magnitude;
         flag(Stsflag.horny);
         flag(Stsflag.debuff);
@@ -32,17 +32,17 @@ public class Horny extends DurationStatus {
 
     @Override
     public String toString() {
-        return "Aroused from " + source + " (" + Formatter.formatDecimal(magnitude) + " x " + getDuration() + ")";
+        return "Aroused from " + sourceSuffix + " (" + Formatter.formatDecimal(magnitude) + " x " + getDuration() + ")";
     }
 
     @Override
     public String describe(Combat c) {
         if (getAffected().human()) {
-            return "Your heart pounds in your chest as you try to suppress your arousal from contacting " + source
+            return "Your heart pounds in your chest as you try to suppress your arousal from contacting " + sourceSuffix
                             + ".";
         } else {
             return getAffected().getName() + " is flushed and "+getAffected().possessiveAdjective()
-            +" nipples are noticeably hard from contacting " + source + ".";
+            +" nipples are noticeably hard from contacting " + sourceSuffix + ".";
         }
     }
 
@@ -64,20 +64,20 @@ public class Horny extends DurationStatus {
 
     @Override
     public void tick(Combat c) {
-        getAffected().arouse(Math.round(magnitude), c, " (" + source + ")");
+        getAffected().arouse(Math.round(magnitude), c, " (" + sourceSuffix + ")");
         getAffected().emote(Emotion.horny, 20);
     }
 
     @Override
     public String getVariant() {
-        return source;
+        return sourceSuffix;
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
         return String.format("%s%s aroused by %s.\n", getAffected().subjectAction("are", "is"),
                         replacement == null ? " now" : "",
-                        source + " (" + Formatter.formatDecimal(magnitude) + " x " + getDuration() + ")");
+                        sourceSuffix + " (" + Formatter.formatDecimal(magnitude) + " x " + getDuration() + ")");
     }
 
     @Override
@@ -89,7 +89,7 @@ public class Horny extends DurationStatus {
     public void replace(Status s) {
         assert s instanceof Horny;
         Horny other = (Horny) s;
-        assert other.source.equals(source);
+        assert other.sourceSuffix.equals(sourceSuffix);
         setDuration(other.getDuration());
         magnitude = other.magnitude;
     }
@@ -151,13 +151,13 @@ public class Horny extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Horny(newAffected.getType(), magnitude, getDuration(), source);
+        return new Horny(newAffected.getType(), magnitude, getDuration(), sourceSuffix);
     }
 
     @Override  public JsonObject saveToJson() {
         JsonObject obj = new JsonObject();
         obj.addProperty("type", getClass().getSimpleName());
-        obj.addProperty("source", source);
+        obj.addProperty("source", sourceSuffix);
         obj.addProperty("magnitude", magnitude);
         obj.addProperty("duration", getDuration());
         return obj;

@@ -3,6 +3,7 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -13,7 +14,7 @@ import nightgames.status.addiction.AddictionType;
 public class DivineCharge extends Status {
     public double magnitude;
 
-    public DivineCharge(Character affected, double magnitude) {
+    public DivineCharge(CharacterType affected, double magnitude) {
         super("Divine Energy", affected);
         flag(Stsflag.divinecharge);
         flag(Stsflag.purgable);
@@ -22,9 +23,9 @@ public class DivineCharge extends Status {
 
     private String getPart(Combat c) {
         boolean penetrated = c.getStance()
-                              .vaginallyPenetrated(c, affected);
+                              .vaginallyPenetrated(c, getAffected());
         boolean inserted = c.getStance()
-                            .inserted(affected);
+                            .inserted(getAffected());
         String part = "body";
         if (penetrated && !inserted) {
             part = "pussy";
@@ -32,7 +33,7 @@ public class DivineCharge extends Status {
         if (!penetrated && inserted) {
             part = "cock";
         }
-        if (!penetrated && !inserted && affected.has(Trait.zealinspiring)) {
+        if (!penetrated && !inserted && getAffected().has(Trait.zealinspiring)) {
             part = "pussy";
         }
         return part;
@@ -41,13 +42,13 @@ public class DivineCharge extends Status {
     @Override
     public void tick(Combat c) {
         if (c != null) {
-            Character opponent = c.getOpponent(affected);
-            if (!c.getStance().havingSex(c, affected) && !(affected.has(Trait.zealinspiring)
+            Character opponent = c.getOpponent(getAffected());
+            if (!c.getStance().havingSex(c, getAffected()) && !(getAffected().has(Trait.zealinspiring)
                             && !opponent.getAddiction(AddictionType.ZEAL, affected).map(Addiction::isInWithdrawal).orElse(false))) {
                 magnitude = magnitude / 2;
-                c.write(affected, "The holy energy seeps out of " + affected.nameDirectObject() + ".");
+                c.write(getAffected(), "The holy energy seeps out of " + getAffected().nameDirectObject() + ".");
                 if (magnitude < .05f)
-                    affected.removelist.add(this);
+                    getAffected().removelist.add(this);
             }
         }
     }
@@ -55,20 +56,20 @@ public class DivineCharge extends Status {
     @Override
     public String initialMessage(Combat c, Status replacement) {
         if (replacement != null) {
-            return String.format("%s concentrating divine energy in %s %s.\n", affected.subjectAction("are", "is"),
-                            affected.possessiveAdjective(), getPart(c));
+            return String.format("%s concentrating divine energy in %s %s.\n", getAffected().subjectAction("are", "is"),
+                            getAffected().possessiveAdjective(), getPart(c));
         }
         return "";
     }
 
     @Override
     public void onApply(Combat c, Character other) {
-        affected.usedAttribute(Attribute.divinity, c, .25);
+        getAffected().usedAttribute(Attribute.divinity, c, .25);
     }
 
     @Override
     public String describe(Combat c) {
-        return "Concentrated divine energy surges through " + affected.nameOrPossessivePronoun() + " " + getPart(c)
+        return "Concentrated divine energy surges through " + getAffected().nameOrPossessivePronoun() + " " + getPart(c)
                         + " (" + Formatter.formatDecimal(magnitude) + ").";
     }
 
@@ -97,7 +98,7 @@ public class DivineCharge extends Status {
         // this will get out of hand super quick, but eh, you shouldn't let it
         // get
         // that far.
-        double maximum = Math.max(2, Math.pow(2., affected.get(Attribute.divinity) / 5.0) * .25);
+        double maximum = Math.max(2, Math.pow(2., getAffected().get(Attribute.divinity) / 5.0) * .25);
         this.magnitude = Math.min(maximum, this.magnitude);
 
     }
@@ -154,7 +155,7 @@ public class DivineCharge extends Status {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new DivineCharge(newAffected, magnitude);
+        return new DivineCharge(newAffected.getType(), magnitude);
     }
 
     @Override  public JsonObject saveToJson() {

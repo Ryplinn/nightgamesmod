@@ -3,6 +3,7 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -11,12 +12,15 @@ import nightgames.utilities.MathUtils;
 
 public class Slimed extends DurationStatus {
     private static final int MAX_STACKS = 10;
-    private Character origin;
+    private CharacterType origin;
     private int stacks;
 
-    public Slimed(Character affected, Character other, int stacks) {
-        super("parasited", affected, other.has(Trait.EnduringAdhesive) ? 4 : 6);
+    public Slimed(CharacterType affected, CharacterType other, int stacks) {
+        super("parasited", affected, 4);
         this.origin = other;
+        if (getOrigin().has(Trait.EnduringAdhesive)) {
+            setDuration(6);
+        }
         this.stacks = stacks;
         // don't auto-remove when cleared.
         requirements.clear();
@@ -25,30 +29,34 @@ public class Slimed extends DurationStatus {
         flag(Stsflag.purgable);
     }
 
+    private Character getOrigin() {
+        return origin.fromPoolGuaranteed();
+    }
+
     @Override
     public String initialMessage(Combat c, Status replacement) {
     	if (replacement != null) {
     	    if (((Slimed)replacement).stacks < 0) {
-                return Formatter.format("Some of the slime covering {self:direct-object} fall off {self:name-possessive} body.\n", affected, origin);
+                return Formatter.format("Some of the slime covering {self:direct-object} fall off {self:name-possessive} body.\n", getAffected(), getOrigin());
     	    } else {
-    	        return Formatter.format("More pieces of {other:name-possessive} slime are getting stuck to {self:name-possessive} body.\n", affected, origin);
+    	        return Formatter.format("More pieces of {other:name-possessive} slime are getting stuck to {self:name-possessive} body.\n", getAffected(), getOrigin());
     	    }
     	}
-        return Formatter.format("Pieces of {other:name-possessive} slime are stuck to {self:name-possessive} body!\n", affected, origin);
+        return Formatter.format("Pieces of {other:name-possessive} slime are stuck to {self:name-possessive} body!\n", getAffected(), getOrigin());
     }
 
     @Override
     public String describe(Combat c) {
     	if (stacks < 2) {
-    		return Formatter.format("A few chunks of {other:name-possessive} slimey body is stuck on {self:direct-object}.", affected, origin);
+    		return Formatter.format("A few chunks of {other:name-possessive} slimey body is stuck on {self:direct-object}.", getAffected(), getOrigin());
     	} else if (stacks < 5) {
-    		return Formatter.format("Bits and pieces of {other:name-possessive} slime are stuck on {self:name-do}.", affected, origin);
+    		return Formatter.format("Bits and pieces of {other:name-possessive} slime are stuck on {self:name-do}.", getAffected(), getOrigin());
     	} else if (stacks < 8) {
-    		return Formatter.format("It's becoming difficult to move with so much of {other:name-possessive} slime on {self:name-possessive} body.", affected, origin);
+    		return Formatter.format("It's becoming difficult to move with so much of {other:name-possessive} slime on {self:name-possessive} body.", getAffected(), getOrigin());
     	} else if (stacks < 10) {
-    		return Formatter.format("It's very difficult to move with so much of {other:name-possessive} slime on {self:name-possessive} body.", affected, origin);
+    		return Formatter.format("It's very difficult to move with so much of {other:name-possessive} slime on {self:name-possessive} body.", getAffected(), getOrigin());
     	} else {
-    		return Formatter.format("{self:SUBJECT-ACTION:are|is} covered head to toe with {other:name-possessive} slime, making it impossible to move!", affected, origin);
+    		return Formatter.format("{self:SUBJECT-ACTION:are|is} covered head to toe with {other:name-possessive} slime, making it impossible to move!", getAffected(), getOrigin());
     	}
     }
 
@@ -69,31 +77,31 @@ public class Slimed extends DurationStatus {
     @Override
     public void tick(Combat c) {
     	super.tick(c);
-    	if (affected.is(Stsflag.plasticized)) {
-            Formatter.writeFormattedIfCombat(c, "The slime just slides off {self:possessive} plastic-wrapped form.", affected, origin);
-            affected.removeStatus(this);
+    	if (getAffected().is(Stsflag.plasticized)) {
+            Formatter.writeFormattedIfCombat(c, "The slime just slides off {self:possessive} plastic-wrapped form.", getAffected(), getOrigin());
+            getAffected().removeStatus(this);
             return;
     	}
         if (getDuration() <= 0) {
         	stacks = Math.max(0, stacks - 10);
         	if (stacks == 0) {
-        		Formatter.writeFormattedIfCombat(c, "{self:SUBJECT-ACTION:finally shake|finally shakes} off all of {other:name-possessive} slime!", affected, origin);
-        		affected.removeStatus(this);
+        		Formatter.writeFormattedIfCombat(c, "{self:SUBJECT-ACTION:finally shake|finally shakes} off all of {other:name-possessive} slime!", getAffected(), getOrigin());
+        		getAffected().removeStatus(this);
         	} else {
-	    		Formatter.writeFormattedIfCombat(c, "{self:SUBJECT-ACTION:shake|shakes} off some of {other:name-possessive} sticky slime.", affected, origin);
+	    		Formatter.writeFormattedIfCombat(c, "{self:SUBJECT-ACTION:shake|shakes} off some of {other:name-possessive} sticky slime.", getAffected(), getOrigin());
 	    		// be lazy and use the same function as the constructor to set the durations
 	        	setDuration((new Slimed(affected, origin, 1)).getDuration());
         	}
         }
-        if (stacks >= MAX_STACKS && origin.has(Trait.PetrifyingPolymers)) {
-        	Formatter.writeFormattedIfCombat(c, "There's so much slime on {self:name-do} that it solidifies into a sheet of hard plastic!.", affected, origin);
+        if (stacks >= MAX_STACKS && getOrigin().has(Trait.PetrifyingPolymers)) {
+        	Formatter.writeFormattedIfCombat(c, "There's so much slime on {self:name-do} that it solidifies into a sheet of hard plastic!.", getAffected(), getOrigin());
         	stacks = 0;
-        	affected.removeStatus(this);
-        	affected.add(c, new Plasticized(affected));
+        	getAffected().removeStatus(this);
+        	getAffected().add(c, new Plasticized(affected));
         }
-        if (stacks >= 0 && origin.has(Trait.ParasiticBond)) {
-            Formatter.writeFormattedIfCombat(c, "While not connected directly to {other:direct-object}, {other:name-possessive} slime seems to be eroding {self:name-possessive} stamina while energizing {other:direct-object}", affected, origin);
-            affected.drain(c, origin, 2 + stacks / 4, Character.MeterType.STAMINA, Character.MeterType.MOJO, 1.0f);
+        if (stacks >= 0 && getOrigin().has(Trait.ParasiticBond)) {
+            Formatter.writeFormattedIfCombat(c, "While not connected directly to {other:direct-object}, {other:name-possessive} slime seems to be eroding {self:name-possessive} stamina while energizing {other:direct-object}", getAffected(), getOrigin());
+            getAffected().drain(c, getOrigin(), 2 + stacks / 4, Character.MeterType.STAMINA, Character.MeterType.MOJO, 1.0f);
         }
     }
 
@@ -169,7 +177,7 @@ public class Slimed extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Slimed(newAffected, newOther, stacks);
+        return new Slimed(newAffected.getType(), newOther.getType(), stacks);
     }
 
     public JsonObject saveToJson() {

@@ -17,17 +17,17 @@ public class Oiled extends Status {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "Your skin is slick with oil and kinda feels weird.";
         } else {
             return String.format("%s is shiny with lubricant, making %s more tempted to touch and rub %s skin.",
-                            affected.subject(), c.getOpponent(affected).subject(), affected.possessiveAdjective());
+                            getAffected().subject(), c.getOpponent(getAffected()).subject(), getAffected().possessiveAdjective());
         }
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s now lubricated.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now lubricated.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -47,7 +47,7 @@ public class Oiled extends Status {
 
     @Override
     public double pleasure(Combat c, BodyPart withPart, BodyPart targetPart, double x) {
-        c.write(affected, Formatter.format("{self:NAME-POSSESSIVE} slippery oiled form makes {self:direct-object} all the more sensitive.", affected, c.getOpponent(affected)));
+        c.write(getAffected(), Formatter.format("{self:NAME-POSSESSIVE} slippery oiled form makes {self:direct-object} all the more sensitive.", getAffected(), c.getOpponent(getAffected())));
         return x / 4;
     }
 
@@ -98,7 +98,7 @@ public class Oiled extends Status {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Oiled(newAffected);
+        return new Oiled(newAffected.getType());
     }
 
     @Override  public JsonObject saveToJson() {

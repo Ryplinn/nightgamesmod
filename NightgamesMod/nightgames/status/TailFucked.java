@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -13,9 +14,9 @@ import nightgames.global.Formatter;
 
 public class TailFucked extends Status implements InsertedStatus {
     private String target;
-    private Character other;
+    private CharacterType other;
 
-    public TailFucked(Character affected, Character other, String hole) {
+    public TailFucked(CharacterType affected, CharacterType other, String hole) {
         super(hole.equals("ass") ? "Tail Pegged" : "Tail Fucked", affected);
         target = hole;
         this.other = other;
@@ -25,28 +26,32 @@ public class TailFucked extends Status implements InsertedStatus {
         flag(Stsflag.tailfucked);
     }
 
+    private Character getOther() {
+        return other.fromPoolGuaranteed();
+    }
+
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        BodyPart hole = affected.body.getRandom(target);
-        BodyPart tail = other.body.getRandom("tail");
+        BodyPart hole = getAffected().body.getRandom(target);
+        BodyPart tail = getOther().body.getRandom("tail");
         if (hole == null || tail == null) {
             return "";
         }
         return Formatter.capitalizeFirstLetter(String.format("%s now fucking %s %s with %s %s\n",
-                        other.subjectAction("are", "is"), affected.nameOrPossessivePronoun(), hole.describe(affected),
-                        other.possessiveAdjective(), tail.describe(other)));
+                        getOther().subjectAction("are", "is"), getAffected().nameOrPossessivePronoun(), hole.describe(getAffected()),
+                        getOther().possessiveAdjective(), tail.describe(getOther())));
     }
 
     @Override
     public String describe(Combat c) {
-        BodyPart hole = affected.body.getRandom(target);
-        BodyPart tail = other.body.getRandom("tail");
+        BodyPart hole = getAffected().body.getRandom(target);
+        BodyPart tail = getOther().body.getRandom("tail");
         if (hole == null || tail == null) {
             return "";
         }
         return Formatter.capitalizeFirstLetter(String.format("%s fucking %s %s with %s %s\n",
-                            other.subjectAction("are", "is"), affected.nameOrPossessivePronoun(),
-                            hole.describe(affected), other.possessiveAdjective(), tail.describe(other)));
+                            getOther().subjectAction("are", "is"), getAffected().nameOrPossessivePronoun(),
+                            hole.describe(getAffected()), getOther().possessiveAdjective(), tail.describe(getOther())));
     }
 
     @Override
@@ -61,19 +66,19 @@ public class TailFucked extends Status implements InsertedStatus {
 
     @Override
     public void tick(Combat c) {
-        BodyPart hole = affected.body.getRandom(target);
-        BodyPart tail = other.body.getRandom("tail");
+        BodyPart hole = getAffected().body.getRandom(target);
+        BodyPart tail = getOther().body.getRandom("tail");
         if (hole == null || tail == null || c == null) {
-            affected.removelist.add(this);
+            getAffected().removelist.add(this);
             return;
         }
-        c.write(other, Formatter.capitalizeFirstLetter(
+        c.write(getOther(), Formatter.capitalizeFirstLetter(
                         Formatter.format("{other:name-possessive} {other:body-part:tail} relentlessly fucks {self:name-do} in {self:possessive} {self:body-part:"
-                                        + target + "}.", affected, other)));
-        affected.body.pleasure(other, tail, hole, 10, c);
-        other.body.pleasure(affected, hole, tail, 2, c);
-        affected.emote(Emotion.desperate, 10);
-        affected.emote(Emotion.nervous, 10);
+                                        + target + "}.", getAffected(), getOther())));
+        getAffected().body.pleasure(getOther(), tail, hole, 10, c);
+        getOther().body.pleasure(getAffected(), hole, tail, 2, c);
+        getAffected().emote(Emotion.desperate, 10);
+        getAffected().emote(Emotion.nervous, 10);
     }
 
     @Override
@@ -133,7 +138,7 @@ public class TailFucked extends Status implements InsertedStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new TailFucked(newAffected, newOther, target);
+        return new TailFucked(newAffected.getType(), newOther.getType(), target);
     }
 
     @Override  public JsonObject saveToJson() {
@@ -154,21 +159,21 @@ public class TailFucked extends Status implements InsertedStatus {
 
     @Override
     public BodyPart getHolePart() {
-        return affected.body.getRandom(target);
+        return getAffected().body.getRandom(target);
     }
 
     @Override
     public Character getReceiver() {
-        return affected;
+        return getAffected();
     }
 
     @Override
     public BodyPart getStickPart() {
-        return other.body.getRandom("tail");
+        return getOther().body.getRandom("tail");
     }
 
     @Override
     public Character getPitcher() {
-        return other;
+        return getOther();
     }
 }

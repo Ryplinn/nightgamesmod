@@ -44,7 +44,7 @@ public class Falling extends Status {
             c.write(c.getOpponent(getAffected()), Formatter.format("{other:SUBJECT-ACTION:take|takes} the chance to shift into a more dominant position.", getAffected(), c.getOpponent(getAffected())));
             c.setStance(c.getStance().reverse(c, true));
         } else if (!c.getStance().prone(getAffected())) {
-            c.setStance(new StandingOver(c.getOpponent(getAffected()), getAffected()));
+            c.setStance(new StandingOver(c.getOpponent(getAffected()).getType(), affected));
         }
         if (getAffected().has(Trait.NimbleRecovery)) {
             c.write(Formatter.format("{self:NAME-POSSESSIVE} nimble body expertly breaks the fall.", getAffected(), c.getOpponent(getAffected())));

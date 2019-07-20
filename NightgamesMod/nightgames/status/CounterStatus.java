@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.skills.CounterBase;
@@ -12,11 +13,7 @@ public class CounterStatus extends DurationStatus {
     private CounterBase skill;
     private String desc;
 
-    public CounterStatus(Character affected, CounterBase skill, String description) {
-        this(affected, skill, description, 0);
-    }
-
-    public CounterStatus(Character affected, CounterBase skill, String description, int duration) {
+    public CounterStatus(CharacterType affected, CounterBase skill, String description, int duration) {
         super("Counter", affected, duration);
         this.skill = skill;
         desc = description;
@@ -25,7 +22,7 @@ public class CounterStatus extends DurationStatus {
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s ready for a counter.\n", affected.subjectAction("get", "gets"));
+        return String.format("%s ready for a counter.\n", getAffected().subjectAction("get", "gets"));
     }
 
     @Override
@@ -94,7 +91,7 @@ public class CounterStatus extends DurationStatus {
     }
 
     public void resolveSkill(Combat c, Character target) {
-        affected.removelist.add(this);
+        getAffected().removelist.add(this);
         skill.resolveCounter(c, target);
     }
 
@@ -104,7 +101,7 @@ public class CounterStatus extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new CounterStatus(newAffected, skill, desc, getDuration());
+        return new CounterStatus(newAffected.getType(), skill, desc, getDuration());
     }
 
     @Override  public JsonObject saveToJson() {

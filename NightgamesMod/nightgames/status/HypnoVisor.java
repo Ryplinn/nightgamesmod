@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.NPC;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -13,15 +14,19 @@ import nightgames.status.addiction.AddictionType;
 
 public class HypnoVisor extends Status {
 
-    private final Character cause;
+    private final CharacterType cause;
     
-    public HypnoVisor(Character affected, Character cause) {
+    public HypnoVisor(CharacterType affected, CharacterType cause) {
         super("Wearing Hypno Visor", affected);
-        assert affected.human() : "NPC got a hypno visor on them";
+        assert getAffected().human() : "NPC got a hypno visor on them";
         this.cause = cause;
         flag(Stsflag.blinded);
         flag(Stsflag.debuff);
         flag(Stsflag.hypnovisor);
+    }
+
+    public Character getCause() {
+        return cause.fromPoolGuaranteed();
     }
 
     @Override
@@ -46,9 +51,9 @@ public class HypnoVisor extends Status {
 
     @Override
     public void tick(Combat c) {
-        affected.addict(c, AddictionType.MIND_CONTROL, cause, Addiction.LOW_INCREASE / 2);
-        c.write(affected, Formatter.format("The Hypno Visor is corrupting your mind, rewiring it"
-                        + " to follow {other:name-possessive} commands.", affected, cause));
+        getAffected().addict(c, AddictionType.MIND_CONTROL, cause, Addiction.LOW_INCREASE / 2);
+        c.write(getAffected(), Formatter.format("The Hypno Visor is corrupting your mind, rewiring it"
+                        + " to follow {other:name-possessive} commands.", getAffected(), getCause()));
     }
     
     @Override
@@ -108,18 +113,20 @@ public class HypnoVisor extends Status {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new HypnoVisor(newAffected, newOther);
+        return new HypnoVisor(newAffected.getType(), newOther.getType());
     }
 
     @Override
     public JsonObject saveToJson() {
         JsonObject obj = new JsonObject();
+        obj.addProperty("type", getClass().getSimpleName());
+        obj.addProperty("cause", cause.toString());
         return obj;
     }
 
     @Override
     public Status loadFromJson(JsonObject obj) {
-        return new HypnoVisor(NPC.noneCharacter(), NPC.noneCharacter());
+        return new HypnoVisor(NPC.noneCharacter().getType(), CharacterType.get(obj.get("cause").getAsString()));
     }
 
 }

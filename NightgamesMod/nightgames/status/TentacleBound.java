@@ -3,18 +3,20 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 
 public class TentacleBound extends Bound {
     private int stacks = 0;
 
-    public TentacleBound(Character affected, double dc, String source, int stacks) {
+    public TentacleBound(CharacterType affected, double dc, String source, int stacks) {
         super("Tentacle Bound", affected, dc, source, null);
+        this.stacks = stacks;
         flag(Stsflag.tentacleBound);
     }
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new TentacleBound(newAffected, toughness, binding, getStacks());
+        return new TentacleBound(newAffected.getType(), toughness, binding, getStacks());
     }
 
     @Override  public JsonObject saveToJson() {

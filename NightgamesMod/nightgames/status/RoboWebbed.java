@@ -3,6 +3,7 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.NPC;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -10,7 +11,7 @@ import nightgames.gui.GUI;
 import nightgames.trap.Trap;
 
 public class RoboWebbed extends Bound {
-    public RoboWebbed(Character affected, double dc, Trap roboWeb) {
+    public RoboWebbed(CharacterType affected, double dc, Trap roboWeb) {
         super("RoboWebbed", affected, dc, "robo-web", roboWeb);
     }
 
@@ -23,29 +24,29 @@ public class RoboWebbed extends Bound {
     public String describe(Combat c) {
         return Formatter.format("{self:SUBJECT-ACTION:are|is} hopelessly tangled up in"
                         + " synthetic webbing, which is sending pleasurable sensations"
-                        + " through {self:possessive} entire body.", affected, NPC.noneCharacter());
+                        + " through {self:possessive} entire body.", getAffected(), NPC.noneCharacter());
     }
 
     @Override
     public void tick(Combat c) {
-        int dmg = (int) (affected.getArousal().max() * .25);
+        int dmg = (int) (getAffected().getArousal().max() * .25);
         // Message handled in describe
-        if (c == null && trap.isPresent()) {
-            if (affected.human()) {
+        if (c == null && trap != null) {
+            if (getAffected().human()) {
                 GUI.gui.message(Formatter.format("{self:SUBJECT-ACTION:are|is} hopelessly tangled up in"
                                 + " synthetic webbing, which is sending pleasurable sensations"
-                                + " through {self:possessive} entire body.", affected, NPC.noneCharacter()));
+                                + " through {self:possessive} entire body.", getAffected(), NPC.noneCharacter()));
             }
-            affected.tempt(dmg);
-            affected.location().opportunity(affected, trap.get());
+            getAffected().tempt(dmg);
+            getAffected().location().opportunity(getAffected(), trap);
         } else {
-            affected.temptNoSkillNoTempter(c, dmg);
+            getAffected().temptNoSkillNoTempter(c, dmg);
         }
     }
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new RoboWebbed(newAffected, toughness, trap.orElse(null));
+        return new RoboWebbed(newAffected.getType(), toughness, trap);
     }
 
     @Override

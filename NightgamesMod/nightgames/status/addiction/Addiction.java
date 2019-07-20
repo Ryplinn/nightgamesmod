@@ -294,7 +294,7 @@ public abstract class Addiction {
         } else {
             reinforced = object.get("reinforced").getAsBoolean();
         }
-        Addiction addiction = type.build(afflicted, cause, magnitude);
+        Addiction addiction = type.build(afflicted.getType(), cause, magnitude);
         addiction.overloading = overloading;
         addiction.didDaytime = reinforced;
         return addiction;

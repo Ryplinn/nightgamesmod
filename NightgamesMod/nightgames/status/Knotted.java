@@ -7,16 +7,17 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class Knotted extends Status {
 
-    private Character opponent;
+    private CharacterType opponent;
     private boolean anal;
 
-    public Knotted(Character affected, Character other, boolean anal) {
+    public Knotted(CharacterType affected, CharacterType other, boolean anal) {
         super("Knotted", affected);
         opponent = other;
         this.anal = anal;
@@ -25,21 +26,25 @@ public class Knotted extends Status {
         flag(Stsflag.purgable);
     }
 
+    public Character getOpponent() {
+        return opponent.fromPoolGuaranteed();
+    }
+
     @Override
     public String initialMessage(Combat c, Status replacement) {
         return String.format("The base of %s %s swells up, forming a tight seal within %s %s and keeping it inside.",
-                        opponent.nameOrPossessivePronoun(), c.getStance().insertedPartFor(c, opponent).describe(opponent),
-                        affected.nameOrPossessivePronoun(),
-                        c.getStance().insertablePartFor(c, affected, opponent).describe(affected));
+                        getOpponent().nameOrPossessivePronoun(), c.getStance().insertedPartFor(c, getOpponent()).describe(getOpponent()),
+                        getAffected().nameOrPossessivePronoun(),
+                        c.getStance().insertablePartFor(c, getAffected(), getOpponent()).describe(getAffected()));
     }
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
-            return opponent.nameOrPossessivePronoun() + " knotted dick is lodged inside of you, preventing escape.";
+        if (getAffected().human()) {
+            return getOpponent().nameOrPossessivePronoun() + " knotted dick is lodged inside of you, preventing escape.";
         } else {
-            return "The knot in "+opponent.nameOrPossessivePronoun()+
-                            " dick is keeping it fully entrenched within " + affected.getName() + ".";
+            return "The knot in " + getOpponent().nameOrPossessivePronoun()
+                            + " dick is keeping it fully entrenched within " + getAffected().getName() + ".";
         }
     }
 
@@ -50,9 +55,9 @@ public class Knotted extends Status {
 
     @Override
     public int regen(Combat c) {
-        affected.emote(Emotion.desperate, 10);
-        affected.emote(Emotion.nervous, 10);
-        affected.emote(Emotion.horny, 20);
+        getAffected().emote(Emotion.desperate, 10);
+        getAffected().emote(Emotion.nervous, 10);
+        getAffected().emote(Emotion.horny, 20);
         return 0;
     }
 
@@ -110,7 +115,7 @@ public class Knotted extends Status {
     public float fitnessModifier() {
         // This is counted twice, but that's intentional.
         // (The other place is Character#getFitness())
-        return affected.body.penetrationFitnessModifier(affected, opponent, false, anal);
+        return getAffected().body.penetrationFitnessModifier(getAffected(), getOpponent(), false, anal);
     }
 
     @Override
@@ -120,7 +125,7 @@ public class Knotted extends Status {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Knotted(newAffected, newOther, anal);
+        return new Knotted(newAffected.getType(), newOther.getType(), anal);
     }
 
     @Override  public JsonObject saveToJson() {

@@ -14,17 +14,17 @@ public class Enthralled extends DurationStatus {
     private int timesRefreshed;
     private boolean makesCynical;
     public CharacterType master;
-    public Enthralled(CharacterType self, Character master, int duration) {
+    public Enthralled(CharacterType self, CharacterType master, int duration) {
         this(self, master, duration, duration > 1);
     }
 
-    public Enthralled(CharacterType self, Character master, int duration, boolean makesCynical) {
+    public Enthralled(CharacterType self, CharacterType master, int duration, boolean makesCynical) {
         super("Enthralled", self, duration);
         timesRefreshed = 0;
-        if (master.isPet()) {
-            master = ((PetCharacter) master).getSelf().owner();
+        this.master = master;
+        if (getMaster().isPet()) {
+            this.master = ((PetCharacter) getMaster()).getSelf().owner().getType();
         }
-        this.master = master.getType();
         flag(Stsflag.enthralled);
         flag(Stsflag.debuff);
         flag(Stsflag.disabling);
@@ -178,7 +178,7 @@ public class Enthralled extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Enthralled(newAffected.getType(), newOther, getDuration(), makesCynical);
+        return new Enthralled(newAffected.getType(), newOther.getType(), getDuration(), makesCynical);
     }
 
     @Override  public JsonObject saveToJson() {
@@ -190,6 +190,6 @@ public class Enthralled extends DurationStatus {
     }
 
     @Override public Status loadFromJson(JsonObject obj) {
-        return new Enthralled(null, NPC.noneCharacter(), obj.get("duration").getAsInt(), obj.get("makesCynical").getAsBoolean());
+        return new Enthralled(null, NPC.noneCharacter().getType(), obj.get("duration").getAsInt(), obj.get("makesCynical").getAsBoolean());
     }
 }

@@ -4,13 +4,14 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
 public class OrgasmSeal extends DurationStatus {
-    public OrgasmSeal(Character affected, int duration) {
+    public OrgasmSeal(CharacterType affected, int duration) {
         super("Orgasm Sealed", affected, duration);
         flag(Stsflag.orgasmseal);
         flag(Stsflag.debuff);
@@ -19,23 +20,23 @@ public class OrgasmSeal extends DurationStatus {
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s ability to cum is now sealed!\n", affected.subject());
+        return String.format("%s ability to cum is now sealed!\n", getAffected().subject());
     }
 
     @Override
     public String describe(Combat c) {
-        if (affected.hasBalls()) {
-            return Formatter.format("A pentragram on {self:name-possessive} ballsack glows with a sinister light.",
-                            affected, affected);
+        if (getAffected().hasBalls()) {
+            return Formatter.format("A pentagram on {self:name-possessive} ballsack glows with a sinister light.",
+                            getAffected(), getAffected());
         } else {
-            return Formatter.format("A pentragram on {self:name-possessive} lower belly glows with a sinister light.",
-                            affected, affected);
+            return Formatter.format("A pentagram on {self:name-possessive} lower belly glows with a sinister light.",
+                            getAffected(), getAffected());
         }
     }
 
     @Override
     public float fitnessModifier() {
-        if (affected.getArousal().percent() > 80) {
+        if (getAffected().getArousal().percent() > 80) {
             return -10;
         }
         return 0;
@@ -49,12 +50,12 @@ public class OrgasmSeal extends DurationStatus {
     @Override
     public int regen(Combat c) {
         super.regen(c);
-        if (affected.getArousal().isFull()) {
+        if (getAffected().getArousal().isFull()) {
             tick(4);
         }
-        if (affected.getArousal().percent() > 80) {
-            affected.emote(Emotion.desperate, 10);
-            affected.emote(Emotion.horny, 10);
+        if (getAffected().getArousal().percent() > 80) {
+            getAffected().emote(Emotion.desperate, 10);
+            getAffected().emote(Emotion.horny, 10);
         }
         return 0;
     }
@@ -116,7 +117,7 @@ public class OrgasmSeal extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new OrgasmSeal(newAffected, getDuration());
+        return new OrgasmSeal(newAffected.getType(), getDuration());
     }
 
     @Override  public JsonObject saveToJson() {

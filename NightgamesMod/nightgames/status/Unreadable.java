@@ -4,18 +4,19 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class Unreadable extends DurationStatus {
-    public Unreadable(Character affected) {
+    public Unreadable(CharacterType affected) {
         super("Unreadable", affected, 3);
         flag(Stsflag.unreadable);
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s now unreadable.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now unreadable.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -91,7 +92,7 @@ public class Unreadable extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Unreadable(newAffected);
+        return new Unreadable(newAffected.getType());
     }
 
     @Override  public JsonObject saveToJson() {

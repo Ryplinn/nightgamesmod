@@ -163,7 +163,7 @@ public class DarkChaos extends Status {
         void execute(Combat c, Character affected) {
             Character partner = c.getStance().getPartner(c, affected);
             if (this == FALLING)
-                c.setStance(new StandingOver(c.getOpponent(affected), affected));
+                c.setStance(new StandingOver(c.getOpponent(affected).getType(), affected.getType()));
             else
                 affected.addlist.add(effect.apply(affected.getType()));
             c.write(affected, Formatter.format(message, affected, partner));

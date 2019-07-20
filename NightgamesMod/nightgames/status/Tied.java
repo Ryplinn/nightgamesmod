@@ -4,16 +4,17 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class Tied extends DurationStatus {
 
-    public Tied(Character affected) {
+    public Tied(CharacterType affected) {
         this(affected, 5);
     }
 
-    public Tied(Character affected, int duration) {
+    private Tied(CharacterType affected, int duration) {
         super("Tied Up", affected, duration);
         flag(Stsflag.tied);
         flag(Stsflag.debuff);
@@ -22,12 +23,12 @@ public class Tied extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "The rope wrapped around you digs into your body, but only slows you down a bit.";
         }
 
-        return String.format("%s squirms against the rope, but %s %s tied it well.", affected.subject(),
-                        c.getOpponent(affected).subjectAction("know"), c.getOpponent(affected).pronoun());
+        return String.format("%s squirms against the rope, but %s %s tied it well.", getAffected().subject(),
+                        c.getOpponent(getAffected()).subjectAction("know"), c.getOpponent(getAffected()).pronoun());
     }
 
     @Override
@@ -88,10 +89,8 @@ public class Tied extends DurationStatus {
         return 0;
     }
 
-    public void turn(Combat c) {}
-
     public Status copy(Character target) {
-        return new Tied(target);
+        return new Tied(target.getType(), this.getDuration());
     }
 
      @Override public JsonObject saveToJson() {
@@ -107,12 +106,12 @@ public class Tied extends DurationStatus {
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s now partially tied up.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now partially tied up.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Tied(newAffected);
+        return new Tied(newAffected.getType(), this.getDuration());
     }
 
     @Override

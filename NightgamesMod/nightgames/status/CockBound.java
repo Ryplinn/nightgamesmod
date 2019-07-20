@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -12,7 +13,7 @@ public class CockBound extends Status {
     private float toughness;
     public String binding;
 
-    public CockBound(Character affected, float dc, String binding) {
+    public CockBound(CharacterType affected, float dc, String binding) {
         super("Cock Bound", affected);
         toughness = dc;
         this.binding = binding;
@@ -22,8 +23,8 @@ public class CockBound extends Status {
 
     @Override
     public String describe(Combat c) {
-        return String.format("%s %s is bound by %s.", affected.nameOrPossessivePronoun(),
-                        affected.body.getRandomCock().describe(affected), binding);
+        return String.format("%s %s is bound by %s.", getAffected().nameOrPossessivePronoun(),
+                        getAffected().body.getRandomCock().describe(getAffected()), binding);
     }
 
     @Override
@@ -38,12 +39,12 @@ public class CockBound extends Status {
 
     @Override
     public int regen(Combat c) {
-        if (!c.getStance().inserted(affected)) {
-            affected.removelist.add(this);
+        if (!c.getStance().inserted(getAffected())) {
+            getAffected().removelist.add(this);
         }
-        affected.emote(Emotion.desperate, 10);
-        affected.emote(Emotion.nervous, 10);
-        affected.emote(Emotion.horny, 20);
+        getAffected().emote(Emotion.desperate, 10);
+        getAffected().emote(Emotion.nervous, 10);
+        getAffected().emote(Emotion.horny, 20);
         toughness -= 1;
         return 0;
     }
@@ -60,7 +61,7 @@ public class CockBound extends Status {
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s cock is now bound by %s.\n", affected.nameOrPossessivePronoun(), binding);
+        return String.format("%s cock is now bound by %s.\n", getAffected().nameOrPossessivePronoun(), binding);
     }
 
     @Override
@@ -116,7 +117,7 @@ public class CockBound extends Status {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new CockBound(newAffected, toughness, binding);
+        return new CockBound(newAffected.getType(), toughness, binding);
     }
 
     @Override  public JsonObject saveToJson() {

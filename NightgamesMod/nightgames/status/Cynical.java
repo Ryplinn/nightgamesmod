@@ -16,16 +16,16 @@ public class Cynical extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "You're feeling more cynical than usual and won't fall for any mind games.";
         } else {
-            return affected.getName() + " has a cynical edge in "+affected.possessiveAdjective()+" eyes.";
+            return getAffected().getName() + " has a cynical edge in "+getAffected().possessiveAdjective()+" eyes.";
         }
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s now cynical towards future mind games.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now cynical towards future mind games.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -90,7 +90,7 @@ public class Cynical extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Cynical(newAffected);
+        return new Cynical(newAffected.getType());
     }
 
     @Override  public JsonObject saveToJson() {

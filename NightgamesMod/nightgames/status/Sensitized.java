@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.NPC;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -15,7 +16,7 @@ public class Sensitized extends DurationStatus {
     double magnitude;
     private double maximum;
 
-    public Sensitized(Character affected, BodyPart part, double magnitude, double maximum, int duration) {
+    public Sensitized(CharacterType affected, BodyPart part, double magnitude, double maximum, int duration) {
         super("Sensitized (" + part.getType() + ")", affected, duration);
         this.part = part;
         this.magnitude = magnitude;
@@ -35,7 +36,7 @@ public class Sensitized extends DurationStatus {
         if (replacement != null)
             return "";
         return Formatter.format(String.format("{self:NAME-POSSESSIVE} groans as {self:possessive} %s grows hot.",
-                        part.describe(affected)), affected, c.getOpponent(affected));
+                        part.describe(getAffected())), getAffected(), c.getOpponent(getAffected()));
     }
 
     @Override
@@ -119,7 +120,7 @@ public class Sensitized extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Sensitized(newAffected, part, magnitude, maximum, getDuration());
+        return new Sensitized(newAffected.getType(), part, magnitude, maximum, getDuration());
     }
 
     @Override  public JsonObject saveToJson() {
@@ -133,7 +134,7 @@ public class Sensitized extends DurationStatus {
     }
 
     @Override public Status loadFromJson(JsonObject obj) {
-        return new Sensitized(NPC.noneCharacter(), JsonUtils.getGson().fromJson(obj.get("part"), BodyPart.class), obj.get("magnitude").getAsFloat(),
+        return new Sensitized(NPC.noneCharacter().getType(), JsonUtils.getGson().fromJson(obj.get("part"), BodyPart.class), obj.get("magnitude").getAsFloat(),
                         obj.get("maximum").getAsFloat(), obj.get("duration").getAsInt());
     }
 

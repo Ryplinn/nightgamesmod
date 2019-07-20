@@ -20,23 +20,23 @@ public class Frenzied extends DurationStatus {
     static {
         // Skills that either lead to penetration, or can be used during it.
         Character p = NPC.noneCharacter();
-        FUCK_SKILLS.add(new AssFuck(p));
-        FUCK_SKILLS.add(new Carry(p));
-        FUCK_SKILLS.add(new Shove(p));
-        FUCK_SKILLS.add(new Tackle(p));
-        FUCK_SKILLS.add(new Straddle(p));
-        FUCK_SKILLS.add(new Tear(p));
-        FUCK_SKILLS.add(new Undress(p));
-        FUCK_SKILLS.add(new Fly(p));
+        FUCK_SKILLS.add(new AssFuck(p.getType()));
+        FUCK_SKILLS.add(new Carry(p.getType()));
+        FUCK_SKILLS.add(new Shove(p.getType()));
+        FUCK_SKILLS.add(new Tackle(p.getType()));
+        FUCK_SKILLS.add(new Straddle(p.getType()));
+        FUCK_SKILLS.add(new Tear(p.getType()));
+        FUCK_SKILLS.add(new Undress(p.getType()));
+        FUCK_SKILLS.add(new Fly(p.getType()));
         FUCK_SKILLS.add(new Fuck(p.getType()));
-        FUCK_SKILLS.add(new Invitation(p));
-        FUCK_SKILLS.add(new WildThrust(p));
-        FUCK_SKILLS.add(new ReverseAssFuck(p));
-        FUCK_SKILLS.add(new ReverseCarry(p));
-        FUCK_SKILLS.add(new ReverseFly(p));
-        FUCK_SKILLS.add(new ReverseFuck(p));
-        FUCK_SKILLS.add(new SubmissiveHold(p));
-        FUCK_SKILLS.add(new ToggleKnot(p));
+        FUCK_SKILLS.add(new Invitation(p.getType()));
+        FUCK_SKILLS.add(new WildThrust(p.getType()));
+        FUCK_SKILLS.add(new ReverseAssFuck(p.getType()));
+        FUCK_SKILLS.add(new ReverseCarry(p.getType()));
+        FUCK_SKILLS.add(new ReverseFly(p.getType()));
+        FUCK_SKILLS.add(new ReverseFuck(p.getType()));
+        FUCK_SKILLS.add(new SubmissiveHold(p.getType()));
+        FUCK_SKILLS.add(new ToggleKnot(p.getType()));
     }
 
     private boolean selfInflicted;

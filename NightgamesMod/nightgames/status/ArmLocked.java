@@ -2,10 +2,8 @@ package nightgames.status;
 
 import com.google.gson.JsonObject;
 
-import nightgames.characters.Attribute;
+import nightgames.characters.*;
 import nightgames.characters.Character;
-import nightgames.characters.Emotion;
-import nightgames.characters.NPC;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -18,10 +16,10 @@ public class ArmLocked extends Status {
      * Default constructor for loading
      */
     public ArmLocked() {
-        this(NPC.noneCharacter(), 0);
+        this(NPC.noneCharacter().getType(), 0);
     }
 
-    public ArmLocked(Character affected, float dc) {
+    public ArmLocked(CharacterType affected, float dc) {
         super("Arm Locked", affected);
         toughness = dc;
         requirements.add(RequirementShortcuts.eitherinserted());
@@ -33,15 +31,15 @@ public class ArmLocked extends Status {
 
     @Override
     public String describe(Combat c) {
-        Character opp = c.getOpponent(affected);
+        Character opp = c.getOpponent(getAffected());
         return String.format("%s hands are intertwined with %s, preventing %s escape.",
-                        Formatter.capitalizeFirstLetter(opp.nameOrPossessivePronoun()), !affected.human() && !affected.useFemalePronouns()
-                        ? "his" : affected.possessiveAdjective() + "s", affected.possessiveAdjective());
+                        Formatter.capitalizeFirstLetter(opp.nameOrPossessivePronoun()), !getAffected().human() && !getAffected().useFemalePronouns()
+                        ? "his" : getAffected().possessiveAdjective() + "s", getAffected().possessiveAdjective());
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s being held down.\n", affected.subjectAction("are", "is"));
+        return String.format("%s being held down.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -56,7 +54,7 @@ public class ArmLocked extends Status {
 
     @Override
     public int regen(Combat c) {
-        affected.emote(Emotion.horny, 10);
+        getAffected().emote(Emotion.horny, 10);
         return 0;
     }
 
@@ -122,7 +120,7 @@ public class ArmLocked extends Status {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new ArmLocked(newAffected, Math.round(toughness));
+        return new ArmLocked(newAffected.getType(), Math.round(toughness));
     }
 
     @Override  public JsonObject saveToJson() {

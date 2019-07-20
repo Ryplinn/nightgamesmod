@@ -4,11 +4,12 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
-public class BD extends DurationStatus {
-    public BD(Character affected) {
+public class BondageFetish extends DurationStatus {
+    public BondageFetish(CharacterType affected) {
         super("Bondage", affected, 10);
         flag(Stsflag.bondage);
         flag(Stsflag.purgable);
@@ -17,16 +18,16 @@ public class BD extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "Fantasies of being tied up continue to dance through your head.";
         } else {
-            return affected.getName() + " is affected by a brief bondage fetish.";
+            return getAffected().getName() + " is affected by a brief bondage fetish.";
         }
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s now affected by a bondage fetish.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now affected by a bondage fetish.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -41,8 +42,8 @@ public class BD extends DurationStatus {
 
     @Override
     public void tick(Combat c) {
-        if (affected.bound()) {
-            affected.arouse(affected.getArousal().max() / 20, c);
+        if (getAffected().bound()) {
+            getAffected().arouse(getAffected().getArousal().max() / 20, c);
         }
     }
 
@@ -53,7 +54,7 @@ public class BD extends DurationStatus {
 
     @Override
     public double pleasure(Combat c, BodyPart withPart, BodyPart targetPart, double x) {
-        return affected.is(Stsflag.bound) ? x / 2 : 0;
+        return getAffected().is(Stsflag.bound) ? x / 2 : 0;
     }
 
     @Override
@@ -63,7 +64,7 @@ public class BD extends DurationStatus {
 
     @Override
     public int tempted(Combat c, int x) {
-        return affected.is(Stsflag.bound) ? x / 2 : 0;
+        return getAffected().is(Stsflag.bound) ? x / 2 : 0;
     }
 
     @Override
@@ -98,7 +99,7 @@ public class BD extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new BD(newAffected);
+        return new BondageFetish(newAffected.getType());
     }
 
     @Override  public JsonObject saveToJson() {
@@ -108,6 +109,6 @@ public class BD extends DurationStatus {
     }
 
     @Override public Status loadFromJson(JsonObject obj) {
-        return new BD(null);
+        return new BondageFetish(null);
     }
 }

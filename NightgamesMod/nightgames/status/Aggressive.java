@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.NPC;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -25,10 +26,10 @@ public class Aggressive extends DurationStatus {
      * Default constructor for loading
      */
     public Aggressive() {
-        this(NPC.noneCharacter(), "none", 0);
+        this(NPC.noneCharacter().getType(), "none", 0);
     }
 
-    public Aggressive(Character affected, String cause, int duration) {
+    public Aggressive(CharacterType affected, String cause, int duration) {
         super("Aggressive", affected, duration);
         this.cause = cause;
         flag(Stsflag.aggressive);
@@ -37,24 +38,24 @@ public class Aggressive extends DurationStatus {
     @Override
     public String initialMessage(Combat c, Status replacement) {
         return String.format("%s now aggressive, and cannot use non-physical skills.",
-                        affected.subjectAction("are", "is"));
+                        getAffected().subjectAction("are", "is"));
     }
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "Affected by " + cause + ", you are incapable of anything but an all-out assault.";
         }
-        return String.format("%s has an aggressive look on %s face: eyes wide open, teeth bared.", affected.getName(),
-                        affected.possessiveAdjective());
+        return String.format("%s has an aggressive look on %s face: eyes wide open, teeth bared.", getAffected().getName(),
+                        getAffected().possessiveAdjective());
     }
 
     @Override
     public Collection<Skill> allowedSkills(Combat c) {
         return CONTACT_SKILLS.stream()
-                        .filter(s -> s.requirements(c, affected, c.getOpponent(affected))
+                        .filter(s -> s.requirements(c, getAffected(), c.getOpponent(getAffected()))
                                         && Skill.skillIsUsable(c, s))
-                        .map(s -> s.copy(affected)).collect(Collectors.toSet());
+                        .map(s -> s.copy(getAffected())).collect(Collectors.toSet());
     }
 
     @Override
@@ -118,7 +119,7 @@ public class Aggressive extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Aggressive(newAffected, cause, getDuration());
+        return new Aggressive(newAffected.getType(), cause, getDuration());
     }
 
      @Override public JsonObject saveToJson() {

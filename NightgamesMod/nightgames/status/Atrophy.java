@@ -3,6 +3,7 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -14,13 +15,13 @@ public class Atrophy extends DurationStatus {
     protected String source;
 
     public static Status getWithPsychologicalType(Character from, Character target, float magnitude, int duration, String source) {
-        return new Atrophy(target, (float) DamageType.temptation.modifyDamage(from, target, magnitude), duration, source);
+        return new Atrophy(target.getType(), (float) DamageType.temptation.modifyDamage(from, target, magnitude), duration, source);
     }
     public static Atrophy getWithBiologicalType(Character from, Character target, float magnitude, int duration, String source) {
-        return new Atrophy(target, (float) DamageType.biological.modifyDamage(from, target, magnitude), duration, source);
+        return new Atrophy(target.getType(), (float) DamageType.biological.modifyDamage(from, target, magnitude), duration, source);
     }
 
-    public Atrophy(Character affected, float magnitude, int duration, String source) {
+    public Atrophy(CharacterType affected, float magnitude, int duration, String source) {
         super("Horny", affected, duration);
         this.source = source;
         this.magnitude = magnitude;
@@ -36,10 +37,10 @@ public class Atrophy extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "You feel sluggish from " + source + ".";
         } else {
-            return affected.getName() + " is visibly weakened from contacting " + source + ".";
+            return getAffected().getName() + " is visibly weakened from contacting " + source + ".";
         }
     }
 
@@ -61,8 +62,8 @@ public class Atrophy extends DurationStatus {
 
     @Override
     public void tick(Combat c) {
-        affected.weaken(c, Math.round(magnitude));
-        affected.emote(Emotion.nervous, 5);
+        getAffected().weaken(c, Math.round(magnitude));
+        getAffected().emote(Emotion.nervous, 5);
     }
 
     @Override
@@ -72,7 +73,7 @@ public class Atrophy extends DurationStatus {
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s %sweakening from %s.\n", affected.subjectAction("are", "is"), replacement != null ? "" : "now ",
+        return String.format("%s %sweakening from %s.\n", getAffected().subjectAction("are", "is"), replacement != null ? "" : "now ",
                         source + " (" + Formatter.formatDecimal(magnitude) + " x " + getDuration() + ")");
     }
 
@@ -147,7 +148,7 @@ public class Atrophy extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Atrophy(newAffected, magnitude, getDuration(), source);
+        return new Atrophy(newAffected.getType(), magnitude, getDuration(), source);
     }
 
     @Override  public JsonObject saveToJson() {

@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -14,23 +15,23 @@ import nightgames.global.Random;
 
 public class BastionOfFaith extends DurationStatus {
 
-    public BastionOfFaith(Character affected) {
+    BastionOfFaith(CharacterType affected) {
         this(affected, 6);
     }
 
-    public BastionOfFaith(Character affected, int duration) {
+    BastionOfFaith(CharacterType affected, int duration) {
         super("Bastion of Faith", affected, duration);
         flag(Stsflag.braced);
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s divine protection.\n", affected.subjectAction("have", "has"));
+        return String.format("%s divine protection.\n", getAffected().subjectAction("have", "has"));
     }
 
     @Override
     public String describe(Combat c) {
-        return String.format("%s protected by a divine aura.\n", affected.subjectAction("are", "is"));
+        return String.format("%s protected by a divine aura.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -50,8 +51,8 @@ public class BastionOfFaith extends DurationStatus {
                         "{self:NAME-POSSESSIVE} holy barrier is making it impossible to damage {self:direct-object}.",
                         "A golden barrier surrounding {self:name-do} is making it impossible to damage {self:direct-object}."
                         );
-        Formatter.writeIfCombat(c, affected, Formatter
-                        .format(Random.pickRandom(possibleStrings).get(), affected, affected));
+        Formatter.writeIfCombat(c, getAffected(), Formatter
+                        .format(Random.pickRandomGuaranteed(possibleStrings), getAffected(), getAffected()));
         return -x;
     }
 
@@ -63,11 +64,11 @@ public class BastionOfFaith extends DurationStatus {
     @Override
     public int weakened(Combat c, int x) {
         List<String> possibleStrings = Arrays.asList(
-                        "{self:NAME-POSSESSIVE} holy barrier is reenergizing {self:direct-object}.",
+                        "{self:NAME-POSSESSIVE} holy barrier is re-energizing {self:direct-object}.",
                         "{self:NAME-POSSESSIVE} holy barrier is buoying up {self:possessive} stamina."
                         );
-        Formatter.writeIfCombat(c, affected, Formatter
-                        .format(Random.pickRandom(possibleStrings).get(), affected, affected));
+        Formatter.writeIfCombat(c, getAffected(), Formatter
+                        .format(Random.pickRandomGuaranteed(possibleStrings), getAffected(), getAffected()));
         return -x;
     }
 
@@ -78,8 +79,8 @@ public class BastionOfFaith extends DurationStatus {
                         "{self:NAME-POSSESSIVE} holy barrier prevents {self:direct-object} draining effects.",
                         "A golden barrier surrounding {self:name-do} stops the theft of {self:possessive} stamina."
                         );
-        Formatter.writeIfCombat(c, affected, Formatter
-                        .format(Random.pickRandom(possibleStrings).get(), affected, affected));
+        Formatter.writeIfCombat(c, getAffected(), Formatter
+                        .format(Random.pickRandomGuaranteed(possibleStrings), getAffected(), getAffected()));
         return -x;
     }
 
@@ -120,7 +121,7 @@ public class BastionOfFaith extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new BastionOfFaith(newAffected);
+        return new BastionOfFaith(newAffected.getType());
     }
 
     @Override  public JsonObject saveToJson() {

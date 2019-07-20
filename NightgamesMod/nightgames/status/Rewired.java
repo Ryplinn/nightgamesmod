@@ -4,11 +4,12 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class Rewired extends DurationStatus {
-    public Rewired(Character affected, int duration) {
+    public Rewired(CharacterType affected, int duration) {
         super("Rewired", affected, duration);
         flag(Stsflag.rewired);
         flag(Stsflag.debuff);
@@ -17,11 +18,11 @@ public class Rewired extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "Your senses feel... wrong. It's like your sense of pleasure and pain are jumbled.";
         } else {
-            return affected.getName() + " fidgets uncertainly at the alien sensation of "+affected.possessiveAdjective()
-            +" rewired nerves.";
+            return getAffected().getName() + " fidgets uncertainly at the alien sensation of " + getAffected()
+                            .possessiveAdjective() + " rewired nerves.";
         }
     }
 
@@ -32,7 +33,7 @@ public class Rewired extends DurationStatus {
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s senses is now rewired.\n", affected.nameOrPossessivePronoun());
+        return String.format("%s senses is now rewired.\n", getAffected().nameOrPossessivePronoun());
     }
 
     @Override
@@ -42,7 +43,7 @@ public class Rewired extends DurationStatus {
 
     @Override
     public double pleasure(Combat c, BodyPart withPart, BodyPart targetPart, double x) {
-        affected.getStamina().reduce((int) Math.round(x));
+        getAffected().getStamina().reduce((int) Math.round(x));
         return 0;
     }
 
@@ -93,7 +94,7 @@ public class Rewired extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Rewired(newAffected, getDuration());
+        return new Rewired(newAffected.getType(), getDuration());
     }
 
     @Override  public JsonObject saveToJson() {

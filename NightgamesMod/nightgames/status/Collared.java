@@ -3,6 +3,7 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -10,9 +11,9 @@ import nightgames.global.Formatter;
 public class Collared extends Status implements Compulsive {
 
     private int charges;
-    private final Character owner;
+    private final CharacterType owner;
     
-    public Collared(Character affected, Character owner) {
+    public Collared(CharacterType affected, CharacterType owner) {
         super("Collared", affected);
         flag(Stsflag.collared);
         flag(Stsflag.compelled);
@@ -20,11 +21,15 @@ public class Collared extends Status implements Compulsive {
         this.owner = owner;
     }
 
+    public Character getOwner() {
+        return owner.fromPoolGuaranteed();
+    }
+
     public void tick(Combat c) {
         if (charges <= 0) {
-            c.write("<b>The collar around " + affected.nameOrPossessivePronoun() 
+            c.write("<b>The collar around " + getAffected().nameOrPossessivePronoun()
                             + " neck runs out of power and falls off.</b>");
-            affected.removelist.add(this);
+            getAffected().removelist.add(this);
         }
     }
 
@@ -35,13 +40,13 @@ public class Collared extends Status implements Compulsive {
     @Override
     public String initialMessage(Combat c, Status replacement) {
         return Formatter.format("{self:SUBJECT} now {self:action:have|has} a metallic collar around"
-                        + " {self:possessive} neck!", affected, c.getOpponent(affected));
+                        + " {self:possessive} neck!", getAffected(), c.getOpponent(getAffected()));
     }
 
     @Override
     public String describe(Combat c) {
         return Formatter.format("{self:SUBJECT-ACTION:are|is} wearing a training collar, which"
-                        + " is hampering {self:possessive} ability to fight.", affected, c.getOpponent(affected));
+                        + " is hampering {self:possessive} ability to fight.", getAffected(), c.getOpponent(getAffected()));
     }
 
     @Override
@@ -111,7 +116,7 @@ public class Collared extends Status implements Compulsive {
     
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Collared(newAffected, newOther);
+        return new Collared(newAffected.getType(), newOther.getType());
     }
 
     @Override
@@ -130,37 +135,37 @@ public class Collared extends Status implements Compulsive {
             case PREVENT_ESCAPE:
                 return Formatter.format("{self:SUBJECT-ACTION:try|tries} to struggle, but"
                                 + " the collar is having none of it and shocks {self:direct-object}"
-                                + " into submission.", affected, owner);
+                                + " into submission.", getAffected(), getOwner());
             case PUNISH_PAIN:
                 return Formatter.format("The training collar around {self:name-possessive}"
                                 + "neck reacts to {self:possessive} aggression by sending"
                                 + " a powerful shock down {self:possessive} spine.", 
-                                affected, owner);
+                                getAffected(), getOwner());
             case PREVENT_REMOVE_BOMB:
                 return Formatter.format("{self:SUBJECT-ACTION:reach|reaches} up to grab the sphere on "
                                 + "{self:possessive} chest, but the collar around {self:possessive} neck"
                 + " does not appreciate the sentiment and shocks {self:direct-object} to keep your arms down.",
-                    affected, owner);
+                    getAffected(), getOwner());
             case PREVENT_STRUGGLE:
                 return Formatter.format("{self:SUBJECT-ACTION:try|tries} to struggle, but"
                                 + " the collar is having none of it and shocks {self:direct-object}"
-                                + " into submission.", affected, owner);
+                                + " into submission.", getAffected(), getOwner());
             case STANCE_FLIP:
                 return c.getStance().reverse(c, false).equals(c.getStance()) ?
                                 Formatter.format("Distracted by a shock from the collar around {self:possessive}"
                                 + " neck, {self:subject-action:have|has} no chance to resist as"
                                 + " {other:subject-action:put|puts} {self:direct-object}"
-                                + " in a pin.", affected, owner)
+                                + " in a pin.", getAffected(), getOwner())
                             :
                                 Formatter.format("Appearantly punishing {self:name-do} for being dominant, the collar"
                                                 + " around {self:possessive} neck gives {self:direct-object} a painful"
                                                 + " shock. At the same time, {other:subject-action:grab|grabs}"
                                                 + " hold of {self:possessive} body and gets {other:reflective}"
-                                                + " into a more advantegeous position.", affected, owner);
+                                                + " into a more advantegeous position.", getAffected(), getOwner());
             case PREVENT_REVERSAL:
                 return Formatter.format("{self:SUBJECT-ACTION:try|tries} to get the"
                             + " upper hand, but the collar adamantly refuses by"
-                            + " shocking {self:direct-object}.", affected, owner);
+                            + " shocking {self:direct-object}.", getAffected(), getOwner());
             default:
                 return "ERROR: Missing compulsion type in Collared";
             

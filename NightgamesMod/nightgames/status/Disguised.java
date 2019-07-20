@@ -3,23 +3,27 @@ package nightgames.status;
 import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.NPC;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
-import nightgames.global.GameState;
 
 public class Disguised extends Status {
-    private NPC disguisedTarget;
+    private CharacterType disguiseTarget;
 
-    public Disguised(Character affected, NPC disguiseTarget) {
+    public Disguised(CharacterType affected, CharacterType disguiseTarget) {
         super("Disguised", affected);
         if (disguiseTarget == affected) {
             throw new RuntimeException("Tried to disguise as oneself!");
         }
-        this.disguisedTarget = disguiseTarget;
+        this.disguiseTarget = disguiseTarget;
         this.flag(Stsflag.disguised);
         this.flag(Stsflag.purgable);
+    }
+
+    private NPC getDisguiseTarget() {
+        return (NPC) disguiseTarget.fromPoolGuaranteed();
     }
 
     @Override
@@ -39,8 +43,8 @@ public class Disguised extends Status {
 
     @Override
     public int mod(Attribute a) {
-        int mod = disguisedTarget.get(a) - affected.getPure(a);
-        if (affected.has(Trait.Masquerade)) {
+        int mod = getDisguiseTarget().get(a) - getAffected().getPure(a);
+        if (getAffected().has(Trait.Masquerade)) {
             mod = mod * 3 / 2;
         }
         return mod;
@@ -98,22 +102,22 @@ public class Disguised extends Status {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Disguised(newAffected, disguisedTarget);
+        return new Disguised(newAffected.getType(), disguiseTarget);
     }
 
      @Override public JsonObject saveToJson() {
         JsonObject obj = new JsonObject();
         obj.addProperty("type", getClass().getSimpleName());
-        obj.addProperty("disguisedTarget", disguisedTarget.getTrueName());
+        obj.addProperty("disguiseTarget", disguiseTarget.toString());
         return obj;
     }
 
     @Override public Status loadFromJson(JsonObject obj) {
-        return new Disguised(null, GameState.getGameState().characterPool.getNPC(obj.get("disguisedTarget").getAsString()));
+        return new Disguised(null, CharacterType.get(obj.get("disguiseTarget").getAsString()));
     }
 
     public NPC getTarget() {
-        return disguisedTarget;
+        return getDisguiseTarget();
     }
 
     @Override

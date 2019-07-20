@@ -12,7 +12,7 @@ import nightgames.combat.Combat;
 public class Flatfooted extends DurationStatus {
     private boolean makesWary;
 
-    public Flatfooted(Character affected, int duration, boolean makesWary) {
+    public Flatfooted(CharacterType affected, int duration, boolean makesWary) {
         super("Flat-Footed", affected, duration);
         flag(Stsflag.distracted);
         flag(Stsflag.debuff);
@@ -27,16 +27,16 @@ public class Flatfooted extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        if (affected.human()) {
+        if (getAffected().human()) {
             return "You are caught off-guard.";
         } else {
-            return affected.getName() + " is flat-footed and not ready to fight.";
+            return getAffected().getName() + " is flat-footed and not ready to fight.";
         }
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s now flatfooted.\n", affected.subjectAction("are", "is"));
+        return String.format("%s now flatfooted.\n", getAffected().subjectAction("are", "is"));
     }
 
     @Override
@@ -51,15 +51,15 @@ public class Flatfooted extends DurationStatus {
 
     @Override
     public void onRemove(Combat c, Character other) {
-        if (makesWary && affected.canRespond()) {
-            affected.addlist.add(new Wary(affected, 3));
+        if (makesWary && getAffected().canRespond()) {
+            getAffected().addlist.add(new Wary(affected, 3));
         }
     }
 
     @Override
     public int regen(Combat c) {
         super.regen(c);
-        affected.emote(Emotion.nervous, 5);
+        getAffected().emote(Emotion.nervous, 5);
         return 0;
     }
 
@@ -115,7 +115,7 @@ public class Flatfooted extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Flatfooted(newAffected, getDuration(), makesWary);
+        return new Flatfooted(newAffected.getType(), getDuration(), makesWary);
     }
 
     @Override  public JsonObject saveToJson() {
