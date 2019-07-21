@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.Body;
 import nightgames.characters.body.BodyPart;
@@ -15,7 +16,7 @@ import nightgames.status.addiction.AddictionType;
 import java.util.ArrayList;
 
 public class Masturbate extends Skill {
-    public Masturbate(Character self) {
+    public Masturbate(CharacterType self) {
         super("Masturbate", self);
         addTag(SkillTag.pleasureSelf);
     }
@@ -41,7 +42,7 @@ public class Masturbate extends Skill {
     }
 
     public BodyPart getTargetOrgan(Combat c, Character target) {
-        ArrayList<BodyPart> parts = new ArrayList<BodyPart>();
+        ArrayList<BodyPart> parts = new ArrayList<>();
         BodyPart cock = target.body.getRandomCock();
         BodyPart pussy = target.body.getRandomPussy();
         BodyPart ass = target.body.getRandom("ass");
@@ -62,7 +63,6 @@ public class Masturbate extends Skill {
         return parts.get(Random.random(parts.size()));
     }
 
-    private BodyPart withO = Body.nonePart;
     private BodyPart targetO = Body.nonePart;
 
     @Override
@@ -72,7 +72,7 @@ public class Masturbate extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        withO = getSelfOrgan();
+        BodyPart withO = getSelfOrgan();
         targetO = getTargetOrgan(c, getSelf());
 
         if (getSelf().human()) {
@@ -97,7 +97,7 @@ public class Masturbate extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Masturbate(user);
+        return new Masturbate(user.getType());
     }
 
     @Override

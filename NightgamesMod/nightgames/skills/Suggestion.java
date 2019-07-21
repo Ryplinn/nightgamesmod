@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.Charmed;
@@ -9,7 +10,7 @@ import nightgames.status.Stsflag;
 
 public class Suggestion extends Skill {
 
-    public Suggestion(Character self) {
+    public Suggestion(CharacterType self) {
         super("Suggestion", self);
     }
 
@@ -42,7 +43,7 @@ public class Suggestion extends Skill {
             } else {
                 c.write(getSelf(), receive(c, 0, Result.normal, target));
             }
-            target.add(c, new Charmed(target));
+            target.add(c, new Charmed(target.getType()));
             return true;
         } else if (getSelf().human()) {
             c.write(getSelf(), deal(c, 0, Result.miss, target));
@@ -54,7 +55,7 @@ public class Suggestion extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Suggestion(user);
+        return new Suggestion(user.getType());
     }
 
     @Override
@@ -84,7 +85,7 @@ public class Suggestion extends Skill {
         }
         return String.format("%s speaks in a firm, but relaxing tone, attempting to put %s"
                         + " into a trance. Obviously %s wouldn't let %s be "
-                        + "hynotized in the middle of a match, right? ...Right? ..."
+                        + "hypnotized in the middle of a match, right? ...Right? ..."
                         + "Why %s %s fighting %s again?", getSelf().subject(),
                         target.nameDirectObject(), target.subject(),
                         target.reflectivePronoun(), target.action("was", "were"),

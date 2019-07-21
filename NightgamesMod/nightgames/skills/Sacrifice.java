@@ -2,13 +2,14 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
 
 public class Sacrifice extends Skill {
 
-    public Sacrifice(Character self) {
+    public Sacrifice(CharacterType self) {
         super("Sacrifice", self, 5);
     }
 
@@ -42,7 +43,7 @@ public class Sacrifice extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Sacrifice(user);
+        return new Sacrifice(user.getType());
     }
 
     @Override

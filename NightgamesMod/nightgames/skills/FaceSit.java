@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.mods.FeralMod;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -16,7 +17,7 @@ import nightgames.status.Shamed;
 
 public class FaceSit extends Skill {
 
-    public FaceSit(Character self) {
+    public FaceSit(CharacterType self) {
         super("Facesit", self);
         addTag(SkillTag.pleasureSelf);
         addTag(SkillTag.dominant);
@@ -53,7 +54,7 @@ public class FaceSit extends Skill {
     public boolean resolve(Combat c, Character target) {
         if (getSelf().has(Trait.enthrallingjuices) && Random.random(4) == 0 && !target.wary()) {
             writeOutput(c, Result.special, target);
-            target.add(c, new Enthralled(target, getSelf(), 5));
+            target.add(c, new Enthralled(target.getType(), self, 5));
         } else {
             writeOutput(c, getSelf().has(Trait.lacedjuices) ? Result.strong : Result.normal, target);
         }
@@ -68,7 +69,7 @@ public class FaceSit extends Skill {
             getSelf().body.pleasure(target, target.body.getRandom("mouth"), getSelf().body.getRandom("pussy"), m, c, this);
             
             if (Random.random(100) < 1 + getSelf().get(Attribute.fetishism) / 2) {
-                target.add(c, new BodyFetish(target, getSelf(), "pussy", .05));
+                target.add(c, new BodyFetish(target.getType(), self, "pussy", .05));
             }
         }
         double n = 4 + Random.random(4) + getSelf().body.getHotness(target);
@@ -80,16 +81,16 @@ public class FaceSit extends Skill {
         target.temptWithSkill(c, getSelf(), getSelf().body.getRandom("pussy"), (int) Math.round(n / 2), this);
 
         target.loseWillpower(c, 5);
-        target.add(c, new Shamed(target));
+        target.add(c, new Shamed(target.getType()));
         if (!c.getStance().isFaceSitting(getSelf())) {
-            c.setStance(new FaceSitting(getSelf(), target), getSelf(), true);
+            c.setStance(new FaceSitting(self, target.getType()), getSelf(), true);
         }
         int fetishChance = 5 + 2 * getSelf().get(Attribute.fetishism);
         if (getSelf().has(Trait.bewitchingbottom)) {
             fetishChance *= 2;
         }
         if (Random.random(100) < fetishChance) {
-            target.add(c, new BodyFetish(target, getSelf(), "ass", .25));
+            target.add(c, new BodyFetish(target.getType(), self, "ass", .25));
         }
       
         return true;
@@ -102,7 +103,7 @@ public class FaceSit extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new FaceSit(user);
+        return new FaceSit(user.getType());
     }
 
     @Override

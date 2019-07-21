@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,7 +14,7 @@ import nightgames.status.Flatfooted;
 
 public class Diversion extends Skill {
 
-    public Diversion(Character self) {
+    public Diversion(CharacterType self) {
         super("Diversion", self);
         addTag(SkillTag.undressing);
     }
@@ -53,8 +54,8 @@ public class Diversion extends Skill {
                                 + "holding just {self:possessive} %s. Wait... what the fuck?", getSelf(), target,
                                 article.getName()));
             }
-            c.setStance(new Behind(getSelf(), target), getSelf(), true);
-            target.add(c, new Flatfooted(target, 1));
+            c.setStance(new Behind(self, target.getType()), getSelf(), true);
+            target.add(c, new Flatfooted(target.getType(), 1));
             return true;
         } else {
             c.write(getSelf(), Formatter.format("{self:SUBJECT-ACTION:try} to divert {other:name-possessive} attention by stripping off {self:possessive} clothing, "
@@ -65,7 +66,7 @@ public class Diversion extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Diversion(user);
+        return new Diversion(user.getType());
     }
 
     @Override

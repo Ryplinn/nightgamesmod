@@ -33,7 +33,7 @@ public class Enthralled extends DurationStatus {
         this.makesCynical = makesCynical;
     }
 
-    private Character getMaster() {
+    public Character getMaster() {
         return master.fromPoolGuaranteed();
     }
 

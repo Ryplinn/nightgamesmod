@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Decider;
 import nightgames.characters.NPC;
 import nightgames.characters.trait.Trait;
@@ -16,7 +17,7 @@ import java.util.*;
 public class ThrowDraft extends Skill {
     private static final Set<Item> transformativeItems = new HashSet<>();
 
-    {
+    static {
         transformativeItems.add(Item.SuccubusDraft);
         transformativeItems.add(Item.BustDraft);
         transformativeItems.add(Item.TinyDraft);
@@ -25,7 +26,7 @@ public class ThrowDraft extends Skill {
         transformativeItems.add(Item.FemDraft);
     }
 
-    public ThrowDraft(Character self) {
+    ThrowDraft(CharacterType self) {
         super("Throw draft", self);
     }
 
@@ -43,7 +44,7 @@ public class ThrowDraft extends Skill {
 
     @Override
     public Collection<String> subChoices(Combat c) {
-        ArrayList<String> usables = new ArrayList<String>();
+        ArrayList<String> usables = new ArrayList<>();
         for (Item i : getSelf().getInventory().keySet()) {
             if (getSelf().has(i) && i.getEffects().get(0).throwable()) {
                 usables.add(i.getName());
@@ -52,11 +53,11 @@ public class ThrowDraft extends Skill {
         return usables;
     }
 
-    public Item pickBest(Combat c, NPC self, Character target, List<Item> usables) {
+    private Item pickBest(Combat c, NPC self, Character target, List<Item> usables) {
         HashMap<Item, Double> checks = new HashMap<>();
         double selfFitness = self.getFitness(c);
         double targetFitness = self.getOtherFitness(c, target);
-        usables.stream().forEach(item -> {
+        usables.forEach(item -> {
             double rating = Decider.rateAction(self, c, selfFitness, targetFitness, (newCombat, newSelf, newOther) -> {
                 for (ItemEffect e : item.getEffects()) {
                     e.use(newCombat, newOther, newSelf, item);
@@ -66,11 +67,9 @@ public class ThrowDraft extends Skill {
             checks.put(item, rating);
         });
         if (DebugFlags.isDebugOn(DebugFlags.DEBUG_SKILLS)) {
-            checks.entrySet().stream().forEach(entry -> {
-                System.out.println("Item " + entry.getKey() + ": " + entry.getValue());
-            });
+            checks.forEach((key, value) -> System.out.println("Item " + key + ": " + value));
         }
-        Item best = checks.entrySet().stream().min((first, second) -> {
+        return checks.entrySet().stream().min((first, second) -> {
             double test = second.getValue() - first.getValue();
             if (test < 0) {
                 return -1;
@@ -79,8 +78,7 @@ public class ThrowDraft extends Skill {
                 return 1;
             }
             return 0;
-        }).get().getKey();
-        return best;
+        }).map(Map.Entry::getKey).orElse(null);
     }
 
     @Override
@@ -94,7 +92,7 @@ public class ThrowDraft extends Skill {
                 }
             }
         } else {
-            ArrayList<Item> usables = new ArrayList<Item>();
+            ArrayList<Item> usables = new ArrayList<>();
             for (Item i : getSelf().getInventory().keySet()) {
                 if (i.getEffects().get(0).throwable() && i.usable(c, getSelf(), c.getOpponent(getSelf()))) {
                     usables.add(i);
@@ -134,7 +132,7 @@ public class ThrowDraft extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new ThrowDraft(user);
+        return new ThrowDraft(user.getType());
     }
 
     @Override

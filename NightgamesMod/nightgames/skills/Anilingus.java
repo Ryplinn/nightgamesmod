@@ -97,14 +97,14 @@ public class Anilingus extends Skill {
         }
         if (target.has(Trait.temptingass) && !getSelf().bound()) {
             c.write(target, Formatter.format("Servicing {other:possessive} perfect behind makes {self:direct-object} almost unconsciously touch {self:reflective}.", getSelf(), target));
-            (new Masturbate(getSelf())).resolve(c, target);
+            (new Masturbate(self)).resolve(c, target);
         }
         return result != Result.miss;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Anilingus(user);
+        return new Anilingus(user.getType());
     }
 
     @Override

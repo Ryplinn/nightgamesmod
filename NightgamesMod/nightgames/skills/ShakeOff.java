@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -9,7 +10,7 @@ import nightgames.status.Stsflag;
 
 public class ShakeOff extends Skill {
 
-    public ShakeOff(Character self) {
+    private ShakeOff(CharacterType self) {
         super("Shake Off", self);
     }
 
@@ -31,13 +32,13 @@ public class ShakeOff extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        getSelf().add(c, new Slimed(getSelf(), target, -10));
+        getSelf().add(c, new Slimed(self, target.getType(), -10));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new ShakeOff(user);
+        return new ShakeOff(user.getType());
     }
 
     @Override

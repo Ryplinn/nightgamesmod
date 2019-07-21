@@ -2,13 +2,14 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.Primed;
 
 public class WindUp extends Skill {
 
-    public WindUp(Character self) {
+    public WindUp(CharacterType self) {
         super("Wind Up", self);
     }
 
@@ -50,7 +51,7 @@ public class WindUp extends Skill {
         int charges = Math.min(4, getSelf().getMojo()
                                            .get()
                         / 5);
-        getSelf().add(c, new Primed(getSelf(), charges + 1));
+        getSelf().add(c, new Primed(self, charges + 1));
         getSelf().spendMojo(c, charges * 5);
         writeOutput(c, Result.normal, target);
         return true;
@@ -58,7 +59,7 @@ public class WindUp extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new WindUp(user);
+        return new WindUp(user.getType());
     }
 
     @Override
@@ -68,8 +69,7 @@ public class WindUp extends Skill {
 
     @Override
     public String deal(Combat c, int damage, Result modifier, Character target) {
-        return String.format(
-                        "You take advantage of a brief lull in the fight to wind up your Procrastinator, priming time charges for later use.");
+        return "You take advantage of a brief lull in the fight to wind up your Procrastinator, priming time charges for later use.";
     }
 
     @Override

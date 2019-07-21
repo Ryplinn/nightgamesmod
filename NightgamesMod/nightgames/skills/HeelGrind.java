@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,7 +14,7 @@ import nightgames.stance.Stance;
 import nightgames.status.BodyFetish;
 
 public class HeelGrind extends Skill {
-    public HeelGrind(Character self) {
+    HeelGrind(CharacterType self) {
         super("Heel Grind", self);
         addTag(SkillTag.usesFeet);
         addTag(SkillTag.pleasure);
@@ -56,17 +57,17 @@ public class HeelGrind extends Skill {
         target.body.pleasure(getSelf(), getSelf().body.getRandom("feet"), target.body.getRandom("pussy"), m, c, this);
         target.body.pleasure(getSelf(), getSelf().body.getRandom("hands"), target.body.getRandom("breasts"), m2, c, this);
         if (c.getStance().en != Stance.behindfootjob) {
-            c.setStance(new BehindFootjob(getSelf(), target), getSelf(), true);
+            c.setStance(new BehindFootjob(self, target.getType()), getSelf(), true);
         }
         if (Random.random(100) < 15 + 2 * getSelf().get(Attribute.fetishism)) {
-            target.add(c, new BodyFetish(target, getSelf(), "feet", .25));
+            target.add(c, new BodyFetish(target.getType(), self, "feet", .25));
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new HeelGrind(user);
+        return new HeelGrind(user.getType());
     }
 
     @Override

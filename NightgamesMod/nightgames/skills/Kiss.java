@@ -73,7 +73,7 @@ public class Kiss extends Skill {
                 m += 2;
             }
         }
-        Result res = Result.normal;
+        Result res;
         if (getSelf().get(Attribute.seduction) >= 9) {
             m += Random.random(4, 6);
             res = Result.normal;
@@ -106,7 +106,7 @@ public class Kiss extends Skill {
             target.buildMojo(c, 50);
             target.heal(c, 100);
             target.loseWillpower(c, Random.random(3) + 2, false);
-            target.add(c, new Lovestruck(target, getSelf(), 2));
+            target.add(c, new Lovestruck(target.getType(), self, 2));
             getSelf().usedAttribute(Attribute.divinity, c, .5);
         }
         if (getSelf().has(Trait.TenderKisses) && target.is(Stsflag.charmed) && Random.random(3) == 0) {
@@ -132,7 +132,7 @@ public class Kiss extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Kiss(user);
+        return new Kiss(user.getType());
     }
 
     @Override
@@ -199,7 +199,7 @@ public class Kiss extends Skill {
         if (modifier == Result.divine) {
             return String.format("%s seductively pulls %s into a deep kiss. As first %s %s to match %s enthusiastic"
                             + " tongue with %s own, but %s starts using %s divine energy to directly attack %s soul. "
-                            + "Golden waves of ecstacy flow through %s body, completely shattering every single thought %s and replacing them with %s.",
+                            + "Golden waves of ecstasy flow through %s body, completely shattering every single thought %s and replacing them with %s.",
                             getSelf().subject(), target.nameDirectObject(), target.pronoun(),
                             target.action("try", "tries"), getSelf().possessiveAdjective(),
                             target.possessiveAdjective(), getSelf().subject(), getSelf().possessiveAdjective(),

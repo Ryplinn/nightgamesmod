@@ -2,13 +2,14 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
 
 public class GoodnightKiss extends Skill {
 
-    public GoodnightKiss(Character self) {
+    GoodnightKiss(CharacterType self) {
         super("Goodnight Kiss", self);
     }
 
@@ -37,9 +38,9 @@ public class GoodnightKiss extends Skill {
     public boolean resolve(Combat c, Character target) {
         c.write(getSelf(), String.format(
                         "%s surreptitiously %s %s lips with a powerful sedative, careful not "
-                                        + "to accidently ingest any. As soon as %s %s an opening, "
+                                        + "to accidentally ingest any. As soon as %s %s an opening, "
                                         + "%s %s in and kiss %s softly. Only a small amount of the drug is actually "
-                                        + "transfered by the kiss, but it's enough. %s immediately staggers "
+                                        + "transferred by the kiss, but it's enough. %s immediately staggers "
                                         + "as the strength leaves %s body.",
                         getSelf().subject(), getSelf().action("coat"), getSelf().possessiveAdjective(),
                         getSelf().pronoun(), getSelf().action("see"), getSelf().pronoun(),
@@ -52,7 +53,7 @@ public class GoodnightKiss extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new GoodnightKiss(user);
+        return new GoodnightKiss(user.getType());
     }
     
     @Override

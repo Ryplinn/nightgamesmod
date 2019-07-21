@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.Body;
 import nightgames.characters.body.CockMod;
 import nightgames.combat.Combat;
@@ -12,7 +13,7 @@ import nightgames.status.Stsflag;
 
 public class ToggleKnot extends Skill {
 
-    public ToggleKnot(Character self) {
+    public ToggleKnot(CharacterType self) {
         super("Toggle Knot", self);
     }
 
@@ -85,14 +86,14 @@ public class ToggleKnot extends Skill {
                                                 Formatter.capitalizeFirstLetter(target.subjectAction("are", "is")),
                                                 target.reflectivePronoun()));
             }
-            target.add(c, new Knotted(target, getSelf(), c.getStance().anallyPenetrated(c, target)));
+            target.add(c, new Knotted(target.getType(), self, c.getStance().anallyPenetrated(c, target)));
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new ToggleKnot(user);
+        return new ToggleKnot(user.getType());
     }
 
     @Override

@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -10,7 +11,7 @@ import nightgames.items.Item;
 
 public class FaerieSwarm extends Skill {
 
-    public FaerieSwarm(Character self) {
+    FaerieSwarm(CharacterType self) {
         super("FaerieSwarm", self, 2);
     }
 
@@ -27,7 +28,7 @@ public class FaerieSwarm extends Skill {
 
     @Override
     public String describe(Combat c) {
-        return "Briefly unleash a crowd of mischievious faeries: Minor Scroll";
+        return "Briefly unleash a crowd of mischievous faeries: Minor Scroll";
     }
 
     @Override
@@ -45,7 +46,7 @@ public class FaerieSwarm extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new FaerieSwarm(user);
+        return new FaerieSwarm(user.getType());
     }
 
     @Override
@@ -70,14 +71,14 @@ public class FaerieSwarm extends Skill {
                         + target.directObject() + "self, but there are too many of them and they're too quick. "
                         + Formatter.capitalizeFirstLetter(target.pronoun())
                         + "'s reduced to writhing and giggling in pleasure until "
-                        + "the brief summoning spell exires.";
+                        + "the brief summoning spell expires.";
     }
 
     @Override
     public String receive(Combat c, int damage, Result modifier, Character target) {
         if (modifier == Result.weak) {
             return String.format("%s pulls out a scroll and a swarm of butterfly-winged faeries burst "
-                            + "forth to attack %s. They mischeviously grab at %s clothes, using magical assistance "
+                            + "forth to attack %s. They mischievously grab at %s clothes, using magical assistance "
                             + "to efficiently strip %s naked.", getSelf().subject(), target.nameDirectObject(),
                             target.possessiveAdjective(), target.directObject());
         }
@@ -86,7 +87,7 @@ public class FaerieSwarm extends Skill {
                         + " A couple of them fly into %s face to distract %s with naked girl "
                         + "parts, while the rest play with %s naked body. They focus especially on %s %s, "
                         + "dozens of tiny hands playfully immobilizing %s with ticklish pleasure. The spell "
-                        + "doesn't actaully last very long, but from %s perspective, it feels"
+                        + "doesn't actually last very long, but from %s perspective, it feels"
                         + " like minutes of delightful torture.", getSelf().subject(),
                         target.nameDirectObject(), target.possessiveAdjective(),
                         target.directObject(), target.possessiveAdjective(),

@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -13,7 +14,7 @@ import nightgames.stance.Stance;
 
 public class Blindside extends Skill {
 
-    public Blindside(Character self) {
+    public Blindside(CharacterType self) {
         super("Blindside", self, 2);
         addTag(SkillTag.positioning);
     }
@@ -42,7 +43,7 @@ public class Blindside extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        c.setStance(new Mount(getSelf(), target), getSelf(), true);
+        c.setStance(new Mount(self, target.getType()), getSelf(), true);
         getSelf().emote(Emotion.confident, 15);
         getSelf().emote(Emotion.dominant, 15);
         target.emote(Emotion.nervous, 10);
@@ -51,7 +52,7 @@ public class Blindside extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Blindside(user);
+        return new Blindside(user.getType());
     }
 
     @Override
@@ -72,7 +73,7 @@ public class Blindside extends Skill {
     @Override
     public String receive(Combat c, int damage, Result modifier, Character target) {
         return String.format(
-                        "Seductively swaying %s hips, %s shashays over to %s. "
+                        "Seductively swaying %s hips, %s sashays over to %s. "
                                         + "%s eyes fix %s in place as %s leans in and firmly kisses %s, shoving %s tongue down"
                                         + " %s mouth. %s are so absorbed in kissing back, that %s only notice %s ulterior motive"
                                         + " once %s has already swept %s legs out from under %s and %s has landed on top of %s.",

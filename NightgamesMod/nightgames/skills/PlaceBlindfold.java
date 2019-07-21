@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -10,7 +11,7 @@ import nightgames.status.Stsflag;
 
 public class PlaceBlindfold extends Skill {
 
-    public PlaceBlindfold(Character self) {
+    PlaceBlindfold(CharacterType self) {
         super("Place Blindfold", self);
     }
 
@@ -51,7 +52,7 @@ public class PlaceBlindfold extends Skill {
                                             getSelf().subjectAction("snap"), target.nameOrPossessivePronoun(),
                                             target.possessiveAdjective()));
             getSelf().remove(Item.Blindfold);
-            target.add(c, new Blinded(target, "a blindfold", false));
+            target.add(c, new Blinded(target.getType(), "a blindfold", false));
         } else {
             c.write(getSelf(),
                             String.format("%s out a blindfold and %s to place it around %s "
@@ -65,7 +66,7 @@ public class PlaceBlindfold extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new PlaceBlindfold(user);
+        return new PlaceBlindfold(user.getType());
     }
 
     @Override

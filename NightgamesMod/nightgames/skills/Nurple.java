@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -12,7 +13,7 @@ import nightgames.skills.damage.DamageType;
 
 public class Nurple extends Skill {
 
-    public Nurple(Character self) {
+    public Nurple(CharacterType self) {
         super("Twist Nipples", self);
         addTag(SkillTag.hurt);
         addTag(SkillTag.mean);
@@ -65,7 +66,7 @@ public class Nurple extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Nurple(user);
+        return new Nurple(user.getType());
     }
 
     @Override

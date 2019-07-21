@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.mods.DemonicMod;
@@ -15,7 +16,7 @@ import nightgames.status.Horny;
 import java.util.function.Predicate;
 
 public class Aphrodisiac extends Skill {
-    public Aphrodisiac(Character self) {
+    public Aphrodisiac(CharacterType self) {
         super("Use Aphrodisiac", self);
         addTag(SkillTag.debuff);
         addTag(SkillTag.arouse);
@@ -77,7 +78,7 @@ public class Aphrodisiac extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Aphrodisiac(user);
+        return new Aphrodisiac(user.getType());
     }
 
     @Override

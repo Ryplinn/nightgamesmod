@@ -2,13 +2,14 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.Stsflag;
 
 public class OrgasmSeal extends Skill {
 
-    public OrgasmSeal(Character self) {
+    OrgasmSeal(CharacterType self) {
         super("Orgasm Seal", self, 4);
     }
 
@@ -35,13 +36,13 @@ public class OrgasmSeal extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        target.add(c, new nightgames.status.OrgasmSeal(target, 15));
+        target.add(c, new nightgames.status.OrgasmSeal(target.getType(), 15));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new OrgasmSeal(user);
+        return new OrgasmSeal(user.getType());
     }
 
     @Override

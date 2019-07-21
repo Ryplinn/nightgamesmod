@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -16,7 +17,7 @@ public class StripBottom extends Skill {
 
     private Clothing stripped, extra;
 
-    public StripBottom(Character self) {
+    StripBottom(CharacterType self) {
         super("Strip Bottoms", self);
 
         addTag(SkillTag.positioning);
@@ -76,7 +77,7 @@ public class StripBottom extends Skill {
     }
 
     @Override public Skill copy(Character user) {
-        return new StripBottom(user);
+        return new StripBottom(user.getType());
     }
 
     @Override public int speed() {

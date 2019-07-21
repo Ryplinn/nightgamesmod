@@ -49,7 +49,7 @@ public class Fuck extends Skill {
         if (ready) {
             stancePossible = true;
             if (selfO.isType("cock")) {
-                stancePossible &= !c.getStance().inserted(getSelf());
+                stancePossible = !c.getStance().inserted(getSelf());
             }
             if (selfO.isType("pussy")) {
                 stancePossible &= !c.getStance().vaginallyPenetrated(c, getSelf());
@@ -82,8 +82,8 @@ public class Fuck extends Skill {
     @Override
     public boolean usable(Combat c, Character target) {
         return fuckable(c, target)
-                        && (c.getStance().insert(c, getSelf(), getSelf()) != c.getStance()
-                                        || c.getStance().insert(c, target, getSelf()) != c.getStance())
+                        && (c.getStance().insert(c, getSelf(), getSelf()).isPresent()
+                                        || c.getStance().insert(c, target, getSelf()).isPresent())
                         && c.getStance().mobile(getSelf()) && !c.getStance().mobile(target) && getSelf().canAct();
     }
 
@@ -135,7 +135,7 @@ public class Fuck extends Skill {
         BodyPart selfO = getSelfOrgan();
         BodyPart targetO = getTargetOrgan(target);
         if (selfO.isReady(getSelf()) && targetO.isReady(target)) {
-            if (targetO.isType("pussy") && target.has(Trait.temptingass) && new AssFuck(getSelf()).usable(c, target)
+            if (targetO.isType("pussy") && target.has(Trait.temptingass) && new AssFuck(self).usable(c, target)
                 && Random.random(3) == 1) {
                 
                 c.write(getSelf(), Formatter.format("%s{self:subject-action:line|lines}"
@@ -144,7 +144,7 @@ public class Fuck extends Skill {
                                 + " {self:pronoun-action:shift|shifts} to the tantalizing hole next door,"
                                 + " and {self:action:sink|sinks} the hard rod into {other:name-possessive}"
                                 + " hot ass instead.<br/>", getSelf(), target, premessage));
-                new AssFuck(getSelf()).resolve(c, target);
+                new AssFuck(self).resolve(c, target);
                 
                 return true;
             }
@@ -154,9 +154,11 @@ public class Fuck extends Skill {
                 c.write(getSelf(), premessage + receive(c, premessage.length(), Result.normal, target));
             }
             if (selfO.isType("pussy")) {
-                c.setStance(c.getStance().insert(c, target, getSelf()), getSelf(), getSelf().canMakeOwnDecision());
+                c.getStance().insert(c, target, getSelf()).ifPresent(newStance -> c
+                                .setStance(newStance, getSelf(), getSelf().canMakeOwnDecision()));
             } else {
-                c.setStance(c.getStance().insert(c, getSelf(), getSelf()), getSelf(), getSelf().canMakeOwnDecision());
+                c.getStance().insert(c, getSelf(), getSelf()).ifPresent(newStance -> c
+                                .setStance(newStance, getSelf(), getSelf().canMakeOwnDecision()));
             }
             int otherm = m;
             if (getSelf().has(Trait.insertion)) {

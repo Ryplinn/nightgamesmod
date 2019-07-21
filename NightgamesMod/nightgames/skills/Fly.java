@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -12,11 +13,11 @@ import nightgames.stance.FlyingCarry;
 import nightgames.status.Falling;
 
 public class Fly extends Fuck {
-    public Fly(Character self) {
+    public Fly(CharacterType self) {
         this("Fly", self);
     }
 
-    public Fly(String name, Character self) {
+    public Fly(String name, CharacterType self) {
         super(name, self, 5);
         addTag(SkillTag.positioning);
     }
@@ -68,18 +69,18 @@ public class Fly extends Fuck {
             if (getSelf().has(Trait.insertion)) {
                 otherm += Math.min(getSelf().get(Attribute.seduction) / 4, 40);
             }
-            c.setStance(new FlyingCarry(getSelf(), target), getSelf(), getSelf().canMakeOwnDecision());
+            c.setStance(new FlyingCarry(self, target.getType()), getSelf(), getSelf().canMakeOwnDecision());
             target.body.pleasure(getSelf(), getSelfOrgan(), getTargetOrgan(target), otherm, c, this);
             getSelf().body.pleasure(target, getTargetOrgan(target), getSelfOrgan(), m, c, this);
         } else {
-            getSelf().add(c, new Falling(getSelf()));
+            getSelf().add(c, new Falling(self));
         }
         return result != Result.miss;
     }
 
     @Override
     public Skill copy(Character target) {
-        return new Fly(target);
+        return new Fly(target.getType());
     }
 
     @Override

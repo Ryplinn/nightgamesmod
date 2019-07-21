@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -14,7 +15,7 @@ import nightgames.status.Falling;
 
 public class Yank extends Skill {
 
-    public Yank(Character self) {
+    public Yank(CharacterType self) {
         super("Yank", self);
         addTag(SkillTag.usesToy);
     }
@@ -47,7 +48,7 @@ public class Yank extends Skill {
             c.write(getSelf(), Formatter.format("{self:SUBJECT-ACTION:yank|yanks} {other:name-do}"
                             + " forward by the toy still connecting them, and "
                             + " {other:pronoun-action} stumbles and falls.", getSelf(), target));
-            target.add(c, new Falling(target));
+            target.add(c, new Falling(target.getType()));
             if (Random.random(100) < removeChance) {
                 c.write("The powerful tug dislodges the toy, causing it to retract back where it was launched from.");
                 target.outfit.unequip(target.outfit.getBottomOfSlot(ClothingSlot.bottom));
@@ -64,7 +65,7 @@ public class Yank extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Yank(user);
+        return new Yank(user.getType());
     }
 
     @Override

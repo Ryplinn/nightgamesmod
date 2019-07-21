@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -12,7 +13,7 @@ import nightgames.status.AttributeBuff;
 
 public class LegLock extends Skill {
 
-    public LegLock(Character self) {
+    public LegLock(CharacterType self) {
         super("Leg Lock", self);
         // addTag(SkillTag.positioning); it's not, right?
         addTag(SkillTag.hurt);
@@ -29,7 +30,7 @@ public class LegLock extends Skill {
     public boolean resolve(Combat c, Character target) {
         if (target.roll(getSelf(), accuracy(c, target))) {
             writeOutput(c, Result.normal, target);
-            target.add(c, new AttributeBuff(target, Attribute.speed, -2, 5));
+            target.add(c, new AttributeBuff(target.getType(), Attribute.speed, -2, 5));
             target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(10, 16)));
             target.emote(Emotion.angry, 15);
         } else {
@@ -46,7 +47,7 @@ public class LegLock extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new LegLock(user);
+        return new LegLock(user.getType());
     }
 
     @Override

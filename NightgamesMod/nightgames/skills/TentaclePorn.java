@@ -67,13 +67,13 @@ public class TentaclePorn extends Skill {
                     TentaclePart.pleasureWithTentacles(c, target, m, target.body.getRandom("skin"));
                 }
                 if (!target.is(Stsflag.oiled)) {
-                    target.add(c, new Oiled(target));
+                    target.add(c, new Oiled(target.getType()));
                 }
                 target.emote(Emotion.horny, 20);
             } else {
                 writeOutput(c, Result.weak, target);
             }
-            target.add(c, new Bound(target, 30 + 2 * Math.sqrt(getSelf().get(Attribute.fetishism) + getSelf().get(Attribute.slime)), "tentacles"));
+            target.add(c, new Bound(target.getType(), 30 + 2 * Math.sqrt(getSelf().get(Attribute.fetishism) + getSelf().get(Attribute.slime)), "tentacles"));
         } else {
             writeOutput(c, Result.miss, target);
             return false;

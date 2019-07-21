@@ -24,8 +24,8 @@ public class ReverseFly extends Fly {
     }
 
     @Override
-    public Skill copy(Character target) {
-        return new ReverseFly(target);
+    public Skill copy(Character user) {
+        return new ReverseFly(user.getType());
     }
 
     @Override
@@ -59,11 +59,11 @@ public class ReverseFly extends Fly {
             if (getSelf().has(Trait.insertion)) {
                 otherm += Math.min(getSelf().get(Attribute.seduction) / 4, 40);
             }
-            c.setStance(new FlyingCowgirl(getSelf(), target), getSelf(), getSelf().canMakeOwnDecision());
+            c.setStance(new FlyingCowgirl(self, target.getType()), getSelf(), getSelf().canMakeOwnDecision());
             target.body.pleasure(getSelf(), getSelfOrgan(), getTargetOrgan(target), otherm, c, this);
             getSelf().body.pleasure(target, getTargetOrgan(target), getSelfOrgan(), m, c, this);
         } else {
-            getSelf().add(c, new Falling(getSelf()));
+            getSelf().add(c, new Falling(self));
             return false;
         }
         return true;

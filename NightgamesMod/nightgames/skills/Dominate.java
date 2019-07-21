@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -12,7 +13,7 @@ import nightgames.stance.StandingOver;
 
 public class Dominate extends Skill {
 
-    public Dominate(Character self) {
+    public Dominate(CharacterType self) {
         super("Dominate", self, 3);
         addTag(SkillTag.positioning);
         addTag(SkillTag.knockdown);
@@ -44,7 +45,7 @@ public class Dominate extends Skill {
     public boolean resolve(Combat c, Character target) {
         getSelf().arouse((int) (getSelf().getArousal().max() * .30), c);
         writeOutput(c, Result.normal, target);
-        c.setStance(new StandingOver(getSelf(), target), target, false);
+        c.setStance(new StandingOver(self, target.getType()), target, false);
         getSelf().emote(Emotion.dominant, 20);
         target.emote(Emotion.nervous, 20);
         return true;
@@ -52,7 +53,7 @@ public class Dominate extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Dominate(user);
+        return new Dominate(user.getType());
     }
 
     @Override

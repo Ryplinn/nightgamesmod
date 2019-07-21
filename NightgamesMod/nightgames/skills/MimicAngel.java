@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.WingsPart;
@@ -17,7 +18,7 @@ import nightgames.status.Stsflag;
 
 public class MimicAngel extends Skill {
 
-    public MimicAngel(Character self) {
+    MimicAngel(CharacterType self) {
         super("Mimicry: Angel", self);
     }
 
@@ -76,8 +77,8 @@ public class MimicAngel extends Skill {
         if (getSelf().has(Trait.Masquerade)) {
             strength = strength * 3 / 2;
         }
-        getSelf().add(c, new AttributeBuff(getSelf(), Attribute.divinity, strength, 10));
-        getSelf().add(c, new SlimeMimicry("angel", getSelf(), 10));
+        getSelf().add(c, new AttributeBuff(self, Attribute.divinity, strength, 10));
+        getSelf().add(c, new SlimeMimicry("angel", self, 10));
         getSelf().body.temporaryAddPartMod("pussy", DivineMod.INSTANCE, 10);
         getSelf().body.temporaryAddPartMod("cock", CockMod.blessed, 10);
         return true;
@@ -85,7 +86,7 @@ public class MimicAngel extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new MimicAngel(user);
+        return new MimicAngel(user.getType());
     }
 
     @Override
@@ -101,7 +102,7 @@ public class MimicAngel extends Skill {
     @Override
     public String receive(Combat c, int damage, Result modifier, Character target) {
         return Formatter.format("{self:NAME-POSSESSIVE} amorphous body jiggles violently and she shrinks her body into a sphere. "
-                        + "{other:SUBJECT} cautiously {other:action:approach|approaches} the unknown object, but hesistate when {other:pronoun-action:see|sees} it suddenly turns pure white "
+                        + "{other:SUBJECT} cautiously {other:action:approach|approaches} the unknown object, but hesitate when {other:pronoun-action:see|sees} it suddenly turns pure white "
                         + "as if someone dumped a bucket of bleach on it. "
                         + "The sphere unwraps itself in layers, with each layer forming a pair of pristine translucent gelatinous feathered wings. "
                         + "{self:NAME} {self:reflective} stands up in the center, giving {other:name-do} a haughty look. "

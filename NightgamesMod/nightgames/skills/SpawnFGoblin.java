@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.pet.FGoblin;
@@ -11,7 +12,7 @@ public class SpawnFGoblin extends Skill {
 
     private final Ptype gender;
     
-    public SpawnFGoblin(Character user, Ptype gender) {
+    SpawnFGoblin(CharacterType user, Ptype gender) {
         super("Spawn Fetish Goblin", user);
         this.gender = gender;
     }
@@ -45,7 +46,7 @@ public class SpawnFGoblin extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new SpawnFGoblin(user, gender);
+        return new SpawnFGoblin(user.getType(), gender);
     }
 
     @Override
@@ -55,10 +56,9 @@ public class SpawnFGoblin extends Skill {
 
     @Override
     public String deal(Combat c, int damage, Result modifier, Character target) {
-        return String.format(
-                        "You channel all the fetishes in your twisted libido into a single form. The creature is about 4 feet tall and has a shapely female body covered "
-                                        + "with bandage gear. Her face is completely obscured by a latex mask, but her big tits and her crotch are completely exposed. She has a large cock, "
-                                        + "which looks ready to burst if it wasn't tightly bound at the base. Past her heavy sack, you can see sex toys sticking out of both her pussy and ass.");
+        return "You channel all the fetishes in your twisted libido into a single form. The creature is about 4 feet tall and has a shapely female body covered "
+                        + "with bandage gear. Her face is completely obscured by a latex mask, but her big tits and her crotch are completely exposed. She has a large cock, "
+                        + "which looks ready to burst if it wasn't tightly bound at the base. Past her heavy sack, you can see sex toys sticking out of both her pussy and ass.";
     }
 
     @Override

@@ -1,13 +1,14 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.nskills.tags.SkillTag;
 
 public class CommandStripPlayer extends PlayerCommand {
 
-    public CommandStripPlayer(Character self) {
+    CommandStripPlayer(CharacterType self) {
         super("Force Strip Player", self);
         addTag(SkillTag.stripping);
     }
@@ -33,7 +34,7 @@ public class CommandStripPlayer extends PlayerCommand {
 
     @Override
     public Skill copy(Character user) {
-        return new CommandStripPlayer(user);
+        return new CommandStripPlayer(user.getType());
     }
 
     @Override

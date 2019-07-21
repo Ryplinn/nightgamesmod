@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.nskills.tags.SkillTag;
@@ -8,7 +9,7 @@ import nightgames.stance.StandingOver;
 
 public class StandUp extends Skill {
 
-    public StandUp(Character self) {
+    public StandUp(CharacterType self) {
         super("Stand Up", self);
         addTag(SkillTag.positioning);
     }
@@ -22,7 +23,7 @@ public class StandUp extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        c.setStance(new StandingOver(getSelf(), target), getSelf(), true);
+        c.setStance(new StandingOver(self, target.getType()), getSelf(), true);
         return true;
     }
 
@@ -33,7 +34,7 @@ public class StandUp extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new StandUp(user);
+        return new StandUp(user.getType());
     }
 
     @Override

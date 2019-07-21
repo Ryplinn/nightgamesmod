@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -11,11 +12,9 @@ import nightgames.status.Seeded;
 import nightgames.status.Stsflag;
 
 public class LeechSeed extends Skill {
-    String lastPart;
 
-    public LeechSeed(Character self) {
+    LeechSeed(CharacterType self) {
         super("Leech Seed", self, 3);
-        lastPart = "none";
         addTag(SkillTag.drain);
         addTag(SkillTag.staminaDamage);
         addTag(SkillTag.positioning);
@@ -43,9 +42,9 @@ public class LeechSeed extends Skill {
             }
             writeOutput(c, results, target);
             if (results == Result.normal) {
-                target.add(c, new Seeded(target, getSelf(), "pussy"));
+                target.add(c, new Seeded(target.getType(), self, "pussy"));
             } else {
-                target.add(c, new Seeded(target, getSelf(), "ass"));
+                target.add(c, new Seeded(target.getType(), self, "ass"));
             }
         } else {
             writeOutput(c, Result.miss, target);
@@ -61,7 +60,7 @@ public class LeechSeed extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new LeechSeed(user);
+        return new LeechSeed(user.getType());
     }
 
     public int speed() {
@@ -103,7 +102,7 @@ public class LeechSeed extends Skill {
         }
         return Formatter.format(
                         "{self:SUBJECT} flashes a brilliant smile at {other:name-do} and beckons {other:direct-object} forward. Against {other:possessive} better judgement, {other:subject-action:move|moves} closer to {self:direct-object}, hoping for an opening to attack. "
-                                        + "Suddenly, {other:pronoun-action:feel|feels} a pressure at {other:possessive} %s. It was a trap! {self:SUBJECT} laughs at {other:name-do} and wiggles {self:possessive} tentacle burried inside {other:direct-object}. {other:NAME-POSSESSIVE} ordeal, however, is not over. {other:PRONOUN-ACTION:feel|feels} an "
+                                        + "Suddenly, {other:pronoun-action:feel|feels} a pressure at {other:possessive} %s. It was a trap! {self:SUBJECT} laughs at {other:name-do} and wiggles {self:possessive} tentacle buried inside {other:direct-object}. {other:NAME-POSSESSIVE} ordeal, however, is not over. {other:PRONOUN-ACTION:feel|feels} an "
                                         + "egg shaped object pushed through {self:possessive} tentacle and deposited inside {other:possessive} %s. With a final giggle, {self:subject} retracts {self:possessive} tentacle and {other:subject-action:get|gets} to see that "
                                         + "{self:subject} planted a fist sized seed inside {other:direct-object}!",
                         getSelf(), target, hole, hole);

@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.Stsflag;
@@ -9,7 +10,7 @@ import nightgames.status.WaterStance;
 
 public class WaterForm extends Skill {
 
-    public WaterForm(Character self) {
+    public WaterForm(CharacterType self) {
         super("Water Form", self);
     }
 
@@ -31,13 +32,13 @@ public class WaterForm extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        getSelf().add(c, new WaterStance(getSelf()));
+        getSelf().add(c, new WaterStance(self));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new WaterForm(user);
+        return new WaterForm(user.getType());
     }
 
     @Override

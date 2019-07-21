@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -14,17 +15,17 @@ import nightgames.status.Stsflag;
 
 
 public class Paizuri extends Skill {
-    public Paizuri(String name, Character self) {
+    Paizuri(String name, CharacterType self) {
         super(name, self);
-    }
-    
-    public Paizuri(Character self) {
-        super("Titfuck", self);
         addTag(SkillTag.positioning);
         addTag(SkillTag.pleasure);
         addTag(SkillTag.oral);
         addTag(SkillTag.foreplay);
         addTag(SkillTag.usesBreasts);
+    }
+    
+    Paizuri(CharacterType self) {
+        this("Titfuck", self);
     }
 
     static int MIN_REQUIRED_BREAST_SIZE = 3;
@@ -82,13 +83,13 @@ public class Paizuri extends Skill {
         }
 
         if (target.human()) {
-            c.write(getSelf(), receive(0, Result.normal, target, breasts));
+            c.write(getSelf(), receive(breasts));
         } else {
             c.write(getSelf(), deal(c, 0, Result.normal, target));
         }
         target.body.pleasure(getSelf(), getSelf().body.getRandom("breasts"), target.body.getRandom("cock"), m, c, this);
         if (Random.random(100) < fetishChance) {
-            target.add(c, new BodyFetish(target, getSelf(), BreastsPart.a.getType(), .05 + (0.01 * breasts.getSize()) + getSelf().get(Attribute.fetishism) * .01));
+            target.add(c, new BodyFetish(target.getType(), self, BreastsPart.a.getType(), .05 + (0.01 * breasts.getSize()) + getSelf().get(Attribute.fetishism) * .01));
         }
         if (getSelf().has(Trait.temptingtits)) {
             target.temptWithSkill(c, getSelf(), getSelf().body.getRandom("breasts"), m/5, this);
@@ -103,7 +104,7 @@ public class Paizuri extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Paizuri(user);
+        return new Paizuri(user.getType());
     }
 
     @Override
@@ -148,7 +149,8 @@ public class Paizuri extends Skill {
             b.append(" shudders with lust");
        
             if (getSelf().has(Trait.beguilingbreasts)) {
-                b.append(" and due to your beguiling nature, " + target.possessiveAdjective() + " can't help drooling at the show.");
+                b.append(" and due to your beguiling nature, ").append(target.possessiveAdjective())
+                                .append(" can't help drooling at the show.");
             }
             else  {
                 b.append(".");
@@ -158,9 +160,9 @@ public class Paizuri extends Skill {
         return b.toString();
     }
 
-    public String receive(int damage, Result modifier, Character target, BreastsPart breasts) {
+    public String receive(BreastsPart breasts) {
         StringBuilder b = new StringBuilder();
-        b.append(getSelf().getName() + " squeezes your dick between her ");
+        b.append(getSelf().getName()).append(" squeezes your dick between her ");
         b.append(breasts.describe(getSelf()));
         if( getSelf().has(Trait.lactating))
         {

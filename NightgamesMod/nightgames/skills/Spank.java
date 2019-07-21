@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -14,7 +15,7 @@ import nightgames.status.Stsflag;
 
 public class Spank extends Skill {
 
-    public Spank(Character self) {
+    public Spank(CharacterType self) {
         super("Spank", self);
         addTag(SkillTag.positioning);
         addTag(SkillTag.hurt);
@@ -36,7 +37,7 @@ public class Spank extends Skill {
             }
             writeOutput(c, Result.special, target);
             if (shamed) {
-                target.add(c, new Shamed(target));
+                target.add(c, new Shamed(target.getType()));
                 target.emote(Emotion.angry, 10);
                 target.emote(Emotion.nervous, 15);
             }
@@ -63,7 +64,7 @@ public class Spank extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Spank(user);
+        return new Spank(user.getType());
     }
 
     @Override

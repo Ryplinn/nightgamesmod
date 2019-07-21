@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -8,7 +9,7 @@ import nightgames.global.Random;
 
 public class CommandOral extends PlayerCommand {
 
-    public CommandOral(Character self) {
+    CommandOral(CharacterType self) {
         super("Force Oral", self);
     }
 
@@ -49,7 +50,7 @@ public class CommandOral extends PlayerCommand {
 
     @Override
     public Skill copy(Character user) {
-        return new CommandOral(user);
+        return new CommandOral(user.getType());
     }
 
     @Override

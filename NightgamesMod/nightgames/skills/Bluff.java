@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -12,7 +13,7 @@ import nightgames.status.Unreadable;
 
 public class Bluff extends Skill {
 
-    public Bluff(Character self) {
+    public Bluff(CharacterType self) {
         super("Bluff", self, 5);
     }
 
@@ -36,11 +37,11 @@ public class Bluff extends Skill {
         int m = 20 + Random.random(25);
         writeOutput(c, Result.normal, target);
         if (!getSelf().getArousal().isFull()) {
-            getSelf().add(c, new IgnoreOrgasm(getSelf(), 2));
+            getSelf().add(c, new IgnoreOrgasm(self, 2));
         }
         getSelf().heal(c, m);
         getSelf().calm(c, getSelf().getArousal().max() / 4);
-        getSelf().add(c, new Unreadable(getSelf()));
+        getSelf().add(c, new Unreadable(self));
         getSelf().emote(Emotion.confident, 30);
         getSelf().emote(Emotion.dominant, 20);
         getSelf().emote(Emotion.nervous, -20);
@@ -49,7 +50,7 @@ public class Bluff extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Bluff(user);
+        return new Bluff(user.getType());
     }
 
     @Override

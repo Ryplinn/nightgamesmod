@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -10,7 +11,7 @@ import nightgames.stance.Pin;
 
 public class Restrain extends Skill {
 
-    public Restrain(Character self) {
+    public Restrain(CharacterType self) {
         super("Pin", self);
         addTag(SkillTag.positioning);
     }
@@ -30,7 +31,7 @@ public class Restrain extends Skill {
     public boolean resolve(Combat c, Character target, boolean nofail) {
         if (nofail || target.roll(getSelf(), accuracy(c, target))) {
             writeOutput(c, Result.normal, target);
-            c.setStance(new Pin(getSelf(), target), getSelf(), true);
+            c.setStance(new Pin(self, target.getType()), getSelf(), true);
             target.emote(Emotion.nervous, 10);
             target.emote(Emotion.desperate, 10);
             getSelf().emote(Emotion.dominant, 20);
@@ -48,7 +49,7 @@ public class Restrain extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Restrain(user);
+        return new Restrain(user.getType());
     }
 
     @Override

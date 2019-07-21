@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 public class Reversal extends Skill {
 
-    public Reversal(Character self) {
+    public Reversal(CharacterType self) {
         super("Reversal", self);
         addTag(SkillTag.escaping);
         addTag(SkillTag.positioning);
@@ -48,7 +49,7 @@ public class Reversal extends Skill {
         if (target.roll(getSelf(), accuracy(c, target))) {
             writeOutput(c, Result.normal, target);
 
-            c.setStance(new Pin(getSelf(), target), getSelf(), true);
+            c.setStance(new Pin(self, target.getType()), getSelf(), true);
             target.emote(Emotion.nervous, 10);
             getSelf().emote(Emotion.dominant, 10);
         } else {
@@ -65,7 +66,7 @@ public class Reversal extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Reversal(user);
+        return new Reversal(user.getType());
     }
 
     @Override

@@ -55,18 +55,18 @@ public class Nurse extends Skill {
             c.write(target, Formatter.format(
                             "{other:SUBJECT-ACTION:are|is} a little confused at the sudden turn of events, but after milk starts flowing into {other:possessive} mouth, {other:pronoun} can't help but continue to suck on {self:possessive} teats.",
                             getSelf(), target));
-            target.add(c, new Suckling(target, getSelf(), 4));
+            target.add(c, new Suckling(target.getType(), self, 4));
         }
         if (special) {
-            c.setStance(new NursingHold(getSelf(), target), getSelf(), true);
-            new Suckle(target).resolve(c, getSelf());
+            c.setStance(new NursingHold(self, target.getType()), getSelf(), true);
+            new Suckle(target.getType()).resolve(c, getSelf());
             getSelf().emote(Emotion.dominant, 20);
         } else {
-            new Suckle(target).resolve(c, getSelf());
+            new Suckle(target.getType()).resolve(c, getSelf());
             getSelf().emote(Emotion.dominant, 10);
         }
         if (Random.random(100) < 5 + 2 * getSelf().get(Attribute.fetishism)) {
-            target.add(c, new BodyFetish(target, getSelf(), BreastsPart.a.getType(), .25));
+            target.add(c, new BodyFetish(target.getType(), self, BreastsPart.a.getType(), .25));
         }
         return true;
     }

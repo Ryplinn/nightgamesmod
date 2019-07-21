@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Kat;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockMod;
@@ -19,7 +20,7 @@ import nightgames.status.Stsflag;
 
 public class MimicCat extends Skill {
 
-    public MimicCat(Character self) {
+    MimicCat(CharacterType self) {
         super("Mimicry: Werecat", self);
     }
 
@@ -85,8 +86,8 @@ public class MimicCat extends Skill {
         if (getSelf().has(Trait.Masquerade)) {
             strength = strength * 3 / 2;
         }
-        getSelf().add(c, new AttributeBuff(getSelf(), Attribute.animism, strength, 10));
-        getSelf().add(c, new SlimeMimicry("cat", getSelf(), 10));
+        getSelf().add(c, new AttributeBuff(self, Attribute.animism, strength, 10));
+        getSelf().add(c, new SlimeMimicry("cat", self, 10));
         getSelf().body.temporaryAddPartMod("pussy", FeralMod.INSTANCE, 10);
         getSelf().body.temporaryAddPartMod("cock", CockMod.primal, 10);
         return true;
@@ -94,7 +95,7 @@ public class MimicCat extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new MimicCat(user);
+        return new MimicCat(user.getType());
     }
 
     @Override
@@ -113,7 +114,7 @@ public class MimicCat extends Skill {
                         + "Not sure what {self:pronoun} is doing, {other:subject} cautiously {other:action:approach|approaches}. Suddenly, {self:possessive} slime solidifies again, "
                         + "and a orange shadow pounces at {other:direct-object} from where {self:pronoun} was before. {other:SUBJECT-ACTION:manage|manages} to dodge it, but looking back at "
                         + "the formerly-crystal blue slime girl, {other:pronoun-action:see|sees} that {self:NAME} has transformed into a caricature of Kat's feral form, "
-                        + "complete with faux cat ears and a slimey tail!", getSelf(), target);
+                        + "complete with faux cat ears and a slimy tail!", getSelf(), target);
     }
 
 }

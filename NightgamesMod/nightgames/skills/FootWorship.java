@@ -43,9 +43,8 @@ public class FootWorship extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        Result result = Result.normal;
-        int m = 0;
-        int n = 0;
+        int m;
+        int n;
         m = 8 + Random.random(6);
         n = 20;
         BodyPart mouth = getSelf().body.getRandom("mouth");
@@ -61,19 +60,17 @@ public class FootWorship extends Skill {
                 getSelf().body.pleasure(getSelf(), feet, mouth, m, c, this);
             }
         }
-        if (n > 0) {
-            target.buildMojo(c, n);
-        }
+        target.buildMojo(c, n);
         if (!c.getStance().sub(getSelf())) {
-            c.setStance(new Kneeling(target, getSelf()), getSelf(), true);
+            c.setStance(new Kneeling(target.getType(), self), getSelf(), true);
         }
         c.getCombatantData(getSelf()).toggleFlagOn("footworshipped", true);
-        return result != Result.miss;
+        return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new FootWorship(user);
+        return new FootWorship(user.getType());
     }
 
     @Override

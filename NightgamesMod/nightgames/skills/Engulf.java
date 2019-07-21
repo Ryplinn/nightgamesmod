@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.custom.CharacterLine;
 import nightgames.combat.Combat;
@@ -12,18 +13,14 @@ import nightgames.stance.Engulfed;
 import nightgames.stance.Stance;
 
 public class Engulf extends CounterBase {
-    public Engulf(Character self) {
-        super("Engulf", self, 5, counterDesc(self), 2);
+    public Engulf(CharacterType self) {
+        super("Engulf", self, 5, counterDesc(), 2);
         addTag(SkillTag.fucking);
         addTag(SkillTag.positioning);
     }
 
-    private static String counterDesc(Character self) {
-        if (self.human()) {
-            return "You have spread yourself out, ready to engulf your opponent.";
-        } else {
-            return String.format("%s spread %s thin, arms opened invitingly.", self.getName(), self.reflectivePronoun());
-        }
+    private static String counterDesc() {
+            return "{self:subject-action:have} spread {self:reflective} thin, {self:if-human:ready to engulf your opponent}{self:if-nonhuman:arms opened invitingly}.";
     }
 
     @Override
@@ -66,7 +63,7 @@ public class Engulf extends CounterBase {
 
     @Override
     public Skill copy(Character user) {
-        return new Engulf(user);
+        return new Engulf(user.getType());
     }
 
     @Override
@@ -110,7 +107,7 @@ public class Engulf extends CounterBase {
         msg += "ass and every other inch of {other:possessive} skin. ";
         msg += getSelf().getRandomLineFor(CharacterLine.ENGULF_LINER, c, target);
         c.write(getSelf(), Formatter.format(msg, getSelf(), target));
-        c.setStance(new Engulfed(getSelf(), target), getSelf(), true);
+        c.setStance(new Engulfed(self, target.getType()), getSelf(), true);
         getSelf().emote(Emotion.dominant, 50);
         getSelf().emote(Emotion.horny, 30);
         target.emote(Emotion.nervous, 50);

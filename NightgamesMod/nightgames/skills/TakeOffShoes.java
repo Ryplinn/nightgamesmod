@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -11,7 +12,7 @@ import nightgames.items.clothing.ClothingSlot;
 
 public class TakeOffShoes extends Skill {
 
-    public TakeOffShoes(Character self) {
+    public TakeOffShoes(CharacterType self) {
         super("Remove Shoes", self);
     }
 
@@ -49,7 +50,7 @@ public class TakeOffShoes extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new TakeOffShoes(user);
+        return new TakeOffShoes(user.getType());
     }
 
     @Override

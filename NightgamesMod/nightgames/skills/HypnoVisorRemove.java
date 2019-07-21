@@ -40,7 +40,7 @@ public class HypnoVisorRemove extends Skill {
             c.write(getSelf(), Formatter.format("{self:SUBJECT-ACTION:find|finds} a small button"
                             + " on the side of the Hypno Visor, and pressing it unlocks whatever"
                             + " mechanisms held it in place. {self:PRONOUN-ACTION:make|makes} sure"
-                            + " to throw it far away before refocussing on the fight.", getSelf(), target));
+                            + " to throw it far away before refocusing on the fight.", getSelf(), target));
             getSelf().removeStatus(Stsflag.hypnovisor);
             return true;
         }

@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -16,7 +17,7 @@ import nightgames.status.Shamed;
 
 public class Smother extends Skill {
 
-    public Smother(Character self) {
+    public Smother(CharacterType self) {
         super("Smother", self);
         addTag(SkillTag.pleasureSelf);
         addTag(SkillTag.dominant);
@@ -68,12 +69,12 @@ public class Smother extends Skill {
         target.weaken(c, (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(10, 25)));
 
         target.loseWillpower(c, Math.max(10, target.getWillpower().max() * 10 / 100 ));
-        target.add(c, new Shamed(target));
+        target.add(c, new Shamed(target.getType()));
         if (c.getStance().enumerate() != Stance.smothering) {
-            c.setStance(new Smothering(getSelf(), target), getSelf(), true);
+            c.setStance(new Smothering(self, target.getType()), getSelf(), true);
         }
         if (Random.random(100) < 25 + 2 * getSelf().get(Attribute.fetishism)) {
-            target.add(c, new BodyFetish(target, getSelf(), "ass", .35));
+            target.add(c, new BodyFetish(target.getType(), self, "ass", .35));
         }
         return true;
     }
@@ -85,7 +86,7 @@ public class Smother extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Smother(user);
+        return new Smother(user.getType());
     }
 
     @Override
@@ -104,12 +105,12 @@ public class Smother extends Skill {
 
     @Override
     public String deal(Combat c, int damage, Result modifier, Character target) {
-        return Formatter.format("Enjoying your dominance over {other:name-do}, you experimentally scoot your legs forward so that your ass completely eclipses {other:possessive} face. {other:SUBJECT-ACTION:panic|panicks} as {other:pronoun} {other:action:realize|realizes} that {other:pronoun} cannot breathe!", getSelf(), target);
+        return Formatter.format("Enjoying your dominance over {other:name-do}, you experimentally scoot your legs forward so that your ass completely eclipses {other:possessive} face. {other:SUBJECT-ACTION:panic|panics} as {other:pronoun} {other:action:realize|realizes} that {other:pronoun} cannot breathe!", getSelf(), target);
     }
 
     @Override
     public String receive(Combat c, int damage, Result modifier, Character target) {
-        return Formatter.format("Enjoying {self:possessive} dominance over {other:name-do}, {self:subject} experimentally scoots {self:possessive} legs forward so that {self:possessive} ass completely eclipses {other:possessive} face. {other:SUBJECT-ACTION:panic|panicks} as {other:pronoun} {other:action:realize|realizes} that {other:pronoun} cannot breathe!", getSelf(), target);
+        return Formatter.format("Enjoying {self:possessive} dominance over {other:name-do}, {self:subject} experimentally scoots {self:possessive} legs forward so that {self:possessive} ass completely eclipses {other:possessive} face. {other:SUBJECT-ACTION:panic|panics} as {other:pronoun} {other:action:realize|realizes} that {other:pronoun} cannot breathe!", getSelf(), target);
     }
 
     @Override

@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,7 +14,7 @@ import nightgames.status.Slimed;
 import nightgames.utilities.MathUtils;
 
 public class Trip extends Skill {
-    public Trip(Character self) {
+    public Trip(CharacterType self) {
         super("Trip", self, 2);
         addTag(SkillTag.positioning);
         addTag(SkillTag.knockdown);
@@ -40,12 +41,12 @@ public class Trip extends Skill {
             if (isSlime()) {
                 writeOutput(c, Result.special, target);
                 if (getSelf().has(Trait.VolatileSubstrate)) {
-                    target.add(c, new Slimed(target, getSelf(), Random.random(2, 4)));
+                    target.add(c, new Slimed(target.getType(), self, Random.random(2, 4)));
                 }
             } else {
                 writeOutput(c, Result.normal, target);
             }
-            target.add(c, new Falling(target));
+            target.add(c, new Falling(target.getType()));
         } else {
             if (isSlime()) {
                 writeOutput(c, Result.weak, target);
@@ -69,7 +70,7 @@ public class Trip extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Trip(user);
+        return new Trip(user.getType());
     }
 
     @Override

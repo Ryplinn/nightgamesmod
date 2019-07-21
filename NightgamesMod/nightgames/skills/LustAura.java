@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -12,7 +13,7 @@ import nightgames.status.Stsflag;
 
 public class LustAura extends Skill {
 
-    public LustAura(Character self) {
+    LustAura(CharacterType self) {
         super("Lust Aura", self);
     }
 
@@ -50,7 +51,7 @@ public class LustAura extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new LustAura(user);
+        return new LustAura(user.getType());
     }
 
     @Override

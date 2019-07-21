@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -18,7 +19,7 @@ import nightgames.items.clothing.ClothingSlot;
 
 public class StripMinor extends Skill {
 
-    public StripMinor(Character self) {
+    StripMinor(CharacterType self) {
         super("Strip Minor", self);
     }
 
@@ -55,9 +56,7 @@ public class StripMinor extends Skill {
                 return true;
             }
             // if you can reach bottom and there's something to strip from the bottom, then do that
-            if (!Collections.disjoint(article.getSlots(), BOTTOM_SLOTS) && c.getStance().reachBottom(getSelf())) {
-                return true;
-            }
+            return !Collections.disjoint(article.getSlots(), BOTTOM_SLOTS) && c.getStance().reachBottom(getSelf());
         }
         return false;
     }
@@ -124,7 +123,7 @@ public class StripMinor extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new StripMinor(user);
+        return new StripMinor(user.getType());
     }
 
     @Override

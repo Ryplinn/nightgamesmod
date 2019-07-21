@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -12,7 +13,7 @@ import nightgames.stance.Standing;
 import nightgames.status.Falling;
 
 public class Carry extends Fuck {
-    public Carry(String name, Character self) {
+    public Carry(String name, CharacterType self) {
         super(name, self, 5);
         addTag(SkillTag.pleasure);
         addTag(SkillTag.pleasureSelf);
@@ -20,7 +21,7 @@ public class Carry extends Fuck {
         addTag(SkillTag.positioning);
     }
 
-    public Carry(Character self) {
+    public Carry(CharacterType self) {
         super("Carry", self, 5);
     }
 
@@ -56,7 +57,7 @@ public class Carry extends Fuck {
             if (getSelf().has(Trait.insertion)) {
                 otherm += Math.min(getSelf().get(Attribute.seduction) / 4, 40);
             }
-            c.setStance(new Standing(getSelf(), target), getSelf(), getSelf().canMakeOwnDecision());
+            c.setStance(new Standing(self, target.getType()), getSelf(), getSelf().canMakeOwnDecision());
             target.body.pleasure(getSelf(), getSelfOrgan(), getTargetOrgan(target), otherm, c, this);
             getSelf().body.pleasure(target, getTargetOrgan(target), getSelfOrgan(), m, c, this);
         } else {
@@ -66,7 +67,7 @@ public class Carry extends Fuck {
             } else if (c.shouldPrintReceive(target, c)) {
                 c.write(getSelf(), premessage + receive(c, premessage.length(), Result.miss, target));
             }
-            getSelf().add(c, new Falling(getSelf()));
+            getSelf().add(c, new Falling(self));
             return false;
         }
         return true;
@@ -74,7 +75,7 @@ public class Carry extends Fuck {
 
     @Override
     public Skill copy(Character user) {
-        return new Carry(user);
+        return new Carry(user.getType());
     }
 
     @Override

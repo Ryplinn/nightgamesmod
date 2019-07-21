@@ -34,7 +34,7 @@ public class Grind extends Thrust {
 
     @Override
     public int[] getDamage(Combat c, Character target) {
-        int results[] = new int[2];
+        int[] results = new int[2];
 
         int ms = 12;
         int mt = 6;
@@ -46,7 +46,6 @@ public class Grind extends Thrust {
         if (getSelf().has(Trait.experienced)) {
             mt = mt * 2 / 3;
         }
-        mt = Math.max(1, mt);
         results[0] = ms;
         results[1] = mt;
 
@@ -55,7 +54,7 @@ public class Grind extends Thrust {
 
     @Override
     public Skill copy(Character user) {
-        return new Grind(user);
+        return new Grind(user.getType());
     }
 
     @Override

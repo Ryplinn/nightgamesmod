@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -15,7 +16,7 @@ import nightgames.skills.damage.DamageType;
 
 public class Kick extends Skill {
 
-    public Kick(Character self) {
+    public Kick(CharacterType self) {
         super("Kick", self);
         addTag(SkillTag.hurt);
         addTag(SkillTag.staminaDamage);
@@ -85,7 +86,7 @@ public class Kick extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Kick(user);
+        return new Kick(user.getType());
     }
 
     @Override

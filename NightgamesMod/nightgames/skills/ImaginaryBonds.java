@@ -12,7 +12,7 @@ import nightgames.status.Bound;
 
 public class ImaginaryBonds extends Skill {
 
-    public ImaginaryBonds(CharacterType self) {
+    private ImaginaryBonds(CharacterType self) {
         super("Binding", self, 4);
         addTag(SkillTag.positioning);
     }
@@ -40,7 +40,7 @@ public class ImaginaryBonds extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        target.add(c, new Bound(target, 45 + 5 * Math.sqrt(getSelf().get(Attribute.hypnotism)), "imaginary bindings"));
+        target.add(c, new Bound(target.getType(), 45 + 5 * Math.sqrt(getSelf().get(Attribute.hypnotism)), "imaginary bindings"));
         target.emote(Emotion.nervous, 5);
         getSelf().emote(Emotion.confident, 20);
         getSelf().emote(Emotion.dominant, 10);

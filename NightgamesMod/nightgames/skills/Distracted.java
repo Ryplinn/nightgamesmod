@@ -1,13 +1,14 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.Stsflag;
 
 public class Distracted extends Skill {
 
-    public Distracted(Character self) {
+    public Distracted(CharacterType self) {
         super("Distracted", self);
     }
 
@@ -29,7 +30,7 @@ public class Distracted extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Distracted(user);
+        return new Distracted(user.getType());
     }
 
     @Override

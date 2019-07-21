@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -11,7 +12,7 @@ import nightgames.status.Rewired;
 
 public class ShortCircuit extends Skill {
 
-    public ShortCircuit(Character self) {
+    ShortCircuit(CharacterType self) {
         super("Short-Circuit", self);
     }
 
@@ -35,13 +36,13 @@ public class ShortCircuit extends Skill {
     public boolean resolve(Combat c, Character target) {
         getSelf().consume(Item.Battery, 3);
         writeOutput(c, Result.normal, target);
-        target.add(c, new Rewired(target, 4 + Random.random(3)));
+        target.add(c, new Rewired(target.getType(), 4 + Random.random(3)));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new ShortCircuit(user);
+        return new ShortCircuit(user.getType());
     }
 
     @Override

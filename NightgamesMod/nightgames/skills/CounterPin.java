@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -9,8 +10,8 @@ import nightgames.global.Random;
 import nightgames.nskills.tags.SkillTag;
 
 public class CounterPin extends CounterBase {
-    public CounterPin(Character self) {
-        super("Counter", self, 4, Formatter.format("{self:SUBJECT-ACTION:hold|holds} a low stance.", self, self));
+    CounterPin(CharacterType self) {
+        super("Counter", self, 4, "{self:SUBJECT-ACTION:hold|holds} a low stance.");
         addTag(SkillTag.positioning);
     }
 
@@ -47,7 +48,7 @@ public class CounterPin extends CounterBase {
 
     @Override
     public Skill copy(Character user) {
-        return new CounterPin(user);
+        return new CounterPin(user.getType());
     }
 
     @Override

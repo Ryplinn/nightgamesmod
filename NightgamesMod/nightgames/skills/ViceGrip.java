@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -9,7 +10,7 @@ import nightgames.global.Formatter;
 import nightgames.stance.Stance;
 
 public class ViceGrip extends Tighten {
-    public ViceGrip(Character self) {
+    ViceGrip(CharacterType self) {
         super("Vice", self);
     }
 
@@ -64,7 +65,7 @@ public class ViceGrip extends Tighten {
 
     @Override
     public Skill copy(Character user) {
-        return new ViceGrip(user);
+        return new ViceGrip(user.getType());
     }
 
     @Override
@@ -87,7 +88,7 @@ public class ViceGrip extends Tighten {
 
     @Override
     public String describe(Combat c) {
-        return "Ninjitsu technique: squeezes your opponent's dick like a vice, 100% chance to make him cum, but can only be used when the opponent is stunned or weak.";
+        return "Ninjutsu technique: squeezes your opponent's dick like a vice, 100% chance to make him cum, but can only be used when the opponent is stunned or weak.";
     }
 
     @Override

@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -9,7 +10,7 @@ import nightgames.nskills.tags.SkillTag;
 
 public class NakedBloom extends Skill {
 
-    public NakedBloom(Character self) {
+    NakedBloom(CharacterType self) {
         super("Naked Bloom", self);
         addTag(SkillTag.stripping);
     }
@@ -50,7 +51,7 @@ public class NakedBloom extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new NakedBloom(user);
+        return new NakedBloom(user.getType());
     }
 
     @Override

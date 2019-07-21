@@ -29,8 +29,7 @@ public class Cunnilingus extends Skill {
                         || getSelf().canAct();
         boolean pussyAvailable = target.crotchAvailable() && target.hasPussy();
         boolean stanceAvailable = c.getStance().oral(getSelf(), target) && (!c.getStance().vaginallyPenetrated(c, target) || c.getStance().getPartsFor(c, getSelf(), target).contains(getSelf().body.getRandom("mouth")));
-        boolean usable = pussyAvailable && stanceAvailable && canUse;
-        return usable;
+        return pussyAvailable && stanceAvailable && canUse;
     }
 
     @Override
@@ -71,14 +70,14 @@ public class Cunnilingus extends Skill {
         }
         writeOutput(c, i, results, target);
         if (i == -2) {
-            getSelf().add(c, new Enthralled(getSelf(), target, 3));
+            getSelf().add(c, new Enthralled(self, target.getType(), 3));
         }
         if (results != Result.miss) {
             if (results == Result.reverse) {
                 target.buildMojo(c, 10);
             }
-            if (ReverseMount.class.isInstance(c.getStance())) {
-                c.setStance(new SixNine(getSelf(), target), getSelf(), true);
+            if (c.getStance() instanceof ReverseMount) {
+                c.setStance(new SixNine(self, target.getType()), getSelf(), true);
             }
             target.body.pleasure(getSelf(), getSelf().body.getRandom("mouth"), target.body.getRandom("pussy"), m, c, this);
         }
@@ -92,7 +91,7 @@ public class Cunnilingus extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Cunnilingus(user);
+        return new Cunnilingus(user.getType());
     }
 
     @Override
@@ -209,6 +208,6 @@ public class Cunnilingus extends Skill {
     
     @Override
     public String describe(Combat c) {
-        return "Perfom cunnilingus on opponent";
+        return "Perform cunnilingus on opponent";
     }
 }

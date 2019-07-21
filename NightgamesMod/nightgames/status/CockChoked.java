@@ -10,9 +10,9 @@ import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class CockChoked extends DurationStatus {
-    Character other;
+    CharacterType other;
 
-    public CockChoked(CharacterType affected, Character other, int duration) {
+    public CockChoked(CharacterType affected, CharacterType other, int duration) {
         super("Cock Choked", affected, duration);
         this.other = other;
         flag(Stsflag.orgasmseal);
@@ -20,15 +20,19 @@ public class CockChoked extends DurationStatus {
         flag(Stsflag.purgable);
     }
 
+    Character getOther() {
+        return other.fromPoolGuaranteed();
+    }
+
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s now preventing %s from cumming\n", other.subjectAction("are", "is"),
+        return String.format("%s now preventing %s from cumming\n", getOther().subjectAction("are", "is"),
                         getAffected().subject());
     }
 
     @Override
     public String describe(Combat c) {
-        return String.format("%s preventing %s from cumming\n", other.subjectAction("are", "is"), getAffected().subject());
+        return String.format("%s preventing %s from cumming\n", getOther().subjectAction("are", "is"), getAffected().subject());
     }
 
     @Override
@@ -116,7 +120,7 @@ public class CockChoked extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new CockChoked(newAffected.getType(), newOther, getDuration());
+        return new CockChoked(newAffected.getType(), newOther.getType(), getDuration());
     }
 
     @Override  public JsonObject saveToJson() {

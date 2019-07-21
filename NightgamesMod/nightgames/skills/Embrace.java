@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -15,7 +16,7 @@ import nightgames.status.TailSucked;
 
 public class Embrace extends Skill {
 
-    public Embrace(Character self) {
+    public Embrace(CharacterType self) {
         super("Embrace", self, 6);
     }
 
@@ -70,21 +71,21 @@ public class Embrace extends Skill {
                                             + " head to {self:possessive} chest. Meanwhile, {self:possessive}"
                                             + " {self:body-part:wings} wrap around {other:direct-object}, holding"
                                             + " {other:direct-object} firmly in place.", getSelf(), target, trans));
-            next = new SuccubusEmbrace(getSelf(), target);
+            next = new SuccubusEmbrace(self, target.getType());
         } else if ((c.getStance().en == Stance.anal || c.getStance().en == Stance.doggy)
                         && c.getStance().penetratedBy(c, target, getSelf())) {
             if (target.hasDick()) {
-                next = new IncubusEmbrace(getSelf(), target, () -> {
+                next = new IncubusEmbrace(self, target.getType(), () -> {
                     c.write(getSelf(), Formatter.format("{self:NAME-POSSESSIVE} {self:body-part:tail}"
                                     + " reaches around and opens up in front of {other:name-possessive}"
                                     + " hard {other:body-part:cock}. In a quick motion, the turgid shaft"
                                     + " is swallowed up completely. The bulbous head at the end of the"
                                     + " tail flexes mightily, creating an intense suction for its"
                                     + " prisoner and drawing out {other:name-possessive} strength.", getSelf(), target));
-                    return new TailSucked(target, getSelf(), 2);
+                    return new TailSucked(target.getType(), self, 2);
                 }, Stsflag.tailsucked);
             } else if (c.getStance().anallyPenetrated(c, target) && target.hasPussy()) {
-                next = new IncubusEmbrace(getSelf(), target, () -> {
+                next = new IncubusEmbrace(self, target.getType(), () -> {
                     c.write(getSelf(), Formatter.format("{self:NAME-POSSESSIVE} prehensile"
                                     + " {self:body-part:tail} snakes around {other:name-possessive}"
                                     + " waist and then downward between {other:possessive} legs."
@@ -94,10 +95,10 @@ public class Embrace extends Skill {
                                     + " appendage does not stop, though, and keeps on pistoning in and out"
                                     + " at a speed which is leaving {other:name-do} even more breathless"
                                     + " than {other:pronoun} already {other:action:were|was}.", getSelf(), target));
-                    return new TailFucked(getSelf(), target, "pussy");
+                    return new TailFucked(self, target.getType(), "pussy");
                 }, Stsflag.tailfucked);
             } else {
-                next = new IncubusEmbrace(getSelf(), target);
+                next = new IncubusEmbrace(self, target.getType());
             }
             c.write(getSelf(), trans);
         } else {
@@ -169,7 +170,7 @@ public class Embrace extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Embrace(user);
+        return new Embrace(user.getType());
     }
 
     @Override

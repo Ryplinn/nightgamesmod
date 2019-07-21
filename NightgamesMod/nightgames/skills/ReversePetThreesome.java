@@ -11,7 +11,7 @@ public class ReversePetThreesome extends PetThreesome {
     }
 
     ReversePetThreesome(CharacterType self) {
-        super("Reverse Threesome", self, 0);
+        this("Reverse Threesome", self, 0);
     }
 
     @Override

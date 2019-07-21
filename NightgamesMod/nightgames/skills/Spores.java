@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -10,7 +11,7 @@ import nightgames.status.Stsflag;
 
 public class Spores extends Skill {
 
-    public Spores(Character self) {
+    public Spores(CharacterType self) {
         super("Spores", self);
     }
 
@@ -47,14 +48,14 @@ public class Spores extends Skill {
                             Formatter.format("{self:SUBJECT-ACTION:release|releases} a mass of tiny particles, and "
                                             + "{other:subject-action:are|is} forced to breathe them in. The scent"
                                             + " drives {other:direct-object} into a frenzy.", getSelf(), target));
-            target.add(c, new Aggressive(target, getSelf().nameOrPossessivePronoun() + " spores", 5));
+            target.add(c, new Aggressive(target.getType(), getSelf().nameOrPossessivePronoun() + " spores", 5));
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Spores(user);
+        return new Spores(user.getType());
     }
 
     @Override

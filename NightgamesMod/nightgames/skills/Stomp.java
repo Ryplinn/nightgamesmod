@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -15,7 +16,7 @@ import nightgames.skills.damage.DamageType;
 
 public class Stomp extends Skill {
 
-    public Stomp(Character self) {
+    public Stomp(CharacterType self) {
         super("Stomp", self);
         addTag(SkillTag.usesFeet);
         addTag(SkillTag.physical);
@@ -95,7 +96,7 @@ public class Stomp extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Stomp(user);
+        return new Stomp(user.getType());
     }
 
     @Override

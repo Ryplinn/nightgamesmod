@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -12,13 +13,13 @@ import nightgames.stance.Stance;
 
 public class Handjob extends Skill {
 
-    public Handjob(Character self) {
-        super("Handjob", self);
+    public Handjob(CharacterType self) {
+        this("Handjob", self);
         addTag(SkillTag.usesHands);
         addTag(SkillTag.pleasure);
     }
 
-    public Handjob(String string, Character self) {
+    public Handjob(String string, CharacterType self) {
         super(string, self);
     }
 
@@ -68,7 +69,7 @@ public class Handjob extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Handjob(user);
+        return new Handjob(user.getType());
     }
 
     @Override

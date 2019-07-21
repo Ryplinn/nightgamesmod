@@ -47,7 +47,7 @@ public class ShamefulDisplay extends Skill {
                             target, Addiction.LOW_INCREASE, c);
             c.write(getSelf(), "Acting submissively voluntarily reduces Mara's control over " + getSelf().nameDirectObject());
         }
-        getSelf().add(c, new Shamed(getSelf()));
+        getSelf().add(c, new Shamed(self));
         int divisor = target.getMood() == Emotion.dominant ? 3 : 4;
         target.add(c, Horny.getWithPsychologicalType(getSelf(), target, getSelf().get(Attribute.submission) / divisor, 2, " (Dominant Thrill)"));
         return true;

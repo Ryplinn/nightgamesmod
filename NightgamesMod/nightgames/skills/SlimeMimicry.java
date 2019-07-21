@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.NPC;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -14,14 +15,14 @@ import java.util.List;
 
 public class SlimeMimicry extends Skill {
     private final static List<Skill> MIMICRY_SKILLS = Arrays.asList(
-                    new MimicAngel(NPC.noneCharacter()),
-                    new MimicCat(NPC.noneCharacter()),
-                    new MimicDryad(NPC.noneCharacter()),
-                    new MimicSuccubus(NPC.noneCharacter()),
-                    new MimicWitch(NPC.noneCharacter())
+                    new MimicAngel(NPC.noneCharacter().getType()),
+                    new MimicCat(NPC.noneCharacter().getType()),
+                    new MimicDryad(NPC.noneCharacter().getType()),
+                    new MimicSuccubus(NPC.noneCharacter().getType()),
+                    new MimicWitch(NPC.noneCharacter().getType())
                     );
     
-    public SlimeMimicry(Character self) {
+    SlimeMimicry(CharacterType self) {
         super("Slime Mimicry", self);
     }
 
@@ -42,12 +43,12 @@ public class SlimeMimicry extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        return Random.pickRandom(MIMICRY_SKILLS).get().copy(getSelf()).resolve(c, target);
+        return Random.pickRandomGuaranteed(MIMICRY_SKILLS).copy(getSelf()).resolve(c, target);
     }
 
     @Override
     public Skill copy(Character user) {
-        return new SlimeMimicry(user);
+        return new SlimeMimicry(user.getType());
     }
 
     @Override

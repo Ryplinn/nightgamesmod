@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -13,7 +14,7 @@ import nightgames.status.Tied;
 
 public class TortoiseWrap extends Skill {
 
-    public TortoiseWrap(Character self) {
+    TortoiseWrap(CharacterType self) {
         super("Tortoise Wrap", self);
         addTag(SkillTag.positioning);
     }
@@ -38,14 +39,14 @@ public class TortoiseWrap extends Skill {
     public boolean resolve(Combat c, Character target) {
         getSelf().consume(Item.Rope, 1);
         writeOutput(c, Result.normal, target);
-        target.add(c, new Tied(target));
-        target.add(c, new Hypersensitive(target));
+        target.add(c, new Tied(target.getType()));
+        target.add(c, new Hypersensitive(target.getType()));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new TortoiseWrap(user);
+        return new TortoiseWrap(user.getType());
     }
 
     @Override

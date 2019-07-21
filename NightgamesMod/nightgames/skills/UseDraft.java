@@ -1,11 +1,9 @@
 package nightgames.skills;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Decider;
 import nightgames.characters.NPC;
 import nightgames.combat.Combat;
@@ -17,7 +15,7 @@ import nightgames.items.ItemEffect;
 import nightgames.status.Stsflag;
 
 public class UseDraft extends Skill {
-    public UseDraft(Character self) {
+    UseDraft(CharacterType self) {
         super("Use draft", self);
     }
 
@@ -34,7 +32,7 @@ public class UseDraft extends Skill {
 
     @Override
     public Collection<String> subChoices(Combat c) {
-        ArrayList<String> usables = new ArrayList<String>();
+        ArrayList<String> usables = new ArrayList<>();
         for (Item i : getSelf().getInventory().keySet()) {
             if (getSelf().has(i) && i.getEffects().get(0).drinkable() && i.usable(c, getSelf(), getSelf())) {
                 usables.add(i.getName());
@@ -43,11 +41,11 @@ public class UseDraft extends Skill {
         return usables;
     }
 
-    public Item pickBest(Combat c, NPC self, Character target, List<Item> usables) {
+    private Item pickBest(Combat c, NPC self, Character target, List<Item> usables) {
         HashMap<Item, Double> checks = new HashMap<>();
         double selfFitness = self.getFitness(c);
         double targetFitness = self.getOtherFitness(c, target);
-        usables.stream().forEach(item -> {
+        usables.forEach(item -> {
             double rating = Decider.rateAction(self, c, selfFitness, targetFitness, (newCombat, newSelf, newOther) -> {
                 for (ItemEffect e : item.getEffects()) {
                     e.use(newCombat, newSelf, newOther, item);
@@ -57,11 +55,9 @@ public class UseDraft extends Skill {
             checks.put(item, rating);
         });
         if (DebugFlags.isDebugOn(DebugFlags.DEBUG_SKILLS)) {
-            checks.entrySet().stream().forEach(entry -> {
-                System.out.println("Item " + entry.getKey() + ": " + entry.getValue());
-            });
+            checks.forEach((key, value) -> System.out.println("Item " + key + ": " + value));
         }
-        Item best = checks.entrySet().stream().min((first, second) -> {
+        return checks.entrySet().stream().min((first, second) -> {
             double test = second.getValue() - first.getValue();
             if (test < 0) {
                 return -1;
@@ -70,8 +66,7 @@ public class UseDraft extends Skill {
                 return 1;
             }
             return 0;
-        }).get().getKey();
-        return best;
+        }).map(Map.Entry::getKey).orElse(null);
     }
 
     @Override
@@ -85,7 +80,7 @@ public class UseDraft extends Skill {
                 }
             }
         } else {
-            ArrayList<Item> usables = new ArrayList<Item>();
+            ArrayList<Item> usables = new ArrayList<>();
             for (Item i : getSelf().getInventory().keySet()) {
                 if (i.getEffects().get(0).drinkable() && i.usable(c, getSelf(), getSelf())) {
                     usables.add(i);
@@ -117,7 +112,7 @@ public class UseDraft extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new UseDraft(user);
+        return new UseDraft(user.getType());
     }
 
     @Override

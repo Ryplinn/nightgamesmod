@@ -67,7 +67,7 @@ public class BreastWorship extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new BreastWorship(user);
+        return new BreastWorship(user.getType());
     }
 
     @Override

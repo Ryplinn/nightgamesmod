@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -9,7 +10,7 @@ import nightgames.items.Item;
 import nightgames.items.ItemEffect;
 
 public class UseSemen extends Skill {
-    public UseSemen(Character self) {
+    UseSemen(CharacterType self) {
         super("Drink Semen Bottle", self);
     }
 
@@ -43,7 +44,7 @@ public class UseSemen extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new UseSemen(user);
+        return new UseSemen(user.getType());
     }
 
     @Override

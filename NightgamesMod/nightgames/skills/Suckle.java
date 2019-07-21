@@ -53,7 +53,7 @@ public class Suckle extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Suckle(user);
+        return new Suckle(user.getType());
     }
 
     @Override

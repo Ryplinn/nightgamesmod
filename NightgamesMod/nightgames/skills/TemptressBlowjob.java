@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -11,7 +12,7 @@ import nightgames.status.FiredUp;
 
 public class TemptressBlowjob extends Blowjob {
 
-    public TemptressBlowjob(Character user) {
+    TemptressBlowjob(CharacterType user) {
         super("Skillful Blowjob", user);
         addTag(SkillTag.usesMouth);
         addTag(SkillTag.pleasure);
@@ -48,7 +49,7 @@ public class TemptressBlowjob extends Blowjob {
                 if (target.body.getRandomCock().isReady(target)) {
                     // Was flaccid, got hard
                     c.write(getSelf(), deal(c, 0, Result.special, target));
-                    getSelf().add(c, new FiredUp(getSelf(), target, "mouth"));
+                    getSelf().add(c, new FiredUp(self, target.getType(), "mouth"));
                 } else {
                     // Was flaccid, still is
                     c.write(getSelf(), deal(c, 0, Result.weak, target));
@@ -60,7 +61,7 @@ public class TemptressBlowjob extends Blowjob {
                 c.write(getSelf(), deal(c, stack, Result.normal, target));
                 target.body.pleasure(getSelf(), getSelf().body.getRandom("mouth"), target.body.getRandomCock(),
                                 m + m * stack / 2, c, this);
-                getSelf().add(c, new FiredUp(getSelf(), target, "mouth"));
+                getSelf().add(c, new FiredUp(self, target.getType(), "mouth"));
             }
         } else {
             c.write(getSelf(), deal(c, 0, Result.miss, target));
@@ -70,7 +71,7 @@ public class TemptressBlowjob extends Blowjob {
 
     @Override
     public Skill copy(Character user) {
-        return new TemptressBlowjob(user);
+        return new TemptressBlowjob(user.getType());
     }
 
     @Override

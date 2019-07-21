@@ -2,13 +2,12 @@ package nightgames.skills;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import nightgames.characters.Attribute;
+import nightgames.characters.*;
 import nightgames.characters.Character;
-import nightgames.characters.Decider;
-import nightgames.characters.NPC;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.DebugFlags;
@@ -18,7 +17,7 @@ import nightgames.items.clothing.Clothing;
 import nightgames.nskills.tags.SkillTag;
 
 public class StripSelf extends Skill {
-    public StripSelf(Character self) {
+    public StripSelf(CharacterType self) {
         super("Strip Self", self);
         addTag(SkillTag.suicidal);
     }
@@ -36,7 +35,7 @@ public class StripSelf extends Skill {
 
     @Override
     public Collection<String> subChoices(Combat c) {
-        return getSelf().getOutfit().getAllStrippable().stream().map(clothing -> clothing.getName())
+        return getSelf().getOutfit().getAllStrippable().stream().map(Clothing::getName)
                         .collect(Collectors.toList());
     }
 
@@ -67,7 +66,7 @@ public class StripSelf extends Skill {
             HashMap<Clothing, Double> checks = new HashMap<>();
             double selfFit = self.getFitness(c);
             double otherFit = self.getOtherFitness(c, target);
-            getSelf().getOutfit().getAllStrippable().stream().forEach(article -> {
+            getSelf().getOutfit().getAllStrippable().forEach(article -> {
                 double rating = Decider.rateAction(self, c, selfFit, otherFit, (newCombat, newSelf, newOther) -> {
                     newSelf.strip(article, newCombat);
                     return true;
@@ -75,11 +74,9 @@ public class StripSelf extends Skill {
                 checks.put(article, rating);
             });
             if (DebugFlags.isDebugOn(DebugFlags.DEBUG_SKILLS)) {
-                checks.entrySet().stream().forEach(entry -> {
-                    System.out.println("Stripping " + entry.getKey() + ": " + entry.getValue());
-                });
+                checks.forEach((key, value) -> System.out.println("Stripping " + key + ": " + value));
             }
-            Clothing best = checks.entrySet().stream().max((first, second) -> {
+            Optional<Clothing> best = checks.entrySet().stream().max((first, second) -> {
                 double test = second.getValue() - first.getValue();
                 if (test < 0) {
                     return -1;
@@ -88,9 +85,9 @@ public class StripSelf extends Skill {
                     return 1;
                 }
                 return 0;
-            }).get().getKey();
-            getSelf().strip(best, c);
-            clothing = best;
+            }).map(Map.Entry::getKey);
+            best.ifPresent(cloth -> getSelf().strip(cloth, c));
+            clothing = best.orElse(null);
         }
         if (clothing == null) {
             c.write(getSelf(), "Skill failed...");
@@ -103,7 +100,7 @@ public class StripSelf extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new StripSelf(user);
+        return new StripSelf(user.getType());
     }
 
     @Override

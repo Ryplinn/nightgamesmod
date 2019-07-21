@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -14,11 +15,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class LeechEnergy extends Skill {
-    String lastPart;
 
-    public LeechEnergy(Character self) {
+    LeechEnergy(CharacterType self) {
         super("Leech Energy", self, 2);
-        lastPart = "none";
         addTag(SkillTag.drain);
         addTag(SkillTag.staminaDamage);
         addTag(SkillTag.positioning);
@@ -39,13 +38,12 @@ public class LeechEnergy extends Skill {
         if (target.roll(getSelf(), accuracy(c, target))) {
             BodyPart part = null;
             BodyPart selfPart = getSelf().body.getRandom("tentacles");
-            List<String> targets = new ArrayList<String>(
-                            Arrays.asList("hands", "feet", "skin", "mouth", "cock", "pussy", "balls"));
+            List<String> targets =
+                            new ArrayList<>(Arrays.asList("hands", "feet", "skin", "mouth", "cock", "pussy", "balls"));
             while (!targets.isEmpty()) {
                 String type = targets.remove(Random.random(targets.size()));
                 part = target.body.getRandom(type);
                 if (part != null) {
-                    lastPart = type;
                     break;
                 }
             }
@@ -126,7 +124,7 @@ public class LeechEnergy extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new LeechEnergy(user);
+        return new LeechEnergy(user.getType());
     }
 
     @Override

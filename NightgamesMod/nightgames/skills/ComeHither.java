@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -14,7 +15,7 @@ import nightgames.status.WingWrapped;
 
 public class ComeHither extends Skill {
 
-    public ComeHither(Character self) {
+    public ComeHither(CharacterType self) {
         super("Come Hither", self);
     }
 
@@ -45,21 +46,21 @@ public class ComeHither extends Skill {
         writeOutput(c, selfMounts ? Result.special : Result.normal, target);                   
                             
         if (selfMounts) {
-            c.setStance(new Mount(getSelf(), target));
+            c.setStance(new Mount(self, target.getType()));
         } else {
-            c.setStance(new Mount(target, getSelf()));
+            c.setStance(new Mount(target.getType(), self));
             if (getSelf().has(Trait.DemonsEmbrace) && getSelf().body.has("wings")) {
-                target.add(c, new WingWrapped(target, getSelf()));
+                target.add(c, new WingWrapped(target.getType(), self));
             }
         }
-        new Kiss(getSelf()).resolve(c, target);
+        new Kiss(self).resolve(c, target);
         
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new ComeHither(user);
+        return new ComeHither(user.getType());
     }
 
     @Override
@@ -70,7 +71,7 @@ public class ComeHither extends Skill {
     @Override
     public String deal(Combat c, int damage, Result modifier, Character target) {
         String msg = "You smoothly lay down on your back and shoot {other:name-do} your"
-                        + " most winning smile. You open your legs slowly, almost tortously so,"
+                        + " most winning smile. You open your legs slowly, almost tortuously so,"
                         + " keeping {other:possessive} gaze fixed between them. ";
         if (!getSelf().outfit.slotOpen(ClothingSlot.bottom)) {
             msg += "Even though your {self:main-genitals} are still hidden, the mere promise"

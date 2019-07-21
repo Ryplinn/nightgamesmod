@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -11,7 +12,7 @@ import nightgames.status.FiredUp;
 
 public class TemptressRide extends Thrust {
 
-    public TemptressRide(Character self) {
+    TemptressRide(CharacterType self) {
         super("Improved Ride", self);
     }
 
@@ -72,13 +73,13 @@ public class TemptressRide extends Thrust {
 
         getSelf().body.pleasure(target, target.body.getRandomCock(), getSelf().body.getRandomPussy(), selfDmg, c, this);
 
-        getSelf().add(c, new FiredUp(getSelf(), target, "pussy"));
+        getSelf().add(c, new FiredUp(self, target.getType(), "pussy"));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new TemptressRide(user);
+        return new TemptressRide(user.getType());
     }
 
     @Override

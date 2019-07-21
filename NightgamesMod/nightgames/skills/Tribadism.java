@@ -39,7 +39,7 @@ public class Tribadism extends Skill {
         if (possible) {
             stancePossible = true;
             if (selfO.isType("pussy")) {
-                stancePossible &= !c.getStance().vaginallyPenetrated(c, getSelf());
+                stancePossible = !c.getStance().vaginallyPenetrated(c, getSelf());
             }
             if (targetO.isType("pussy")) {
                 stancePossible &= !c.getStance().vaginallyPenetrated(c, target);
@@ -60,7 +60,7 @@ public class Tribadism extends Skill {
         BodyPart selfO = getSelfOrgan();
         BodyPart targetO = getTargetOrgan(target);
         writeOutput(c, Result.normal, target);
-        c.setStance(new TribadismStance(getSelf(), target), getSelf(), true);
+        c.setStance(new TribadismStance(self, target.getType()), getSelf(), true);
         int otherm = 10;
         int m = 10;
         target.body.pleasure(getSelf(), selfO, targetO, m, c, this);

@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -14,7 +15,7 @@ import nightgames.status.Winded;
 
 public class StunBlast extends Skill {
 
-    public StunBlast(Character self) {
+    StunBlast(CharacterType self) {
         super("Stun Blast", self);
     }
 
@@ -43,16 +44,16 @@ public class StunBlast extends Skill {
                                         target.has(ClothingTrait.harpoonOnahole)) { 
             writeOutput(c, Result.special, target);
             target.getStamina().empty();
-            target.add(c, new Winded(target));
-            target.add(c, new Falling(target));
+            target.add(c, new Winded(target.getType()));
+            target.add(c, new Falling(target.getType()));
             return true;
         }
         getSelf().consume(Item.Battery, 4);
         if (Random.random(10) >= 4) {
             writeOutput(c, Result.normal, target);
             target.getStamina().empty();
-            target.add(c, new Falling(target));
-            target.add(c, new Winded(target));
+            target.add(c, new Falling(target.getType()));
+            target.add(c, new Winded(target.getType()));
         } else {
             writeOutput(c, Result.miss, target);
             return false;
@@ -62,7 +63,7 @@ public class StunBlast extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new StunBlast(user);
+        return new StunBlast(user.getType());
     }
 
     @Override

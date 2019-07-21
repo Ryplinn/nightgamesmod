@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -10,7 +11,7 @@ import nightgames.status.Stsflag;
 
 public class DenyOrgasm extends Skill {
 
-    public DenyOrgasm(Character self) {
+    DenyOrgasm(CharacterType self) {
         super("Deny Orgasm", self, 4);
     }
 
@@ -38,13 +39,13 @@ public class DenyOrgasm extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        target.add(c, new CockChoked(target, getSelf(), 4));
+        target.add(c, new CockChoked(target.getType(), self, 4));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new DenyOrgasm(user);
+        return new DenyOrgasm(user.getType());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -9,7 +10,7 @@ import nightgames.status.Stsflag;
 
 public class EnergyDrink extends Skill {
 
-    public EnergyDrink(Character self) {
+    public EnergyDrink(CharacterType self) {
         super("Energy Drink", self);
     }
 
@@ -49,7 +50,7 @@ public class EnergyDrink extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new EnergyDrink(user);
+        return new EnergyDrink(user.getType());
     }
 
     @Override

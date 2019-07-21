@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -15,7 +16,7 @@ import nightgames.status.Stsflag;
 
 public class Taunt extends Skill {
 
-    public Taunt(Character self) {
+    public Taunt(CharacterType self) {
         super("Taunt", self);
     }
 
@@ -45,7 +46,7 @@ public class Taunt extends Skill {
         } 
         target.temptNoSource(c, getSelf(), (int) Math.round(m), this);
         if (Random.randomdouble() < chance) {
-            target.add(c, new Shamed(target));
+            target.add(c, new Shamed(target.getType()));
         }
         if (c.getStance().dom(getSelf()) && getSelf().has(Trait.bitingwords)) {
             int willpowerLoss = Math.max(target.getWillpower().max() / 50, 3) + Random.random(3);
@@ -55,13 +56,13 @@ public class Taunt extends Skill {
             c.write(getSelf(), Formatter.format("{other:SUBJECT-ACTION:speak|speaks} with such unquestionable"
                             + " authority that {self:subject-action:don't|doesn't} even consider not obeying."
                             , getSelf(), target));
-            target.add(c, new Enthralled(target, getSelf(), 1, false));
+            target.add(c, new Enthralled(target.getType(), self, 1, false));
         } else if (getSelf().has(Trait.MelodiousInflection) && !target.is(Stsflag.charmed) && Random.random(3) == 0) {
             c.write(getSelf(), Formatter.format("Something about {self:name-possessive} words, the"
                             + " way {self:possessive} voice rises and falls, {self:possessive}"
                             + " pauses and pitch... {other:SUBJECT} soon {other:action:find|finds}"
                             + " {other:reflective} utterly hooked.", getSelf(), target));
-            target.add(c, new Charmed(target, 2).withFlagRemoved(Stsflag.mindgames));
+            target.add(c, new Charmed(target.getType(), 2).withFlagRemoved(Stsflag.mindgames));
         }
         target.emote(Emotion.angry, 30);
         target.emote(Emotion.nervous, 15);
@@ -77,7 +78,7 @@ public class Taunt extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Taunt(user);
+        return new Taunt(user.getType());
     }
 
     @Override

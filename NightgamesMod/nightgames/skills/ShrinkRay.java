@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockPart;
 import nightgames.characters.body.mods.SizeMod;
@@ -16,7 +17,7 @@ import nightgames.status.Shamed;
 @SuppressWarnings("unused")
 public class ShrinkRay extends Skill {
 
-    public ShrinkRay(Character self) {
+    ShrinkRay(CharacterType self) {
         super("Shrink Ray", self);
     }
 
@@ -59,7 +60,7 @@ public class ShrinkRay extends Skill {
                 c.write(getSelf(), receive(c, permanent ? 1 : 0, Result.normal, target));
             }
         }
-        target.add(c, new Shamed(target));
+        target.add(c, new Shamed(target.getType()));
         if (permanent) {
             if (target.hasDick()) {
                 CockPart part = target.body.getCockAbove(SizeMod.getMinimumSize("cock"));
@@ -95,7 +96,7 @@ public class ShrinkRay extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new ShrinkRay(user);
+        return new ShrinkRay(user.getType());
     }
 
     @Override

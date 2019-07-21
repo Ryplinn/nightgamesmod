@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,7 +14,7 @@ import nightgames.status.addiction.AddictionType;
 
 public class DemandArousal extends Skill {
 
-    DemandArousal(Character self) {
+    DemandArousal(CharacterType self) {
         super("Demand Arousal", self, 4);
     }
 
@@ -54,7 +55,7 @@ public class DemandArousal extends Skill {
                                 + " {other:pronoun-action:are|is} aroused out of {other:possessive} mind."
                                 , getSelf(), target);
                 alleviation = Addiction.MED_INCREASE;
-                target.add(c, new Hypersensitive(target, 2));
+                target.add(c, new Hypersensitive(target.getType(), 2));
                 break;
             case LOW:
                 msg += Formatter.format("seem to have more weight behind them than usual. \"<i>"
@@ -88,7 +89,7 @@ public class DemandArousal extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new DemandArousal(user);
+        return new DemandArousal(user.getType());
     }
 
     @Override

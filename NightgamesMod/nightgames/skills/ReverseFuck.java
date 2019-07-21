@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -8,13 +9,13 @@ import nightgames.global.Formatter;
 import nightgames.nskills.tags.SkillTag;
 
 public class ReverseFuck extends Fuck {
-    public ReverseFuck(String name, Character self, int cooldown) {
+    private ReverseFuck(String name, CharacterType self, int cooldown) {
         super(name, self, cooldown);
         addTag(SkillTag.positioning);
     }
 
-    public ReverseFuck(Character self) {
-        super("Reverse Fuck", self, 0);
+    public ReverseFuck(CharacterType self) {
+        this("Reverse Fuck", self, 0);
     }
 
     @Override
@@ -29,7 +30,7 @@ public class ReverseFuck extends Fuck {
 
     @Override
     public Skill copy(Character user) {
-        return new ReverseFuck(user);
+        return new ReverseFuck(user.getType());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -10,7 +11,7 @@ import nightgames.status.Stsflag;
 
 public class ToggleBlindfold extends Skill {
 
-    public ToggleBlindfold(Character self) {
+    ToggleBlindfold(CharacterType self) {
         super("Toggle Blindfold", self);
     }
 
@@ -55,7 +56,7 @@ public class ToggleBlindfold extends Skill {
             getSelf().remove(Item.Blindfold);
             if (!c.getStance()
                   .sub(getSelf()) || target.roll(getSelf(), 80)) {
-                getSelf().add(c, new Blinded(getSelf(), "a blindfold", true));
+                getSelf().add(c, new Blinded(self, "a blindfold", true));
                 c.write(getSelf(), String.format("%s a blindfold around %s eyes.",
                                 getSelf().subjectAction("tie"), getSelf().possessiveAdjective()));
             } else {
@@ -82,7 +83,7 @@ public class ToggleBlindfold extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new ToggleBlindfold(user);
+        return new ToggleBlindfold(user.getType());
     }
 
     @Override

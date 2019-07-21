@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.items.Item;
@@ -10,7 +11,7 @@ import nightgames.status.Stsflag;
 
 public class Tie extends Skill {
 
-    public Tie(Character self) {
+    Tie(CharacterType self) {
         super("Bind", self);
     }
 
@@ -33,12 +34,12 @@ public class Tie extends Skill {
         if (getSelf().has(Item.Handcuffs, 1)) {
             getSelf().consume(Item.Handcuffs, 1);
             writeOutput(c, Result.special, target);
-            target.add(c, new Bound(target, (40 + 3 * Math.sqrt(getSelf().get(Attribute.cunning))), "handcuffs"));
+            target.add(c, new Bound(target.getType(), (40 + 3 * Math.sqrt(getSelf().get(Attribute.cunning))), "handcuffs"));
         } else {
             getSelf().consume(Item.ZipTie, 1);
             if (target.roll(getSelf(), accuracy(c, target))) {
                 writeOutput(c, Result.normal, target);
-                target.add(c, new Bound(target, (25 + 3 * Math.sqrt(getSelf().get(Attribute.cunning))), "ziptie"));
+                target.add(c, new Bound(target.getType(), (25 + 3 * Math.sqrt(getSelf().get(Attribute.cunning))), "ziptie"));
             } else {
                 writeOutput(c, Result.miss, target);
                 return false;
@@ -49,7 +50,7 @@ public class Tie extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Tie(user);
+        return new Tie(user.getType());
     }
 
     @Override

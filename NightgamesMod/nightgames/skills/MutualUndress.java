@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -9,7 +10,7 @@ import nightgames.nskills.tags.SkillTag;
 
 public class MutualUndress extends Skill {
 
-    public MutualUndress(Character self) {
+    MutualUndress(CharacterType self) {
         super("Tempt Undress", self);
         addTag(SkillTag.undressing);
         addTag(SkillTag.stripping);
@@ -22,11 +23,8 @@ public class MutualUndress extends Skill {
 
     @Override
     public boolean usable(Combat c, Character target) {
-        if (getSelf().stripDifficulty(target) == 0 && getSelf().canAct() && c.getStance().mobile(getSelf())
-                        && !getSelf().mostlyNude() && !target.mostlyNude()) {
-            return true;
-        }
-        return false;
+        return getSelf().stripDifficulty(target) == 0 && getSelf().canAct() && c.getStance().mobile(getSelf())
+                        && !getSelf().mostlyNude() && !target.mostlyNude();
     }
 
     @Override
@@ -54,7 +52,7 @@ public class MutualUndress extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new MutualUndress(user);
+        return new MutualUndress(user.getType());
     }
 
     @Override

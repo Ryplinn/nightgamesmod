@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -16,7 +17,7 @@ import nightgames.status.addiction.AddictionType;
 
 public class Offer extends Skill {
 
-    public Offer(Character self) {
+    Offer(CharacterType self) {
         super("Offer", self);
     }
 
@@ -46,7 +47,7 @@ public class Offer extends Skill {
     public boolean resolve(Combat c, Character target) {
         if (target.getArousal().get() < 15) {
             writeOutput(c, Result.miss, target);
-            getSelf().add(c, new Shamed(getSelf()));
+            getSelf().add(c, new Shamed(self));
             if (target.hasDick() || target.has(Trait.strapped)) {
                 new Spank(target).resolve(c, getSelf());
             }
@@ -56,7 +57,7 @@ public class Offer extends Skill {
             if (getSelf().hasPussy()) {
                 // offer pussy to dick/strapon
                 writeOutput(c, Result.special, target);
-                c.setStance(new Missionary(target, getSelf()), target, true);
+                c.setStance(new Missionary(target.getType(), self), target, true);
                 getSelf().body.pleasure(target, target.body.getRandomCock(), getSelf().body.getRandomPussy(),
                                 Random.random(5) + getSelf().get(Attribute.perception), c, this);
                 target.body.pleasure(getSelf(), getSelf().body.getRandomPussy(), target.body.getRandomCock(),
@@ -65,7 +66,7 @@ public class Offer extends Skill {
             } else {
                 // offer ass to dick/strapon
                 writeOutput(c, Result.anal, target);
-                c.setStance(new Anal(target, getSelf()), target, true);
+                c.setStance(new Anal(target.getType(), self), target, true);
                 getSelf().body.pleasure(target, target.body.getRandomInsertable(), getSelf().body.getRandomAss(),
                                 Random.random(5) + getSelf().get(Attribute.perception), c, this);
                 if (!target.has(Trait.strapped)) {
@@ -77,7 +78,7 @@ public class Offer extends Skill {
             assert getSelf().hasDick() && target.hasPussy();
             // Offer cock to female
             writeOutput(c, Result.normal, target);
-            c.setStance(new Cowgirl(target, getSelf()), target, true);
+            c.setStance(new Cowgirl(target.getType(), self), target, true);
             getSelf().body.pleasure(target, target.body.getRandomPussy(), getSelf().body.getRandomCock(),
                             Random.random(5) + getSelf().get(Attribute.perception), c, this);
             target.body.pleasure(getSelf(), getSelf().body.getRandomCock(), target.body.getRandomPussy(),
@@ -94,7 +95,7 @@ public class Offer extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Offer(user);
+        return new Offer(user.getType());
     }
 
     @Override

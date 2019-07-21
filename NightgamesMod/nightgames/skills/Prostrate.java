@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -13,7 +14,7 @@ import nightgames.status.addiction.AddictionType;
 // Not Prostate, ProstRate
 public class Prostrate extends Skill {
 
-    public Prostrate(Character self) {
+    public Prostrate(CharacterType self) {
         super("Prostrate", self);
     }
 
@@ -42,12 +43,12 @@ public class Prostrate extends Skill {
             c.write(target, "Angel lays a hand on the back of your head and then softly pushes to the side."
                             + " Understanding Her intent, you roll over onto your back, and she sits down on top of you,"
                             + " smiling kindly.");
-            c.setStance(new Mount(target, getSelf()), getSelf(), true);
+            c.setStance(new Mount(target.getType(), self), getSelf(), true);
         } else {
             c.write(target, "Angel curls a finger under your chin and lifts your head. She keeps going, and you"
                             + " understand she wants you to stand up. Back on your feet, She traces a hand over your"
                             + " chest and shoulder while walking around you and gently hugging you from behind.");
-            c.setStance(new Behind(target, getSelf()), getSelf(), true);
+            c.setStance(new Behind(target.getType(), self), getSelf(), true);
         }
         getSelf().unaddictCombat(AddictionType.ZEAL, target, Addiction.LOW_INCREASE, c);
         getSelf().addict(c, AddictionType.ZEAL, target, Addiction.LOW_INCREASE);
@@ -56,7 +57,7 @@ public class Prostrate extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Prostrate(user);
+        return new Prostrate(user.getType());
     }
 
     @Override

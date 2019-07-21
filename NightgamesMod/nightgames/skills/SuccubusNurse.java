@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -16,7 +17,7 @@ import nightgames.status.Status;
 
 public class SuccubusNurse extends Skill {
 
-    public SuccubusNurse(Character self) {
+    public SuccubusNurse(CharacterType self) {
         super("Succubus Nurse", self);
         addTag(SkillTag.breastfeed);
         addTag(SkillTag.usesBreasts);
@@ -74,18 +75,18 @@ public class SuccubusNurse extends Skill {
                                         ? "making {other:direct-object} feel strangely" + " calm and passive inside"
                                         : "feeling strangely erotic"));
         if (getSelf().has(Trait.Pacification)) {
-            target.add(c, new AttributeBuff(target, Attribute.power, -2, 5));
+            target.add(c, new AttributeBuff(target.getType(), Attribute.power, -2, 5));
         }
-        new Suckle(target).resolve(c, getSelf(), true);
+        new Suckle(target.getType()).resolve(c, getSelf(), true);
         if (Random.random(100) < 5 + 2 * getSelf().get(Attribute.fetishism)) {
-            target.add(c, new BodyFetish(target, getSelf(), BreastsPart.a.getType(), .25));
+            target.add(c, new BodyFetish(target.getType(), self, BreastsPart.a.getType(), .25));
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new SuccubusNurse(user);
+        return new SuccubusNurse(user.getType());
     }
 
     @Override

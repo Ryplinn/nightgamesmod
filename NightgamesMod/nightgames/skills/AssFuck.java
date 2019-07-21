@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
@@ -17,7 +18,7 @@ import nightgames.stance.Stance;
 import nightgames.status.*;
 
 public class AssFuck extends Fuck {
-    public AssFuck(Character self) {
+    public AssFuck(CharacterType self) {
         super("Ass Fuck", self, 0);
     }
 
@@ -41,7 +42,7 @@ public class AssFuck extends Fuck {
                         && (getTargetOrgan(target).isReady(target) || target.has(Trait.buttslut) || getSelf().has(Item.Lubricant)
                                         || getSelf().getArousal().percent() > 50 || getSelf().has(Trait.alwaysready)
                                         || getSelf().has(Trait.assmaster))
-                        && (!target.hasPussy() || !PullOut.blockedByAddiction(getSelf()));
+                        && (!target.hasPussy() || PullOut.permittedByAddiction(getSelf()));
     }
 
     @Override
@@ -56,7 +57,7 @@ public class AssFuck extends Fuck {
                 premessage += "{self:action:lube|lubes}";
             }
             premessage += " up {other:possessive} ass with {self:possessive} " + fluids + ".";
-            target.add(c, new Oiled(target));
+            target.add(c, new Oiled(target.getType()));
         } else if (!target.hasStatus(Stsflag.oiled) && getSelf().has(Item.Lubricant)) {
             if (premessage.isEmpty()) {
                 premessage = "{self:subject-action:lube|lubes}";
@@ -64,7 +65,7 @@ public class AssFuck extends Fuck {
                 premessage += "{self:action:lube|lubes}";
             }
             premessage += " up {other:possessive} ass.";
-            target.add(c, new Oiled(target));
+            target.add(c, new Oiled(target.getType()));
             getSelf().consume(Item.Lubricant, 1);
         }
         c.write(getSelf(), Formatter.format(premessage, getSelf(), target));
@@ -78,7 +79,7 @@ public class AssFuck extends Fuck {
         } else if (target.human()) {
             if (!c.getStance().behind(getSelf()) && getSelf().has(Trait.strapped)) {
                 c.write(getSelf(), receive(c, premessage.length(), Result.upgrade, target));
-            } else if (getSelf().getType().equals("Eve") && c.getStance().behind(getSelf())) {
+            } else if (self.equals(CharacterType.get("Eve")) && c.getStance().behind(getSelf())) {
                 m += 5;
                 c.write(getSelf(), receive(c, premessage.length(), Result.special, target));
             } else {
@@ -94,14 +95,14 @@ public class AssFuck extends Fuck {
 
         boolean voluntary = getSelf().canMakeOwnDecision();
         if (c.getStance().behind(getSelf())) {
-            if (getSelf().getType().equals("Eve")) {
-                c.setStance(new AnalProne(getSelf(), target), getSelf(), voluntary);
+            if (self.equals(CharacterType.get("Eve"))) {
+                c.setStance(new AnalProne(self, target.getType()), getSelf(), voluntary);
             } else {
-                if (c.getStance().enumerate() == Stance.behindfootjob) {c.setStance(new BehindFootjob(getSelf(),target));}
-                else {c.setStance(new Anal(getSelf(), target), getSelf(), voluntary);}
+                if (c.getStance().enumerate() == Stance.behindfootjob) {c.setStance(new BehindFootjob(self,target.getType()));}
+                else {c.setStance(new Anal(self, target.getType()), getSelf(), voluntary);}
             }
         } else {
-            c.setStance(new AnalProne(getSelf(), target), getSelf(), voluntary);
+            c.setStance(new AnalProne(self, target.getType()), getSelf(), voluntary);
         }
         int otherm = m;
         if (getSelf().has(Trait.insertion)) {
@@ -118,7 +119,7 @@ public class AssFuck extends Fuck {
             target.emote(Emotion.horny, 25);
         }
         if (!target.has(Trait.Unflappable)) {
-            target.add(c, new Flatfooted(target, 1));
+            target.add(c, new Flatfooted(target.getType(), 1));
         }
         if (getSelf().has(Trait.analFanatic) && getSelf().hasDick()) {
             c.write(getSelf(),
@@ -127,8 +128,8 @@ public class AssFuck extends Fuck {
                             getSelf().possessiveAdjective(), getSelf().body.getRandomCock().describe(getSelf()),
                             target.nameOrPossessivePronoun(), getSelf().nameOrPossessivePronoun(),
                             target.directObject()));
-            getSelf().add(c, new Frenzied(getSelf(), 4));
-            getSelf().add(c, new IgnoreOrgasm(getSelf(), 4));
+            getSelf().add(c, new Frenzied(self, 4));
+            getSelf().add(c, new IgnoreOrgasm(self, 4));
         }
         return true;
     }
@@ -140,7 +141,7 @@ public class AssFuck extends Fuck {
 
     @Override
     public Skill copy(Character user) {
-        return new AssFuck(user);
+        return new AssFuck(user.getType());
     }
 
     @Override
@@ -205,7 +206,7 @@ public class AssFuck extends Fuck {
                                             + " but Eve trips you before you regain your balance. She follows you to the ground, rolling you onto your"
                                             + " back and lifting your legs. <i>\"Uh uh, you're not going anywhere, my little cumslut-to-be. Now just lay back and"
                                             + " take it.\"</i> Keeping your legs up with one arm, she uses the other to line up her %s with your hole. Then,"
-                                            + " she brutually slams it all the way in in one go. Your screams and Eve's laughter fill the air as she starts"
+                                            + " she brutally slams it all the way in in one go. Your screams and Eve's laughter fill the air as she starts"
                                             + " fucking you at a furious pace.",
                             target.getName(), getSelf().body.getRandomCock().describe(getSelf()));
         } else {

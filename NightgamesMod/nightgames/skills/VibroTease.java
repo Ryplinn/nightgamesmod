@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,7 +14,7 @@ import nightgames.stance.Stance;
 
 public class VibroTease extends Skill {
 
-    public VibroTease(Character self) {
+    VibroTease(CharacterType self) {
         super("Vibro-Tease", self);
         addTag(SkillTag.usesToy);
     }
@@ -58,7 +59,7 @@ public class VibroTease extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new VibroTease(user);
+        return new VibroTease(user.getType());
     }
 
     @Override

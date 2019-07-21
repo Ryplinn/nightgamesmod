@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -11,10 +12,9 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.FlowerSex;
 
 public class CounterFlower extends CounterBase {
-    public CounterFlower(Character self) {
+    CounterFlower(CharacterType self) {
         super("Flower Counter", self, 5,
-                        Formatter.format("<b>The giant flower at the base of {self:name-possessive} legs are open, with the petals waving invitingly.</b>",
-                                        self, self),
+                        "<b>The giant flower at the base of {self:name-possessive} legs are open, with the petals waving invitingly.</b>",
                         2);
         addTag(SkillTag.fucking);
         addTag(SkillTag.positioning);
@@ -48,8 +48,8 @@ public class CounterFlower extends CounterBase {
             } else {
                 c.write(getSelf(), receive(c, 0, Result.normal, target));
             }
-            c.setStance(new FlowerSex(getSelf(), target), getSelf(), true);
-            new Thrust(getSelf()).resolve(c, target);
+            c.setStance(new FlowerSex(self, target.getType()), getSelf(), true);
+            new Thrust(self).resolve(c, target);
         } else {
             if (getSelf().human()) {
                 c.write(getSelf(), deal(c, 0, Result.miss, target));
@@ -82,7 +82,7 @@ public class CounterFlower extends CounterBase {
 
     @Override
     public Skill copy(Character user) {
-        return new CounterFlower(user);
+        return new CounterFlower(user.getType());
     }
 
     @Override

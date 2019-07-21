@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.FireStance;
@@ -9,7 +10,7 @@ import nightgames.status.Stsflag;
 
 public class FireForm extends Skill {
 
-    public FireForm(Character self) {
+    FireForm(CharacterType self) {
         super("Fire Form", self);
     }
 
@@ -38,13 +39,13 @@ public class FireForm extends Skill {
             else 
                 printBlinded(c);
         }
-        getSelf().add(c, new FireStance(getSelf()));
+        getSelf().add(c, new FireStance(self));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new FireForm(user);
+        return new FireForm(user.getType());
     }
 
     @Override

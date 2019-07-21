@@ -509,7 +509,7 @@ public class NPC extends Character {
             busy--;
         } else if (this.is(Stsflag.enthralled) && !has(Trait.immobile)) {
             Character master;
-            master = ((Enthralled) getStatus(Stsflag.enthralled)).master;
+            master = ((Enthralled) getStatus(Stsflag.enthralled)).getMaster();
             Move compelled = findPath(master.location);
             if (compelled != null) {
                 move = compelled;
@@ -732,7 +732,7 @@ public class NPC extends Character {
                         c.write(this, Formatter.format(
                                         "{self:NAME-POSSESSIVE} quick wits find a gap in {other:name-possessive} hold and {self:action:slip|slips} away.",
                                         this, target));
-                        c.setStance(new Neutral(this, c.getOpponent(this)), this, true);
+                        c.setStance(new Neutral(getType(), c.getOpponent(this).getType()), this, true);
                     }
                 } else {
                     target.body.pleasure(this, body.getRandom("hands"), target.body.getRandomBreasts(),
@@ -762,7 +762,7 @@ public class NPC extends Character {
                     target.weaken(c, (int) DamageType.stance.modifyDamage(NPC.this, target, 15));
                 } else {
                     c.write(this, getName() + " outmanuevers you and catches you from behind when you stumble.");
-                    c.setStance(new Behind(this, target));
+                    c.setStance(new Behind(this.getType(), target.getType()));
                 }
                 break;
             default:

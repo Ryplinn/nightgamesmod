@@ -86,7 +86,7 @@ public class WildThrust extends Thrust {
 
     @Override
     public Skill copy(Character user) {
-        return new WildThrust(user);
+        return new WildThrust(user.getType());
     }
 
     @Override

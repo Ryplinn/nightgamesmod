@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
@@ -16,7 +17,7 @@ import nightgames.status.Stsflag;
 
 public class TentacleRape extends Skill {
 
-    public TentacleRape(Character self) {
+    TentacleRape(CharacterType self) {
         super("Tentacle Rape", self);
     }
 
@@ -41,7 +42,7 @@ public class TentacleRape extends Skill {
         return "Violate your opponent with your tentacles.";
     }
 
-    BodyPart tentacles = null;
+    private BodyPart tentacles = null;
 
     @Override
     public int accuracy(Combat c, Character target) {
@@ -77,26 +78,26 @@ public class TentacleRape extends Skill {
                     target.body.pleasure(getSelf(), tentacles, target.body.getRandom("skin"), m, c, this);
                 }
                 if (!target.is(Stsflag.oiled)) {
-                    target.add(c, new Oiled(target));
+                    target.add(c, new Oiled(target.getType()));
                 }
                 target.emote(Emotion.horny, 20);
             } else {
                 writeOutput(c, Result.weak, target);
             }
-            target.add(c, new Bound(target, 30 + 2 * Math.sqrt(getSelf().get(Attribute.fetishism) + getSelf().get(Attribute.slime)), "tentacles"));
+            target.add(c, new Bound(target.getType(), 30 + 2 * Math.sqrt(getSelf().get(Attribute.fetishism) + getSelf().get(Attribute.slime)), "tentacles"));
         } else {
             writeOutput(c, Result.miss, target);
             return false;
         }
         if (getSelf().has(Trait.VolatileSubstrate) && getSelf().has(Trait.slime)) {
-            target.add(c, new Slimed(target, getSelf(), Random.random(2, 5)));
+            target.add(c, new Slimed(target.getType(), self, Random.random(2, 5)));
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new TentacleRape(user);
+        return new TentacleRape(user.getType());
     }
 
     @Override

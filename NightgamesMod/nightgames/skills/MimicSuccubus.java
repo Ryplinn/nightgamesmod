@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Reyka;
 import nightgames.characters.body.*;
 import nightgames.characters.body.mods.DemonicMod;
@@ -16,7 +17,7 @@ import nightgames.status.Stsflag;
 
 public class MimicSuccubus extends Skill {
 
-    public MimicSuccubus(Character self) {
+    MimicSuccubus(CharacterType self) {
         super("Mimicry: Succubus", self);
     }
 
@@ -87,8 +88,8 @@ public class MimicSuccubus extends Skill {
         if (getSelf().has(Trait.Masquerade)) {
             strength = strength * 3 / 2;
         }
-        getSelf().add(c, new AttributeBuff(getSelf(), Attribute.darkness, strength, 10));
-        getSelf().add(c, new SlimeMimicry("succubus", getSelf(), 10));
+        getSelf().add(c, new AttributeBuff(self, Attribute.darkness, strength, 10));
+        getSelf().add(c, new SlimeMimicry("succubus", self, 10));
         getSelf().body.temporaryAddPartMod("pussy", DemonicMod.INSTANCE, 10);
         getSelf().body.temporaryAddPartMod("cock", CockMod.incubus, 10);
 
@@ -97,7 +98,7 @@ public class MimicSuccubus extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new MimicSuccubus(user);
+        return new MimicSuccubus(user.getType());
     }
 
     @Override
@@ -114,8 +115,8 @@ public class MimicSuccubus extends Skill {
     public String receive(Combat c, int damage, Result modifier, Character target) {
         return Formatter.format("{self:NAME-POSSESSIVE} mercurial form seems to suddenly expand, then collapse onto itself. "
                         + "Her crystal blue goo glimmers and shifts into a deep obsidian. After reforming her features out of "
-                        + "her eratically flowing slime, {other:subject-action:see|sees} that she has taken on an appearance reminiscent of Reyka's succubus form, "
-                        + "complete with large translucent gel wings, a thick tail and her characteristic laviscious grin.", getSelf(), target);
+                        + "her erratically flowing slime, {other:subject-action:see|sees} that she has taken on an appearance reminiscent of Reyka's succubus form, "
+                        + "complete with large translucent gel wings, a thick tail and her characteristic lascivious grin.", getSelf(), target);
     }
 
 }

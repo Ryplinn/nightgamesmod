@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -14,7 +15,7 @@ import nightgames.status.Shamed;
 
 public class FaceFuck extends Skill {
 
-    public FaceFuck(Character self) {
+    FaceFuck(CharacterType self) {
         super("Face Fuck", self);
     }
 
@@ -66,7 +67,7 @@ public class FaceFuck extends Skill {
         } else {
             c.write(getSelf(), receive(c, 0, res, target));
         }
-        target.add(c, new Shamed(target));
+        target.add(c, new Shamed(target.getType()));
 
         if (selfDamage > 0) {
             getSelf().body.pleasure(target, targetMouth, getSelf().body.getRandom("cock"), selfDamage, c, this);
@@ -75,7 +76,7 @@ public class FaceFuck extends Skill {
             target.body.pleasure(target, getSelf().body.getRandomInsertable(), targetMouth, targetDamage, c, this);
         }
         if (Random.random(100) < 5 + 2 * getSelf().get(Attribute.fetishism) && !getSelf().has(Trait.strapped)) {
-            target.add(c, new BodyFetish(target, getSelf(), "cock", .25));
+            target.add(c, new BodyFetish(target.getType(), self, "cock", .25));
         }
         target.loseMojo(c, Random.random(10, 20));
         target.loseWillpower(c, 5);
@@ -84,7 +85,7 @@ public class FaceFuck extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new FaceFuck(user);
+        return new FaceFuck(user.getType());
     }
 
     @Override
@@ -94,7 +95,7 @@ public class FaceFuck extends Skill {
 
     @Override
     public String deal(Combat c, int damage, Result modifier, Character target) {
-        String m = "";
+        String m;
         if (modifier == Result.strapon || modifier == Result.upgrade) {
             m = "You grab hold of " + target.getName()
                             + "'s head and push your cock into her mouth. She flushes in shame and anger, but still dutifully services you with her lips "

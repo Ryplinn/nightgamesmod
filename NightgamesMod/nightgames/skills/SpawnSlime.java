@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.items.Item;
@@ -9,7 +10,7 @@ import nightgames.pet.Slime;
 
 public class SpawnSlime extends Skill {
 
-    public SpawnSlime(Character self) {
+    SpawnSlime(CharacterType self) {
         super("Create Slime", self);
     }
 
@@ -47,7 +48,7 @@ public class SpawnSlime extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new SpawnSlime(user);
+        return new SpawnSlime(user.getType());
     }
 
     @Override

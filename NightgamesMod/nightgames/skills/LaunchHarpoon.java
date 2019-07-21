@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -11,7 +12,7 @@ import nightgames.nskills.tags.SkillTag;
 
 public class LaunchHarpoon extends Skill {
 
-    public LaunchHarpoon(Character self) {
+    public LaunchHarpoon(CharacterType self) {
         super("Launch Harpoon", self);
         this.addTag(SkillTag.usesToy);
     }
@@ -105,7 +106,7 @@ public class LaunchHarpoon extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new LaunchHarpoon(user);
+        return new LaunchHarpoon(user.getType());
     }
     
     @Override

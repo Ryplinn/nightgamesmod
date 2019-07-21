@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -16,7 +17,7 @@ import nightgames.skills.damage.DamageType;
 
 public class Squeeze extends Skill {
 
-    public Squeeze(Character self) {
+    public Squeeze(CharacterType self) {
         super("Squeeze Balls", self);
         addTag(SkillTag.mean);
         addTag(SkillTag.hurt);
@@ -107,7 +108,7 @@ public class Squeeze extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Squeeze(user);
+        return new Squeeze(user.getType());
     }
 
     @Override

@@ -1,13 +1,14 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.pet.PetCharacter;
 
 public class CommandDismiss extends PlayerCommand {
 
-    public CommandDismiss(Character self) {
+    CommandDismiss(CharacterType self) {
         super("Force Dismiss", self);
     }
 
@@ -30,7 +31,7 @@ public class CommandDismiss extends PlayerCommand {
 
     @Override
     public Skill copy(Character user) {
-        return new CommandDismiss(user);
+        return new CommandDismiss(user.getType());
     }
 
     @Override

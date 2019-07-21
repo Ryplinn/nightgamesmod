@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.custom.CharacterLine;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -12,7 +13,7 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.status.Satiated;
 
 public class LevelDrain extends Drain {
-    public LevelDrain(Character self) {
+    public LevelDrain(CharacterType self) {
         super("Level Drain", self);
 
         addTag(SkillTag.drain);
@@ -44,7 +45,7 @@ public class LevelDrain extends Drain {
         return 60;
     }
 
-    private int stealXP(Combat c, Character target) {
+    private int stealXP(Character target) {
         int xpStolen = target.getXP();
         if (xpStolen <= 0) {
             return 0;
@@ -69,9 +70,9 @@ public class LevelDrain extends Drain {
                 getSelf().arouse(getSelf().getArousal().max(), c);
                 break;
             case 1:
-                int stolen = stealXP(c, target);
+                int stolen = stealXP(target);
                 if (stolen > 0) {
-                    getSelf().add(c, new Satiated(getSelf(), stolen, 0));
+                    getSelf().add(c, new Satiated(self, stolen, 0));
                     if (getSelf().human()) {
                         c.write(getSelf(), "You have absorbed " + stolen + " XP from " + target.getName() + "!\n");
                     } else {
@@ -81,7 +82,7 @@ public class LevelDrain extends Drain {
                 break;
             case 2:
                 int xpStolen = 95 + 5 * target.getLevel();
-                getSelf().add(c, new Satiated(getSelf(), xpStolen, 0));
+                getSelf().add(c, new Satiated(self, xpStolen, 0));
                 c.write(target, target.dong());
                 if (getSelf().human()) {
                     c.write(getSelf(), "You have stolen a level from " + target.getName() + "'s levels and absorbed it as " + xpStolen
@@ -106,7 +107,7 @@ public class LevelDrain extends Drain {
 
     @Override
     public Skill copy(Character target) {
-        return new LevelDrain(target);
+        return new LevelDrain(target.getType());
     }
 
     @Override

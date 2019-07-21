@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -10,7 +11,7 @@ import nightgames.status.Stsflag;
 
 public class Recover extends Skill {
 
-    public Recover(Character self) {
+    public Recover(CharacterType self) {
         super("Recover", self);
         addTag(SkillTag.positioning);
         addTag(SkillTag.escaping);
@@ -36,7 +37,7 @@ public class Recover extends Skill {
             else
                 c.write(getSelf(), receive(c, 0, Result.normal, target));
         }
-        c.setStance(new Neutral(getSelf(), target), getSelf(), true);
+        c.setStance(new Neutral(self, target.getType()), getSelf(), true);
         getSelf().heal(c, Random.random(3));
         return true;
     }
@@ -48,7 +49,7 @@ public class Recover extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Recover(user);
+        return new Recover(user.getType());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -12,7 +13,7 @@ import nightgames.status.Stsflag;
 
 public class DarkTalisman extends Skill {
 
-    public DarkTalisman(Character self) {
+    DarkTalisman(CharacterType self) {
         super("Dark Talisman", self);
         addTag(SkillTag.dark);
     }
@@ -48,7 +49,7 @@ public class DarkTalisman extends Skill {
         writeOutput(c, result, target);
         getSelf().consume(Item.Talisman, 1);
         if (result == Result.normal) {
-            target.add(c, new Enthralled(target, getSelf(), Random.random(3) + 1));
+            target.add(c, new Enthralled(target.getType(), self, Random.random(3) + 1));
             return true;
         } else {
             return false;
@@ -57,7 +58,7 @@ public class DarkTalisman extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new DarkTalisman(user);
+        return new DarkTalisman(user.getType());
     }
 
     @Override

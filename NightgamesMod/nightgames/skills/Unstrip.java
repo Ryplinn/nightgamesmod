@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -9,7 +10,7 @@ import nightgames.status.Primed;
 
 public class Unstrip extends Skill {
 
-    public Unstrip(Character self) {
+    Unstrip(CharacterType self) {
         super("Unstrip", self);
     }
 
@@ -35,7 +36,7 @@ public class Unstrip extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         getSelf().outfit.dress(getSelf().outfitPlan);
-        getSelf().add(c, new Primed(getSelf(), -6));
+        getSelf().add(c, new Primed(self, -6));
         writeOutput(c, Result.normal, target);
         getSelf().emote(Emotion.confident, 20);
         return true;
@@ -43,7 +44,7 @@ public class Unstrip extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Unstrip(user);
+        return new Unstrip(user.getType());
     }
 
     @Override
@@ -53,9 +54,8 @@ public class Unstrip extends Skill {
 
     @Override
     public String deal(Combat c, int damage, Result modifier, Character target) {
-        return String.format(
-                        "It's tricky, but with some clever calculations, you restore the state of your outfit. Your outfit from the "
-                                        + "start of the night reappears on your body.");
+        return "It's tricky, but with some clever calculations, you restore the state of your outfit. Your outfit from the "
+                        + "start of the night reappears on your body.";
     }
 
     @Override

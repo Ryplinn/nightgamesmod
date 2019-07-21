@@ -13,9 +13,7 @@ import nightgames.stance.Missionary;
 
 public class CounterDrain extends CounterBase {
     CounterDrain(CharacterType self) {
-        super("Counter Vortex", self, 6, "");
-        this.description =
-                        Formatter.format("{self:SUBJECT-ACTION:glow|glows} with a purple light.", getSelf(), getSelf());
+        super("Counter Vortex", self, 6, "{self:SUBJECT-ACTION:glow|glows} with a purple light.");
         addTag(SkillTag.drain);
         addTag(SkillTag.fucking);
         addTag(SkillTag.staminaDamage);

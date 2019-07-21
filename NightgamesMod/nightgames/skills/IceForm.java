@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.IceStance;
@@ -9,7 +10,7 @@ import nightgames.status.Stsflag;
 
 public class IceForm extends Skill {
 
-    public IceForm(Character self) {
+    IceForm(CharacterType self) {
         super("Ice Form", self);
     }
 
@@ -38,13 +39,13 @@ public class IceForm extends Skill {
             else 
                 printBlinded(c);
         }
-        getSelf().add(c, new IceStance(getSelf()));
+        getSelf().add(c, new IceStance(self));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new IceForm(user);
+        return new IceForm(user.getType());
     }
 
     @Override

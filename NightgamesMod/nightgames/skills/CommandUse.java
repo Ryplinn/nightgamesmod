@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -14,10 +15,10 @@ import nightgames.status.Stsflag;
 
 public class CommandUse extends PlayerCommand {
 
-    public static final List<Item> CANDIDATES = Arrays.asList(Item.Lubricant, Item.SPotion);
+    private static final List<Item> CANDIDATES = Arrays.asList(Item.Lubricant, Item.SPotion);
     private Item used;
 
-    public CommandUse(Character self) {
+    CommandUse(CharacterType self) {
         super("Force Item Use", self);
         used = null;
     }
@@ -71,11 +72,11 @@ public class CommandUse extends PlayerCommand {
         } while (used == null);
         switch (used) {
             case Lubricant:
-                target.add(c, new Oiled(target));
+                target.add(c, new Oiled(target.getType()));
                 c.write(getSelf(), deal(c, 0, Result.normal, target));
                 break;
             case SPotion:
-                target.add(c, new Hypersensitive(target));
+                target.add(c, new Hypersensitive(target.getType()));
                 c.write(getSelf(), deal(c, 0, Result.special, target));
                 break;
             default:
@@ -89,7 +90,7 @@ public class CommandUse extends PlayerCommand {
 
     @Override
     public Skill copy(Character user) {
-        return new CommandUse(user);
+        return new CommandUse(user.getType());
     }
 
     @Override

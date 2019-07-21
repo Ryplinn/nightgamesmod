@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -12,7 +13,7 @@ import nightgames.status.addiction.AddictionType;
 
 public class HypnoVisorPlace extends Skill {
 
-    public HypnoVisorPlace(Character self) {
+    HypnoVisorPlace(CharacterType self) {
         super("Place Hypno Visor", self, 5);
     }
 
@@ -39,23 +40,23 @@ public class HypnoVisorPlace extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        StringBuilder sb = new StringBuilder(Formatter.format("{self:SUBJECT-ACTION:walk|walks}"
+        String message = Formatter.format("{self:SUBJECT-ACTION:walk|walks}"
                         + " around and kneels behind {other:name-do}, propping {other:direct-object}"
-                        + " up against {self:direct-object}. ", getSelf(), target));
-        sb.append(addictionDesc(c, target));
-        sb.append(Formatter.format(" {self:PRONOUN-ACTION:rummage|rummages} around a bit"
-                        + " behind {other:direct-object}, and then {other:possessive}"
-                        + " vision goes dark. {self:PRONOUN-ACTION:have|has} placed some"
-                        + " kind of device around {self:possessive} head, not unlike a VR headset."
-                        + " It might be a really good idea to get it off quickly...", getSelf(), target));
-        c.write(getSelf(), sb.toString());
-        target.add(c, new HypnoVisor(target, getSelf()));
+                        + " up against {self:direct-object}. ", getSelf(), target) + addictionDesc(target) + Formatter
+                        .format(" {self:PRONOUN-ACTION:rummage|rummages} around a bit"
+                                                        + " behind {other:direct-object}, and then {other:possessive}"
+                                                        + " vision goes dark. {self:PRONOUN-ACTION:have|has} placed some"
+                                                        + " kind of device around {self:possessive} head, not unlike a VR headset."
+                                                        + " It might be a really good idea to get it off quickly...", getSelf(),
+                                        target);
+        c.write(getSelf(), message);
+        target.add(c, new HypnoVisor(target.getType(), self));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new HypnoVisorPlace(user);
+        return new HypnoVisorPlace(user.getType());
     }
 
     @Override
@@ -68,12 +69,12 @@ public class HypnoVisorPlace extends Skill {
         return add != null && add.atLeast(Addiction.Severity.LOW) && add.isInWithdrawal();
     }
 
-    private String addictionDesc(Combat c, Character target) {
+    private String addictionDesc(Character target) {
         if (isInWithdrawal(target)) {
             return Formatter.format("<i>Ah, {other:name}. Why did you try to get away from my control?"
                             + " We both know there is no point, that you are secretly happier"
                             + " when you don't have to think for yourself. So, let's wash that pesky"
-                            + " stubborness right out of you, alright?.</i>", getSelf(), target);
+                            + " stubbornness right out of you, alright?.</i>", getSelf(), target);
         }
         switch (target.getAnyAddictionSeverity(AddictionType.MIND_CONTROL)) {
             case HIGH:

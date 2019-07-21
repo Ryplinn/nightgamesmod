@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -13,7 +14,7 @@ import nightgames.status.WingWrapped;
 
 public class WingWrap extends Skill {
 
-    public WingWrap(Character self) {
+    public WingWrap(CharacterType self) {
         super("Wing Wrap", self);
     }
 
@@ -47,13 +48,13 @@ public class WingWrap extends Skill {
     public boolean resolve(Combat c, Character target) {
 
         c.write(getSelf(), describeWrap(c, target));
-        target.add(c, new WingWrapped(target, getSelf()));
+        target.add(c, new WingWrapped(target.getType(), self));
 
         if (c.getStance()
              .sub(getSelf())
                         && c.getStance()
                             .havingSex(c)) {
-            SubmissiveHold hold = new SubmissiveHold(getSelf());
+            SubmissiveHold hold = new SubmissiveHold(self);
             if (Skill.skillIsUsable(c, hold, target)) {
                 c.write(getSelf(),
                                 Formatter.format("Taking full advantage of {other:name-possessive}"
@@ -97,10 +98,10 @@ public class WingWrap extends Skill {
         }
         if (c.getStance()
              .facing(getSelf(), target)) {
-            desc += " In what little light penetrates the coccoon {self:name-possessive} wings" + " have created, ";
+            desc += " In what little light penetrates the cocoon {self:name-possessive} wings" + " have created, ";
             if (target.human()) {
                 desc += "{self:possessive} face, coupled with {self:possessive} confident expression,"
-                                + " are at once both terrifying and irresistably attractive.";
+                                + " are at once both terrifying and irresistibly attractive.";
             } else {
                 desc += "{self:pronoun-action:look|looks} down on {other:direct-object} with amusement.";
             }
@@ -114,7 +115,7 @@ public class WingWrap extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new WingWrap(user);
+        return new WingWrap(user.getType());
     }
 
     @Override

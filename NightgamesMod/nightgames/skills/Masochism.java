@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.Masochistic;
@@ -9,7 +10,7 @@ import nightgames.status.Stsflag;
 
 public class Masochism extends Skill {
 
-    public Masochism(Character self) {
+    public Masochism(CharacterType self) {
         super("Masochism", self);
     }
 
@@ -32,14 +33,14 @@ public class Masochism extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        getSelf().add(c, new Masochistic(getSelf()));
-        target.add(c, new Masochistic(target));
+        getSelf().add(c, new Masochistic(self));
+        target.add(c, new Masochistic(target.getType()));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Masochism(user);
+        return new Masochism(user.getType());
     }
 
     @Override

@@ -1,11 +1,12 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.pet.PetCharacter;
 
 public class PetInitiatedReverseThreesome extends ReversePetThreesome {
-    public PetInitiatedReverseThreesome(Character self) {
+    PetInitiatedReverseThreesome(CharacterType self) {
         super("Initiate Reverse Threesome", self, 0);
     }
 
@@ -16,7 +17,7 @@ public class PetInitiatedReverseThreesome extends ReversePetThreesome {
 
     @Override
     public Skill copy(Character user) {
-        return new PetInitiatedReverseThreesome(user);
+        return new PetInitiatedReverseThreesome(user.getType());
     }
 
     protected Character getFucker(Combat c) {

@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -13,7 +14,7 @@ import nightgames.status.addiction.AddictionType;
 
 public class Stumble extends Skill {
 
-    public Stumble(Character self) {
+    public Stumble(CharacterType self) {
         super("Stumble", self);
     }
 
@@ -35,9 +36,9 @@ public class Stumble extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         if (Random.random(2) == 0) {
-            c.setStance(new Mount(target, getSelf()), target, false);
+            c.setStance(new Mount(target.getType(), self), target, false);
         } else {
-            c.setStance(new ReverseMount(target, getSelf()), target, false);
+            c.setStance(new ReverseMount(target.getType(), self), target, false);
         }
         if (getSelf().human()) {
             c.write(getSelf(), deal(c, 0, Result.normal, target));
@@ -54,7 +55,7 @@ public class Stumble extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Stumble(user);
+        return new Stumble(user.getType());
     }
 
     @Override

@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -12,7 +13,7 @@ import nightgames.skills.damage.DamageType;
 
 public class Flick extends Skill {
 
-    public Flick(Character self) {
+    public Flick(CharacterType self) {
         super("Flick", self, 2);
         addTag(SkillTag.mean);
         addTag(SkillTag.hurt);
@@ -74,7 +75,7 @@ public class Flick extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Flick(user);
+        return new Flick(user.getType());
     }
 
     @Override

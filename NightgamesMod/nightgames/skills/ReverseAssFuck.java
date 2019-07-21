@@ -63,7 +63,7 @@ public class ReverseAssFuck extends Fuck {
                 premessage += "{self:action:lube|lubes}";
             }
             premessage += " up {self:possessive} ass with {self:possessive} " + fluids + ".";
-            getSelf().add(c, new Oiled(getSelf()));
+            getSelf().add(c, new Oiled(self));
         } else if (!getSelf().hasStatus(Stsflag.oiled) && getSelf().has(Item.Lubricant)) {
             if (premessage.isEmpty()) {
                 premessage = "{self:subject-action:lube|lubes}";
@@ -71,7 +71,7 @@ public class ReverseAssFuck extends Fuck {
                 premessage += "{self:action:lube|lubes}";
             }
             premessage += " up {self:possessive} ass.";
-            getSelf().add(c, new Oiled(getSelf()));
+            getSelf().add(c, new Oiled(self));
             getSelf().consume(Item.Lubricant, 1);
         }
         c.write(getSelf(), Formatter.format(premessage, getSelf(), target));
@@ -85,10 +85,10 @@ public class ReverseAssFuck extends Fuck {
         }
         target.body.pleasure(getSelf(), getSelfOrgan(), getTargetOrgan(target), otherm, c, this);
         getSelf().body.pleasure(target, getTargetOrgan(target), getSelfOrgan(), m, c, this);
-        c.setStance(new AnalCowgirl(getSelf(), target), getSelf(), getSelf().canMakeOwnDecision());
+        c.setStance(new AnalCowgirl(self, target.getType()), getSelf(), getSelf().canMakeOwnDecision());
         getSelf().emote(Emotion.dominant, 30);
         if (Random.random(100) < 5 + 2 * getSelf().get(Attribute.fetishism) || getSelf().has(Trait.bewitchingbottom)) {
-            target.add(c, new BodyFetish(target, getSelf(), "ass", .25));
+            target.add(c, new BodyFetish(target.getType(), self, "ass", .25));
         }
         return true;
     }
@@ -100,7 +100,7 @@ public class ReverseAssFuck extends Fuck {
 
     @Override
     public Skill copy(Character user) {
-        return new ReverseAssFuck(user);
+        return new ReverseAssFuck(user.getType());
     }
 
     @Override

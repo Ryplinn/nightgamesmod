@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -16,7 +17,7 @@ import nightgames.status.Slimed;
 
 public class Slap extends Skill {
 
-    public Slap(Character self) {
+    public Slap(CharacterType self) {
         super("Slap", self);
         addTag(SkillTag.hurt);
         addTag(SkillTag.positioning);
@@ -45,14 +46,14 @@ public class Slap extends Skill {
                 writeOutput(c, Result.critical, target);
                 target.pain(c, getSelf(), Math.min(80, Random.random(10) + getSelf().get(Attribute.slime) + getSelf().get(Attribute.power) / 2));
                 if (c.getStance().en == Stance.neutral && Random.random(5) == 0) {
-                    c.setStance(new StandingOver(getSelf(), target), getSelf(), true);
+                    c.setStance(new StandingOver(self, target.getType()), getSelf(), true);
                     c.write(getSelf(),
                                     Formatter.format("{self:SUBJECT-ACTION:slap|slaps} {other:direct-object} hard"
                                                     + " enough to throw {other:pronoun} to the ground.", getSelf(),
                                     target));
                 }
                 if (getSelf().has(Trait.VolatileSubstrate)) {
-                    target.add(c, new Slimed(target, getSelf(), Random.random(2, 4)));
+                    target.add(c, new Slimed(target.getType(), self, Random.random(2, 4)));
                 }
                 target.emote(Emotion.nervous, 40);
                 target.emote(Emotion.angry, 30);
@@ -97,7 +98,7 @@ public class Slap extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Slap(user);
+        return new Slap(user.getType());
     }
 
     @Override

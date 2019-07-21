@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -12,7 +13,7 @@ import nightgames.status.Trance;
 
 public class Deepen extends Skill {
 
-    public Deepen(Character self) {
+    Deepen(CharacterType self) {
         super("Deepen", self);
     }
 
@@ -45,30 +46,30 @@ public class Deepen extends Skill {
             if (target.human()) {
                 c.write(getSelf(), Formatter.format("{self:NAME-POSSESSIVE} all-encompassing eyes completely fills your field of vision now as she destroys any last trace of independent thought inside your mind.", getSelf(), target));
             } else {
-                c.write(getSelf(), Formatter.format("Since {other:NAME-DO} has alreay been heavy hypnotized, you take the chance to erode the last bits of {other:possessive} resistance. There's no way {other:pronoun} can disobey you now.", getSelf(), target));
+                c.write(getSelf(), Formatter.format("Since {other:NAME-DO} has already been heavily hypnotized, you take the chance to erode the last bits of {other:possessive} resistance. There's no way {other:pronoun} can disobey you now.", getSelf(), target));
             }
-            target.add(c, new Enthralled(target, getSelf(), 3));
+            target.add(c, new Enthralled(target.getType(), self, 3));
         } else if (target.is(Stsflag.lovestruck)) {
             if (target.human()) {
                 c.write(getSelf(), Formatter.format("{self:SUBJECT} holds your face in her hands and forces you to look into her eyes. You don't even think about resisting as her words become truth inside your brain.", getSelf(), target));
             } else {
-                c.write(getSelf(), Formatter.format("Since {other:NAME-DO} has alreay been hypnotized, you take the chance to bring {other:direct-object} even deeper.", getSelf(), target));
+                c.write(getSelf(), Formatter.format("Since {other:NAME-DO} has already been hypnotized, you take the chance to bring {other:direct-object} even deeper.", getSelf(), target));
             }
-            target.add(c, new Trance(target, 4));
+            target.add(c, new Trance(target.getType(), 4));
         } else if (target.is(Stsflag.charmed)) {
             if (target.human()) {
                 c.write(getSelf(), Formatter.format("{self:SUBJECT} leans close and brings you deeper under her control with her hypnotic voice.", getSelf(), target));
             } else {
-                c.write(getSelf(), Formatter.format("Since {other:NAME-DO} has alreay been lightly hypnotized, you take the chance to bring {other:direct-object} deeper.", getSelf(), target));
+                c.write(getSelf(), Formatter.format("Since {other:NAME-DO} has already been lightly hypnotized, you take the chance to bring {other:direct-object} deeper.", getSelf(), target));
             }
-            target.add(c, new Lovestruck(target, getSelf(), 5));
+            target.add(c, new Lovestruck(target.getType(), self, 5));
         }
         return false;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Deepen(user);
+        return new Deepen(user.getType());
     }
 
     @Override

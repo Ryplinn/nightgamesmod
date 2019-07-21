@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -15,7 +16,7 @@ import nightgames.status.Falling;
 import nightgames.status.Stsflag;
 
 public class Shove extends Skill {
-    public Shove(Character self) {
+    public Shove(CharacterType self) {
         super("Shove", self);
         addTag(SkillTag.positioning);
         addTag(SkillTag.hurt);
@@ -46,7 +47,7 @@ public class Shove extends Skill {
             target.shred(ClothingSlot.top);
             target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(10, 25)));
             if (getSelf().checkVsDc(Attribute.power, target.knockdownDC() - getSelf().get(Attribute.ki))) {
-                c.setStance(new Neutral(getSelf(), c.getOpponent(getSelf())), getSelf(), true);
+                c.setStance(new Neutral(self, c.getOpponent(getSelf()).getType()), getSelf(), true);
             }
         } else if (c.getStance().getClass() == Mount.class || c.getStance().getClass() == ReverseMount.class) {
             if (getSelf().checkVsDc(Attribute.power, target.knockdownDC() + 5)) {
@@ -57,7 +58,7 @@ public class Shove extends Skill {
                     c.write(getSelf(), String.format("%s shoves %s hard enough to free %s and jump up.",
                                     getSelf().subject(), target.nameDirectObject(), getSelf().reflectivePronoun()));
                 }
-                c.setStance(new Neutral(getSelf(), c.getOpponent(getSelf())), getSelf(), true);
+                c.setStance(new Neutral(self, c.getOpponent(getSelf()).getType()), getSelf(), true);
             } else {
                 if (getSelf().human()) {
                     c.write(getSelf(), "You push " + target.getName() + ", but you're unable to dislodge her.");
@@ -77,7 +78,7 @@ public class Shove extends Skill {
                                     getSelf().subject(), target.nameDirectObject(),
                                     target.pronoun(), target.action("fall")));
                 }
-                target.add(c, new Falling(target));
+                target.add(c, new Falling(target.getType()));
             } else {
                 if (getSelf().human()) {
                     c.write(getSelf(), "You shove " + target.getName() + " back a step, but she keeps her footing.");
@@ -100,7 +101,7 @@ public class Shove extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Shove(user);
+        return new Shove(user.getType());
     }
 
     @Override

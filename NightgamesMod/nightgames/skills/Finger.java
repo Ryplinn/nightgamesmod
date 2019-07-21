@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -12,7 +13,7 @@ import nightgames.stance.Stance;
 
 public class Finger extends Skill {
 
-    public Finger(Character self) {
+    public Finger(CharacterType self) {
         super("Finger", self);
         addTag(SkillTag.usesHands);
         addTag(SkillTag.pleasure);
@@ -72,7 +73,7 @@ public class Finger extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Finger(user);
+        return new Finger(user.getType());
     }
 
     @Override

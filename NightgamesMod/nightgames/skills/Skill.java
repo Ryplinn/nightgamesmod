@@ -176,7 +176,7 @@ public abstract class Skill {
 
     @Override
     public boolean equals(Object other) {
-        if (other == null) return false;
+        if (!(other instanceof Skill)) return false;
         return toString().equals(other.toString());
     }
 
@@ -274,7 +274,7 @@ public abstract class Skill {
         tags.add(tag);
     }
 
-    protected void removeTag(SkillTag tag) {
+    void removeTag(SkillTag tag) {
         tags.remove(tag);
     }
     public final Set<SkillTag> getTags(Combat c) {

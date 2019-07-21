@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -9,7 +10,7 @@ import nightgames.status.Primed;
 
 public class Rewind extends Skill {
 
-    public Rewind(Character self) {
+    Rewind(CharacterType self) {
         super("Rewind", self);
     }
 
@@ -34,7 +35,7 @@ public class Rewind extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        getSelf().add(c, new Primed(getSelf(), -8));
+        getSelf().add(c, new Primed(self, -8));
         getSelf().getArousal()
                  .empty();
         getSelf().getStamina()
@@ -50,7 +51,7 @@ public class Rewind extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Rewind(user);
+        return new Rewind(user.getType());
     }
 
     @Override
@@ -60,9 +61,8 @@ public class Rewind extends Skill {
 
     @Override
     public String deal(Combat c, int damage, Result modifier, Character target) {
-        return String.format(
-                        "It takes a lot of time energy, but you manage to rewind your physical condition back to the very start "
-                                        + "of the match, removing all damage you've taken.");
+        return "It takes a lot of time energy, but you manage to rewind your physical condition back to the very start "
+                        + "of the match, removing all damage you've taken.";
     }
 
     @Override

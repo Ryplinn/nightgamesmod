@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,7 +14,7 @@ import nightgames.status.Stsflag;
 
 public class MagLock extends Skill {
 
-    public MagLock(Character self) {
+    public MagLock(CharacterType self) {
         super("MagLock", self, 2);
     }
 
@@ -45,7 +46,7 @@ public class MagLock extends Skill {
                             + " around {other:name-possessive} arm. It doesn't do anything right now,"
                             + " but the powerful electromagnet inside will prove very hard to remove"
                             + " if it can lock on to another such band.", getSelf(), target));
-            target.add(c, new MagLocked(target));
+            target.add(c, new MagLocked(target.getType()));
             return true;
         }
         if (stat.getCount() == 1) {
@@ -54,7 +55,7 @@ public class MagLock extends Skill {
                             + " the wrist which was still free. {self:PRONOUN-ACTION:push|pushes} a little button"
                             + " on both bands, causing a loud <i>CLICK</i>."
                             + " {other:SUBJECT-ACTION:try|tries} to move {other:possessive} arms, but"
-                            + " {other:action:find|finds} that the two MagLocks are almost inseperable."
+                            + " {other:action:find|finds} that the two MagLocks are almost inseparable."
                             + " Getting them off will be no mean feat; let alone what would happen if"
                             + " {self:SUBJECT} got another one in place...", getSelf(), target));
             stat.addLock();
@@ -82,7 +83,7 @@ public class MagLock extends Skill {
                                 + " ankle. The new MagLock joins with the two already in place with"
                                 + " a <i>CLICK</i>. %s", getSelf(), target, end));
             }
-            c.setStance(new Mount(getSelf(), target));
+            c.setStance(new Mount(self, target.getType()));
             stat.addLock();
         }
         return true;
@@ -90,7 +91,7 @@ public class MagLock extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new MagLock(user);
+        return new MagLock(user.getType());
     }
 
     @Override

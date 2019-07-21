@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -11,7 +12,7 @@ import nightgames.status.Stsflag;
 
 public class LewdSuggestion extends Skill {
 
-    public LewdSuggestion(Character self) {
+    public LewdSuggestion(CharacterType self) {
         super("Lewd Suggestion", self);
     }
 
@@ -61,7 +62,7 @@ public class LewdSuggestion extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new LewdSuggestion(user);
+        return new LewdSuggestion(user.getType());
     }
 
     @Override
@@ -74,22 +75,22 @@ public class LewdSuggestion extends Skill {
         if (modifier == Result.strong) {
             return String.format(
                             "You take advantage of the erotic fantasies already swirling through %s's head, whispering ideas that fan the flame of %s lust.",
-                            new Object[] {target.getName(), target.possessiveAdjective()});
+                            target.getName(), target.possessiveAdjective());
         }
         if (modifier == Result.miss) {
             return String.format(
                             "You whisper ideas that attempt to fan the flame of %s lust, but it doesn't seem to do much",
-                            new Object[] {target.nameOrPossessivePronoun()});
+                            target.nameOrPossessivePronoun());
         }
-        return String.format("You plant an erotic suggestion in %s's mind, distracting %s with lewd fantasies.",
-                        new Object[] {target.getName(), target.directObject()});
+        return String.format("You plant an erotic suggestion in %s's mind, distracting %s with lewd fantasies.", target.getName(),
+                        target.directObject());
     }
 
     @Override
     public String receive(Combat c, int damage, Result modifier, Character target) {
         if (modifier == Result.strong) {
             return String.format(
-                            "%s whispers a lewd suggestion to %s, intensifying the fantasies %s %s trying to ignore and enflaming %s arousal.",
+                            "%s whispers a lewd suggestion to %s, intensifying the fantasies %s %s trying to ignore and inflaming %s arousal.",
                             getSelf().getName(), target.nameDirectObject(), target.pronoun(), target.action("were", "was"),
                             target.possessiveAdjective());
         }

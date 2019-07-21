@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -9,7 +10,7 @@ import nightgames.status.BodyFetish;
 
 public class TailJob extends Skill {
 
-    public TailJob(Character self) {
+    TailJob(CharacterType self) {
         super("Tailjob", self);
     }
 
@@ -42,7 +43,7 @@ public class TailJob extends Skill {
             receiver = "pussy";
         }
         if (Random.random(100) < 5 + 2 * getSelf().get(Attribute.fetishism)) {
-            target.add(c, new BodyFetish(target, getSelf(), "tail", .25));
+            target.add(c, new BodyFetish(target.getType(), self, "tail", .25));
         }
         target.body.pleasure(getSelf(), getSelf().body.getRandom("tail"), target.body.getRandom(receiver), m, c, this);
         return true;
@@ -50,7 +51,7 @@ public class TailJob extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new TailJob(user);
+        return new TailJob(user.getType());
     }
 
     @Override

@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -15,7 +16,7 @@ import nightgames.status.Trance;
 
 public class Tempt extends Skill {
 
-    public Tempt(Character self) {
+    public Tempt(CharacterType self) {
         super("Tempt", self);
     }
 
@@ -46,18 +47,18 @@ public class Tempt extends Skill {
             c.write(getSelf(),
                             Formatter.format("{self:NAME-POSSESSIVE} words fall on fertile grounds. {other:NAME-POSSESSIVE} will to resist crumbles in light of {self:possessive} temptation.",
                                             getSelf(), target));
-            target.add(c, new Enthralled(target, getSelf(), 3));
+            target.add(c, new Enthralled(target.getType(), self, 3));
         } else if (getSelf().has(Trait.commandingvoice) && Random.random(3) == 0) {
             c.write(getSelf(), Formatter.format("{self:SUBJECT-ACTION:speak|speaks} with such unquestionable"
                             + " authority that {other:subject-action:don't|doesn't} even consider disobeying."
                             , getSelf(), target));
-            target.add(c, new Trance(target, 1, false));
+            target.add(c, new Trance(target.getType(), 1, false));
         } else if (getSelf().has(Trait.MelodiousInflection) && !target.is(Stsflag.charmed) && Random.random(3) == 0) {
             c.write(getSelf(), Formatter.format("Something about {self:name-possessive} words, the"
                             + " way {self:possessive} voice rises and falls, {self:possessive}"
                             + " pauses and pitch... {other:SUBJECT} soon {other:action:find|finds}"
                             + " {other:reflective} utterly hooked.", getSelf(), target));
-            target.add(c, new Charmed(target, 2).withFlagRemoved(Stsflag.mindgames));
+            target.add(c, new Charmed(target.getType(), 2).withFlagRemoved(Stsflag.mindgames));
         }
 
         target.temptNoSource(c, getSelf(), n, this);
@@ -73,7 +74,7 @@ public class Tempt extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Tempt(user);
+        return new Tempt(user.getType());
     }
 
     @Override

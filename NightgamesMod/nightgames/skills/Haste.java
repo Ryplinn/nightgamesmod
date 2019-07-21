@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.AttributeBuff;
@@ -9,7 +10,7 @@ import nightgames.status.Primed;
 
 public class Haste extends Skill {
 
-    public Haste(Character self) {
+    Haste(CharacterType self) {
         super("Haste", self, 6);
     }
 
@@ -34,15 +35,15 @@ public class Haste extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        getSelf().add(c, new Primed(getSelf(), -1));
-        getSelf().add(c, new AttributeBuff(getSelf(), Attribute.speed, 10, 6));
+        getSelf().add(c, new Primed(self, -1));
+        getSelf().add(c, new AttributeBuff(self, Attribute.speed, 10, 6));
         writeOutput(c, Result.normal, target);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Haste(user);
+        return new Haste(user.getType());
     }
 
     @Override
@@ -52,8 +53,7 @@ public class Haste extends Skill {
 
     @Override
     public String deal(Combat c, int damage, Result modifier, Character target) {
-        return String.format(
-                        "You spend a stored time charge. The world around you appears to slow down as your personal time accelerates.");
+        return "You spend a stored time charge. The world around you appears to slow down as your personal time accelerates.";
     }
 
     @Override

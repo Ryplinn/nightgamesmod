@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.CockPart;
 import nightgames.characters.body.mods.SizeMod;
@@ -13,7 +14,7 @@ import nightgames.status.Stsflag;
 
 public class ToggleSlimeCock extends Skill {
 
-    public ToggleSlimeCock(Character self) {
+    ToggleSlimeCock(CharacterType self) {
         super("Toggle Slime Cock", self);
     }
 
@@ -75,7 +76,7 @@ public class ToggleSlimeCock extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new ToggleSlimeCock(user);
+        return new ToggleSlimeCock(user.getType());
     }
 
     @Override

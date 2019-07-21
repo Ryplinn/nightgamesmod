@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -13,7 +14,7 @@ import nightgames.status.AttributeBuff;
 
 public class ArmBar extends Skill {
 
-    public ArmBar(Character self) {
+    ArmBar(CharacterType self) {
         super("Armbar", self);
         addTag(SkillTag.hurt);
         addTag(SkillTag.staminaDamage);
@@ -37,7 +38,7 @@ public class ArmBar extends Skill {
             int m = (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(6, 10));
             writeOutput(c, m, Result.normal, target);
             target.pain(c, getSelf(), m);
-            target.add(c, new AttributeBuff(target, Attribute.power, -4, 5));
+            target.add(c, new AttributeBuff(target.getType(), Attribute.power, -4, 5));
             target.emote(Emotion.angry, 15);
         } else {
             writeOutput(c, Result.miss, target);
@@ -53,7 +54,7 @@ public class ArmBar extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new ArmBar(user);
+        return new ArmBar(user.getType());
     }
 
     @Override

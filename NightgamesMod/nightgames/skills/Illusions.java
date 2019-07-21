@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -10,7 +11,7 @@ import nightgames.status.Distorted;
 
 public class Illusions extends Skill {
 
-    public Illusions(Character self) {
+    public Illusions(CharacterType self) {
         super("Illusions", self);
     }
 
@@ -37,14 +38,14 @@ public class Illusions extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        getSelf().add(c, new Distorted(getSelf(), 6));
-        getSelf().add(c, new Alluring(getSelf(), 5));
+        getSelf().add(c, new Distorted(self, 6));
+        getSelf().add(c, new Alluring(self, 5));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Illusions(user);
+        return new Illusions(user.getType());
     }
 
     @Override

@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -11,7 +12,7 @@ import nightgames.global.Random;
 import nightgames.status.Hypersensitive;
 
 public class BreastGrowth extends Skill {
-    public BreastGrowth(Character self) {
+    BreastGrowth(CharacterType self) {
         super("Breast Growth", self);
     }
 
@@ -64,7 +65,7 @@ public class BreastGrowth extends Skill {
                         && !target.has(Trait.stableform);
         writeOutput(c, permanent ? 1 : 0, res, target);
         if (res != Result.miss) {
-            target.add(c, new Hypersensitive(target, 10));
+            target.add(c, new Hypersensitive(target.getType(), 10));
             BreastsPart part = target.body.getBreastsBelow(BreastsPart.f.getSize());
             if (permanent) {
                 if (part != null) {
@@ -82,7 +83,7 @@ public class BreastGrowth extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new BreastGrowth(user);
+        return new BreastGrowth(user.getType());
     }
 
     @Override

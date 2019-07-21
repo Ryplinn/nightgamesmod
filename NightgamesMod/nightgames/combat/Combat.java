@@ -136,10 +136,10 @@ public class Combat extends Observable implements Cloneable {
         }
         self.getAddictions().forEach(a -> a.startCombat(this, other));
         if (self.has(Trait.zealinspiring) && other.getAddiction(AddictionType.ZEAL, self).map(Addiction::isInWithdrawal).orElse(false)) {
-            self.add(this, new DivineCharge(self, .3));
+            self.add(this, new DivineCharge(self.getType(), .3));
         }
         if (self.has(Trait.suave) && !other.hasDick()) {
-            self.add(this, new SapphicSeduction(self));
+            self.add(this, new SapphicSeduction(self.getType()));
         }
 
         if (self.has(Trait.footfetishist)) {
@@ -428,7 +428,7 @@ public class Combat extends Observable implements Cloneable {
             write(character, Formatter.format("The instant {self:subject-action:lay|lays} {self:possessive} eyes on {other:name-possessive} bare breasts, {self:possessive} consciousness flies out of {self:possessive} mind. " +
                             (character.canAct() ? "{other:SUBJECT-ACTION:giggle|giggles} a bit and cups her stupendous tits and gives them a little squeeze to which {self:subject} can only moan." : ""), 
                             character, mainOpponent));
-            opponents.forEach(opponent -> opponent.add(this, new Trance(opponent, 50)));
+            opponents.forEach(opponent -> opponent.add(this, new Trance(opponent.getType(), 50)));
             getCombatantData(character).setBooleanFlag(beguilingbreastCompletedFlag, true);
         }
 
@@ -532,14 +532,14 @@ public class Combat extends Observable implements Cloneable {
             write(self,
                             Formatter.format("<br/>{other:NAME-POSSESSIVE} eyes start glowing and captures both {self:name-possessive} gaze and consciousness.",
                                             other, self));
-            other.add(this, new Enthralled(other.getType(), self, 2));
+            other.add(this, new Enthralled(other.getType(), self.getType(), 2));
         }
         if (self.has(Trait.magicEyeTrance) && other.getArousal().percent() >= 50 && getStance().facing(other, self)
                         && Random.random(10) == 0) {
             write(self,
                             Formatter.format("<br/>{other:NAME-POSSESSIVE} eyes start glowing and send {self:subject} straight into a trance.",
                                             other, self));
-            other.add(this, new Trance(other));
+            other.add(this, new Trance(other.getType()));
         }
 
         if (self.has(Trait.magicEyeFrenzy) && other.getArousal().percent() >= 50 && getStance().facing(other, self)
@@ -663,7 +663,7 @@ public class Combat extends Observable implements Cloneable {
                     } else if (drainer.hasPussy() && drained.hasPussy()) {
                         write(drainer, Formatter.format("With {other:name-do} defeated and unable to fight back, {self:subject-action:climb|climbs} "
                                         + "on top of {other:direct-object} and {self:action:press} {self:possessive} wet snatch on top of {other:poss-pronoun}.", drainer, drained));
-                        setStance(new TribadismStance(drainer, drained));
+                        setStance(new TribadismStance(drainer.getType(), drained.getType()));
                     } else {
                         write(drainer, Formatter.format("With {other:name-do} defeated and unable to fight back, {self:subject-action:climb|climbs} "
                                         + "on top of {other:direct-object}. However, {self:pronoun} could not figure a "
@@ -813,7 +813,7 @@ public class Combat extends Observable implements Cloneable {
             return getRandomWorshipSkill(self, other).orElse(def);
         }
         if (rollAssWorship(self, other)) {
-            AssFuck fuck = new AssFuck(self);
+            AssFuck fuck = new AssFuck(self.getType());
             if (fuck.requirements(this, other) && fuck.usable(this, other) && !self.is(Stsflag.frenzied)) {
                 write(other, Formatter.format("<b>The look of {other:name-possessive} ass,"
                                         + " so easily within {self:possessive} reach, causes"
@@ -957,7 +957,7 @@ public class Combat extends Observable implements Cloneable {
             write(self, Formatter.format("<b><i>\"Stay still, worm!\"</i> {self:subject-action:speak|speaks}"
                             + " with such force that it casues {other:name-do} to temporarily"
                             + " cease resisting.</b>", self, other));
-            other.add(this, new Flatfooted(other, 1, false));
+            other.add(this, new Flatfooted(other.getType(), 1, false));
         }
 
         Optional<String> compulsion = Compulsive.describe(this, self, Compulsive.Situation.STANCE_FLIP);
@@ -967,7 +967,7 @@ public class Combat extends Observable implements Cloneable {
             if (!stance.equals(nw)) {
                 stance = nw;
             } else {
-                stance = new Pin(other, self);
+                stance = new Pin(other.getType(), self.getType());
             }
             write(self, compulsion.get());
             Compulsive.doPostCompulsion(this, self, Situation.STANCE_FLIP);
@@ -1078,7 +1078,7 @@ public class Combat extends Observable implements Cloneable {
     
     private void resolveContactBonuses(Character contacted, Character contacter) {
 		if (contacted.has(Trait.VolatileSubstrate) && contacted.has(Trait.slime)) {
-			contacter.add(this, new Slimed(contacter, contacted, 1));
+			contacter.add(this, new Slimed(contacter.getType(), contacted.getType(), 1));
 		}
 	}
 
@@ -1155,7 +1155,7 @@ public class Combat extends Observable implements Cloneable {
     private void checkStamina(Character p) {
         if (p.getStamina()
              .isEmpty() && !p.is(Stsflag.stunned)) {
-            p.add(this, new Winded(p, 3));
+            p.add(this, new Winded(p.getType(), 3));
             if (p.isPet()){
                 // pets don't get stance changes
                 return;
@@ -1188,7 +1188,7 @@ public class Combat extends Observable implements Cloneable {
                         } else {
                             write(p, p.getName() + " drops to the floor, exhausted.");
                         } 
-                        setStance(new StandingOver(other, p), null, false);
+                        setStance(new StandingOver(other.getType(), p.getType()), null, false);
                     }
                 }
                 p.loseWillpower(this, Math.min(p.getWillpower()
@@ -1415,10 +1415,10 @@ public class Combat extends Observable implements Cloneable {
     private void checkStanceStatus(Character c, Position oldStance, Position newStance) {
         if (oldStance.sub(c) && !newStance.sub(c)) {
             if ((oldStance.prone(c) || !oldStance.mobile(c)) && !newStance.prone(c) && newStance.mobile(c)) {
-                c.add(this, new Braced(c));
-                c.add(this, new Wary(c, 3));
+                c.add(this, new Braced(c.getType()));
+                c.add(this, new Wary(c.getType(), 3));
             } else if (!oldStance.mobile(c) && newStance.mobile(c)) {
-                c.add(this, new Wary(c, 3));
+                c.add(this, new Wary(c.getType(), 3));
             }
         }
     }
@@ -1484,7 +1484,7 @@ public class Combat extends Observable implements Cloneable {
             if (voluntary && newStance.en == Stance.neutral && getStance().en != Stance.kneeling && otherCharacter.has(Trait.genuflection) && rollWorship(initiator, otherCharacter)) {
                 write(initiator, Formatter.format("While trying to get back up, {self:name-possessive} eyes accidentally met {other:name-possessive} gaze. "
                                 + "Like a deer in headlights, {self:possessive} body involuntarily stops moving and kneels down before {other:direct-object}.", initiator, otherCharacter));
-                newStance = new Kneeling(otherCharacter, initiator);
+                newStance = new Kneeling(otherCharacter.getType(), initiator.getType());
             }
         }
         checkStanceStatus(p1, stance, newStance);
@@ -1525,7 +1525,7 @@ public class Combat extends Observable implements Cloneable {
         if (stance != newStance && initiator != null && initiator.has(Trait.Catwalk)) {
             write(initiator, Formatter.format("The way {self:subject-action:move|moves} exudes such feline grace that it demands {other:name-possessive} attention.",
                             initiator, getOpponent(initiator)));
-            initiator.add(this, new Alluring(initiator, 1));
+            initiator.add(this, new Alluring(initiator.getType(), 1));
         }
 
         stance = newStance;

@@ -2,13 +2,14 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
 
 public class Glamour extends Skill {
 
-    public Glamour(Character self) {
+    public Glamour(CharacterType self) {
         super("Glamour", self);
     }
 
@@ -35,13 +36,13 @@ public class Glamour extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        getSelf().add(c, new nightgames.status.Glamour(getSelf(), 10));
+        getSelf().add(c, new nightgames.status.Glamour(self, 10));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Glamour(user);
+        return new Glamour(user.getType());
     }
 
     @Override

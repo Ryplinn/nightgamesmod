@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.TailPart;
@@ -21,7 +22,7 @@ import java.util.List;
 
 public class TailPeg extends Skill {
 
-    public TailPeg(Character self) {
+    TailPeg(CharacterType self) {
         super("Tail Peg", self);
     }
 
@@ -72,7 +73,7 @@ public class TailPeg extends Skill {
             boolean intercourse = !c.getStance().getPartsFor(c, getSelf(), target).isEmpty() && c.getStance().penisInserted(target);
             boolean shamed = false;
             if (!intercourse && Random.random(4) == 2) {
-                target.add(c, new Shamed(target));
+                target.add(c, new Shamed(target.getType()));
                 shamed = true;
             }
             if (target.human()) {
@@ -113,11 +114,11 @@ public class TailPeg extends Skill {
                 if (!c.getStance().vaginallyPenetrated(c, target)) {
                     target.body.pleasure(getSelf(), getSelf().body.getRandom("tail"), target.body.getRandom("pussy"),
                                     strength, c, this);
-                    target.add(c, new TailFucked(target, getSelf(), "pussy"));
+                    target.add(c, new TailFucked(target.getType(), self, "pussy"));
                 } else if (!c.getStance().anallyPenetrated(c, target)) {
                     target.body.pleasure(getSelf(), getSelf().body.getRandom("tail"), target.body.getRandom("ass"),
                                     strength, c, this);
-                    target.add(c, new TailFucked(target, getSelf(), "ass"));
+                    target.add(c, new TailFucked(target.getType(), self, "ass"));
                 }
             }
             target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, strength / 2));
@@ -126,7 +127,7 @@ public class TailPeg extends Skill {
             getSelf().emote(Emotion.confident, 15);
             getSelf().emote(Emotion.dominant, 25);
             if (Random.random(100) < 5 + 2 * getSelf().get(Attribute.fetishism)) {
-                target.add(c, new BodyFetish(target, getSelf(), "tail", .25));
+                target.add(c, new BodyFetish(target.getType(), self, "tail", .25));
             }
         } else {
             if (target.human()) {
@@ -141,7 +142,7 @@ public class TailPeg extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new TailPeg(user);
+        return new TailPeg(user.getType());
     }
 
     @Override
@@ -235,7 +236,7 @@ public class TailPeg extends Skill {
                 List<BodyPart> parts = c.getStance().getPartsFor(c, getSelf(), target);
                 String part = "hands";
                 if (!parts.isEmpty()) {
-                    part = Random.pickRandom(parts).get().describe(getSelf());
+                    part = Random.pickRandomGuaranteed(parts).describe(getSelf());
                 }
                 return String.format("%s smirks and coils %s tail around in front of %s. %s briefly %s "
                                 + "at it and %s the appendage move under %s and %s. %s to keep it"

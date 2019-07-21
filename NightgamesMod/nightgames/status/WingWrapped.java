@@ -17,17 +17,13 @@ public class WingWrapped extends Status {
     private final int strength;
     private Position initialPosition;
 
-    private WingWrapped(CharacterType affected, CharacterType wrapper, int strength) {
+    public WingWrapped(CharacterType affected, CharacterType wrapper) {
         super("Wing Wrapped", affected);
         this.wrapper = wrapper;
-        this.strength = strength;
+        this.strength = calcStrength(getWrapper());
         flag(Stsflag.wrapped);
     }
     
-    public WingWrapped(CharacterType affected, Character wrapper) {
-        this(affected, wrapper.getType(), calcStrength(wrapper));
-    }
-
     private static int calcStrength(Character wrapper) {
         return wrapper.get(Attribute.power) / 4 + wrapper.get(Attribute.darkness) / 6;
     }
@@ -164,7 +160,7 @@ public class WingWrapped extends Status {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new WingWrapped(newAffected.getType(), newOther.getType(), strength);
+        return new WingWrapped(newAffected.getType(), newOther.getType());
     }
 
     @Override

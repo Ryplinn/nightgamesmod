@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -12,7 +13,7 @@ import nightgames.status.Falling;
 
 public class DarkTendrils extends Skill {
 
-    public DarkTendrils(Character self) {
+    DarkTendrils(CharacterType self) {
         super("Dark Tendrils", self, 4);
         addTag(SkillTag.positioning);
         addTag(SkillTag.knockdown);
@@ -41,11 +42,11 @@ public class DarkTendrils extends Skill {
         if (target.roll(getSelf(), accuracy(c, target))) {
             if (Random.random(2) == 1) {
                 writeOutput(c, Result.normal, target);
-                target.add(c, new Bound(target, 35 + 2 * Math.sqrt(getSelf().get(Attribute.darkness)), "shadows"));
-                target.add(c, new Falling(target));
+                target.add(c, new Bound(target.getType(), 35 + 2 * Math.sqrt(getSelf().get(Attribute.darkness)), "shadows"));
+                target.add(c, new Falling(target.getType()));
             } else if (getSelf().checkVsDc(Attribute.darkness, target.knockdownDC() - getSelf().getMojo().get())) {
                 writeOutput(c, Result.weak, target);
-                target.add(c, new Falling(target));
+                target.add(c, new Falling(target.getType()));
             } else {
                 writeOutput(c, Result.miss, target);
             }
@@ -58,7 +59,7 @@ public class DarkTendrils extends Skill {
 
     @Override
     public nightgames.skills.Skill copy(Character user) {
-        return new DarkTendrils(user);
+        return new DarkTendrils(user.getType());
     }
 
     @Override

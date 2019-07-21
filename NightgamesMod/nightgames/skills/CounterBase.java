@@ -10,14 +10,14 @@ import nightgames.status.CounterStatus;
 import nightgames.status.Stsflag;
 
 public abstract class CounterBase extends Skill {
-    protected String description;
+    protected String description;   // format string
     private int duration;
 
-    public CounterBase(String name, CharacterType self, int cooldown, String description) {
+    CounterBase(String name, CharacterType self, int cooldown, String description) {
         this(name, self, cooldown, description, 0);
     }
 
-    public CounterBase(String name, CharacterType self, int cooldown, String description, int duration) {
+    CounterBase(String name, CharacterType self, int cooldown, String description, int duration) {
         super(name, self, cooldown);
         addTag(SkillTag.counter);
         this.description = description;
@@ -40,7 +40,7 @@ public abstract class CounterBase extends Skill {
         } else {
             printBlinded(c);
         }
-        getSelf().add(c, new CounterStatus(getSelf(), this, description, duration));
+        getSelf().add(c, new CounterStatus(self, this, description, duration));
         return true;
     }
 

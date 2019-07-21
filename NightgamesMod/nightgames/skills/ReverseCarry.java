@@ -49,7 +49,7 @@ public class ReverseCarry extends Carry {
             if (getSelf().has(Trait.insertion)) {
                 otherm += Math.min(getSelf().get(Attribute.seduction) / 4, 40);
             }
-            c.setStance(new Jumped(getSelf(), target), getSelf(), getSelf().canMakeOwnDecision());
+            c.setStance(new Jumped(self, target.getType()), getSelf(), getSelf().canMakeOwnDecision());
             target.body.pleasure(getSelf(), getSelfOrgan(), getTargetOrgan(target), otherm, c, this);
             getSelf().body.pleasure(target, getTargetOrgan(target), getSelfOrgan(), m, c, this);
         } else {
@@ -58,7 +58,7 @@ public class ReverseCarry extends Carry {
             } else if (c.shouldPrintReceive(target, c)) {
                 c.write(getSelf(), premessage + receive(c, premessage.length(), Result.miss, target));
             }
-            getSelf().add(c, new Falling(getSelf()));
+            getSelf().add(c, new Falling(self));
             return false;
         }
         return true;
@@ -66,7 +66,7 @@ public class ReverseCarry extends Carry {
 
     @Override
     public Skill copy(Character user) {
-        return new ReverseCarry(user);
+        return new ReverseCarry(user.getType());
     }
 
     @Override

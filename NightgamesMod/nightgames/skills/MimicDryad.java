@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.EarPart;
 import nightgames.characters.body.mods.PlantMod;
@@ -16,7 +17,7 @@ import nightgames.status.SlimeMimicry;
 import nightgames.status.Stsflag;
 
 public class MimicDryad extends Skill {
-    public MimicDryad(Character self) {
+    MimicDryad(CharacterType self) {
         super("Mimicry: Dryad", self);
     }
 
@@ -81,15 +82,15 @@ public class MimicDryad extends Skill {
         if (getSelf().has(Trait.Masquerade)) {
             strength = strength * 3 / 2;
         }
-        getSelf().add(c, new AttributeBuff(getSelf(), Attribute.bio, strength, 10));
-        getSelf().add(c, new SlimeMimicry("dryad", getSelf(), 10));
+        getSelf().add(c, new AttributeBuff(self, Attribute.bio, strength, 10));
+        getSelf().add(c, new SlimeMimicry("dryad", self, 10));
         getSelf().body.temporaryAddPartMod("pussy", PlantMod.INSTANCE, 10);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new MimicDryad(user);
+        return new MimicDryad(user.getType());
     }
 
     @Override

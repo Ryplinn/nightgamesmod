@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -11,7 +12,7 @@ import nightgames.status.Stsflag;
 import nightgames.utilities.MathUtils;
 
 public class PressurePoint extends Skill {
-    public PressurePoint(Character self) {
+    PressurePoint(CharacterType self) {
         super("Pressure Point", self, 6);
         addTag(SkillTag.debuff);
         addTag(SkillTag.pleasure);
@@ -48,7 +49,7 @@ public class PressurePoint extends Skill {
     public boolean resolve(Combat c, Character target) {
         if (target.roll(getSelf(), accuracy(c, target))) {
             writeOutput(c, Result.normal, target);
-            target.add(c, new PressurePointed(target));
+            target.add(c, new PressurePointed(target.getType()));
             getSelf().weaken(c, getSelf().getStamina().max() / 5);
             return true;
         } else {
@@ -60,7 +61,7 @@ public class PressurePoint extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new PressurePoint(user);
+        return new PressurePoint(user.getType());
     }
 
     @Override

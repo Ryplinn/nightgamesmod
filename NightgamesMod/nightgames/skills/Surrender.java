@@ -1,13 +1,14 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
 import nightgames.nskills.tags.SkillTag;
 
 public class Surrender extends Skill {
-    public Surrender(Character self) {
+    public Surrender(CharacterType self) {
         super("Surrender", self);
         addTag(SkillTag.suicidal);
     }
@@ -37,7 +38,7 @@ public class Surrender extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Surrender(user);
+        return new Surrender(user.getType());
     }
 
     @Override

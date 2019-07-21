@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -8,7 +9,7 @@ import nightgames.skills.damage.DamageType;
 
 public class CommandHurt extends PlayerCommand {
 
-    public CommandHurt(Character self) {
+    CommandHurt(CharacterType self) {
         super("Force Pain", self);
     }
 
@@ -26,7 +27,7 @@ public class CommandHurt extends PlayerCommand {
 
     @Override
     public Skill copy(Character user) {
-        return new CommandHurt(user);
+        return new CommandHurt(user.getType());
     }
 
     @Override

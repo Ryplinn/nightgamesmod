@@ -44,18 +44,18 @@ public class Struggle extends Skill {
         }
         return ((!c.getStance().mobile(getSelf()) && !c.getStance().dom(getSelf()) || getSelf().bound()
                         || (getSelf().is(Stsflag.maglocked) && !getSelf().is(Stsflag.hogtied)))
-                        || hasSingleGrabber(c, target))
+                        || hasSingleGrabber(c))
                         && getSelf().canRespond();
     }
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        if (blockedByCollar(c, target)) {
+        if (blockedByCollar(c)) {
             return false;
         }
         if (getSelf().is(Stsflag.maglocked)) {
             return struggleMagLock(c, target);
-        } else if (hasSingleGrabber(c, target)) {
+        } else if (hasSingleGrabber(c)) {
             return struggleGrabber(c, target);
         } else if (getSelf().bound()) {
             return struggleBound(c, target);
@@ -64,18 +64,18 @@ public class Struggle extends Skill {
             if (c.getStance().enumerate() == Stance.anal) {
                 return struggleAnal(c, target, knotted);
             } else {
-                return struggleVaginal(c, target, knotted);
+                return struggleVaginal(c, knotted);
             }
         } else {
             return struggleRegular(c, target);
         }
     }
     
-    private boolean hasSingleGrabber(Combat c, Character target) {
+    private boolean hasSingleGrabber(Combat c) {
         return c.getCombatantData(getSelf()).getIntegerFlag(Grab.FLAG) == 1;
     }
     
-    private boolean blockedByCollar(Combat c, Character target) {
+    private boolean blockedByCollar(Combat c) {
         Optional<String> compulsion = Compulsive.describe(c, getSelf(), Situation.PREVENT_STRUGGLE);
         if (compulsion.isPresent()) {
             c.write(getSelf(), compulsion.get());
@@ -145,7 +145,7 @@ public class Struggle extends Skill {
                 } else {
                     c.write(getSelf(), "You manage to break away from " + target.getName() + ".");
                 }
-                c.setStance(new Neutral(getSelf(), c.getOpponent(getSelf())));
+                c.setStance(new Neutral(self, c.getOpponent(getSelf()).getType()));
             } else if (c.shouldPrintReceive(target, c)) {
                 if (knotted) {
                     c.write(getSelf(), String.format("%s roughly pulls away from %s, groaning loudly"
@@ -160,7 +160,7 @@ public class Struggle extends Skill {
                                     getSelf().subject(), target.nameDirectObject(),
                                     target.possessiveAdjective(), getSelf().possessiveAdjective()));
                 }
-                c.setStance(new Neutral(getSelf(), c.getOpponent(getSelf())));
+                c.setStance(new Neutral(self, c.getOpponent(getSelf()).getType()));
             }
             return true;
         } else {
@@ -170,15 +170,15 @@ public class Struggle extends Skill {
         }
     }
 
-    private boolean struggleVaginal(Combat c, Character target, boolean knotted) {
+    private boolean struggleVaginal(Combat c, boolean knotted) {
         int diffMod = 0;
         Character partner;
         if (c.getStance().sub(getSelf())) {
             partner = c.getStance().getDomSexCharacter();
         } else {
-            partner = c.getStance().bottom;
+            partner = c.getStance().getBottom();
         }
-        target = partner;
+        Character target = partner;
         if (c.getStance().insertedPartFor(c, target).moddedPartCountsAs(target, CockMod.enlightened)) {
             diffMod = 15;
         } else if (c.getStance().insertedPartFor(c, getSelf()).moddedPartCountsAs(getSelf(), CockMod.enlightened)) {
@@ -223,7 +223,7 @@ public class Struggle extends Skill {
                 c.write(getSelf(),
                                 Formatter.format("{self:SUBJECT-ACTION:manage|manages} to shake {other:direct-object} off.",
                                                 getSelf(), target));
-                c.setStance(new Neutral(getSelf(), c.getOpponent(getSelf())));
+                c.setStance(new Neutral(self, c.getOpponent(getSelf()).getType()));
             }
             return true;
         } else {
@@ -250,7 +250,7 @@ public class Struggle extends Skill {
             } else if (c.shouldPrintReceive(target, c)) {
                 c.write(getSelf(), getSelf().getName() + " squirms out from under "+target.nameDirectObject()+".");
             }
-            c.setStance(new Neutral(getSelf(), c.getOpponent(getSelf())));
+            c.setStance(new Neutral(self, c.getOpponent(getSelf()).getType()));
             return true;
         } else {
             getSelf().struggle();
@@ -363,7 +363,7 @@ public class Struggle extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Struggle(user);
+        return new Struggle(user.getType());
     }
 
     @Override

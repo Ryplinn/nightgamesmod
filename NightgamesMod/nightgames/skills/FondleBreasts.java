@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.mods.SizeMod;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -12,7 +13,7 @@ import nightgames.stance.Stance;
 
 public class FondleBreasts extends Skill {
 
-    public FondleBreasts(Character self) {
+    public FondleBreasts(CharacterType self) {
         super("Fondle Breasts", self);
     }
 
@@ -57,7 +58,7 @@ public class FondleBreasts extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new FondleBreasts(user);
+        return new FondleBreasts(user.getType());
     }
 
     @Override

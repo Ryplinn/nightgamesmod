@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -9,7 +10,7 @@ import nightgames.global.Random;
 
 public class BunshinService extends Skill {
 
-    public BunshinService(Character self) {
+    BunshinService(CharacterType self) {
         super("Bunshin Service", self);
     }
 
@@ -35,7 +36,7 @@ public class BunshinService extends Skill {
 
     @Override
     public int getMojoCost(Combat c) {
-        return numberOfClones(c) * 2;
+        return numberOfClones() * 2;
     }
 
     @Override
@@ -43,7 +44,7 @@ public class BunshinService extends Skill {
         return "Pleasure your opponent with shadow clones: 4 mojo per attack (min 2))";
     }
 
-    private int numberOfClones(Combat c) {
+    private int numberOfClones() {
         return Math.min(Math.min(getSelf().getMojo().get()/2, getSelf().get(Attribute.ninjutsu)/2), 15);
     }
 
@@ -54,7 +55,7 @@ public class BunshinService extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        int clones = numberOfClones(c);
+        int clones = numberOfClones();
         Result r;
         if(getSelf().human()){
             c.write(getSelf(), String.format("You form %d shadow clones and rush forward.",clones));
@@ -92,7 +93,7 @@ public class BunshinService extends Skill {
                                         : target.hasPussy() ? target.body.getRandomPussy()
                                                         : target.body.getRandomAss();
                         target.body.pleasure(getSelf(),getSelf().body.getRandom("hands"), targetPart, Random.random(6)
-                                        + getSelf().get(Attribute.seduction) / 2 + target.get(Attribute.perception), c,
+                                        + getSelf().get(Attribute.seduction) / 2f + target.get(Attribute.perception), c,
                                         this);
                         break;
                 }
@@ -106,7 +107,7 @@ public class BunshinService extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new BunshinService(user);
+        return new BunshinService(user.getType());
     }
 
     @Override

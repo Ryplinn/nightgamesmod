@@ -331,7 +331,7 @@ public class Player extends Character {
             busy--;
         } else if (this.is(Stsflag.enthralled)) {
             Character master;
-            master = ((Enthralled) getStatus(Stsflag.enthralled)).master;
+            master = ((Enthralled) getStatus(Stsflag.enthralled)).getMaster();
             if (master != null) {
                 Move compelled = findPath(master.location());
                 if (compelled != null) {
@@ -754,7 +754,7 @@ public class Player extends Character {
                         c.write(this, Formatter.format(
                                         "{self:NAME-POSSESSIVE} quick wits find a gap in {other:name-possessive} hold and {self:action:slip|slips} away.",
                                         this, target));
-                        c.setStance(new Neutral(this, c.getOpponent(this)), this, true);
+                        c.setStance(new Neutral(this.getType(), c.getOpponent(this).getType()), this, true);
                     }
                 } else {
                     target.body.pleasure(this, body.getRandom("hands"), target.body.getRandomBreasts(),
@@ -785,7 +785,7 @@ public class Player extends Character {
                 } else {
                     c.write(this, target.getName()
                                     + " loses her balance while grappling with you. Before she can fall to the floor, you catch her from behind and hold her up.");
-                    c.setStance(new Behind(this, target));
+                    c.setStance(new Behind(this.getType(), target.getType()));
                 }
                 break;
             default:
@@ -808,7 +808,7 @@ public class Player extends Character {
         if (opponent.has(Trait.sadist) && !is(Stsflag.masochism)) {
             c.write("<br/>"+ Formatter.capitalizeFirstLetter(
                             String.format("%s seem to shudder in arousal at the thought of pain.", subject())));
-            add(c, new Masochistic(this));
+            add(c, new Masochistic(this.getType()));
         }
         if (has(Trait.RawSexuality)) {
             c.write(this, Formatter.format("{self:NAME-POSSESSIVE} raw sexuality turns both of you on.", this, opponent));
@@ -925,7 +925,7 @@ public class Player extends Character {
             nudify();
             purge(c);
             addTemporaryTrait(Trait.slime, 999);
-            add(c, new PlayerSlimeDummy(this));
+            add(c, new PlayerSlimeDummy(this.getType()));
             if (hasPussy() && !body.getRandomPussy().moddedPartCountsAs(this, GooeyMod.INSTANCE)) {
                 body.temporaryAddOrReplacePartWithType(body.getRandomPussy().applyMod(GooeyMod.INSTANCE), 999);
                 body.temporaryAddOrReplacePartWithType(new TentaclePart("slime filaments", "pussy", "slime", 0.0, 1.0, 1.0), 999);

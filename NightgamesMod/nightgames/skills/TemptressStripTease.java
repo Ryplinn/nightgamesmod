@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -14,7 +15,7 @@ import nightgames.status.Charmed;
 
 public class TemptressStripTease extends StripTease {
 
-    public TemptressStripTease(Character self) {
+    TemptressStripTease(CharacterType self) {
         super("Skillful Strip Tease", self);
     }
 
@@ -33,7 +34,7 @@ public class TemptressStripTease extends StripTease {
         return isDance(c) ? super.getMojoBuilt(c) : super.getMojoCost(c);
     }
 
-    public boolean canStrip(Combat c, Character target) {
+    private boolean canStrip(Combat c, Character target) {
         boolean sexydance = c.getStance().enumerate() == Stance.neutral && getSelf().canAct() && getSelf().mostlyNude();
         boolean normalstrip = !getSelf().mostlyNude();
         return getSelf().stripDifficulty(target) == 0 && (sexydance || normalstrip);
@@ -52,7 +53,7 @@ public class TemptressStripTease extends StripTease {
 
     @Override
     public String describe(Combat c) {
-        return isDance(c) ? "Do a slow, titilating dance to charm your opponent."
+        return isDance(c) ? "Do a slow, titillating dance to charm your opponent."
                         : "Shed your clothes seductively, charming your opponent.";
     }
 
@@ -69,9 +70,9 @@ public class TemptressStripTease extends StripTease {
             }
             target.temptNoSource(c, getSelf(), 10 + Random.random(Math.max(5, technique)), this);
             if (Random.random(2) == 0) {
-                target.add(c, new Charmed(target, Random.random(Math.min(3, technique))));
+                target.add(c, new Charmed(target.getType(), Random.random(Math.min(3, technique))));
             }
-            getSelf().add(c, new Alluring(getSelf(), 3));
+            getSelf().add(c, new Alluring(self, 3));
         } else {
             if (getSelf().human()) {
                 c.write(getSelf(), deal(c, 0, Result.normal, target));
@@ -80,8 +81,8 @@ public class TemptressStripTease extends StripTease {
             }
 
             target.temptNoSource(c, getSelf(), 15 + Random.random(Math.max(10, technique)), this);
-            target.add(c, new Charmed(target, Random.random(Math.min(5, technique))));
-            getSelf().add(c, new Alluring(getSelf(), 5));
+            target.add(c, new Charmed(target.getType(), Random.random(Math.min(5, technique))));
+            getSelf().add(c, new Alluring(self, 5));
             getSelf().undress(c);
         }
         target.emote(Emotion.horny, 30);
@@ -92,7 +93,7 @@ public class TemptressStripTease extends StripTease {
 
     @Override
     public Skill copy(Character user) {
-        return new TemptressStripTease(user);
+        return new TemptressStripTease(user.getType());
     }
 
     @Override
@@ -113,7 +114,7 @@ public class TemptressStripTease extends StripTease {
                             target.action("gaze"));
         } else {
             return String.format("%s takes a few steps back and starts "
-                            + "moving sinously. She sensually runs her hands over her body, "
+                            + "moving sinuously. She sensually runs her hands over her body, "
                             + "undoing straps and buttons where she encounters them, and starts"
                             + " peeling her clothes off slowly, never breaking eye contact."
                             + " %s can only gawk in amazement as her perfect body is revealed bit"

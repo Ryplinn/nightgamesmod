@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -10,8 +11,8 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.Behind;
 
 public class Maneuver extends Skill {
-    public Maneuver(Character self) {
-        super("Manuever", self, 2);
+    public Maneuver(CharacterType self) {
+        super("Maneuver", self, 2);
         addTag(SkillTag.positioning);
     }
 
@@ -29,10 +30,10 @@ public class Maneuver extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        if (isFlashStep(c)) {
+        if (isFlashStep()) {
             if (target.roll(getSelf(), accuracy(c, target))) {
                 writeOutput(c, Result.special, target);
-                c.setStance(new Behind(getSelf(), target), getSelf(), true);
+                c.setStance(new Behind(self, target.getType()), getSelf(), true);
                 getSelf().weaken(c, getSelf().getStamina().get() / 10);
                 getSelf().emote(Emotion.confident, 15);
                 getSelf().emote(Emotion.dominant, 15);
@@ -45,7 +46,7 @@ public class Maneuver extends Skill {
         } else {
             if (target.roll(getSelf(), accuracy(c, target))) {
                 writeOutput(c, Result.normal, target);
-                c.setStance(new Behind(getSelf(), target), getSelf(), true);
+                c.setStance(new Behind(self, target.getType()), getSelf(), true);
                 getSelf().emote(Emotion.confident, 15);
                 getSelf().emote(Emotion.dominant, 15);
                 target.emote(Emotion.nervous, 10);
@@ -59,12 +60,12 @@ public class Maneuver extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.cunning) >= 20 || isFlashStep(c);
+        return user.get(Attribute.cunning) >= 20 || isFlashStep();
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Maneuver(user);
+        return new Maneuver(user.getType());
     }
 
     @Override
@@ -74,7 +75,7 @@ public class Maneuver extends Skill {
 
     @Override
     public int accuracy(Combat c, Character target) {
-        return isFlashStep(c) ? 200 : 75;
+        return isFlashStep() ? 200 : 75;
     }
 
     @Override
@@ -115,13 +116,13 @@ public class Maneuver extends Skill {
         }
     }
 
-    private boolean isFlashStep(Combat c) {
+    private boolean isFlashStep() {
         return getSelf().getStamina().percent() > 15 && getSelf().get(Attribute.ki) >= 6;
     }
 
     @Override
     public String describe(Combat c) {
-        if (isFlashStep(c)) {
+        if (isFlashStep()) {
             return "Use lightning speed to get behind your opponent before she can react: 10% stamina";
         } else {
             return "Get behind opponent";
@@ -135,7 +136,7 @@ public class Maneuver extends Skill {
 
     @Override
     public String getLabel(Combat c) {
-        if (isFlashStep(c)) {
+        if (isFlashStep()) {
             return "Flash Step";
         }
         return getName(c);

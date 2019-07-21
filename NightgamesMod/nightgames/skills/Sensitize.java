@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -10,7 +11,7 @@ import nightgames.status.Stsflag;
 
 public class Sensitize extends Skill {
 
-    public Sensitize(Character self) {
+    Sensitize(CharacterType self) {
         super("Sensitivity Potion", self);
     }
 
@@ -46,13 +47,13 @@ public class Sensitize extends Skill {
             writeOutput(c, Result.miss, target);
             return false;
         }
-        target.add(c, new Hypersensitive(target));
+        target.add(c, new Hypersensitive(target.getType()));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Sensitize(user);
+        return new Sensitize(user.getType());
     }
 
     @Override

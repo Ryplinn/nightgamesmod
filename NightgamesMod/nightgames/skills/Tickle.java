@@ -66,7 +66,7 @@ public class Tickle extends Skill {
                     bonus += 5 + Random.random(4);
                     weak += 3 + Random.random(4);
                     if (Random.random(4) == 0) {
-                        target.add(c, new Winded(target, 1));
+                        target.add(c, new Winded(target.getType(), 1));
                     }
                 }
                 if (result == Result.special) {

@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -12,7 +13,7 @@ import nightgames.items.Item;
 import nightgames.status.Hypersensitive;
 
 public class BreastRay extends Skill {
-    public BreastRay(Character self) {
+    BreastRay(CharacterType self) {
         super("Breast Ray", self);
     }
 
@@ -43,7 +44,7 @@ public class BreastRay extends Skill {
         boolean permanent = Random.random(20) == 0 && (getSelf().human() || c.shouldPrintReceive(target, c))
                         && !target.has(Trait.stableform);
         writeOutput(c, permanent ? 1 : 0, Result.normal, target);
-        target.add(c, new Hypersensitive(target, 10));
+        target.add(c, new Hypersensitive(target.getType(), 10));
         BreastsPart part = target.body.getBreastsBelow(BreastsPart.f.getSize());
         if (permanent) {
             if (part != null) {
@@ -60,7 +61,7 @@ public class BreastRay extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new BreastRay(user);
+        return new BreastRay(user.getType());
     }
 
     @Override
@@ -91,7 +92,7 @@ public class BreastRay extends Skill {
                                         Formatter.capitalizeFirstLetter(target.pronoun()),
                                         target.action("flush", "flushes"),
                                         target.action("try", "tries"),
-                                        target.reflectivePronoun(), target.directObject());;
+                                        target.reflectivePronoun(), target.directObject());
         if (damage > 0) {
             message += " You realize the effects are permanent!";
         }

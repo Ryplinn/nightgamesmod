@@ -2,13 +2,14 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 
 public class PerfectTouch extends Skill {
 
-    public PerfectTouch(Character self) {
+    PerfectTouch(CharacterType self) {
         super("Sleight of Hand", self);
     }
 
@@ -48,7 +49,7 @@ public class PerfectTouch extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new PerfectTouch(user);
+        return new PerfectTouch(user.getType());
     }
 
     @Override

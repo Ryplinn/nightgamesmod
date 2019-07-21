@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class Strapon extends Skill {
 
-    public Strapon(Character self) {
+    public Strapon(CharacterType self) {
         super("Strap On", self, 15);
     }
 
@@ -80,7 +81,7 @@ public class Strapon extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Strapon(user);
+        return new Strapon(user.getType());
     }
 
     @Override

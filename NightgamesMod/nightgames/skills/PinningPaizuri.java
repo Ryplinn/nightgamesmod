@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -10,7 +11,7 @@ import nightgames.stance.HeldPaizuri;
 import nightgames.stance.Stance;
 
 public class PinningPaizuri extends Skill {
-    public PinningPaizuri(Character self) {
+    PinningPaizuri(CharacterType self) {
         super("Titfuck Pin", self);
         addTag(SkillTag.positioning);
         addTag(SkillTag.pleasure);
@@ -20,7 +21,7 @@ public class PinningPaizuri extends Skill {
     }
 
     
-    static int MIN_REQUIRED_BREAST_SIZE = 3;
+    private final static int MIN_REQUIRED_BREAST_SIZE = 3;
     
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
@@ -54,16 +55,16 @@ public class PinningPaizuri extends Skill {
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
         
-        c.setStance(new HeldPaizuri(getSelf(), target), getSelf(), true);
+        c.setStance(new HeldPaizuri(self, target.getType()), getSelf(), true);
      
-        new Paizuri(getSelf()).resolve(c, target);
+        new Paizuri(self).resolve(c, target);
         
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new PinningPaizuri(user);
+        return new PinningPaizuri(user.getType());
     }
 
     @Override

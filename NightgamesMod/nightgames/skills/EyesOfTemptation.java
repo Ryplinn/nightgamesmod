@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -10,7 +11,7 @@ import nightgames.status.Enthralled;
 import nightgames.status.Stsflag;
 
 public class EyesOfTemptation extends Skill {
-    public EyesOfTemptation(Character self) {
+    EyesOfTemptation(CharacterType self) {
         super("Eyes of Temptation", self, 5);
     }
 
@@ -43,7 +44,7 @@ public class EyesOfTemptation extends Skill {
                         : target.roll(getSelf(), accuracy(c, target)) ? Result.normal : Result.miss;
         writeOutput(c, result, target);
         if (result == Result.normal) {
-            target.add(c, new Enthralled(target, getSelf(), 5));
+            target.add(c, new Enthralled(target.getType(), self, 5));
             getSelf().emote(Emotion.dominant, 50);
         }
         return result != Result.miss;
@@ -51,7 +52,7 @@ public class EyesOfTemptation extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new EyesOfTemptation(user);
+        return new EyesOfTemptation(user.getType());
     }
 
     @Override

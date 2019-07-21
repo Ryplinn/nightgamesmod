@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -12,9 +13,12 @@ import nightgames.skills.damage.DamageType;
 import nightgames.status.Drained;
 import nightgames.status.TailSucked;
 
+import java.util.Map;
+import java.util.Optional;
+
 public class TailSuck extends Skill {
 
-    public TailSuck(Character self) {
+    public TailSuck(CharacterType self) {
         super("Tail Suck", self);
     }
 
@@ -55,7 +59,7 @@ public class TailSuck extends Skill {
             target.body.pleasure(getSelf(), getSelf().body.getRandom("tail"), target.body.getRandomCock(),
                             Random.random(10) + 10, c, this);
             drain(c, target);
-            target.add(c, new TailSucked(target, getSelf(), power()));
+            target.add(c, new TailSucked(target.getType(), self, power()));
         } else if (target.hasBalls()) {
             writeOutput(c, Result.weak, target);
             target.body.pleasure(getSelf(), getSelf().body.getRandom("tail"), target.body.getRandom("balls"),
@@ -69,7 +73,7 @@ public class TailSuck extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new TailSuck(user);
+        return new TailSuck(user.getType());
     }
 
     @Override
@@ -182,8 +186,12 @@ public class TailSuck extends Skill {
     }
 
     private void drain(Combat c, Character target) {
-        Attribute toDrain = Random.pickRandom(target.att.entrySet().stream().filter(e -> e.getValue() != 0)
-                        .map(e -> e.getKey()).toArray(Attribute[]::new)).get();
+        Optional<Attribute> pickToDrain = Random.pickRandom(target.att.entrySet().stream().filter(e -> e.getValue() != 0)
+                        .map(Map.Entry::getKey).toArray(Attribute[]::new));
+        if (!pickToDrain.isPresent()) {
+            return;
+        }
+        Attribute toDrain = pickToDrain.get();
         Drained.drain(c, getSelf(), target, toDrain, power(), 20, true);
         target.drain(c, getSelf(), (int) DamageType.drain.modifyDamage(getSelf(), target, 10), Character.MeterType.STAMINA);
         target.drain(c, getSelf(), 1 + Random.random(power() * 3), Character.MeterType.MOJO);

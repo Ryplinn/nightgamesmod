@@ -34,7 +34,7 @@ public class CatsGrace extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        getSelf().add(c, new Nimble(getSelf(), 4));
+        getSelf().add(c, new Nimble(self, 4));
         return true;
     }
 

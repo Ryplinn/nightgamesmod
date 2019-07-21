@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -10,7 +11,7 @@ import nightgames.items.clothing.ClothingTable;
 import nightgames.nskills.tags.SkillTag;
 
 public class LivingClothing extends Skill {
-    public LivingClothing(Character self) {
+    public LivingClothing(CharacterType self) {
         super("Living Clothing: Self", self, 5);
         addTag(SkillTag.suicidal);
     }
@@ -46,7 +47,7 @@ public class LivingClothing extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new LivingClothing(user);
+        return new LivingClothing(user.getType());
     }
 
     @Override

@@ -7,16 +7,17 @@ import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
+import nightgames.global.Formatter;
 import nightgames.skills.CounterBase;
 
 public class CounterStatus extends DurationStatus {
     private CounterBase skill;
-    private String desc;
+    private String descriptionFormat;
 
-    public CounterStatus(CharacterType affected, CounterBase skill, String description, int duration) {
+    public CounterStatus(CharacterType affected, CounterBase skill, String descriptionFormat, int duration) {
         super("Counter", affected, duration);
         this.skill = skill;
-        desc = description;
+        this.descriptionFormat = descriptionFormat;
         flag(Stsflag.counter);
     }
 
@@ -27,7 +28,7 @@ public class CounterStatus extends DurationStatus {
 
     @Override
     public String describe(Combat c) {
-        return desc;
+        return Formatter.format(descriptionFormat, getAffected(), c.getOpponent(getAffected()));
     }
 
     @Override
@@ -101,7 +102,7 @@ public class CounterStatus extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new CounterStatus(newAffected.getType(), skill, desc, getDuration());
+        return new CounterStatus(newAffected.getType(), skill, descriptionFormat, getDuration());
     }
 
     @Override  public JsonObject saveToJson() {

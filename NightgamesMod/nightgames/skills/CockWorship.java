@@ -79,7 +79,7 @@ public class CockWorship extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new CockWorship(user);
+        return new CockWorship(user.getType());
     }
 
     @Override

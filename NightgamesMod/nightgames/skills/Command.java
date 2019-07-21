@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
@@ -22,7 +23,7 @@ import java.util.*;
 
 public class Command extends Skill {
 
-    public Command(Character self) {
+    public Command(CharacterType self) {
         super("Command", self);
     }
 
@@ -63,24 +64,27 @@ public class Command extends Skill {
         Set<CommandType> positioning = new HashSet<>(available);
         positioning.retainAll(Arrays.asList(CommandType.MASTER_BEHIND, CommandType.MASTER_MOUNT,
                         CommandType.MASTER_REVERSE_MOUNT, CommandType.MASTER_FACESIT));
-        if (!positioning.isEmpty() && Random.random(100) <= 75) {
-            executeCommand(Random.pickRandom(positioning.toArray(new CommandType[] {})).get(), c, target);
+        Optional<CommandType> position = Random.pickRandom(new ArrayList<>(positioning));
+        if (position.isPresent() && Random.random(100) <= 75) {
+            executeCommand(position.get(), c, target);
             return true;
         }
 
         // Then stripping
         Set<CommandType> stripping = new HashSet<>(available);
         stripping.retainAll(Arrays.asList(CommandType.STRIP_MASTER, CommandType.STRIP_SLAVE));
-        if (!stripping.isEmpty() && Random.random(100) <= 75) {
-            executeCommand(Random.pickRandom(stripping.toArray(new CommandType[] {})).get(), c, target);
+        Optional<CommandType> strip = Random.pickRandom(new ArrayList<>(stripping));
+        if (strip.isPresent() && Random.random(100) <= 75) {
+            executeCommand(strip.get(), c, target);
             return true;
         }
 
         // Then 'one-offs'
-        Set<CommandType> oneoff = new HashSet<>(available);
-        oneoff.retainAll(Arrays.asList(CommandType.MASTER_STRAPON, CommandType.SUBMIT));
-        if (!oneoff.isEmpty() && Random.random(100) <= 75) {
-            executeCommand(Random.pickRandom(oneoff.toArray(new CommandType[] {})).get(), c, target);
+        Set<CommandType> oneOffs = new HashSet<>(available);
+        oneOffs.retainAll(Arrays.asList(CommandType.MASTER_STRAPON, CommandType.SUBMIT));
+        Optional<CommandType> oneOff = Random.pickRandom(new ArrayList<>(oneOffs));
+        if (oneOff.isPresent() && Random.random(100) <= 75) {
+            executeCommand(oneOff.get(), c, target);
             return true;
         }
 
@@ -93,22 +97,23 @@ public class Command extends Skill {
             executeCommand(CommandType.WORSHIP_COCK, c, target);
             return true;
         }
-        Set<CommandType> oral = new HashSet<>(available);
-        oral.retainAll(Arrays.asList(CommandType.GIVE_ANNILINGUS, CommandType.GIVE_BLOWJOB,
+        Set<CommandType> orals = new HashSet<>(available);
+        orals.retainAll(Arrays.asList(CommandType.GIVE_ANNILINGUS, CommandType.GIVE_BLOWJOB,
                         CommandType.GIVE_CUNNILINGUS));
-        if (!oral.isEmpty() && Random.random(100) <= 75) {
-            executeCommand(Random.pickRandom(oral.toArray(new CommandType[] {})).get(), c, target);
+        Optional<CommandType> oral = Random.pickRandom(new ArrayList<>(orals));
+        if (oral.isPresent() && Random.random(100) <= 75) {
+            executeCommand(oral.get(), c, target);
             return true;
         }
 
         // If none chosen yet, just pick anything
-        executeCommand(Random.pickRandom(available.toArray(new CommandType[] {})).get(), c, target);
+        executeCommand(Random.pickRandomGuaranteed(new ArrayList<>(available)), c, target);
         return true;
     }
 
     @Override
     public Skill copy(Character target) {
-        return new Command(target);
+        return new Command(target.getType());
     }
 
     @Override
@@ -214,11 +219,8 @@ public class Command extends Skill {
             return false;
         if (!ch.outfit.slotOpen(ClothingSlot.top))
             return true;
-        if (!ch.outfit.slotOpen(ClothingSlot.bottom) && !ch.outfit.getTopOfSlot(ClothingSlot.bottom)
-                                                                  .getID()
-                                                                  .equals("strapon"))
-            return true;
-        return false;
+        return !ch.outfit.slotOpen(ClothingSlot.bottom) && !ch.outfit.getTopOfSlot(ClothingSlot.bottom).getID()
+                        .equals("strapon");
     }
 
     private Clothing getStripTarget(Character ch) {
@@ -250,10 +252,10 @@ public class Command extends Skill {
                 getSelf().body.pleasure(target, target.body.getRandom("mouth"), getSelf().body.getRandomAss(),
                                 7 + Random.random(m), c, this);
                 if (Random.random(50) < getSelf().get(Attribute.fetishism) + 10) {
-                    target.add(c, new BodyFetish(target, getSelf(), "ass", .1));
+                    target.add(c, new BodyFetish(target.getType(), self, "ass", .1));
                 }
                 if (c.getStance().dom(target)) {
-                    c.setStance(new Kneeling(getSelf(), target));
+                    c.setStance(new Kneeling(self, target.getType()));
                 }
                 target.temptNoSkillNoSource(c, getSelf(), 7 + Random.random(20));
                 getSelf().buildMojo(c, 15);
@@ -261,7 +263,7 @@ public class Command extends Skill {
             case GIVE_BLOWJOB:
                 c.write(getSelf(),
                                 String.format("%s holds up %s %s, and %s simply can't resist"
-                                                + " the tantilizing appendage. %s %s head and %s and %s"
+                                                + " the tantalizing appendage. %s %s head and %s and %s"
                                                 + " it all over.", getSelf().getName(), getSelf().possessiveAdjective(),
                                                 getSelf().body.getRandomCock()
                                                               .describe(getSelf()), target.subject(),
@@ -272,11 +274,11 @@ public class Command extends Skill {
                 getSelf().body.pleasure(target, target.body.getRandom("mouth"), getSelf().body.getRandomCock(),
                                 7 + Random.random(m), c, this);
                 if (Random.random(50) < getSelf().get(Attribute.fetishism) + 10) {
-                    target.add(c, new BodyFetish(target, getSelf(), "cock", .1));
+                    target.add(c, new BodyFetish(target.getType(), self, "cock", .1));
                 }
 
                 if (c.getStance().dom(target)) {
-                    c.setStance(new Kneeling(getSelf(), target));
+                    c.setStance(new Kneeling(self, target.getType()));
                 }
                 target.temptNoSkillNoSource(c, getSelf(), 7 + Random.random(20));
                 getSelf().buildMojo(c, 15);
@@ -293,11 +295,11 @@ public class Command extends Skill {
                 getSelf().body.pleasure(target, target.body.getRandom("mouth"), getSelf().body.getRandomPussy(),
                                 7 + Random.random(m), c, this);
                 if (Random.random(50) < getSelf().get(Attribute.fetishism) + 10) {
-                    target.add(c, new BodyFetish(target, getSelf(), "pussy", .1));
+                    target.add(c, new BodyFetish(target.getType(), self, "pussy", .1));
                 }
 
                 if (c.getStance().dom(target)) {
-                    c.setStance(new Kneeling(getSelf(), target));
+                    c.setStance(new Kneeling(self, target.getType()));
                 }
                 target.temptNoSkillNoSource(c, getSelf(), 7 + Random.random(20));
                 getSelf().buildMojo(c, 15);
@@ -309,7 +311,7 @@ public class Command extends Skill {
                                                 + " behind.", target.directObject(), getSelf().getName(),
                                                 target.nameDirectObject(),
                                                 target.directObject()));
-                c.setStance(new Behind(getSelf(), target), target, false);
+                c.setStance(new Behind(self, target.getType()), target, false);
                 getSelf().buildMojo(c, 5);
                 break;
             case MASTER_MOUNT:
@@ -319,7 +321,7 @@ public class Command extends Skill {
                                                 getSelf().getName(), target.subject(), 
                                                 target.directObject(), getSelf().possessiveAdjective(),
                                                 target.possessiveAdjective()));
-                c.setStance(new Mount(getSelf(), target), target, false);
+                c.setStance(new Mount(self, target.getType()), target, false);
                 getSelf().buildMojo(c, 5);
                 break;
             case MASTER_REVERSE_MOUNT:
@@ -330,7 +332,7 @@ public class Command extends Skill {
                                                 + " belly.", getSelf().getName(), target.subject(),
                                                 target.directObject(), target.possessiveAdjective(), getSelf().pronoun(),
                                                 target.directObject(), target.possessiveAdjective()));
-                c.setStance(new ReverseMount(getSelf(), target), target, false);
+                c.setStance(new ReverseMount(self, target.getType()), target, false);
                 getSelf().buildMojo(c, 5);
                 break;
             case MASTER_STRAPON:
@@ -345,7 +347,7 @@ public class Command extends Skill {
                                                 target.pronoun(), target.action("are", "is")));
                 if (getSelf().has(Item.Strapon2)) {
                     c.write(getSelf(), "The phallic toy vibrates softly but insistently, "
-                                    + "obviously designed to make the recepient squeal.");
+                                    + "obviously designed to make the recipient squeal.");
                 }
                 getSelf().getOutfit()
                          .equip(ClothingTable.getByID("strapon"));
@@ -412,7 +414,7 @@ public class Command extends Skill {
                                                 target.nameOrPossessivePronoun(), target.directObject(),
                                                 target.pronoun(), 
                                                 Formatter.capitalizeFirstLetter(target.subjectAction("obey"))));
-                c.setStance(new StandingOver(getSelf(), target), target, false);
+                c.setStance(new StandingOver(self, target.getType()), target, false);
                 break;
             case WORSHIP_COCK:
                 c.write(getSelf(),
@@ -474,23 +476,19 @@ public class Command extends Skill {
                                     .format("{self:SUBJECT-ACTION:order} {other:name-do} to be still.", getSelf(), target));
                 } else {
                     c.write(getSelf(),
-                                    String.format("With a mischevous smile, %s tells %s to be still,"
+                                    String.format("With a mischievous smile, %s tells %s to be still,"
                                                     + " and that %s has a special surprise for %s.", getSelf().getName(),
                                                     target.subject(), getSelf().pronoun(), target.directObject()));
                 }
-                getSelf().getSkills()
-                      .stream()
-                      .filter(skill -> Tactics.fucking.equals(skill.type(c)))
-                      .map(s -> s.copy(getSelf()))
-                      .filter(s -> s.requirements(c, getSelf(), target) && s.usable(c, target))
-                      .findAny()
-                      .get()
-                      .resolve(c, target);
+                getSelf().getSkills().stream().filter(skill -> Tactics.fucking.equals(skill.type(c)))
+                                .map(s -> s.copy(getSelf()))
+                                .filter(s -> s.requirements(c, getSelf(), target) && s.usable(c, target)).findAny()
+                                .ifPresent(skill -> skill.resolve(c, target));
                 break;
             case MASTER_FACESIT:
                 c.write(getSelf(), String.format("%s stands over %s face and slowly lowers %s down onto it.",
                                 getSelf().getName(), target.nameOrPossessivePronoun(), getSelf().reflectivePronoun()));
-                c.setStance(new FaceSitting(getSelf(), target), target, false);
+                c.setStance(new FaceSitting(self, target.getType()), target, false);
                 break;
         }
     }

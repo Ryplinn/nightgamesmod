@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -23,7 +24,7 @@ public class ThrowBomb extends Skill {
                     + " The thing is beeping softly, and by the confident little smirk {other:subject} is giving"
                     + " you from below, it might be best to remove it. Soon.";
 
-    public ThrowBomb(Character self) {
+    public ThrowBomb(CharacterType self) {
         super("Throw Bomb", self, 4);
     }
 
@@ -61,7 +62,7 @@ public class ThrowBomb extends Skill {
                                                                                                   .dom(getSelf())
                         || target.roll(getSelf(), 75)) {
             writeOutput(c, Result.normal, target);
-            target.add(c, new PheromoneBombed(target));
+            target.add(c, new PheromoneBombed(target.getType()));
         } else {
             writeOutput(c, Result.miss, target);
         }
@@ -70,7 +71,7 @@ public class ThrowBomb extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new ThrowBomb(user);
+        return new ThrowBomb(user.getType());
     }
 
     @Override

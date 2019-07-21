@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -10,7 +11,7 @@ import nightgames.status.Primed;
 
 public class AttireShift extends Skill {
 
-    public AttireShift(Character self) {
+    AttireShift(CharacterType self) {
         super("Attire Shift", self);
         addTag(SkillTag.stripping);
     }
@@ -33,7 +34,7 @@ public class AttireShift extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        getSelf().add(c, new Primed(getSelf(),-2));
+        getSelf().add(c, new Primed(self,-2));
         target.nudify();
         writeOutput(c, Result.normal, target);
         getSelf().emote(Emotion.dominant, 15);
@@ -43,7 +44,7 @@ public class AttireShift extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new AttireShift(user);
+        return new AttireShift(user.getType());
     }
 
     @Override

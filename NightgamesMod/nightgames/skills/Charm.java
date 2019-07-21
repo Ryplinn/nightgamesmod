@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -12,7 +13,7 @@ import nightgames.status.Charmed;
 import nightgames.status.Stsflag;
 
 public class Charm extends Skill {
-    public Charm(Character self) {
+    public Charm(CharacterType self) {
         super("Charm", self, 4);
     }
 
@@ -23,7 +24,7 @@ public class Charm extends Skill {
 
     @Override
     public int getMojoCost(Combat c) {
-        if (isPurr(c)) {
+        if (isPurr()) {
             return 0;
         }
         return 30;
@@ -31,7 +32,7 @@ public class Charm extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        if (isPurr(c)) {
+        if (isPurr()) {
             return resolvePurr(c, target);
         }
         if (target.human() && target.is(Stsflag.blinded)) {
@@ -46,7 +47,7 @@ public class Charm extends Skill {
             }
             int m = (int) Math.round(mag);
             target.temptNoSource(c, getSelf(), m, this);
-            target.add(c, new Charmed(target));
+            target.add(c, new Charmed(target.getType()));
             target.emote(Emotion.horny, 10);
             getSelf().emote(Emotion.confident, 20);
         } else {
@@ -67,7 +68,7 @@ public class Charm extends Skill {
             if (damage > 0) {
                 target.temptNoSource(c, getSelf(), damage, this);
             }
-            target.add(c, new Charmed(target));
+            target.add(c, new Charmed(target.getType()));
             return true;
         } else {
             writeOutput(c, Result.weak, target);
@@ -77,12 +78,12 @@ public class Charm extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return (user.get(Attribute.cunning) >= 8 && user.get(Attribute.seduction) > 16) || isPurr(c);
+        return (user.get(Attribute.cunning) >= 8 && user.get(Attribute.seduction) > 16) || isPurr();
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Charm(user);
+        return new Charm(user.getType());
     }
 
     @Override
@@ -95,7 +96,7 @@ public class Charm extends Skill {
         return Tactics.debuff;
     }
 
-    private boolean isPurr(Combat c) {
+    private boolean isPurr() {
         return getSelf().get(Attribute.animism) >= 9 && getSelf().getArousal().percent() >= 20;
     }
 
@@ -157,7 +158,7 @@ public class Charm extends Skill {
 
     @Override
     public String getLabel(Combat c) {
-        if (isPurr(c)) {
+        if (isPurr()) {
             return "Purr";
         }
         return getName(c);

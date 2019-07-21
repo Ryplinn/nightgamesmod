@@ -14,7 +14,7 @@ public class CommandDown extends PlayerCommand {
     @Override
     public boolean usable(Combat c, Character target) {
         return target.is(Stsflag.enthralled)
-                        && ((Enthralled) target.getStatus(Stsflag.enthralled)).master.equals(getSelf())
+                        && ((Enthralled) target.getStatus(Stsflag.enthralled)).master.equals(self)
                         && !c.getStance().havingSex(c) && getSelf().canRespond();
     }
 
@@ -30,7 +30,7 @@ public class CommandDown extends PlayerCommand {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        c.setStance(new Mount(getSelf(), target), target, false);
+        c.setStance(new Mount(self, target.getType()), target, false);
         writeOutput(c, Result.normal, target);
         return true;
     }

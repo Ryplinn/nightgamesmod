@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -9,7 +10,7 @@ import nightgames.stance.StandingOver;
 
 public class Submit extends Skill {
 
-    public Submit(Character self) {
+    private Submit(CharacterType self) {
         super("Submit", self);
 
     }
@@ -22,7 +23,7 @@ public class Submit extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        c.setStance(new StandingOver(target, getSelf()), target, false);
+        c.setStance(new StandingOver(target.getType(), self), target, false);
         return true;
     }
 
@@ -33,7 +34,7 @@ public class Submit extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Submit(user);
+        return new Submit(user.getType());
     }
 
     @Override

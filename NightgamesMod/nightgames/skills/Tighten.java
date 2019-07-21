@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -13,12 +14,12 @@ import nightgames.stance.Stance;
 import nightgames.status.BodyFetish;
 
 public class Tighten extends Thrust {
-    public Tighten(String name, Character self) {
+    public Tighten(String name, CharacterType self) {
         super(name, self);
         removeTag(SkillTag.pleasureSelf);
     }
 
-    public Tighten(Character self) {
+    public Tighten(CharacterType self) {
         this("Tighten", self);
     }
 
@@ -80,7 +81,7 @@ public class Tighten extends Thrust {
         if (m[1] != 0)
             getSelf().body.pleasure(target, targetO, selfO, m[1], 0, c, false, this);
         if (selfO.isType("ass") && Random.random(100) < 2 + getSelf().get(Attribute.fetishism)) {
-            target.add(c, new BodyFetish(target, getSelf(), "ass", .25));
+            target.add(c, new BodyFetish(target.getType(), self, "ass", .25));
         }
         return true;
     }
@@ -92,7 +93,7 @@ public class Tighten extends Thrust {
 
     @Override
     public Skill copy(Character user) {
-        return new Tighten(user);
+        return new Tighten(user.getType());
     }
 
     @Override

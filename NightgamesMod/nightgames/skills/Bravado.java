@@ -1,15 +1,16 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 
 public class Bravado extends Skill {
-    int cost;
+    private int cost;
 
-    public Bravado(Character self) {
+    public Bravado(CharacterType self) {
         super("Determination", self, 5);
         cost = 0;
     }
@@ -46,7 +47,7 @@ public class Bravado extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Bravado(user);
+        return new Bravado(user.getType());
     }
 
     @Override

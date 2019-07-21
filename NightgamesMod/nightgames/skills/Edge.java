@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -11,7 +12,7 @@ import nightgames.nskills.tags.SkillTag;
 
 public class Edge extends Skill {
 
-    public Edge(Character self) {
+    public Edge(CharacterType self) {
         super("Edge", self);
         addTag(SkillTag.usesHands);
         addTag(SkillTag.pleasure);
@@ -88,7 +89,7 @@ public class Edge extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Edge(user);
+        return new Edge(user.getType());
     }
 
     @Override

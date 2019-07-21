@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.items.Item;
@@ -9,7 +10,7 @@ import nightgames.items.clothing.ClothingTable;
 import nightgames.items.clothing.ClothingTrait;
 
 public class NursesGloves extends Skill {
-    public NursesGloves(Character self) {
+    private NursesGloves(CharacterType self) {
         super("Nurse's Gloves", self, 5);
     }
 
@@ -44,7 +45,7 @@ public class NursesGloves extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new NursesGloves(user);
+        return new NursesGloves(user.getType());
     }
 
     @Override

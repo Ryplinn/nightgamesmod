@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.mods.ArcaneMod;
@@ -15,7 +16,7 @@ import nightgames.status.SlimeMimicry;
 import nightgames.status.Stsflag;
 
 public class MimicWitch extends Skill {
-    public MimicWitch(Character self) {
+    MimicWitch(CharacterType self) {
         super("Mimicry: Witch", self);
     }
 
@@ -81,8 +82,8 @@ public class MimicWitch extends Skill {
         if (getSelf().has(Trait.Masquerade)) {
             strength = strength * 3 / 2;
         }
-        getSelf().add(c, new AttributeBuff(getSelf(), Attribute.spellcasting, strength, 10));
-        getSelf().add(c, new SlimeMimicry("witch", getSelf(), 10));
+        getSelf().add(c, new AttributeBuff(self, Attribute.spellcasting, strength, 10));
+        getSelf().add(c, new SlimeMimicry("witch", self, 10));
 
         getSelf().body.temporaryAddPartMod("pussy", ArcaneMod.INSTANCE, 10);
         getSelf().body.temporaryAddPartMod("cock", CockMod.runic, 10);
@@ -91,7 +92,7 @@ public class MimicWitch extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new MimicWitch(user);
+        return new MimicWitch(user.getType());
     }
 
     @Override

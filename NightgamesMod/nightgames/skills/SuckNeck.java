@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -10,7 +11,7 @@ import nightgames.skills.damage.DamageType;
 
 public class SuckNeck extends Skill {
 
-    public SuckNeck(Character self) {
+    SuckNeck(CharacterType self) {
         super("Suck Neck", self);
         addTag(SkillTag.usesMouth);
         addTag(SkillTag.pleasure);
@@ -53,7 +54,7 @@ public class SuckNeck extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new SuckNeck(user);
+        return new SuckNeck(user.getType());
     }
 
     @Override

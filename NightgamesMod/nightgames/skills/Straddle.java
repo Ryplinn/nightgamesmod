@@ -25,7 +25,7 @@ public class Straddle extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        c.setStance(new Mount(getSelf(), target), getSelf(), true);
+        c.setStance(new Mount(self, target.getType()), getSelf(), true);
         return true;
     }
 

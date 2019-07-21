@@ -12,7 +12,7 @@ public enum Stage {
 
     private final double arousalFactor;
 
-    private Stage(double af) {
+    Stage(double af) {
         arousalFactor = af;
     }
 

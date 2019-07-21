@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -12,21 +13,21 @@ import nightgames.status.Alluring;
 import nightgames.status.Stsflag;
 
 public class StripTease extends Skill {
-    public StripTease(Character self) {
-        super("Strip Tease", self);
+    StripTease(CharacterType self) {
+        this("Strip Tease", self);
+    }
+
+    StripTease(String string, CharacterType self) {
+        super(string, self);
         addTag(SkillTag.undressing);
     }
 
-    public StripTease(String string, Character self) {
-        super(string, self);
-    }
-
-    public static boolean hasRequirements(Character user) {
+    private static boolean hasRequirements(Character user) {
         return user.get(Attribute.seduction) >= 24 && !user.has(Trait.direct) && !user.has(Trait.shy)
                         && !user.has(Trait.temptress);
     }
 
-    public static boolean isUsable(Combat c, Character self, Character target) {
+    private static boolean isUsable(Combat c, Character self, Character target) {
         return self.stripDifficulty(target) == 0 && !self.has(Trait.strapped) && self.canAct() && c.getStance()
                                                                                                    .mobile(self)
                         && !self.mostlyNude() && !c.getStance()
@@ -64,7 +65,7 @@ public class StripTease extends Skill {
         if (!target.is(Stsflag.blinded)) {
             int m = 15 + Random.random(5);
             target.temptNoSource(c, getSelf(), m, this);
-            getSelf().add(c, new Alluring(getSelf(), 5));
+            getSelf().add(c, new Alluring(self, 5));
         }
         target.emote(Emotion.horny, 30);
         getSelf().undress(c);
@@ -75,7 +76,7 @@ public class StripTease extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new StripTease(user);
+        return new StripTease(user.getType());
     }
 
     @Override

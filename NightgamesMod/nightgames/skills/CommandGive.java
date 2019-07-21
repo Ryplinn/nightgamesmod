@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -11,12 +12,12 @@ import nightgames.items.Item;
 
 public class CommandGive extends PlayerCommand {
 
-    public static final List<Item> TRANSFERABLES =
+    private static final List<Item> TRANSFERABLES =
                     Arrays.asList(Item.EnergyDrink, Item.SPotion, Item.Aphrodisiac, Item.Sedative, Item.Battery,
                                     Item.Beer, Item.Lubricant, Item.Rope, Item.ZipTie, Item.Tripwire, Item.Spring);
     private Item transfer;
 
-    public CommandGive(Character self) {
+    CommandGive(CharacterType self) {
         super("Take Item", self);
         transfer = null;
     }
@@ -56,7 +57,7 @@ public class CommandGive extends PlayerCommand {
 
     @Override
     public Skill copy(Character user) {
-        return new CommandGive(user);
+        return new CommandGive(user.getType());
     }
 
     @Override

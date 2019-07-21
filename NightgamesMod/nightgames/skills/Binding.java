@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -10,7 +11,7 @@ import nightgames.status.Bound;
 
 public class Binding extends Skill {
 
-    public Binding(Character self) {
+    public Binding(CharacterType self) {
         super("Binding", self, 4);
         addTag(SkillTag.positioning);
     }
@@ -39,7 +40,7 @@ public class Binding extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        target.add(c, new Bound(target, 45 + 3 * Math.sqrt(getSelf().get(Attribute.spellcasting)), "seal"));
+        target.add(c, new Bound(target.getType(), 45 + 3 * Math.sqrt(getSelf().get(Attribute.spellcasting)), "seal"));
         target.emote(Emotion.nervous, 5);
         getSelf().emote(Emotion.confident, 20);
         getSelf().emote(Emotion.dominant, 10);
@@ -48,7 +49,7 @@ public class Binding extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Binding(user);
+        return new Binding(user.getType());
     }
 
     @Override

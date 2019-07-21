@@ -3,9 +3,11 @@ package nightgames.skills;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -19,7 +21,7 @@ public class ImbueFetish extends Skill {
 
     private String chosenFetish;
 
-    public ImbueFetish(Character self) {
+    ImbueFetish(CharacterType self) {
         super("Imbue Fetish", self, 3);
     }
 
@@ -46,14 +48,18 @@ public class ImbueFetish extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        chosenFetish = Random.pickRandom(
-                        POSSIBLE_FETISHES.stream().filter(part -> getSelf().body.has(part)).toArray(String[]::new)).get();
+        Optional<String> fetish = Random.pickRandom(
+                        POSSIBLE_FETISHES.stream().filter(part -> getSelf().body.has(part)).toArray(String[]::new));
+        if (!fetish.isPresent()) {
+            return false;
+        }
+        chosenFetish = fetish.get();
         if (getSelf().human()) {
             c.write(getSelf(), deal(c, 0, Result.normal, target));
         } else {
             c.write(getSelf(), receive(c, 0, Result.normal, target));
         }
-        target.add(c, new BodyFetish(target, getSelf(), chosenFetish,
+        target.add(c, new BodyFetish(target.getType(), self, chosenFetish,
                         Random.randomdouble() * .2 + getSelf().get(Attribute.fetishism) * .01));
         chosenFetish = null;
         return true;
@@ -61,7 +67,7 @@ public class ImbueFetish extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new ImbueFetish(user);
+        return new ImbueFetish(user.getType());
     }
 
     @Override

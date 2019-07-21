@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -14,7 +15,7 @@ import nightgames.nskills.tags.SkillTag;
 
 public class Tear extends Skill {
 
-    public Tear(Character self) {
+    public Tear(CharacterType self) {
         super("Tear Clothes", self);
         addTag(SkillTag.stripping);
     }
@@ -223,7 +224,7 @@ public class Tear extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Tear(user);
+        return new Tear(user.getType());
     }
 
     public String getLabel(Combat c) {

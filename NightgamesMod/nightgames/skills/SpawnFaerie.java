@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,7 +14,7 @@ import nightgames.pet.Ptype;
 public class SpawnFaerie extends Skill {
     private Ptype gender;
 
-    public SpawnFaerie(Character self, Ptype gender) {
+    SpawnFaerie(CharacterType self, Ptype gender) {
         super("Summon Faerie (" + gender.name() + ")", self);
         this.gender = gender;
     }
@@ -71,7 +72,7 @@ public class SpawnFaerie extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new SpawnFaerie(user, gender);
+        return new SpawnFaerie(user.getType(), gender);
     }
 
     @Override

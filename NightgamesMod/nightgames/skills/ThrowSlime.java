@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -14,10 +15,10 @@ import nightgames.status.*;
 
 public class ThrowSlime extends Skill {
 
-    public ThrowSlime(Character self) {
+    public ThrowSlime(CharacterType self) {
         super("Throw Slime", self, 4);
         addTag(SkillTag.knockdown);
-        if (self.get(Attribute.slime) >= 12) {
+        if (getSelf().get(Attribute.slime) >= 12) {
             addTag(SkillTag.mental);
         }
     }
@@ -59,7 +60,7 @@ public class ThrowSlime extends Skill {
             if (type != HitType.NONE) {
                 target.add(c, type.build(getSelf(), target));
                 if (getSelf().has(Trait.VolatileSubstrate)) {
-                    target.add(c, new Slimed(target, getSelf(), Random.random(1, 11)));
+                    target.add(c, new Slimed(target.getType(), self, Random.random(1, 11)));
                 }
                 return true;
             } else {
@@ -70,7 +71,7 @@ public class ThrowSlime extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new ThrowSlime(user);
+        return new ThrowSlime(user.getType());
     }
 
     @Override
@@ -115,27 +116,27 @@ public class ThrowSlime extends Skill {
         public Status build(Character user, Character target) {
             switch (this) {
                 case BOUND_S:
-                    return new Bound(target, 55 + 4 * Math.sqrt(user.get(Attribute.slime)), "slime");
+                    return new Bound(target.getType(), 55 + 4 * Math.sqrt(user.get(Attribute.slime)), "slime");
                 case BOUND_W:
-                    return new Bound(target, 20 + 2 * Math.sqrt(user.get(Attribute.slime)), "slime");
+                    return new Bound(target.getType(), 20 + 2 * Math.sqrt(user.get(Attribute.slime)), "slime");
                 case FALL:
-                    return new Falling(target);
+                    return new Falling(target.getType());
                 case FLAT_1:
-                    return new Flatfooted(target, 1);
+                    return new Flatfooted(target.getType(), 1);
                 case FLAT_3:
-                    return new Flatfooted(target, 3);
+                    return new Flatfooted(target.getType(), 3);
                 case FRENZIED:
-                    return new Frenzied(target, 3);
+                    return new Frenzied(target.getType(), 3);
                 case PARASITED:
-                    return new Parasited(target, user);
+                    return new Parasited(target.getType(), user.getType());
                 case TRANCE:
-                    return new Trance(target, 3);
+                    return new Trance(target.getType(), 3);
                 default: // NONE or a stupid mistake
                     GUI.gui
                           .message("ERROR: Half-implemented HitType for ThrowSlime; "
                                           + "applying 1-turn Wary instead. Please report this."
                                           + " And be sure to laugh at my stupidity. (DNDW)");
-                    return new Wary(target, 1);
+                    return new Wary(target.getType(), 1);
             }
         }
 
@@ -205,7 +206,7 @@ public class ThrowSlime extends Skill {
                                                     + " mind with an unquenchable thirst for sex. And you"
                                                     + " know just where to get some..."
                                                     : "When the flush reaches {other:name-possessive} head, {other:pronoun}"
-                                                    + " suddenly stares straight at you, focussed and intense"
+                                                    + " suddenly stares straight at you, focused and intense"
                                                     + " with a not-so-subtle hint of sheer insanity.")
                                     , self, target);
                     break;

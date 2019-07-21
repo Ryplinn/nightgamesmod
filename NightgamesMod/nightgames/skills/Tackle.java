@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -14,7 +15,7 @@ import nightgames.status.Winded;
 
 public class Tackle extends Skill {
 
-    public Tackle(Character self) {
+    public Tackle(CharacterType self) {
         super("Tackle", self);
 
         addTag(SkillTag.positioning);
@@ -38,9 +39,9 @@ public class Tackle extends Skill {
                             + " hit, knocking the wind out of {other:subject} and allowing {self:subject}"
                             + " to take {self:subject} place on top of {other:possessive} heaving chest."
                             , getSelf(), target));
-            c.setStance(new Mount(getSelf(), target));
+            c.setStance(new Mount(self, target.getType()));
             target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(15, 30)));
-            target.add(c, new Winded(target, 2));
+            target.add(c, new Winded(target.getType(), 2));
         }
         if (target.roll(getSelf(), accuracy(c, target))
                         && getSelf().checkVsDc(Attribute.power, target.knockdownDC() - getSelf().get(Attribute.animism))) {
@@ -53,7 +54,7 @@ public class Tackle extends Skill {
                 target.pain(c, getSelf(), (int) DamageType.physical
                                 .modifyDamage(getSelf(), target, Random.random(10, 25)));
             }
-            c.setStance(new Mount(getSelf(), target), getSelf(), true);
+            c.setStance(new Mount(self, target.getType()), getSelf(), true);
         } else {
             writeOutput(c, Result.miss, target);
             return false;
@@ -73,7 +74,7 @@ public class Tackle extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Tackle(user);
+        return new Tackle(user.getType());
     }
 
     @Override

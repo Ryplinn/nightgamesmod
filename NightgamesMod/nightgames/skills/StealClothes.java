@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.items.clothing.Clothing;
@@ -10,7 +11,7 @@ import nightgames.nskills.tags.SkillTag;
 
 public class StealClothes extends Skill {
 
-    public StealClothes(Character self) {
+    StealClothes(CharacterType self) {
         super("Steal Clothes", self);
         addTag(SkillTag.stripping);
     }
@@ -80,7 +81,7 @@ public class StealClothes extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new StealClothes(user);
+        return new StealClothes(user.getType());
     }
 
     @Override

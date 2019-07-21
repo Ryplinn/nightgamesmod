@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -12,7 +13,7 @@ import nightgames.status.BodyFetish;
 
 public class Footjob extends Skill {
 
-    public Footjob(Character self) {
+    public Footjob(CharacterType self) {
         super("Footjob", self);
         addTag(SkillTag.usesFeet);
         addTag(SkillTag.pleasure);
@@ -67,7 +68,7 @@ public class Footjob extends Skill {
                 target.body.pleasure(getSelf(), getSelf().body.getRandom("feet"), target.body.getRandom("pussy"), m, c, this);
             }
             if (Random.random(100) < 15 + 2 * getSelf().get(Attribute.fetishism)) {
-                target.add(c, new BodyFetish(target, getSelf(), "feet", .25));
+                target.add(c, new BodyFetish(target.getType(), self, "feet", .25));
             }
         } else {
             if (getSelf().human()) {
@@ -83,7 +84,7 @@ public class Footjob extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Footjob(user);
+        return new Footjob(user.getType());
     }
 
     @Override

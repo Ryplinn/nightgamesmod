@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -10,7 +11,7 @@ import nightgames.stance.HeldOral;
 import nightgames.stance.Stance;
 
 public class PinAndBlow extends Skill {
-    public PinAndBlow(Character self) {
+    PinAndBlow(CharacterType self) {
         super("Oral Pin", self);
         addTag(SkillTag.positioning);
         addTag(SkillTag.pleasure);
@@ -47,20 +48,20 @@ public class PinAndBlow extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        c.setStance(new HeldOral(getSelf(), target), getSelf(), true);
+        c.setStance(new HeldOral(self, target.getType()), getSelf(), true);
         if (target.hasDick()) {
-            new Blowjob(getSelf()).resolve(c, target);
+            new Blowjob(self).resolve(c, target);
         } else if (target.hasPussy()) {
-            new Cunnilingus(getSelf()).resolve(c, target);
+            new Cunnilingus(self).resolve(c, target);
         } else if (target.body.has("ass")) {
-            new Anilingus(getSelf()).resolve(c, target);
+            new Anilingus(self).resolve(c, target);
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new PinAndBlow(user);
+        return new PinAndBlow(user.getType());
     }
 
     @Override

@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -15,7 +16,7 @@ import nightgames.status.Primed;
 
 public class CheapShot extends Skill {
 
-    public CheapShot(Character self) {
+    CheapShot(CharacterType self) {
         super("Cheap Shot", self);
         addTag(SkillTag.hurt);
         addTag(SkillTag.staminaDamage);
@@ -42,12 +43,12 @@ public class CheapShot extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        getSelf().add(c, new Primed(getSelf(), -3));
+        getSelf().add(c, new Primed(self, -3));
         writeOutput(c, Result.normal, target);
         if (target.human() && Random.random(5) >= 3) {
             c.write(getSelf(), getSelf().bbLiner(c, target));
         }
-        c.setStance(new Behind(getSelf(), target), getSelf(), true);
+        c.setStance(new Behind(self, target.getType()), getSelf(), true);
         target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(8, 20)));
         getSelf().buildMojo(c, 10);
 
@@ -60,7 +61,7 @@ public class CheapShot extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new CheapShot(user);
+        return new CheapShot(user.getType());
     }
 
     @Override

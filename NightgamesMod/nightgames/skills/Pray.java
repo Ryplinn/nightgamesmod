@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -10,7 +11,7 @@ import nightgames.status.addiction.AddictionType;
 
 public class Pray extends Skill {
 
-    public Pray(Character self) {
+    public Pray(CharacterType self) {
         super("Pray", self, 2);
     }
 
@@ -46,7 +47,7 @@ public class Pray extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Pray(user);
+        return new Pray(user.getType());
     }
 
     @Override

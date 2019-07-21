@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.BondageFetish;
@@ -9,7 +10,7 @@ import nightgames.status.Stsflag;
 
 public class Bondage extends Skill {
 
-    public Bondage(Character self) {
+    public Bondage(CharacterType self) {
         super("Bondage", self);
     }
 
@@ -32,14 +33,14 @@ public class Bondage extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        getSelf().add(c, new BondageFetish(getSelf()));
-        target.add(c, new BondageFetish(target));
+        getSelf().add(c, new BondageFetish(self));
+        target.add(c, new BondageFetish(target.getType()));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Bondage(user);
+        return new Bondage(user.getType());
     }
 
     @Override

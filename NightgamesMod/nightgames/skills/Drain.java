@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -12,14 +13,14 @@ import nightgames.skills.damage.DamageType;
 import nightgames.status.Drained;
 
 public class Drain extends Skill {
-    public Drain(Character self) {
+    public Drain(CharacterType self) {
         super("Drain", self, 5);
         addTag(SkillTag.drain);
         addTag(SkillTag.dark);
         addTag(SkillTag.fucking);
     }
 
-    public Drain(String name, Character self) {
+    public Drain(String name, CharacterType self) {
         super(name, self, 5);
     }
 
@@ -35,10 +36,10 @@ public class Drain extends Skill {
 
     @Override
     public int getMojoCost(Combat c) {
-        return drainsAttributes(c) ? 30 : 0;
+        return drainsAttributes() ? 30 : 0;
     }
 
-    private boolean drainsAttributes(Combat c) {
+    private boolean drainsAttributes() {
         return getSelf().getMojo().get() >= 30;
     }
 
@@ -58,14 +59,10 @@ public class Drain extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        return resolve(c, target, false);
-    }
-
-    public boolean resolve(Combat c, Character target, boolean nocost) {
         int strength = Math.max(10, 1 + getSelf().get(Attribute.darkness) / 4);
         int staminaStrength = 50;
         int type = Math.max(1, Random.centeredrandom(6, getSelf().get(Attribute.darkness) / 3.0, 3));
-        if (!drainsAttributes(c) && type > 2) {
+        if (!drainsAttributes() && type > 2) {
             type = 1;
             staminaStrength /= 2;
         }
@@ -109,7 +106,7 @@ public class Drain extends Skill {
 
     @Override
     public Skill copy(Character target) {
-        return new Drain(target);
+        return new Drain(target.getType());
     }
 
     @Override
@@ -138,8 +135,6 @@ public class Drain extends Skill {
                     return base + "taking " + target.possessiveAdjective() + " raw sexual energy and"
                                     + " adding it to your own";
                 case 1:
-                    return base + "but unfortunately you made a mistake, and only feel a small" + " bit of "
-                                    + target.possessiveAdjective() + " energy traversing the space between you.";
                 case 2:
                     return base + "but unfortunately you made a mistake, and only feel a small" + " bit of "
                                     + target.possessiveAdjective() + " energy traversing the space between you.";

@@ -1,13 +1,14 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.ReverseMount;
 
 public class ReverseStraddle extends Skill {
-    public ReverseStraddle(Character self) {
+    ReverseStraddle(CharacterType self) {
         super("Mount(Reverse)", self);
         addTag(SkillTag.positioning);
         addTag(SkillTag.petDisallowed);
@@ -22,7 +23,7 @@ public class ReverseStraddle extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        c.setStance(new ReverseMount(getSelf(), target), getSelf(), true);
+        c.setStance(new ReverseMount(self, target.getType()), getSelf(), true);
         return true;
     }
 
@@ -33,7 +34,7 @@ public class ReverseStraddle extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new ReverseStraddle(user);
+        return new ReverseStraddle(user.getType());
     }
 
     @Override

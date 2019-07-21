@@ -41,7 +41,7 @@ public class InjectAphrodisiac extends Skill {
         target.emote(Emotion.horny, 20);
         this.getSelf().consume(Item.Aphrodisiac, 1);
         target.add(c, Horny.getWithBiologicalType(getSelf(), target, magnitude, 10, "Aphrodisac Injection"));
-        target.add(c, new InducedEuphoria(target));
+        target.add(c, new InducedEuphoria(target.getType()));
         getSelf().consume(Item.MedicalSupplies, 1);
 
         return true;

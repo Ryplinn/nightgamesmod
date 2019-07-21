@@ -46,7 +46,7 @@ public class Whisper extends Skill {
         if (getSelf().has(Trait.darkpromises) && roll == 4 && getSelf().canSpend(15) && !target.wary()) {
             getSelf().spendMojo(c, 15);
             writeOutput(c, Result.special, target);
-            target.add(c, new Enthralled(target.getType(), getSelf(), 4));
+            target.add(c, new Enthralled(target.getType(), self, 4));
         } else {
             writeOutput(c, Result.normal, target);
         }

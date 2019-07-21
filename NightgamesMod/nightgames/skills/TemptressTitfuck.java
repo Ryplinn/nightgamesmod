@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -14,7 +15,7 @@ import nightgames.status.Stsflag;
 
 public class TemptressTitfuck extends Paizuri {
 
-    public TemptressTitfuck(Character user) {
+    TemptressTitfuck(CharacterType user) {
         super("Skillful Titfuck", user);
         addTag(SkillTag.usesBreasts);
         addTag(SkillTag.pleasure);
@@ -68,11 +69,11 @@ public class TemptressTitfuck extends Paizuri {
                 if (target.body.getRandomCock().isReady(target)) {
                     // Was flaccid, got hard
                     c.write(getSelf(), deal(c, 0, Result.special, target));
-                    getSelf().add(c, new FiredUp(getSelf(), target, "breasts"));
+                    getSelf().add(c, new FiredUp(self, target.getType(), "breasts"));
                     
                     target.body.pleasure(getSelf(), getSelf().body.getRandom("breasts"), target.body.getRandom("cock"), m, c, this);
                     if (Random.random(100) < fetishChance) {
-                        target.add(c, new BodyFetish(target, getSelf(), BreastsPart.a.getType(), .05 + (0.01 * breasts.getSize()) + getSelf().get(Attribute.fetishism) * .01));
+                        target.add(c, new BodyFetish(target.getType(), self, BreastsPart.a.getType(), .05 + (0.01 * breasts.getSize()) + getSelf().get(Attribute.fetishism) * .01));
                     }
                 } else {
                     // Was flaccid, still is
@@ -87,10 +88,10 @@ public class TemptressTitfuck extends Paizuri {
                 c.write(getSelf(), deal(c, stack, Result.normal, target));
                 target.body.pleasure(getSelf(), getSelf().body.getRandom("breasts"), target.body.getRandomCock(),
                                 m + m * stack / 2, c, this);
-                getSelf().add(c, new FiredUp(getSelf(), target, "breasts"));
+                getSelf().add(c, new FiredUp(self, target.getType(), "breasts"));
                 
                 if (Random.random(100) < fetishChance) {
-                    target.add(c, new BodyFetish(target, getSelf(), BreastsPart.a.getType(), .05 + (0.01 * breasts.getSize()) + getSelf().get(Attribute.fetishism) * .01));
+                    target.add(c, new BodyFetish(target.getType(), self, BreastsPart.a.getType(), .05 + (0.01 * breasts.getSize()) + getSelf().get(Attribute.fetishism) * .01));
                 }
             }
         } else {
@@ -101,7 +102,7 @@ public class TemptressTitfuck extends Paizuri {
 
     @Override
     public Skill copy(Character user) {
-        return new TemptressTitfuck(user);
+        return new TemptressTitfuck(user.getType());
     }
 
     @Override

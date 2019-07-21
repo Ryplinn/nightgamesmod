@@ -1,13 +1,14 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.Stsflag;
 
 public class Obey extends Skill {
 
-    public Obey(Character self) {
+    Obey(CharacterType self) {
         super("Obey", self);
     }
 
@@ -35,16 +36,16 @@ public class Obey extends Skill {
             c.write(getSelf(), getSelf().getName() + " stares ahead blankly, waiting for "+getSelf().possessiveAdjective()+" orders.");
         }
         if (getSelf().human()) {
-            (new Command(target)).resolve(c, getSelf());
+            (new Command(target.getType())).resolve(c, getSelf());
         } else {
-            (new Masturbate(getSelf())).resolve(c, target);
+            (new Masturbate(self)).resolve(c, target);
         }
         return true;
     }
 
     @Override
-    public Skill copy(Character paramCharacter) {
-        return new Obey(paramCharacter);
+    public Skill copy(Character user) {
+        return new Obey(user.getType());
     }
 
     @Override

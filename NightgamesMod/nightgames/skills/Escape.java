@@ -85,7 +85,7 @@ public class Escape extends Skill {
                                 target.pronoun(), target.action("move"), getSelf().pronoun(),
                                 target.possessiveAdjective()));
             }
-            c.setStance(new Neutral(getSelf(), c.getOpponent(getSelf())), getSelf(), true);
+            c.setStance(new Neutral(self, c.getOpponent(getSelf()).getType()), getSelf(), true);
         } else {
             c.escape(getSelf(), c.getStance());
             getSelf().struggle();

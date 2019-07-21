@@ -52,7 +52,7 @@ public class Dissolve extends Skill {
                             + ". Slowly, it dissolves away beneath {self:possessive} touch.";
             c.write(getSelf(), Formatter.format(msg, getSelf(), target));
             if (getSelf().has(Trait.VolatileSubstrate)) {
-                target.add(c, new Slimed(target, getSelf(), Random.random(2, 4)));
+                target.add(c, new Slimed(target.getType(), self, Random.random(2, 4)));
             }
         } else {
             getSelf().consume(Item.DisSol, 1);

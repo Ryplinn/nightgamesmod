@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.global.DebugFlags;
 import nightgames.pet.Ptype;
 
@@ -13,7 +14,8 @@ import java.util.Set;
 public class SkillPool {
     public static Set<Skill> skillPool = new HashSet<>();
 
-    public static void buildSkillPool(Character ch) {
+    public static void buildSkillPool(Character character) {
+        CharacterType ch = character.getType();
         skillPool.clear();
         skillPool.add(new Slap(ch));
         skillPool.add(new Tribadism(ch));

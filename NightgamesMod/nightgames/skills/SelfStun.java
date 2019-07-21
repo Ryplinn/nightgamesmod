@@ -1,13 +1,14 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.Winded;
 
 public class SelfStun extends Skill {
 
-    public SelfStun(Character self) {
+    SelfStun(CharacterType self) {
         super("Stun Self", self);
     }
 
@@ -28,14 +29,14 @@ public class SelfStun extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        getSelf().add(c, new Winded(getSelf()));
+        getSelf().add(c, new Winded(self));
         writeOutput(c, Result.normal, target);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new SelfStun(user);
+        return new SelfStun(user.getType());
     }
 
     @Override

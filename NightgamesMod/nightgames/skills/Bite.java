@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -10,7 +11,7 @@ import nightgames.status.addiction.AddictionType;
 @SuppressWarnings("unused")
 public class Bite extends Skill {
 
-    public Bite(Character self) {
+    public Bite(CharacterType self) {
         super("Bite", self, 5);
     }
 
@@ -56,7 +57,7 @@ public class Bite extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Bite(user);
+        return new Bite(user.getType());
     }
 
     @Override

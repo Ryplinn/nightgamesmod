@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -10,7 +11,7 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.status.BodyFetish;
 
 public class FootSmother extends Skill {
-    public FootSmother(Character self) {
+    FootSmother(CharacterType self) {
         super("Foot Smother", self);
         addTag(SkillTag.usesFeet);
         addTag(SkillTag.pleasure);
@@ -36,8 +37,7 @@ public class FootSmother extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        Result result = Result.normal;
-        int m = 0;
+        int m;
         m = 8 + Random.random(6);
         if (getSelf().human()) {
             c.write(getSelf(), Formatter.format(deal(c, 0, Result.normal, target), getSelf(), target));
@@ -46,14 +46,14 @@ public class FootSmother extends Skill {
         }
         target.temptWithSkill(c, getSelf(), getSelf().body.getRandom("feet"), m, this);
         if (Random.random(100) < 30 + 2 * getSelf().get(Attribute.fetishism)) {
-            target.add(c, new BodyFetish(target, getSelf(), "feet", .25));
+            target.add(c, new BodyFetish(target.getType(), self, "feet", .25));
         }
-        return result != Result.miss;
+        return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new FootSmother(user);
+        return new FootSmother(user.getType());
     }
 
     @Override

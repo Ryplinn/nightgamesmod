@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -11,7 +12,7 @@ import nightgames.status.Primed;
 
 public class EmergencyJump extends Skill {
 
-    public EmergencyJump(Character self) {
+    EmergencyJump(CharacterType self) {
         super("Emergency Jump", self);
         addTag(SkillTag.positioning);
         addTag(SkillTag.escaping);
@@ -43,9 +44,9 @@ public class EmergencyJump extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        getSelf().add(c, new Primed(getSelf(),-2));
+        getSelf().add(c, new Primed(self,-2));
         getSelf().free();
-        c.setStance(new Behind(getSelf(),target), getSelf(), true);
+        c.setStance(new Behind(self, target.getType()), getSelf(), true);
         if(getSelf().human()){
             c.write(getSelf(),deal(c,0,Result.normal,target));
         }
@@ -59,7 +60,7 @@ public class EmergencyJump extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new EmergencyJump(user);
+        return new EmergencyJump(user.getType());
     }
 
     @Override
@@ -69,9 +70,8 @@ public class EmergencyJump extends Skill {
 
     @Override
     public String deal(Combat c, int damage, Result modifier, Character target) {
-        return String.format(
-                        "You're in trouble for a moment, so you trigger your temporal manipulator and stop time just long "
-                                        + "enough to free yourself.");
+        return "You're in trouble for a moment, so you trigger your temporal manipulator and stop time just long "
+                        + "enough to free yourself.";
     }
 
     @Override

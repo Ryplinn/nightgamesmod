@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -11,7 +12,7 @@ import nightgames.status.Stsflag;
 
 public class Collar extends Skill {
 
-    public Collar(Character self) {
+    public Collar(CharacterType self) {
         super("Collar", self);
     }
 
@@ -59,14 +60,14 @@ public class Collar extends Skill {
                             + " {self:pronoun-action:ask|asks} {other:direct-object}, <i>\"That little"
                             + " collar is going to make sure you behave. You can be a good %s, right {other:name}?\"<i>"
                             , getSelf(), target, target.boyOrGirl()));
-            target.add(c, new Collared(target, getSelf()));
+            target.add(c, new Collared(target.getType(), self));
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Collar(user);
+        return new Collar(user.getType());
     }
 
     @Override

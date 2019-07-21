@@ -13,7 +13,7 @@ import nightgames.skills.damage.DamageType;
 import java.util.Optional;
 
 public class FlyCatcher extends Skill {
-    public FlyCatcher(CharacterType self) {
+    FlyCatcher(CharacterType self) {
         super("Fly Catcher", self);
     }
 

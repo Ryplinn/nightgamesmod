@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -12,7 +13,7 @@ import nightgames.stance.Stance;
 
 public class Turnover extends Skill {
 
-    public Turnover(Character self) {
+    Turnover(CharacterType self) {
         super("Turn Over", self);
         addTag(SkillTag.positioning);
     }
@@ -35,14 +36,14 @@ public class Turnover extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        c.setStance(new Behind(getSelf(), target), getSelf(), true);
+        c.setStance(new Behind(self, target.getType()), getSelf(), true);
         target.emote(Emotion.dominant, 20);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Turnover(user);
+        return new Turnover(user.getType());
     }
 
     @Override

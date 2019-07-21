@@ -3,6 +3,7 @@ package nightgames.skills;
 import java.util.Optional;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -13,7 +14,7 @@ import nightgames.status.Stsflag;
 
 public class RemoveBomb extends Skill {
 
-    public RemoveBomb(Character self) {
+    RemoveBomb(CharacterType self) {
         super("Remove Bomb", self);
     }
 
@@ -61,7 +62,7 @@ public class RemoveBomb extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new RemoveBomb(user);
+        return new RemoveBomb(user.getType());
     }
 
     @Override

@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.nskills.tags.SkillTag;
@@ -12,7 +13,7 @@ import nightgames.status.addiction.AddictionType;
 
 public class Cowardice extends Skill {
 
-    public Cowardice(Character self) {
+    public Cowardice(CharacterType self) {
         super("Cowardice", self);
         addTag(SkillTag.suicidal);
         addTag(SkillTag.positioning);
@@ -35,7 +36,7 @@ public class Cowardice extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        c.setStance(new Behind(target, getSelf()), target, true);
+        c.setStance(new Behind(target.getType(), self), target, true);
         if (getSelf().human()) {
             c.write(getSelf(), deal(c, 0, Result.normal, target));
         } else {
@@ -51,7 +52,7 @@ public class Cowardice extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Cowardice(user);
+        return new Cowardice(user.getType());
     }
 
     @Override

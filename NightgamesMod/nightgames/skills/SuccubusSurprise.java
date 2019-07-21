@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.trait.Trait;
@@ -17,7 +18,7 @@ import nightgames.status.Stsflag;
 
 public class SuccubusSurprise extends Skill {
 
-    public SuccubusSurprise(Character self) {
+    SuccubusSurprise(CharacterType self) {
         super("Succubus Surprise", self);
     }
 
@@ -59,14 +60,14 @@ public class SuccubusSurprise extends Skill {
         getSelf().remove(Item.SuccubusDraft);
         Item.SuccubusDraft.getEffects().forEach(e -> e.use(c, getSelf(), target, Item.SuccubusDraft));
         if (isArmLock(c.getStance())) {
-            target.add(c, new ArmLocked(target, 4 * getSelf().get(Attribute.power)));
+            target.add(c, new ArmLocked(target.getType(), 4 * getSelf().get(Attribute.power)));
         } else {
-            target.add(c, new LegLocked(target, 4 * getSelf().get(Attribute.power)));
+            target.add(c, new LegLocked(target.getType(), 4 * getSelf().get(Attribute.power)));
         }
-        new Grind(getSelf()).resolve(c, target);
+        new Grind(self).resolve(c, target);
 
         if (!getSelf().human() && target.human() && !oppHasBlessed
-                        && getSelf().getType().equals("CUSTOM_NPCSamantha")) {
+                        && getSelf().getType().equals(CharacterType.get("CUSTOM_NPCSamantha"))) {
             c.write(getSelf(), "<br/><br/>\"<i>Do you like your surprise, " + target.getName() + "? I do.\"</i>");
         }
         return true;
@@ -74,7 +75,7 @@ public class SuccubusSurprise extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new SuccubusSurprise(user);
+        return new SuccubusSurprise(user.getType());
     }
 
     @Override
@@ -149,10 +150,7 @@ public class SuccubusSurprise extends Skill {
     }
 
     private boolean isArmLock(Position p) {
-        if (p.en == Stance.missionary) {
-            return false;
-        }
-        return true;
+        return p.en != Stance.missionary;
     }
 
     @Override

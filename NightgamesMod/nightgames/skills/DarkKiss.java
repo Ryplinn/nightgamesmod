@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -11,7 +12,7 @@ import nightgames.status.addiction.AddictionType;
 
 public class DarkKiss extends Skill {
 
-    DarkKiss(Character self) {
+    DarkKiss(CharacterType self) {
         super("Dark Kiss", self, 3);
         addTag(SkillTag.dark);
     }
@@ -59,7 +60,7 @@ public class DarkKiss extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new DarkKiss(user);
+        return new DarkKiss(user.getType());
     }
 
     @Override

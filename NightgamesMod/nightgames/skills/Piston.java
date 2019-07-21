@@ -31,7 +31,7 @@ public class Piston extends Thrust {
 
     @Override
     public int[] getDamage(Combat c, Character target) {
-        int results[] = new int[2];
+        int[] results = new int[2];
 
         int m = 15 + Random.random(8);
         int mt = 10 + Random.random(5);
@@ -47,7 +47,7 @@ public class Piston extends Thrust {
 
     @Override
     public Skill copy(Character user) {
-        return new Piston(user);
+        return new Piston(user.getType());
     }
 
     @Override

@@ -2,13 +2,14 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.Shield;
 
 public class Barrier extends Skill {
 
-    public Barrier(Character self) {
+    public Barrier(CharacterType self) {
         super("Barrier", self);
     }
 
@@ -36,13 +37,13 @@ public class Barrier extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        getSelf().add(c, new Shield(getSelf(), .5));
+        getSelf().add(c, new Shield(self, .5));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Barrier(user);
+        return new Barrier(user.getType());
     }
 
     @Override

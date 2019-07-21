@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.StraponPart;
@@ -14,7 +15,7 @@ import nightgames.status.BodyFetish;
 
 public class Frottage extends Skill {
 
-    public Frottage(Character self) {
+    public Frottage(CharacterType self) {
         super("Frottage", self);
         addTag(SkillTag.pleasureSelf);
     }
@@ -68,7 +69,7 @@ public class Frottage extends Skill {
         }
         target.body.pleasure(getSelf(), dealer, receiver, m, c, this);
         if (Random.random(100) < 15 + 2 * getSelf().get(Attribute.fetishism)) {
-            target.add(c, new BodyFetish(target, getSelf(), "cock", .25));
+            target.add(c, new BodyFetish(target.getType(), self, "cock", .25));
         }
         getSelf().emote(Emotion.horny, 15);
         target.emote(Emotion.horny, 15);
@@ -77,7 +78,7 @@ public class Frottage extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Frottage(user);
+        return new Frottage(user.getType());
     }
 
     @Override

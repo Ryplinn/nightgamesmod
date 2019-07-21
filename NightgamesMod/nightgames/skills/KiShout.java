@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -10,7 +11,7 @@ import nightgames.status.Falling;
 import nightgames.utilities.MathUtils;
 
 public class KiShout extends Skill {
-    public KiShout(Character self) {
+    KiShout(CharacterType self) {
         super("Ki Shout", self, 3);
         addTag(SkillTag.positioning);
         addTag(SkillTag.hurt);
@@ -50,7 +51,7 @@ public class KiShout extends Skill {
         if (target.roll(getSelf(), accuracy(c, target))) {
             writeOutput(c, Result.normal, target);
             target.pain(c, getSelf(), (int) (10 + 3 * Math.sqrt(getSelf().get(Attribute.ki))));
-            target.add(c, new Falling(target));
+            target.add(c, new Falling(target.getType()));
             getSelf().weaken(c, getSelf().getStamina().max() / 4);
             return true;
         } else {
@@ -63,7 +64,7 @@ public class KiShout extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new KiShout(user);
+        return new KiShout(user.getType());
     }
 
     @Override

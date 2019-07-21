@@ -10,7 +10,7 @@ import nightgames.global.Formatter;
 import nightgames.status.Lethargic;
 
 public class SpiralThrust extends Thrust {
-    int cost;
+    private int cost;
 
     public SpiralThrust(CharacterType self) {
         super("Spiral Thrust", self);
@@ -57,14 +57,14 @@ public class SpiralThrust extends Thrust {
     public boolean resolve(Combat c, Character target) {
         boolean res = super.resolve(c, target);
         if (res) {
-            getSelf().add(c, new Lethargic(getSelf(), 30, .75));
+            getSelf().add(c, new Lethargic(self, 30, .75));
         }
         return res;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new SpiralThrust(user);
+        return new SpiralThrust(user.getType());
     }
 
     @Override

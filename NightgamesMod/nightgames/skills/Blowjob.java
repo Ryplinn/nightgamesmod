@@ -15,7 +15,7 @@ import nightgames.stance.ReverseMount;
 import nightgames.stance.SixNine;
 
 public class Blowjob extends Skill {
-    public Blowjob(String name, Character self) {
+    public Blowjob(String name, CharacterType self) {
         super(name, self);
     }
 
@@ -49,12 +49,12 @@ public class Blowjob extends Skill {
         return priority;
     }
 
-    public boolean isVaginal(Combat c, Character target) {
+    private boolean isVaginal(Combat c, Character target) {
         return c.getStance().isPartFuckingPartInserted(c, target, target.body.getRandomCock(), getSelf(), getSelf().body.getRandomPussy())
                         && !c.getOpponent(getSelf()).has(Trait.strapped) && getSelf().body.getRandomPussy().moddedPartCountsAs(getSelf(), ExtendedTonguedMod.INSTANCE);
     }
 
-    public boolean isFacesitting(Combat c, Character target) {
+    private boolean isFacesitting(Combat c, Character target) {
         return c.getStance().isBeingFaceSatBy(getSelf(), target);
     }
 
@@ -93,8 +93,8 @@ public class Blowjob extends Skill {
                 getSelf().body.pleasure(target, cock, mouth, m, c, this);
             }
 
-            if (ReverseMount.class.isInstance(c.getStance())) {
-                c.setStance(new SixNine(getSelf(), target), getSelf(), true);
+            if (c.getStance() instanceof ReverseMount) {
+                c.setStance(new SixNine(self, target.getType()), getSelf(), true);
             }
         } else {
             writeOutput(c, Result.miss, target);
@@ -115,7 +115,7 @@ public class Blowjob extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Blowjob(user);
+        return new Blowjob(user.getType());
     }
 
     @Override
@@ -134,11 +134,10 @@ public class Blowjob extends Skill {
 
     @Override
     public String deal(Combat c, int damage, Result modifier, Character target) {
-        String m = "";
+        String m;
         if (modifier == Result.miss) {
             m = "You try to take " + target.getName() + "'s penis into your mouth, but she manages to pull away.";
-        }
-        if (target.getArousal().get() < 15) {
+        } else if (target.getArousal().get() < 15) {
             m = "You suck on " + target.getName()
                             + " flaccid little penis until it grows into an intimidating large erection.";
         } else if (target.getArousal().percent() >= 90) {

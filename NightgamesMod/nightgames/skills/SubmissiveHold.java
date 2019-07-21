@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,7 +14,7 @@ import nightgames.status.LegLocked;
 import nightgames.status.Stsflag;
 
 public class SubmissiveHold extends Skill {
-    public SubmissiveHold(Character self) {
+    public SubmissiveHold(CharacterType self) {
         super("Submissive Hold", self);
     }
 
@@ -46,10 +47,7 @@ public class SubmissiveHold extends Skill {
     }
 
     private boolean isArmLock(Position p) {
-        if (p.en == Stance.missionary) {
-            return false;
-        }
-        return true;
+        return p.en != Stance.missionary;
     }
 
     @Override
@@ -63,7 +61,7 @@ public class SubmissiveHold extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new SubmissiveHold(user);
+        return new SubmissiveHold(user.getType());
     }
 
     @Override
@@ -105,9 +103,9 @@ public class SubmissiveHold extends Skill {
             c.write(getSelf(), receive(c, 0, Result.normal, target));
         }
         if (isArmLock(c.getStance())) {
-            target.add(c, new ArmLocked(target, 4 * getSelf().get(Attribute.power)));
+            target.add(c, new ArmLocked(target.getType(), 4 * getSelf().get(Attribute.power)));
         } else {
-            target.add(c, new LegLocked(target, 4 * getSelf().get(Attribute.power)));
+            target.add(c, new LegLocked(target.getType(), 4 * getSelf().get(Attribute.power)));
         }
         return true;
     }

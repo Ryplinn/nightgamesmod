@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.pet.ImpFem;
@@ -11,7 +12,7 @@ import nightgames.pet.Ptype;
 public class SpawnImp extends Skill {
     private Ptype gender;
 
-    public SpawnImp(Character self, Ptype gender) {
+    SpawnImp(CharacterType self, Ptype gender) {
         super("Summon Imp (" + gender.name() + ")", self);
         this.gender = gender;
     }
@@ -64,7 +65,7 @@ public class SpawnImp extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new SpawnImp(user, gender);
+        return new SpawnImp(user.getType(), gender);
     }
 
     @Override

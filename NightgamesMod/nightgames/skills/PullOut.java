@@ -33,19 +33,20 @@ public class PullOut extends Skill {
     @Override
     public boolean usable(Combat c, Character target) {
         return !target.hasStatus(Stsflag.knotted) && getSelf().canAct() && (c.getStance().isFaceSitting(getSelf())
-                        || c.getStance().havingSex(c, getSelf()) && c.getStance().dom(getSelf())) && !blockedByAddiction(getSelf());
+                        || c.getStance().havingSex(c, getSelf()) && c.getStance().dom(getSelf())) && permittedByAddiction(
+                        getSelf());
     }
 
-    static boolean blockedByAddiction(Character user) {
+    static boolean permittedByAddiction(Character user) {
         if (!user.human()) {
-            return false;
+            return true;
         }
         Optional<Addiction> addiction = user.getAnyAddiction(AddictionType.BREEDER);
         if (!addiction.isPresent()) {
-            return false;
+            return true;
         }
         Addiction add = addiction.get();
-        return add.atLeast(Addiction.Severity.HIGH) || add.activeTracker().map(AddictionSymptom::getCombatSeverity)
+        return !add.atLeast(Addiction.Severity.HIGH) && !add.activeTracker().map(AddictionSymptom::getCombatSeverity)
                         .map(severity -> severity.atLeast(Addiction.Severity.HIGH)).orElse(false);
     }
 
@@ -76,7 +77,7 @@ public class PullOut extends Skill {
             }
             if (!target.has(Trait.powerfulcheeks)) {
                 writeOutput(c, result, target);
-                c.setStance(c.getStance().insertRandom(c));
+                c.getStance().insertRandom(c).ifPresent(c::setStance);
                 return true;
             } else if (getSelf().checkVsDc(Attribute.power,
                             baseDifficulty - getSelf().getEscape(c, target) + powerMod)) {
@@ -92,7 +93,7 @@ public class PullOut extends Skill {
                                     + " it, but it proves insufficient as the hard shaft escapes its"
                                     + " former prison.", getSelf(), target));
                 }
-                c.setStance(c.getStance().insertRandom(c));
+                c.getStance().insertRandom(c).ifPresent(c::setStance);
             } else if (!isLocked) {
                 c.write(getSelf(), Formatter.format("{self:SUBJECT-ACTION:try|tries} to pull out of"
                                 + " {other:name-possessive} lustrous ass, but {other:pronoun-action:squeeze|squeezes}"
@@ -110,7 +111,7 @@ public class PullOut extends Skill {
             }
         } else if (result == Result.special) {
             writeOutput(c, Result.special, target);
-            c.setStance(new StandingOver(getSelf(), target), getSelf(), true);
+            c.setStance(new StandingOver(self, target.getType()), getSelf(), true);
         } else {
             if (isLocked || target.has(Trait.tight) && c.getStance().inserted(getSelf())) {
                 boolean escaped = getSelf().checkVsDc(Attribute.power,
@@ -179,7 +180,7 @@ public class PullOut extends Skill {
                 return false;
             } else 
                 writeOutput(c, result, target);
-            c.setStance(c.getStance().insertRandom(c));
+            c.getStance().insertRandom(c).ifPresent(c::setStance);
         }
         return true;
     }

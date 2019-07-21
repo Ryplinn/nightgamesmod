@@ -1,12 +1,13 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 
 public class CommandInsult extends PlayerCommand {
 
-    public CommandInsult(Character self) {
+    CommandInsult(CharacterType self) {
         super("Insult", self);
     }
 
@@ -29,7 +30,7 @@ public class CommandInsult extends PlayerCommand {
 
     @Override
     public Skill copy(Character user) {
-        return new CommandInsult(user);
+        return new CommandInsult(user.getType());
     }
 
     @Override

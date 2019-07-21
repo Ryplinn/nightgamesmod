@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.items.Item;
@@ -9,7 +10,7 @@ import nightgames.status.Stsflag;
 
 public class Lubricate extends Skill {
 
-    public Lubricate(Character self) {
+    Lubricate(CharacterType self) {
         super("Lubricate", self);
     }
 
@@ -27,14 +28,14 @@ public class Lubricate extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        target.add(c, new Oiled(target));
+        target.add(c, new Oiled(target.getType()));
         getSelf().consume(Item.Lubricant, 1);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Lubricate(user);
+        return new Lubricate(user.getType());
     }
 
     @Override

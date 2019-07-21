@@ -157,9 +157,9 @@ public class Invitation extends Skill {
         }
         if (success) {
             if (c.getStance().en == Stance.missionary) {
-                target.add(c, new LegLocked(target, 4 * getSelf().get(Attribute.power)));
+                target.add(c, new LegLocked(target.getType(), 4 * getSelf().get(Attribute.power)));
             } else {
-                target.add(c, new ArmLocked(target, 4 * getSelf().get(Attribute.power)));
+                target.add(c, new ArmLocked(target.getType(), 4 * getSelf().get(Attribute.power)));
             }
             new Thrust(target.getType()).resolve(c, getSelf());
             if (hasDivinity()) {

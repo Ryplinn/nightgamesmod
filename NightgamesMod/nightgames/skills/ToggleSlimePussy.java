@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.PussyPart;
 import nightgames.characters.body.mods.GooeyMod;
 import nightgames.combat.Combat;
@@ -12,7 +13,7 @@ import nightgames.status.Stsflag;
 
 public class ToggleSlimePussy extends Skill {
 
-    public ToggleSlimePussy(Character self) {
+    ToggleSlimePussy(CharacterType self) {
         super("Toggle Slime Pussy", self);
     }
 
@@ -69,7 +70,7 @@ public class ToggleSlimePussy extends Skill {
             if (getSelf().crotchAvailable() || getSelf().human()) {
                 msg += "and a slit forms in {self:possessive} slime. The new pussy's lips shudder invitingly.";
             } else {
-                msg += "but you see no outside changs. Perhaps they are hidden under {self:possessive} clothes?";
+                msg += "but you see no outside changes. Perhaps they are hidden under {self:possessive} clothes?";
             }
             getSelf().body.add(PussyPart.generic.applyMod(GooeyMod.INSTANCE));
         }
@@ -82,7 +83,7 @@ public class ToggleSlimePussy extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new ToggleSlimePussy(user);
+        return new ToggleSlimePussy(user.getType());
     }
 
     @Override

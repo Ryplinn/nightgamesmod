@@ -9,9 +9,9 @@ import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
 public class Lovestruck extends DurationStatus {
-    Character other;
+    CharacterType other;
 
-    public Lovestruck(CharacterType affected, Character other, int duration) {
+    public Lovestruck(CharacterType affected, CharacterType other, int duration) {
         super("Lovestruck", affected, duration);
         this.other = other;
         flag(Stsflag.lovestruck);
@@ -21,12 +21,17 @@ public class Lovestruck extends DurationStatus {
         flag(Stsflag.mindgames);
     }
 
+    Character getOther() {
+        return other.fromPoolGuaranteed();
+    }
+
     @Override
     public String describe(Combat c) {
         if (getAffected().human()) {
-            return "You feel an irresistible attraction to " + other.nameDirectObject() + ".";
+            return "You feel an irresistible attraction to " + getOther().nameDirectObject() + ".";
         } else {
-            return getAffected().getName() + " is looking at "+other.nameDirectObject()+" like a lovestruck teenager.";
+            return getAffected().getName() + " is looking at " + getOther().nameDirectObject()
+                            + " like a lovestruck teenager.";
         }
     }
 

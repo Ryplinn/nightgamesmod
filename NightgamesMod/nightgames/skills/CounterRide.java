@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -11,9 +12,8 @@ import nightgames.stance.Cowgirl;
 import nightgames.stance.Missionary;
 
 public class CounterRide extends CounterBase {
-    public CounterRide(Character self) {
-        super("Sex Counter", self, 5, Formatter.format(
-                        "{self:SUBJECT-ACTION:invite|invites} the opponent with {self:possessive} body.", self, self));
+    CounterRide(CharacterType self) {
+        super("Sex Counter", self, 5, "{self:SUBJECT-ACTION:invite|invites} the opponent with {self:possessive} body.");
         addTag(SkillTag.fucking);
         addTag(SkillTag.positioning);
         addTag(SkillTag.counter);
@@ -37,10 +37,10 @@ public class CounterRide extends CounterBase {
         }
         if (target.hasDick() && getSelf().hasPussy()) {
             c.setStance(Cowgirl.similarInstance(getSelf(), target), getSelf(), true);
-            new Thrust(getSelf()).resolve(c, target);
+            new Thrust(self).resolve(c, target);
         } else {
             c.setStance(Missionary.similarInstance(getSelf(), target), getSelf(), true);
-            new Thrust(getSelf()).resolve(c, target);
+            new Thrust(self).resolve(c, target);
         }
     }
 
@@ -68,7 +68,7 @@ public class CounterRide extends CounterBase {
 
     @Override
     public Skill copy(Character user) {
-        return new CounterRide(user);
+        return new CounterRide(user.getType());
     }
 
     @Override

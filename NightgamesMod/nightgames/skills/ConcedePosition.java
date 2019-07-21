@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -8,7 +9,7 @@ import nightgames.nskills.tags.SkillTag;
 
 public class ConcedePosition extends Skill {
 
-    public ConcedePosition(Character self) {
+    public ConcedePosition(CharacterType self) {
         super("Concede Position", self);
         addTag(SkillTag.worship);
         addTag(SkillTag.petDisallowed);
@@ -34,7 +35,7 @@ public class ConcedePosition extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new ConcedePosition(user);
+        return new ConcedePosition(user.getType());
     }
 
     @Override
