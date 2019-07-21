@@ -45,7 +45,7 @@ public class TestAngel extends BasePersonality {
         baseChar.mood = Emotion.confident;
         baseChar.trophy = Item.AngelTrophy;
 
-        baseChar.body = new Body(baseChar, 1);
+        baseChar.body = new Body(baseChar.getType(), 1);
         baseChar.body.add(BreastsPart.dd);
         baseChar.body.add(new FacePart(.1, 4.2));
         baseChar.body.add(PussyPart.generic);

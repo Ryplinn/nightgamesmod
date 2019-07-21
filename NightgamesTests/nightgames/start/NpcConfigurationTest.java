@@ -40,11 +40,11 @@ public class NpcConfigurationTest {
                         IsMapContaining.hasEntry(Attribute.cunning, 15),
                         IsMapContaining.hasEntry(Attribute.divinity, 10),
                         IsMapContaining.hasEntry(Attribute.spellcasting, 2)));
-        assertThat(mergedConfig.body.flatMap(body -> body.type),
+        assertThat(mergedConfig.body.type,
                         equalTo(Optional.of(BodyConfiguration.Archetype.ANGEL)));
-        assertThat(mergedConfig.xp.orElse(0), equalTo(50));
-        assertThat(mergedConfig.level.orElse(0), equalTo(5));
-        assertThat(mergedConfig.money.orElse(0), equalTo(5000));
+        assertThat(mergedConfig.xp, equalTo(50));
+        assertThat(mergedConfig.level, equalTo(5));
+        assertThat(mergedConfig.money, equalTo(5000));
     }
 
     @Test public void testNpcCreation() {
@@ -73,7 +73,7 @@ public class NpcConfigurationTest {
     }
     
     @Test public void testGenderChange() {
-        angelConfig.gender = Optional.of(CharacterSex.male);
+        angelConfig.gender = CharacterSex.male;
         NPC angel = new NPC(CharacterType.get("TestAngel"), new TestAngel(), angelConfig, startConfig.npcCommon);
 
         assertFalse(angel.body.has("pussy"));
@@ -86,9 +86,7 @@ public class NpcConfigurationTest {
     @Test public void testClothing() {
         NPCConfiguration mergedConfig = new NPCConfiguration(angelConfig, startConfig.npcCommon);
         NPC angel = new NPC(CharacterType.get("TestAngel"), new TestAngel(), angelConfig, startConfig.npcCommon);
-        Clothing[] expectedClothing = ClothingTable.getIDs(mergedConfig.clothing
-                        .orElseThrow(() -> new AssertionError("Merged npc clothing config has no")))
-                        .toArray(new Clothing[] {});
+        Clothing[] expectedClothing = ClothingTable.getIDs(mergedConfig.clothing).toArray(new Clothing[] {});
         assertThat(angel.outfit.getEquipped(), hasItems(expectedClothing));
     }
 }

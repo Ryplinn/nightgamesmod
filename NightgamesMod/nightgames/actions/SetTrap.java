@@ -11,7 +11,7 @@ public class SetTrap extends Action {
     private static final long serialVersionUID = 9194305067966782124L;
     private Trap trap;
 
-    public SetTrap(Trap trap) {
+    SetTrap(Trap trap) {
         super("Set(" + trap.toString() + ")");
         this.trap = trap;
     }

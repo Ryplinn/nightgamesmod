@@ -23,7 +23,7 @@ public class Recover extends Skill {
                 .prone(getSelf())
                         && c.getStance()
                             .mobile(getSelf())
-                        && !(new StandUp(getSelf())).usable(c, target)
+                        && !(new StandUp(self)).usable(c, target)
                         && getSelf().canAct();
     }
 

@@ -35,9 +35,9 @@ public class TentacleInjectVenom extends TentacleArmSkill {
                             + "{other:pronoun-action:yelp} and {other:action:pull} it out straight away. Unfortunately, "
                             + "{other:pronoun} already {other:action:start} to feel sluggish as {other:pronoun-action:realize} "
                             + "{other:pronoun-action:have} been poisoned.", owner, target));
-            target.add(c, new Atrophy(target, owner.getLevel() / 3, 10, getSourceString(owner)));
-            target.add(c, new AttributeBuff(target, Attribute.power, target.getPure(Attribute.power) / 3, 10));
-            target.add(c, new AttributeBuff(target, Attribute.speed, target.getPure(Attribute.speed) / 3, 10));
+            target.add(c, new Atrophy(target.getType(), owner.getLevel() / 3, 10, getSourceString(owner)));
+            target.add(c, new AttributeBuff(target.getType(), Attribute.power, target.getPure(Attribute.power) / 3, 10));
+            target.add(c, new AttributeBuff(target.getType(), Attribute.speed, target.getPure(Attribute.speed) / 3, 10));
             return true;
         } else {
             c.write(GUIColor.limbColor(owner), Formatter.format("A %s flies towards {other:name-do}, "

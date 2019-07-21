@@ -287,7 +287,7 @@ public class PetCharacter extends Character {
         super.resolveOrgasm(c, opponent, selfPart, opponentPart, times, totalTimes);
         if (getSelf().owner().has(Trait.StickyFinale)) {
             c.write(this, Formatter.format("The force of {self:name-possessive} orgasm causes {self:direct-object} to shudder and explode in a rain of slime, completely covering {other:name-do} with the sticky substance.", this, opponent));
-            opponent.add(c, new Slimed(opponent, getSelf().owner(), Random.random(5, 11)));
+            opponent.add(c, new Slimed(opponent.getType(), getSelf().owner().getType(), Random.random(5, 11)));
         } else {
             c.write(this, Formatter.format("The force of {self:name-possessive} orgasm destroys {self:possessive} anchor to the fight and {self:pronoun} disappears.", this, opponent));
         }

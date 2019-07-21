@@ -54,14 +54,14 @@ public class ToyAttack extends ArmSkill {
             target.body.pleasure(owner, ToysPart.dildo, target.body.getRandomHole(), m, c);
         } else {
             String part;
-            boolean pussyAvaiable = target.body.has("pussy") && !c.getStance().vaginallyPenetrated(c, target);
-            boolean cockAvaiable = target.body.has("cock") && !c.getStance().penetratedBy(c, owner, target);
+            boolean pussyAvailable = target.body.has("pussy") && !c.getStance().vaginallyPenetrated(c, target);
+            boolean cockAvailable = target.body.has("cock") && !c.getStance().penetratedBy(c, owner, target);
             
-            if (pussyAvaiable && cockAvaiable) {
+            if (pussyAvailable && cockAvailable) {
                 part = Random.random(3) == 0 ? "pussy" : Random.random(2) == 0 ? "cock" : "ass";
-            } else if (cockAvaiable) {
+            } else if (cockAvailable) {
                 part = Random.random(2) == 0 ? "cock" : "ass";
-            } else if (pussyAvaiable) {
+            } else if (pussyAvailable) {
                 part = Random.random(2) == 0 ? "pussy" : "ass";
             } else {
                 part = "ass";
@@ -73,7 +73,7 @@ public class ToyAttack extends ArmSkill {
                                     + " into a cock-like column of material and shoots straight at"
                                     + " {other:name-possessive} unprotected {other:body-part:pussy}."
                                     + " The slippery dildo has no trouble pushing past {other:possessive}"
-                                    + " soft folds, and pumps rythmically in and out of the soon-sopping hole."
+                                    + " soft folds, and pumps rhythmically in and out of the soon-sopping hole."
                                     , owner, target, arm.getName()));
                     target.body.pleasure(owner, ToysPart.dildo, target.body.getRandomPussy(), m, c);
                 } else if (part.equals("cock")) {

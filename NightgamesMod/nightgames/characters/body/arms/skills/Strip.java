@@ -12,6 +12,7 @@ import nightgames.items.clothing.ClothingSlot;
 import nightgames.items.clothing.ClothingTrait;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class Strip extends ArmSkill {
 
@@ -40,8 +41,8 @@ public class Strip extends ArmSkill {
             slot = ClothingSlot.bottom;
         } else {
             accuracy *= 1.5;
-            slot = Random.pickRandom(Arrays.stream(ClothingSlot.values()).filter(s -> !target.outfit.
-                            slotEmpty(s)).toArray(ClothingSlot[]::new)).get();
+            slot = Random.pickRandomGuaranteed(Arrays.stream(ClothingSlot.values()).filter(s -> !target.outfit.
+                            slotEmpty(s)).collect(Collectors.toList()));
         }
         
         if (sub || Random.random(100) < accuracy) {

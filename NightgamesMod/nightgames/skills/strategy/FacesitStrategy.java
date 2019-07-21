@@ -32,7 +32,7 @@ public class FacesitStrategy extends KnockdownThenActionStrategy {
         if (self.has(Trait.powerfulcheeks) && weight > 0) {
             weight += 1;
         }
-        if (!(new FaceSit(self)).requirements(c, self, c.getOpponent(self))) {
+        if (!(new FaceSit(self.getType())).requirements(c, self, c.getOpponent(self))) {
             weight = 0;
         }
         return weight;

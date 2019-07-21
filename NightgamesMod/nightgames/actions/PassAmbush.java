@@ -8,7 +8,7 @@ public class PassAmbush extends Action {
 
     private static final long serialVersionUID = -1745311550506911281L;
 
-    public PassAmbush() {
+    PassAmbush() {
         super("Try Ambush");
     }
 

@@ -25,6 +25,10 @@ public class FFMCowgirlThreesome extends Threesome {
         return domSexCharacter.fromPoolGuaranteed();
     }
 
+    @Override public List<Character> getAllPartners(Combat c, Character self) {
+        return ((Position) this).getAllPartners(c, self);
+    }
+
     @Override
     public List<BodyPart> partsForStanceOnly(Combat combat, Character self, Character other) {
         if (self == getDomSexCharacter() && other.getType() == bottom) {

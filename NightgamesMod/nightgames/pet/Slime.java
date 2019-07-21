@@ -2,11 +2,7 @@ package nightgames.pet;
 
 import nightgames.characters.Character;
 import nightgames.characters.Growth;
-import nightgames.characters.body.CockMod;
-import nightgames.characters.body.GenericBodyPart;
-import nightgames.characters.body.CockPart;
-import nightgames.characters.body.PussyPart;
-import nightgames.characters.body.TentaclePart;
+import nightgames.characters.body.*;
 import nightgames.characters.body.mods.GooeyMod;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -54,7 +50,7 @@ public class Slime extends Pet {
                 + "high pitched moan and squirms against her bonds until she shudders in orgasm and vanishes.");
             }
         } else if (opponent instanceof CharacterPet) { 
-            (new SlimeJob(getSelf())).resolve(c, opponent.getSelf());
+            (new SlimeJob(getSelf().getType())).resolve(c, opponent.getSelf());
         } else {
             if (!opponent.hasDick()) {
                 c.write(getSelf(), Formatter.format("{self:SUBJECT} gathers around {other:name-possessive} ankles. With unexpected speed, it surges up {other:possessive} legs and simultaneously penetrates {other:possessive} pussy and "
@@ -76,7 +72,7 @@ public class Slime extends Pet {
                             + " seizes your slime and holds it near her groin. The ooze reacts to the closeness of her vagina and immediately forms a phallic appendage. She grabs the slimy "
                             + "cock before it can penetrate her and strokes it quickly. With each stroke, the shape becomes more defined, until the slime has a perfectly human penis and a set of testicles. "
                             + captor.getName()
-                            + " speeds up her stokes and grabs the artifical balls with her free hand. The slime ejaculates its own fluid and melts into a puddle.");
+                            + " speeds up her stokes and grabs the artificial balls with her free hand. The slime ejaculates its own fluid and melts into a puddle.");
         } else if (captor.human()) {
             c.write(captor, "You manage to catch " + own()
                             + "slime, but you're not sure what to do with it. It occurs to you that this thing is actively seeking sexual pleasure, so you push two fingers "
@@ -98,14 +94,14 @@ public class Slime extends Pet {
         self.body.add(PussyPart.generic.applyMod(GooeyMod.INSTANCE));
         self.body.add(new TentaclePart("tentacles", "body", "slime", 0, 1, 1));
         // don't finish the body as a slime, it wont have normal body parts.
-        self.learn(new SlimeJob(self));
-        self.learn(new Thrust(self));
-        self.learn(new Grind(self));
-        self.learn(new Piston(self));
-        self.learn(new PussyGrind(self));
-        self.learn(new SlimeOil(self));
-        self.learn(new SlimeMelt(self));
-        self.learn(new SlimeTrip(self));
+        self.learn(new SlimeJob(self.getType()));
+        self.learn(new Thrust(self.getType()));
+        self.learn(new Grind(self.getType()));
+        self.learn(new Piston(self.getType()));
+        self.learn(new PussyGrind(self.getType()));
+        self.learn(new SlimeOil(self.getType()));
+        self.learn(new SlimeMelt(self.getType()));
+        self.learn(new SlimeTrip(self.getType()));
 
         setSelf(self);
     }

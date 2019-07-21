@@ -1,7 +1,5 @@
 package nightgames.characters.body.mods;
 
-import java.util.Optional;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.body.BodyPart;
@@ -9,6 +7,8 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.status.CockBound;
+
+import java.util.Optional;
 
 public class GooeyMod extends PartMod {
     public static final GooeyMod INSTANCE = new GooeyMod();
@@ -36,7 +36,7 @@ public class GooeyMod extends PartMod {
             c.write(self, Formatter.format("{self:NAME-POSSESSIVE} %s envelops"
                             + " {other:possessive} {other:body-part:cock} in a sticky grip, making extraction more"
                             + " difficult.", self, opponent, partName));
-            opponent.add(c, new CockBound(opponent, 7, self.nameOrPossessivePronoun() + " " + partName));
+            opponent.add(c, new CockBound(opponent.getType(), 7, self.nameOrPossessivePronoun() + " " + partName));
         }
     }
 

@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
@@ -8,7 +9,7 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.Skill;
 
 public class FairyEnergize extends SimpleMasterSkill {
-    public FairyEnergize(Character self) {
+    public FairyEnergize(CharacterType self) {
         super("Fairy Energize", self, 5);
         addTag(SkillTag.buff);
     }
@@ -39,6 +40,6 @@ public class FairyEnergize extends SimpleMasterSkill {
 
     @Override
     public Skill copy(Character user) {
-        return new FairyEnergize(user);
+        return new FairyEnergize(user.getType());
     }
 }

@@ -1,22 +1,20 @@
 package nightgames.characters.body.mods;
 
-import java.util.Optional;
-
 import com.google.gson.JsonElement;
-
-import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.BodyPartMod;
 import nightgames.characters.body.GenericBodyPart;
 import nightgames.combat.Combat;
 
+import java.util.Optional;
+
 public abstract class PartMod implements BodyPartMod, Comparable<PartMod> {
     protected String modType;
     protected double hotness;
     protected double pleasure;
     protected double sensitivity;
-    protected int sortOrder;
+    private int sortOrder;
 
     public PartMod(String modType, double hotness, double pleasure, double sensitivity, int sortOrder) {
         this.modType = modType;
@@ -52,7 +50,7 @@ public abstract class PartMod implements BodyPartMod, Comparable<PartMod> {
     public double applyReceiveBonuses(Combat c, Character self, Character opponent, BodyPart part, BodyPart target, double damage) { return 0; }
     public void onStartPenetration(Combat c, Character self, Character opponent, BodyPart part, BodyPart target) {}
     public double applyBonuses(Combat c, Character self, Character opponent, BodyPart part, BodyPart target, double damage) { return 0; }
-    public int mod(Attribute a, int total) { return 0; }
+    public int mod() { return 0; }
     public void tickHolding(Combat c, Character self, Character opponent, BodyPart part, BodyPart otherOrgan) {}
     public int counterValue(BodyPart part, BodyPart otherPart, Character self, Character other) { return 0; }
     public void onOrgasm(Combat c, Character self, Character opponent, BodyPart part) {}
@@ -63,15 +61,15 @@ public abstract class PartMod implements BodyPartMod, Comparable<PartMod> {
         return getBasePleasure();
     }
 
-    public double modHotness(Character self) {
+    public double modHotness() {
         return getBaseHotness();
     }
 
-    public double modSensitivity(Character self) {
+    public double modSensitivity() {
         return getBaseSensitivity();
     }
 
-    protected String lowerOrRear(BodyPart part) {
+    String lowerOrRear(BodyPart part) {
         if (part.isType("ass")) {
             return "rear";
         } else {
@@ -100,19 +98,19 @@ public abstract class PartMod implements BodyPartMod, Comparable<PartMod> {
         return Integer.compare(getSortOrder(), other.getSortOrder());
     }
 
-    protected int getSortOrder() {
+    private int getSortOrder() {
         return sortOrder;
     }
 
-    public double getBaseHotness() {
+    private double getBaseHotness() {
         return hotness;
     }
 
-    public double getBasePleasure() {
+    private double getBasePleasure() {
         return pleasure;
     }
 
-    public double getBaseSensitivity() {
+    private double getBaseSensitivity() {
         return sensitivity;
     }
 

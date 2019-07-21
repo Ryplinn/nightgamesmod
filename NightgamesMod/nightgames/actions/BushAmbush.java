@@ -9,7 +9,7 @@ public class BushAmbush extends Action {
 
     private static final long serialVersionUID = 2384434976695344978L;
 
-    public BushAmbush() {
+    BushAmbush() {
         super("Hide in Bushes");
     }
 

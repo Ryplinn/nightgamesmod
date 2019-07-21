@@ -572,7 +572,7 @@ public class Kat extends BasePersonality {
     public boolean checkMood(Combat c, Emotion mood, int value, NPC selfNPC) {
         if (selfNPC.getArousal().percent() >= 50) {
             if (!selfNPC.is(Stsflag.feral)) {
-                selfNPC.add(c, new Feral(selfNPC));
+                selfNPC.add(c, new Feral(selfNPC.getType()));
             }
             if (!selfNPC.has(Trait.shameless)) {
                 selfNPC.add(Trait.shameless);

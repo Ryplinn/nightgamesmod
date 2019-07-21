@@ -62,16 +62,16 @@ public class Mara extends BasePersonality {
                                         + "being naked in the moonlight. Come on!\"</i> You undress and put your clothes in a neat pile, taking the time to gather up hers as well. You walk up behind {self:possessive} and hold "
                                         + "{self:possessive} while enjoying the view. The night air is slightly cool, but {self:possessive} nude body is warm in your arms. {self:PRONOUN} turns {self:possessive} head to give you a tender kiss before stepping out of "
                                         + "your embrace. <i>\"Have you ever danced naked under the stars?\"</i> It's a strange question, but {self:pronoun} looks too lovely in this light to refuse. The two of you dance without any "
-                                        + "hint of style or rhythm, not caring how rediculous you'd look to a third party. When you've both tired, you spend some time just looking at the stars together. You "
+                                        + "hint of style or rhythm, not caring how ridiculous you'd look to a third party. When you've both tired, you spend some time just looking at the stars together. You "
                                         + "never would have imagined this is how you'd be spending your night, but {self:subject} always finds ways to surprise you. You suddenly realize {self:pronoun}'s no longer standing next to "
-                                        + "you. You spot {self:possessive} back by the door, holding your clothes. {self:PRONOUN} winks mischeviously and dashes into the building. You give chase, still naked. You manage to catch {self:possessive} just "
+                                        + "you. You spot {self:possessive} back by the door, holding your clothes. {self:PRONOUN} winks mischievously and dashes into the building. You give chase, still naked. You manage to catch {self:possessive} just "
                                         + "as {self:pronoun} reaches your room. You consider it a minor miracle no one saw the two of you streaking through the dorm building. You're going to have to find a way to pay {self:possessive} back "
                                         + "before morning.");
 
         selfNPC.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> {
             final String[] finalLines =
                             {"<i>\"NNnnnn..! Oh man I can't take much more!\"</i>", "<i>\"Ngh! Slow down! please!\"</i>",
-                                            "{self:SUBJECT} groans as {self:possessive} climax subsides, <i>\"Again! I deman a rematch!\"</i>",};
+                                            "{self:SUBJECT} groans as {self:possessive} climax subsides, <i>\"Again! I demand a rematch!\"</i>",};
             switch (self.orgasms) {
                 case 0:
                     return "<i>\"Aw man, that one didn't count! Come on, let's go, I'll fuck your brains out!\"</i>";
@@ -179,7 +179,7 @@ public class Mara extends BasePersonality {
                                                         + " whirrs to life inside. <i>\"There we go. I really should work on the"
                                                         + " reliability. That will leave me with plenty of time to add new goodies."
                                                         + " Mmm... What do you think, {other:name}? Should I invest resources into"
-                                                        + " one really fancy toy, or should I divide my time over several simpeler ones?",
+                                                        + " one really fancy toy, or should I divide my time over several simpler ones?",
                                         self, other),
                         Arrays.asList(new CombatSceneChoice("Quality", (c, self, other) -> {
                             c.write(Formatter.format(
@@ -466,7 +466,7 @@ public class Mara extends BasePersonality {
                             + "earnestly, intent on showing just how well you can 'give'. Soon Mara is collapsed on top of you breathing hard and her eyes unfocused. You stand and take your leave. You may have lost the battle but the war is far from over.";
         }
         if (selfNPC.has(Trait.madscientist) && selfNPC.has(Item.Lubricant)) {
-            target.add(c, new Oiled(target));
+            target.add(c, new Oiled(target.getType()));
             return "You've fallen completely into Mara's hands now. Her nimble fingers dance over your dick and balls, playing you like an instrument. You grit your teeth and "
                             + "try to endure her touch until you can finger her to orgasm. It's a lost cause though, and you groan as you inevitably feel your pleasure building to a peak. Just before "
                             + "you hit the point of no return, her wonderful fingers release you. Mara grins impishly as your dick twitches in frustration at being left on edge. As soon as you've "
@@ -536,12 +536,12 @@ public class Mara extends BasePersonality {
     public String defeat(Combat c, Result flag, NPC selfNPC) {
         Character other = c.getOpponent(selfNPC);
         if (selfNPC.has(Trait.madscientist) && selfNPC.has(Item.SPotion)) {
-            selfNPC.add(c, new Hypersensitive(selfNPC));
+            selfNPC.add(c, new Hypersensitive(selfNPC.getType()));
             return "Mara begins to panic as she realizes she's on the verge of defeat. She grabs a small bottle of liquid from pouch on her belt, but it slips from her fingers "
                             + "as she shudders in orgasm. You finger her pussy until she goes limp. While you're waiting for her to recover, you take a look at the bottle she dropped. "
                             + "You recognize this stuff, it greatly heightens sensitivity when absorbed into skin. It seems like a shame not to use it.<br/><br/>Mara sits up, looking at you "
                             + "nervously, but doesn't protest or resist as you open up the bottle and dab a small amount on her nipples. She bites her lip to keep from moaning, but can't "
-                            + "supress her shivers when you start to play with her breasts. You capture her lips and focus on her hypersensitive nipples until you feel her trembling in "
+                            + "suppress her shivers when you start to play with her breasts. You capture her lips and focus on her hypersensitive nipples until you feel her trembling in "
                             + "orgasm again. This seems pretty effective, but you're just getting started.<br/><br/>While Mara is still shaking in pleasure, you take the opportunity to coat "
                             + "your fingers in the liquid. As she comes to her senses, you slips those fingers into her pussy and rub the potion into her vaginal walls. She writhes against "
                             + "your hand and moans loudly, no longer able to control her voice. You continue playing with her pussy and lick her hard nipples. As she starts building to another "
@@ -676,7 +676,7 @@ public class Mara extends BasePersonality {
                                 + assist.getName()
                                 + " pleading for mercy. After a few minutes of this, sweet electric shivers wrack your body when Mara's "
                                 + "dancing fingers tease your dripping pussy and your clit. You are unable to decide whether you are being tickled into "
-                                + "submission or fingered to ecstasy. Your oversensitized pussy finally can't take any more and trys clamping onto her "
+                                + "submission or fingered to ecstasy. Your oversensitized pussy finally can't take any more and tries clamping onto her "
                                 + "teasing fingers. But she keeps you on the edge until you collapse in exhaustion. You dimly hear Mara talking but you "
                                 + "feel too worn out to understand her.";
             }
@@ -713,7 +713,7 @@ public class Mara extends BasePersonality {
                         + "shift in tone and you realise Mara's dancing fingers have moved to her pussy and clit. Her entire body trembles as if unable to decide whether it's being "
                         + "tickled into submission or fingered to ecstasy. You finally hear a breathless gasp as "
                         + target.getName() + " hits her climax and shudders in your arms. You release "
-                        + "her and she collapses, completely exhausted. Mara grins at you mischeviously. <i>\"She obviously enjoyed that. Do you want to be next?\"</i>";
+                        + "her and she collapses, completely exhausted. Mara grins at you mischievously. <i>\"She obviously enjoyed that. Do you want to be next?\"</i>";
     }
 
     @Override

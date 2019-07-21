@@ -1,18 +1,18 @@
 package nightgames.pet;
 
-import java.util.HashMap;
 import nightgames.characters.Character;
 import nightgames.characters.Player;
 import nightgames.combat.Combat;
 import nightgames.items.clothing.Outfit;
 import nightgames.skills.SkillPool;
 
-public class PlayerPetCharacter extends PetCharacter {
-    private Player prototype;
+import java.util.HashMap;
 
-    public PlayerPetCharacter(String name, Pet self, Player prototypeCharacter, int level) throws CloneNotSupportedException {
+public class PlayerPetCharacter extends PetCharacter {
+
+    PlayerPetCharacter(String name, Pet self, Player prototypeCharacter, int level) throws CloneNotSupportedException {
         super(self, name, prototypeCharacter.getType() + "Pet", prototypeCharacter.getGrowth(), 1);
-        prototype = (Player) prototypeCharacter.clone();
+        Player prototype = (Player) prototypeCharacter.clone();
         prototype.applyBasicStats(this);
         for (int i = 1; i < level; i++) {
             getGrowth().levelUp(this);

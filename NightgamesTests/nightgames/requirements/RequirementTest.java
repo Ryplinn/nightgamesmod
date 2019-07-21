@@ -52,7 +52,7 @@ public class RequirementTest {
     }
 
     @Test public void analTest() {
-        combat.setStance(new Anal(other, self));
+        combat.setStance(new Anal(other.getType(), self.getType()));
         assertThat(anal().meets(combat, self, other), is(true));
         assertThat(anal().meets(combat, other, self), is(false));
     }
@@ -96,7 +96,7 @@ public class RequirementTest {
     }
 
     @Test public void domTest() {
-        combat.setStance(new HeldOral(self, other));
+        combat.setStance(new HeldOral(self.getType(), other.getType()));
         assertThat(dom().meets(combat, self, other), is(true));
         assertThat(dom().meets(combat, other, self), is(false));
     }
@@ -117,12 +117,12 @@ public class RequirementTest {
 
     @Test public void insertedTest() {
         self.body.addReplace(new CockPart().applyMod(new SizeMod(SizeMod.COCK_SIZE_HUGE)), 1);
-        combat.setStance(new FlyingCarry(self, other));
+        combat.setStance(new FlyingCarry(self.getType(), other.getType()));
         assertThat(inserted().meets(combat, self, other), is(true));
         assertThat(inserted().meets(combat, other, self), is(false));
         assertThat(eitherinserted().meets(combat, self, other), is(true));
         assertThat(eitherinserted().meets(combat, other, self), is(true));
-        combat.setStance(new Neutral(self, other));
+        combat.setStance(new Neutral(self.getType(), other.getType()));
         assertThat(eitherinserted().meets(combat, self, other), is(false));
         assertThat(eitherinserted().meets(combat, other, self), is(false));
     }
@@ -204,11 +204,11 @@ public class RequirementTest {
     @Test public void positionTest() {
         self.body.addReplace(new CockPart(), 1);
         PositionRequirement flyfuck = position("FlyingCarry");
-        combat.setStance(new FlyingCarry(self, other));
+        combat.setStance(new FlyingCarry(self.getType(), other.getType()));
         assertThat(flyfuck.meets(combat, self, other), is(true));
         assertThat(flyfuck.meets(combat, other, self), is(true));
         assertThat(position("flying").meets(combat, self, other), is(false));
-        combat.setStance(new Neutral(self, other));
+        combat.setStance(new Neutral(self.getType(), other.getType()));
         assertThat(flyfuck.meets(combat, self, other), is(false));
         assertThat(flyfuck.meets(combat, other, self), is(false));
     }
@@ -216,7 +216,7 @@ public class RequirementTest {
     @Test public void proneTest() {
         assertThat(prone().meets(combat, self, other), is(false));
         assertThat(prone().meets(combat, other, self), is(false));
-        combat.setStance(new FaceSitting(self, other));
+        combat.setStance(new FaceSitting(self.getType(), other.getType()));
         assertThat(prone().meets(combat, self, other), is(false));
         assertThat(prone().meets(combat, other, self), is(true));
     }
@@ -231,7 +231,7 @@ public class RequirementTest {
     }
 
     @Test public void reverseTest() {
-        combat.setStance(new Anal(other, self));
+        combat.setStance(new Anal(other.getType(), self.getType()));
         assertThat(rev(anal()).meets(combat, self, other), is(false));
         assertThat(rev(anal()).meets(combat, other, self), is(true));
     }
@@ -248,13 +248,13 @@ public class RequirementTest {
 
     @Test public void statusTest() {
         StatusRequirement caffeinated = status(Stsflag.alert);
-        self.add(combat, new Alert(self));
+        self.add(combat, new Alert(self.getType()));
         assertThat(caffeinated.meets(combat, self, other), is(true));
         assertThat(caffeinated.meets(combat, other, self), is(false));
     }
 
     @Test public void subTest() {
-        combat.setStance(new HeldOral(self, other));
+        combat.setStance(new HeldOral(self.getType(), other.getType()));
         assertThat(sub().meets(combat, self, other), is(false));
         assertThat(sub().meets(combat, other, self), is(true));
     }

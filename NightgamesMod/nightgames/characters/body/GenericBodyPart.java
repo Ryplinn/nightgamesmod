@@ -145,7 +145,7 @@ public class GenericBodyPart implements BodyPart {
         double hotnessMod = hotness;
         double bonus = 1.0;
         for (PartMod mod : mods) {
-            bonus += mod.modHotness(self);
+            bonus += mod.modHotness();
         }
         return hotnessMod * bonus;
     }
@@ -175,7 +175,7 @@ public class GenericBodyPart implements BodyPart {
         double sensitivityMod = sensitivity;
         double bonus = 1.0;
         for (PartMod mod : mods) {
-            bonus += mod.modSensitivity(self);
+            bonus += mod.modSensitivity();
         }
         return sensitivityMod * bonus;
     }
@@ -358,7 +358,7 @@ public class GenericBodyPart implements BodyPart {
     public int mod(Attribute a, int total) {
         int bonus = 0;
         for (PartMod mod : mods) {
-            bonus += mod.mod(a, total);
+            bonus += mod.mod();
         }
         return bonus;
     }

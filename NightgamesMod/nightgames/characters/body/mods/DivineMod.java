@@ -48,12 +48,12 @@ public class DivineMod extends PartMod {
                                             + "%s feeding on {self:possessive} own pleasure to charge up {self:possessive} divine energy.",
                             self, opponent, self == opponent ? "{self:SUBJECT-ACTION:are|is}" 
                                             : "{other:SUBJECT-ACTION:realize|realizes} {self:subject-action:are|is}"));
-            self.add(c, new DivineCharge(self, .25));
+            self.add(c, new DivineCharge(self.getType(), .25));
         } else {
             c.write(self, Formatter.format(
                             "{self:SUBJECT-ACTION:continue|continues} feeding on {self:possessive} own pleasure to charge up {self:possessive} divine energy.",
                             self, opponent));
-            self.add(c, new DivineCharge(self, charge.magnitude));
+            self.add(c, new DivineCharge(self.getType(), charge.magnitude));
         }
         return 0;
     }

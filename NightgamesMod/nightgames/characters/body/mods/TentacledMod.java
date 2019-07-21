@@ -32,7 +32,7 @@ public class TentacledMod extends PartMod {
                                                     + "{other:name} almost starts hyperventilating from the sensations.",
                                     self, opponent, lowerOrRear(part)));
                 }
-                opponent.add(c, new CockBound(opponent, 10, self.nameOrPossessivePronoun() + " " + part.adjective() + " tentacles"));
+                opponent.add(c, new CockBound(opponent.getType(), 10, self.nameOrPossessivePronoun() + " " + part.adjective() + " tentacles"));
             } else {
                 if (!self.human()) {
                     c.write(self, Formatter.format(

@@ -34,7 +34,7 @@ public class TentacleSuck extends TentacleArmSkill {
                             + "{other:SUBJECT-ACTION:try} pulling it off {other:reflective} with {other:possessive} hands but the vacuum-tight "
                             + "suction make it feel like {other:pronoun-action:are} giving {other:reflective} a tug-job.", owner, target, arm.getName()));
             target.body.pleasure(owner, tentaclePart, target.body.getRandomPussy(), strength, c);
-            target.add(c, new PartSucked(target, owner, tentaclePart, "cock"));
+            target.add(c, new PartSucked(target.getType(), owner.getType(), tentaclePart, "cock"));
             return true;
         } else {
             c.write(GUIColor.limbColor(owner), Formatter.format("A %s flies towards {other:name-possessive} crotch, "

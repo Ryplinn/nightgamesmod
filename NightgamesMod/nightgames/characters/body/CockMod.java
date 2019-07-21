@@ -75,7 +75,7 @@ public class CockMod extends PartMod {
                 message += String.format("Power radiates out from %s %s, seeping into %s and subverting %s will. ",
                                 self.nameOrPossessivePronoun(), part.describe(self), opponent.nameOrPossessivePronoun(),
                                 opponent.directObject());
-                opponent.add(c, new Enthralled(opponent.getType(), self, 3));
+                opponent.add(c, new Enthralled(opponent.getType(), self.getType(), 3));
             }
             if (self.hasStatus(Stsflag.cockbound)) {
                 String binding = ((CockBound) self.getStatus(Stsflag.cockbound)).binding;
@@ -146,7 +146,7 @@ public class CockMod extends PartMod {
                     message += String.format(
                                     " The intense sensations cause %s to forget to breathe for a moment, leaving %s literally breathless.",
                                     opponent.subject(), opponent.directObject());
-                    opponent.add(c, new Winded(opponent, 1));
+                    opponent.add(c, new Winded(opponent.getType(), 1));
                 }
             }
             c.write(self, message);
@@ -199,12 +199,12 @@ public class CockMod extends PartMod {
                                                 + " radiates a golden glow as {self:subject-action:groan|groans}. "
                                                 + "{other:SUBJECT-ACTION:realize|realizes} {self:subject-action:are|is} feeding on {self:possessive} own pleasure to charge up {self:possessive} divine energy.",
                                 self, opponent));
-                self.add(c, new DivineCharge(self, .25));
+                self.add(c, new DivineCharge(self.getType(), .25));
             } else {
                 c.write(self, Formatter.format(
                                 "{self:SUBJECT-ACTION:continue|continues} feeding on {self:possessive} own pleasure to charge up {self:possessive} divine energy.",
                                 self, opponent));
-                self.add(c, new DivineCharge(self, charge.magnitude));
+                self.add(c, new DivineCharge(self.getType(), charge.magnitude));
             }
         }
         return 0;
@@ -230,7 +230,7 @@ public class CockMod extends PartMod {
                                         Formatter.capitalizeFirstLetter(opponent.subjectAction("offer", "offers")));
                         duration += 2;
                     }
-                    opponent.add(c, new Enthralled(opponent.getType(), self, duration));
+                    opponent.add(c, new Enthralled(opponent.getType(), self.getType(), duration));
                     c.write(self, message);
                 }
             } else {

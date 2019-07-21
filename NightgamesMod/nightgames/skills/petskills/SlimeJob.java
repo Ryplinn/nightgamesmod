@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
@@ -9,7 +10,7 @@ import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
 public class SlimeJob extends SimpleEnemySkill {
-    public SlimeJob(Character self) {
+    public SlimeJob(CharacterType self) {
         super("Slime Job", self);
         addTag(SkillTag.pleasure);
     }
@@ -56,7 +57,7 @@ public class SlimeJob extends SimpleEnemySkill {
 
     @Override
     public Skill copy(Character user) {
-        return new SlimeJob(user);
+        return new SlimeJob(user.getType());
     }
 
     @Override

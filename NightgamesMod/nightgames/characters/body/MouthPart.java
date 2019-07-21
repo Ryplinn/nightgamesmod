@@ -49,37 +49,37 @@ public class MouthPart extends GenericBodyPart {
         if (!fluid.isEmpty() && opponent.has(Trait.frenzyingjuices) && Random.random(5) == 0) {
             c.write(self, Formatter.capitalizeFirstLetter(opponent.nameOrPossessivePronoun()) + " madness-inducing "
                             + fluid + " leaves " + self.nameOrPossessivePronoun() + " in a state of frenzy.");
-            self.add(c, new Frenzied(self, 3));
+            self.add(c, new Frenzied(self.getType(), 3));
         }
         if (!fluid.isEmpty() && target.getFluidAddictiveness(opponent) > 0 && !self.is(Stsflag.tolerance)) {
-            self.add(c, new FluidAddiction(self, opponent, target.getFluidAddictiveness(opponent), 5));
-            FluidAddiction st = (FluidAddiction) self.getStatus(Stsflag.fluidaddiction);
-            if (st == null) {
-                // pass (addiction was resisted)
-            } else if (st.activated()) {
-                if (self.human()) {
-                    c.write(self, Formatter.capitalizeFirstLetter(Formatter.format(
-                                    "As {other:name-possessive} " + fluid
-                                                    + " flow down your throat, your entire mind fogs up. "
-                                                    + "You forget where you are, why you're here, and what you're doing. "
-                                                    + "The only thing left in you is a primal need to obtain more of {other:possessive} fluids.",
-                                    self, opponent)));
-                } else {
-                    c.write(self, Formatter.capitalizeFirstLetter(Formatter.format(
-                                    "As your " + fluid
-                                                    + " slides down {self:name-possessive} throat, you see a shadow pass over {self:possessive} face. "
-                                                    + "Whereas {self:name} was playfully teasing you just a few seconds ago, you can now only see a desperate need that {self:pronoun} did not possess before.",
-                                    self, opponent)));
-                }
-            } else if (!st.isActive()) {
-                if (self.human()) {
-                    c.write(self, Formatter.capitalizeFirstLetter(
-                                    Formatter.format("You feel a strange desire to drink down more of {other:name-possessive} "
-                                                    + fluid + ".", self, opponent)));
-                } else {
-                    c.write(self, Formatter.capitalizeFirstLetter(
-                                    Formatter.format("{self:name} drinks down your " + fluid + " and seems to want more.",
-                                                    self, opponent)));
+            self.add(c, new FluidAddiction(self.getType(), opponent.getType(), target.getFluidAddictiveness(opponent), 5));
+            FluidAddiction st = (FluidAddiction) self.getStatus(Stsflag.fluidaddiction); // null if addiction was resisted
+            if (st != null) {
+                if (st.activated()) {
+                    if (self.human()) {
+                        c.write(self, Formatter.capitalizeFirstLetter(Formatter.format(
+                                        "As {other:name-possessive} " + fluid
+                                                        + " flow down your throat, your entire mind fogs up. "
+                                                        + "You forget where you are, why you're here, and what you're doing. "
+                                                        + "The only thing left in you is a primal need to obtain more of {other:possessive} fluids.",
+                                        self, opponent)));
+                    } else {
+                        c.write(self, Formatter.capitalizeFirstLetter(Formatter.format(
+                                        "As your " + fluid
+                                                        + " slides down {self:name-possessive} throat, you see a shadow pass over {self:possessive} face. "
+                                                        + "Whereas {self:name} was playfully teasing you just a few seconds ago, you can now only see a desperate need that {self:pronoun} did not possess before.",
+                                        self, opponent)));
+                    }
+                } else if (!st.isActive()) {
+                    if (self.human()) {
+                        c.write(self, Formatter.capitalizeFirstLetter(
+                                        Formatter.format("You feel a strange desire to drink down more of {other:name-possessive} "
+                                                        + fluid + ".", self, opponent)));
+                    } else {
+                        c.write(self, Formatter.capitalizeFirstLetter(
+                                        Formatter.format("{self:name} drinks down your " + fluid + " and seems to want more.",
+                                                        self, opponent)));
+                    }
                 }
             }
         }
@@ -91,7 +91,7 @@ public class MouthPart extends GenericBodyPart {
                     c.write(opponent, "<br/>" + opponent.getName()
                                     + "'s mind falls into a pink colored fog from the tongue lashing.");
                 }
-                opponent.add(c, new Trance(opponent));
+                opponent.add(c, new Trance(opponent.getType()));
             }
             bonus += Random.random(3) + MathUtils.clamp(self.get(Attribute.seduction) / 3, 10, 30)
                             * self.getArousal().percent() / 100.0;
@@ -109,7 +109,7 @@ public class MouthPart extends GenericBodyPart {
             opponent.pain(c, opponent, 8 + Random.random(10), false, true);
         }
         if (self.has(Trait.Corrupting)) {
-            opponent.add(c, new PartiallyCorrupted(opponent, self));
+            opponent.add(c, new PartiallyCorrupted(opponent.getType(), self.getType()));
         }
         if (self.has(Trait.soulsucker) && target.isGenital()) {
             if (!self.human()) {

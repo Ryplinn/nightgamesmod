@@ -15,12 +15,7 @@ public class Maya extends BasePersonality {
 
     private static final long serialVersionUID = 447375506153223682L;
 
-    // For loading from save
     public Maya() {
-        this(1);
-    }
-
-    public Maya(int playerLevel) {
         super(false);
     }
 
@@ -131,9 +126,9 @@ public class Maya extends BasePersonality {
     @Override
     public String victory(Combat c, Result flag, NPC selfNPC) {
         Character target = c.getOpponent(selfNPC);
-        target.add(c, new Drowsy(target));
+        target.add(c, new Drowsy(target.getType()));
         selfNPC.arousal.empty();
-        selfNPC.add(c, new Energized(selfNPC, 10));
+        selfNPC.add(c, new Energized(selfNPC.getType(), 10));
         return "Maya completely outmatches you. How were you suppose to deal with"
                         + " someone this skilled? Your cock spurts a sticky white flag in her hands "
                         + "as you cum. You slump down to the floor as you catch your breath. Maya "
@@ -288,7 +283,7 @@ public class Maya extends BasePersonality {
                         + "too many, or it would have attracted attention. The matches are pretty "
                         + "rough and the physical combat seems to escalate over time. Probably 5-10?"
                         + "<br/><br/><i>\"Wrong. The answer is zero. No one has ever been injured in a match."
-                        + " It's not just due to Lilly's hardwork, as diligent as she and her "
+                        + " It's not just due to Lilly's hard work, as diligent as she and her "
                         + "predecessors have been. It's because we're under our Benefactor's "
                         + "protection.\"</i> Her expression has shifted slightly as she talks. "
                         + "It now appears more like hero worship, along with something else "

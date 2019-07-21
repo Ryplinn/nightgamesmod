@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.ToysPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -10,7 +11,7 @@ import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
 public class GoblinTease extends SimpleEnemySkill {
-    public GoblinTease(Character self) {
+    public GoblinTease(CharacterType self) {
         super("Goblin Tease", self);
         addTag(SkillTag.pleasure);
     }
@@ -68,7 +69,7 @@ public class GoblinTease extends SimpleEnemySkill {
 
     @Override
     public Skill copy(Character user) {
-        return new GoblinTease(user);
+        return new GoblinTease(user.getType());
     }
 
     @Override

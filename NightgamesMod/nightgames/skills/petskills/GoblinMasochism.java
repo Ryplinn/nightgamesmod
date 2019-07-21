@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.nskills.tags.SkillTag;
@@ -10,7 +11,7 @@ import nightgames.status.Masochistic;
 import nightgames.status.Stsflag;
 
 public class GoblinMasochism extends SimpleEnemySkill {
-    public GoblinMasochism(Character self) {
+    public GoblinMasochism(CharacterType self) {
         super("Goblin Masochism", self);
         addTag(SkillTag.debuff);
     }
@@ -30,14 +31,14 @@ public class GoblinMasochism extends SimpleEnemySkill {
         c.write(getSelf(), Formatter.format("{self:SUBJECT} draws a riding crop and hits her own balls with it. She shivers with delight at the pain and both of you can "
                         + "feel an aura of masochism radiate off her.", getSelf(), target));
         getSelf().pain(c, getSelf(), 10);
-        c.p1.add(c, new Masochistic(c.p1));
-        c.p2.add(c, new Masochistic(c.p2));
+        c.p1.add(c, new Masochistic(c.p1.getType()));
+        c.p2.add(c, new Masochistic(c.p2.getType()));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new GoblinMasochism(user);
+        return new GoblinMasochism(user.getType());
     }
 
     @Override

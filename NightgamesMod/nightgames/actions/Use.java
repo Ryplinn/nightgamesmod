@@ -35,7 +35,7 @@ public class Use extends Action {
                 GUI.gui.message(
                                 "You cover yourself in slick oil. It's a weird feeling, but it should make it easier to escape from a hold.");
             }
-            user.addNonCombat(new Oiled(user));
+            user.addNonCombat(new Oiled(user.getType()));
             user.consume(Item.Lubricant, 1);
             return Movement.oil;
         } else if (item == Item.EnergyDrink) {
@@ -45,12 +45,12 @@ public class Use extends Action {
             }
             user.heal(null, 10 + Random.random(10));
             user.consume(Item.EnergyDrink, 1);
-            return Movement.enerydrink;
+            return Movement.energydrink;
         } else if (item == Item.Beer) {
             if (user.human()) {
-                GUI.gui.message("You pop open a beer and chug it down, feeling buzzed and a bit slugish.");
+                GUI.gui.message("You pop open a beer and chug it down, feeling buzzed and a bit sluggish.");
             }
-            user.addNonCombat(new Buzzed(user));
+            user.addNonCombat(new Buzzed(user.getType()));
             user.consume(Item.Beer, 1);
             return Movement.beer;
         }
@@ -62,7 +62,7 @@ public class Use extends Action {
         if (item == Item.Lubricant) {
             return Movement.oil;
         } else if (item == Item.EnergyDrink) {
-            return Movement.enerydrink;
+            return Movement.energydrink;
         } else if (item == Item.Beer) {
             return Movement.beer;
         }

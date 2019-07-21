@@ -25,7 +25,7 @@ public class TentacleSquirt extends TentacleArmSkill {
     public boolean resolve(Combat c, Arm arm, Character owner, Character target) {
         boolean sub = target.bound() || !c.getStance().mobile(target);
         boolean success = sub || Random.random(100) < 10 + owner.get(Attribute.slime);
-        ThrowSlime throwSlimeSkill = new ThrowSlime(owner);
+        ThrowSlime throwSlimeSkill = new ThrowSlime(owner.getType());
         HitType type = throwSlimeSkill.decideEffect(c, target);
 
         if (success && type != HitType.NONE) {
@@ -33,7 +33,7 @@ public class TentacleSquirt extends TentacleArmSkill {
                             .format("The %s rears up and fires a large gunk of slime at {other:name-do}", owner, target, arm.getName()));
             type.message(c, owner, target);
             target.add(c, type.build(owner, target));
-            target.add(c, new Slimed(target, owner, Random.random(1, 5)));
+            target.add(c, new Slimed(target.getType(), owner.getType(), Random.random(1, 5)));
             return true;
         } else {
             c.write(GUIColor.limbColor(owner), Formatter.format("The %s rears up and fires a large gunk of slime at {other:name-do}. Luckily, it misses its mark.", owner, target, arm.getName()));

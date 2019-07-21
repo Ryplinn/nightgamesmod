@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.nskills.tags.SkillTag;
@@ -8,7 +9,7 @@ import nightgames.skills.Skill;
 import nightgames.status.Shield;
 
 public class FairyShield extends SimpleMasterSkill {
-    public FairyShield(Character self) {
+    public FairyShield(CharacterType self) {
         super("Fairy Shield", self, 10);
         addTag(SkillTag.buff);
     }
@@ -28,7 +29,7 @@ public class FairyShield extends SimpleMasterSkill {
         if (target.roll(getSelf(), accuracy(c, target))) {
             int duration = 3 + getSelf().getLevel() / 10;
             c.write(getSelf(), Formatter.format("{self:SUBJECT} raises a shield around {other:name-do}, preventing attacks!", getSelf(), target));
-            target.add(c, new Shield(target, .5, duration));
+            target.add(c, new Shield(target.getType(), .5, duration));
         } else {
             c.write(getSelf(), Formatter
                             .format("{self:SUBJECT} flies around the edge of the fight looking for an opening.", getSelf(), target));
@@ -44,6 +45,6 @@ public class FairyShield extends SimpleMasterSkill {
 
     @Override
     public Skill copy(Character user) {
-        return new FairyShield(user);
+        return new FairyShield(user.getType());
     }
 }

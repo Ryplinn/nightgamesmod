@@ -49,7 +49,7 @@ public class Offer extends Skill {
             writeOutput(c, Result.miss, target);
             getSelf().add(c, new Shamed(self));
             if (target.hasDick() || target.has(Trait.strapped)) {
-                new Spank(target).resolve(c, getSelf());
+                new Spank(target.getType()).resolve(c, getSelf());
             }
             return false;
         }

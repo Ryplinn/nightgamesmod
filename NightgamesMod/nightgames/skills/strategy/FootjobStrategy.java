@@ -20,7 +20,7 @@ public class FootjobStrategy extends KnockdownThenActionStrategy {
     @Override
     public double weight(Combat c, Character self) {
         double weight = .25;
-        if (!(new Footjob(self)).requirements(c, self, c.getOpponent(self))) {
+        if (!(new Footjob(self.getType())).requirements(c, self, c.getOpponent(self))) {
             return 0;
         }
         if (c.getOpponent(self).has(Trait.footfetishist)) {
@@ -54,10 +54,10 @@ public class FootjobStrategy extends KnockdownThenActionStrategy {
         }
         
         if (!self.outfit.hasNoShoes()) {
-            return Optional.of(Collections.singleton(new TakeOffShoes(self)));
+            return Optional.of(Collections.singleton(new TakeOffShoes(self.getType())));
         }
 
-        StandUp standup = new StandUp(self);
+        StandUp standup = new StandUp(self.getType());
         if (allowedSkills.contains(standup)) {
             return Optional.of(Collections.singleton(standup));
         }

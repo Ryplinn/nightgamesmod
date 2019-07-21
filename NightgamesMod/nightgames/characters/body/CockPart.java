@@ -12,12 +12,14 @@ import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.status.Sensitized;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CockPart extends GenericBodyPart {
-    public static String synonyms[] = {"cock", "dick", "shaft", "phallus"};
+    private static List<String> synonyms = Arrays.asList("cock", "dick", "shaft", "phallus");
 
     public static CockPart generic = new CockPart();
 
@@ -62,7 +64,7 @@ public class CockPart extends GenericBodyPart {
 
     @Override
     protected String modlessDescription(Character c) {
-        String syn = Random.pickRandom(synonyms).get();
+        String syn = Random.pickRandomGuaranteed(synonyms);
         return (c.hasPussy() && !moddedPartCountsAs(c, CockMod.incubus) ? "girl-" : "") + syn;
     }
 
@@ -103,7 +105,7 @@ public class CockPart extends GenericBodyPart {
             }
         }
         if (self.has(Trait.druglacedprecum) && !opponent.isPartProtected(target)) {
-            opponent.add(c, new Sensitized(opponent, target, .2, 2.0, 20));
+            opponent.add(c, new Sensitized(opponent.getType(), target, .2, 2.0, 20));
             c.write(self, Formatter.format("{self:NAME-POSSESSIVE} drug-laced precum is affecting {other:direct-object}.",
                             self, opponent));
         }
@@ -173,12 +175,14 @@ public class CockPart extends GenericBodyPart {
         return this.applyMod(new SizeMod(SizeMod.clampToValidSize(this, getSize() - 1)));
     }
 
-    public PussyPart getEquivalentPussy() {
-        List<PartMod> newMods = getPartMods().stream().map(BodyUtils.EQUIVALENT_MODS::get).filter(mod -> mod != null).distinct().collect(Collectors.toList());
-        GenericBodyPart newPart = PussyPart.generateGeneric();
+    PussyPart getEquivalentPussy() {
+        List<PartMod> newMods =
+                        getPartMods().stream().map(partMod -> (CockMod) partMod).map(BodyUtils.EQUIVALENT_MODS::get)
+                                        .filter(Objects::nonNull).distinct().collect(Collectors.toList());
+        PussyPart newPart = PussyPart.generateGeneric();
         for (PartMod mod : newMods) {
-            newPart = (GenericBodyPart)newPart.applyMod(mod);
+            newPart = (PussyPart) newPart.applyMod(mod);
         }
-        return (PussyPart)newPart;
+        return newPart;
     }
 }

@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
@@ -9,7 +10,7 @@ import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
 public class ImpTease extends SimpleEnemySkill {
-    public ImpTease(Character self) {
+    public ImpTease(CharacterType self) {
         super("Imp Tease", self);
         addTag(SkillTag.pleasure);
     }
@@ -54,7 +55,7 @@ public class ImpTease extends SimpleEnemySkill {
 
     @Override
     public Skill copy(Character user) {
-        return new ImpTease(user);
+        return new ImpTease(user.getType());
     }
 
     @Override

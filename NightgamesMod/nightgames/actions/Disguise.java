@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class Disguise extends Action {
     private static final long serialVersionUID = 2089054062272510717L;
 
-    public Disguise() {
+    Disguise() {
         super("Disguise");
     }
 
@@ -24,13 +24,12 @@ public class Disguise extends Action {
     }
 
     private NPC getRandomNPC(Character user) {
-        NPC target = (NPC) Random.pickRandom(Match.getParticipants()
-                        .stream().filter(other -> !other.human() 
-                                        && user != other 
+        return (NPC) Random.pickRandom(Match.getParticipants()
+                        .stream().filter(other -> !other.human()
+                                        && user != other
                                         && !other.has(Trait.cursed)
                                         && !Flag.checkCharacterDisabledFlag(other.getType()))
                         .collect(Collectors.toList())).orElse(null);
-        return target;
     }
 
     @Override

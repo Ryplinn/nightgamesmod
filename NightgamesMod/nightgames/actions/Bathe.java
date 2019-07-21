@@ -11,7 +11,7 @@ public class Bathe extends Action {
      */
     private static final long serialVersionUID = 4565550545479306251L;
 
-    public Bathe() {
+    Bathe() {
         super("Clean Up");
     }
 

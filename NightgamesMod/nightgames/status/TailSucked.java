@@ -23,7 +23,7 @@ public class TailSucked extends Status implements InsertedStatus {
         this.sucker = sucker;
         this.power = power;
         requirements.add((c, self, other) -> c != null && self != null && other != null
-                        && new TailSuck(other).usable(c, self));
+                        && new TailSuck(other.getType()).usable(c, self));
         flag(Stsflag.bound);
         flag(Stsflag.debuff);
         flag(Stsflag.tailsucked);

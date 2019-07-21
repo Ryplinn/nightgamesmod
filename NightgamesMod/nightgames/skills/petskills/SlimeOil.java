@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.nskills.tags.SkillTag;
@@ -10,7 +11,7 @@ import nightgames.status.Oiled;
 import nightgames.status.Stsflag;
 
 public class SlimeOil extends SimpleEnemySkill {
-    public SlimeOil(Character self) {
+    public SlimeOil(CharacterType self) {
         super("Slime Oil", self, 10);
         addTag(SkillTag.buff);
     }
@@ -33,7 +34,7 @@ public class SlimeOil extends SimpleEnemySkill {
                                         + "The slime suddenly pounces on {other:name-do} and wraps itself around {other:direct-object}. "
                                         + "It doesn't seem to be attacking {other:direct-object} as much as giving you a hug, "
                                         + "but it leaves {other:direct-object} covered in slimy residue", getSelf(), target));
-            target.add(c, new Oiled(target));
+            target.add(c, new Oiled(target.getType()));
         } else {
             c.write(getSelf(), Formatter.format("{self:SUBJECT} launches itself towards {other:name-do}, but {other:SUBJECT-ACTION:sidestep|sidesteps} it handily.",
                             getSelf(), target));
@@ -49,7 +50,7 @@ public class SlimeOil extends SimpleEnemySkill {
 
     @Override
     public Skill copy(Character user) {
-        return new SlimeOil(user);
+        return new SlimeOil(user.getType());
     }
 
     @Override

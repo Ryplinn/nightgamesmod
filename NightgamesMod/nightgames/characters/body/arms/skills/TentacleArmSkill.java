@@ -5,7 +5,7 @@ import nightgames.characters.body.arms.Arm;
 import nightgames.combat.Combat;
 
 public abstract class TentacleArmSkill extends ArmSkill {
-    public TentacleArmSkill(String name, int level) {
+    TentacleArmSkill(String name, int level) {
         super(name, level);
     }
 

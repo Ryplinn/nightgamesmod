@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.nskills.tags.SkillTag;
@@ -10,7 +11,7 @@ import nightgames.status.Shamed;
 import nightgames.status.Stsflag;
 
 public class GoblinFaceFuck extends SimpleEnemySkill {
-    public GoblinFaceFuck(Character self) {
+    public GoblinFaceFuck(CharacterType self) {
         super("Goblin Face Fuck", self);
         addTag(SkillTag.pleasure);
         addTag(SkillTag.debuff);
@@ -29,18 +30,18 @@ public class GoblinFaceFuck extends SimpleEnemySkill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        c.write(getSelf(), Formatter.format("{self:SUBJECT} straddles {other:name-possessive} head, giving {other:direct-object} an eyefull of her assorted genitals. "
+        c.write(getSelf(), Formatter.format("{self:SUBJECT} straddles {other:name-possessive} head, giving {other:direct-object} an eyeful of her assorted genitals. "
                         + "She pulls the vibrator out of her pussy, causing a rain of love juice to splash {other:possessive} face. "
                         + "{self:SUBJECT} then wipes her leaking cock on {other:name-possessive} forehead, smearing {other:direct-object} with precum. "
                         + "{other:NAME-POSSESSIVE} face flushes with shame as the goblin marks {other:direct-object} with her fluids.", getSelf(), target));
         getSelf().body.pleasure(target, target.body.getRandom("skin"), getSelf().body.getRandomCock(), 10, c);
-        target.add(c, new Shamed(target));
+        target.add(c, new Shamed(target.getType()));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new GoblinFaceFuck(user);
+        return new GoblinFaceFuck(user.getType());
     }
 
     @Override

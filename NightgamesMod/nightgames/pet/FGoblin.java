@@ -9,11 +9,7 @@ import nightgames.skills.Grind;
 import nightgames.skills.Piston;
 import nightgames.skills.PussyGrind;
 import nightgames.skills.Thrust;
-import nightgames.skills.petskills.GoblinBondage;
-import nightgames.skills.petskills.GoblinDenial;
-import nightgames.skills.petskills.GoblinFaceFuck;
-import nightgames.skills.petskills.GoblinMasochism;
-import nightgames.skills.petskills.GoblinTease;
+import nightgames.skills.petskills.*;
 
 public class FGoblin extends Pet {
     public FGoblin(Character owner, int pow, int ac) {
@@ -62,7 +58,7 @@ public class FGoblin extends Pet {
                         own(),opponent.own(),own(),opponent.own()));
                 break;
             default:
-                (new GoblinTease(getSelf())).resolve(c, opponent.getSelf());
+                (new GoblinTease(getSelf().getType())).resolve(c, opponent.getSelf());
                 return;
             }
         c.removePet(opponent.getSelf());
@@ -79,7 +75,7 @@ public class FGoblin extends Pet {
             c.write(captor, String.format("You manage to catch %s's ", owner().getName()));
             c.write(captor, Formatter.format("{other:SUBJECT} manage to catch {self:name-do} fetish goblin by her bondage gear, keeping her from escaping. It's not immediately clear how {other:pronoun} can "
                     + "finish off the overstimulated goblin. There's not much {other:subject} can do to the goblin's genitals beyond what she's already doing with her 'accessories.' "
-                    + "{other:SUBJECT-ACTION:need|needs} a strong enough stimulus to push her over the theshold. {other:PRONOUN} grab the end of the anal beads sticking out of the fetish goblin's ass and "
+                    + "{other:SUBJECT-ACTION:need|needs} a strong enough stimulus to push her over the threshold. {other:PRONOUN} grab the end of the anal beads sticking out of the fetish goblin's ass and "
                     + "yank them out all at once. The goblin shudders and the flow of liquid leaking out of her holes signals her orgasm before she vanishes.", getSelf(), captor));
         }
         c.removePet(getSelf());
@@ -92,15 +88,15 @@ public class FGoblin extends Pet {
         self.body.setHeight(120);
         self.body.makeGenitalOrgans(CharacterSex.herm);
         self.body.finishBody(CharacterSex.herm);
-        self.learn(new GoblinTease(self));
-        self.learn(new Thrust(self));
-        self.learn(new Grind(self));
-        self.learn(new Piston(self));
-        self.learn(new PussyGrind(self));
-        self.learn(new GoblinBondage(self));
-        self.learn(new GoblinMasochism(self));
-        self.learn(new GoblinFaceFuck(self));
-        self.learn(new GoblinDenial(self));
+        self.learn(new GoblinTease(self.getType()));
+        self.learn(new Thrust(self.getType()));
+        self.learn(new Grind(self.getType()));
+        self.learn(new Piston(self.getType()));
+        self.learn(new PussyGrind(self.getType()));
+        self.learn(new GoblinBondage(self.getType()));
+        self.learn(new GoblinMasochism(self.getType()));
+        self.learn(new GoblinFaceFuck(self.getType()));
+        self.learn(new GoblinDenial(self.getType()));
         setSelf(self);
     }
 }

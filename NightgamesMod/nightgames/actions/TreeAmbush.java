@@ -9,7 +9,7 @@ public class TreeAmbush extends Action {
 
     private static final long serialVersionUID = -8503564080765172483L;
 
-    public TreeAmbush() {
+    TreeAmbush() {
         super("Climb a Tree");
     }
 

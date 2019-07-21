@@ -51,20 +51,20 @@ public class TechStrategy extends AbstractStrategy {
         Set<Skill> preferred = new HashSet<>();
         Set<Skill> secondary = new HashSet<>();
         if (self.has(Trait.harpoon)) {
-            preferred.add(new LaunchHarpoon(self));
-            preferred.add(new Yank(self));
+            preferred.add(new LaunchHarpoon(self.getType()));
+            preferred.add(new Yank(self.getType()));
             secondary.addAll(new UseToyStrategy().getPreferredSkills(c, self, allowedSkills)
                                                  .orElse(Collections.emptySet()));
         }
         if (self.has(Trait.bomber)) {
-            preferred.add(new ThrowBomb(self));
+            preferred.add(new ThrowBomb(self.getType()));
         }
         if (self.has(Trait.maglocks)) {
-            preferred.add(new MagLock(self));
+            preferred.add(new MagLock(self.getType()));
             secondary.addAll(new KnockdownStrategy().filterSkills(c, self, allowedSkills));
         }
         if (self.has(Trait.trainingcollar)) {
-            preferred.add(new Collar(self));
+            preferred.add(new Collar(self.getType()));
             secondary.addAll(new KnockdownStrategy().filterSkills(c, self, allowedSkills));
         }
 

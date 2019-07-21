@@ -11,7 +11,7 @@ import java.util.Collection;
 
 public class DisguiseHelper {
     public static void disguiseCharacter(Character self, NPC target) {
-        self.addNonCombat(new Disguised(self, target));
+        self.addNonCombat(new Disguised(self.getType(), target.getType()));
         self.body.clearReplacements();
         Collection<BodyPart> currentParts = new ArrayList<>(self.body.getCurrentParts()); 
         currentParts.forEach(part -> self.body.temporaryRemovePart(part, 1000));

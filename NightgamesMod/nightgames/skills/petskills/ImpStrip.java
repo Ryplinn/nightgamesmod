@@ -1,11 +1,8 @@
 package nightgames.skills.petskills;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -16,15 +13,19 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 public class ImpStrip extends SimpleEnemySkill {
-    public ImpStrip(Character self) {
+    public ImpStrip(CharacterType self) {
         super("Imp Strip", self);
         addTag(SkillTag.stripping);
     }
 
     @Override
     public boolean usable(Combat c, Character target) {
-        return super.usable(c, target) && !getStrippableSlots(c, target).isEmpty();
+        return super.usable(c, target) && !getStrippableSlots(target).isEmpty();
     }
 
     @Override
@@ -32,7 +33,7 @@ public class ImpStrip extends SimpleEnemySkill {
         return 5;
     }
 
-    private List<ClothingSlot> getStrippableSlots(Combat c, Character target) {
+    private List<ClothingSlot> getStrippableSlots(Character target) {
         List<ClothingSlot> strippable = new ArrayList<>();
         if (!target.crotchAvailable()) {
             strippable.add(ClothingSlot.bottom);
@@ -44,11 +45,12 @@ public class ImpStrip extends SimpleEnemySkill {
     }
     @Override
     public boolean resolve(Combat c, Character target) {        
-        Optional<ClothingSlot> targetSlot = Random.pickRandom(getStrippableSlots(c, target));
-        int difficulty = !targetSlot.isPresent() ? 999999 : target.getOutfit().getTopOfSlot(targetSlot.get()).dc() + target.getLevel()
-                + (target.getStamina().percent() / 5 - target.getArousal().percent()) / 4
-                - (!target.canAct() || c.getStance().sub(target) ? 20 : 0);
-        if (getSelf().checkVsDc(Attribute.cunning, difficulty)) {
+        Optional<ClothingSlot> targetSlot = Random.pickRandom(getStrippableSlots(target));
+        int difficulty = targetSlot.map(clothingSlot ->
+                        target.getOutfit().getTopOfSlot(clothingSlot).dc() + target.getLevel()
+                                        + (target.getStamina().percent() / 5 - target.getArousal().percent()) / 4 - (
+                                        !target.canAct() || c.getStance().sub(target) ? 20 : 0)).orElse(999999);
+        if (getSelf().checkVsDc(Attribute.cunning, difficulty) && targetSlot.isPresent()) {
             // should never be null here, since otherwise we can't use the skill          
             Clothing stripped = target.strip(targetSlot.get(), c);
             c.write(getSelf(), Formatter.format("{self:SUBJECT} steals {other:name-possessive} %s and runs off with it.",
@@ -64,7 +66,7 @@ public class ImpStrip extends SimpleEnemySkill {
 
     @Override
     public Skill copy(Character user) {
-        return new ImpStrip(user);
+        return new ImpStrip(user.getType());
     }
 
     @Override

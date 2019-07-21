@@ -49,14 +49,14 @@ public class FTCEncounter extends Encounter {
     }
 
     private void treeAmbush(Character attacker, Character victim) {
-        victim.addNonCombat(new Flatfooted(victim, 3));
+        victim.addNonCombat(new Flatfooted(victim.getType(), 3));
         if (attacker.has(Item.Handcuffs))
-            victim.addNonCombat(new Bound(victim, 75, "handcuffs"));
+            victim.addNonCombat(new Bound(victim.getType(), 75, "handcuffs"));
         else
-            victim.addNonCombat(new Bound(victim, 50, "zip-tie"));
+            victim.addNonCombat(new Bound(victim.getType(), 50, "zip-tie"));
         if (getP1().human() || getP2().human()) {
-            fight = new Combat(attacker, victim, attacker.location(), (Initiation) ambushRegular);
-            fight.setStance(new Pin(attacker, victim));
+            fight = new Combat(attacker, victim, attacker.location(), ambushRegular);
+            fight.setStance(new Pin(attacker.getType(), victim.getType()));
             String message = "";
             if (victim.human()) {
                 message += "As you walk down the trail, you hear a slight rustling in the"
@@ -87,19 +87,19 @@ public class FTCEncounter extends Encounter {
         } else {
             GUI.gui.refresh();
             fight = new Combat(attacker, victim, location, ambushRegular);
-            fight.setStance(new Pin(attacker, victim));
+            fight.setStance(new Pin(attacker.getType(), victim.getType()));
         }
     }
 
     private void bushAmbush(Character attacker, Character victim) {
-        victim.addNonCombat(new Flatfooted(victim, 3));
+        victim.addNonCombat(new Flatfooted(victim.getType(), 3));
         if (attacker.has(Item.Handcuffs))
-            victim.addNonCombat(new Bound(victim, 75, "handcuffs"));
+            victim.addNonCombat(new Bound(victim.getType(), 75, "handcuffs"));
         else
-            victim.addNonCombat(new Bound(victim, 50, "zip-tie"));
+            victim.addNonCombat(new Bound(victim.getType(), 50, "zip-tie"));
         if (getP1().human() || getP2().human()) {
-            fight = new Combat(attacker, victim, attacker.location(), (Initiation) ambushRegular);
-            fight.setStance(new Mount(attacker, victim));
+            fight = new Combat(attacker, victim, attacker.location(), ambushRegular);
+            fight.setStance(new Mount(attacker.getType(), victim.getType()));
             String message = "";
             if (victim.human()) {
                 message += "You are having a little difficulty wading through the dense"
@@ -122,7 +122,7 @@ public class FTCEncounter extends Encounter {
         } else {
             GUI.gui.refresh();
             fight = new Combat(attacker, victim, location, ambushRegular);
-            fight.setStance(new Pin(attacker, victim));
+            fight.setStance(new Pin(attacker.getType(), victim.getType()));
         }
     }
 
@@ -146,11 +146,11 @@ public class FTCEncounter extends Encounter {
                                 + " at a disadvantage.";
             }
             fight = new Combat(attacker, victim, attacker.location());
-            victim.addNonCombat(new Flatfooted(victim, 3));
+            victim.addNonCombat(new Flatfooted(victim.getType(), 3));
         } else {
             if (attacker.human()) {
                 message += "While you are hiding behind a rock, waiting for someone to"
-                                + " walk around the corner up ahead, you hear a soft cruch behind"
+                                + " walk around the corner up ahead, you hear a soft crunch behind"
                                 + " you. You turn around, but not fast enough. {other:name} is"
                                 + " already on you, and has grabbed your shoulders. You are unable"
                                 + " to prevent {other:direct-object} from throwing you to the ground,"
@@ -166,12 +166,10 @@ public class FTCEncounter extends Encounter {
                                 + " {self:direct-object} to fall to the ground.";
             }
             fight = new Combat(attacker, victim, attacker.location());
-            attacker.addNonCombat(new Flatfooted(attacker, 3));
+            attacker.addNonCombat(new Flatfooted(attacker.getType(), 3));
         }
         if (attacker.human() || victim.human()) {
             GUI.gui.message(Formatter.format(message, attacker, victim));
-        } else {
-
         }
     }
 

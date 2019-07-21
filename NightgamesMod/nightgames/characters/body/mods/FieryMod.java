@@ -1,7 +1,5 @@
 package nightgames.characters.body.mods;
 
-import java.util.Optional;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.body.BodyPart;
@@ -9,6 +7,8 @@ import nightgames.characters.body.CockMod;
 import nightgames.characters.body.GenericBodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
+
+import java.util.Optional;
 
 public class FieryMod extends PartMod {
     public static final FieryMod INSTANCE = new FieryMod();
@@ -31,7 +31,7 @@ public class FieryMod extends PartMod {
         if (!opponent.stunned()) {
             if (target.moddedPartCountsAs(opponent, CockMod.primal)) {
                 c.write(self, String.format(
-                                "The intense heat emanating from %s %s only serves to enflame %s primal passion.",
+                                "The intense heat emanating from %s %s only serves to inflame %s primal passion.",
                                 self.nameOrPossessivePronoun(), part.describe(self), opponent.nameOrPossessivePronoun()));
                 opponent.buildMojo(c, 7);
             } else if (target.moddedPartCountsAs(opponent, CockMod.bionic)) {
@@ -60,7 +60,7 @@ public class FieryMod extends PartMod {
             BodyPart target = targetPart.get();
             if (target.moddedPartCountsAs(opponent, CockMod.primal)) {
                 c.write(self, String.format(
-                                "The intense heat emanating from %s %s only serves to enflame %s primal passion.",
+                                "The intense heat emanating from %s %s only serves to inflame %s primal passion.",
                                 self.nameOrPossessivePronoun(), part.describe(self), opponent.nameOrPossessivePronoun()));
                 opponent.buildMojo(c, 7);
             } else if (target.moddedPartCountsAs(opponent, CockMod.bionic)) {

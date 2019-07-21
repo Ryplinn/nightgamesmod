@@ -66,7 +66,7 @@ public class ZealAddiction extends Addiction {
         Optional<AddictionSymptom> s = super.startCombat(c, opp);
         if (shouldApplyDivineCharge() && opp.equals(getCause())) {
             int sev = getSeverity().ordinal();
-            opp.status.add(new DivineCharge(opp, sev * .75f));
+            opp.status.add(new DivineCharge(opp.getType(), sev * .75f));
         }
         return s;
     }

@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
@@ -8,7 +9,7 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.Skill;
 
 public class GoblinDenial extends SimpleMasterSkill {
-    public GoblinDenial(Character self) {
+    public GoblinDenial(CharacterType self) {
         super("GoblinDenial", self, 5);
         addTag(SkillTag.calm);
     }
@@ -40,6 +41,6 @@ public class GoblinDenial extends SimpleMasterSkill {
 
     @Override
     public Skill copy(Character user) {
-        return new GoblinDenial(user);
+        return new GoblinDenial(user.getType());
     }
 }

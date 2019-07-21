@@ -13,7 +13,7 @@ public abstract class Action implements Serializable {
      *
      */
     private static final long serialVersionUID = 4981682001213276175L;
-    public static Set<Action> actionPool;
+    private static Set<Action> actionPool;
     static {
         buildActionPool();
     }
@@ -23,7 +23,7 @@ public abstract class Action implements Serializable {
         this.name = name;
     }
 
-    public static void buildActionPool() {
+    private static void buildActionPool() {
         actionPool = new HashSet<>();
         actionPool.add(new Resupply());
         actionPool.add(new Wait());
@@ -89,13 +89,9 @@ public abstract class Action implements Serializable {
         }
         Action other = (Action) obj;
         if (name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!name.equals(other.name)) {
-            return false;
-        }
-        return true;
+            return other.name == null;
+        } else
+            return name.equals(other.name);
     }
 
 }

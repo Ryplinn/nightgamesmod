@@ -1,17 +1,16 @@
 package nightgames.skills.strategy;
 
-import java.util.Set;
-
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.global.Random;
 import nightgames.skills.Skill;
 
+import java.util.Set;
+
 public class DefaultStrategy extends AbstractStrategy {
     @Override
     public double weight(Combat c, Character self) {
-        double weight = 5;
-        return weight;
+        return 5.;
     }
 
     @Override

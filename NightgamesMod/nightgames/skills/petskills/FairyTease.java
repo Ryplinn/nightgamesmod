@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
@@ -10,7 +11,7 @@ import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
 public class FairyTease extends SimpleEnemySkill {
-    public FairyTease(Character self) {
+    public FairyTease(CharacterType self) {
         super("Fairy Tease", self);
         addTag(SkillTag.pleasure);
     }
@@ -62,7 +63,7 @@ public class FairyTease extends SimpleEnemySkill {
 
     @Override
     public Skill copy(Character user) {
-        return new FairyTease(user);
+        return new FairyTease(user.getType());
     }
 
     @Override

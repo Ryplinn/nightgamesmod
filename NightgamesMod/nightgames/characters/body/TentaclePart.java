@@ -1,23 +1,18 @@
 package nightgames.characters.body;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import nightgames.characters.Character;
-import nightgames.characters.DummyCharacter;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 
+import java.util.*;
+
 public class TentaclePart extends GenericBodyPart {
-    public static final GenericBodyPart DUMMY_PART = new GenericBodyPart("tentacles", 1.0, 1.0, 0.0, "tentacles", "");
-    public static final Character DUMMY_CHARACTER = new DummyCharacter("summoned tentacles", "tentaclesdummy", 1, DUMMY_PART);
+    private static final GenericBodyPart DUMMY_PART = new GenericBodyPart("tentacles", 1.0, 1.0, 0.0, "tentacles", "");
     public String attachpoint;
-    String fluids;
+    private String fluids;
     private boolean printSynonym;
-    static String allowedAttachTypes[] = {"ass", "mouth", "pussy", "hands", "feet", "tail", "cock"};
+    private static String[] allowedAttachTypes = {"ass", "mouth", "pussy", "hands", "feet", "tail", "cock"};
 
     public static void pleasureWithTentacles(Combat c, Character target, int strength, BodyPart targetPart) {
         target.body.pleasure(c.getOpponent(target), DUMMY_PART, targetPart, strength, c);
@@ -25,8 +20,8 @@ public class TentaclePart extends GenericBodyPart {
 
     public static TentaclePart randomTentacle(String desc, Body body, String fluids, double hotness, double pleasure,
                     double sensitivity) {
-        Set<String> avail = new HashSet<String>(Arrays.asList(allowedAttachTypes));
-        Set<String> parts = new HashSet<String>();
+        Set<String> avail = new HashSet<>(Arrays.asList(allowedAttachTypes));
+        Set<String> parts = new HashSet<>();
         for (BodyPart p : body.getCurrentParts()) {
             if (p instanceof TentaclePart) {
                 avail.remove(((TentaclePart) p).attachpoint);
@@ -36,14 +31,13 @@ public class TentaclePart extends GenericBodyPart {
 
         avail.retainAll(parts);
         String type;
-        ArrayList<String> availList = new ArrayList<String>(avail);
+        ArrayList<String> availList = new ArrayList<>(avail);
         if (avail.size() > 0) {
             type = availList.get(Random.random(availList.size()));
         } else {
             type = "back";
         }
-        TentaclePart part = new TentaclePart(desc, type, fluids, hotness, pleasure, sensitivity);
-        return part;
+        return new TentaclePart(desc, type, fluids, hotness, pleasure, sensitivity);
     }
 
     public TentaclePart(String desc, String attachpoint, String fluids, double hotness, double pleasure,
@@ -63,19 +57,19 @@ public class TentaclePart extends GenericBodyPart {
         super(DUMMY_PART);
     }
 
-    public static String synonyms[] = {"mass", "clump", "nest", "group",};
+    private static List<String> synonyms = Arrays.asList("mass", "clump", "nest", "group");
 
     @Override
     public void describeLong(StringBuilder b, Character c) {
         if (printSynonym)
-            b.append("A " + Random.pickRandom(synonyms).get() + " of ");
+            b.append("A ").append(Random.pickRandomGuaranteed(synonyms)).append(" of ");
         else
             b.append("A ");
         b.append(describe(c));
         if (c.body.has(attachpoint)) {
-            b.append(" sprouts from " + c.nameOrPossessivePronoun() + " " + attachpoint + ".");
+            b.append(" sprouts from ").append(c.nameOrPossessivePronoun()).append(" ").append(attachpoint).append(".");
         } else {
-            b.append(" sprouts from " + c.nameOrPossessivePronoun() + " back.");
+            b.append(" sprouts from ").append(c.nameOrPossessivePronoun()).append(" back.");
         }
     }
 

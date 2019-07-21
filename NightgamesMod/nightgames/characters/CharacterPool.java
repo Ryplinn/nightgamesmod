@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
  */
 public class CharacterPool {
     public Map<CharacterType, NPC> characterPool;   // All starting and unlockable characters
+    public Map<CharacterType, Character> temporaryCharacters;   // in-combat pet characters and such
     public Set<CharacterType> debugChars;
     public Player human;
 
@@ -71,7 +72,7 @@ public class CharacterPool {
         NPC jewel = new NPC(CharacterType.get("Jewel"), new Jewel(), startConfig);
         NPC airi = new NPC(CharacterType.get("Airi"), new Airi(), startConfig);
         NPC eve = new NPC(CharacterType.get("Eve"), new Eve(), startConfig);
-        NPC maya = new NPC(CharacterType.get("Maya"), new Maya(1), startConfig);
+        NPC maya = new NPC(CharacterType.get("Maya"), new Maya(), startConfig);
         NPC yui = new NPC(CharacterType.get("Yui"), new Yui(), startConfig);
         characterPool.put(cassie.getType(), cassie);
         characterPool.put(angel.getType(), angel);

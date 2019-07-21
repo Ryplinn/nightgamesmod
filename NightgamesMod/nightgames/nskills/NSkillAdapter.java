@@ -1,18 +1,18 @@
 package nightgames.nskills;
 
-import java.util.Optional;
-
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
+import java.util.Optional;
+
 public class NSkillAdapter extends Skill {
     SkillInterface skill;
 
     public NSkillAdapter(Character user, SkillInterface skill) {
-        super(skill.getName(), user);
+        super(skill.getName(), user.getType());
         this.skill = skill;
     }
 

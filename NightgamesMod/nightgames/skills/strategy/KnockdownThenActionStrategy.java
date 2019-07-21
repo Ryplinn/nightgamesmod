@@ -1,16 +1,16 @@
 package nightgames.skills.strategy;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.global.Random;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.Skill;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public abstract class KnockdownThenActionStrategy extends AbstractStrategy {
 
@@ -21,7 +21,7 @@ public abstract class KnockdownThenActionStrategy extends AbstractStrategy {
         return Optional.empty(); 
     }
     
-    protected static Optional<Set<Skill>> emptyIfSetEmpty(Set<Skill> skills) {
+    static Optional<Set<Skill>> emptyIfSetEmpty(Set<Skill> skills) {
         if (skills.isEmpty()) {
             return Optional.empty();
         } else {

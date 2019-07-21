@@ -30,7 +30,7 @@ public class TentacleReel extends TentacleArmSkill {
             c.write(GUIColor.limbColor(owner), Formatter.format("The %s wrapped around {other:name-possessive} waist manages to pull {other:direct-object} right up against {self:name-do}. "
                             + "It does not stop there though; the tentacle somehow manages to pull {other:direct-object} into {self:possessive} very body, engulfing {other:direct-object} inside.", owner, target, arm.getName()));
             target.free();
-            c.setStance(new Engulfed(owner, target), owner, true);
+            c.setStance(new Engulfed(owner.getType(), target.getType()), owner, true);
         } else {
             c.write(GUIColor.limbColor(owner), Formatter.format("The %s wrapped around {other:name-possessive} waist starts pulling {other:direct-object} back towards {self:name-do}.", owner, target, arm.getName()));
             bound.setStacks(bound.getStacks() + 1);

@@ -149,7 +149,7 @@ public class AssPart extends GenericBodyPart {
                 c.write(opponent, Formatter.format(
                                 "The foreign object rummaging around inside {self:name-possessive} ass <i><b>just feels so right</b></i>. {self:SUBJECT-ACTION:feel|feels} {self:reflective} slipping into a trance!",
                                                 self, opponent));
-                self.add(c, new Trance(self, 3, false));
+                self.add(c, new Trance(self.getType(), 3, false));
             }
             c.write(opponent, Formatter.format(
                             "The foreign object rummaging around inside {self:name-possessive} ass feels so <i>right</i>. {self:SUBJECT} can't help moaning in time with the swelling pleasure.",

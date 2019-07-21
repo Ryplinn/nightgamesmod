@@ -50,36 +50,36 @@ public class SkillsTest {
 		}
 		area = new Area("Test Area","Area for testing", Movement.quad);
 		stances = new ArrayList<>();
-		stances.add(new Anal(npcs1.get(0), npcs1.get(1)));
-		stances.add(new AnalCowgirl(npcs1.get(0), npcs1.get(1)));
-		stances.add(new AnalProne(npcs1.get(0), npcs1.get(1)));
-		stances.add(new Behind(npcs1.get(0), npcs1.get(1)));
-		stances.add(new BehindFootjob(npcs1.get(0), npcs1.get(1)));
-		stances.add(new CoiledSex(npcs1.get(0), npcs1.get(1)));
-		stances.add(new Cowgirl(npcs1.get(0), npcs1.get(1)));
-		stances.add(new Doggy(npcs1.get(0), npcs1.get(1)));
-		stances.add(new Engulfed(npcs1.get(0), npcs1.get(1)));
-		stances.add(new FaceSitting(npcs1.get(0), npcs1.get(1)));
-		stances.add(new FlowerSex(npcs1.get(0), npcs1.get(1)));
-		stances.add(new FlyingCarry(npcs1.get(0), npcs1.get(1)));
-		stances.add(new FlyingCowgirl(npcs1.get(0), npcs1.get(1)));
-		stances.add(new HeldOral(npcs1.get(0), npcs1.get(1)));
-		stances.add(new Jumped(npcs1.get(0), npcs1.get(1)));
-		stances.add(new Missionary(npcs1.get(0), npcs1.get(1)));
-		stances.add(new Mount(npcs1.get(0), npcs1.get(1)));
-		stances.add(new Neutral(npcs1.get(0), npcs1.get(1)));
-		stances.add(new NursingHold(npcs1.get(0), npcs1.get(1)));
-		stances.add(new Pin(npcs1.get(0), npcs1.get(1)));
-		stances.add(new ReverseCowgirl(npcs1.get(0), npcs1.get(1)));
-		stances.add(new ReverseMount(npcs1.get(0), npcs1.get(1)));
-		stances.add(new SixNine(npcs1.get(0), npcs1.get(1)));
-		stances.add(new Standing(npcs1.get(0), npcs1.get(1)));
-		stances.add(new StandingOver(npcs1.get(0), npcs1.get(1)));
-		stances.add(new TribadismStance(npcs1.get(0), npcs1.get(1)));
-		stances.add(new UpsideDownFemdom(npcs1.get(0), npcs1.get(1)));
-        stances.add(new UpsideDownMaledom(npcs1.get(0), npcs1.get(1)));
-        stances.add(new HeldOral(npcs1.get(0), npcs1.get(1)));
-        stances.add(new HeldPaizuri(npcs1.get(0), npcs1.get(1)));
+		stances.add(new Anal(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new AnalCowgirl(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new AnalProne(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new Behind(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new BehindFootjob(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new CoiledSex(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new Cowgirl(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new Doggy(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new Engulfed(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new FaceSitting(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new FlowerSex(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new FlyingCarry(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new FlyingCowgirl(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new HeldOral(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new Jumped(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new Missionary(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new Mount(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new Neutral(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new NursingHold(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new Pin(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new ReverseCowgirl(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new ReverseMount(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new SixNine(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new Standing(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new StandingOver(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new TribadismStance(npcs1.get(0).getType(), npcs1.get(1).getType()));
+		stances.add(new UpsideDownFemdom(npcs1.get(0).getType(), npcs1.get(1).getType()));
+        stances.add(new UpsideDownMaledom(npcs1.get(0).getType(), npcs1.get(1).getType()));
+        stances.add(new HeldOral(npcs1.get(0).getType(), npcs1.get(1).getType()));
+        stances.add(new HeldPaizuri(npcs1.get(0).getType(), npcs1.get(1).getType()));
         gameState.makeMatch(new ArrayList<>(npcs1));
 	}
 
@@ -96,14 +96,14 @@ public class SkillsTest {
 				}
 			}
 		} else {
-			System.out.println("STANCE NOT EFFECTIVE: " + pos.getClass().getSimpleName() + " with top: " + pos.top.getTrueName() + " and bottom: " + pos.bottom.getTrueName());
+			System.out.println("STANCE NOT EFFECTIVE: " + pos.getClass().getSimpleName() + " with top: " + pos.getTop().getTrueName() + " and bottom: " + pos.getBottom().getTrueName());
 		}
 	}
 
 	// TODO: May need to clone npc1 and npc2 here too, depending on how skills affect characters.
 	private void testCombo(Character npc1, Character npc2, Position pos) throws CloneNotSupportedException {
-		pos.top = npc1;
-		pos.bottom = npc2;
+		pos.top = npc1.getType();
+		pos.bottom = npc2.getType();
 		testSkill(npc1, npc2, pos);
 		testSkill(npc2, npc1, pos);
 	}

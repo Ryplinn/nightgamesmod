@@ -5,11 +5,7 @@ import nightgames.characters.CharacterSex;
 import nightgames.characters.Growth;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
-import nightgames.skills.petskills.FairyEnergize;
-import nightgames.skills.petskills.FairyHeal;
-import nightgames.skills.petskills.FairyKick;
-import nightgames.skills.petskills.FairyShield;
-import nightgames.skills.petskills.FairyTease;
+import nightgames.skills.petskills.*;
 
 public class FairyFem extends Pet {
     public FairyFem(Character owner) {
@@ -52,11 +48,11 @@ public class FairyFem extends Pet {
                 break;
             case slime:
                 c.write(getSelf(), own() + "fae glows with magic as it circles " + opponent.own()
-                                + "slime rapidly. The slime begins to tremble and slowly elongates into the shape of a crude phallis. It shudders "
+                                + "slime rapidly. The slime begins to tremble and slowly elongates into the shape of a crude phallus. It shudders "
                                 + "violently and sprays liquid from the tip until the entire creature is a puddle on the floor.");
                 break;
             default:
-                (new FairyTease(getSelf())).resolve(c, opponent.getSelf());
+                (new FairyTease(getSelf().getType())).resolve(c, opponent.getSelf());
                 return;
         }
         c.removePet(opponent.getSelf());
@@ -82,11 +78,11 @@ public class FairyFem extends Pet {
         self.body.setHeight(20);
         self.body.makeGenitalOrgans(CharacterSex.female);
         self.body.finishBody(CharacterSex.female);
-        self.learn(new FairyEnergize(self));
-        self.learn(new FairyHeal(self));
-        self.learn(new FairyTease(self));
-        self.learn(new FairyKick(self));
-        self.learn(new FairyShield(self));
+        self.learn(new FairyEnergize(self.getType()));
+        self.learn(new FairyHeal(self.getType()));
+        self.learn(new FairyTease(self.getType()));
+        self.learn(new FairyKick(self.getType()));
+        self.learn(new FairyShield(self.getType()));
         setSelf(self);
     }
 }

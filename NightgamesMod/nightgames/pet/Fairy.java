@@ -5,11 +5,7 @@ import nightgames.characters.CharacterSex;
 import nightgames.characters.Growth;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
-import nightgames.skills.petskills.FairyEnergize;
-import nightgames.skills.petskills.FairyHeal;
-import nightgames.skills.petskills.FairyKick;
-import nightgames.skills.petskills.FairyShield;
-import nightgames.skills.petskills.FairyTease;
+import nightgames.skills.petskills.*;
 
 public class Fairy extends Pet {
     public Fairy(Character owner, Ptype gender) {
@@ -85,7 +81,7 @@ public class Fairy extends Pet {
                             + "slime like a tiny missile. The slime splashes more than it explodes, it's pieces "
                             + "only shudder once before going still.");
         } else {
-            (new FairyTease(getSelf())).resolve(c, opponent.getSelf());
+            (new FairyTease(getSelf().getType())).resolve(c, opponent.getSelf());
             return;
         }
         c.removePet(opponent.getSelf());
@@ -132,11 +128,11 @@ public class Fairy extends Pet {
         self.body.setHeight(22 - (type()==Ptype.fairyfem?2:0));
         self.body.makeGenitalOrgans(getCharacterSex());
         self.body.finishBody(getCharacterSex());
-        self.learn(new FairyEnergize(self));
-        self.learn(new FairyHeal(self));
-        self.learn(new FairyTease(self));
-        self.learn(new FairyKick(self));
-        self.learn(new FairyShield(self));
+        self.learn(new FairyEnergize(self.getType()));
+        self.learn(new FairyHeal(self.getType()));
+        self.learn(new FairyTease(self.getType()));
+        self.learn(new FairyKick(self.getType()));
+        self.learn(new FairyShield(self.getType()));
         setSelf(self);
     }
 }

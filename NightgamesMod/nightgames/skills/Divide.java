@@ -78,7 +78,7 @@ public class Divide extends Skill {
             return null;
         }
         pet.getSelf().add(Trait.MindlessClone);
-        pet.getSelf().getSkills().add(new SlimeCloneParasite(pet.getSelf()));
+        pet.getSelf().getSkills().add(new SlimeCloneParasite(pet.getSelf().getType()));
         return pet;
 
     }

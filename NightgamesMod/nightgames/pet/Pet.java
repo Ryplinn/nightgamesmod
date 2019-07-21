@@ -83,7 +83,7 @@ public abstract class Pet implements Cloneable {
         return this.name;
     }
 
-    public Pet cloneWithOwner(Character owner) throws CloneNotSupportedException {
+    Pet cloneWithOwner(Character owner) throws CloneNotSupportedException {
         Pet clone = (Pet) this.clone();
         clone.owner = owner;
         return clone;

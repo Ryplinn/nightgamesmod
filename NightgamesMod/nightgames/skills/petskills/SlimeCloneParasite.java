@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.mods.ParasitedMod;
 import nightgames.characters.trait.Trait;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class SlimeCloneParasite extends SimpleEnemySkill {
-    public SlimeCloneParasite(Character self) {
+    public SlimeCloneParasite(CharacterType self) {
         super("Parasitism", self);
         addTag(SkillTag.debuff);
     }
@@ -65,7 +66,7 @@ public class SlimeCloneParasite extends SimpleEnemySkill {
 
     @Override
     public Skill copy(Character user) {
-        return new SlimeCloneParasite(user);
+        return new SlimeCloneParasite(user.getType());
     }
 
     @Override

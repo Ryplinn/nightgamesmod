@@ -2,6 +2,7 @@ package nightgames.gui;
 
 import nightgames.characters.NPC;
 import nightgames.characters.Player;
+import nightgames.global.TestGameState;
 import nightgames.pet.FGoblin;
 import nightgames.pet.FairyFem;
 import nightgames.pet.PetCharacter;
@@ -16,6 +17,7 @@ import static org.junit.Assert.assertThat;
 public class GUIColorTest {
 
     @Test public void characterColorTest() {
+        new TestGameState();
         Player summonerPlayer = new Player("SummonerPlayer");
         NPC summonerNPC = new NPC("SummonerNPC");
         PetCharacter playerPet = new FGoblin(summonerPlayer, 1, 1).getSelf();

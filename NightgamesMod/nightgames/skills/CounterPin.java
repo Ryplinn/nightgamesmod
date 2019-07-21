@@ -22,7 +22,7 @@ public class CounterPin extends CounterBase {
 
     @Override
     public void resolveCounter(Combat c, Character target) {
-        Restrain skill = new Restrain(getSelf());
+        Restrain skill = new Restrain(self);
         skill.resolve(c, target, true);
     }
 

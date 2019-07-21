@@ -9,11 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class MultiArmMove {
-    @SuppressWarnings("unused")
-    private final String name;
 
-    MultiArmMove(String name) {
-        this.name = name;
+    MultiArmMove() {
     }
 
     public abstract Optional<List<Arm>> getInvolvedArms(Combat c, Character owner, Character target,

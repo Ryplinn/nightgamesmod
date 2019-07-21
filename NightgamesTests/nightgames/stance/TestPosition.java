@@ -1,15 +1,16 @@
 package nightgames.stance;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 
 /**
  * Test position. Top character is dominant.
  */
 public class TestPosition extends Position {
-    public int dominance;
+    private int dominance;
 
-    public TestPosition(Character top, Character bottom, Stance stance, int dominance) {
+    public TestPosition(CharacterType top, CharacterType bottom, Stance stance, int dominance) {
         super(top, bottom, stance);
         this.dominance = dominance;
     }
@@ -31,11 +32,11 @@ public class TestPosition extends Position {
     }
 
     @Override public boolean dom(Character c) {
-        return c.equals(top);
+        return c.getType().equals(top);
     }
 
     @Override public boolean sub(Character c) {
-        return c.equals(bottom);
+        return c.getType().equals(bottom);
     }
 
     @Override public boolean reachTop(Character c) {

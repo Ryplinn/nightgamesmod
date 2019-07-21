@@ -29,7 +29,7 @@ public class ReceiveAnalStrategy extends AbstractStrategy {
         if (self.has(Trait.powerfulcheeks) && weight > 0) {
             weight += 1;
         }
-        if (weight > 0 && new AssFuck(c.getOpponent(self)).usable(c, self)) {
+        if (weight > 0 && new AssFuck(c.getOpponent(self).getType()).usable(c, self)) {
             weight *= 1.5;
         }
         return weight;
@@ -42,7 +42,7 @@ public class ReceiveAnalStrategy extends AbstractStrategy {
         }
         Set<Skill> anal = allowedSkills.stream().filter(s -> s.getTags(c).contains(SkillTag.anal)).collect(Collectors.toSet());
         if (anal.isEmpty()) {
-            if (new AssFuck(c.getOpponent(self)).usable(c, self)) {
+            if (new AssFuck(c.getOpponent(self).getType()).usable(c, self)) {
                 return new ForeplayStrategy().filterSkills(c, self, allowedSkills);
             }
             return new FuckStrategy().filterSkills(c, self, allowedSkills);

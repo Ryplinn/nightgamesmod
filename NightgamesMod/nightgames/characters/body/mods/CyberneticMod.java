@@ -48,7 +48,7 @@ public class CyberneticMod extends PartMod {
                                     opponent.directObject()));
                     bonus += 15;
                     if (target.moddedPartCountsAs(opponent, CockMod.incubus) || Random.random(4) == 0) {
-                        opponent.add(c, new Shamed(opponent));
+                        opponent.add(c, new Shamed(opponent.getType()));
                     }
                 }
             }

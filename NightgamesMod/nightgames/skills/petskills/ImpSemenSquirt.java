@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
@@ -10,7 +11,7 @@ import nightgames.skills.Tactics;
 import nightgames.status.Horny;
 
 public class ImpSemenSquirt extends SimpleEnemySkill {
-    public ImpSemenSquirt(Character self) {
+    public ImpSemenSquirt(CharacterType self) {
         super("Imp Semen Squirt", self);
         addTag(SkillTag.pleasure);
     }
@@ -36,13 +37,13 @@ public class ImpSemenSquirt extends SimpleEnemySkill {
                         + "{other:SUBJECT-ACTION:flush|flushes} bright red and {other:action:look|looks} stunned "
                         + "as the aphrodisiac laden fluid overwhelms {other:possessive} senses.", getSelf(), target));
         getSelf().body.pleasure(getSelf(), getSelf().body.getRandom("hands"), getSelf().body.getRandomCock(), 10, c);
-        target.add(c, new Horny(target, m, 5, "imp cum"));
+        target.add(c, new Horny(target.getType(), m, 5, "imp cum"));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new ImpSemenSquirt(user);
+        return new ImpSemenSquirt(user.getType());
     }
 
     @Override

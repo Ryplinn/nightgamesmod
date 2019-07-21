@@ -1,8 +1,5 @@
 package nightgames.skills.strategy;
 
-import java.util.Collections;
-import java.util.Set;
-
 import nightgames.characters.Character;
 import nightgames.characters.NPC;
 import nightgames.combat.Combat;
@@ -11,8 +8,11 @@ import nightgames.skills.Barrier;
 import nightgames.skills.Skill;
 import nightgames.status.Stsflag;
 
+import java.util.Collections;
+import java.util.Set;
+
 public class BarrierStrategy extends AbstractStrategy {
-    private static final Barrier BARRIER = new Barrier(NPC.noneCharacter());
+    private static final Barrier BARRIER = new Barrier(NPC.noneCharacter().getType());
     
     @Override
     public double weight(Combat c, Character self) {
@@ -29,7 +29,7 @@ public class BarrierStrategy extends AbstractStrategy {
             return Collections.emptySet();
         }
         if (allowedSkills.contains(BARRIER)) {
-            return Collections.singleton(new Barrier(self));
+            return Collections.singleton(new Barrier(self.getType()));
         }
         return Collections.emptySet();
     }

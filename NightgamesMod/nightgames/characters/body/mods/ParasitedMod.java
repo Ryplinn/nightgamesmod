@@ -1,16 +1,16 @@
 package nightgames.characters.body.mods;
 
-import java.util.Optional;
-
 import nightgames.characters.Character;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 
+import java.util.Optional;
+
 public class ParasitedMod extends PartMod {
     public static final ParasitedMod INSTANCE = new ParasitedMod();
 
-    public ParasitedMod() {
+    private ParasitedMod() {
         super("parasited", 0, 0, 0, -1000);
     }
 

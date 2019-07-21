@@ -40,7 +40,7 @@ public class TentacleFuck extends TentacleArmSkill {
                             + "{other:SUBJECT:try} pulling it out with {other:possessive} hands but the slippery appendage easily eludes {other:possessive} grip. "
                             + "The entire business just ends ups arousing {other:direct-object} to no end.", owner, target, arm.getName()));
             target.body.pleasure(owner, tentaclePart, target.body.getRandomPussy(), strength, c);
-            target.add(c, new PartFucked(target, owner, tentaclePart, "pussy"));
+            target.add(c, new PartFucked(target.getType(), owner.getType(), tentaclePart, "pussy"));
             return true;
         } else {
             c.write(GUIColor.limbColor(owner), Formatter.format("A %s flies towards {other:name-possessive} crotch, "

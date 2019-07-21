@@ -584,7 +584,7 @@ public class Combat extends Observable implements Cloneable {
                                     Formatter.format("Sensing a moment of distraction, you use the power in your voice to force {self:subject} to your will.",
                                                     other, self));
                 }
-                (new Command(self)).resolve(this, other);
+                (new Command(self.getType())).resolve(this, other);
                 int cooldown = Math.max(1, 6 - (self.getLevel() - other.getLevel() / 5));
                 getCombatantData(self).setIntegerFlag("enchantingvoice-count", -cooldown);
             } else {
@@ -759,7 +759,7 @@ public class Combat extends Observable implements Cloneable {
     public Optional<Skill> getRandomWorshipSkill(Character self, Character other) {
         List<Skill> avail = new ArrayList<>(WORSHIP_SKILLS);
         if (other.has(Trait.piety)) {
-            avail.add(new ConcedePosition(self));
+            avail.add(new ConcedePosition(self.getType()));
         }
         Collections.shuffle(avail);
         while (!avail.isEmpty()) {
@@ -961,7 +961,7 @@ public class Combat extends Observable implements Cloneable {
         }
 
         Optional<String> compulsion = Compulsive.describe(this, self, Compulsive.Situation.STANCE_FLIP);
-        if (compulsion.isPresent() && Random.random(10) < 3 && new Reversal(other).usable(this, self)) {
+        if (compulsion.isPresent() && Random.random(10) < 3 && new Reversal(other.getType()).usable(this, self)) {
             self.pain(this, null, Random.random(20, 50));
             Position nw = stance.reverse(this, false);
             if (!stance.equals(nw)) {
@@ -1652,6 +1652,7 @@ public class Combat extends Observable implements Cloneable {
         writeSystemMessage(self, Formatter.format("{self:SUBJECT-ACTION:have|has} summoned {other:name-do} (Level %s)",
                                         master, self, self.getLevel()));
         otherCombatants.add(self);
+        GameState.getGameState().characterPool.temporaryCharacters.put(self.getType(), self);
         this.write(self, self.challenge(getOpponent(self)));
     }
 

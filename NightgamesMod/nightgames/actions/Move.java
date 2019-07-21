@@ -26,10 +26,6 @@ public class Move extends Action {
         return destination.id();
     }
 
-    public Area getDestination() {
-        return destination;
-    }
-
     @Override
     public Movement consider() {
         return destination.id();

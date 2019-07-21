@@ -39,7 +39,7 @@ public class ArcaneMod extends PartMod {
             if (target.moddedPartCountsAs(opponent, CockMod.primal)) {
                 message = String.format(
                                 (isMouth ? "The arcane lipstick painted on" : "The tattoos around")+" %s %s flare up with a new intensity, responding to the energy flow from %s %s."
-                                                + " The magic within them latches onto it and pulls fiercly, drawing %s strength into %s with great gulps.",
+                                                + " The magic within them latches onto it and pulls fiercely, drawing %s strength into %s with great gulps.",
                                 self.nameOrPossessivePronoun(), part.describe(self), opponent.nameOrPossessivePronoun(),
                                 target.describe(opponent), opponent.possessiveAdjective(), self.directObject());
                 strength = 10 + self.get(Attribute.spellcasting) / 4;
@@ -61,7 +61,7 @@ public class ArcaneMod extends PartMod {
                 c.write(self, " The light seems to seep into " + opponent.possessiveAdjective() + " "
                                 + target.describe(opponent) + ", leaving " + opponent.directObject() + " enthralled to "
                                 + self.possessiveAdjective() + " will.");
-                opponent.add(c, new Enthralled(opponent, self, 3));
+                opponent.add(c, new Enthralled(opponent.getType(), self.getType(), 3));
             }
         } else {
             String message = String.format(

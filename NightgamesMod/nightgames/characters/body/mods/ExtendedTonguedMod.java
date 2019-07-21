@@ -31,7 +31,7 @@ public class ExtendedTonguedMod extends PartMod {
     public double applyBonuses(Combat c, Character self, Character opponent, BodyPart part, BodyPart target, double damage) { 
         if (c.getStance().isPartFuckingPartInserted(c, opponent, target, self, part) && part.isType("pussy")) {
             if (target.isType("cock") && !opponent.hasStatus(Stsflag.cockbound)) {
-                opponent.add(c, new CockBound(opponent, 5, self.nameOrPossessivePronoun() + " " + part.adjective() + "-tongue"));
+                opponent.add(c, new CockBound(opponent.getType(), 5, self.nameOrPossessivePronoun() + " " + part.adjective() + "-tongue"));
                 c.write(self, self.nameOrPossessivePronoun() + " long sinuous " + part.adjective() + " tongue wraps around "
                                 + opponent.nameOrPossessivePronoun() + " " + target.describe(opponent)
                                 + ", preventing any escape.\n");

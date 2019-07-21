@@ -13,7 +13,7 @@ public class Energize extends Action {
      */
     private static final long serialVersionUID = 75530820306364893L;
 
-    public Energize() {
+    Energize() {
         super("Absorb Mana");
     }
 
@@ -30,7 +30,7 @@ public class Energize extends Action {
                                             + "continuously and the first lesson you learned was how to siphon off the excess. You absorb as much as you can hold, until you're overflowing with mana.");
         }
         user.getMojo().fill();
-        user.addNonCombat(new Energized(user, 20));
+        user.addNonCombat(new Energized(user.getType(), 20));
         return Movement.mana;
     }
 

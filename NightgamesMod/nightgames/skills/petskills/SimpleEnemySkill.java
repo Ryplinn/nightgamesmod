@@ -21,10 +21,7 @@ public abstract class SimpleEnemySkill extends Skill {
         if (other.useFemalePronouns() && getSelf().useFemalePronouns() && Flag.checkFlag(Flag.skipFF)) {
             return false;
         }
-        if (!other.useFemalePronouns() && !getSelf().useFemalePronouns() && Flag.checkFlag(Flag.skipMM)) {
-            return false;
-        }
-        return true;
+        return other.useFemalePronouns() || getSelf().useFemalePronouns() || !Flag.checkFlag(Flag.skipMM);
     }
 
     @Override

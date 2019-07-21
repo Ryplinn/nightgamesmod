@@ -11,11 +11,7 @@ import nightgames.skills.Grind;
 import nightgames.skills.Piston;
 import nightgames.skills.PussyGrind;
 import nightgames.skills.Thrust;
-import nightgames.skills.petskills.ImpAssault;
-import nightgames.skills.petskills.ImpFacesit;
-import nightgames.skills.petskills.ImpSemenSquirt;
-import nightgames.skills.petskills.ImpStrip;
-import nightgames.skills.petskills.ImpTease;
+import nightgames.skills.petskills.*;
 
 public class ImpMale extends Pet {
 
@@ -61,7 +57,7 @@ public class ImpMale extends Pet {
                                 + "fluid, the slime's color darkens and it gradually solidifies, unable to move.");
                 break;
             default:
-                (new ImpTease(getSelf())).resolve(c, opponent.getSelf());
+                (new ImpTease(getSelf().getType())).resolve(c, opponent.getSelf());
                 return;
         }
         c.removePet(opponent.getSelf());
@@ -90,15 +86,15 @@ public class ImpMale extends Pet {
             self.body.add(new CockPart().applyMod(new SizeMod(SizeMod.COCK_SIZE_BIG)));
         }
         self.body.finishBody(CharacterSex.male);
-        self.learn(new ImpAssault(self));
-        self.learn(new Thrust(self));
-        self.learn(new Grind(self));
-        self.learn(new Piston(self));
-        self.learn(new PussyGrind(self));
-        self.learn(new ImpTease(self));
-        self.learn(new ImpStrip(self));
-        self.learn(new ImpFacesit(self));
-        self.learn(new ImpSemenSquirt(self));
+        self.learn(new ImpAssault(self.getType()));
+        self.learn(new Thrust(self.getType()));
+        self.learn(new Grind(self.getType()));
+        self.learn(new Piston(self.getType()));
+        self.learn(new PussyGrind(self.getType()));
+        self.learn(new ImpTease(self.getType()));
+        self.learn(new ImpStrip(self.getType()));
+        self.learn(new ImpFacesit(self.getType()));
+        self.learn(new ImpSemenSquirt(self.getType()));
         setSelf(self);
     }
 }

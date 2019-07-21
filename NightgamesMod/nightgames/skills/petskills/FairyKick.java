@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -12,7 +13,7 @@ import nightgames.skills.damage.DamageType;
 import nightgames.status.Stsflag;
 
 public class FairyKick extends SimpleEnemySkill {
-    public FairyKick(Character self) {
+    public FairyKick(CharacterType self) {
         super("Fairy Kick", self);
         addTag(SkillTag.staminaDamage);
         addTag(SkillTag.positioning);
@@ -51,7 +52,7 @@ public class FairyKick extends SimpleEnemySkill {
 
     @Override
     public Skill copy(Character user) {
-        return new FairyKick(user);
+        return new FairyKick(user.getType());
     }
 
     @Override

@@ -29,7 +29,7 @@ public enum Movement {
     struggle(" is struggling against her bondage"),
     resupply(" heads for one of the safe rooms, probably to get a change of clothes."),
     oil(" rubbing body oil on every inch of her skin. Wow, you wouldn't mind watching that again."),
-    enerydrink(" opening an energy drink and downing the whole thing."),
+    energydrink(" opening an energy drink and downing the whole thing."),
     beer(" opening a beer and downing the whole thing."),
     recharge(" plugging a battery pack into a nearby charging station."),
     locating(" is holding someone's underwear in her hands and breathing deeply. Strange."),

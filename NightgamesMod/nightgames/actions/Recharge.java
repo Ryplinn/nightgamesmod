@@ -12,7 +12,7 @@ public class Recharge extends Action {
      */
     private static final long serialVersionUID = 2089054062272510717L;
 
-    public Recharge() {
+    Recharge() {
         super("Recharge");
     }
 

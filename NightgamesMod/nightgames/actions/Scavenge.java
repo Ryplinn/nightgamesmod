@@ -10,7 +10,7 @@ public class Scavenge extends Action {
      */
     private static final long serialVersionUID = -6692555226745083699L;
 
-    public Scavenge() {
+    Scavenge() {
         super("Scavenge Items");
     }
 

@@ -51,7 +51,7 @@ public class FuckStrategy extends AbstractStrategy {
             return positioningSkills;
         }
         if (!other.body.getAllGenitals().stream().allMatch(other::clothingFuckable)) {
-            allowedSkills.stream().filter(skill -> Tactics.stripping.equals(skill.type(c)));
+            return allowedSkills.stream().filter(skill -> Tactics.stripping.equals(skill.type(c))).collect(Collectors.toSet());
         }
         if (!self.body.getAllGenitals().stream().allMatch(other::clothingFuckable)) {
             return allowedSkills.stream().filter(skill -> skill.getTags(c).contains(SkillTag.undressing)).collect(Collectors.toSet());

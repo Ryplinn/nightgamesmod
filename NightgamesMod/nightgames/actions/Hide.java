@@ -11,7 +11,7 @@ public class Hide extends Action {
      */
     private static final long serialVersionUID = 9222848242102511020L;
 
-    public Hide() {
+    Hide() {
         super("Hide");
 
     }

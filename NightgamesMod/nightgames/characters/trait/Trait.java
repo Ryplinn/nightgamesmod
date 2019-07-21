@@ -1,9 +1,8 @@
 package nightgames.characters.trait;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
+import nightgames.characters.NPC;
 import nightgames.global.Formatter;
-import nightgames.global.GameState;
 import nightgames.global.Random;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.items.clothing.ClothingTrait;
@@ -245,7 +244,7 @@ public enum Trait {
     pussywhipped("Pussy Whipped", "Loves pussy far more than is healthy, always have a pussy fetish."), // Starts off each match with a pussy fetish
     cockcraver("Cock Craver", "Constantly thinking about cocks, always has a cock fetish."), // Starts off each match with a cock fetish
     immobile("Immobile", "Unable to move."), // Cannot move
-    lethargic("Lethargic", "Very low mojo gain from normal methods.", new Lethargic(null, 999, .75)), // 25% mojo gain
+    lethargic("Lethargic", "Very low mojo gain from normal methods.", new Lethargic(NPC.noneCharacter().getType(), 999, .75)), // 25% mojo gain
     hairtrigger("Hair Trigger", "Very quick to shoot. Not for beginners."),
     buttslut("Buttslut", "Extremely weak to anal pleasure."),
     obedient("Obedient", "Easy to order around."),

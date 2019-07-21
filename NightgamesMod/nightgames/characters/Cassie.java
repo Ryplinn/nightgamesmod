@@ -272,7 +272,7 @@ public class Cassie extends BasePersonality {
                                         "After you two recover from your afterglow, Cassie turns towards you. \"You know, we've been competing in the games for a while now. I can't believe how much I've changed! "
                                                         + "When we just started, I've only gone all the way with a " + c.getOpponent(
                                                         selfNPC).boyOrGirl()
-                                                        + " once. I barely knew what to do even! Now though...\" Cassie gigles and starts tickling your spent "
+                                                        + " once. I barely knew what to do even! Now though...\" Cassie giggles and starts tickling your spent "
                                                         + "cock with an conjured arcane feather. \"Hey " + player.getName()
                                                         + ", what do you think? are you disappointed I turned out this way?\"",
                         Arrays.asList(new CombatSceneChoice("Liked her old submissiveness more", (c, self, other) -> {
@@ -293,7 +293,7 @@ public class Cassie extends BasePersonality {
                             useEnchantressBonus(selfNPC);
                             return true;
                         }), new CombatSceneChoice("Both are nice [Hard Mode]", (c, self, other) -> {
-                            c.write("You hesistate a bit when faced with the sudden question. Cassie looks at you expectantly, so in a moment of indecision, you reply that both sides of her are nice."
+                            c.write("You hesitate a bit when faced with the sudden question. Cassie looks at you expectantly, so in a moment of indecision, you reply that both sides of her are nice."
                                             + "<br/>"
                                             + "Cassie blushes and responds, \"Aww that's so sweet! I'll have to work hard to live up to your expectations then.\"");
                             useSubmissiveBonus(selfNPC);
@@ -458,11 +458,11 @@ public class Cassie extends BasePersonality {
                             + "harder as you whisper to her how good her cock felt. She leans forward to present her "
                             + selfNPC.body.getLargestBreasts().describe(selfNPC)
                             + " to you. <i>\"Can you touch my nipples more? I really like that.\"</i> You reach up and play with "
-                            + "her breasts as she continues to grind against you. She stops your pillow talk by kissing you desperately just before you feel her body tense up in orgasm and splurt our her white soup on your stomach. "
+                            + "her breasts as she continues to grind against you. She stops your pillow talk by kissing you desperately just before you feel her body tense up in orgasm and splurt out her white soup on your stomach. "
                             + "She collapses on top of you and kisses your cheek contently. <i>\"I'll keep practicing and make you feel even better next time, \"</i> she tells you happily. <i>\"I promise.\"</i> ";
         } else if (selfNPC.arousal.percent() > 50) {
             selfNPC.arousal.empty();
-            return "Despite your best efforts, you realize you've lost to Cassie's diligant manipulation of your penis. It takes so much focus to hold back your ejaculation "
+            return "Despite your best efforts, you realize you've lost to Cassie's diligent manipulation of your penis. It takes so much focus to hold back your ejaculation "
                             + "that you can't even attempt to retaliate. She pumps your twitching dick eagerly as the last of your endurance gives way. The pleasure building up in the base "
                             + "of your shaft finally overwhelms you and you almost pass out from the intensity of your climax. White jets of semen coat Cassie's hands in the proof of your defeat. <br/><br/>"
                             + "As you recover, you notice Cassie restlessly rubbing her legs together with unfulfilled arousal and offer to help get her off however she prefers. She looks down at "
@@ -487,16 +487,16 @@ public class Cassie extends BasePersonality {
     public String defeat(Combat c, Result flag, NPC selfNPC) {
         Character opponent = c.getOpponent(selfNPC);
         if (selfNPC.has(Trait.witch) && Random.random(3) == 0) {
-            opponent.add(c, new Energized(opponent, 10));
+            opponent.add(c, new Energized(opponent.getType(), 10));
             return "You capture Cassie's lips and slip your hand between her legs to facilitate her imminent orgasm. You rub her soaked pussy lips and she moans against your lips. Her body "
                             + "tenses as she clings to you, letting you know she's reached her climax. You keep rubbing her petals as she starts to relax. She shows no sign of breaking the kiss or "
-                            + "letting you go, so you decide to see if you can give her consecutive orgams.<br/><br/>You dig your fingers into Cassie's sensitive pussy and rub her insides. Her eyes open "
+                            + "letting you go, so you decide to see if you can give her consecutive orgasms.<br/><br/>You dig your fingers into Cassie's sensitive pussy and rub her insides. Her eyes open "
                             + "wide and she lets out a noise of surprise. You tease her tongue with your own and she melts against you again. It only takes a few minutes before her pussy squeezes your "
                             + "fingers and she hits her second orgasm. Your fingers don't even slow down this time. You move away from her lips to focus on licking and sucking her neck. Her pussy twitches "
-                            + "erraticly as you finger her. <i>\"It's so intense! I can't stop twitching!\"</i> She moans plaintively, but she doesn't seem to dislike it. <i>\"I love it! But I think I'm going to die!\"</i> "
+                            + "erratically as you finger her. <i>\"It's so intense! I can't stop twitching!\"</i> She moans plaintively, but she doesn't seem to dislike it. <i>\"I love it! But I think I'm going to die!\"</i> "
                             + "You've been going easy on her clit up until now, but now you rub it firmly with your thumb and gently bite down on her collarbone. She screams in pleasure through her third orgasm, "
                             + "which lasts much longer than her first two.<br/><br/>Cassie goes limp as you hold her tenderly. You haven't had any release, but she seems in no condition to help now. She makes "
-                            + "a content noise and looks ready to fall asleep in your arms. You tickle her lightly and remind her that the match isn't over. <i>\"Can't go on,\"</i> She murmers sleepily. <i>\"Already "
+                            + "a content noise and looks ready to fall asleep in your arms. You tickle her lightly and remind her that the match isn't over. <i>\"Can't go on,\"</i> She murmurs sleepily. <i>\"Already "
                             + "dead. You've slain me.\"</i> She looks at you with half closed eyes. <i>\"You must be an angel, you're practically glowing.\"</i><br/><br/>Suddenly her eyes go wide and she bolts upright. "
                             + "<i>\"You are glowing! You've got all my mana.\"</i> You look at your hands, which do seem to be faintly glowing and you feel unusually energized. Cassie groans quietly. <i>\"When a "
                             + "mage orgasms, she releases some of her mana. You made me cum so much I don't have enough mana left to use my magic. Give it back!\"</i> She looks on the verge of tears, but you "
@@ -511,7 +511,7 @@ public class Cassie extends BasePersonality {
                             + "her hair until she goes limp. When you break the kiss she covers her beet red face with both hands. <i>\"I can't believe I came alone. You made me feel so good, I couldn't help it.\"</i> "
                             + "You can't see her expression, but her voice sounds sheepish rather than defeated. <br/><br/>You spot her glasses on the floor nearby, knocked off in the throes of her orgasm. You pick them "
                             + "up and gently push her hands away from her face. She's flushed and her bangs are matted to her face with sweat, but she's as beautiful as ever. You place her glasses on her "
-                            + "head and she smiles shyly. <i>\"I want you to keep moving. We won't be done until you orgasm too.\"</i> Your cock twiches inside her as if trying to remind you of its need. Cassie must "
+                            + "head and she smiles shyly. <i>\"I want you to keep moving. We won't be done until you orgasm too.\"</i> Your cock twitches inside her as if trying to remind you of its need. Cassie must "
                             + "feel it, because she giggles and kisses you lightly. You start thrusting again and she gasps with delight. She's still sensitive from her climax and if possible you want to give her "
                             + "another. You suck gently on her earlobe and feel her twitch in surprise at the sensation. You know you won't last much longer in her warm, tight pussy, but Cassie is completely entrusting "
                             + "her body to you, giving you the freedom to pleasure her. You work your way down her neck, kissing, licking and listening to her breathing grow heavier. <br/><br/>Her reactions are having a "
@@ -526,7 +526,7 @@ public class Cassie extends BasePersonality {
                             + "her hair until she goes limp inside you. When you break the kiss she covers her beet red face with both hands. <i>\"I can't believe I came alone. You made me feel so good, I couldn't help it.\"</i> "
                             + "You can't see her expression, but her voice sounds sheepish rather than defeated. <br/><br/>You spot her glasses on the floor nearby, knocked off in the throes of her orgasm. You pick them "
                             + "up and gently push her hands away from her face. She's flushed and her bangs are matted to her face with sweat, but she's as beautiful as ever. You place her glasses on her "
-                            + "head and she smiles shyly. <i>\"I want to please you too. Can you wait for a moment so I can get ready again? We won't be done until you orgasm too.\"</i> Your pussy twiches around her spent cock as if trying to remind you of its need. "
+                            + "head and she smiles shyly. <i>\"I want to please you too. Can you wait for a moment so I can get ready again? We won't be done until you orgasm too.\"</i> Your pussy twitches around her spent cock as if trying to remind you of its need. "
                             + "Cassie must feel it, because she giggles and kisses you lightly. You lift yourself slightly and her cock slips out of you, eliciting a gasp as the cold night air hits her sensitive organ. "
                             + "You wrap your lips around her soft penis and give her a combination of a cleanup-blowjob and a way to get her hard again. It worked like magic, as the wilted organ springs back to "
                             + "its former glory. You lie down and let her take the lead this time. She's still sensitive from her previous climax, but she's determined to make you cum. "
@@ -579,7 +579,7 @@ public class Cassie extends BasePersonality {
                                 + "simply bask in her warmth, filled with exhaustion, satisfaction, and a deep sense of love. It takes you a moment to realize the emotions aren't your own. "
                                 + "It's hard to articulate, but you can sense that feelings are flowing into you from Cassie. She looks at you in surprise, clearly feeling the same thing. In "
                                 + "fact, you know for sure she's feeling the same.<br/><br/>"
-                                + "<i>\"You too, right? Ah!\"</i> Realization suddenly dawns on her. <i>\"I think I read about this. We must have been emotionally in synch when the mana loop "
+                                + "<i>\"You too, right? Ah!\"</i> Realization suddenly dawns on her. <i>\"I think I read about this. We must have been emotionally in sync when the mana loop "
                                 + "occurred. Our emotions will keep leaking out as long as we're... connected.\"</i> She casts a meaningful glance downward to where you're still penetrating "
                                 + "her. You've apparently stumbled onto the ultimate form of afterglow. Only possible with two magic users under very specific circumstances. You kiss her "
                                 + "softly, indulging in the warm feelings she's letting out.<br/><br/>"
@@ -589,7 +589,7 @@ public class Cassie extends BasePersonality {
                                 + "to a " + c.getOpponent(selfNPC).boyOrGirl() + ". You'll just need to figure out what I'm feeling the old fashioned way.\"</i>";
             }
             return "You and Cassie move your hips against each other, both rapidly approaching orgasm. As you thrust again and again into her tight folds, you feel yourself pass "
-                            + "the point of no return. You need to make her cum, now! You kiss her passionately, forcing your tongue into her mouth. The deep kiss combined with your continous "
+                            + "the point of no return. You need to make her cum, now! You kiss her passionately, forcing your tongue into her mouth. The deep kiss combined with your continuous "
                             + "thrusting have the desired effect. She embraces you tightly as her climax washes over her. At the same time, you fill her womb with your seed. You didn't quite "
                             + "win, but a draw means you both get points, though you both also forfeit your clothes. Right now, you're both too tired to really care about that. You lie on the "
                             + "floor trying to regain your strength, still holding each other, still joined below the waist. You probably look more like lovers than opponents now and part of you "

@@ -5,11 +5,7 @@ import nightgames.characters.CharacterSex;
 import nightgames.characters.Growth;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
-import nightgames.skills.petskills.FairyEnergize;
-import nightgames.skills.petskills.FairyHeal;
-import nightgames.skills.petskills.FairyKick;
-import nightgames.skills.petskills.FairyShield;
-import nightgames.skills.petskills.FairyTease;
+import nightgames.skills.petskills.*;
 
 public class FairyMale extends Pet {   
     public FairyMale(Character owner) {
@@ -52,7 +48,7 @@ public class FairyMale extends Pet {
                                 + "only shudder once before going still.");
                 break;
             default:
-                (new FairyTease(getSelf())).resolve(c, opponent.getSelf());
+                (new FairyTease(getSelf().getType())).resolve(c, opponent.getSelf());
                 return;
         }
         c.removePet(opponent.getSelf());
@@ -74,11 +70,11 @@ public class FairyMale extends Pet {
     protected void buildSelf() {
         PetCharacter self = new PetCharacter(this, owner().nameOrPossessivePronoun() + " " + getName(), getName(), new Growth(), getPower());
         // fairies are about 20 centimeters tall
-        self.learn(new FairyEnergize(self));
-        self.learn(new FairyHeal(self));
-        self.learn(new FairyTease(self));
-        self.learn(new FairyKick(self));
-        self.learn(new FairyShield(self));
+        self.learn(new FairyEnergize(self.getType()));
+        self.learn(new FairyHeal(self.getType()));
+        self.learn(new FairyTease(self.getType()));
+        self.learn(new FairyKick(self.getType()));
+        self.learn(new FairyShield(self.getType()));
         self.body.setHeight(22);
         self.body.makeGenitalOrgans(CharacterSex.male);
         self.body.finishBody(CharacterSex.male);

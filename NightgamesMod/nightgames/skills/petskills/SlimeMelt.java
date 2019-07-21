@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SlimeMelt extends SimpleEnemySkill {
-    public SlimeMelt(Character self) {
+    public SlimeMelt(CharacterType self) {
         super("Slime Melt", self);
         addTag(SkillTag.stripping);
     }
@@ -44,7 +45,7 @@ public class SlimeMelt extends SimpleEnemySkill {
         if (!target.breastsAvailable() && target.outfit.slotShreddable(ClothingSlot.top)) {
             strippable.add(ClothingSlot.top);
         }
-        ClothingSlot targetSlot = Random.pickRandom(strippable).get();
+        ClothingSlot targetSlot = Random.pickRandomGuaranteed(strippable);
         if (target.roll(getSelf(), accuracy(c, target))) {
             // should never be null here, since otherwise we can't use the skill          
             Clothing stripped = target.strip(targetSlot, c);
@@ -62,7 +63,7 @@ public class SlimeMelt extends SimpleEnemySkill {
 
     @Override
     public Skill copy(Character user) {
-        return new SlimeMelt(user);
+        return new SlimeMelt(user.getType());
     }
 
     @Override

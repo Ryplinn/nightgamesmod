@@ -32,7 +32,8 @@ public class TentacleCling extends TentacleArmSkill {
         if (success) {
             c.write(GUIColor.limbColor(owner), Formatter.format("A %s shoots out from behind {self:name-do}"
                             + " and wraps itself around {other:name-possessive} waist, restricting {other:possessive} movement.", owner, target, arm.getName()));
-            target.add(c, new TentacleBound(target, 30 + 4 * Math.sqrt(owner.get(Attribute.slime)), owner.nameOrPossessivePronoun() + " " + arm.getName(), 1));
+            target.add(c, new TentacleBound(target.getType(), 30 + 4 * Math.sqrt(owner.get(Attribute.slime)),
+                            owner.nameOrPossessivePronoun() + " " + arm.getName(), 1));
         } else {
             c.write(GUIColor.limbColor(owner), Formatter.format("A %s shoots out from behind {self:name-do}"
                             + " and attempts to wrap itself around {other:name-possessive} waist. "

@@ -41,7 +41,7 @@ public class MindControl extends Addiction {
             if (c != null && !getAffected().is(Stsflag.enthralled) && c.getOpponent(getAffected()).equals(source.getCause())
                             && Random.randomdouble() < magnitude / 3) {
 
-                getAffected().addlist.add(new Enthralled(affected, getCause(), 3));
+                getAffected().addlist.add(new Enthralled(affected, cause, 3));
                 Formatter.writeIfCombat(c, getCause(), getCause().getName()
                                 + "'s constant urging overcomes your defences, washing away all of your resistance.");
             }

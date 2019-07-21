@@ -38,8 +38,8 @@ public class CounterDrain extends CounterBase {
         } else {
             c.setStance(Missionary.similarInstance(getSelf(), target), getSelf(), true);
         }
-        Drain drain = new Drain(getSelf());
-        drain.resolve(c, target, true);
+        Drain drain = new Drain(self);
+        drain.resolve(c, target);
     }
 
     @Override

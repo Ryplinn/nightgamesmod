@@ -1,6 +1,7 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.nskills.tags.SkillTag;
@@ -10,7 +11,7 @@ import nightgames.status.BondageFetish;
 import nightgames.status.Stsflag;
 
 public class GoblinBondage extends SimpleEnemySkill {
-    public GoblinBondage(Character self) {
+    public GoblinBondage(CharacterType self) {
         super("Goblin Bondage", self);
         addTag(SkillTag.debuff);
     }
@@ -28,16 +29,16 @@ public class GoblinBondage extends SimpleEnemySkill {
     @Override
     public boolean resolve(Combat c, Character target) {
         c.write(getSelf(), Formatter.format("{self:SUBJECT} pulls the bondage straps tighter around herself. You can see the leather and latex digging into her skin as "
-                        + "her bondage fascinatation begins to affect both of you.", getSelf(), target));
+                        + "her bondage fascination begins to affect both of you.", getSelf(), target));
         getSelf().pain(c, getSelf(), 10);
-        c.p1.add(c, new BondageFetish(c.p1));
-        c.p2.add(c, new BondageFetish(c.p2));
+        c.p1.add(c, new BondageFetish(c.p1.getType()));
+        c.p2.add(c, new BondageFetish(c.p2.getType()));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new GoblinBondage(user);
+        return new GoblinBondage(user.getType());
     }
 
     @Override
