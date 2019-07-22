@@ -3,7 +3,8 @@ package nightgames.global;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for DebugFlags.
@@ -11,6 +12,7 @@ import static org.junit.Assert.*;
 public class DebugFlagsTest {
     @Before public void setUp() {
         DebugFlags.debug = new boolean[DebugFlags.values().length];
+        DebugFlags.debugSimulation = 0;
     }
 
     @Test public void parseOneFlag() throws Exception {
