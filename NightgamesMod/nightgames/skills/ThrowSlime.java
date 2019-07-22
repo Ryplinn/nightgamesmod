@@ -14,11 +14,14 @@ import nightgames.stance.Stance;
 import nightgames.status.*;
 
 public class ThrowSlime extends Skill {
+    ThrowSlime(CharacterType self) {
+        this(self, 0);
+    }
 
-    public ThrowSlime(CharacterType self) {
+    public ThrowSlime(CharacterType self, int slimeAttribute) {
         super("Throw Slime", self, 4);
         addTag(SkillTag.knockdown);
-        if (getSelf().get(Attribute.slime) >= 12) {
+        if (slimeAttribute >= 12) {
             addTag(SkillTag.mental);
         }
     }
@@ -71,7 +74,7 @@ public class ThrowSlime extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new ThrowSlime(user.getType());
+        return new ThrowSlime(user.getType(), user.get(Attribute.slime));
     }
 
     @Override

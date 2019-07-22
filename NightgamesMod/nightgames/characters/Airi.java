@@ -11,7 +11,6 @@ import nightgames.daytime.Daytime;
 import nightgames.global.*;
 import nightgames.items.Item;
 import nightgames.stance.Engulfed;
-import nightgames.start.NPCConfiguration;
 import nightgames.status.Flatfooted;
 import nightgames.status.SlimeMimicry;
 import nightgames.status.Stsflag;
@@ -31,10 +30,6 @@ public class Airi extends BasePersonality {
     private static final String AIRI_TENTACLES_FOCUS = "AiriTentaclesFocus";
 
     public Airi() {
-        this(Optional.empty(), Optional.empty());
-    }
-
-    public Airi(Optional<NPCConfiguration> charConfig, Optional<NPCConfiguration> commonConfig) {
         super(false);
     }
 

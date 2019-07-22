@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
+import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
@@ -233,6 +234,10 @@ public abstract class Addiction {
 
     public void removeImmediately() {
 
+    }
+
+    public List<Trait> appliedTraits() {
+        return new ArrayList<>();
     }
 
     public enum Severity {

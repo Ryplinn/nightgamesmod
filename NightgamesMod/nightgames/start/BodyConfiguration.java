@@ -111,7 +111,9 @@ class BodyConfiguration {
         replaceIfPresent(body, ears);
         replaceIfPresent(body, tail);
         replaceIfPresent(body, wings);
-        replaceIfPresent(body, new FacePart(body.getFace().hotness, faceFemininity));
+        if (faceFemininity != null) {
+            replaceIfPresent(body, new FacePart(body.getFace().hotness, faceFemininity));
+        }
         applyTentacles(body);
         if (hotness != null) {
             body.hotness = hotness;

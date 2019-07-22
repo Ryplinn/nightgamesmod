@@ -1,13 +1,7 @@
 package nightgames.skills;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import nightgames.characters.*;
 import nightgames.characters.Character;
+import nightgames.characters.*;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.DebugFlags;
@@ -15,6 +9,12 @@ import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.items.clothing.Clothing;
 import nightgames.nskills.tags.SkillTag;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class StripSelf extends Skill {
     public StripSelf(CharacterType self) {
@@ -66,7 +66,7 @@ public class StripSelf extends Skill {
             HashMap<Clothing, Double> checks = new HashMap<>();
             double selfFit = self.getFitness(c);
             double otherFit = self.getOtherFitness(c, target);
-            getSelf().getOutfit().getAllStrippable().forEach(article -> {
+            self.getOutfit().getAllStrippable().forEach(article -> {
                 double rating = Decider.rateAction(self, c, selfFit, otherFit, (newCombat, newSelf, newOther) -> {
                     newSelf.strip(article, newCombat);
                     return true;

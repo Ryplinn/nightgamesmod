@@ -6,7 +6,6 @@ import nightgames.characters.Character;
 import nightgames.characters.Meter;
 import nightgames.characters.Player;
 import nightgames.combat.Combat;
-import nightgames.daytime.Daytime;
 import nightgames.debug.DebugGUIPanel;
 import nightgames.global.Random;
 import nightgames.global.*;

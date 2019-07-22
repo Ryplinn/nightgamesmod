@@ -35,7 +35,7 @@ public class FFXTribThreesome extends Threesome {
     }
 
     @Override public List<Character> getAllPartners(Combat c, Character self) {
-        return ((Position) this).getAllPartners(c, self);
+        return Collections.singletonList(getPartner(c, self));
     }
 
     @Override

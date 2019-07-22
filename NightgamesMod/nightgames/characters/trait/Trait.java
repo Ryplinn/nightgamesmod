@@ -1,7 +1,7 @@
 package nightgames.characters.trait;
 
 import nightgames.characters.Character;
-import nightgames.characters.NPC;
+import nightgames.characters.CharacterType;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.items.clothing.ClothingSlot;
@@ -12,6 +12,7 @@ import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.*;
+import java.util.function.Function;
 
 public enum Trait {
     sadist("Sadist", "Skilled at providing pleasure alongside pain",
@@ -244,7 +245,7 @@ public enum Trait {
     pussywhipped("Pussy Whipped", "Loves pussy far more than is healthy, always have a pussy fetish."), // Starts off each match with a pussy fetish
     cockcraver("Cock Craver", "Constantly thinking about cocks, always has a cock fetish."), // Starts off each match with a cock fetish
     immobile("Immobile", "Unable to move."), // Cannot move
-    lethargic("Lethargic", "Very low mojo gain from normal methods.", new Lethargic(NPC.noneCharacter().getType(), 999, .75)), // 25% mojo gain
+    lethargic("Lethargic", "Very low mojo gain from normal methods.", (weakChar) -> new Lethargic(weakChar, 999, .75)), // 25% mojo gain
     hairtrigger("Hair Trigger", "Very quick to shoot. Not for beginners."),
     buttslut("Buttslut", "Extremely weak to anal pleasure."),
     obedient("Obedient", "Easy to order around."),
@@ -423,7 +424,7 @@ public enum Trait {
     indomitable("Indomitable", "Plainly refuses to be dominated"),
     confidentdom("Confident Dom", "Attributes rise while dominant"),
     drainingass("Draining Ass", "Taking it in the ass drains stamina and possibly Power"),
-    edger("Edger", "Can keep oppoenents right at the edge"),
+    edger("Edger", "Can keep opponents right at the edge"),
     commandingvoice("Commanding Voice", "Does not take 'no' for an answer"),
     mentalfortress("Mental Fortress", "Confident enough to have a chance to resist mind control"),
     bewitchingbottom("Bewitching Bottom", "Makes opponents go wild for ass"),
@@ -504,7 +505,7 @@ public enum Trait {
     private TraitDescription longDesc;
     private String name;
     public Trait parent;
-    public Status status;
+    public Function<CharacterType, Status> statusFunction;
 
     public static void buildFeatPool() {
         featPool = new HashSet<>();
@@ -548,10 +549,10 @@ public enum Trait {
         this.parent = parent;
     }
 
-    Trait(String name, String description, Status status) {
+    Trait(String name, String description, Function<CharacterType, Status> statusFunction) {
         this.name = name;
         desc = description;
-        this.status = status;
+        this.statusFunction = statusFunction;
     }
 
     public boolean isFeat() {

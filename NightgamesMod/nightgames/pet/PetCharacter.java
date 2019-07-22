@@ -31,7 +31,6 @@ public class PetCharacter extends Character {
         PET_UNUSABLE_TAG.add(SkillTag.petDisallowed);
         PET_UNUSABLE_TAG.add(SkillTag.counter);
     }
-    private String type;
     private CharacterType ownerType;
     private Pet self;
 
@@ -100,10 +99,9 @@ public class PetCharacter extends Character {
                     Trait.tongueTraining3,
                     Trait.tight);
     public PetCharacter(Pet self, String name, String type, Growth growth, int level) {
-        super(name, 1);
+        super(CharacterType.get(type), name, 1);
         this.ownerType = self.owner().getType();
         this.self = self;
-        this.type = type;
         this.setGrowth(growth);
         for (int i = 1; i < level; i++) {
             this.level += 1;
@@ -117,7 +115,7 @@ public class PetCharacter extends Character {
                 }
             }
         }
-        this.getSkills().clear();
+        this.skills.clear();
         this.mojo.setMax(100);
         this.mojo.empty();
         this.arousal.empty();
@@ -275,11 +273,6 @@ public class PetCharacter extends Character {
     @Override
     public String getPortrait(Combat c) {
         return "";
-    }
-
-    @Override
-    public CharacterType getType() {
-        return CharacterType.get(type);
     }
 
     @Override

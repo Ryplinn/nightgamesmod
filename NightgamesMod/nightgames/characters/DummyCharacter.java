@@ -4,8 +4,8 @@ import nightgames.actions.Action;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Encounter;
-import nightgames.combat.Result;
 import nightgames.combat.Encs;
+import nightgames.combat.Result;
 import nightgames.skills.Tactics;
 import nightgames.trap.Trap;
 
@@ -15,12 +15,9 @@ import java.util.Optional;
 public class DummyCharacter extends Character {
 
     public DummyCharacter(String name, String type, int level, BodyPart... parts) {
-        super(name, level);
-        this.type = type;
+        super(CharacterType.get(type), name, level);
         Arrays.stream(parts).forEach(part -> body.add(part));
     }
-
-    private String type;
 
     @Override
     public void ding(Combat c) {}
@@ -108,11 +105,6 @@ public class DummyCharacter extends Character {
     @Override
     public Encs showerSceneResponse(Character target, Encounter encounter) {
         return Encs.wait;
-    }
-
-    @Override
-    public CharacterType getType() {
-        return CharacterType.get(type);
     }
 
     @Override

@@ -1,11 +1,11 @@
 package nightgames.combat;
 
 import nightgames.areas.Area;
-import nightgames.characters.*;
 import nightgames.characters.Character;
+import nightgames.characters.*;
 import nightgames.daytime.Daytime;
-import nightgames.global.*;
 import nightgames.global.Random;
+import nightgames.global.*;
 import nightgames.gui.GUI;
 import nightgames.gui.TestGUI;
 import nightgames.modifier.standard.NoModifier;
@@ -31,9 +31,12 @@ public class CombatStats {
     private final Object recordLock = new Object();
 
     public void setupTestRun(Setup setup) {
+        GameState gameState = new TestGameState();
+        gameState.init();
         this.setup = setup;
         records = new HashMap<>();
         combatants = setup.execute();
+        gameState.characterPool.putAll(combatants);
         combatants.forEach(c -> records.put(c.getTrueName(), new Record(c)));
         //Global.save(true);
         DebugFlags.debug = new boolean[DebugFlags.values().length];
@@ -115,6 +118,7 @@ public class CombatStats {
     @Test
     public void combatStats() throws Exception {
         GameState gameState = new TestGameState();
+        gameState.init();
         GUI gui = new TestGUI();
         Prematch prematch = new PreMatchSchool(new CompletableFuture<>());
         prematch.setUpMatch(new NoModifier());

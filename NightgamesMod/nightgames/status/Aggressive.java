@@ -1,11 +1,6 @@
 package nightgames.status;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.stream.Collectors;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
@@ -15,10 +10,15 @@ import nightgames.combat.Combat;
 import nightgames.skills.Skill;
 import nightgames.skills.SkillPool;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.stream.Collectors;
+
 public class Aggressive extends DurationStatus {
 
     private static final Collection<Skill> CONTACT_SKILLS = Collections.unmodifiableSet(
-                    SkillPool.skillPool.stream().filter(Skill::makesContact).collect(Collectors.toSet()));
+                    SkillPool.skillPool.stream().map((skillstructor) -> skillstructor.apply(CharacterType.get("dummy")))
+                                    .filter(Skill::makesContact).collect(Collectors.toSet()));
 
     private String cause;
 

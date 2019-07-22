@@ -9,12 +9,14 @@ import nightgames.characters.custom.JsonSourceNPCDataLoader;
 import nightgames.characters.custom.NPCData;
 import nightgames.characters.trait.Trait;
 import nightgames.json.JsonUtils;
+import nightgames.pet.PetCharacter;
 import nightgames.start.NPCConfiguration;
 import nightgames.start.StartConfiguration;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /**
@@ -22,11 +24,11 @@ import java.util.stream.Collectors;
  */
 public class CharacterPool {
     public Map<CharacterType, NPC> characterPool;   // All starting and unlockable characters
-    public Map<CharacterType, Character> temporaryCharacters;   // in-combat pet characters and such
-    public Set<CharacterType> debugChars;
+    private Set<CharacterType> debugChars;
     public Player human;
+    public transient List<PetCharacter> otherCombatants;
 
-    protected CharacterPool() {
+    private CharacterPool() {
         characterPool = new HashMap<>();
         debugChars = new HashSet<>();
     }
@@ -149,23 +151,29 @@ public class CharacterPool {
     }
 
     public Character getCharacterByType(String typeName) {
-        return getCharacterByType(CharacterType.get(typeName));
+        return getCharacterByType(CharacterType.get(typeName), true);
     }
 
-    Character getCharacterByType(CharacterType type) {
+    Character getCharacterByType(CharacterType type, boolean required) {
+        if (otherCombatants != null) {
+            Optional<PetCharacter> foundPet = otherCombatants.stream().filter(pet -> pet.getType() == type).findAny();
+            if (foundPet.isPresent()) {
+                return foundPet.get();
+            }
+        }
         if (human.getType().equals(type)) {
             return human;
         }
-        return getNPCByType(type);
+        return getNPCByType(type, required);
     }
 
     public NPC getNPCByType(String typeName) {
-        return getNPCByType(CharacterType.get(typeName));
+        return getNPCByType(CharacterType.get(typeName), true);
     }
 
-    private NPC getNPCByType(CharacterType type) {
+    private NPC getNPCByType(CharacterType type, boolean required) {
         NPC results = characterPool.get(type);
-        if (results == null) {
+        if (results == null && required) {
             System.err.println("failed to find NPC for type " + type);
         }
         return results;
@@ -197,6 +205,42 @@ public class CharacterPool {
 
     public List<NPC> debugChars() {
         return debugChars.stream().map(this::getNPCByType).collect(Collectors.toList());
+    }
+
+    private NPC getNPCByType(CharacterType type) {
+        return getNPCByType(type, true);
+    }
+
+    public void putAll(Character... characters) {
+        for (Character character : characters) {
+            put(character);
+        }
+    }
+
+    public void put(Character character) {
+        if (character instanceof Player) {
+            human = (Player) character;
+        } else if (character instanceof NPC) {
+            characterPool.put(character.getType(), (NPC) character);
+        } else {
+            assert character instanceof PetCharacter;
+            if (otherCombatants == null) {
+                otherCombatants = new CopyOnWriteArrayList<>();
+            }
+            otherCombatants.add((PetCharacter) character);
+        }
+    }
+
+    public void setOtherCombatants(List<PetCharacter> otherCombatants) {
+        this.otherCombatants = otherCombatants;
+    }
+
+    Character getCharacterByType(CharacterType type) {
+        return getCharacterByType(type, true);
+    }
+
+    public void putAll(List<Character> characters) {
+        putAll(characters.toArray(new Character[] {}));
     }
 
     public static class CharacterNotFoundException extends RuntimeException {

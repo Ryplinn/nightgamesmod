@@ -4,7 +4,6 @@ import nightgames.characters.*;
 import nightgames.characters.trait.Trait;
 import nightgames.daytime.Daytime;
 import nightgames.gui.GUI;
-import nightgames.json.JsonUtils;
 import nightgames.skills.SkillPool;
 import nightgames.start.PlayerConfiguration;
 import nightgames.start.StartConfiguration;
@@ -24,7 +23,7 @@ public class GameState {
     public double xpRate;
     private static boolean ingame = false;
     public CharacterPool characterPool;
-    private volatile Thread loopThread;
+    private transient volatile Thread loopThread;
 
     public GameState(String playerName, StartConfiguration config, List<Trait> pickedTraits,
                 CharacterSex pickedGender, Map<Attribute, Integer> selectedAttributes) {
@@ -42,8 +41,6 @@ public class GameState {
         if(characterPool.human.has(Trait.largereserves)) {
             characterPool.human.getWillpower().gain(20);
         }
-        SkillPool.buildSkillPool(characterPool.human);
-        SkillPool.learnSkills(characterPool.human);
         Flag.flags = new HashSet<>(cfgFlags);
         Flag.resetCounters();
         Time.time = Time.NIGHT;
@@ -67,12 +64,20 @@ public class GameState {
         } else {
             characterPool = new CharacterPool(data.player, data.npcs);
         }
-        SkillPool.buildSkillPool(characterPool.human);
+        SkillPool.buildSkillPool();
         Flag.flags = new HashSet<>(data.flags);
         Flag.counters = new HashMap<>(data.counters);
         Time.date = data.date;
         Time.time = data.time;
         GUI.gui.fontsize = data.fontsize;
+    }
+
+    /**
+     * Finishes initialization of GameState. Must be called after construction.
+     */
+    public void init() {
+        SkillPool.buildSkillPool();
+        SkillPool.learnSkills(characterPool.human);
     }
 
     // TODO: Make this its own scene.
@@ -171,6 +176,7 @@ public class GameState {
     }
 
     public void closeGame() {
+        CharacterType.usePool(null);
         loopThread.interrupt();
     }
 

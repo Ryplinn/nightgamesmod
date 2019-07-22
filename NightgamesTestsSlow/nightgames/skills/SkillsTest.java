@@ -4,6 +4,7 @@ import com.google.gson.JsonParseException;
 import nightgames.actions.Movement;
 import nightgames.areas.Area;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.characters.NPC;
 import nightgames.characters.custom.CustomNPC;
 import nightgames.characters.custom.JsonSourceNPCDataLoader;
@@ -19,6 +20,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class SkillsTest {
 	private List<NPC> npcs1;
@@ -30,6 +32,7 @@ public class SkillsTest {
 	public void prepare() throws JsonParseException {
 		GUI.gui = new TestGUI();
 		TestGameState gameState = new TestGameState();
+		gameState.init();
 		npcs1 = new ArrayList<>();
 		npcs2 = new ArrayList<>();
 		try {
@@ -48,6 +51,8 @@ public class SkillsTest {
 			e.printStackTrace();
 			Assert.fail();
 		}
+		gameState.characterPool.putAll(npcs1.toArray(new Character[] {}));
+		gameState.characterPool.putAll(npcs2.toArray(new Character[] {}));
 		area = new Area("Test Area","Area for testing", Movement.quad);
 		stances = new ArrayList<>();
 		stances.add(new Anal(npcs1.get(0).getType(), npcs1.get(1).getType()));
@@ -87,9 +92,9 @@ public class SkillsTest {
 		Combat c = new Combat(npc1, npc2, area, pos);
 		pos.checkOngoing(c);
 		if (c.getStance() == pos) {
-			for (Skill skill : SkillPool.skillPool) {
+			for (Function<CharacterType, Skill> skillstructor : SkillPool.skillPool) {
 				Combat cloned = c.clone();
-				Skill used = skill.copy(cloned.p1);
+				Skill used = skillstructor.apply(cloned.p1.getType());
 				if (Skill.skillIsUsable(cloned, used)) {
 					System.out.println("["+cloned.getStance().getClass().getSimpleName()+"] Skill usable: " + used.getLabel(cloned) + ".");
 					used.resolve(cloned, cloned.p2);

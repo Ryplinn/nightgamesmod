@@ -28,7 +28,7 @@ public class CustomModifierLoaderTest {
 
 
     @BeforeClass public static void setUpClass() {
-        SkillPool.buildSkillPool(player);
+        SkillPool.buildSkillPool();
     }
 
     @Before public void setUp() throws Exception {

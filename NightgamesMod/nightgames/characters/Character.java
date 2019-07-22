@@ -42,6 +42,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -50,6 +51,7 @@ import static nightgames.gui.GUIColor.*;
 
 public abstract class Character extends Observable implements Cloneable {
     private static final String APOSTLES_COUNT = "APOSTLES_COUNT";
+    private final CharacterType type;
     private String name;
     public CharacterSex initialGender;
     public int level;
@@ -64,7 +66,7 @@ public abstract class Character extends Observable implements Cloneable {
     public Outfit outfit;
     public OutfitPlan outfitPlan;
     protected Area location;
-    private CopyOnWriteArrayList<Skill> skills;
+    protected CopyOnWriteArrayList<Function<CharacterType, Skill>> skills;
     public CopyOnWriteArrayList<Status> status;
     private Set<Stsflag> statusFlags;
     private CopyOnWriteArrayList<Trait> traits;
@@ -97,7 +99,8 @@ public abstract class Character extends Observable implements Cloneable {
     private Growth growth;
     public transient int lastInitRoll;
     
-    public Character(String name, int level) {
+    public Character(CharacterType type, String name, int level) {
+        this.type = type;
         this.name = name;
         this.level = level;
         this.growth = new Growth();
@@ -190,7 +193,7 @@ public abstract class Character extends Observable implements Cloneable {
         c.attractions = new HashMap<>(attractions);
         c.affections = new HashMap<>(affections);
         c.addictions = new CopyOnWriteArrayList<>(addictions);
-        c.skills = (new CopyOnWriteArrayList<>(getSkills()));
+        c.skills = (new CopyOnWriteArrayList<>(skills));
         c.body = body.clone();
         c.body.character = getType();
         c.orgasmed = orgasmed;
@@ -1140,6 +1143,11 @@ public abstract class Character extends Observable implements Cloneable {
         if (t.parent != null) {
             hasTrait = getTraits().contains(t.parent);
         }
+        for (Addiction addiction : getAddictions()) {
+            if (addiction.appliedTraits().contains(t)) {
+                return true;
+            }
+        }
         if (outfit.has(t)) {
             return true;
         }
@@ -1318,7 +1326,7 @@ public abstract class Character extends Observable implements Cloneable {
 
     public void removeStatusNoSideEffects() {
         if (DebugFlags.isDebugOn(DebugFlags.DEBUG_SCENE)) {
-            System.out.println("Purging (remove no sideeffects) " + getTrueName());
+            System.out.println("Purging (remove no side effects) " + getTrueName());
         }
         status.removeAll(removelist);
         removelist.clear();
@@ -1577,7 +1585,9 @@ public abstract class Character extends Observable implements Cloneable {
         return saveObj;
     }
 
-    public abstract CharacterType getType();
+    public final CharacterType getType() {
+        return type;
+    }
 
     public void load(JsonObject object) {
         name = object.get("name").getAsString();
@@ -1630,7 +1640,7 @@ public abstract class Character extends Observable implements Cloneable {
                 traits.remove(Trait.slime);
         }
         
-        body = Body.load(object.getAsJsonObject("body"), this);
+        body = Body.load(object.getAsJsonObject("body"), getType());
         att = JsonUtils.mapFromJson(object.getAsJsonObject("attributes"), Attribute.class, Integer.class);
         inventory = JsonUtils.mapFromJson(object.getAsJsonObject("inventory"), Item.class, Integer.class);
 
@@ -2253,8 +2263,8 @@ public abstract class Character extends Observable implements Cloneable {
 
     public abstract void emote(Emotion emo, int amt);
 
-    public void learn(Skill copy) {
-        skills.addIfAbsent(copy.copy(this));
+    public void learn(Function<CharacterType, Skill> skillstructor) {
+        skills.addIfAbsent(skillstructor);
     }
 
     public void forget(Skill copy) {
@@ -2298,8 +2308,8 @@ public abstract class Character extends Observable implements Cloneable {
 
     public void upkeep() {
         getTraits().forEach(trait -> {
-            if (trait.status != null) {
-                Status newStatus = trait.status.instance(this, null);
+            if (trait.statusFunction != null) {
+                Status newStatus = trait.statusFunction.apply(getType());
                 if (!has(newStatus)) {
                     addNonCombat(newStatus);
                 }
@@ -2987,6 +2997,10 @@ public abstract class Character extends Observable implements Cloneable {
         HashSet<Skill> available = new HashSet<>();
         HashSet<Skill> cds = new HashSet<>();
         for (Skill a : getSkills()) {
+            // band-aid fix until a better way of handling conditional skill tags is found
+            if (a instanceof ThrowSlime) {
+                a = a.copy(this);
+            }
             if (Skill.skillIsUsable(c, a)) {
                 if (cooldownAvailable(a)) {
                     available.add(a);
@@ -3756,8 +3770,9 @@ public abstract class Character extends Observable implements Cloneable {
     public void setGrowth(Growth growth) {
         this.growth = growth;
     }
+
     public Collection<Skill> getSkills() {
-        return skills;
+        return skills.stream().map(skillstructor -> skillstructor.apply(getType())).collect(Collectors.toSet());
     }
 
     protected void distributePoints(List<PreferredAttribute> preferredAttributes) {

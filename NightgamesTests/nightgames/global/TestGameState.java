@@ -2,12 +2,12 @@ package nightgames.global;
 
 import nightgames.characters.Character;
 import nightgames.characters.CharacterSex;
+import nightgames.characters.CharacterType;
 import nightgames.modifier.standard.NoModifier;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Test version of GameState that exposes more handles for easier testing.
@@ -15,7 +15,12 @@ import java.util.Optional;
 public class TestGameState extends GameState {
     public TestGameState() {
         super("TestPlayer", null, new ArrayList<>(), CharacterSex.male, new HashMap<>());
+    }
+
+    @Override public void init() {
         GameState.setGameState(this);
+        super.init();
+        CharacterType.usePool(this.characterPool);
     }
 
     @Override public void closeGame() {

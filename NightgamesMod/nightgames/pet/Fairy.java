@@ -8,9 +8,6 @@ import nightgames.global.Formatter;
 import nightgames.skills.petskills.*;
 
 public class Fairy extends Pet {
-    public Fairy(Character owner, Ptype gender) {
-        this(owner, gender, 2, 4);
-    }
 
     public Fairy(Character owner, Ptype gender, int power, int ac) {
         super("faerie", owner, gender, power, ac);
@@ -20,9 +17,10 @@ public class Fairy extends Pet {
     public String describe() {
         return null;
     }
-    
+
     private int getNum(Ptype thistype, Ptype othertype) {
-        return 10*thistype.ordinal() + othertype.ordinal();
+
+        return 10 * thistype.ordinal() + othertype.ordinal();
     }
 
     @Override
@@ -53,7 +51,7 @@ public class Fairy extends Pet {
         } else if (switcher == getNum(Ptype.fairyfem, Ptype.slime) 
                 || switcher == getNum(Ptype.fairyherm, Ptype.slime)) {
             c.write(getSelf(), own() + "fae glows with magic as it circles " + opponent.own()
-                            + "slime rapidly. The slime begins to tremble and slowly elongates into the shape of a crude phallis. It shudders "
+                            + "slime rapidly. The slime begins to tremble and slowly elongates into the shape of a crude phallus. It shudders "
                             + "violently and sprays liquid from the tip until the entire creature is a puddle on the floor.");
         } else if (switcher == getNum(Ptype.fairymale, Ptype.fairyfem)
                 || switcher == getNum(Ptype.fairymale, Ptype.fairyherm)) {
@@ -128,11 +126,11 @@ public class Fairy extends Pet {
         self.body.setHeight(22 - (type()==Ptype.fairyfem?2:0));
         self.body.makeGenitalOrgans(getCharacterSex());
         self.body.finishBody(getCharacterSex());
-        self.learn(new FairyEnergize(self.getType()));
-        self.learn(new FairyHeal(self.getType()));
-        self.learn(new FairyTease(self.getType()));
-        self.learn(new FairyKick(self.getType()));
-        self.learn(new FairyShield(self.getType()));
+        self.learn(FairyEnergize::new);
+        self.learn(FairyHeal::new);
+        self.learn(FairyTease::new);
+        self.learn(FairyKick::new);
+        self.learn(FairyShield::new);
         setSelf(self);
     }
 }

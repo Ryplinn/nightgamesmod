@@ -7,7 +7,10 @@ import nightgames.characters.custom.effect.CustomEffect;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.daytime.Daytime;
-import nightgames.global.*;
+import nightgames.global.DebugFlags;
+import nightgames.global.Flag;
+import nightgames.global.Match;
+import nightgames.global.Random;
 import nightgames.items.Item;
 import nightgames.pet.PetCharacter;
 import nightgames.skills.Skill;
@@ -400,9 +403,9 @@ public class Decider {
     }
 
     private static Character getCopyFromCombat(Combat c, Combat clonedCombat, Character self) {
-        if (c.p1 == self) {
+        if (c.p1.equals(self)) {
             return clonedCombat.p1;
-        } else if (c.p2 == self) {
+        } else if (c.p2.equals(self)) {
             return clonedCombat.p2;
         } else {
             if (c.otherCombatantsContains(self)) {

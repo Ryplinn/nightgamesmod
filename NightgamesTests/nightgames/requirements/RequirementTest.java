@@ -12,7 +12,9 @@ import nightgames.characters.body.mods.SizeMod;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
+import nightgames.global.GameState;
 import nightgames.global.Match;
+import nightgames.global.TestGameState;
 import nightgames.items.Item;
 import nightgames.modifier.standard.NoModifier;
 import nightgames.stance.*;
@@ -44,8 +46,11 @@ public class RequirementTest {
     private Combat combat;
 
     @Before public void setUp() {
+        GameState gameState = new TestGameState();
+        gameState.init();
         self = new NPC("SelfTestNPC");
         other = new NPC("OtherTestNPC");
+        gameState.characterPool.putAll(self, other);
         Area area = new Area("TestArea", "TestArea description", Movement.beer);
         new Match(Arrays.asList(self, other), new NoModifier());
         combat = new Combat(self, other, area);

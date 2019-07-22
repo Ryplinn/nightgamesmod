@@ -136,7 +136,7 @@ public class Mara extends BasePersonality {
         selfNPC.addPersonalStrategy(new FootjobStrategy());
         selfNPC.addPersonalStrategy(new UseToyStrategy());
         selfNPC.addPersonalStrategy(new StraponStrategy());
-        selfNPC.addPersonalStrategy(new WindUpStrategy());
+        selfNPC.addPersonalStrategy(new WindUpStrategy(selfNPC));
         selfNPC.addPersonalStrategy(new TechStrategy());
     }
 

@@ -4,6 +4,7 @@ import nightgames.actions.Movement;
 import nightgames.areas.Area;
 import nightgames.characters.NPC;
 import nightgames.characters.trait.Trait;
+import nightgames.global.GameState;
 import nightgames.global.Match;
 import nightgames.global.TestGameState;
 import nightgames.modifier.standard.NoModifier;
@@ -28,9 +29,11 @@ public class CombatTest {
     private Combat combat;
 
     @Before public void setUp() {
-        new TestGameState();
+        GameState gameState = new TestGameState();
+        gameState.init();
         self = new NPC("SelfTestNPC");
         other = new NPC("OtherTestNPC");
+        gameState.characterPool.putAll(self, other);
         Match.match = new Match(Arrays.asList(self, other), new NoModifier());
         Area area = new Area("TestArea", "TestArea description", Movement.beer);
         combat = new Combat(self, other, area);

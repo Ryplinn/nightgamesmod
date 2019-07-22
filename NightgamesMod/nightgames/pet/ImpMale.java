@@ -14,11 +14,6 @@ import nightgames.skills.Thrust;
 import nightgames.skills.petskills.*;
 
 public class ImpMale extends Pet {
-
-    public ImpMale(Character owner) {
-        super("imp", owner, Ptype.impmale, 3, 2);
-    }
-
     public ImpMale(Character owner, int power, int ac) {
         super("imp", owner, Ptype.impmale, power, ac);
     }
@@ -86,15 +81,15 @@ public class ImpMale extends Pet {
             self.body.add(new CockPart().applyMod(new SizeMod(SizeMod.COCK_SIZE_BIG)));
         }
         self.body.finishBody(CharacterSex.male);
-        self.learn(new ImpAssault(self.getType()));
-        self.learn(new Thrust(self.getType()));
-        self.learn(new Grind(self.getType()));
-        self.learn(new Piston(self.getType()));
-        self.learn(new PussyGrind(self.getType()));
-        self.learn(new ImpTease(self.getType()));
-        self.learn(new ImpStrip(self.getType()));
-        self.learn(new ImpFacesit(self.getType()));
-        self.learn(new ImpSemenSquirt(self.getType()));
+        self.learn(ImpAssault::new);
+        self.learn(Thrust::new);
+        self.learn(Grind::new);
+        self.learn(Piston::new);
+        self.learn(PussyGrind::new);
+        self.learn(ImpTease::new);
+        self.learn(ImpStrip::new);
+        self.learn(ImpFacesit::new);
+        self.learn(ImpSemenSquirt::new);
         setSelf(self);
     }
 }

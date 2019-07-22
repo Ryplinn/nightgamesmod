@@ -17,17 +17,22 @@ import nightgames.status.Enthralled;
 import nightgames.status.Status;
 import nightgames.status.Stsflag;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 public class MindControl extends Addiction {
 
     public MindControl(CharacterType afflicted, CharacterType cause, float magnitude) {
         super("Mind Control", afflicted, cause, magnitude);
-        getAfflicted().add(Trait.mindcontrolresistance);
     }
 
     public MindControl(CharacterType afflicted, CharacterType cause) {
         this(afflicted, cause, .01f);
+    }
+
+    @Override public List<Trait> appliedTraits() {
+        return Collections.singletonList(Trait.mindcontrolresistance);
     }
 
     private class MindControlTrackerSymptom extends AddictionSymptom {

@@ -30,7 +30,7 @@ import java.util.Map;
 public class JsonSourceNPCDataLoader {
     private static JsonRequirementLoader requirementLoader = new JsonRequirementLoader();
 
-    protected static void loadResources(JsonObject resources, Stats stats) {
+    static void loadResources(JsonObject resources, Stats stats) {
         stats.stamina = resources.get("stamina").getAsFloat();
         stats.arousal = resources.get("arousal").getAsFloat();
         stats.mojo = resources.get("mojo").getAsFloat();
@@ -78,7 +78,7 @@ public class JsonSourceNPCDataLoader {
         loadAllLines(object.getAsJsonObject("lines"), data.characterLines);
         data.portraits = loadLines(object.getAsJsonArray("portraits"));
         loadRecruitment(object.getAsJsonObject("recruitment"), data.recruitment);
-        data.body = Body.load(object.getAsJsonObject("body"), null);
+        data.body = Body.load(object.getAsJsonObject("body"), CharacterType.get(data.type));
         data.sex = CharacterSex.valueOf(object.get("sex").getAsString());
 
         JsonUtils.getOptionalArray(object, "ai-modifiers").ifPresent(arr -> loadAiModifiers(arr, data.aiModifiers));
@@ -92,7 +92,7 @@ public class JsonSourceNPCDataLoader {
         return data;
     }
 
-    protected static void loadRecruitment(JsonObject object, RecruitmentData recruitment) {
+    static void loadRecruitment(JsonObject object, RecruitmentData recruitment) {
         recruitment.introduction = object.get("introduction").getAsString();
         recruitment.action = object.get("action").getAsString();
         recruitment.confirm = object.get("confirm").getAsString();
@@ -100,7 +100,7 @@ public class JsonSourceNPCDataLoader {
         loadEffects(object.getAsJsonArray("cost"), recruitment.effects);
     }
 
-    protected static void loadEffects(JsonArray jsonArray, List<CustomEffect> effects) {
+    static void loadEffects(JsonArray jsonArray, List<CustomEffect> effects) {
         for (JsonElement element : jsonArray) {
             JsonObject obj = element.getAsJsonObject();
             JsonUtils.getOptional(obj, "modMoney").ifPresent(e -> effects.add(new MoneyModEffect(e.getAsInt())));
@@ -123,7 +123,7 @@ public class JsonSourceNPCDataLoader {
         return entries;
     }
 
-    protected static CustomStringEntry readLine(JsonObject object) {
+    static CustomStringEntry readLine(JsonObject object) {
         CustomStringEntry entry = new CustomStringEntry(object.get("text").getAsString());
         entry.requirements = JsonUtils.getOptionalObject(object, "requirements")
                         .map(obj -> requirementLoader.loadRequirements(obj)).orElse(new ArrayList<>());
@@ -142,11 +142,11 @@ public class JsonSourceNPCDataLoader {
         }
     }
 
-    protected static ItemAmount readItem(JsonObject obj) {
+    static ItemAmount readItem(JsonObject obj) {
         return JsonUtils.getGson().fromJson(obj, ItemAmount.class);
     }
 
-    protected static void loadGrowthResources(JsonObject object, Growth growth) {
+    static void loadGrowthResources(JsonObject object, Growth growth) {
         growth.stamina = object.get("stamina").getAsFloat();
         growth.bonusStamina = object.get("bonusStamina").getAsFloat();
         growth.arousal = object.get("arousal").getAsFloat();
@@ -171,7 +171,7 @@ public class JsonSourceNPCDataLoader {
         loadGrowthTraits(obj.get("traits").getAsJsonArray(), growth);
     }
 
-    protected static void loadPreferredAttributes(JsonArray arr, List<PreferredAttribute> preferredAttributes) {
+    static void loadPreferredAttributes(JsonArray arr, List<PreferredAttribute> preferredAttributes) {
         for (JsonElement element : arr) {
             JsonObject obj = element.getAsJsonObject();
             Attribute att = JsonUtils.getGson().fromJson(obj.get("attribute"), Attribute.class);
@@ -197,8 +197,7 @@ public class JsonSourceNPCDataLoader {
         traits.addAll(JsonUtils.collectionFromJson(array, Trait.class));
     }
 
-     @SuppressWarnings("unchecked")
-    protected static void loadAiModifiers(JsonArray arr, AiModifiers mods) {
+     @SuppressWarnings("unchecked") static void loadAiModifiers(JsonArray arr, AiModifiers mods) {
         for (Object aiMod : arr) {
             JsonObject obj = (JsonObject) aiMod;
             String value = obj.get("value").getAsString();

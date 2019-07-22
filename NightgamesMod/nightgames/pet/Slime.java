@@ -94,14 +94,14 @@ public class Slime extends Pet {
         self.body.add(PussyPart.generic.applyMod(GooeyMod.INSTANCE));
         self.body.add(new TentaclePart("tentacles", "body", "slime", 0, 1, 1));
         // don't finish the body as a slime, it wont have normal body parts.
-        self.learn(new SlimeJob(self.getType()));
-        self.learn(new Thrust(self.getType()));
-        self.learn(new Grind(self.getType()));
-        self.learn(new Piston(self.getType()));
-        self.learn(new PussyGrind(self.getType()));
-        self.learn(new SlimeOil(self.getType()));
-        self.learn(new SlimeMelt(self.getType()));
-        self.learn(new SlimeTrip(self.getType()));
+        self.learn(SlimeJob::new);
+        self.learn(Thrust::new);
+        self.learn(Grind::new);
+        self.learn(Piston::new);
+        self.learn(PussyGrind::new);
+        self.learn(SlimeOil::new);
+        self.learn(SlimeMelt::new);
+        self.learn(SlimeTrip::new);
 
         setSelf(self);
     }

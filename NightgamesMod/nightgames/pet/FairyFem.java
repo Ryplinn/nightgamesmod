@@ -8,10 +8,6 @@ import nightgames.global.Formatter;
 import nightgames.skills.petskills.*;
 
 public class FairyFem extends Pet {
-    public FairyFem(Character owner) {
-        this(owner, 2, 4);
-    }
-
     public FairyFem(Character owner, int power, int ac) {
         super("faerie", owner, Ptype.fairyfem, power, ac);
     }
@@ -73,16 +69,16 @@ public class FairyFem extends Pet {
     @Override
     protected void buildSelf() {
         Growth growth = new Growth();
-        PetCharacter self = new PetCharacter(this, owner().nameOrPossessivePronoun() + " " + getName(), getName(), growth, getPower());
+        PetCharacter self = new PetCharacter(this, owner().nameOrPossessivePronoun() + " " + getName(), owner.getType().toString() + ": " + getName(), growth, getPower());
         // fairies are about 20 centimeters tall
         self.body.setHeight(20);
         self.body.makeGenitalOrgans(CharacterSex.female);
         self.body.finishBody(CharacterSex.female);
-        self.learn(new FairyEnergize(self.getType()));
-        self.learn(new FairyHeal(self.getType()));
-        self.learn(new FairyTease(self.getType()));
-        self.learn(new FairyKick(self.getType()));
-        self.learn(new FairyShield(self.getType()));
+        self.learn(FairyEnergize::new);
+        self.learn(FairyHeal::new);
+        self.learn(FairyTease::new);
+        self.learn(FairyKick::new);
+        self.learn(FairyShield::new);
         setSelf(self);
     }
 }

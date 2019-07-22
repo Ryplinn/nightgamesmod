@@ -98,6 +98,7 @@ public class Main {
         try {
             // Blocks until a game state is loaded into the GUI
             GameState.setGameState(GUI.gui.getGameState());
+            GameState.getGameState().init();
             GameState.getGameState().gameLoop();
         } finally {
             GameState.closeCurrentGame();

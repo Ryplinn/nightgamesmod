@@ -34,7 +34,7 @@ public final class CharacterType {
 
     private Optional<Character> fromPool(CharacterPool pool) {
         lastUsedPool = pool;
-        return Optional.ofNullable(pool.getCharacterByType(this));
+        return Optional.ofNullable(pool.getCharacterByType(this, false));
     }
 
     /**
@@ -44,6 +44,9 @@ public final class CharacterType {
      */
     public Optional<Character> fromPool() {
         if (lastUsedPool == null) {
+            if (GameState.getGameState() == null) {
+                return Optional.empty();
+            }
             lastUsedPool = GameState.getGameState().characterPool;
         }
         return fromPool(lastUsedPool);

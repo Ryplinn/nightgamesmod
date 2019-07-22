@@ -1295,6 +1295,8 @@ public class Combat extends Observable implements Cloneable {
         getCombatantData(p1).getRemovedItems().forEach(p1::gain);
         getCombatantData(p2).getRemovedItems().forEach(p2::gain);
 
+        GameState.getGameState().characterPool.otherCombatants = null;
+
         location.endEncounter();
         p1.spendXP();
         p1.spendLevels(this);
@@ -1652,7 +1654,6 @@ public class Combat extends Observable implements Cloneable {
         writeSystemMessage(self, Formatter.format("{self:SUBJECT-ACTION:have|has} summoned {other:name-do} (Level %s)",
                                         master, self, self.getLevel()));
         otherCombatants.add(self);
-        GameState.getGameState().characterPool.temporaryCharacters.put(self.getType(), self);
         this.write(self, self.challenge(getOpponent(self)));
     }
 
@@ -1715,6 +1716,7 @@ public class Combat extends Observable implements Cloneable {
         if (phase == CombatPhase.START) {
             startScene();
         }
+        GameState.getGameState().characterPool.setOtherCombatants(this.otherCombatants);
         while (!finished) {
             boolean pause = false;
             if (!cloned && isBeingObserved()) {

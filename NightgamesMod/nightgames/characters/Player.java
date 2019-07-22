@@ -15,9 +15,10 @@ import nightgames.combat.Encounter;
 import nightgames.combat.Encs;
 import nightgames.combat.Result;
 import nightgames.ftc.FTCMatch;
+import nightgames.global.Flag;
 import nightgames.global.Formatter;
+import nightgames.global.Match;
 import nightgames.global.Random;
-import nightgames.global.*;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
@@ -41,9 +42,8 @@ import java.util.stream.Collectors;
 import static nightgames.requirements.RequirementShortcuts.item;
 
 public class Player extends Character {
-    public GUI gui;
+    public transient GUI gui;
     public int traitPoints;
-    private CharacterType type;
 
     private Player() {
         this("Dummy");
@@ -55,7 +55,7 @@ public class Player extends Character {
 
     public Player(String name, CharacterSex sex, PlayerConfiguration config, List<Trait> pickedTraits,
                     Map<Attribute, Integer> selectedAttributes) {
-        super(name, 1);
+        super(CharacterType.get("Player"), name, 1);
         initialGender = sex;
         applyBasicStats(this);
         setGrowth();
@@ -64,7 +64,6 @@ public class Player extends Character {
 
         Optional.ofNullable(config).ifPresent(this::applyConfigStats);
         finishCharacter(pickedTraits, selectedAttributes);
-        this.type = CharacterType.get(getClass().getSimpleName());
     }
 
     public Player(JsonObject playerJson) {
@@ -677,7 +676,7 @@ public class Player extends Character {
                                             + " to be able to handle this level of stimulation. You need to turn "
                                             + "up the heat some more. Well, if you weren't prepared to suck a cock"
                                             + " or two, you may have joined the wrong competition. You take just "
-                                            + "the glans into your mouth, attacking the most senstitive area with "
+                                            + "the glans into your mouth, attacking the most sensitive area with "
                                             + "your tongue. %s lets out a gasp and shudders. That's a more promising "
                                             + "reaction.<br/><br/>You continue your oral assault until you hear a breathy "
                                             + "moan, <i>\"I'm gonna cum!\"</i> You hastily remove %s dick out of "
@@ -716,7 +715,7 @@ public class Player extends Character {
         assessOpponent(target);
         gui.message("<br/>");
 
-        GameState.getGameState().characterPool.getPlayer().promptOpportunity(target, trap, gui, enc);
+        promptOpportunity(target, trap, gui, enc);
     }
 
     @Override
@@ -780,7 +779,7 @@ public class Player extends Character {
             case positioning:
                 if (c.getStance()
                      .dom(this)) {
-                    c.write(this, "You outmanuever " + target.getName() + " and you exhausted her from the struggle.");
+                    c.write(this, "You outmaneuver " + target.getName() + " and you exhausted her from the struggle.");
                     target.weaken(c, (int) DamageType.stance.modifyDamage(Player.this, target, 15));
                 } else {
                     c.write(this, target.getName()
@@ -899,11 +898,6 @@ public class Player extends Character {
     @Override
     public Meter getWillpower() {
         return willpower;
-    }
-
-    @Override
-    public CharacterType getType() {
-        return type;
     }
 
     @Override

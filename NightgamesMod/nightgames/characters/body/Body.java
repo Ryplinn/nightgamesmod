@@ -20,6 +20,7 @@ import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.json.JsonUtils;
 import nightgames.nskills.tags.SkillTag;
+import nightgames.pet.Pet;
 import nightgames.pet.PetCharacter;
 import nightgames.skills.Divide;
 import nightgames.skills.Skill;
@@ -94,7 +95,7 @@ public class Body implements Cloneable {
     private transient Collection<PartReplacement> replacements;
     private transient Map<String, List<PartModReplacement>> modReplacements;
     private transient Collection<BodyPart> currentParts;
-    transient public CharacterType character;
+    public CharacterType character;
     public double baseFemininity;
     private double height;
 
@@ -330,7 +331,7 @@ public class Body implements Cloneable {
 
     private void updateCharacter() {
         if (character != null) {
-            getCharacter().update();
+            character.fromPool().ifPresent(Character::update);
         }
     }
 
@@ -1124,9 +1125,9 @@ public class Body implements Cloneable {
         }
     }
 
-    public static Body load(JsonObject bodyObj, Character character) {
+    public static Body load(JsonObject bodyObj, CharacterType character) {
         double hotness = bodyObj.get("hotness").getAsDouble();
-        Body body = new Body(character.getType(), hotness);
+        Body body = new Body(character, hotness);
         body.loadParts(bodyObj.getAsJsonArray("parts"));
         double defaultFemininity = 0;
         if (body.has("pussy")) {
@@ -1282,7 +1283,10 @@ public class Body implements Cloneable {
                                 + "As {other:pronoun-action:lay|lays} there heaving in exertion, {self:possessive} belly rapidly bloats up "
                                 + "as if going through 9 months of pregnancy within seconds. With a groan, {self:pronoun-action:expel|expels} a massive quantity of slime onto the floor. "
                                 + "The slime seems to quiver for a second before reforming itself into an exact copy of {self:name-do}!", getCharacter(), opponent, part.describe(getCharacter())));
-                c.addPet(getCharacter(), Divide.makeClone(c, getCharacter()).getSelf());
+                Pet clone = Divide.makeClone(c, getCharacter());
+                if (clone != null) {
+                    c.addPet(getCharacter(), clone.getSelf());
+                }
             }
             if (opponent.has(Trait.RapidMeiosis) && opponent.has(Trait.slime)) {
                 c.write(opponent, Formatter.format("After {other:name-possessive} gooey cum fills {self:name-possessive} %s, "
@@ -1290,7 +1294,10 @@ public class Body implements Cloneable {
                                 + "The faux-semen seems to be multiplying inside {self:direct-object}! "
                                 + "Without warning, the sticky liquid makes a quick exit out of {self:possessive} orifice "
                                 + "and reforms itself into a copy of {other:name-do}!", getCharacter(), opponent, part.describe(getCharacter())));
-                c.addPet(opponent, Divide.makeClone(c, opponent).getSelf());
+                Pet clone = Divide.makeClone(c, opponent);
+                if (clone != null) {
+                    c.addPet(opponent, clone.getSelf());
+                }
             }
         }
     }

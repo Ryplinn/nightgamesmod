@@ -145,6 +145,6 @@ public class MFFMissionaryThreesome extends Threesome {
 
     @Override public List<Character> getAllPartners(Combat c, Character self) {
         // Only two people are fucking in this position; the other is just helping.
-        return ((Position) this).getAllPartners(c, self);
+        return Collections.singletonList(getPartner(c, self));
     }
 }

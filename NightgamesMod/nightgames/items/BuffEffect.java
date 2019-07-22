@@ -1,20 +1,23 @@
 package nightgames.items;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.status.Status;
 
-public class BuffEffect extends ItemEffect {
-    private Status applied;
+import java.util.function.BiFunction;
 
-    public BuffEffect(String verb, String otherverb, Status status) {
+public class BuffEffect extends ItemEffect {
+    private BiFunction<CharacterType, CharacterType, Status> buffSupplier;
+
+    public BuffEffect(String verb, String otherverb, BiFunction<CharacterType, CharacterType, Status> buffSupplier) {
         super(verb, otherverb, true, true);
-        applied = status;
+        this.buffSupplier = buffSupplier;
     }
 
     @Override
     public boolean use(Combat c, Character user, Character opponent, Item item) {
-        user.add(c, applied.instance(user, opponent));
+        user.add(c, buffSupplier.apply(user.getType(), opponent.getType()));
         return true;
     }
 }

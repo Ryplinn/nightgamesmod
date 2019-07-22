@@ -47,12 +47,10 @@ public class NPC extends Character {
     private List<CombatStrategy> personalStrategies;
     private List<CombatScene> postCombatScenes;
     private Map<String, List<CharacterLine>> lines;
-    private final CharacterType type;
 
     public NPC(CharacterType type, String name, int level, Personality ai, NPCConfiguration charConfig,
                     NPCConfiguration commonConfig) {
-        super(name, level);
-        this.type = type;
+        super(type, name, level);
         this.ai = ai;
         this.isStartCharacter = ai instanceof BasePersonality && ((BasePersonality) ai).isStartCharacter;
         this.available = isStartCharacter;
@@ -914,11 +912,6 @@ public class NPC extends Character {
             return disguised.getTarget().ai.image(c, this);
         }
         return ai.image(c, this);
-    }
-
-    @Override
-    public CharacterType getType() {
-        return this.type;
     }
 
     @Override public void load(JsonObject object) {

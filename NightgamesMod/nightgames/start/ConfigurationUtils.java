@@ -1,6 +1,9 @@
 package nightgames.start;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -33,11 +36,11 @@ class ConfigurationUtils {
             return null;
         }
         Map<K, V> map = new HashMap<>();
-        if (primary != null) {
-            map.putAll(primary);
-        }
         if (secondary != null) {
             map.putAll(secondary);
+        }
+        if (primary != null) {
+            map.putAll(primary);
         }
         return map;
     }

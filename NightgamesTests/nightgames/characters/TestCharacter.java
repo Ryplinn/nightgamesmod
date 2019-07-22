@@ -3,8 +3,8 @@ package nightgames.characters;
 import nightgames.actions.Action;
 import nightgames.combat.Combat;
 import nightgames.combat.Encounter;
-import nightgames.combat.Result;
 import nightgames.combat.Encs;
+import nightgames.combat.Result;
 import nightgames.skills.Tactics;
 import nightgames.trap.Trap;
 
@@ -19,7 +19,7 @@ public class TestCharacter extends Character {
     }
 
     private TestCharacter(int level) {
-        super("TestCharacter", level);
+        super(CharacterType.get("TestCharacter"), "TestCharacter", level);
     }
 
     @Override public void ding(Combat c) {
@@ -104,10 +104,6 @@ public class TestCharacter extends Character {
 
     @Override public Encs showerSceneResponse(Character target, Encounter encounter) {
         return Encs.wait;
-    }
-
-    @Override public CharacterType getType() {
-        return CharacterType.get("TestCharacter");
     }
 
     @Override public void afterParty() {
