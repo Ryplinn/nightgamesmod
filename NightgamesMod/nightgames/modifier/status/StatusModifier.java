@@ -1,33 +1,37 @@
 package nightgames.modifier.status;
 
 import nightgames.characters.Character;
+import nightgames.characters.CharacterType;
 import nightgames.modifier.ModifierCategory;
 import nightgames.modifier.ModifierComponent;
 import nightgames.status.Status;
 
+import java.util.function.Function;
+
 public class StatusModifier implements ModifierCategory<StatusModifier>, ModifierComponent {
     public static final StatusModifierCombiner combiner = new StatusModifierCombiner();
 
-    private final Status status;
+    private String name;
+    private final Function<CharacterType, Status> statusBuilder;
     private final boolean playerOnly;
 
-    public StatusModifier(Status status, boolean playerOnly) {
-        this.status = status;
+    public StatusModifier(Function<CharacterType, Status> statusBuilder, String name, boolean playerOnly) {
+        this.statusBuilder = statusBuilder;
+        this.name = name;
         this.playerOnly = playerOnly;
     }
 
-    public StatusModifier(Status status) {
-        this(status, false);
-    }
-
-    protected StatusModifier() {
-        status = null;
+    StatusModifier() {
+        statusBuilder = null;
         playerOnly = true;
     }
 
     public void apply(Character c) {
-        if ((!playerOnly || c.human()) && status != null) {
-            c.addNonCombat(status.instance(c, null));
+        if (statusBuilder != null && (!playerOnly || c.human())) {
+            Status status = statusBuilder.apply(c.getType());
+            if (status != null) {
+                c.addNonCombat(status);
+            }
         }
     }
 
@@ -48,10 +52,14 @@ public class StatusModifier implements ModifierCategory<StatusModifier>, Modifie
 
     @Override
     public String toString() {
-        return status.name;
+        if (statusBuilder == null) {
+            return "null StatusModifier";
+        }
+        return name;
     }
 
     @Override public String name() {
-        return "status-modifier-" + status.name;
+        assert statusBuilder != null;
+        return "status-modifier-" + name;
     }
 }
