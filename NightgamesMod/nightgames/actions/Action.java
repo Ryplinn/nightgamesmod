@@ -7,6 +7,7 @@ import nightgames.trap.Trap;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Supplier;
 
 public abstract class Action implements Serializable {
     /**
@@ -44,7 +45,7 @@ public abstract class Action implements Serializable {
         actionPool.add(new TreeAmbush());
         actionPool.add(new Struggle());
         Trap.buildTrapPool();
-        for (Trap t : Trap.trapPool) {
+        for (Supplier<Trap> t : Trap.trapPool) {
             actionPool.add(new SetTrap(t));
         }
     }

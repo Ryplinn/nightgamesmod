@@ -53,7 +53,7 @@ public class Combat extends Observable implements Cloneable {
         FINISHED_SCENE,
         ENDED,
     }
-    private GUI gui;
+    private transient GUI gui;
     public Character p1;
     public Character p2;
     private List<PetCharacter> otherCombatants;

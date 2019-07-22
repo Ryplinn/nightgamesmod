@@ -7,10 +7,11 @@ import nightgames.combat.Encounter;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Supplier;
 
 public abstract class Trap implements Deployable {
 
-    public static Set<Trap> trapPool;
+    public static Set<Supplier<Trap>> trapPool;
     protected CharacterType owner;
     private final String name;
     private int strength;
@@ -22,19 +23,19 @@ public abstract class Trap implements Deployable {
 
     public static void buildTrapPool() {
         trapPool = new HashSet<>();
-        trapPool.add(new Alarm());
-        trapPool.add(new Tripline());
-        trapPool.add(new Snare());
-        trapPool.add(new SpringTrap());
-        trapPool.add(new AphrodisiacTrap());
-        trapPool.add(new DissolvingTrap());
-        trapPool.add(new Decoy());
-        trapPool.add(new Spiderweb());
-        trapPool.add(new EnthrallingTrap());
-        trapPool.add(new IllusionTrap());
-        trapPool.add(new StripMine());
-        trapPool.add(new TentacleTrap());
-        trapPool.add(new RoboWeb());
+        trapPool.add(Alarm::new);
+        trapPool.add(Tripline::new);
+        trapPool.add(Snare::new);
+        trapPool.add(SpringTrap::new);
+        trapPool.add(AphrodisiacTrap::new);
+        trapPool.add(DissolvingTrap::new);
+        trapPool.add(Decoy::new);
+        trapPool.add(Spiderweb::new);
+        trapPool.add(EnthrallingTrap::new);
+        trapPool.add(IllusionTrap::new);
+        trapPool.add(StripMine::new);
+        trapPool.add(TentacleTrap::new);
+        trapPool.add(RoboWeb::new);
     }
 
     protected abstract void trigger(Character target);
