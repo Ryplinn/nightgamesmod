@@ -1,7 +1,7 @@
 package nightgames.skills;
 
-import nightgames.characters.*;
 import nightgames.characters.Character;
+import nightgames.characters.*;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -49,11 +49,11 @@ public class Simulacrum extends Skill {
             c.write(getSelf(), formatMessage(Result.miss, CharacterSex.asexual, CharacterSex.asexual, target));
             return false;
         }
+        c.addPet(getSelf(), pet.getSelf());
         CharacterSex initialSex = pet.getSelf().body.guessCharacterSex();
         pet.getSelf().body.autoTG();
         CharacterSex finalSex = pet.getSelf().body.guessCharacterSex();
         c.write(getSelf(), formatMessage(Result.normal, initialSex, finalSex, target));
-        c.addPet(getSelf(), pet.getSelf());
 
         return true;
     }

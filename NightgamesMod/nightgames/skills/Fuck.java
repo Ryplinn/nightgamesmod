@@ -103,26 +103,28 @@ public class Fuck extends Skill {
             bottomMessage = "";
         }
 
-        if (!bottomMessage.isEmpty() && getSelfOrgan().isType("cock")) {
-            premessage = String.format("{self:SUBJECT-ACTION:pull|pulls} down {self:possessive} %s halfway and ",
-                            bottomMessage);
-        } else if (!bottomMessage.isEmpty() && getSelfOrgan().isType("pussy")) {
-            premessage = String.format("{self:SUBJECT-ACTION:pull|pulls} {self:possessive} %s to the side and ",
-                            bottomMessage);
-        }
-
-        if (!target.crotchAvailable() && getSelfOrgan().moddedPartCountsAs(getSelf(), CockMod.slimy)) {
-            Clothing destroyed = target.strip(ClothingSlot.bottom, c);
-            assert target.outfit.slotEmpty(ClothingSlot.bottom);
-            String start;
-            if (premessage.isEmpty()) {
-                start = "{self:SUBJECT-ACTION:place|places}";
-            } else {
-                start = "{self:action:place|places} ";
+        if (getSelfOrgan() != null) {
+            if (!bottomMessage.isEmpty() && getSelfOrgan().isType("cock")) {
+                premessage = String.format("{self:SUBJECT-ACTION:pull|pulls} down {self:possessive} %s halfway and ",
+                                bottomMessage);
+            } else if (!bottomMessage.isEmpty() && getSelfOrgan().isType("pussy")) {
+                premessage = String.format("{self:SUBJECT-ACTION:pull|pulls} {self:possessive} %s to the side and ",
+                                bottomMessage);
             }
-            premessage += start + " the head of {self:possessive} {self:body-part:cock}"
-                            + " against {other:name-possessive} " + destroyed.getName() + ". The corrosive slime burns"
-                            + " right through them, but leaves the skin beneath untouched. Then, ";
+
+            if (!target.crotchAvailable() && getSelfOrgan().moddedPartCountsAs(getSelf(), CockMod.slimy)) {
+                Clothing destroyed = target.strip(ClothingSlot.bottom, c);
+                assert target.outfit.slotEmpty(ClothingSlot.bottom);
+                String start;
+                if (premessage.isEmpty()) {
+                    start = "{self:SUBJECT-ACTION:place|places}";
+                } else {
+                    start = "{self:action:place|places} ";
+                }
+                premessage += start + " the head of {self:possessive} {self:body-part:cock}"
+                                + " against {other:name-possessive} " + destroyed.getName() + ". The corrosive slime burns"
+                                + " right through them, but leaves the skin beneath untouched. Then, ";
+            }
         }
 
         return Formatter.format(premessage, getSelf(), target);
@@ -134,7 +136,7 @@ public class Fuck extends Skill {
         int m = Random.random(10, 15);
         BodyPart selfO = getSelfOrgan();
         BodyPart targetO = getTargetOrgan(target);
-        if (selfO.isReady(getSelf()) && targetO.isReady(target)) {
+        if (selfO != null && targetO != null && selfO.isReady(getSelf()) && targetO.isReady(target)) {
             if (targetO.isType("pussy") && target.has(Trait.temptingass) && new AssFuck(self).usable(c, target)
                 && Random.random(3) == 1) {
                 

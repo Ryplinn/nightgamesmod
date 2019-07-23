@@ -28,7 +28,7 @@ public class CharacterPool {
     public Player human;
     public transient List<PetCharacter> otherCombatants;
 
-    private CharacterPool() {
+    public CharacterPool() {
         characterPool = new HashMap<>();
         debugChars = new HashSet<>();
     }
@@ -147,7 +147,7 @@ public class CharacterPool {
 
     public Character getParticipantByName(String name) {
         return availableNpcs().stream().filter(c -> c.getTrueName().equals(name)).findAny()
-                        .orElseThrow(() -> new NoSuchElementException("Could not find particpant " + name));
+                        .orElseThrow(() -> new NoSuchElementException("Could not find participant " + name));
     }
 
     public Character getCharacterByType(String typeName) {
@@ -161,7 +161,7 @@ public class CharacterPool {
                 return foundPet.get();
             }
         }
-        if (human.getType().equals(type)) {
+        if (human != null && human.getType().equals(type)) {
             return human;
         }
         return getNPCByType(type, required);
@@ -189,7 +189,7 @@ public class CharacterPool {
      * WARNING DO NOT USE THIS IN ANY COMBAT RELATED CODE.
      * IT DOES NOT TAKE INTO ACCOUNT THAT THE PLAYER GETS CLONED. WARNING. WARNING.
      *
-     * @return
+     * @return The human player character.
      */
     public Player getPlayer() {
         return human;
@@ -239,7 +239,7 @@ public class CharacterPool {
         return getCharacterByType(type, true);
     }
 
-    public void putAll(List<Character> characters) {
+    public void putAll(List<? extends Character> characters) {
         putAll(characters.toArray(new Character[] {}));
     }
 

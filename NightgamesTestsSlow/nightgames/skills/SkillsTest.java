@@ -27,11 +27,12 @@ public class SkillsTest {
 	private List<NPC> npcs2;
 	private List<Position> stances;
 	private Area area;
+	private TestGameState gameState;
 
 	@Before
 	public void prepare() throws JsonParseException {
 		GUI.gui = new TestGUI();
-		TestGameState gameState = new TestGameState();
+		gameState = new TestGameState();
 		gameState.init();
 		npcs1 = new ArrayList<>();
 		npcs2 = new ArrayList<>();
@@ -94,11 +95,13 @@ public class SkillsTest {
 		if (c.getStance() == pos) {
 			for (Function<CharacterType, Skill> skillstructor : SkillPool.skillPool) {
 				Combat cloned = c.clone();
+				gameState.characterPool.setOtherCombatants(cloned.getOtherCombatants());
 				Skill used = skillstructor.apply(cloned.p1.getType());
 				if (Skill.skillIsUsable(cloned, used)) {
 					System.out.println("["+cloned.getStance().getClass().getSimpleName()+"] Skill usable: " + used.getLabel(cloned) + ".");
 					used.resolve(cloned, cloned.p2);
 				}
+				gameState.characterPool.setOtherCombatants(null);
 			}
 		} else {
 			System.out.println("STANCE NOT EFFECTIVE: " + pos.getClass().getSimpleName() + " with top: " + pos.getTop().getTrueName() + " and bottom: " + pos.getBottom().getTrueName());

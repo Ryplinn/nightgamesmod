@@ -430,6 +430,11 @@ public class Decider {
         } catch (CloneNotSupportedException e) {
             return 0;
         }
+        CharacterPool previousPool = CharacterType.lastUsedPool;
+        CharacterPool simPool = new CharacterPool();
+        simPool.putAll(c2.p1, c2.p2);
+        simPool.putAll(c2.getOtherCombatants());
+        CharacterType.usePool(simPool);
 
         DebugFlags.debugSimulation += 1;
         Character newSkillUser = getCopyFromCombat(c, c2, skillUser);
@@ -444,6 +449,7 @@ public class Decider {
         if (DebugFlags.isDebugOn(DebugFlags.DEBUG_SKILLS_RATING) && (c2.p1.human() || c2.p2.human())) {
             System.out.println("After:\n" + c2.debugMessage());
         }
+        CharacterType.usePool(previousPool);
         return selfFitnessDelta - otherFitnessDelta;
     }
 }

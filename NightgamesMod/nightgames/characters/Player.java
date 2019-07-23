@@ -110,6 +110,9 @@ public class Player extends Character {
     }
 
     public String describeStatus() {
+        // use main character pool for status description
+        CharacterPool previousPool = CharacterType.lastUsedPool;
+        CharacterType.usePool(null);    // resets to default pool
         StringBuilder b = new StringBuilder();
         if (GUI.gui.combat != null && (GUI.gui.combat.p1.human() || GUI.gui.combat.p2.human())) {
             body.describeBodyText(b, GUI.gui.combat.getOpponent(this), false);
@@ -129,6 +132,7 @@ public class Player extends Character {
             b.append("<br/><br/>Addictions:<br/>");
             List<Addiction> addictions = new ArrayList<>(getAddictions());
             addictions.stream().filter(addiction -> addiction.atLeast(Addiction.Severity.LOW))
+                            .filter(addiction -> addiction.getCause() != null)
                             .sorted(Comparator.comparing(addiction -> addiction.getCause().getName()))
                             .forEach(addiction -> b.append(addiction.describeStatus()).append("<br/>"));
         }
@@ -140,6 +144,8 @@ public class Player extends Character {
                              .map(s -> s.name)
                              .collect(Collectors.joining(", ")));
         }
+        // restore previous pool
+        CharacterType.usePool(previousPool);
         return b.toString();
     }
 
