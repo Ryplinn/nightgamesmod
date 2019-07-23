@@ -452,7 +452,7 @@ public abstract class Position implements Cloneable {
     }
 
     Optional<Position> dickMissing(Combat c, Character inserter, Character inserted) {
-        if (inserter.hasInsertable()) {
+        if (!inserter.hasInsertable()) {
             if (inserter.human()) {
                 c.write(String.format("With %s %s gone, you groan in frustration and cease your merciless movements.",
                                 inserter.possessiveAdjective(), ProseUtils.getDickWord()));

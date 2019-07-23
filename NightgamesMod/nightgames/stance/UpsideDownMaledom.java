@@ -25,7 +25,7 @@ public class UpsideDownMaledom extends Position {
         } else {
             return String.format("%s is holding %s upside-down by %s legs while fucking %s pussy.",
                             getTop().subject(), getBottom().nameDirectObject(), getBottom().possessiveAdjective(),
-                            getTop().possessiveAdjective());
+                            getBottom().possessiveAdjective());
         }
     }
 
