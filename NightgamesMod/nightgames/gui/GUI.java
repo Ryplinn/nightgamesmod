@@ -37,6 +37,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
 public class GUI extends JFrame implements Observer {
@@ -1115,44 +1116,95 @@ public class GUI extends JFrame implements Observer {
         addButton(button);
     }
 
+    private final class RefreshData {
+        private final String staminaLabel;
+        private final int currentStamina;
+        private final int maxStamina;
+        private final String arousalLabel;
+        private final int currentArousal;
+        private final int maxArousal;
+        private final String mojoLabel;
+        private final int currentMojo;
+        private final int maxMojo;
+        private final String willpowerLabel;
+        private final int currentWillpower;
+        private final int maxWillpower;
+        private final int level;
+        private final int xp;
+        private final String location;
+        private final int cash;
+        private final Time currentTime;
+        private final Map<Item, Integer> inventory;
+        private final Map<Attribute, Integer> attributes;
+        private final Map<Attribute, Integer> attributesPure;
+        private final String outfitDescription;
+        private final String statusDescription;
+
+        private RefreshData(Player player) {
+            staminaLabel = getLabelString(player.getStamina());
+            currentStamina = player.getStamina().get();
+            maxStamina = player.getStamina().max();
+            arousalLabel = getLabelString(player.getArousal());
+            currentArousal = player.getArousal().get();
+            maxArousal = player.getArousal().max();
+            mojoLabel = getLabelString(player.getMojo());
+            currentMojo = player.getMojo().get();
+            maxMojo = player.getMojo().max();
+            willpowerLabel = getLabelString(player.getWillpower());
+            currentWillpower = player.getWillpower().get();
+            maxWillpower = player.getWillpower().max();
+            level = player.getLevel();
+            xp = player.getXP();
+            location = player.location().name;
+            cash = player.money;
+            currentTime = Time.getTime();
+            inventory = new HashMap<>(player.getInventory());
+            attributes = Stream.of(Attribute.values()).collect(Collectors.toMap(att -> att, player::get));
+            attributesPure = Stream.of(Attribute.values()).collect(Collectors.toMap(att -> att, player::getPure));
+            outfitDescription = player.getOutfit().describe(player);
+            statusDescription = player.describeStatus();
+        }
+    }
+
     public void refresh() {
-        if (!this.refreshRequested) {
+        if (!this.refreshRequested && GameState.getGameState() != null) {
             this.refreshRequested = true;
             if (populatedPlayer != null) {
-                SwingUtilities.invokeLater(() -> refreshInternal(populatedPlayer));
+                RefreshData refreshData = new RefreshData(populatedPlayer);
+                SwingUtilities.invokeLater(() -> refreshInternal(refreshData));
             }
         }
     }
 
-    private void refreshInternal(Player player) {
-        stamina.setText("Stamina: " + getLabelString(player.getStamina()));
-        arousal.setText("Arousal: " + getLabelString(player.getArousal()));
-        mojo.setText("Mojo: " + getLabelString(player.getMojo()));
-        willpower.setText("Willpower: " + getLabelString(player.getWillpower()));
-        lvl.setText("Lvl: " + player.getLevel());
-        xp.setText("XP: " + player.getXP());
-        staminaBar.setMaximum(player.getStamina().max());
-        staminaBar.setValue(player.getStamina().get());
-        arousalBar.setMaximum(player.getArousal().max());
-        arousalBar.setValue(player.getArousal().get());
-        mojoBar.setMaximum(player.getMojo().max());
-        mojoBar.setValue(player.getMojo().get());
-        willpowerBar.setMaximum(player.getWillpower().max());
-        willpowerBar.setValue(player.getWillpower().get());
-        loclbl.setText(player.location().name);
-        cashLabel.setText("$" + player.money);
+    private void refreshInternal(RefreshData refreshData) {
+        stamina.setText("Stamina: " + refreshData.staminaLabel);
+        arousal.setText("Arousal: " + refreshData.arousalLabel);
+        mojo.setText("Mojo: " + refreshData.mojoLabel);
+        willpower.setText("Willpower: " + refreshData.willpowerLabel);
+        lvl.setText("Lvl: " + refreshData.level);
+        xp.setText("XP: " + refreshData.xp);
+        staminaBar.setMaximum(refreshData.maxStamina);
+        staminaBar.setValue(refreshData.currentStamina);
+        arousalBar.setMaximum(refreshData.maxArousal);
+        arousalBar.setValue(refreshData.currentArousal);
+        mojoBar.setMaximum(refreshData.maxMojo);
+        mojoBar.setValue(refreshData.currentMojo);
+        willpowerBar.setMaximum(refreshData.maxWillpower);
+        willpowerBar.setValue(refreshData.currentWillpower);
+        loclbl.setText(refreshData.location);
+        cashLabel.setText("$" + refreshData.cash);
         if (map != null) {
             map.repaint();
         }
 
-        Time currentTime = Time.getTime();
+        Time currentTime = refreshData.currentTime;
         String timeText = currentTime.timeText();
         GUIColor textColor = GUIColor.timeTextColor(currentTime);
         timeLabel.setText(String.format("<html>Day %d - <font color=%s>%s</font></html>", Time.getDate(),
                         textColor.rgbHTML(), timeText));
 
-        displayStatus(player);
-        List<Item> availItems = player.getInventory().entrySet().stream().filter(entry -> (entry.getValue() > 0))
+        displayStatus(refreshData.attributes, refreshData.attributesPure, refreshData.outfitDescription, refreshData.statusDescription);
+        List<Item> availItems = refreshData.inventory.entrySet().stream().filter(entry -> (entry.getValue() > 0))
                 .map(Map.Entry::getKey).collect(Collectors.toList());
 
 	    JPanel inventoryPane = new JPanel();
@@ -1160,11 +1212,10 @@ public class GUI extends JFrame implements Observer {
 	    inventoryPane.setSize(new Dimension(400, 800));
 	    inventoryPane.setBackground(GUIColor.BG_DARK.color);
 
-	    Map<Item, Integer> items = player.getInventory();
 	    int count = 0;
 
 	    for (Item i : availItems) {
-	        JLabel label = new JLabel(i.getName() + ": " + items.get(i) + "\n");
+	        JLabel label = new JLabel(i.getName() + ": " + refreshData.inventory.get(i) + "\n");
 	        label.setForeground(GUIColor.TEXT_LIGHT.color);
 	        label.setToolTipText(i.getDesc());
 	        inventoryPane.add(label);
@@ -1187,7 +1238,7 @@ public class GUI extends JFrame implements Observer {
     	});
     }
     
-    private void displayStatus(Player player) {
+    private void displayStatus(Map<Attribute, Integer> attributes, Map<Attribute, Integer> attributesPure, String outfitDescription, String statusDescription) {
         statusPanel.removeAll();
         statusPanel.repaint();
         //statusPanel.setPreferredSize(new Dimension(400, mainPanel.getHeight()));
@@ -1212,8 +1263,8 @@ public class GUI extends JFrame implements Observer {
         int descFontSize = fontsize - 1;
         ArrayList<JLabel> attlbls = new ArrayList<>();
         for (Attribute a : Attribute.values()) {
-            int amt = player.get(a);
-            int pure = player.getPure(a);
+            int amt = attributes.getOrDefault(a, 0);
+            int pure = attributesPure.getOrDefault(a, 0);
             if (pure > 0 || amt > 0) {
                 if (amt == pure) {
                     JLabel label = new JLabel(String.format("<html><font face='Georgia' size=%d>%s: %s</font></html>", descFontSize, a.displayName(), amt));
@@ -1256,7 +1307,7 @@ public class GUI extends JFrame implements Observer {
         try {
             editorKit.insertHTML(doc, doc.getLength(),
                             "<font face='Georgia' color='white' size='" + descFontSize + "'>"
-                                            + player.getOutfit().describe(player) + "<br/>" + player.describeStatus()
+                                            + outfitDescription + "<br/>" + statusDescription
                                             + "</font><br/>",
                             0, 0, null);
         } catch (BadLocationException | IOException e) {
