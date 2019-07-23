@@ -306,6 +306,12 @@ public abstract class Addiction {
     }
 
     public String describeStatus() {
+        if (getCause() == null || getCause().getName() == null || displayName == null || getSeverity() == null) {
+            System.err.println("Addiction has null field: " + this);
+            System.err.println("Cause: " + getCause());
+            System.err.println("displayName: " + displayName);
+            System.err.println("Severity: " + getSeverity());
+        }
         return String.format("%s's %s: %s (%.3f)", getCause().getName(), displayName,
                         getSeverity().name().toLowerCase(), getMagnitude());
     }

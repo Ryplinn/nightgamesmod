@@ -1354,6 +1354,10 @@ public abstract class Character extends Observable implements Cloneable {
 
     public boolean stunned() {
         for (Status s : getStatuses()) {
+            if (s.flags() == null) {
+                System.err.println("Null flags in status " + s);
+                continue;
+            }
             if (s.flags().contains(Stsflag.stunned) || s.flags().contains(Stsflag.falling)) {
                 return true;
             }
@@ -1757,6 +1761,7 @@ public abstract class Character extends Observable implements Cloneable {
             c.write(opponent, opponentOrgasmLiner);
         }
 
+        // TODO: Rebalance this. Kat's orgasms tend to only lose 10-15 willpower (feral?) while this restores ~20, making her a perpetual fucking machine.
         if (has(Trait.nymphomania) && (
                         Random.random(100) < Math.sqrt(get(Attribute.nymphomania) + get(Attribute.animism)) * 10) && !getWillpower().isEmpty() && times == totalTimes) {
             if (human()) {
@@ -3872,7 +3877,7 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public Optional<Addiction> getAddiction(AddictionType addictionType, CharacterType causeType) {
-        return addictions.stream().filter(a -> a.getType() == addictionType)
+        return addictions.stream().filter(a -> a.getType() == addictionType).filter(a -> a.getCause() != null)
                         .filter(a -> a.getCause().getType().equals(causeType)).findAny();
     }
 
