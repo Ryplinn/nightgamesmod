@@ -94,7 +94,7 @@ public class Body implements Cloneable {
     public double hotness;
     private transient Collection<PartReplacement> replacements;
     private transient Map<String, List<PartModReplacement>> modReplacements;
-    private transient Collection<BodyPart> currentParts;
+    private transient ConcurrentHashMap.KeySetView<BodyPart, Boolean> currentParts;
     public CharacterType character;
     public double baseFemininity;
     private double height;
@@ -122,7 +122,7 @@ public class Body implements Cloneable {
         return character.fromPoolGuaranteed();
     }
 
-    public Collection<BodyPart> getCurrentParts() {
+    public Set<BodyPart> getCurrentParts() {
         return currentParts;
     }
 
@@ -1099,7 +1099,7 @@ public class Body implements Cloneable {
             reps.forEach(rep -> newBody.modReplacements.get(type).add(new PartModReplacement(rep)));
         });
         newBody.bodyParts = new LinkedHashSet<>(bodyParts);
-        newBody.currentParts = new HashSet<>(currentParts);
+        newBody.currentParts = new ConcurrentHashMap<>(currentParts.getMap()).keySet(Boolean.TRUE);
         return newBody;
     }
 
