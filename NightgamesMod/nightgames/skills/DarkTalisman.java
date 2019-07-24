@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -13,43 +12,43 @@ import nightgames.status.Stsflag;
 
 public class DarkTalisman extends Skill {
 
-    DarkTalisman(CharacterType self) {
-        super("Dark Talisman", self);
+    DarkTalisman() {
+        super("Dark Talisman");
         addTag(SkillTag.dark);
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getRank() >= 1;
+        return user.getRank() >= 1;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance()
-                                      .mobile(getSelf())
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && c.getStance()
+                                      .mobile(user)
                         && !c.getStance()
-                             .prone(getSelf())
-                        && !target.is(Stsflag.enthralled) && getSelf().has(Item.Talisman);
+                             .prone(user)
+                        && !target.is(Stsflag.enthralled) && user.has(Item.Talisman);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Consume the mysterious talisman to control your opponent";
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return target.is(Stsflag.blinded) ? -100 : 90;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         Result result = target.is(Stsflag.blinded) ? Result.special
-                        : target.roll(getSelf(), accuracy(c, target)) ? Result.normal : Result.miss;
-        writeOutput(c, result, target);
-        getSelf().consume(Item.Talisman, 1);
+                        : target.roll(user, accuracy(c, user, target)) ? Result.normal : Result.miss;
+        writeOutput(c, result, user, target);
+        user.consume(Item.Talisman, 1);
         if (result == Result.normal) {
-            target.add(c, new Enthralled(target.getType(), self, Random.random(3) + 1));
+            target.add(c, new Enthralled(target.getType(), user.getType(), Random.random(3) + 1));
             return true;
         } else {
             return false;
@@ -58,16 +57,16 @@ public class DarkTalisman extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new DarkTalisman(user.getType());
+        return new DarkTalisman();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.normal) {
             return "You brandish the dark talisman, which seems to glow with power. The trinket crumbles to dust, but you see the image remain in the reflection of "
                             + target.getName() + "'s eyes.";
@@ -81,17 +80,17 @@ public class DarkTalisman extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.normal) {
             return String.format("%s holds up a strange talisman. %s compelled to look at the thing, captivated by its unholy nature.",
-                            getSelf().getName(), Formatter.capitalizeFirstLetter(target.subjectAction("feel")));
+                            user.getName(), Formatter.capitalizeFirstLetter(target.subjectAction("feel")));
         } else if (modifier == Result.special) {
             return String.format("%s something which sounds like sand spilling onto the floor and a cry of annoyed "
-                            + "frustration from %s. What could it have been?", getSelf().subjectAction("hear"),
+                            + "frustration from %s. What could it have been?", user.subjectAction("hear"),
                             target.nameDirectObject());
         } else {
             return String.format("%s holds up a strange talisman. %s a tiny tug on %s consciousness, but it doesn't really affect %s much.",
-                            getSelf().getName(), Formatter.capitalizeFirstLetter(target.subjectAction("feel")), target.possessiveAdjective(),
+                            user.getName(), Formatter.capitalizeFirstLetter(target.subjectAction("feel")), target.possessiveAdjective(),
                             target.directObject());
         }
     }

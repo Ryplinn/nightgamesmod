@@ -50,7 +50,7 @@ public class Slime extends Pet {
                 + "high pitched moan and squirms against her bonds until she shudders in orgasm and vanishes.");
             }
         } else if (opponent instanceof CharacterPet) { 
-            (new SlimeJob(getSelf().getType())).resolve(c, opponent.getSelf());
+            (new SlimeJob()).resolve(c, getSelf(), opponent.getSelf());
         } else {
             if (!opponent.hasDick()) {
                 c.write(getSelf(), Formatter.format("{self:SUBJECT} gathers around {other:name-possessive} ankles. With unexpected speed, it surges up {other:possessive} legs and simultaneously penetrates {other:possessive} pussy and "

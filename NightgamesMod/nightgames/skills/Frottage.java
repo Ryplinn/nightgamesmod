@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.StraponPart;
@@ -15,8 +14,8 @@ import nightgames.status.BodyFetish;
 
 public class Frottage extends Skill {
 
-    public Frottage(CharacterType self) {
-        super("Frottage", self);
+    public Frottage() {
+        super("Frottage");
         addTag(SkillTag.pleasureSelf);
     }
 
@@ -26,68 +25,68 @@ public class Frottage extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance().mobile(getSelf()) && !c.getStance().sub(getSelf())
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && c.getStance().mobile(user) && !c.getStance().sub(user)
                         && !c.getStance().havingSex(c) && target.crotchAvailable()
-                        && (getSelf().hasDick() && getSelf().crotchAvailable() || getSelf().has(Trait.strapped))
-                        && c.getStance().reachBottom(getSelf());
+                        && (user.hasDick() && user.crotchAvailable() || user.has(Trait.strapped))
+                        && c.getStance().reachBottom(user);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Rub yourself against your opponent";
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 10;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         int m = 6 + Random.random(8);
         BodyPart receiver = target.hasDick() ? target.body.getRandomCock() : target.body.getRandomPussy();
-        BodyPart dealer = getSelf().hasDick() ? getSelf().body.getRandomCock() : getSelf().has(Trait.strapped) ? StraponPart.generic : getSelf().body.getRandomPussy();
-        if (getSelf().human()) {
+        BodyPart dealer = user.hasDick() ? user.body.getRandomCock() : user.has(Trait.strapped) ? StraponPart.generic : user.body.getRandomPussy();
+        if (user.human()) {
             if (target.hasDick()) {
-                c.write(getSelf(), deal(c, m, Result.special, target));
+                c.write(user, deal(c, m, Result.special, user, target));
             } else {
-                c.write(getSelf(), deal(c, m, Result.normal, target));
+                c.write(user, deal(c, m, Result.normal, user, target));
             }
-        } else if (getSelf().has(Trait.strapped)) {
+        } else if (user.has(Trait.strapped)) {
             if (target.human()) {
-                c.write(getSelf(), receive(c, m, Result.special, target));
+                c.write(user, receive(c, m, Result.special, user, target));
             }
             target.loseMojo(c, 10);
             dealer = null;
         } else {
-            c.write(getSelf(), receive(c, m, Result.normal, target));
+            c.write(user, receive(c, m, Result.normal, user, target));
         }
 
         if (dealer != null) {
-            getSelf().body.pleasure(target, receiver, dealer, m / 2, c, this);
+            user.body.pleasure(target, receiver, dealer, m / 2, c, new SkillUsage<>(this, user, target));
         }
-        target.body.pleasure(getSelf(), dealer, receiver, m, c, this);
-        if (Random.random(100) < 15 + 2 * getSelf().get(Attribute.fetishism)) {
-            target.add(c, new BodyFetish(target.getType(), self, "cock", .25));
+        target.body.pleasure(user, dealer, receiver, m, c, new SkillUsage<>(this, user, target));
+        if (Random.random(100) < 15 + 2 * user.get(Attribute.fetishism)) {
+            target.add(c, new BodyFetish(target.getType(), user.getType(), "cock", .25));
         }
-        getSelf().emote(Emotion.horny, 15);
+        user.emote(Emotion.horny, 15);
         target.emote(Emotion.horny, 15);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Frottage(user.getType());
+        return new Frottage();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.special) {
             return "You tease " + target.getName() + "'s penis with your own, dueling her like a pair of fencers.";
         } else {
@@ -97,25 +96,25 @@ public class Frottage extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.special) {
             return String.format("%s thrusts %s hips to prod %s delicate jewels with %s strapon dildo. "
                             + "As %s and %s %s hips back, %s presses the toy against %s cock, "
                             + "teasing %s sensitive parts.",
-                            getSelf().subject(), getSelf().possessiveAdjective(), target.nameOrPossessivePronoun(),
-                            getSelf().possessiveAdjective(),
+                            user.subject(), user.possessiveAdjective(), target.nameOrPossessivePronoun(),
+                            user.possessiveAdjective(),
                             target.subjectAction("flinch", "flinches"), target.action("pull"), target.possessiveAdjective(),
-                            getSelf().subject(), target.possessiveAdjective(), target.possessiveAdjective());
-        } else if (getSelf().hasDick() && target.hasDick()) {
+                            user.subject(), target.possessiveAdjective(), target.possessiveAdjective());
+        } else if (user.hasDick() && target.hasDick()) {
             return String.format("%s pushes %s %s against the sensitive head of %s member, "
-                            + "dominating %s manhood.", getSelf().subject(), getSelf().possessiveAdjective(),
-                            getSelf().body.getRandomCock().describe(getSelf()), target.nameOrPossessivePronoun(),
+                            + "dominating %s manhood.", user.subject(), user.possessiveAdjective(),
+                            user.body.getRandomCock().describe(user), target.nameOrPossessivePronoun(),
                             target.possessiveAdjective());
         } else {
             return String.format("%s pushes %s cock against her soft thighs, rubbing %s shaft up"
-                            + " against %s nether lips.", getSelf().subject(),
+                            + " against %s nether lips.", user.subject(),
                             target.nameOrPossessivePronoun(), target.possessiveAdjective(),
-                            getSelf().possessiveAdjective());
+                            user.possessiveAdjective());
         }
     }
 

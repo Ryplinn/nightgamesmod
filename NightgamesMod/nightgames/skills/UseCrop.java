@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -14,8 +13,8 @@ import nightgames.skills.damage.DamageType;
 
 public class UseCrop extends Skill {
 
-    UseCrop(CharacterType self) {
-        super(Item.Crop.getName(), self);
+    UseCrop() {
+        super(Item.Crop.getName());
         addTag(SkillTag.usesToy);
         addTag(SkillTag.positioning);
         addTag(SkillTag.hurt);
@@ -28,47 +27,47 @@ public class UseCrop extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return (getSelf().has(Item.Crop) || getSelf().has(Item.Crop2)) && getSelf().canAct()
-                        && c.getStance().mobile(getSelf())
-                        && (c.getStance().reachTop(getSelf()) || c.getStance().reachBottom(getSelf()));
+    public boolean usable(Combat c, Character user, Character target) {
+        return (user.has(Item.Crop) || user.has(Item.Crop2)) && user.canAct()
+                        && c.getStance().mobile(user)
+                        && (c.getStance().reachTop(user) || c.getStance().reachBottom(user));
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 10;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 90;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), accuracy(c, target))) {
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.roll(user, accuracy(c, user, target))) {
             double m = Random.random(12, 18);
-            if (target.crotchAvailable() && c.getStance().reachBottom(getSelf())) {
-                if (getSelf().has(Item.Crop2) && Random.random(10) > 7 && !target.has(Trait.brassballs)) {
-                    writeOutput(c, Result.critical, target);
+            if (target.crotchAvailable() && c.getStance().reachBottom(user)) {
+                if (user.has(Item.Crop2) && Random.random(10) > 7 && !target.has(Trait.brassballs)) {
+                    writeOutput(c, Result.critical, user, target);
                     if (target.has(Trait.achilles)) {
                         m += 6;
                     }
                     target.emote(Emotion.angry, 10);
                     m += 8;
                 } else {
-                    writeOutput(c, Result.normal, target);
-                    target.pain(c, getSelf(), 5 + Random.random(12) + target.get(Attribute.perception) / 2);
+                    writeOutput(c, Result.normal, user, target);
+                    target.pain(c, user, 5 + Random.random(12) + target.get(Attribute.perception) / 2);
                 }
             } else {
-                writeOutput(c, Result.weak, target);
+                writeOutput(c, Result.weak, user, target);
                 m -= Random.random(2, 6);
-                target.pain(c, getSelf(), 5 + Random.random(12));
+                target.pain(c, user, 5 + Random.random(12));
             }
-            target.pain(c, getSelf(), (int) DamageType.gadgets.modifyDamage(getSelf(), target, m));
+            target.pain(c, user, (int) DamageType.gadgets.modifyDamage(user, target, m));
             target.emote(Emotion.angry, 15);
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
         return true;
@@ -76,16 +75,16 @@ public class UseCrop extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new UseCrop(user.getType());
+        return new UseCrop();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.damage;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             if (!target.has(Item.Crop)) {
                 return "You lash out with your riding crop, but it fails to connect.";
@@ -111,15 +110,15 @@ public class UseCrop extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             if (!target.has(Item.Crop)) {
                 return String.format("%s out of the way, as %s swings %s riding crop at %s.",
-                                target.subjectAction("duck"), getSelf().subject(),
-                                getSelf().possessiveAdjective(), target.directObject());
+                                target.subjectAction("duck"), user.subject(),
+                                user.possessiveAdjective(), target.directObject());
             } else {
                 return String.format("%s swings %s riding crop, but %s %s own crop and %s it.",
-                                getSelf().subject(), getSelf().possessiveAdjective(),
+                                user.subject(), user.possessiveAdjective(),
                                 target.subjectAction("draw"), target.possessiveAdjective(),
                                 target.action("parry", "parries"));
             }
@@ -127,21 +126,21 @@ public class UseCrop extends Skill {
             return String.format("%s hits %s on the ass with %s riding crop. "
                             + "The attachment on the end delivers a painful sting to "
                             + "%s jewels. %s in pain and %s the urge to "
-                            + "curl up in the fetal position.", getSelf().subject(),
-                            target.nameDirectObject(), getSelf().possessiveAdjective(),
+                            + "curl up in the fetal position.", user.subject(),
+                            target.nameDirectObject(), user.possessiveAdjective(),
                             target.possessiveAdjective(), target.subjectAction("groan"),
                             target.action("fight"));
         } else if (modifier == Result.weak) {
             return String.format("%s strikes %s with a riding crop.",
-                            getSelf().subject(), target.nameDirectObject());
+                            user.subject(), target.nameDirectObject());
         } else {
             return String.format("%s hits %s bare ass with a riding crop hard enough to leave a painful welt.",
-                            getSelf().subject(), target.nameOrPossessivePronoun());
+                            user.subject(), target.nameOrPossessivePronoun());
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Strike your opponent with riding crop. More effective if she's naked";
     }
 

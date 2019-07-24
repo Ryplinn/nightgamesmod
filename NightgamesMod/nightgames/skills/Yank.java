@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -15,8 +14,8 @@ import nightgames.status.Falling;
 
 public class Yank extends Skill {
 
-    public Yank(CharacterType self) {
-        super("Yank", self);
+    public Yank() {
+        super("Yank");
         addTag(SkillTag.usesToy);
     }
 
@@ -26,28 +25,28 @@ public class Yank extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
+    public boolean usable(Combat c, Character user, Character target) {
         return c.getStance().en  == Stance.neutral && (target.has(ClothingTrait.harpoonDildo)
                         || target.has(ClothingTrait.harpoonOnahole));
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Give a tug on your toy to trip your opponent.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         int acc = 70;
         int removeChance = 50;
-        if (getSelf().has(Trait.intensesuction)) {
+        if (user.has(Trait.intensesuction)) {
             acc += 20;
             removeChance /= 2;
         }
-        if (target.roll(getSelf(), acc)) {
-            c.write(getSelf(), Formatter.format("{self:SUBJECT-ACTION:yank|yanks} {other:name-do}"
+        if (target.roll(user, acc)) {
+            c.write(user, Formatter.format("{self:SUBJECT-ACTION:yank|yanks} {other:name-do}"
                             + " forward by the toy still connecting them, and "
-                            + " {other:pronoun-action} stumbles and falls.", getSelf(), target));
+                            + " {other:pronoun-action} stumbles and falls.", user, target));
             target.add(c, new Falling(target.getType()));
             if (Random.random(100) < removeChance) {
                 c.write("The powerful tug dislodges the toy, causing it to retract back where it was launched from.");
@@ -55,31 +54,31 @@ public class Yank extends Skill {
             }
             return true;
         } else {
-            c.write(getSelf(), Formatter.format("{self:SUBJECT-ACTION:pull|pulls} {other:name-do}"
+            c.write(user, Formatter.format("{self:SUBJECT-ACTION:pull|pulls} {other:name-do}"
                             + " forward by the toy still connecting them, but "
                             + " {other:pronoun-action:keep|keeps} {other:possessive}"
-                            + " balance.", getSelf(), target));
+                            + " balance.", user, target));
         }
         return false;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Yank(user.getType());
+        return new Yank();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 

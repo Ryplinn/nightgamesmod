@@ -4,7 +4,6 @@ import com.google.gson.JsonParseException;
 import nightgames.actions.Movement;
 import nightgames.areas.Area;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.NPC;
 import nightgames.characters.custom.CustomNPC;
 import nightgames.characters.custom.JsonSourceNPCDataLoader;
@@ -20,7 +19,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class SkillsTest {
 	private List<NPC> npcs1;
@@ -93,13 +92,14 @@ public class SkillsTest {
 		Combat c = new Combat(npc1, npc2, area, pos);
 		pos.checkOngoing(c);
 		if (c.getStance() == pos) {
-			for (Function<CharacterType, Skill> skillstructor : SkillPool.skillPool) {
+			for (Supplier<Skill> skillstructor : SkillPool.skillPool) {
 				Combat cloned = c.clone();
 				gameState.characterPool.setOtherCombatants(cloned.getOtherCombatants());
-				Skill used = skillstructor.apply(cloned.p1.getType());
-				if (Skill.skillIsUsable(cloned, used)) {
-					System.out.println("["+cloned.getStance().getClass().getSimpleName()+"] Skill usable: " + used.getLabel(cloned) + ".");
-					used.resolve(cloned, cloned.p2);
+				Skill used = skillstructor.get();
+				if (Skill.skillIsUsable(cloned, used, cloned.p1, cloned.p2)) {
+					System.out.println("["+cloned.getStance().getClass().getSimpleName()+"] Skill usable: " + used.getLabel(cloned,
+                                    cloned.p1) + ".");
+					used.resolve(cloned, cloned.p1, cloned.p2);
 				}
 				gameState.characterPool.setOtherCombatants(null);
 			}

@@ -12,12 +12,13 @@ import nightgames.skills.SkillPool;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class Aggressive extends DurationStatus {
 
     private static final Collection<Skill> CONTACT_SKILLS = Collections.unmodifiableSet(
-                    SkillPool.skillPool.stream().map((skillstructor) -> skillstructor.apply(CharacterType.get("dummy")))
+                    SkillPool.skillPool.stream().map(Supplier::get)
                                     .filter(Skill::makesContact).collect(Collectors.toSet()));
 
     private String cause;
@@ -54,7 +55,7 @@ public class Aggressive extends DurationStatus {
     public Collection<Skill> allowedSkills(Combat c) {
         return CONTACT_SKILLS.stream()
                         .filter(s -> s.requirements(c, getAffected(), c.getOpponent(getAffected()))
-                                        && Skill.skillIsUsable(c, s))
+                                        && Skill.skillIsUsable(c, s, getAffected()))
                         .map(s -> s.copy(getAffected())).collect(Collectors.toSet());
     }
 
@@ -93,7 +94,7 @@ public class Aggressive extends DurationStatus {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return 5;
     }
 

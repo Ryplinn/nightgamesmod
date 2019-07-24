@@ -20,7 +20,7 @@ public class FootjobStrategy extends KnockdownThenActionStrategy {
     @Override
     public double weight(Combat c, Character self) {
         double weight = .25;
-        if (!(new Footjob(self.getType())).requirements(c, self, c.getOpponent(self))) {
+        if (!(new Footjob()).requirements(c, self, c.getOpponent(self))) {
             return 0;
         }
         if (c.getOpponent(self).has(Trait.footfetishist)) {
@@ -38,8 +38,8 @@ public class FootjobStrategy extends KnockdownThenActionStrategy {
     @Override
     protected Optional<Set<Skill>> getPreferredSkills(Combat c, Character self, Set<Skill> allowedSkills) {
         Set<Skill> footjobSkills = allowedSkills.stream()
-                        .filter(skill -> (skill.getTags(c).contains(SkillTag.usesFeet))
-                                        && !skill.getTags(c).contains(SkillTag.suicidal))
+                        .filter(skill -> (skill.getTags(c, self).contains(SkillTag.usesFeet))
+                                        && !skill.getTags(c, self).contains(SkillTag.suicidal))
                         .collect(Collectors.toSet());
 
         if (!footjobSkills.isEmpty()) {
@@ -47,17 +47,17 @@ public class FootjobStrategy extends KnockdownThenActionStrategy {
         }
         if (!c.getOpponent(self).crotchAvailable()) {
             Set<Skill> strippingSkills = allowedSkills.stream()
-                            .filter(skill -> (skill.getTags(c).contains(SkillTag.stripping))
-                                            && !skill.getTags(c).contains(SkillTag.suicidal))
+                            .filter(skill -> (skill.getTags(c, self).contains(SkillTag.stripping))
+                                            && !skill.getTags(c, self).contains(SkillTag.suicidal))
                             .collect(Collectors.toSet());
             return Optional.of(strippingSkills);
         }
         
         if (!self.outfit.hasNoShoes()) {
-            return Optional.of(Collections.singleton(new TakeOffShoes(self.getType())));
+            return Optional.of(Collections.singleton(new TakeOffShoes()));
         }
 
-        StandUp standup = new StandUp(self.getType());
+        StandUp standup = new StandUp();
         if (allowedSkills.contains(standup)) {
             return Optional.of(Collections.singleton(standup));
         }

@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -16,23 +15,23 @@ import nightgames.status.Trance;
 
 public class Tempt extends Skill {
 
-    public Tempt(CharacterType self) {
-        super("Tempt", self);
+    public Tempt() {
+        super("Tempt");
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canRespond();
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canRespond();
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.normal, target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.normal, user, target);
         double m = 4 + Random.random(4);
 
-        if (c.getStance().front(getSelf())) {
+        if (c.getStance().front(user)) {
             // opponent can see self
-            m += getSelf().body.getHotness(target);
+            m += user.body.getHotness(target);
         }
 
         if (target.has(Trait.imagination)) {
@@ -42,28 +41,28 @@ public class Tempt extends Skill {
         int n = (int) Math.round(m);
 
         boolean tempted = Random.random(5) == 0;
-        if (getSelf().has(Trait.darkpromises) && tempted && !target.wary() && getSelf().canSpend(15)) {
-            getSelf().spendMojo(c, 15);
-            c.write(getSelf(),
+        if (user.has(Trait.darkpromises) && tempted && !target.wary() && user.canSpend(15)) {
+            user.spendMojo(c, 15);
+            c.write(user,
                             Formatter.format("{self:NAME-POSSESSIVE} words fall on fertile grounds. {other:NAME-POSSESSIVE} will to resist crumbles in light of {self:possessive} temptation.",
-                                            getSelf(), target));
-            target.add(c, new Enthralled(target.getType(), self, 3));
-        } else if (getSelf().has(Trait.commandingvoice) && Random.random(3) == 0) {
-            c.write(getSelf(), Formatter.format("{self:SUBJECT-ACTION:speak|speaks} with such unquestionable"
+                                            user, target));
+            target.add(c, new Enthralled(target.getType(), user.getType(), 3));
+        } else if (user.has(Trait.commandingvoice) && Random.random(3) == 0) {
+            c.write(user, Formatter.format("{self:SUBJECT-ACTION:speak|speaks} with such unquestionable"
                             + " authority that {other:subject-action:don't|doesn't} even consider disobeying."
-                            , getSelf(), target));
+                            , user, target));
             target.add(c, new Trance(target.getType(), 1, false));
-        } else if (getSelf().has(Trait.MelodiousInflection) && !target.is(Stsflag.charmed) && Random.random(3) == 0) {
-            c.write(getSelf(), Formatter.format("Something about {self:name-possessive} words, the"
+        } else if (user.has(Trait.MelodiousInflection) && !target.is(Stsflag.charmed) && Random.random(3) == 0) {
+            c.write(user, Formatter.format("Something about {self:name-possessive} words, the"
                             + " way {self:possessive} voice rises and falls, {self:possessive}"
                             + " pauses and pitch... {other:SUBJECT} soon {other:action:find|finds}"
-                            + " {other:reflective} utterly hooked.", getSelf(), target));
+                            + " {other:reflective} utterly hooked.", user, target));
             target.add(c, new Charmed(target.getType(), 2).withFlagRemoved(Stsflag.mindgames));
         }
 
-        target.temptNoSource(c, getSelf(), n, this);
+        target.temptNoSource(c, user, n, this);
         target.emote(Emotion.horny, 10);
-        getSelf().emote(Emotion.confident, 10);
+        user.emote(Emotion.confident, 10);
         return true;
     }
 
@@ -74,31 +73,31 @@ public class Tempt extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Tempt(user.getType());
+        return new Tempt();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 9;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
-        return getSelf().temptLiner(c, target);
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
+        return user.temptLiner(c, target);
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        return getSelf().temptLiner(c, target);
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        return user.temptLiner(c, target);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Tempts your opponent. More effective if they can see you.";
     }
 }

@@ -183,16 +183,16 @@ public class PetCharacter extends Character {
 
     public void act(Combat c, Character target) {
         List<Skill> allowedEnemySkills = getSkills().stream()
-                        .filter(skill -> Skill.skillIsUsable(c, skill, target) && Collections
-                                        .disjoint(skill.getTags(c), PET_UNUSABLE_TAG)).collect(Collectors.toList());
+                        .filter(skill -> Skill.skillIsUsable(c, skill, this, target) && Collections
+                                        .disjoint(skill.getTags(c, this), PET_UNUSABLE_TAG)).collect(Collectors.toList());
         Skill.filterAllowedSkills(c, allowedEnemySkills, this, target);        
 
         List<Skill> allowedMasterSkills = getSkills().stream()
-                        .filter(skill -> Skill.skillIsUsable(c, skill, getSelf().owner) && (
-                                        skill.getTags(c).contains(SkillTag.helping) || (
-                                                        getSelf().owner.has(Trait.showmanship) && skill.getTags(c)
+                        .filter(skill -> Skill.skillIsUsable(c, skill, this, getSelf().owner) && (
+                                        skill.getTags(c, this).contains(SkillTag.helping) || (
+                                                        getSelf().owner.has(Trait.showmanship) && skill.getTags(c, this)
                                                                         .contains(SkillTag.worship))) && Collections
-                                        .disjoint(skill.getTags(c), PET_UNUSABLE_TAG)).collect(Collectors.toList());
+                                        .disjoint(skill.getTags(c, this), PET_UNUSABLE_TAG)).collect(Collectors.toList());
         Skill.filterAllowedSkills(c, allowedMasterSkills, this, getSelf().owner);
         WeightedSkill bestEnemySkill = Decider.prioritizePet(this, target, allowedEnemySkills, c);
         WeightedSkill bestMasterSkill = Decider.prioritizePet(this, getSelf().owner, allowedMasterSkills, c);
@@ -208,18 +208,19 @@ public class PetCharacter extends Character {
 
         double roll = Random.randomdouble(masterSkillRating + enemySkillRating) - masterSkillRating;
         if (DebugFlags.isDebugOn(DebugFlags.DEBUG_PET)) {
-            System.out.printf("Rolled %s for master skill: %s [%.2f] and %s [%.2f]\n", roll, bestMasterSkill.skill.getLabel(c), -masterSkillRating, bestEnemySkill.skill.getLabel(c), enemySkillRating);
+            System.out.printf("Rolled %s for master skill: %s [%.2f] and %s [%.2f]\n", roll, bestMasterSkill.skill.getLabel(c,
+                            this), -masterSkillRating, bestEnemySkill.skill.getLabel(c, this), enemySkillRating);
         }
         if (roll >= 0) {
             if (DebugFlags.isDebugOn(DebugFlags.DEBUG_PET)) {
-                System.out.println("Using enemy skill " + bestEnemySkill.skill.getLabel(c));
+                System.out.println("Using enemy skill " + bestEnemySkill.skill.getLabel(c, this));
             }
-            Skill.resolve(bestEnemySkill.skill, c, target);
+            Skill.resolve(bestEnemySkill.skill, c, this, target);
         } else {
             if (DebugFlags.isDebugOn(DebugFlags.DEBUG_PET)) {
-                System.out.println("Using master skill " + bestMasterSkill.skill.getLabel(c));
+                System.out.println("Using master skill " + bestMasterSkill.skill.getLabel(c, this));
             }
-            Skill.resolve(bestMasterSkill.skill, c, self.owner());
+            Skill.resolve(bestMasterSkill.skill, c, this, self.owner());
         }
     }
 

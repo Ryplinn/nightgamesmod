@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -16,8 +15,8 @@ import nightgames.skills.damage.DamageType;
 
 public class Stomp extends Skill {
 
-    public Stomp(CharacterType self) {
-        super("Stomp", self);
+    public Stomp() {
+        super("Stomp");
         addTag(SkillTag.usesFeet);
         addTag(SkillTag.physical);
         addTag(SkillTag.hurt);
@@ -27,41 +26,41 @@ public class Stomp extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return !c.getStance().prone(getSelf()) && c.getStance().prone(target) && c.getStance().feet(getSelf(), target)
-                        && getSelf().canAct() && !c.getStance().inserted(target);
+    public boolean usable(Combat c, Character user, Character target) {
+        return !c.getStance().prone(user) && c.getStance().prone(target) && c.getStance().feet(user, target)
+                        && user.canAct() && !c.getStance().inserted(target);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 20;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         int pain = Random.random(1, 10);
         if (target.has(Trait.brassballs)) {
-            if (getSelf().has(Trait.heeldrop) && target.crotchAvailable() && target.hasBalls()) {
-                if (getSelf().human()) {
-                    c.write(getSelf(), deal(c, 0, Result.strong, target));
+            if (user.has(Trait.heeldrop) && target.crotchAvailable() && target.hasBalls()) {
+                if (user.human()) {
+                    c.write(user, deal(c, 0, Result.strong, user, target));
                 } else if (c.shouldPrintReceive(target, c)) {
-                    c.write(getSelf(), receive(c, 0, Result.strong, target));
+                    c.write(user, receive(c, 0, Result.strong, user, target));
                     if (target.hasBalls() && Random.random(5) >= 1) {
-                        c.write(getSelf(), getSelf().bbLiner(c, target));
+                        c.write(user, user.bbLiner(c, target));
                     }
                 }
                 pain = 15 - (int) Math
                                 .round((5 + Random.random(5)) * target.getOutfit().getExposure(ClothingSlot.bottom));
             } else {
-                writeOutput(c, Result.weak2, target);
+                writeOutput(c, Result.weak2, user, target);
             }
-        } else if (getSelf().has(Trait.heeldrop) && target.crotchAvailable()) {
-            if (getSelf().human()) {
-                c.write(getSelf(), deal(c, 0, Result.special, target));
+        } else if (user.has(Trait.heeldrop) && target.crotchAvailable()) {
+            if (user.human()) {
+                c.write(user, deal(c, 0, Result.special, user, target));
             } else if (c.shouldPrintReceive(target, c)) {
-                c.write(getSelf(), receive(c, 0, Result.special, target));
+                c.write(user, receive(c, 0, Result.special, user, target));
                 if (target.hasBalls() && Random.random(5) >= 1) {
-                    c.write(getSelf(), getSelf().bbLiner(c, target));
+                    c.write(user, user.bbLiner(c, target));
                 }
             }
             if (target.has(Trait.achilles)) {
@@ -69,22 +68,22 @@ public class Stomp extends Skill {
             }
             pain += 40 - (int) Math.round((5 + Random.random(5)) * target.getOutfit().getExposure(ClothingSlot.bottom));
         } else if (target.has(ClothingTrait.armored)) {
-            writeOutput(c, Result.weak, target);
+            writeOutput(c, Result.weak, user, target);
             pain += 15 - (int) Math.round((2 + Random.random(3)) * target.getOutfit().getExposure(ClothingSlot.bottom));
         } else {
-            if (getSelf().human()) {
-                c.write(getSelf(), deal(c, 0, Result.normal, target));
+            if (user.human()) {
+                c.write(user, deal(c, 0, Result.normal, user, target));
             } else if (c.shouldPrintReceive(target, c)) {
-                c.write(getSelf(), receive(c, 0, Result.normal, target));
+                c.write(user, receive(c, 0, Result.normal, user, target));
                 if (target.hasBalls() && Random.random(5) >= 1) {
-                    c.write(getSelf(), getSelf().bbLiner(c, target));
+                    c.write(user, user.bbLiner(c, target));
                 }
             }
             pain += 20;
             pain += 20 - (int) Math
                             .round((10 + Random.random(10)) * target.getOutfit().getExposure(ClothingSlot.bottom));
         }
-        target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, pain));
+        target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, pain));
         target.emote(Emotion.angry, 25);
         return true;
     }
@@ -96,30 +95,30 @@ public class Stomp extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Stomp(user.getType());
+        return new Stomp();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 4;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.damage;
     }
 
     @Override
-    public String getLabel(Combat c) {
-        if (getSelf().has(Trait.heeldrop)) {
+    public String getLabel(Combat c, Character user) {
+        if (user.has(Trait.heeldrop)) {
             return "Double Legdrop";
         } else {
-            return getName(c);
+            return getName(c, user);
         }
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.special) {
             if (target.hasBalls()) {
                 return "You push " + target.getName()
@@ -161,21 +160,21 @@ public class Stomp extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.special) {
             return String.format("%s forces %s legs open and begins prodding %s genitals with %s foot. "
                             + "%s slightly aroused by %s attention, but %s is not giving "
                             + "%s a proper footjob, %s is mostly just playing with %s balls. Too late, "
                             + "%s that %s is actually lining up %s targets. Two torrents of pain "
                             + "erupt from %s delicates as %s feet crash down on them.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(),
-                            target.possessiveAdjective(), getSelf().possessiveAdjective(),
+                            user.subject(), target.nameOrPossessivePronoun(),
+                            target.possessiveAdjective(), user.possessiveAdjective(),
                             Formatter.capitalizeFirstLetter(target.subjectAction("are", "is")),
-                            getSelf().nameOrPossessivePronoun(), getSelf().pronoun(),
-                            target.directObject(), getSelf().pronoun(), target.possessiveAdjective(),
-                            target.subjectAction("realize"), getSelf().pronoun(),
-                            getSelf().possessiveAdjective(), target.nameOrPossessivePronoun(),
-                            getSelf().nameOrPossessivePronoun());
+                            user.nameOrPossessivePronoun(), user.pronoun(),
+                            target.directObject(), user.pronoun(), target.possessiveAdjective(),
+                            target.subjectAction("realize"), user.pronoun(),
+                            user.possessiveAdjective(), target.nameOrPossessivePronoun(),
+                            user.nameOrPossessivePronoun());
         } else if (modifier == Result.strong) {
             return String.format(
                             "%s forces %s legs out of the way and then starts using %s "
@@ -183,32 +182,32 @@ public class Stomp extends Skill {
                                             + " worse, when %s suddenly lifts the foot up and slams it back down with"
                                             + " great force. %s often feel much pain from %s balls, but the"
                                             + " enormous impact still hurts a lot.",
-                            getSelf().getName(), target.nameOrPossessivePronoun(),
-                            getSelf().possessiveAdjective(), target.possessiveAdjective(),
+                            user.getName(), target.nameOrPossessivePronoun(),
+                            user.possessiveAdjective(), target.possessiveAdjective(),
                             target.body.getRandomCock().describe(target), 
                             Formatter.capitalizeFirstLetter(target.subjectAction("were", "was")),
-                            getSelf().pronoun(), 
+                            user.pronoun(),
                             Formatter.capitalizeFirstLetter(target.subjectAction("were", "was")),
                             target.possessiveAdjective());
         } else if (modifier == Result.weak2) {
             return String.format("%s forces %s legs open and brutally stomps %s "
                             + "balls. Despite the great blow, %s feel much pain.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(),
+                            user.subject(), target.nameOrPossessivePronoun(),
                             target.possessiveAdjective(), target.subjectAction("don't", "doesn't"));
         } else if (modifier == Result.weak) {
             return String.format("%s grabs %s ankles and stomps down on %s armored groin, doing little damage.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(), target.possessiveAdjective());
+                            user.subject(), target.nameOrPossessivePronoun(), target.possessiveAdjective());
         } else {
             return String.format("%s grabs %s ankles and stomps down on %s unprotected "
                             + "jewels. %s up in the fetal position, groaning in agony.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(),
+                            user.subject(), target.nameOrPossessivePronoun(),
                             target.possessiveAdjective(),
                             Formatter.capitalizeFirstLetter(target.subjectAction("curl")));
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Stomps on your opponent's groin for extreme damage";
     }
 

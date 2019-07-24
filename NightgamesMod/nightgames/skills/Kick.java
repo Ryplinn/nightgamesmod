@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -16,8 +15,8 @@ import nightgames.skills.damage.DamageType;
 
 public class Kick extends Skill {
 
-    public Kick(CharacterType self) {
-        super("Kick", self);
+    public Kick() {
+        super("Kick");
         addTag(SkillTag.hurt);
         addTag(SkillTag.staminaDamage);
         addTag(SkillTag.positioning);
@@ -29,44 +28,44 @@ public class Kick extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().feet(getSelf(), target) && getSelf().canAct() && (!c.getStance().prone(getSelf())
-                        || getSelf().has(Trait.dirtyfighter) && !c.getStance().connected(c));
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().feet(user, target) && user.canAct() && (!c.getStance().prone(user)
+                        || user.has(Trait.dirtyfighter) && !c.getStance().connected(c));
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 5;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 90;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.getOutfit().slotShreddable(ClothingSlot.bottom) && getSelf().get(Attribute.ki) >= 14
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.getOutfit().slotShreddable(ClothingSlot.bottom) && user.get(Attribute.ki) >= 14
                         && Random.random(3) == 2) {
-            writeOutput(c, Result.special, target);
+            writeOutput(c, Result.special, user, target);
             target.shred(ClothingSlot.bottom);
-        } else if (target.roll(getSelf(), accuracy(c, target))) {
+        } else if (target.roll(user, accuracy(c, user, target))) {
             double m = Random.random(16, 21);
             if (target.has(Trait.brassballs)) {
                 m *= .8;
             }
-            if (getSelf().human()) {
-                if (c.getStance().prone(getSelf())) {
-                    c.write(getSelf(), deal(c, 0, Result.strong, target));
+            if (user.human()) {
+                if (c.getStance().prone(user)) {
+                    c.write(user, deal(c, 0, Result.strong, user, target));
                 } else {
-                    c.write(getSelf(), deal(c, 0, Result.normal, target));
+                    c.write(user, deal(c, 0, Result.normal, user, target));
 
                 }
             } else if (c.shouldPrintReceive(target, c)) {
-                if (c.getStance().prone(getSelf())) {
-                    c.write(getSelf(), receive(c, 0, Result.strong, target));
+                if (c.getStance().prone(user)) {
+                    c.write(user, receive(c, 0, Result.strong, user, target));
                 } else {
-                    c.write(getSelf(), receive(c, 0, Result.normal, target));
+                    c.write(user, receive(c, 0, Result.normal, user, target));
                 }
             }
             if (target.has(Trait.achilles) && !target.has(ClothingTrait.armored)) {
@@ -75,10 +74,10 @@ public class Kick extends Skill {
             if (target.has(ClothingTrait.armored)) {
                 m = m / 2;
             }
-            target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, m));
+            target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, m));
             target.emote(Emotion.angry, 20);
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
         return true;
@@ -86,22 +85,22 @@ public class Kick extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Kick(user.getType());
+        return new Kick();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 8;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.damage;
     }
 
     @Override
-    public String getLabel(Combat c) {
-        if (getSelf().get(Attribute.ki) >= 14) {
+    public String getLabel(Combat c, Character user) {
+        if (user.get(Attribute.ki) >= 14) {
             return "Shatter Kick";
         } else {
             return "Kick";
@@ -109,7 +108,7 @@ public class Kick extends Skill {
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "Your kick hits nothing but air.";
         }
@@ -130,28 +129,28 @@ public class Kick extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
-            return getSelf().getName() + "'s kick hits nothing but air.";
+            return user.getName() + "'s kick hits nothing but air.";
         }
         if (modifier == Result.special) {
             return Formatter.format("{self:SUBJECT} launches a powerful kick straight at {other:name-possessive} groin, but pulls it back "
                             + "just before impact. {other:pronoun-action:feel|feels} a chill run down {other:possessive} spine and {other:possessive} {other:balls-vulva} "
                             + "are grateful for the last second reprieve. {other:POSSESSIVE} %s crumble off {other:possessive} body,"
-                            + " practically disintegrating.... Still somewhat grateful.", getSelf(), target,
+                            + " practically disintegrating.... Still somewhat grateful.", user, target,
                             target.getOutfit().getTopOfSlot(ClothingSlot.bottom).getName());
         }
         if (modifier == Result.strong) {
             return Formatter.format("With {other:name-do} flat on {other:possessive} back, {self:subject-action:quickly move|quickly moves} in to press {self:possessive} advantage. "
                             + "Faster than {other:pronoun} can react, {self:possessive} foot shoots up between "
-                            + "{other:possessive} legs, dealing a critical hit on {other:possessive} unprotected {other:balls-vulva}.", getSelf(), target);
+                            + "{other:possessive} legs, dealing a critical hit on {other:possessive} unprotected {other:balls-vulva}.", user, target);
         } else {
-            return Formatter.format("{self:NAME-POSSESSIVE} foot lashes out into {other:name-possessive} delicate {other:balls-vulva} with devastating force.", getSelf(), target);
+            return Formatter.format("{self:NAME-POSSESSIVE} foot lashes out into {other:name-possessive} delicate {other:balls-vulva} with devastating force.", user, target);
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Kick your opponent in the groin";
     }
 

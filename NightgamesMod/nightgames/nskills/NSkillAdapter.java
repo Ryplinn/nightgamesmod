@@ -12,7 +12,7 @@ public class NSkillAdapter extends Skill {
     SkillInterface skill;
 
     public NSkillAdapter(Character user, SkillInterface skill) {
-        super(skill.getName(), user.getType());
+        super(skill.getName());
         this.skill = skill;
     }
 
@@ -22,19 +22,19 @@ public class NSkillAdapter extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return skill.getHighestPriorityUsableResult(c, getSelf(), target).isPresent();
+    public boolean usable(Combat c, Character user, Character target) {
+        return skill.getHighestPriorityUsableResult(c, user, target).isPresent();
     }
 
     @Override
-    public String describe(Combat c) {
-        Optional<SkillResult> maybeResult = skill.getHighestPriorityUsableResult(c, getSelf(), c.getOpponent(getSelf()));
+    public String describe(Combat c, Character user) {
+        Optional<SkillResult> maybeResult = skill.getHighestPriorityUsableResult(c, user, c.getOpponent(user));
         return maybeResult.isPresent() ? maybeResult.get().getDescription() : "";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        return skill.resolve(c, getSelf(), target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        return skill.resolve(c, user, target);
     }
 
     @Override
@@ -43,17 +43,17 @@ public class NSkillAdapter extends Skill {
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.misc;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return "";
     }
 }

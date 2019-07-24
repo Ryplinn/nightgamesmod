@@ -44,8 +44,8 @@ public class CustomModifierLoaderTest {
         assertThat(mod.clothing.toString(), equalTo("underwear-only, Forced:[jacket]"));
         assertThat(mod.status, equalTo(StatusModifier.combiner.nullModifier()));
         assertThat(mod.skills.bannedTactics(), IsCollectionContaining.hasItem(Tactics.fucking));
-        assertThat(mod.skills.encouragedSkills(), allOf(IsMapContaining.hasEntry(new Blowjob(player.getType()), 1.0),
-                        IsMapContaining.hasEntry((Skill) new Kick(player.getType()), -2.0)));
+        assertThat(mod.skills.encouragedSkills(), allOf(IsMapContaining.hasEntry(new Blowjob(), 1.0),
+                        IsMapContaining.hasEntry((Skill) new Kick(), -2.0)));
         assertThat(mod.skills.toString(), equalTo("Banned:[fucking], Encouraged:{Blow=1.0, Kick=-2.0}"));
         assertThat(mod.actions.bannedActions(), IsCollectionContaining.hasItem(new Locate()));
         assertThat(mod.custom, equalTo(BaseModifier.EMPTY_CONSUMER));

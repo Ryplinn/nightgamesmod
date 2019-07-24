@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -11,8 +10,8 @@ import nightgames.stance.HeldPaizuri;
 import nightgames.stance.Stance;
 
 public class PinningPaizuri extends Skill {
-    PinningPaizuri(CharacterType self) {
-        super("Titfuck Pin", self);
+    PinningPaizuri() {
+        super("Titfuck Pin");
         addTag(SkillTag.positioning);
         addTag(SkillTag.pleasure);
         addTag(SkillTag.oral);
@@ -29,79 +28,79 @@ public class PinningPaizuri extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().mobile(getSelf())
-                && c.getStance().dom(getSelf())
-                && c.getStance().facing(getSelf(), target)
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().mobile(user)
+                && c.getStance().dom(user)
+                && c.getStance().facing(user, target)
                 && (c.getStance().prone(target)  ||  c.getStance().en == Stance.paizuripin)
-                && target.crotchAvailable() && getSelf().canAct()
+                && target.crotchAvailable() && user.canAct()
                 && !c.getStance().connected(c)
                 && c.getStance().en != Stance.paizuripin
-                && getSelf().hasBreasts() && getSelf().body.getLargestBreasts().getSize() >= MIN_REQUIRED_BREAST_SIZE
-                && target.hasDick() && getSelf().breastsAvailable() && target.crotchAvailable();
+                && user.hasBreasts() && user.body.getLargestBreasts().getSize() >= MIN_REQUIRED_BREAST_SIZE
+                && target.hasDick() && user.breastsAvailable() && target.crotchAvailable();
     }
 
     @Override
-    public float priorityMod(Combat c) {
+    public float priorityMod(Combat c, Character user) {
         return 0;
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 5;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.normal, target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.normal, user, target);
         
-        c.setStance(new HeldPaizuri(self, target.getType()), getSelf(), true);
+        c.setStance(new HeldPaizuri(user.getType(), target.getType()), user, true);
      
-        new Paizuri(self).resolve(c, target);
+        new Paizuri().resolve(c, user, target);
         
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new PinningPaizuri(user.getType());
+        return new PinningPaizuri();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 5;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
-        return receive(c, damage, modifier, target);
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
+        return receive(c, damage, modifier, user, target);
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         
         
         if( c.getStance().en == Stance.oralpin)
         {
             return Formatter.format(
                             "{self:SUBJECT-ACTION:free|frees} {other:possessive} cock from her mouth, and quickly {self:action:wrap|wraps} {self:possessive} breasts around {other:possessive} cock.",
-                            getSelf(), target);
+                            user, target);
         }else
         {
             return Formatter.format(
                             "{self:SUBJECT-ACTION:bow|bows} {other:name-do} over, and {self:action:wrap|wraps} {self:possessive} breasts around {other:possessive} cock.",
-                            getSelf(), target);
+                            user, target);
         }             
         
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Hold your opponent down and use your tits";
     }
 

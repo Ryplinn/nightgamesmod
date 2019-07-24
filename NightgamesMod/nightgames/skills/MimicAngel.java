@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.WingsPart;
@@ -18,8 +17,8 @@ import nightgames.status.Stsflag;
 
 public class MimicAngel extends Skill {
 
-    MimicAngel(CharacterType self) {
-        super("Mimicry: Angel", self);
+    MimicAngel() {
+        super("Mimicry: Angel");
     }
 
     @Override
@@ -28,85 +27,85 @@ public class MimicAngel extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canRespond() && !getSelf().is(Stsflag.mimicry) && GameState.getGameState().characterPool.getNPC("Angel").has(Trait.demigoddess);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canRespond() && !user.is(Stsflag.mimicry) && GameState.getGameState().characterPool.getNPC("Angel").has(Trait.demigoddess);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Mimics an angel's powers";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (getSelf().human()) {
-            c.write(getSelf(), deal(c, 0, Result.normal, target));
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (user.human()) {
+            c.write(user, deal(c, 0, Result.normal, user, target));
         } else if (c.shouldPrintReceive(target, c)) {
             if (!target.is(Stsflag.blinded))
-                c.write(getSelf(), receive(c, 0, Result.normal, target));
+                c.write(user, receive(c, 0, Result.normal, user, target));
             else 
-                printBlinded(c);
+                printBlinded(c, user);
         }
-        if (getSelf().has(Trait.ImitatedStrength)) {
-            getSelf().addTemporaryTrait(Trait.divinity, 10);
-            if (getSelf().getLevel() >= 20) {
-                getSelf().addTemporaryTrait(Trait.objectOfWorship, 10);
+        if (user.has(Trait.ImitatedStrength)) {
+            user.addTemporaryTrait(Trait.divinity, 10);
+            if (user.getLevel() >= 20) {
+                user.addTemporaryTrait(Trait.objectOfWorship, 10);
             }
-            if (getSelf().getLevel() >= 28) {
-                getSelf().addTemporaryTrait(Trait.lastStand, 10);
+            if (user.getLevel() >= 28) {
+                user.addTemporaryTrait(Trait.lastStand, 10);
             }
-            if (getSelf().getLevel() >= 36) {
-                getSelf().addTemporaryTrait(Trait.erophage, 10);
+            if (user.getLevel() >= 36) {
+                user.addTemporaryTrait(Trait.erophage, 10);
             }
-            if (getSelf().getLevel() >= 44) {
-                getSelf().addTemporaryTrait(Trait.sacrosanct, 10);
+            if (user.getLevel() >= 44) {
+                user.addTemporaryTrait(Trait.sacrosanct, 10);
             }
-            if (getSelf().getLevel() >= 52) {
-                getSelf().addTemporaryTrait(Trait.genuflection, 10);
+            if (user.getLevel() >= 52) {
+                user.addTemporaryTrait(Trait.genuflection, 10);
             }
-            if (getSelf().getLevel() >= 60) {
-                getSelf().addTemporaryTrait(Trait.revered, 10);
+            if (user.getLevel() >= 60) {
+                user.addTemporaryTrait(Trait.revered, 10);
             }
         }
-        getSelf().body.temporaryAddOrReplacePartWithType(WingsPart.angelicslime, 10);
-        BreastsPart part = getSelf().body.getBreastsBelow(BreastsPart.h.getSize());
+        user.body.temporaryAddOrReplacePartWithType(WingsPart.angelicslime, 10);
+        BreastsPart part = user.body.getBreastsBelow(BreastsPart.h.getSize());
         if (part != null) {
-            getSelf().body.temporaryAddOrReplacePartWithType(part.upgrade().upgrade(), 10);
+            user.body.temporaryAddOrReplacePartWithType(part.upgrade().upgrade(), 10);
         }
-        int strength = Math.max(10, getSelf().get(Attribute.slime)) * 2 / 3;
-        if (getSelf().has(Trait.Masquerade)) {
+        int strength = Math.max(10, user.get(Attribute.slime)) * 2 / 3;
+        if (user.has(Trait.Masquerade)) {
             strength = strength * 3 / 2;
         }
-        getSelf().add(c, new AttributeBuff(self, Attribute.divinity, strength, 10));
-        getSelf().add(c, new SlimeMimicry("angel", self, 10));
-        getSelf().body.temporaryAddPartMod("pussy", DivineMod.INSTANCE, 10);
-        getSelf().body.temporaryAddPartMod("cock", CockMod.blessed, 10);
+        user.add(c, new AttributeBuff(user.getType(), Attribute.divinity, strength, 10));
+        user.add(c, new SlimeMimicry("angel", user.getType(), 10));
+        user.body.temporaryAddPartMod("pussy", DivineMod.INSTANCE, 10);
+        user.body.temporaryAddPartMod("cock", CockMod.blessed, 10);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new MimicAngel(user.getType());
+        return new MimicAngel();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You shift your slime and start mimicking Angel's... angel form.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return Formatter.format("{self:NAME-POSSESSIVE} amorphous body jiggles violently and she shrinks her body into a sphere. "
                         + "{other:SUBJECT} cautiously {other:action:approach|approaches} the unknown object, but hesitate when {other:pronoun-action:see|sees} it suddenly turns pure white "
                         + "as if someone dumped a bucket of bleach on it. "
                         + "The sphere unwraps itself in layers, with each layer forming a pair of pristine translucent gelatinous feathered wings. "
                         + "{self:NAME} {self:reflective} stands up in the center, giving {other:name-do} a haughty look. "
-                        + "Looks like {self:NAME} is mimicking Angel's er... angel form!", getSelf(), target);
+                        + "Looks like {self:NAME} is mimicking Angel's er... angel form!", user, target);
     }
 
 }

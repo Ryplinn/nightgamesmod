@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -11,8 +10,8 @@ import nightgames.status.Distorted;
 
 public class Illusions extends Skill {
 
-    public Illusions(CharacterType self) {
-        super("Illusions", self);
+    public Illusions() {
+        super("Illusions");
     }
 
     @Override
@@ -21,51 +20,51 @@ public class Illusions extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance().mobile(getSelf()) && !c.getStance().prone(getSelf());
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && c.getStance().mobile(user) && !c.getStance().prone(user);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 20;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Create illusions to act as cover: 20 Mojo";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.normal, target);
-        getSelf().add(c, new Distorted(self, 6));
-        getSelf().add(c, new Alluring(self, 5));
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.normal, user, target);
+        user.add(c, new Distorted(user.getType(), 6));
+        user.add(c, new Alluring(user.getType(), 5));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Illusions(user.getType());
+        return new Illusions();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You cast an illusion spell to create several images of yourself. At the same time, you add a charm to make yourself irresistible.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format("%s casts a brief spell and %s vision is filled with "
                         + "naked copies of %s. %s can still tell which %s is real,"
                         + " but it's still a distraction. At the same "
-                        + "time, %s suddenly looks irresistible.", getSelf().subject(),
-                        target.nameOrPossessivePronoun(), getSelf().directObject(),
-                        Formatter.capitalizeFirstLetter(target.pronoun()), getSelf().getName(),
-                        getSelf().nameDirectObject());
+                        + "time, %s suddenly looks irresistible.", user.subject(),
+                        target.nameOrPossessivePronoun(), user.directObject(),
+                        Formatter.capitalizeFirstLetter(target.pronoun()), user.getName(),
+                        user.nameDirectObject());
     }
 }

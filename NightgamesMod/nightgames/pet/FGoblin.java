@@ -58,7 +58,7 @@ public class FGoblin extends Pet {
                         own(),opponent.own(),own(),opponent.own()));
                 break;
             default:
-                (new GoblinTease(getSelf().getType())).resolve(c, opponent.getSelf());
+                (new GoblinTease()).resolve(c, getSelf(), opponent.getSelf());
                 return;
             }
         c.removePet(opponent.getSelf());

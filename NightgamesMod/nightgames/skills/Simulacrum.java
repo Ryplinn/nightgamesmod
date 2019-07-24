@@ -9,67 +9,67 @@ import nightgames.pet.CharacterPet;
 import nightgames.pet.Pet;
 
 public class Simulacrum extends Skill {
-    public Simulacrum(CharacterType self) {
-        super("Simulacrum", self);
+    public Simulacrum() {
+        super("Simulacrum");
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().get(Attribute.divinity) >= 12;
+        return user.get(Attribute.divinity) >= 12;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance().mobile(getSelf()) && !c.getStance().prone(getSelf())
-                        && c.getPetsFor(getSelf()).size() < getSelf().getPetLimit() && !target.isPet();
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && c.getStance().mobile(user) && !c.getStance().prone(user)
+                        && c.getPetsFor(user).size() < user.getPetLimit() && !target.isPet();
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 30;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Summons a copy of your opponent to assist you.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         Pet pet;
-        int power = Math.max(10, getSelf().getLevel() - 2);
+        int power = Math.max(10, user.getLevel() - 2);
         int ac = 4 + power / 3;
 
         String cloneName = String.format("%s clone", target.nameOrPossessivePronoun());
         if (target instanceof Player) {
-            pet = new CharacterPet(cloneName, getSelf(), target, power, ac);
+            pet = new CharacterPet(cloneName, user, target, power, ac);
         } else if (target instanceof NPC) {
-            pet = new CharacterPet(cloneName, getSelf(), target, power, ac);
+            pet = new CharacterPet(cloneName, user, target, power, ac);
         } else {
-            c.write(getSelf(), formatMessage(Result.miss, CharacterSex.asexual, CharacterSex.asexual, target));
+            c.write(user, formatMessage(Result.miss, CharacterSex.asexual, CharacterSex.asexual, user, target));
             return false;
         }
-        c.addPet(getSelf(), pet.getSelf());
+        c.addPet(user, pet.getSelf());
         CharacterSex initialSex = pet.getSelf().body.guessCharacterSex();
         pet.getSelf().body.autoTG();
         CharacterSex finalSex = pet.getSelf().body.guessCharacterSex();
-        c.write(getSelf(), formatMessage(Result.normal, initialSex, finalSex, target));
+        c.write(user, formatMessage(Result.normal, initialSex, finalSex, user, target));
 
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Simulacrum(user.getType());
+        return new Simulacrum();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.summoning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "unused";
     }
     
@@ -103,21 +103,22 @@ public class Simulacrum extends Skill {
         }
     }
 
-    private String formatMessage(Result modifier, CharacterSex initialSex, CharacterSex finalSex, Character target) {
-        if (getSelf().human()) {
+    private String formatMessage(Result modifier, CharacterSex initialSex, CharacterSex finalSex, Character user,
+                    Character target) {
+        if (user.human()) {
             if (modifier == Result.miss) {
                 return Formatter.format("Reaching into your divine spark, you command {other:name-possessive} very soul to serve you. "
-                                + "{other:PRONOUN} looks momentarily confused as nothing happened.", getSelf(), target);
+                                + "{other:PRONOUN} looks momentarily confused as nothing happened.", user, target);
             }
             return Formatter.format("Reaching into your divine spark, you command {other:name-possessive} very soul to serve you. "
                             + "{other:PRONOUN} looks confused for a second before suddenly noticing a translucent figure shifting into existence between you and {other:direct-object}. "
-                            + "The projection stabilizes into a split image of {other:name-do}!", getSelf(), target);
+                            + "The projection stabilizes into a split image of {other:name-do}!", user, target);
         } else {
             if (modifier == Result.miss) {
                 return Formatter.format("{self:SUBJECT} closes {self:possessive} eyes momentarily before slowly rising into the air. "
                                 + "{other:SUBJECT-ACTION:are|is} not sure what {self:pronoun} is up to, but it's definitely not good for {other:direct-object}. "
                                 + "Fortunately, {other:subject:were|was} close enough to leap at {self:direct-object} and interrupt whatever {self:pronoun} was trying to do.", 
-                                getSelf(), target);
+                                user, target);
             }
             return Formatter.format("{self:SUBJECT} closes {self:possessive} eyes momentarily before slowly rising into the air. "
                             + "{other:SUBJECT-ACTION:are|is} not sure what {self:pronoun} is up to, but it's definitely not good for {other:direct-object}. "
@@ -127,12 +128,12 @@ public class Simulacrum extends Skill {
                             + "but when {other:pronoun-action:raise|raises} {other:possessive} head, {other:subject-action:see|sees} a figure kneeling before {self:name-do}. "
                             + "<br/><br/>"
                             + getSubText(initialSex, finalSex)
-                            + "You're now fighting your own clone!", getSelf(), target);
+                            + "You're now fighting your own clone!", user, target);
         }
     }
     
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return "unused";
     }
 }

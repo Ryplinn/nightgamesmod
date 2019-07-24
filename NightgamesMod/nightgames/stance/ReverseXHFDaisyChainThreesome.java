@@ -45,7 +45,7 @@ public class ReverseXHFDaisyChainThreesome extends Threesome {
                 return Optional.of(new Doggy(top, bottom));
             }
         }
-        return Optional.empty();
+        return super.checkOngoing(c);
     }
 
     @Override
@@ -177,8 +177,8 @@ public class ReverseXHFDaisyChainThreesome extends Threesome {
         } else {
             return self.getSkills().stream()
                             .filter(skill -> skill.requirements(c, self, getBottom()))
-                            .filter(skill -> Skill.skillIsUsable(c, skill, getBottom()))
-                            .filter(skill -> skill.type(c) == Tactics.fucking).collect(Collectors.toSet());
+                            .filter(skill -> Skill.skillIsUsable(c, skill, self, getBottom()))
+                            .filter(skill -> skill.type(c, self) == Tactics.fucking).collect(Collectors.toSet());
         }
     }
 }

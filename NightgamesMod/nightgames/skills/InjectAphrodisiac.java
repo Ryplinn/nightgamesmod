@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -12,62 +11,62 @@ import nightgames.status.Horny;
 import nightgames.status.InducedEuphoria;
 
 public class InjectAphrodisiac extends Skill {
-    private InjectAphrodisiac(CharacterType self) {
-        super("Inject Aphrodisiac", self);
+    private InjectAphrodisiac() {
+        super("Inject Aphrodisiac");
     }
 
     public boolean requirements(Combat c, Character user, Character target) {
         return user.get(Attribute.medicine) >= 4;
     }
 
-    public boolean usable(Combat c, Character target) {
-        return (c.getStance().mobile(this.getSelf())) && (this.getSelf().has(Item.Aphrodisiac) && (!getSelf().human()))
-                        && (this.getSelf().canAct()) && getSelf().has(Item.MedicalSupplies, 1)
-                        && (!c.getStance().mobile(this.getSelf()) || !target.canAct());
+    public boolean usable(Combat c, Character user, Character target) {
+        return (c.getStance().mobile(user)) && (user.has(Item.Aphrodisiac) && (!user.human()))
+                        && (user.canAct()) && user.has(Item.MedicalSupplies, 1)
+                        && (!c.getStance().mobile(user) || !target.canAct());
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 25;
     }
 
-    public boolean resolve(Combat c, Character target) {
-        int magnitude = 2 + getSelf().get(Attribute.medicine);
-        if (this.getSelf().human()) {
-            c.write(getSelf(), deal(c, magnitude, Result.normal, target));
+    public boolean resolve(Combat c, Character user, Character target) {
+        int magnitude = 2 + user.get(Attribute.medicine);
+        if (user.human()) {
+            c.write(user, deal(c, magnitude, Result.normal, user, target));
         } else {
-            c.write(getSelf(), receive(c, magnitude, Result.normal, this.getSelf()));
+            c.write(user, receive(c, magnitude, Result.normal, user, user));
         }
         target.emote(Emotion.horny, 20);
-        this.getSelf().consume(Item.Aphrodisiac, 1);
-        target.add(c, Horny.getWithBiologicalType(getSelf(), target, magnitude, 10, "Aphrodisac Injection"));
+        user.consume(Item.Aphrodisiac, 1);
+        target.add(c, Horny.getWithBiologicalType(user, target, magnitude, 10, "Aphrodisac Injection"));
         target.add(c, new InducedEuphoria(target.getType()));
-        getSelf().consume(Item.MedicalSupplies, 1);
+        user.consume(Item.MedicalSupplies, 1);
 
         return true;
     }
 
     public Skill copy(Character user) {
-        return new InjectAphrodisiac(user.getType());
+        return new InjectAphrodisiac();
     }
 
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return Formatter.format(
                         "You quickly grab one of your syringes full of potent aphrodisiac before grabbing {other:name-do} and injecting {other:direct-object} with its contents. After you do so you see a bright flush spread across {other:possessive} face and {other:possessive} breathing picks up.",
-                        getSelf(), target);
+                        user, target);
     }
 
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return Formatter.format(
                         "{self:SUBJECT} grins as {self:pronoun} flashes a hypodermic needle filled with light purple liquid. {other:SUBJECT-ACTION:gasp|gasps} as {self:pronoun} grab {other:possessive} arm before jabbing {other:direct-object} with the needle skillfully, pushing the plunger down to unload its cargo. A warmth floods through {other:name-possessive} body as the drug begins to take effect. It was an aphrodisiac!",
-                        getSelf(), target);
+                        user, target);
     }
 
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Injects your opponent with aphrodisiac";
     }
 }

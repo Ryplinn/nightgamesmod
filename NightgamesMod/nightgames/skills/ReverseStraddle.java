@@ -1,29 +1,28 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.ReverseMount;
 
 public class ReverseStraddle extends Skill {
-    ReverseStraddle(CharacterType self) {
-        super("Mount(Reverse)", self);
+    ReverseStraddle() {
+        super("Mount(Reverse)");
         addTag(SkillTag.positioning);
         addTag(SkillTag.petDisallowed);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().mobile(getSelf()) && c.getStance().mobile(target) && c.getStance().prone(target)
-                        && getSelf().canAct();
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().mobile(user) && c.getStance().mobile(target) && c.getStance().prone(target)
+                        && user.canAct();
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.normal, target);
-        c.setStance(new ReverseMount(self, target.getType()), getSelf(), true);
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.normal, user, target);
+        c.setStance(new ReverseMount(user.getType(), target.getType()), user, true);
         return true;
     }
 
@@ -34,33 +33,33 @@ public class ReverseStraddle extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new ReverseStraddle(user.getType());
+        return new ReverseStraddle();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 6;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You straddle " + target.getName() + ", facing her feet.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format("%s sits on %s chest, facing %s crotch.",
-                        getSelf().subject(), target.nameOrPossessivePronoun(),
+                        user.subject(), target.nameOrPossessivePronoun(),
                         target.possessiveAdjective());
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Straddle facing groin";
     }
 

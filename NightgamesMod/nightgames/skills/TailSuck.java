@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -18,8 +17,8 @@ import java.util.Optional;
 
 public class TailSuck extends Skill {
 
-    public TailSuck(CharacterType self) {
-        super("Tail Suck", self);
+    public TailSuck() {
+        super("Tail Suck");
     }
 
     @Override
@@ -29,60 +28,60 @@ public class TailSuck extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && target.hasDick() && target.body.getRandomCock().isReady(target)
-                        && target.crotchAvailable() && c.getStance().mobile(getSelf()) && !c.getStance().mobile(target)
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && target.hasDick() && target.body.getRandomCock().isReady(target)
+                        && target.crotchAvailable() && c.getStance().mobile(user) && !c.getStance().mobile(target)
                         && !c.getStance().inserted(target);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Use your tail to draw in your target's energies";
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
-        return c.getStance().isPartFuckingPartInserted(c, target, target.body.getRandomCock(), getSelf(), getSelf().body.getRandom("tail")) ? 200 : 90;
+    public int accuracy(Combat c, Character user, Character target) {
+        return c.getStance().isPartFuckingPartInserted(c, target, target.body.getRandomCock(), user, user.body.getRandom("tail")) ? 200 : 90;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (c.getStance().isPartFuckingPartInserted(c, target, target.body.getRandomCock(), getSelf(), getSelf().body.getRandom("tail"))) {
-            writeOutput(c, Result.special, target);
-            target.body.pleasure(getSelf(), getSelf().body.getRandom("tail"), target.body.getRandomCock(),
-                            Random.random(10) + 10, c, this);
-            drain(c, target);
-        } else if (getSelf().roll(getSelf(), accuracy(c, target))) {
-            Result res = c.getStance().isBeingFaceSatBy(target, getSelf()) ? Result.critical
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (c.getStance().isPartFuckingPartInserted(c, target, target.body.getRandomCock(), user, user.body.getRandom("tail"))) {
+            writeOutput(c, Result.special, user, target);
+            target.body.pleasure(user, user.body.getRandom("tail"), target.body.getRandomCock(),
+                            Random.random(10) + 10, c, new SkillUsage<>(this, user, target));
+            drain(c, user, target);
+        } else if (user.roll(user, accuracy(c, user, target))) {
+            Result res = c.getStance().isBeingFaceSatBy(target, user) ? Result.critical
                             : Result.normal;
-            writeOutput(c, res, target);
-            target.body.pleasure(getSelf(), getSelf().body.getRandom("tail"), target.body.getRandomCock(),
-                            Random.random(10) + 10, c, this);
-            drain(c, target);
-            target.add(c, new TailSucked(target.getType(), self, power()));
+            writeOutput(c, res, user, target);
+            target.body.pleasure(user, user.body.getRandom("tail"), target.body.getRandomCock(),
+                            Random.random(10) + 10, c, new SkillUsage<>(this, user, target));
+            drain(c, user, target);
+            target.add(c, new TailSucked(target.getType(), user.getType(), power(user)));
         } else if (target.hasBalls()) {
-            writeOutput(c, Result.weak, target);
-            target.body.pleasure(getSelf(), getSelf().body.getRandom("tail"), target.body.getRandom("balls"),
-                            Random.random(5) + 5, c, this);
+            writeOutput(c, Result.weak, user, target);
+            target.body.pleasure(user, user.body.getRandom("tail"), target.body.getRandom("balls"),
+                            Random.random(5) + 5, c, new SkillUsage<>(this, user, target));
             return true;
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new TailSuck(user.getType());
+        return new TailSuck();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.special) {
             return String.format(
                             "Flexing a few choice muscles, you provide extra stimulation"
@@ -126,12 +125,12 @@ public class TailSuck extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.special) {
             return String.format(
                             "%s twists and turns %s tail with renewed vigor,"
                                             + " stealing more of %s energy in the process.",
-                            getSelf().getName(), getSelf().possessiveAdjective(), target.nameOrPossessivePronoun());
+                            user.getName(), user.possessiveAdjective(), target.nameOrPossessivePronoun());
         } else if (modifier == Result.normal) {
             return String.format(
                             "%s grabs %s tail with both hands and aims it at"
@@ -141,7 +140,7 @@ public class TailSuck extends Skill {
                                             + ", which does indeed <i>feel</i> like a pussy as well, engulfs %s %s"
                                             + " completely. %s as if %s %s slowly getting weaker the more it"
                                             + " sucks on %s. That is not good.",
-                            getSelf().getName(), getSelf().possessiveAdjective(),
+                            user.getName(), user.possessiveAdjective(),
                             target.nameOrPossessivePronoun(), target.directObject(),target.directObject(),
                             target.possessiveAdjective(), target.body.getRandomCock().describe(target),
                             Formatter.capitalizeFirstLetter(target.subjectAction("feel")),
@@ -153,13 +152,13 @@ public class TailSuck extends Skill {
                                             + " %s %s %s being swallowed up in a warm sheath. If %s %s weren't in %s face, you would"
                                             + " think %s were fucking %s. Suddenly, the slick canal contracts around %s dick, and"
                                             + " %s %s some of %s strength flowing out of %s and into it. That is not good.",
-                            target.possessiveAdjective(), getSelf().nameOrPossessivePronoun(), target.subjectAction("feel"),
-                            getSelf().possessiveAdjective(), Formatter.capitalizeFirstLetter(target.pronoun()),
+                            target.possessiveAdjective(), user.nameOrPossessivePronoun(), target.subjectAction("feel"),
+                            user.possessiveAdjective(), Formatter.capitalizeFirstLetter(target.pronoun()),
                             target.action("are", "is"), target.pronoun(), target.action("feel"),
                             target.possessiveAdjective(), target.body.getRandomCock().describe(target), 
-                            getSelf().possessiveAdjective(), getUser().body.getRandomPussy().describe(getSelf()),
+                            user.possessiveAdjective(), user.body.getRandomPussy().describe(user),
                             target.possessiveAdjective(),
-                            getSelf().subject(), target.directObject(), target.nameOrPossessivePronoun(),
+                            user.subject(), target.directObject(), target.nameOrPossessivePronoun(),
                             target.pronoun(), target.action("feel"), target.possessiveAdjective(), target.directObject());
         } else if (modifier == Result.weak) {
             return String.format(
@@ -171,36 +170,36 @@ public class TailSuck extends Skill {
                                             + " misses %s %s but finds %s balls instead. %s does not seem"
                                             + " too interested in them, though, and leaves them alone after"
                                             + " massaging them a bit.",
-                            getSelf().getName(), getSelf().possessiveAdjective(), target.nameOrPossessivePronoun(),
+                            user.getName(), user.possessiveAdjective(), target.nameOrPossessivePronoun(),
                             target.subjectAction("twist"), target.possessiveAdjective(), target.possessiveAdjective(),
-                            target.body.getRandomCock().describe(target), target.possessiveAdjective(), getSelf().getName());
+                            target.body.getRandomCock().describe(target), target.possessiveAdjective(), user.getName());
         } else {
             return String.format("%s grabs %s tail with both hands and aims it at"
                             + " %s groin. The tip opens up like a flower, revealing a hollow"
                             + " inside shaped suspiciously like a pussy. That cannot be good, so"
                             + " %s %s hips just in time to evade the tail as it suddenly"
-                            + " launches forward..", getSelf().getName(), getSelf().possessiveAdjective(), 
+                            + " launches forward..", user.getName(), user.possessiveAdjective(),
                             target.nameOrPossessivePronoun(),
                             target.subjectAction("twist"), target.possessiveAdjective());
         }
     }
 
-    private void drain(Combat c, Character target) {
+    private void drain(Combat c, Character user, Character target) {
         Optional<Attribute> pickToDrain = Random.pickRandom(target.att.entrySet().stream().filter(e -> e.getValue() != 0)
                         .map(Map.Entry::getKey).toArray(Attribute[]::new));
         if (!pickToDrain.isPresent()) {
             return;
         }
         Attribute toDrain = pickToDrain.get();
-        Drained.drain(c, getSelf(), target, toDrain, power(), 20, true);
-        target.drain(c, getSelf(), (int) DamageType.drain.modifyDamage(getSelf(), target, 10), Character.MeterType.STAMINA);
-        target.drain(c, getSelf(), 1 + Random.random(power() * 3), Character.MeterType.MOJO);
+        Drained.drain(c, user, target, toDrain, power(user), 20, true);
+        target.drain(c, user, (int) DamageType.drain.modifyDamage(user, target, 10), Character.MeterType.STAMINA);
+        target.drain(c, user, 1 + Random.random(power(user) * 3), Character.MeterType.MOJO);
         target.emote(Emotion.desperate, 5);
-        getSelf().emote(Emotion.confident, 5);
+        user.emote(Emotion.confident, 5);
     }
 
-    private int power() {
-        return (int) (1 + getSelf().get(Attribute.darkness) / 20.0);
+    private int power(Character user) {
+        return (int) (1 + user.get(Attribute.darkness) / 20.0);
     }
 
 }

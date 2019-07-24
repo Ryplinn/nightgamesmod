@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,8 +12,8 @@ import nightgames.status.addiction.AddictionType;
 
 public class HypnoVisorPlace extends Skill {
 
-    HypnoVisorPlace(CharacterType self) {
-        super("Place Hypno Visor", self, 5);
+    HypnoVisorPlace() {
+        super("Place Hypno Visor", 5);
     }
 
     @Override
@@ -23,44 +22,44 @@ public class HypnoVisorPlace extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return target.human() && getSelf().canAct() && c.getStance().reachTop(getSelf()) 
+    public boolean usable(Combat c, Character user, Character target) {
+        return target.human() && user.canAct() && c.getStance().reachTop(user)
                         && !target.canRespond() && !target.is(Stsflag.blinded);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Place a Hypno Visor on your opponent's head.";
     }
     
     @Override
-    public float priorityMod(Combat c) {
+    public float priorityMod(Combat c, Character user) {
         return 8.f;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         String message = Formatter.format("{self:SUBJECT-ACTION:walk|walks}"
                         + " around and kneels behind {other:name-do}, propping {other:direct-object}"
-                        + " up against {self:direct-object}. ", getSelf(), target) + addictionDesc(target) + Formatter
+                        + " up against {self:direct-object}. ", user, target) + addictionDesc(user, target) + Formatter
                         .format(" {self:PRONOUN-ACTION:rummage|rummages} around a bit"
                                                         + " behind {other:direct-object}, and then {other:possessive}"
                                                         + " vision goes dark. {self:PRONOUN-ACTION:have|has} placed some"
                                                         + " kind of device around {self:possessive} head, not unlike a VR headset."
-                                                        + " It might be a really good idea to get it off quickly...", getSelf(),
+                                                        + " It might be a really good idea to get it off quickly...", user,
                                         target);
-        c.write(getSelf(), message);
-        target.add(c, new HypnoVisor(target.getType(), self));
+        c.write(user, message);
+        target.add(c, new HypnoVisor(target.getType(), user.getType()));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new HypnoVisorPlace(user.getType());
+        return new HypnoVisorPlace();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
     
@@ -69,29 +68,29 @@ public class HypnoVisorPlace extends Skill {
         return add != null && add.atLeast(Addiction.Severity.LOW) && add.isInWithdrawal();
     }
 
-    private String addictionDesc(Character target) {
+    private String addictionDesc(Character user, Character target) {
         if (isInWithdrawal(target)) {
             return Formatter.format("<i>Ah, {other:name}. Why did you try to get away from my control?"
                             + " We both know there is no point, that you are secretly happier"
                             + " when you don't have to think for yourself. So, let's wash that pesky"
-                            + " stubbornness right out of you, alright?.</i>", getSelf(), target);
+                            + " stubbornness right out of you, alright?.</i>", user, target);
         }
         switch (target.getAnyAddictionSeverity(AddictionType.MIND_CONTROL)) {
             case HIGH:
                 return Formatter.format("<i>You're doing really well so far, {other:name}!"
-                                + " Still, a little refresher surely can't hurt?</i>", getSelf(), target);
+                                + " Still, a little refresher surely can't hurt?</i>", user, target);
             case LOW:
                 return Formatter.format("<i>You're still a little reluctant to do as you"
                                 + " are told, aren't you {other:name}? Well, I know just"
-                                + " the thing to help fix that!</i>", getSelf(), target);
+                                + " the thing to help fix that!</i>", user, target);
             case MED:
                 return Formatter.format("<i>You know {other:name}, we both know that, deep"
                                 + " down, you want to be a good {other:boy}, right? You"
                                 + " just need a little help. Well, who am I not to give"
-                                + " it to you?</i>", getSelf(), target);
+                                + " it to you?</i>", user, target);
             case NONE:
                 return Formatter.format("<i>Calm down now, {other:name}. Everything will be fine,"
-                                + " you just need to hold still for a moment...</i>", getSelf(), target);
+                                + " you just need to hold still for a moment...</i>", user, target);
             default:
                 return "<u>[[[Something went badly wrong in HypnoVisorPlace]]]</u>";
             
@@ -99,12 +98,12 @@ public class HypnoVisorPlace extends Skill {
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 

@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -16,8 +15,8 @@ import nightgames.status.Slimed;
 
 public class Dissolve extends Skill {
 
-    public Dissolve(CharacterType self) {
-        super("Dissolve", self);
+    public Dissolve() {
+        super("Dissolve");
         addTag(SkillTag.stripping);
     }
 
@@ -27,43 +26,43 @@ public class Dissolve extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().mobile(getSelf()) && getSelf().canAct()
-                        && (getSelf().has(Item.DisSol) || getSelf().get(Attribute.slime) > 0)
-                        && target.outfit.getRandomShreddableSlot() != null && !c.getStance().prone(getSelf());
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().mobile(user) && user.canAct()
+                        && (user.has(Item.DisSol) || user.get(Attribute.slime) > 0)
+                        && target.outfit.getRandomShreddableSlot() != null && !c.getStance().prone(user);
     }
 
-    public int accuracy(Combat c, Character target) {
-        return getSelf().get(Attribute.slime) > 0 || getSelf().has(Item.Aersolizer) ? 200 : 80;
+    public int accuracy(Combat c, Character user, Character target) {
+        return user.get(Attribute.slime) > 0 || user.has(Item.Aersolizer) ? 200 : 80;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         ClothingSlot toShred = null;
         if (!target.outfit.slotOpen(ClothingSlot.bottom) && target.outfit.slotShreddable(ClothingSlot.bottom)) {
             toShred = ClothingSlot.bottom;
         } else if (!target.outfit.slotOpen(ClothingSlot.top) && target.outfit.slotShreddable(ClothingSlot.top)) {
             toShred = ClothingSlot.top;
         }
-        if (getSelf().get(Attribute.slime) > 0) {
+        if (user.get(Attribute.slime) > 0) {
             Clothing destroyed = shred(target, toShred);
             String msg = "{self:SUBJECT-ACTION:reach|reaches} out with a slimy hand and"
                             + " {self:action:caress|caresses} {other:possessive} " + destroyed.getName()
                             + ". Slowly, it dissolves away beneath {self:possessive} touch.";
-            c.write(getSelf(), Formatter.format(msg, getSelf(), target));
-            if (getSelf().has(Trait.VolatileSubstrate)) {
-                target.add(c, new Slimed(target.getType(), self, Random.random(2, 4)));
+            c.write(user, Formatter.format(msg, user, target));
+            if (user.has(Trait.VolatileSubstrate)) {
+                target.add(c, new Slimed(target.getType(), user.getType(), Random.random(2, 4)));
             }
         } else {
-            getSelf().consume(Item.DisSol, 1);
-            if (getSelf().has(Item.Aersolizer)) {
-                writeOutput(c, Result.special, target);
+            user.consume(Item.DisSol, 1);
+            if (user.has(Item.Aersolizer)) {
+                writeOutput(c, Result.special, user, target);
                 shred(target, toShred);
-            } else if (target.roll(getSelf(), accuracy(c, target))) {
-                writeOutput(c, Result.normal, target);
+            } else if (target.roll(user, accuracy(c, user, target))) {
+                writeOutput(c, Result.normal, user, target);
                 shred(target, toShred);
             } else {
-                writeOutput(c, Result.miss, target);
+                writeOutput(c, Result.miss, user, target);
                 return false;
             }
         }
@@ -78,16 +77,16 @@ public class Dissolve extends Skill {
     
     @Override
     public Skill copy(Character user) {
-        return new Dissolve(user.getType());
+        return new Dissolve();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.stripping;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.special) {
             return "You pop a Dissolving Solution into your Aerosolizer and spray " + target.getName()
                             + " with a cloud of mist. She emerges from the cloud with her clothes rapidly "
@@ -101,25 +100,25 @@ public class Dissolve extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character attacker) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character attacker) {
         if (modifier == Result.special) {
             return String.format("%s inserts a bottle into the attachment on her arm. "
                             + "%s suddenly surrounded by a cloud of mist."
                             + " %s clothes begin to disintegrate immediately.",
-                            getSelf().subject(), Formatter.capitalizeFirstLetter(attacker.subjectAction("are", "is")),
+                            user.subject(), Formatter.capitalizeFirstLetter(attacker.subjectAction("are", "is")),
                             Formatter.capitalizeFirstLetter(attacker.nameOrPossessivePronoun()));
         } else if (modifier == Result.miss) {
             return String.format("%s splashes a bottle of liquid in %s direction, but none of it hits %s.",
-                            getSelf().subject(), attacker.nameOrPossessivePronoun(), attacker.directObject());
+                            user.subject(), attacker.nameOrPossessivePronoun(), attacker.directObject());
         } else {
             return String.format("%s covers you with a clear liquid. %s clothes dissolve away, but it doesn't do anything to %s skin.",
-                            getSelf().subject(), Formatter.capitalizeFirstLetter(attacker.subject()), attacker.possessiveAdjective());
+                            user.subject(), Formatter.capitalizeFirstLetter(attacker.subject()), attacker.possessiveAdjective());
         }
     }
 
     @Override
-    public String describe(Combat c) {
-        if (getSelf().get(Attribute.slime) > 0)
+    public String describe(Combat c, Character user) {
+        if (user.get(Attribute.slime) > 0)
             return "Use your slime to dissolve your opponent's clothes";
         return "Throws dissolving solution to destroy opponent's clothes";
     }

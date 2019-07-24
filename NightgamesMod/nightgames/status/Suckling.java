@@ -1,10 +1,6 @@
 package nightgames.status;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
@@ -14,12 +10,13 @@ import nightgames.combat.Combat;
 import nightgames.skills.Skill;
 import nightgames.skills.Suckle;
 
-public class Suckling extends DurationStatus {
-    private Suckle skill;
+import java.util.Collection;
+import java.util.Collections;
 
-    public Suckling(CharacterType affected, CharacterType opponent, int duration) {
+public class Suckling extends DurationStatus {
+
+    public Suckling(CharacterType affected, int duration) {
         super("Suckling", affected, duration);
-        skill = new Suckle(opponent);
         flag(Stsflag.suckling);
         flag(Stsflag.debuff);
         flag(Stsflag.purgable);
@@ -28,13 +25,13 @@ public class Suckling extends DurationStatus {
 
     @Override
     public Collection<Skill> allowedSkills(Combat c) {
-        return Collections.singleton(new Suckle(affected));
+        return Collections.singleton(new Suckle());
     }
 
     @Override
     public String initialMessage(Combat c, Status replacement) {
-        return String.format("%s fighting an urge to drink from %s nipples.\n", getAffected().subjectAction("are", "is"),
-                        skill.getSelf().nameOrPossessivePronoun());
+        return String.format("%s fighting an urge to drink from %s nipples.\n",
+                        getAffected().subjectAction("are", "is"), c.getOpponent(getAffected()));
     }
 
     @Override
@@ -42,8 +39,8 @@ public class Suckling extends DurationStatus {
         if (getAffected().human()) {
             return "You feel an irresistible urge to suck on " + c.getOpponent(getAffected()).nameOrPossessivePronoun() + " nipples.";
         } else {
-            return getAffected().getName() + " is looking intently at "
-                            +c.getOpponent(getAffected()).nameOrPossessivePronoun()+" breasts.";
+            return getAffected().getName() + " is looking intently at " + c.getOpponent(getAffected())
+                            .nameOrPossessivePronoun() + " breasts.";
         }
     }
 
@@ -90,7 +87,7 @@ public class Suckling extends DurationStatus {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return -10;
     }
 
@@ -121,7 +118,7 @@ public class Suckling extends DurationStatus {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Suckling(newAffected.getType(), newOther.getType(), getDuration());
+        return new Suckling(newAffected.getType(), getDuration());
     }
 
     @Override  public JsonObject saveToJson() {
@@ -132,6 +129,6 @@ public class Suckling extends DurationStatus {
     }
 
     @Override public Status loadFromJson(JsonObject obj) {
-        return new Suckling(null, null, obj.get("duration").getAsInt());
+        return new Suckling(null, obj.get("duration").getAsInt());
     }
 }

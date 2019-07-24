@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -11,33 +10,33 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.Stance;
 
 public class Suckle extends Skill {
-    public Suckle(CharacterType self) {
-        super("Suckle", self);
+    public Suckle() {
+        super("Suckle");
         addTag(SkillTag.usesMouth);
         addTag(SkillTag.pleasure);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return target.breastsAvailable() && c.getStance().reachTop(getSelf()) && c.getStance().front(getSelf())
-                        && (getSelf().canAct() || c.getStance().enumerate() == Stance.nursing && getSelf().canRespond())
-                        && c.getStance().facing(getSelf(), target) && c.getStance().en != Stance.neutral;
+    public boolean usable(Combat c, Character user, Character target) {
+        return target.breastsAvailable() && c.getStance().reachTop(user) && c.getStance().front(user)
+                        && (user.canAct() || c.getStance().enumerate() == Stance.nursing && user.canRespond())
+                        && c.getStance().facing(user, target) && c.getStance().en != Stance.neutral;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        return resolve(c, target, false);
+    public boolean resolve(Combat c, Character user, Character target) {
+        return resolve(c, user, target, false);
     }
 
-    public boolean resolve(Combat c, Character target, boolean silent) {
+    public boolean resolve(Combat c, Character user, Character target, boolean silent) {
         Result results = target.has(Trait.lactating) ? Result.special : Result.normal;
-        int m = (getSelf().get(Attribute.seduction) > 10 ? 8 : 4) + Random.random(6);
-        if (!silent) writeOutput(c, Result.normal, target);
-        if (getSelf().has(Trait.silvertongue)) {
+        int m = (user.get(Attribute.seduction) > 10 ? 8 : 4) + Random.random(6);
+        if (!silent) writeOutput(c, Result.normal, user, target);
+        if (user.has(Trait.silvertongue)) {
             m += 4;
         }
 
-        target.body.pleasure(getSelf(), getSelf().body.getRandom("mouth"), target.body.getRandom("breasts"), m, c, this);
+        target.body.pleasure(user, user.body.getRandom("mouth"), target.body.getRandom("breasts"), m, c, new SkillUsage<>(this, user, target));
         if (results == Result.special) {
             target.buildMojo(c, 10);
         } else {
@@ -53,16 +52,16 @@ public class Suckle extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Suckle(user.getType());
+        return new Suckle();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.normal) {
             return "You slowly circle your tongue around each of " + target.getName()
                             + "'s nipples, and start sucking like a newborn.";
@@ -74,25 +73,25 @@ public class Suckle extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.normal) {
             return String.format("%s licks and sucks %s nipples, sending a "
                             + "surge of excitement straight to %s groin.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(),
+                            user.subject(), target.nameOrPossessivePronoun(),
                             target.possessiveAdjective());
         } else {
             return String.format("%s licks and sucks %s nipples, drawing forth "
                             + "a gush of breast milk from %s teats. "
                             + "%s drinks deeply of %s milk, gurgling happily as more of the"
-                            + " smooth liquid flows down %s throat.", getSelf().subject(),
+                            + " smooth liquid flows down %s throat.", user.subject(),
                             target.nameOrPossessivePronoun(), target.possessiveAdjective(),
-                            getSelf().subject(), target.nameOrPossessivePronoun(),
-                            getSelf().possessiveAdjective());
+                            user.subject(), target.nameOrPossessivePronoun(),
+                            user.possessiveAdjective());
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Suck your opponent's nipples. Builds mojo for the opponent.";
     }
 

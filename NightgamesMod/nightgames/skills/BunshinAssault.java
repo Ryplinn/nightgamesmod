@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -11,8 +10,8 @@ import nightgames.skills.damage.DamageType;
 
 public class BunshinAssault extends Skill {
 
-    BunshinAssault(CharacterType self) {
-        super("Bunshin Assault", self);
+    BunshinAssault() {
+        super("Bunshin Assault");
         addTag(SkillTag.hurt);
         addTag(SkillTag.staminaDamage);
         addTag(SkillTag.positioning);
@@ -20,81 +19,81 @@ public class BunshinAssault extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.ninjutsu) >= 6;
+        return user.getPure(Attribute.ninjutsu) >= 6;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
+    public boolean usable(Combat c, Character user, Character target) {
         return c.getStance()
-                .mobile(getSelf())
+                .mobile(user)
                         && !c.getStance()
-                             .prone(getSelf())
-                        && getSelf().canAct() && !c.getStance()
+                             .prone(user)
+                        && user.canAct() && !c.getStance()
                                                    .behind(target)
                         && !c.getStance()
                              .penetrated(c, target)
                         && !c.getStance()
-                             .penetrated(c, getSelf());
+                             .penetrated(c, user);
     }
 
-    private int numberOfClones() {
-        return Math.min(Math.min(getSelf().getMojo().get()/2, getSelf().get(Attribute.ninjutsu)/2), 15);
-    }
-
-    @Override
-    public int getMojoCost(Combat c) {
-        return numberOfClones() * 2;
+    private int numberOfClones(Character user) {
+        return Math.min(Math.min(user.getMojo().get()/2, user.get(Attribute.ninjutsu)/2), 15);
     }
 
     @Override
-    public String describe(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
+        return numberOfClones(user) * 2;
+    }
+
+    @Override
+    public String describe(Combat c, Character user) {
         return "Attack your opponent with shadow clones: 2 Mojo per attack (min 2)";
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
-        return 25 + getSelf().get(Attribute.speed) * 5;
+    public int accuracy(Combat c, Character user, Character target) {
+        return 25 + user.get(Attribute.speed) * 5;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        int clones = numberOfClones();
+    public boolean resolve(Combat c, Character user, Character target) {
+        int clones = numberOfClones(user);
         Result r;
-        if(getSelf().human()){
-            c.write(getSelf(), String.format("You form %d shadow clones and rush forward.",clones));
+        if(user.human()){
+            c.write(user, String.format("You form %d shadow clones and rush forward.",clones));
         }
         else if(c.shouldPrintReceive(target, c)){
-            c.write(getSelf(), String.format("%s moves in a blur and suddenly %s %d of %s approaching %s.",getSelf().getName(),
-                            target.subjectAction("see"),clones,getSelf().pronoun(),target.reflectivePronoun()));
+            c.write(user, String.format("%s moves in a blur and suddenly %s %d of %s approaching %s.",user.getName(),
+                            target.subjectAction("see"),clones,user.pronoun(),target.reflectivePronoun()));
         }
         for(int i=0;i<clones;i++){
-            if(target.roll(getSelf(), accuracy(c, target))) {
+            if(target.roll(user, accuracy(c, user, target))) {
                 switch(Random.random(4)){
                 case 0:
                     r=Result.weak;
-                    target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random
+                    target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random
                                     .random(1, 4)));
                     break;
                 case 1:
                     r=Result.normal;
-                    target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random
+                    target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random
                                     .random(2, 5)));
                     break;
                 case 2:
                     r=Result.strong;
-                    target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random
+                    target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random
                                     .random(6, 9)));
                     break;
                 default:
                     r=Result.critical;
-                    target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random
+                    target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random
                                     .random(10, 14)));
                     break;
                 }
-                writeOutput(c, r, target);
+                writeOutput(c, r, user, target);
             }else{
 
-                writeOutput(c, Result.miss, target);
+                writeOutput(c, Result.miss, user, target);
             }
         }
         return true;
@@ -102,22 +101,22 @@ public class BunshinAssault extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new BunshinAssault(user.getType());
+        return new BunshinAssault();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.damage;
     }
 
     
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 4;
     }
     
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if(modifier==Result.miss){
             return String.format("%s dodges one of your shadow clones.",target.getName());
         }else if(modifier==Result.weak){
@@ -140,7 +139,7 @@ public class BunshinAssault extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if(modifier==Result.miss){
             return String.format("%s quickly %s a shadow clone's attack.",
                             target.subject(), target.action("dodge"));
@@ -150,22 +149,22 @@ public class BunshinAssault extends Skill {
                             target.possessiveAdjective());
         }else if(modifier==Result.strong){
             if(target.hasBalls()){
-                return String.format("A %s clone gets a hold of %s balls and squeezes them painfully.",getSelf().getName(),
+                return String.format("A %s clone gets a hold of %s balls and squeezes them painfully.",user.getName(),
                                 target.nameOrPossessivePronoun());
             }else{
-                return String.format("A %s clone unleashes a quick roundhouse kick that hits %s sensitive boobs.",getSelf().getName(),
+                return String.format("A %s clone unleashes a quick roundhouse kick that hits %s sensitive boobs.",user.getName(),
                                 target.nameOrPossessivePronoun());
             }
         }else if(modifier==Result.critical){
             if(target.hasBalls()){
-                return String.format("One lucky %s clone manages to land a snap-kick squarely on %s unguarded jewels.",getSelf().getName(),
+                return String.format("One lucky %s clone manages to land a snap-kick squarely on %s unguarded jewels.",user.getName(),
                                 target.nameOrPossessivePronoun());
             }else{
-                return String.format("One %s clone hits %s between the legs with a fierce cunt-punt.",getSelf().getName(),
+                return String.format("One %s clone hits %s between the legs with a fierce cunt-punt.",user.getName(),
                                 target.nameOrPossessivePronoun());
             }
         }else{
-            return String.format("One of %s clones delivers a swift punch to %s solar plexus.",getSelf().possessiveAdjective(),
+            return String.format("One of %s clones delivers a swift punch to %s solar plexus.",user.possessiveAdjective(),
                             target.nameOrPossessivePronoun());
         }
     }

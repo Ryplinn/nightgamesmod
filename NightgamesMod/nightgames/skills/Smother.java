@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -17,8 +16,8 @@ import nightgames.status.Shamed;
 
 public class Smother extends Skill {
 
-    public Smother(CharacterType self) {
-        super("Smother", self);
+    public Smother() {
+        super("Smother");
         addTag(SkillTag.pleasureSelf);
         addTag(SkillTag.dominant);
         addTag(SkillTag.facesit);
@@ -31,66 +30,66 @@ public class Smother extends Skill {
     }
 
     @Override
-    public float priorityMod(Combat c) {
+    public float priorityMod(Combat c, Character user) {
         return 6;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().crotchAvailable() && getSelf().canAct() && c.getStance().dom(getSelf())
-                        && (c.getStance().isBeingFaceSatBy(target, getSelf()))
-                        && !getSelf().has(Trait.shy);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.crotchAvailable() && user.canAct() && c.getStance().dom(user)
+                        && (c.getStance().isBeingFaceSatBy(target, user))
+                        && !user.has(Trait.shy);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Shove your ass into your opponent's face to demonstrate your superiority";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.normal, target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.normal, user, target);
 
         int m = 10;
         if (target.has(Trait.silvertongue)) {
             m = m * 3 / 2;
         }
-        getSelf().body.pleasure(target, target.body.getRandom("mouth"), getSelf().body.getRandom("ass"), m, c, this);
+        user.body.pleasure(target, target.body.getRandom("mouth"), user.body.getRandom("ass"), m, c, new SkillUsage<>(this, user, target));
         double n = 14 + Random.random(4);
-        if (c.getStance().front(getSelf())) {
+        if (c.getStance().front(user)) {
             // opponent can see self
-            n += getSelf().body.getHotness(target);
+            n += user.body.getHotness(target);
         }
         if (target.has(Trait.imagination)) {
             n *= 1.5;
         }
 
-        target.temptWithSkill(c, getSelf(), getSelf().body.getRandom("ass"), (int) Math.round(n / 2), this);
-        target.weaken(c, (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(10, 25)));
+        target.temptWithSkill(c, user, user.body.getRandom("ass"), (int) Math.round(n / 2), this);
+        target.weaken(c, (int) DamageType.physical.modifyDamage(user, target, Random.random(10, 25)));
 
         target.loseWillpower(c, Math.max(10, target.getWillpower().max() * 10 / 100 ));
         target.add(c, new Shamed(target.getType()));
         if (c.getStance().enumerate() != Stance.smothering) {
-            c.setStance(new Smothering(self, target.getType()), getSelf(), true);
+            c.setStance(new Smothering(user.getType(), target.getType()), user, true);
         }
-        if (Random.random(100) < 25 + 2 * getSelf().get(Attribute.fetishism)) {
-            target.add(c, new BodyFetish(target.getType(), self, "ass", .35));
+        if (Random.random(100) < 25 + 2 * user.get(Attribute.fetishism)) {
+            target.add(c, new BodyFetish(target.getType(), user.getType(), "ass", .35));
         }
         return true;
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 25;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Smother(user.getType());
+        return new Smother();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         if (c.getStance().enumerate() != Stance.smothering) {
             return Tactics.positioning;
         } else {
@@ -99,18 +98,18 @@ public class Smother extends Skill {
     }
 
     @Override
-    public String getLabel(Combat c) {
+    public String getLabel(Combat c, Character user) {
         return "Smother";
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
-        return Formatter.format("Enjoying your dominance over {other:name-do}, you experimentally scoot your legs forward so that your ass completely eclipses {other:possessive} face. {other:SUBJECT-ACTION:panic|panics} as {other:pronoun} {other:action:realize|realizes} that {other:pronoun} cannot breathe!", getSelf(), target);
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
+        return Formatter.format("Enjoying your dominance over {other:name-do}, you experimentally scoot your legs forward so that your ass completely eclipses {other:possessive} face. {other:SUBJECT-ACTION:panic|panics} as {other:pronoun} {other:action:realize|realizes} that {other:pronoun} cannot breathe!", user, target);
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        return Formatter.format("Enjoying {self:possessive} dominance over {other:name-do}, {self:subject} experimentally scoots {self:possessive} legs forward so that {self:possessive} ass completely eclipses {other:possessive} face. {other:SUBJECT-ACTION:panic|panics} as {other:pronoun} {other:action:realize|realizes} that {other:pronoun} cannot breathe!", getSelf(), target);
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        return Formatter.format("Enjoying {self:possessive} dominance over {other:name-do}, {self:subject} experimentally scoots {self:possessive} legs forward so that {self:possessive} ass completely eclipses {other:possessive} face. {other:SUBJECT-ACTION:panic|panics} as {other:pronoun} {other:action:realize|realizes} that {other:pronoun} cannot breathe!", user, target);
     }
 
     @Override

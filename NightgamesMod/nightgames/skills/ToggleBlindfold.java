@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -11,8 +10,8 @@ import nightgames.status.Stsflag;
 
 public class ToggleBlindfold extends Skill {
 
-    ToggleBlindfold(CharacterType self) {
-        super("Toggle Blindfold", self);
+    ToggleBlindfold() {
+        super("Toggle Blindfold");
     }
 
     @Override
@@ -21,83 +20,83 @@ public class ToggleBlindfold extends Skill {
     }
 
     @Override
-    public String getLabel(Combat c) {
-        return getSelf().is(Stsflag.blinded) ? "Remove Blindfold" : "Wear Blindfold";
+    public String getLabel(Combat c, Character user) {
+        return user.is(Stsflag.blinded) ? "Remove Blindfold" : "Wear Blindfold";
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return ((!getSelf().is(Stsflag.blinded) && getSelf().has(Item.Blindfold))
-                        || (getSelf().is(Stsflag.blinded)) && canRemove()) && getSelf().canAct();
+    public boolean usable(Combat c, Character user, Character target) {
+        return ((!user.is(Stsflag.blinded) && user.has(Item.Blindfold))
+                        || (user.is(Stsflag.blinded)) && canRemove(user)) && user.canAct();
     }
 
-    private boolean canRemove() {
-        if (!(getSelf().getStatus(Stsflag.blinded) instanceof Blinded)) {
+    private boolean canRemove(Character user) {
+        if (!(user.getStatus(Stsflag.blinded) instanceof Blinded)) {
             return false;
         }
-        Blinded status = (Blinded) getSelf().getStatus(Stsflag.blinded);
+        Blinded status = (Blinded) user.getStatus(Stsflag.blinded);
         assert status != null;
         return status.getCause()
                      .equals("a blindfold") && status.isVoluntary();
     }
 
-    public float priorityMod(Combat c) {
-        return getSelf().is(Stsflag.blinded) ? 4.f : -4.f;
+    public float priorityMod(Combat c, Character user) {
+        return user.is(Stsflag.blinded) ? 4.f : -4.f;
     }
 
     @Override
-    public String describe(Combat c) {
-        return getSelf().is(Stsflag.blinded) ? "Remove your blindfold" : "Put on a blindfold to shield your eyes.";
+    public String describe(Combat c, Character user) {
+        return user.is(Stsflag.blinded) ? "Remove your blindfold" : "Put on a blindfold to shield your eyes.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (!getSelf().is(Stsflag.blinded)) {
-            getSelf().remove(Item.Blindfold);
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (!user.is(Stsflag.blinded)) {
+            user.remove(Item.Blindfold);
             if (!c.getStance()
-                  .sub(getSelf()) || target.roll(getSelf(), 80)) {
-                getSelf().add(c, new Blinded(self, "a blindfold", true));
-                c.write(getSelf(), String.format("%s a blindfold around %s eyes.",
-                                getSelf().subjectAction("tie"), getSelf().possessiveAdjective()));
+                  .sub(user) || target.roll(user, 80)) {
+                user.add(c, new Blinded(user.getType(), "a blindfold", true));
+                c.write(user, String.format("%s a blindfold around %s eyes.",
+                                user.subjectAction("tie"), user.possessiveAdjective()));
             } else {
-                c.write(getSelf(), String.format("%s out a blindfold, but %s it from %s hands and %s it away.",
-                                getSelf().subjectAction("take"), target.subjectAction("snatch", "snatches"),
-                                getSelf().possessiveAdjective(), getSelf().action("throw")));
+                c.write(user, String.format("%s out a blindfold, but %s it from %s hands and %s it away.",
+                                user.subjectAction("take"), target.subjectAction("snatch", "snatches"),
+                                user.possessiveAdjective(), user.action("throw")));
             }
         } else if (c.getStance()
-                    .sub(getSelf()) && target.canAct() && Random.random(2) == 0) {
-            c.write(getSelf(),
+                    .sub(user) && target.canAct() && Random.random(2) == 0) {
+            c.write(user,
                             String.format("%s to take off %s blindfold, but %s %s hands away.",
-                                            getSelf().subjectAction("try", "tries"), getSelf().possessiveAdjective(),
-                                            target.subjectAction("keep"), getSelf().possessiveAdjective()));
+                                            user.subjectAction("try", "tries"), user.possessiveAdjective(),
+                                            target.subjectAction("keep"), user.possessiveAdjective()));
         } else {
-            getSelf().gain(Item.Blindfold);
-            c.write(getSelf(),
+            user.gain(Item.Blindfold);
+            c.write(user,
                             String.format("%s off %s blindfold and %s a few times to clear %s eyes.",
-                                            getSelf().subjectAction("take"), getSelf().possessiveAdjective(),
-                                            getSelf().action("blink"), getSelf().possessiveAdjective()));
-            getSelf().removeStatus(Stsflag.blinded);
+                                            user.subjectAction("take"), user.possessiveAdjective(),
+                                            user.action("blink"), user.possessiveAdjective()));
+            user.removeStatus(Stsflag.blinded);
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new ToggleBlindfold(user.getType());
+        return new ToggleBlindfold();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.misc;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 }

@@ -1,58 +1,57 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.nskills.tags.SkillTag;
 
 public class CommandStrip extends PlayerCommand {
 
-    CommandStrip(CharacterType self) {
-        super("Force Strip Self", self);
+    CommandStrip() {
+        super("Force Strip Self");
         addTag(SkillTag.stripping);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return super.usable(c, target) && !target.mostlyNude();
+    public boolean usable(Combat c, Character user, Character target) {
+        return super.usable(c, user, target) && !target.mostlyNude();
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Force your opponent to strip naked.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         target.undress(c);
         if (target.human()) {
-            c.write(getSelf(), receive(c, 0, Result.normal, target));
+            c.write(user, receive(c, 0, Result.normal, user, target));
         } else {
-            c.write(getSelf(), deal(c, 0, Result.normal, target));
+            c.write(user, deal(c, 0, Result.normal, user, target));
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new CommandStrip(user.getType());
+        return new CommandStrip();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.stripping;
     }
 
     @Override
-    public String deal(Combat c, int magnitude, Result modifier, Character target) {
+    public String deal(Combat c, int magnitude, Result modifier, Character user, Character target) {
         return "You look " + target.getName() + " in the eye, sending a psychic command for"
                         + " her to strip. She complies without question, standing before you nude only"
                         + " seconds later.";
     }
 
     @Override
-    public String receive(Combat c, int magnitude, Result modifier, Character target) {
+    public String receive(Combat c, int magnitude, Result modifier, Character user, Character target) {
         return "<<This should not be displayed, please inform The Silver Bard: CommandStrip-receive>>";
     }
 

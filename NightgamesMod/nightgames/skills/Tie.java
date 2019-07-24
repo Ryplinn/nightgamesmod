@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.items.Item;
@@ -11,8 +10,8 @@ import nightgames.status.Stsflag;
 
 public class Tie extends Skill {
 
-    Tie(CharacterType self) {
-        super("Bind", self);
+    Tie() {
+        super("Bind");
     }
 
     @Override
@@ -21,27 +20,27 @@ public class Tie extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return !target.wary() && getSelf().canAct() && c.getStance().reachTop(getSelf())
-                        && (getSelf().has(Item.ZipTie) || getSelf().has(Item.Handcuffs))
-                        && c.getStance().dom(getSelf())
+    public boolean usable(Combat c, Character user, Character target) {
+        return !target.wary() && user.canAct() && c.getStance().reachTop(user)
+                        && (user.has(Item.ZipTie) || user.has(Item.Handcuffs))
+                        && c.getStance().dom(user)
                         && !target.is(Stsflag.bound)
                         && !target.is(Stsflag.maglocked);
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (getSelf().has(Item.Handcuffs, 1)) {
-            getSelf().consume(Item.Handcuffs, 1);
-            writeOutput(c, Result.special, target);
-            target.add(c, new Bound(target.getType(), (40 + 3 * Math.sqrt(getSelf().get(Attribute.cunning))), "handcuffs"));
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (user.has(Item.Handcuffs, 1)) {
+            user.consume(Item.Handcuffs, 1);
+            writeOutput(c, Result.special, user, target);
+            target.add(c, new Bound(target.getType(), (40 + 3 * Math.sqrt(user.get(Attribute.cunning))), "handcuffs"));
         } else {
-            getSelf().consume(Item.ZipTie, 1);
-            if (target.roll(getSelf(), accuracy(c, target))) {
-                writeOutput(c, Result.normal, target);
-                target.add(c, new Bound(target.getType(), (25 + 3 * Math.sqrt(getSelf().get(Attribute.cunning))), "ziptie"));
+            user.consume(Item.ZipTie, 1);
+            if (target.roll(user, accuracy(c, user, target))) {
+                writeOutput(c, Result.normal, user, target);
+                target.add(c, new Bound(target.getType(), (25 + 3 * Math.sqrt(user.get(Attribute.cunning))), "ziptie"));
             } else {
-                writeOutput(c, Result.miss, target);
+                writeOutput(c, Result.miss, user, target);
                 return false;
             }
         }
@@ -50,26 +49,26 @@ public class Tie extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Tie(user.getType());
+        return new Tie();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 2;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 80;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "You try to catch " + target.getName() + "'s hands, but she squirms too much to keep your grip on her.";
         } else if (modifier == Result.special) {
@@ -80,22 +79,22 @@ public class Tie extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s tries to tie %s down, but %s %s %s arms free.",
-                            getSelf().subject(), target.nameDirectObject(),
+                            user.subject(), target.nameDirectObject(),
                             target.pronoun(), target.action("keep"), target.possessiveAdjective());
         } else if (modifier == Result.special) {
             return String.format("%s restrains %s with a pair of handcuffs.",
-                            getSelf().subject(), target.nameDirectObject());
+                            user.subject(), target.nameDirectObject());
         } else {
             return String.format("%s secures %s hands with a ziptie.",
-                            getSelf().subject(), target.nameOrPossessivePronoun());
+                            user.subject(), target.nameOrPossessivePronoun());
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Tie up your opponent's hands with a ziptie";
     }
 

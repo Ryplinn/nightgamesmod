@@ -32,7 +32,7 @@ public class FacesitStrategy extends KnockdownThenActionStrategy {
         if (self.has(Trait.powerfulcheeks) && weight > 0) {
             weight += 1;
         }
-        if (!(new FaceSit(self.getType())).requirements(c, self, c.getOpponent(self))) {
+        if (!(new FaceSit()).requirements(c, self, c.getOpponent(self))) {
             weight = 0;
         }
         return weight;
@@ -41,8 +41,8 @@ public class FacesitStrategy extends KnockdownThenActionStrategy {
     @Override
     protected Optional<Set<Skill>> getPreferredSkills(Combat c, Character self, Set<Skill> allowedSkills) {
         return emptyIfSetEmpty(allowedSkills.stream()
-                        .filter(skill -> skill.getTags(c).contains(SkillTag.facesit)
-                                        && !skill.getTags(c).contains(SkillTag.suicidal))
+                        .filter(skill -> skill.getTags(c, self).contains(SkillTag.facesit)
+                                        && !skill.getTags(c, self).contains(SkillTag.suicidal))
                         .collect(Collectors.toSet()));
     }
     

@@ -1,7 +1,9 @@
 package nightgames.skills;
 
+import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.*;
+import nightgames.characters.Decider;
+import nightgames.characters.NPC;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.DebugFlags;
@@ -17,8 +19,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class StripSelf extends Skill {
-    public StripSelf(CharacterType self) {
-        super("Strip Self", self);
+    public StripSelf() {
+        super("Strip Self");
         addTag(SkillTag.suicidal);
     }
 
@@ -28,41 +30,41 @@ public class StripSelf extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        boolean hasClothes = subChoices(c).size() > 0;
-        return hasClothes && getSelf().canAct() && c.getStance().mobile(getSelf()) && !getSelf().isPet();
+    public boolean usable(Combat c, Character user, Character target) {
+        boolean hasClothes = subChoices(c, user).size() > 0;
+        return hasClothes && user.canAct() && c.getStance().mobile(user) && !user.isPet();
     }
 
     @Override
-    public Collection<String> subChoices(Combat c) {
-        return getSelf().getOutfit().getAllStrippable().stream().map(Clothing::getName)
+    public Collection<String> subChoices(Combat c, Character user) {
+        return user.getOutfit().getAllStrippable().stream().map(Clothing::getName)
                         .collect(Collectors.toList());
     }
 
     @Override
-    public float priorityMod(Combat c) {
+    public float priorityMod(Combat c, Character user) {
         return -4f;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         Clothing clothing = null;
-        int diff = getSelf().stripDifficulty(target);
+        int diff = user.stripDifficulty(target);
         if (!choice.isEmpty() && Random.random(50) < diff) {
-            c.write(getSelf(), Formatter.format("{self:SUBJECT-ACTION:try|tries} to remove the %s"
+            c.write(user, Formatter.format("{self:SUBJECT-ACTION:try|tries} to remove the %s"
                             + " from {self:possessive} body, but it stubbornly sticks"
-                            + " to {self:direct-object}.", getSelf(), target, choice));
+                            + " to {self:direct-object}.", user, target, choice));
             return false;
         }
-        if (getSelf().human()) {
-            Optional<Clothing> stripped = getSelf().getOutfit().getEquipped().stream()
+        if (user.human()) {
+            Optional<Clothing> stripped = user.getOutfit().getEquipped().stream()
                             .filter(article -> article.getName().equals(choice)).findAny();
             if (stripped.isPresent()) {
-                clothing = getSelf().getOutfit().unequip(stripped.get());
-                c.getCombatantData(getSelf()).addToClothesPile(getSelf(), clothing);
+                clothing = user.getOutfit().unequip(stripped.get());
+                c.getCombatantData(user).addToClothesPile(user, clothing);
             }
-        } else if (getSelf() instanceof NPC) {
-            NPC self = (NPC) getSelf();
+        } else if (user instanceof NPC) {
+            NPC self = (NPC) user;
             HashMap<Clothing, Double> checks = new HashMap<>();
             double selfFit = self.getFitness(c);
             double otherFit = self.getOtherFitness(c, target);
@@ -86,40 +88,40 @@ public class StripSelf extends Skill {
                 }
                 return 0;
             }).map(Map.Entry::getKey);
-            best.ifPresent(cloth -> getSelf().strip(cloth, c));
+            best.ifPresent(cloth -> user.strip(cloth, c));
             clothing = best.orElse(null);
         }
         if (clothing == null) {
-            c.write(getSelf(), "Skill failed...");
+            c.write(user, "Skill failed...");
         } else {
-            c.write(getSelf(), Formatter.format(String.format("{self:SUBJECT-ACTION:strip|strips} off %s %s.",
-                            getSelf().possessiveAdjective(), clothing.getName()), getSelf(), target));
+            c.write(user, Formatter.format(String.format("{self:SUBJECT-ACTION:strip|strips} off %s %s.",
+                            user.possessiveAdjective(), clothing.getName()), user, target));
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new StripSelf(user.getType());
+        return new StripSelf();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.stripping;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return "";
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Strip yourself";
     }
 

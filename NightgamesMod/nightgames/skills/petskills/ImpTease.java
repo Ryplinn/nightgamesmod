@@ -1,7 +1,6 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
@@ -10,61 +9,61 @@ import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
 public class ImpTease extends SimpleEnemySkill {
-    public ImpTease(CharacterType self) {
-        super("Imp Tease", self);
+    public ImpTease() {
+        super("Imp Tease");
         addTag(SkillTag.pleasure);
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 5;
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return super.requirements(c, user, target) && gendersMatch(target);
+        return super.requirements(c, user, target) && gendersMatch(user, target);
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), accuracy(c, target))) {
-            int m = (int) (Random.random(10, 16) + Math.sqrt(getSelf().getLevel())) / 2;
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.roll(user, accuracy(c, user, target))) {
+            int m = (int) (Random.random(10, 16) + Math.sqrt(user.getLevel())) / 2;
             if (target.crotchAvailable() && !c.getStance().penisInserted(target) && target.hasDick()) {
-                c.write(getSelf(), Formatter.format("{self:SUBJECT} jumps onto {other:name-do} and humps at {other:possessive} dick before "
+                c.write(user, Formatter.format("{self:SUBJECT} jumps onto {other:name-do} and humps at {other:possessive} dick before "
                                 + "{other:subject-action:can pull|can pull} {self:direct-object} off.",
-                                    getSelf(), target));
-                target.body.pleasure(getSelf(), getSelf().body.getRandomPussy(), target.body.getRandomCock(), m, c);
+                                    user, target));
+                target.body.pleasure(user, user.body.getRandomPussy(), target.body.getRandomCock(), m, c);
                 return true;
-            } else if (target.hasPussy() && !c.getStance().vaginallyPenetrated(c, target) && target.crotchAvailable() && getSelf().hasDick()) {
-                c.write(getSelf(), Formatter.format("{self:SUBJECT} latches onto {other:name-do} and shoves {self:possessive} thick cock into {other:possessive} pussy. As the demon humps {other:direct-object}, {other:SUBJECT-ACTION:yell|shrieks} and punches {self:direct-object} away.",
-                                getSelf(), target));
-                target.body.pleasure(getSelf(), getSelf().body.getRandomCock(), target.body.getRandomPussy(), m, c);
+            } else if (target.hasPussy() && !c.getStance().vaginallyPenetrated(c, target) && target.crotchAvailable() && user.hasDick()) {
+                c.write(user, Formatter.format("{self:SUBJECT} latches onto {other:name-do} and shoves {self:possessive} thick cock into {other:possessive} pussy. As the demon humps {other:direct-object}, {other:SUBJECT-ACTION:yell|shrieks} and punches {self:direct-object} away.",
+                                user, target));
+                target.body.pleasure(user, user.body.getRandomCock(), target.body.getRandomPussy(), m, c);
                 return true;
             } else if (target.breastsAvailable() || target.isPet()) {
-                c.write(getSelf(), Formatter.format("{self:SUBJECT} jumps up and hugs {other:name-possessive} chest and licks {other:possessive} nipples with "
+                c.write(user, Formatter.format("{self:SUBJECT} jumps up and hugs {other:name-possessive} chest and licks {other:possessive} nipples with "
                                 + "{self:possessive} longer than average tongue until {other:pronoun-action:pull|pulls} {self:direct-object} off.",
-                                getSelf(), target));
+                                user, target));
                 m += 5;
-                target.body.pleasure(getSelf(), getSelf().body.getRandom("mouth"), target.body.getRandomBreasts(), m, c);
+                target.body.pleasure(user, user.body.getRandom("mouth"), target.body.getRandomBreasts(), m, c);
                 return true;
             }
         }
-        c.write(getSelf(), Formatter.format("{self:SUBJECT} stands at the periphery of the fight, touching {self:reflective} idly.", getSelf(), target));
+        c.write(user, Formatter.format("{self:SUBJECT} stands at the periphery of the fight, touching {self:reflective} idly.", user, target));
         return false;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new ImpTease(user.getType());
+        return new ImpTease();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 8;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 

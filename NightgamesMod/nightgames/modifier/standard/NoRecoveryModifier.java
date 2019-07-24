@@ -10,7 +10,7 @@ public class NoRecoveryModifier extends BaseModifier {
 
     public NoRecoveryModifier() {
         actions = new BanActionModifier(new MasturbateAction());
-        skills = new BanSkillsModifier(new Masturbate(null));
+        skills = new BanSkillsModifier(new Masturbate());
     }
 
     @Override

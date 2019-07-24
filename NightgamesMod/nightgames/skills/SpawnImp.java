@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.pet.ImpFem;
@@ -12,8 +11,8 @@ import nightgames.pet.Ptype;
 public class SpawnImp extends Skill {
     private Ptype gender;
 
-    SpawnImp(CharacterType self, Ptype gender) {
-        super("Summon Imp (" + gender.name() + ")", self);
+    SpawnImp(Ptype gender) {
+        super("Summon Imp (" + gender.name() + ")");
         this.gender = gender;
     }
 
@@ -23,41 +22,41 @@ public class SpawnImp extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance().mobile(getSelf()) && !c.getStance().prone(getSelf())
-                        && c.getPetsFor(getSelf()).size() < getSelf().getPetLimit();
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && c.getStance().mobile(user) && !c.getStance().prone(user)
+                        && c.getPetsFor(user).size() < user.getPetLimit();
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 10;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Summon a demonic Imp: 10 mojo, 5 arousal";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        getSelf().arouse(5, c);
-        int power = 5 + getSelf().get(Attribute.darkness);
-        int ac = 2 + getSelf().get(Attribute.darkness) / 10;
-        if (getSelf().human()) {
-            c.write(getSelf(), deal(c, 0, Result.normal, target));
+    public boolean resolve(Combat c, Character user, Character target) {
+        user.arouse(5, c);
+        int power = 5 + user.get(Attribute.darkness);
+        int ac = 2 + user.get(Attribute.darkness) / 10;
+        if (user.human()) {
+            c.write(user, deal(c, 0, Result.normal, user, target));
             if (gender == Ptype.impfem) {
-                c.addPet(getSelf(), new ImpFem(getSelf(), power, ac).getSelf());
+                c.addPet(user, new ImpFem(user, power, ac).getSelf());
             } else {
-                c.addPet(getSelf(), new ImpMale(getSelf(), power, ac).getSelf());
+                c.addPet(user, new ImpMale(user, power, ac).getSelf());
             }
         } else {
             if (target.human()) {
-                c.write(getSelf(), receive(c, 0, Result.normal, target));
+                c.write(user, receive(c, 0, Result.normal, user, target));
             }
             if (gender == Ptype.impfem) {
-                c.addPet(getSelf(), new ImpFem(getSelf(), power, ac).getSelf());
+                c.addPet(user, new ImpFem(user, power, ac).getSelf());
             } else {
-                c.addPet(getSelf(), new ImpMale(getSelf(), power, ac).getSelf());
+                c.addPet(user, new ImpMale(user, power, ac).getSelf());
             }
         }
         return true;
@@ -65,16 +64,16 @@ public class SpawnImp extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new SpawnImp(user.getType(), gender);
+        return new SpawnImp(gender);
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.summoning;
     }
 
     @Override
-    public String getLabel(Combat c) {
+    public String getLabel(Combat c, Character user) {
         if (gender == Ptype.impfem) {
             return "Imp (female)";
         } else {
@@ -83,7 +82,7 @@ public class SpawnImp extends Skill {
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (gender == Ptype.impfem) {
             return "You focus your dark energy and summon a minion to fight for you. A naked, waist high, female imp steps out of a small burst of flame. She stirs up her honey "
                             + "pot and despite yourself, you're slightly affected by the pheromones she's releasing.";
@@ -95,19 +94,19 @@ public class SpawnImp extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
     	if (gender == Ptype.impfem) {
 	        return String.format("%s spreads out %s dark aura and a demonic imp appears next to %s"
 	                        + " in a burst of flame. The imp stands about waist height, with bright red hair, "
 	                        + "silver skin and a long flexible tail. It's naked, clearly female, and "
 	                        + "surprisingly attractive given its inhuman features.",
-	                        getSelf().subject(), getSelf().possessiveAdjective(), getSelf().directObject());
+	                        user.subject(), user.possessiveAdjective(), user.directObject());
     	} else {
 	        return String.format("%s spreads out %s dark aura and a demonic imp appears next to %s"
 	                        + " in a burst of flame. The imp stands about waist height, with bright red hair, "
 	                        + "silver skin and a long flexible tail. It's naked, clearly male, and "
 	                        + "surprisingly attractive given its inhuman features.",
-	                        getSelf().subject(), getSelf().possessiveAdjective(), getSelf().directObject());
+	                        user.subject(), user.possessiveAdjective(), user.directObject());
     	}
     }
 }

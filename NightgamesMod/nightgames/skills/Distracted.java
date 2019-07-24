@@ -1,15 +1,14 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.Stsflag;
 
 public class Distracted extends Skill {
 
-    public Distracted(CharacterType self) {
-        super("Distracted", self);
+    public Distracted() {
+        super("Distracted");
     }
 
     @Override
@@ -18,38 +17,38 @@ public class Distracted extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().distracted() && !getSelf().is(Stsflag.enthralled);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.distracted() && !user.is(Stsflag.enthralled);
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.normal, target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.normal, user, target);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Distracted(user.getType());
+        return new Distracted();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.misc;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You miss your opportunity to act.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character attacker) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character attacker) {
         return attacker.getName() + " looks a little unfocused and makes no attempt to defend herself.";
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Caught off guard";
     }
 

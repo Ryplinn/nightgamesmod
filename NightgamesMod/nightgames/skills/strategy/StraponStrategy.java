@@ -2,7 +2,6 @@ package nightgames.skills.strategy;
 
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
-import nightgames.characters.NPC;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.items.Item;
@@ -13,7 +12,7 @@ import java.util.Collections;
 import java.util.Set;
 
 public class StraponStrategy extends FuckStrategy {
-    private static final Skill STRAPON_SKILL = new Strapon(NPC.noneCharacter().getType());
+    private static final Skill STRAPON_SKILL = new Strapon();
 
     @Override
     public double weight(Combat c, Character self) {
@@ -29,7 +28,7 @@ public class StraponStrategy extends FuckStrategy {
     
     protected Set<Skill> filterSkills(Combat c, Character self, Set<Skill> allowedSkills) {
         if (self.has(Trait.strapped) && allowedSkills.contains(STRAPON_SKILL)) {
-            return Collections.singleton(new Strapon(self.getType()));
+            return Collections.singleton(new Strapon());
         }
         return super.filterSkills(c, self, allowedSkills);
     }

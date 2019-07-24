@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -12,8 +11,8 @@ import nightgames.stance.Cowgirl;
 import nightgames.stance.Missionary;
 
 public class CounterDrain extends CounterBase {
-    CounterDrain(CharacterType self) {
-        super("Counter Vortex", self, 6, "{self:SUBJECT-ACTION:glow|glows} with a purple light.");
+    CounterDrain() {
+        super("Counter Vortex", 6, "{self:SUBJECT-ACTION:glow|glows} with a purple light.");
         addTag(SkillTag.drain);
         addTag(SkillTag.fucking);
         addTag(SkillTag.staminaDamage);
@@ -22,24 +21,24 @@ public class CounterDrain extends CounterBase {
     }
 
     @Override
-    public float priorityMod(Combat c) {
+    public float priorityMod(Combat c, Character user) {
         return (float) Random.randomdouble() * 3;
     }
 
     @Override
-    public void resolveCounter(Combat c, Character target) {
-        if (getSelf().human()) {
-            c.write(getSelf(), deal(c, 0, Result.normal, target));
+    public void resolveCounter(Combat c, Character user, Character target) {
+        if (user.human()) {
+            c.write(user, deal(c, 0, Result.normal, user, target));
         } else {
-            c.write(getSelf(), receive(c, 0, Result.normal, target));
+            c.write(user, receive(c, 0, Result.normal, user, target));
         }
-        if (target.hasDick() && getSelf().hasPussy()) {
-            c.setStance(Cowgirl.similarInstance(getSelf(), target), getSelf(), true);
+        if (target.hasDick() && user.hasPussy()) {
+            c.setStance(Cowgirl.similarInstance(user, target), user, true);
         } else {
-            c.setStance(Missionary.similarInstance(getSelf(), target), getSelf(), true);
+            c.setStance(Missionary.similarInstance(user, target), user, true);
         }
-        Drain drain = new Drain(self);
-        drain.resolve(c, target);
+        Drain drain = new Drain();
+        drain.resolve(c, user, target);
     }
 
     @Override
@@ -48,55 +47,55 @@ public class CounterDrain extends CounterBase {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return !c.getStance().dom(getSelf()) && !c.getStance().dom(target) && getSelf().canAct()
-                        && getSelf().crotchAvailable() && target.crotchAvailable()
-                        && (getSelf().hasDick() && target.hasPussy() || getSelf().hasPussy() && target.hasDick()) && target.canAct();
+    public boolean usable(Combat c, Character user, Character target) {
+        return !c.getStance().dom(user) && !c.getStance().dom(target) && user.canAct()
+                        && user.crotchAvailable() && target.crotchAvailable()
+                        && (user.hasDick() && target.hasPussy() || user.hasPussy() && target.hasDick()) && target.canAct();
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 30;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Counter with Drain";
     }
 
     @Override
     public Skill copy(Character user) {
-        return new CounterDrain(user.getType());
+        return new CounterDrain();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.setup) {
             return Formatter.format(
                             "You drop your stance, take a deep breath and close your eyes. A purple glow starts radiating from your core.",
-                            getSelf(), target);
+                            user, target);
         } else {
             return Formatter.format(
                             "You suddenly open your eyes as you sense {other:name} approaching. "
                                             + "The purple light that surrounds you suddenly flies into {other:direct-object}, "
                                             + "eliciting a cry out of her. She collapses like a puppet with her strings cut and falls to the ground. "
                                             + "Seeing the opportunity, you smirk and leisurely mount her.",
-                            getSelf(), target);
+                            user, target);
         }
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.setup) {
             return Formatter.format(
                             "She drops her stance, takes a deep breath and closes her eyes. {other:SUBJECT-ACTION:notice|notices}"
                             + " a purple glow begin to radiate from her core.",
-                            getSelf(), target);
+                            user, target);
         } else {
             return Formatter.format(
                             "{self:SUBJECT} suddenly opens her eyes as {other:subject-action:approach|approaches}. "
@@ -104,7 +103,7 @@ public class CounterDrain extends CounterBase {
                                             + "The purple energy seems to paralyze {other:possessive} muscles and {other:pronoun-action:collapse|collapses}"
                                             + " like a puppet with {other:possessive} strings cut. {other:PRONOUN} can't help but fall to the ground with a cry. "
                                             + "Seeing the opportunity, {self:pronoun} smirks and leisurely mounts {other:direct-object}.",
-                            getSelf(), target);
+                            user, target);
         }
     }
 

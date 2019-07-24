@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -10,8 +9,8 @@ import nightgames.status.Stsflag;
 
 public class EnergyDrink extends Skill {
 
-    public EnergyDrink(CharacterType self) {
-        super("Energy Drink", self);
+    public EnergyDrink() {
+        super("Energy Drink");
     }
 
     @Override
@@ -20,52 +19,52 @@ public class EnergyDrink extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().mobile(getSelf()) && getSelf().canAct() && getSelf().has(Item.EnergyDrink);
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().mobile(user) && user.canAct() && user.has(Item.EnergyDrink);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Terrible stuff, but will make you less tired";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (getSelf().human()) {
-            c.write(getSelf(), deal(c, 0, Result.normal, target));
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (user.human()) {
+            c.write(user, deal(c, 0, Result.normal, user, target));
         } else if (target.human()) {
             if (!target.is(Stsflag.blinded))
-                c.write(getSelf(), receive(c, 0, Result.normal, target));
+                c.write(user, receive(c, 0, Result.normal, user, target));
             else 
-                printBlinded(c);
+                printBlinded(c, user);
         } else if (c.isBeingObserved()) {
-            c.write(getSelf(), receive(c, 0, Result.normal, target));
+            c.write(user, receive(c, 0, Result.normal, user, target));
         }
-        getSelf().heal(c, Math.max(20, getSelf().getStamina().max() / 2));
-        getSelf().buildMojo(c, 20 + Random.random(10));
+        user.heal(c, Math.max(20, user.getStamina().max() / 2));
+        user.buildMojo(c, 20 + Random.random(10));
 
-        getSelf().consume(Item.EnergyDrink, 1);
+        user.consume(Item.EnergyDrink, 1);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new EnergyDrink(user.getType());
+        return new EnergyDrink();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.recovery;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You chug an energy drink and feel some of your fatigue vanish.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        return getSelf().getName() + " opens up an energy drink and downs the whole can.";
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        return user.getName() + " opens up an energy drink and downs the whole can.";
     }
 
 }

@@ -79,7 +79,7 @@ public class Fairy extends Pet {
                             + "slime like a tiny missile. The slime splashes more than it explodes, it's pieces "
                             + "only shudder once before going still.");
         } else {
-            (new FairyTease(getSelf().getType())).resolve(c, opponent.getSelf());
+            (new FairyTease()).resolve(c, getSelf(), opponent.getSelf());
             return;
         }
         c.removePet(opponent.getSelf());

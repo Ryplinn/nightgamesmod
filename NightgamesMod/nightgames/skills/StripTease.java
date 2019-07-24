@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -13,12 +12,12 @@ import nightgames.status.Alluring;
 import nightgames.status.Stsflag;
 
 public class StripTease extends Skill {
-    StripTease(CharacterType self) {
-        this("Strip Tease", self);
+    StripTease() {
+        this("Strip Tease");
     }
 
-    StripTease(String string, CharacterType self) {
-        super(string, self);
+    StripTease(String string) {
+        super(string);
         addTag(SkillTag.undressing);
     }
 
@@ -43,65 +42,65 @@ public class StripTease extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return isUsable(c, getSelf(), target);
+    public boolean usable(Combat c, Character user, Character target) {
+        return isUsable(c, user, target);
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 30;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (getSelf().human()) {
-            c.write(getSelf(), deal(c, 0, Result.normal, target));
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (user.human()) {
+            c.write(user, deal(c, 0, Result.normal, user, target));
         } else if (c.shouldPrintReceive(target, c)) {
             if (target.human() && target.is(Stsflag.blinded))
-                printBlinded(c);
+                printBlinded(c, user);
             else
-                c.write(getSelf(), receive(c, 0, Result.normal, target));
+                c.write(user, receive(c, 0, Result.normal, user, target));
         }
         if (!target.is(Stsflag.blinded)) {
             int m = 15 + Random.random(5);
-            target.temptNoSource(c, getSelf(), m, this);
-            getSelf().add(c, new Alluring(self, 5));
+            target.temptNoSource(c, user, m, this);
+            user.add(c, new Alluring(user.getType(), 5));
         }
         target.emote(Emotion.horny, 30);
-        getSelf().undress(c);
-        getSelf().emote(Emotion.confident, 15);
-        getSelf().emote(Emotion.dominant, 15);
+        user.undress(c);
+        user.emote(Emotion.confident, 15);
+        user.emote(Emotion.dominant, 15);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new StripTease(user.getType());
+        return new StripTease();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "During a brief respite in the fight as " + target.getName()
                         + " is catching her breath, you make a show of seductively removing your clothes. "
                         + "By the time you finish, she's staring with undisguised arousal, pressing a hand unconsciously against her groin.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format("%s asks for a quick time out and starts sexily slipping %s own clothes off."
                         + " Although there are no time outs in the rules, %s can't help staring "
                         + "at the seductive display until %s finishes with a cute wiggle of %s naked ass.",
-                        getSelf().subject(), getSelf().possessiveAdjective(), target.subject(),
-                        getSelf().pronoun(), getSelf().possessiveAdjective());
+                        user.subject(), user.possessiveAdjective(), target.subject(),
+                        user.pronoun(), user.possessiveAdjective());
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Tempt opponent by removing your clothes";
     }
 

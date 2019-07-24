@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -11,34 +10,34 @@ import nightgames.items.Item;
 
 public class FaerieSwarm extends Skill {
 
-    FaerieSwarm(CharacterType self) {
-        super("FaerieSwarm", self, 2);
+    FaerieSwarm() {
+        super("FaerieSwarm", 2);
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.spellcasting) >= 2;
+        return user.getPure(Attribute.spellcasting) >= 2;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance().mobile(getSelf()) && !c.getStance().prone(getSelf())
-                        && getSelf().has(Item.MinorScroll);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && c.getStance().mobile(user) && !c.getStance().prone(user)
+                        && user.has(Item.MinorScroll);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Briefly unleash a crowd of mischievous faeries: Minor Scroll";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        getSelf().consume(Item.MinorScroll, 1);
+    public boolean resolve(Combat c, Character user, Character target) {
+        user.consume(Item.MinorScroll, 1);
         if (target.getOutfit().isNude()) {
-            writeOutput(c, Result.normal, target);
-            target.body.pleasure(getSelf(), null, null, 25 + Random.random(getSelf().get(Attribute.spellcasting)), c, this);
+            writeOutput(c, Result.normal, user, target);
+            target.body.pleasure(user, null, null, 25 + Random.random(user.get(Attribute.spellcasting)), c, new SkillUsage<>(this, user, target));
         } else {
-            writeOutput(c, Result.weak, target);
+            writeOutput(c, Result.weak, user, target);
             target.undress(c);
         }
         return true;
@@ -46,16 +45,16 @@ public class FaerieSwarm extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new FaerieSwarm(user.getType());
+        return new FaerieSwarm();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.summoning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.weak) {
             return "You unroll the summoning scroll and unleash a cloud of cute, naked faeries."
                             + "They immediately swarm around " + target.getName() + ", grabbing and pulling at "
@@ -75,11 +74,11 @@ public class FaerieSwarm extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.weak) {
             return String.format("%s pulls out a scroll and a swarm of butterfly-winged faeries burst "
                             + "forth to attack %s. They mischievously grab at %s clothes, using magical assistance "
-                            + "to efficiently strip %s naked.", getSelf().subject(), target.nameDirectObject(),
+                            + "to efficiently strip %s naked.", user.subject(), target.nameDirectObject(),
                             target.possessiveAdjective(), target.directObject());
         }
         String parts = target.hasDick() ? "dick and balls" : target.hasPussy() ? "pussy and clit" : "ass and chest";
@@ -88,7 +87,7 @@ public class FaerieSwarm extends Skill {
                         + "parts, while the rest play with %s naked body. They focus especially on %s %s, "
                         + "dozens of tiny hands playfully immobilizing %s with ticklish pleasure. The spell "
                         + "doesn't actually last very long, but from %s perspective, it feels"
-                        + " like minutes of delightful torture.", getSelf().subject(),
+                        + " like minutes of delightful torture.", user.subject(),
                         target.nameDirectObject(), target.possessiveAdjective(),
                         target.directObject(), target.possessiveAdjective(),
                         target.possessiveAdjective(),

@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -11,8 +10,8 @@ import nightgames.status.Stsflag;
 
 public class Sensitize extends Skill {
 
-    Sensitize(CharacterType self) {
-        super("Sensitivity Potion", self);
+    Sensitize() {
+        super("Sensitivity Potion");
     }
 
     @Override
@@ -21,30 +20,30 @@ public class Sensitize extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().mobile(getSelf()) && getSelf().canAct() && getSelf().has(Item.SPotion)
-                        && target.mostlyNude() && !c.getStance().prone(getSelf()) && !target.is(Stsflag.hypersensitive);
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().mobile(user) && user.canAct() && user.has(Item.SPotion)
+                        && target.mostlyNude() && !c.getStance().prone(user) && !target.is(Stsflag.hypersensitive);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Makes your opponent hypersensitive";
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
-        return getSelf().has(Item.Aersolizer) ? 200 : 65;
+    public int accuracy(Combat c, Character user, Character target) {
+        return user.has(Item.Aersolizer) ? 200 : 65;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        getSelf().consume(Item.SPotion, 1);
-        if (getSelf().has(Item.Aersolizer)) {
-            writeOutput(c, Result.special, target);
-        } else if (target.roll(getSelf(), accuracy(c, target))) {
-            writeOutput(c, Result.normal, target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        user.consume(Item.SPotion, 1);
+        if (user.has(Item.Aersolizer)) {
+            writeOutput(c, Result.special, user, target);
+        } else if (target.roll(user, accuracy(c, user, target))) {
+            writeOutput(c, Result.normal, user, target);
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
         target.add(c, new Hypersensitive(target.getType()));
@@ -53,16 +52,16 @@ public class Sensitize extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Sensitize(user.getType());
+        return new Sensitize();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.special) {
             return "You pop a sensitivity potion into your Aerosolizer and spray " + target.getName()
                             + " with a cloud of mist. She shivers as it takes hold and heightens her "
@@ -77,22 +76,22 @@ public class Sensitize extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.special) {
             return String.format("%s inserts a bottle into the attachment on %s arm. %s "
                             + "suddenly surrounded by a cloud of minty gas. %s skin becomes"
                             + " hot, but goosebumps appear anyway. "
-                            + "Even the air touching %s skin makes %s shiver.", getSelf().subject(),
-                            getSelf().possessiveAdjective(), 
+                            + "Even the air touching %s skin makes %s shiver.", user.subject(),
+                            user.possessiveAdjective(),
                             Formatter.capitalizeFirstLetter(target.subjectAction("are", "is")),
                             target.possessiveAdjective(), target.possessiveAdjective(),
                             target.directObject());
         } else if (modifier == Result.miss) {
             return String.format("%s splashes a bottle of liquid in %s direction, but none of it hits %s.",
-                            getSelf().subject(), target.nameDirectObject(), target.directObject());
+                            user.subject(), target.nameDirectObject(), target.directObject());
         } else {
             return String.format("%s throws a bottle of strange liquid at %s. The skin it touches grows hot"
-                            + " and oversensitive.", getSelf().subject(), target.nameDirectObject());
+                            + " and oversensitive.", user.subject(), target.nameDirectObject());
         }
     }
 

@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockPart;
 import nightgames.characters.body.mods.SizeMod;
@@ -17,8 +16,8 @@ import nightgames.status.Shamed;
 @SuppressWarnings("unused")
 public class ShrinkRay extends Skill {
 
-    ShrinkRay(CharacterType self) {
-        super("Shrink Ray", self);
+    ShrinkRay() {
+        super("Shrink Ray");
     }
 
     @Override
@@ -27,37 +26,37 @@ public class ShrinkRay extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance().mobile(getSelf()) && !c.getStance().prone(getSelf())
-                        && target.mostlyNude() && getSelf().has(Item.Battery, 2);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && c.getStance().mobile(user) && !c.getStance().prone(user)
+                        && target.mostlyNude() && user.has(Item.Battery, 2);
     }
 
     @Override
-    public float priorityMod(Combat c) {
+    public float priorityMod(Combat c, Character user) {
         return 2.f;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Shrink your opponent's 'assets' to damage her ego: 2 Batteries";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        getSelf().consume(Item.Battery, 2);
-        boolean permanent = Random.random(20) == 0 && (getSelf().human() || target.human())
+    public boolean resolve(Combat c, Character user, Character target) {
+        user.consume(Item.Battery, 2);
+        boolean permanent = Random.random(20) == 0 && (user.human() || target.human())
                         && !target.has(Trait.stableform);
-        if (getSelf().human()) {
+        if (user.human()) {
             if (target.hasDick()) {
-                c.write(getSelf(), deal(c, permanent ? 1 : 0, Result.special, target));
+                c.write(user, deal(c, permanent ? 1 : 0, Result.special, user, target));
             } else {
-                c.write(getSelf(), deal(c, permanent ? 1 : 0, Result.normal, target));
+                c.write(user, deal(c, permanent ? 1 : 0, Result.normal, user, target));
             }
         } else if (c.shouldPrintReceive(target, c)) {
             if (target.hasDick()) {
-                c.write(getSelf(), receive(c, permanent ? 1 : 0, Result.special, target));
+                c.write(user, receive(c, permanent ? 1 : 0, Result.special, user, target));
             } else {
-                c.write(getSelf(), receive(c, permanent ? 1 : 0, Result.normal, target));
+                c.write(user, receive(c, permanent ? 1 : 0, Result.normal, user, target));
             }
         }
         target.add(c, new Shamed(target.getType()));
@@ -96,16 +95,16 @@ public class ShrinkRay extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new ShrinkRay(user.getType());
+        return new ShrinkRay();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         String message;
         if (modifier == Result.special) {
             message = "You aim your shrink ray at " + target.getName()
@@ -121,19 +120,19 @@ public class ShrinkRay extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         String message;
         if (modifier == Result.special) {
             message = String.format("%s points a device at %s groin and giggles as %s genitals "
-                            + "shrink. %s in shame and %s %s.", getSelf().subject(),
+                            + "shrink. %s in shame and %s %s.", user.subject(),
                             target.nameOrPossessivePronoun(), target.possessiveAdjective(),
                             Formatter.capitalizeFirstLetter(target.subjectAction("flush", "flushes")),
                             target.action("cover"), target.reflectivePronoun());
         } else {
             message = String.format("%s points a device at %s chest and giggles as %s %s"
-                            + " shrink. %s in shame and %s %s.", getSelf().subject(),
+                            + " shrink. %s in shame and %s %s.", user.subject(),
                             target.nameOrPossessivePronoun(), target.possessiveAdjective(),
-                            getSelf().body.getRandomBreasts().describe(getSelf()),
+                            user.body.getRandomBreasts().describe(user),
                             Formatter.capitalizeFirstLetter(target.subjectAction("flush", "flushes")),
                             target.action("cover"), target.reflectivePronoun());
         }

@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -14,8 +13,8 @@ import nightgames.status.Falling;
 
 public class HipThrow extends Skill {
 
-    HipThrow(CharacterType self) {
-        super("Hip Throw", self);
+    HipThrow() {
+        super("Hip Throw");
         addTag(SkillTag.hurt);
         addTag(SkillTag.staminaDamage);
         addTag(SkillTag.positioning);
@@ -28,26 +27,26 @@ public class HipThrow extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return !target.wary() && c.getStance().mobile(getSelf()) && c.getStance().mobile(target)
-                        && !c.getStance().prone(getSelf()) && !c.getStance().prone(target) && getSelf().canAct()
+    public boolean usable(Combat c, Character user, Character target) {
+        return !target.wary() && c.getStance().mobile(user) && c.getStance().mobile(target)
+                        && !c.getStance().prone(user) && !c.getStance().prone(target) && user.canAct()
                         && !c.getStance().connected(c);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 10;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (getSelf().checkVsDc(Attribute.power, target.knockdownDC() - target.get(Attribute.cunning) / 2)) {
-            writeOutput(c, Result.normal, target);
-            target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(10, 16)));
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (user.checkVsDc(Attribute.power, target.knockdownDC() - target.get(Attribute.cunning) / 2)) {
+            writeOutput(c, Result.normal, user, target);
+            target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random.random(10, 16)));
             target.add(c, new Falling(target.getType()));
             target.emote(Emotion.angry, 5);
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
         return true;
@@ -55,16 +54,16 @@ public class HipThrow extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new HipThrow(user.getType());
+        return new HipThrow();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.damage;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.normal) {
             return target.getName()
                             + " rushes toward you, but you step in close and pull her towards you, using her momentum to throw her across your hip and onto the floor.";
@@ -75,30 +74,30 @@ public class HipThrow extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.normal) {
             return String.format("%s a momentary weakness in %s guard and %s toward %s to "
                             + "take advantage of it. The next thing %s, %s %s "
                             + "hitting the floor behind %s.",
-                            getSelf().subjectAction("see"), target.nameOrPossessivePronoun(),
-                            getSelf().action("lunge"), target.directObject(),
-                            getSelf().subjectAction("know"), getSelf().pronoun(),
-                            getSelf().action("are", "is"), target.directObject());
+                            user.subjectAction("see"), target.nameOrPossessivePronoun(),
+                            user.action("lunge"), target.directObject(),
+                            user.subjectAction("know"), user.pronoun(),
+                            user.action("are", "is"), target.directObject());
         } else {
             return String.format("%s grabs %s arm and pulls %s off balance, but %s %s"
                             + " to plant %s foot behind %s leg sweep. This gives %s a more"
                             + " stable stance than %s and %s has "
-                            + "to break away to stay on %s feet.", getSelf().subject(),
+                            + "to break away to stay on %s feet.", user.subject(),
                             target.nameOrPossessivePronoun(), target.directObject(),
                             target.pronoun(), target.action("manage"), target.possessiveAdjective(),
-                            getSelf().possessiveAdjective(), target.nameDirectObject(),
-                            getSelf().nameDirectObject(), getSelf().pronoun(),
-                            getSelf().possessiveAdjective());
+                            user.possessiveAdjective(), target.nameDirectObject(),
+                            user.nameDirectObject(), user.pronoun(),
+                            user.possessiveAdjective());
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Throw your opponent to the ground, dealing some damage: 10 Mojo";
     }
 

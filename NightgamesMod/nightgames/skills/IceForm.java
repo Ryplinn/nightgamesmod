@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.IceStance;
@@ -10,8 +9,8 @@ import nightgames.status.Stsflag;
 
 public class IceForm extends Skill {
 
-    IceForm(CharacterType self) {
-        super("Ice Form", self);
+    IceForm() {
+        super("Ice Form");
     }
 
     @Override
@@ -20,49 +19,49 @@ public class IceForm extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && !c.getStance().sub(getSelf()) && !getSelf().is(Stsflag.form);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && !c.getStance().sub(user) && !user.is(Stsflag.form);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Improves resistance to pleasure, reduces mojo gain to a quarter.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (getSelf().human()) {
-            c.write(getSelf(), deal(c, 0, Result.normal, target));
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (user.human()) {
+            c.write(user, deal(c, 0, Result.normal, user, target));
         } else if (c.shouldPrintReceive(target, c)) {
             if (!target.is(Stsflag.blinded))
-                c.write(getSelf(), receive(c, 0, Result.normal, target));
+                c.write(user, receive(c, 0, Result.normal, user, target));
             else 
-                printBlinded(c);
+                printBlinded(c, user);
         }
-        getSelf().add(c, new IceStance(self));
+        user.add(c, new IceStance(user.getType()));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new IceForm(user.getType());
+        return new IceForm();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You visualize yourself at the center of a raging snow storm. You can already feel yourself start to go numb.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format("%s takes a deep breath and %s expression turns so "
                         + "frosty that %s not sure %s can ever thaw her out.",
-                        getSelf().subject(), getSelf().possessiveAdjective(),
+                        user.subject(), user.possessiveAdjective(),
                         target.subjectAction("are", "is"), target.pronoun());
     }
 

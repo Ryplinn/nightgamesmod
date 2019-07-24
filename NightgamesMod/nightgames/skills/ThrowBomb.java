@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -24,12 +23,12 @@ public class ThrowBomb extends Skill {
                     + " The thing is beeping softly, and by the confident little smirk {other:subject} is giving"
                     + " you from below, it might be best to remove it. Soon.";
 
-    public ThrowBomb(CharacterType self) {
-        super("Throw Bomb", self, 4);
+    public ThrowBomb() {
+        super("Throw Bomb", 4);
     }
 
     @Override
-    public String getLabel(Combat c) {
+    public String getLabel(Combat c, Character user) {
         return c.getStance().en == Stance.neutral ? "Throw Bomb" : "Stick Bomb";
     }
 
@@ -39,59 +38,59 @@ public class ThrowBomb extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && getSelf().has(Item.Battery, 3) && target.outfit.slotOpen(ClothingSlot.top)
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && user.has(Item.Battery, 3) && target.outfit.slotOpen(ClothingSlot.top)
                         && !target.is(Stsflag.bombed)
-                        && (c.getStance().facing(getSelf(), target)
-                        || (c.getStance().behind(getSelf()) && c.getStance().dom(getSelf())))
-                        && (c.getStance().en != Stance.pin || c.getStance().dom(getSelf()));
+                        && (c.getStance().facing(user, target)
+                        || (c.getStance().behind(user) && c.getStance().dom(user)))
+                        && (c.getStance().en != Stance.pin || c.getStance().dom(user));
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Try to stick a Pheromone Bomb to your opponent. (3 Batteries)";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        getSelf().consume(Item.Battery, 3);
+    public boolean resolve(Combat c, Character user, Character target) {
+        user.consume(Item.Battery, 3);
         Stance s = c.getStance().en;
         if ((s == Stance.behind && c.getStance()
-                                    .dom(getSelf()))
+                                    .dom(user))
                         || s == Stance.cowgirl || s == Stance.missionary || s == Stance.mount || c.getStance()
-                                                                                                  .dom(getSelf())
-                        || target.roll(getSelf(), 75)) {
-            writeOutput(c, Result.normal, target);
+                                                                                                  .dom(user)
+                        || target.roll(user, 75)) {
+            writeOutput(c, Result.normal, user, target);
             target.add(c, new PheromoneBombed(target.getType()));
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
         }
         return false;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new ThrowBomb(user.getType());
+        return new ThrowBomb();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return Formatter.format("You try to get a Pheromone Bomb on {other:subject}, but "
-                            + "{other:pronoun} slaps it out of your hand.", getSelf(), target);
+                            + "{other:pronoun} slaps it out of your hand.", user, target);
         }
         return Formatter.format(
                         "You take out a Pheromone Bomb, arm it, and stick it to" + " {other:name-possessive} chest.",
-                        getSelf(), target);
+                        user, target);
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         switch (c.getStance().en) {
             case behind:
             case pin:
@@ -101,13 +100,13 @@ public class ThrowBomb extends Skill {
                                                 + " to {other:possessive} chest. It beeps softly when it makes contact, and"
                                                 + " when {self:pronoun} pulls {self:possessive} hand back it sticks to {other:name-do},"
                                                 + " still beeping intermittently.",
-                                getSelf(), target);
+                                user, target);
             case cowgirl:
             case missionary:
             case mount:
                 return Formatter.format(c.getStance()
-                                      .dom(getSelf()) ? DOM_SEX : SUB_SEX,
-                                getSelf(), target);
+                                      .dom(user) ? DOM_SEX : SUB_SEX,
+                                user, target);
             case neutral:
                 if (modifier == Result.miss) {
                     return Formatter.format(
@@ -115,7 +114,7 @@ public class ThrowBomb extends Skill {
                                                     + " but as {other:pronoun-action:step} to the side and see it fly past {other:subject-action:note}"
                                                     + " that it's actually"
                                                     + " a metal sphere; a machine of some sort. It's probably a good thing it sailed past.",
-                                    getSelf(), target);
+                                    user, target);
                 }
                 return Formatter.format(
                                 "With a near-perfect baseball pitch, {self:subject} throws some kind of object at {other:name-do}."
@@ -124,18 +123,18 @@ public class ThrowBomb extends Skill {
                                                 + " {other:SUBJECT-ACTION:do|does} know"
                                                 + " that it's sticking to {other:direct-object} quite insistently, and {other:pronoun}"
                                                 + " might not want to find out what else it can do.",
-                                getSelf(), target);
+                                user, target);
             default:
                 if (modifier == Result.miss) {
                     return Formatter.format(
                                     "{self:SUBJECT} brandishes a small spherical device, but {other:subject-action:slap} it out of"
                                                     + " {self:possessive} hands before {self:pronoun} can do anything with it.",
-                                    getSelf(), target);
+                                    user, target);
                 }
                 return Formatter.format(
                                 "{self:SUBJECT} takes out a small, round device and sticks it onto {other:name-possessive} chest."
                                                 + " Knowing {self:direct-object}, it would probably be best to get it off quickly.",
-                                getSelf(), target);
+                                user, target);
         }
     }
 }

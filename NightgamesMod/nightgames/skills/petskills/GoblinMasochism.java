@@ -1,7 +1,6 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.nskills.tags.SkillTag;
@@ -11,26 +10,26 @@ import nightgames.status.Masochistic;
 import nightgames.status.Stsflag;
 
 public class GoblinMasochism extends SimpleEnemySkill {
-    public GoblinMasochism(CharacterType self) {
-        super("Goblin Masochism", self);
+    public GoblinMasochism() {
+        super("Goblin Masochism");
         addTag(SkillTag.debuff);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return super.usable(c, target) && !target.is(Stsflag.masochism);
+    public boolean usable(Combat c, Character user, Character target) {
+        return super.usable(c, user, target) && !target.is(Stsflag.masochism);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 5;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        c.write(getSelf(), Formatter.format("{self:SUBJECT} draws a riding crop and hits her own balls with it. She shivers with delight at the pain and both of you can "
-                        + "feel an aura of masochism radiate off her.", getSelf(), target));
-        getSelf().pain(c, getSelf(), 10);
+    public boolean resolve(Combat c, Character user, Character target) {
+        c.write(user, Formatter.format("{self:SUBJECT} draws a riding crop and hits her own balls with it. She shivers with delight at the pain and both of you can "
+                        + "feel an aura of masochism radiate off her.", user, target));
+        user.pain(c, user, 10);
         c.p1.add(c, new Masochistic(c.p1.getType()));
         c.p2.add(c, new Masochistic(c.p2.getType()));
         return true;
@@ -38,16 +37,16 @@ public class GoblinMasochism extends SimpleEnemySkill {
 
     @Override
     public Skill copy(Character user) {
-        return new GoblinMasochism(user.getType());
+        return new GoblinMasochism();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 8;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 

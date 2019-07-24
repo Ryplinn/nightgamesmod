@@ -175,13 +175,13 @@ public class FaceSitting extends Position {
             return Collections.emptySet();
         } else {
             Collection<Skill> avail = new HashSet<>();
-            avail.add(new Cunnilingus(bottom));
-            avail.add(new Anilingus(bottom));
-            avail.add(new Blowjob(bottom));
-            avail.add(new Escape(bottom));
-            avail.add(new Struggle(bottom));
-            avail.add(new Nothing(bottom));
-            avail.add(new Wait(bottom));
+            avail.add(new Cunnilingus());
+            avail.add(new Anilingus());
+            avail.add(new Blowjob());
+            avail.add(new Escape());
+            avail.add(new Struggle());
+            avail.add(new Nothing());
+            avail.add(new Wait());
             return avail;
         }
     }
@@ -234,9 +234,9 @@ public class FaceSitting extends Position {
                             struggler.directObject(), getTop().directObject()));
         }
         if (getTop().hasPussy() && !getTop().has(Trait.temptingass)) {
-            new Cunnilingus(struggler.getType()).resolve(c, getTop());
+            new Cunnilingus().resolve(c, struggler, getTop());
         } else {
-            new Anilingus(struggler.getType()).resolve(c, getTop());
+            new Anilingus().resolve(c, struggler, getTop());
         }
     }
 

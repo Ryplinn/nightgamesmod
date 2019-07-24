@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -11,8 +10,8 @@ import nightgames.nskills.tags.SkillTag;
 
 public class Defabricator extends Skill {
 
-    public Defabricator(CharacterType self) {
-        super("Defabricator", self);
+    public Defabricator() {
+        super("Defabricator");
         addTag(SkillTag.stripping);
     }
 
@@ -22,21 +21,21 @@ public class Defabricator extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance().mobile(getSelf()) && !c.getStance().prone(getSelf())
-                        && !target.mostlyNude() && getSelf().has(Item.Battery, 8);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && c.getStance().mobile(user) && !c.getStance().prone(user)
+                        && !target.mostlyNude() && user.has(Item.Battery, 8);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Does what it says on the tin.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        getSelf().consume(Item.Battery, 8);
-        writeOutput(c, Result.normal, target);
-        if (getSelf().human() || c.isBeingObserved())
+    public boolean resolve(Combat c, Character user, Character target) {
+        user.consume(Item.Battery, 8);
+        writeOutput(c, Result.normal, user, target);
+        if (user.human() || c.isBeingObserved())
             c.write(target, target.nakedLiner(c, target));
         target.nudify();
         return true;
@@ -44,25 +43,25 @@ public class Defabricator extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Defabricator(user.getType());
+        return new Defabricator();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.stripping;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You charge up your Defabricator and point it in " + target.getName()
                         + "'s general direction. A bright light engulfs her and her clothes are disintegrated in moment.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format("%s points a device at %s and light shines from it like it's a simple flashlight. "
                         + "The device's function is immediately revealed as %s clothes just vanish "
-                        + "in the light. %s left naked in seconds.", getSelf().subject(),
+                        + "in the light. %s left naked in seconds.", user.subject(),
                         target.nameDirectObject(), target.possessiveAdjective(), 
                         Formatter.capitalizeFirstLetter(target.subjectAction("are", "is")));
     }

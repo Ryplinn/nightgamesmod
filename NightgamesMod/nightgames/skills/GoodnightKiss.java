@@ -2,49 +2,48 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
 
 public class GoodnightKiss extends Skill {
 
-    GoodnightKiss(CharacterType self) {
-        super("Goodnight Kiss", self);
+    GoodnightKiss() {
+        super("Goodnight Kiss");
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.ninjutsu) >= 18;
+        return user.getPure(Attribute.ninjutsu) >= 18;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
+    public boolean usable(Combat c, Character user, Character target) {
         return c.getStance()
-                .kiss(getSelf(), target) && getSelf().canAct();
+                .kiss(user, target) && user.canAct();
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 30;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Deliver a powerful knockout drug via a kiss: 30 Mojo";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        c.write(getSelf(), String.format(
+    public boolean resolve(Combat c, Character user, Character target) {
+        c.write(user, String.format(
                         "%s surreptitiously %s %s lips with a powerful sedative, careful not "
                                         + "to accidentally ingest any. As soon as %s %s an opening, "
                                         + "%s %s in and kiss %s softly. Only a small amount of the drug is actually "
                                         + "transferred by the kiss, but it's enough. %s immediately staggers "
                                         + "as the strength leaves %s body.",
-                        getSelf().subject(), getSelf().action("coat"), getSelf().possessiveAdjective(),
-                        getSelf().pronoun(), getSelf().action("see"), getSelf().pronoun(),
-                        getSelf().action("dart"), target.subject(), target.subject(), target.possessiveAdjective()));
+                        user.subject(), user.action("coat"), user.possessiveAdjective(),
+                        user.pronoun(), user.action("see"), user.pronoun(),
+                        user.action("dart"), target.subject(), target.subject(), target.possessiveAdjective()));
         target.tempt(Random.random(4));
         target.getStamina()
               .empty();
@@ -53,26 +52,26 @@ public class GoodnightKiss extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new GoodnightKiss(user.getType());
+        return new GoodnightKiss();
     }
     
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 7;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.damage;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 

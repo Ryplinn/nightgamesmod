@@ -578,12 +578,12 @@ public class Body implements Cloneable {
         return pleasure(opponent, with, target, magnitude, 0, c, false, null);
     }
 
-    public int pleasure(Character opponent, BodyPart with, BodyPart target, double magnitude, Combat c, Skill skill) {
-        return pleasure(opponent, with, target, magnitude, 0, c, false, skill);
+    public int pleasure(Character opponent, BodyPart with, BodyPart target, double magnitude, Combat c, Skill.SkillUsage usage) {
+        return pleasure(opponent, with, target, magnitude, 0, c, false, usage);
     }
 
     public int pleasure(Character opponent, BodyPart with, BodyPart target, double magnitude, int bonus, Combat c,
-                    boolean sub, Skill skill) {
+                    boolean sub, Skill.SkillUsage usage) {
         if (target == null) {
             target = nonePart;
         }
@@ -664,7 +664,7 @@ public class Body implements Cloneable {
         boolean unsatisfied = false;
         if (getCharacter().has(Trait.Unsatisfied)
                         && (getCharacter().getArousal().percent() >= 50)
-                        && (skill == null || !skill.getTags(c).contains(SkillTag.fucking))
+                        && (usage == null || !usage.skill.getTags(c, usage.user).contains(SkillTag.fucking))
                         && !(with.isGenital() && target.isGenital() && c.getStance().havingSex(c))) {
             if (c != null && c.getOpponent(getCharacter()).human()) {
                 pleasure -= 4;
@@ -688,14 +688,14 @@ public class Body implements Cloneable {
         double staleness = 1.0;
         double stageMultiplier = 0.0;
         boolean staleMove = false;
-        if (skill != null) {
-            if (c != null && skill.getSelf() != null && c.getCombatantData(skill.getSelf()) != null) {
-                staleness = c.getCombatantData(skill.getSelf()).getMoveModifier(skill);
+        if (usage != null) {
+            if (c != null && usage.user != null && c.getCombatantData(usage.user) != null) {
+                staleness = c.getCombatantData(usage.user).getMoveModifier(usage.skill);
             }
             if (staleness <= .51) {
                 staleMove = true;
             }
-            stageMultiplier = skill.getStage().multiplierFor(getCharacter());
+            stageMultiplier = usage.skill.getStage().multiplierFor(getCharacter());
         }
         multiplier = Math.max(0, multiplier + stageMultiplier) * staleness;
 
@@ -721,7 +721,7 @@ public class Body implements Cloneable {
                                             String.format(" + <font color=%s>%.1f</font>",
                                                             GUIColor.AROUSAL_MALUS.rgbHTML(), baseBonusDamage) :
                                             "";
-            String stageString = skill == null ? "" : String.format(" + stage:%.2f", skill.multiplierForStage(getCharacter()));
+            String stageString = usage == null ? "" : String.format(" + stage:%.2f", usage.skill.multiplierForStage(getCharacter()));
             String dominanceString = dominance < 0.01 ? "" : String.format(" + dominance:%.2f", dominance);
             String staleString = staleness < .99 ? String.format(" x staleness: %.2f", staleness) : "";
             String battleString =
@@ -735,10 +735,14 @@ public class Body implements Cloneable {
                                             dominanceString, staleString);
             c.writeSystemMessage(battleString);
             Optional<BodyFetish> otherFetish = opponent.body.getFetish(target.getType());
-            if (otherFetish.isPresent() && otherFetish.get().magnitude > .3 && perceptionlessDamage > 0 && skill != null
-                            && skill.self.equals(character) && opponent.getType() != character && opponent.canRespond()) {
-                c.write(getCharacter(), Formatter.format("Playing with {other:possessive} {other:body-part:%s} arouses {self:direct-object} almost as much as {other:direct-object}.", opponent, getCharacter(), target.getType()));
-                opponent.temptNoSkill(c, getCharacter(), target, (int) Math.round(perceptionlessDamage * (otherFetish.get().magnitude - .2)));
+            if (otherFetish.isPresent() && otherFetish.get().magnitude > .3 && perceptionlessDamage > 0 && usage != null
+                            && usage.user != null && usage.user.getType().equals(character)
+                            && opponent.getType() != character && opponent.canRespond()) {
+                c.write(getCharacter(), Formatter.format(
+                                "Playing with {other:possessive} {other:body-part:%s} arouses {self:direct-object} almost as much as {other:direct-object}.",
+                                opponent, getCharacter(), target.getType()));
+                opponent.temptNoSkill(c, getCharacter(), target,
+                                (int) Math.round(perceptionlessDamage * (otherFetish.get().magnitude - .2)));
             }
         } else {
             GUIColor firstColor = GUIColor.characterColor(getCharacter());
@@ -762,7 +766,7 @@ public class Body implements Cloneable {
                 c.write(getCharacter(), Formatter.format("Foreplay doesn't seem to do it for {self:name-do} anymore. {self:PRONOUN-ACTION:clearly need|clearly needs} to fuck!", getCharacter(), opponent));
             }
         }
-        if (staleMove && skill.getUser().human()) {
+        if (staleMove && usage.user.human()) {
             c.write(opponent, Formatter.format("This seems to be a getting bit boring for {other:direct-object}... Maybe it's time to switch it up?", opponent, getCharacter()));
         }
         double percentPleasure = 100.0 * result / getCharacter().getArousal().max();
@@ -780,7 +784,12 @@ public class Body implements Cloneable {
                             "{self:NAME-POSSESSIVE} moans as {other:subject-action:make|makes} a show of pleasing {other:possessive} {self:master} "
                                             + "turns %s on immensely.", getCharacter(), opponent,
                             voyeur.nameDirectObject()));
-            voyeur.temptWithSkill(c, getCharacter(), null, Math.max(Random.random(14, 20), result / 3), skill);
+            int temptAmount = Math.max(Random.random(14, 20), result / 3);
+            if (usage != null) {
+                voyeur.temptWithSkill(c, getCharacter(), null, temptAmount, usage.skill);
+            } else {
+                voyeur.temptNoSkill(c, getCharacter(), null, temptAmount);
+            }
         }
 
         getCharacter().resolvePleasure(result, c, opponent, target, with);

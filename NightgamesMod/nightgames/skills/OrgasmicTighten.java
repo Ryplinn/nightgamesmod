@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,8 +12,8 @@ import nightgames.stance.Stance;
 import nightgames.status.BodyFetish;
 
 public class OrgasmicTighten extends Thrust {
-    public OrgasmicTighten(CharacterType self) {
-        super("Orgasmic Tighten", self);
+    public OrgasmicTighten() {
+        super("Orgasmic Tighten");
         removeTag(SkillTag.pleasureSelf);
     }
 
@@ -24,80 +23,80 @@ public class OrgasmicTighten extends Thrust {
     }
 
     @Override
-    public BodyPart getSelfOrgan(Combat c, Character target) {
-        if (c.getStance().anallyPenetratedBy(c, getSelf(), target)) {
-            return getSelf().body.getRandom("ass");
-        } else if (c.getStance().vaginallyPenetratedBy(c, getSelf(), target)) {
-            return getSelf().body.getRandomPussy();
+    public BodyPart getSelfOrgan(Combat c, Character user, Character target) {
+        if (c.getStance().anallyPenetratedBy(c, user, target)) {
+            return user.body.getRandom("ass");
+        } else if (c.getStance().vaginallyPenetratedBy(c, user, target)) {
+            return user.body.getRandomPussy();
         } else {
             return null;
         }
     }
 
     @Override
-    public int[] getDamage(Combat c, Character target) {
+    public int[] getDamage(Combat c, Character user, Character target) {
         int[] result = new int[2];
 
-        int m = Random.random(25, 40) + Math.min(getSelf().get(Attribute.power) / 3, 20);
+        int m = Random.random(25, 40) + Math.min(user.get(Attribute.power) / 3, 20);
         result[0] = m;
 
         return result;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        BodyPart selfO = getSelfOrgan(c, target);
-        BodyPart targetO = getTargetOrgan(c, target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        BodyPart selfO = getSelfOrgan(c, user, target);
+        BodyPart targetO = getTargetOrgan(c, user, target);
         Result result;
-        if (c.getStance().anallyPenetratedBy(c, getSelf(), target)) {
+        if (c.getStance().anallyPenetratedBy(c, user, target)) {
             result = Result.anal;
         } else {
             result = Result.normal;
         }
 
-        writeOutput(c, result, target);
+        writeOutput(c, result, user, target);
 
-        int[] m = getDamage(c, target);
+        int[] m = getDamage(c, user, target);
         assert (m.length >= 2);
 
         if (m[0] != 0)
-            target.body.pleasure(getSelf(), selfO, targetO, m[0], c, this);
+            target.body.pleasure(user, selfO, targetO, m[0], c, new SkillUsage<>(this, user, target));
         if (m[1] != 0)
-            getSelf().body.pleasure(target, targetO, selfO, m[1], -10000, c, false, this);
-        if (selfO.isType("ass") && Random.random(100) < 2 + getSelf().get(Attribute.fetishism)) {
-            target.add(c, new BodyFetish(target.getType(), self, "ass", .25));
+            user.body.pleasure(target, targetO, selfO, m[1], -10000, c, false, new SkillUsage<>(this, user, target));
+        if (selfO.isType("ass") && Random.random(100) < 2 + user.get(Attribute.fetishism)) {
+            target.add(c, new BodyFetish(target.getType(), user.getType(), "ass", .25));
         }
         return true;
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 0;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new OrgasmicTighten(user.getType());
+        return new OrgasmicTighten();
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (c.getStance().en == Stance.anal) {
             return Formatter.format("While cumming {self:name-possessive} spasming backdoor seems to urge {other:name-do} to do the same.",
-                            getSelf(), target);
+                            user, target);
         } else {
             return Formatter.format("While cumming {self:name-possessive} spasming honeypot seems to urge {other:name-do} to do the same.",
-                            getSelf(), target);
+                            user, target);
         }
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        return deal(c, damage, modifier, target);
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        return deal(c, damage, modifier, user, target);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Squeeze opponent's dick, no pleasure to self";
     }
 

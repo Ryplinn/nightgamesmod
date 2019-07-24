@@ -1,7 +1,6 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.mods.ParasitedMod;
 import nightgames.characters.trait.Trait;
@@ -19,17 +18,17 @@ import java.util.List;
 import java.util.Optional;
 
 public class SlimeCloneParasite extends SimpleEnemySkill {
-    public SlimeCloneParasite(CharacterType self) {
-        super("Parasitism", self);
+    public SlimeCloneParasite() {
+        super("Parasitism");
         addTag(SkillTag.debuff);
     }
 
-    public float priorityMod(Combat c) {
+    public float priorityMod(Combat c, Character user) {
         return 10.0f;
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 25;
     }
 
@@ -40,8 +39,8 @@ public class SlimeCloneParasite extends SimpleEnemySkill {
 
     private final static List<String> PARASITEABLE_PARTS = Arrays.asList("cock", "pussy", "ass", "mouth");
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), accuracy(c, target))) {
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.roll(user, accuracy(c, user, target))) {
             List<BodyPart> possibleTargets = new ArrayList<>();
             for (String type : PARASITEABLE_PARTS) {
                 if (!target.body.getRandom(type).moddedPartCountsAs(target, ParasitedMod.INSTANCE)) {
@@ -51,31 +50,31 @@ public class SlimeCloneParasite extends SimpleEnemySkill {
             Optional<BodyPart> result = Random.pickRandom(possibleTargets);
             if (result.isPresent()) {
                 BodyPart targetPart = result.get();
-                c.write(getSelf(), Formatter.format("{self:SUBJECT-ACTION:launch} {self:reflective} at {other:name-possessive} %s. "
+                c.write(user, Formatter.format("{self:SUBJECT-ACTION:launch} {self:reflective} at {other:name-possessive} %s. "
                                 + "{other:PRONOUN-ACTION:try} to dodge out of the way, but it's no use. "
                                 + "{self:NAME-POSSESSIVE} gelatinous body has deformed around {other:possessive} %s and manages "
                                 + "to crawl inside {other:possessive} body somehow!",
-                                getSelf(), target, targetPart.describe(target), targetPart.getType()));
+                                user, target, targetPart.describe(target), targetPart.getType()));
                 target.body.temporaryAddPartMod(targetPart.getType(), ParasitedMod.INSTANCE, 10);
             }
             return true;
         }
-        c.write(getSelf(), Formatter.format("{self:SUBJECT-ACTION:launch} {self:reflective} at {other:name-do}, but {other:pronoun-action:dodge} away in time.", getSelf(), target));
+        c.write(user, Formatter.format("{self:SUBJECT-ACTION:launch} {self:reflective} at {other:name-do}, but {other:pronoun-action:dodge} away in time.", user, target));
         return false;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new SlimeCloneParasite(user.getType());
+        return new SlimeCloneParasite();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 8;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 

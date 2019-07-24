@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.StraponPart;
@@ -17,20 +16,20 @@ import nightgames.nskills.tags.SkillTag;
 
 public class Fuck extends Skill {
 
-    public Fuck(String name, CharacterType self, int cooldown) {
-        super(name, self, cooldown);
+    public Fuck(String name, int cooldown) {
+        super(name, cooldown);
         addTag(SkillTag.pleasure);
         addTag(SkillTag.fucking);
         addTag(SkillTag.petDisallowed);
     }
 
-    public Fuck(CharacterType self) {
-        this("Fuck", self, 0);
+    public Fuck() {
+        this("Fuck", 0);
     }
 
-    public BodyPart getSelfOrgan() {
-        BodyPart res = getSelf().body.getRandomCock();
-        if (res == null && getSelf().has(Trait.strapped)) {
+    public BodyPart getSelfOrgan(Character user) {
+        BodyPart res = user.body.getRandomCock();
+        if (res == null && user.has(Trait.strapped)) {
             res = StraponPart.generic;
         }
         return res;
@@ -40,22 +39,22 @@ public class Fuck extends Skill {
         return target.body.getRandomPussy();
     }
 
-    boolean fuckable(Combat c, Character target) {
-        BodyPart selfO = getSelfOrgan();
+    boolean fuckable(Combat c, Character user, Character target) {
+        BodyPart selfO = getSelfOrgan(user);
         BodyPart targetO = getTargetOrgan(target);
         boolean possible = selfO != null && targetO != null;
-        boolean ready = possible && selfO.isReady(getSelf());
+        boolean ready = possible && selfO.isReady(user);
         boolean stancePossible = false;
         if (ready) {
             stancePossible = true;
             if (selfO.isType("cock")) {
-                stancePossible = !c.getStance().inserted(getSelf());
+                stancePossible = !c.getStance().inserted(user);
             }
             if (selfO.isType("pussy")) {
-                stancePossible &= !c.getStance().vaginallyPenetrated(c, getSelf());
+                stancePossible &= !c.getStance().vaginallyPenetrated(c, user);
             }
             if (selfO.isType("ass")) {
-                stancePossible &= !c.getStance().anallyPenetrated(c, getSelf());
+                stancePossible &= !c.getStance().anallyPenetrated(c, user);
             }
             if (targetO.isType("cock")) {
                 stancePossible &= !c.getStance().inserted(target);
@@ -67,30 +66,30 @@ public class Fuck extends Skill {
                 stancePossible &= !c.getStance().anallyPenetrated(c, target);
             }
         }
-        stancePossible &= !c.getStance().havingSex(c) && !c.getStance().isFaceSitting(getSelf());
-        return possible && ready && stancePossible && getSelf().clothingFuckable(selfO) && canGetToCrotch(target);
+        stancePossible &= !c.getStance().havingSex(c) && !c.getStance().isFaceSitting(user);
+        return possible && ready && stancePossible && user.clothingFuckable(selfO) && canGetToCrotch(user, target);
     }
 
-    private boolean canGetToCrotch(Character target) {
+    private boolean canGetToCrotch(Character user, Character target) {
         if (target.crotchAvailable())
             return true;
-        if (!getSelfOrgan().moddedPartCountsAs(getSelf(), CockMod.slimy))
+        if (!getSelfOrgan(user).moddedPartCountsAs(user, CockMod.slimy))
             return false;
         return target.outfit.getTopOfSlot(ClothingSlot.bottom).getLayer() == 0;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return fuckable(c, target)
-                        && (c.getStance().insert(c, getSelf(), getSelf()).isPresent()
-                                        || c.getStance().insert(c, target, getSelf()).isPresent())
-                        && c.getStance().mobile(getSelf()) && !c.getStance().mobile(target) && getSelf().canAct();
+    public boolean usable(Combat c, Character user, Character target) {
+        return fuckable(c, user, target)
+                        && (c.getStance().insert(c, user, user).isPresent()
+                                        || c.getStance().insert(c, target, user).isPresent())
+                        && c.getStance().mobile(user) && !c.getStance().mobile(target) && user.canAct();
     }
 
-    String premessage(Combat c, Character target) {
+    String premessage(Combat c, Character user, Character target) {
         String premessage = "";
-        Clothing underwear = getSelf().getOutfit().getSlotAt(ClothingSlot.bottom, 0);
-        Clothing bottom = getSelf().getOutfit().getSlotAt(ClothingSlot.bottom, 1);
+        Clothing underwear = user.getOutfit().getSlotAt(ClothingSlot.bottom, 0);
+        Clothing bottom = user.getOutfit().getSlotAt(ClothingSlot.bottom, 1);
         String bottomMessage;
 
         if (underwear != null && bottom != null) {
@@ -103,16 +102,16 @@ public class Fuck extends Skill {
             bottomMessage = "";
         }
 
-        if (getSelfOrgan() != null) {
-            if (!bottomMessage.isEmpty() && getSelfOrgan().isType("cock")) {
+        if (getSelfOrgan(user) != null) {
+            if (!bottomMessage.isEmpty() && getSelfOrgan(user).isType("cock")) {
                 premessage = String.format("{self:SUBJECT-ACTION:pull|pulls} down {self:possessive} %s halfway and ",
                                 bottomMessage);
-            } else if (!bottomMessage.isEmpty() && getSelfOrgan().isType("pussy")) {
+            } else if (!bottomMessage.isEmpty() && getSelfOrgan(user).isType("pussy")) {
                 premessage = String.format("{self:SUBJECT-ACTION:pull|pulls} {self:possessive} %s to the side and ",
                                 bottomMessage);
             }
 
-            if (!target.crotchAvailable() && getSelfOrgan().moddedPartCountsAs(getSelf(), CockMod.slimy)) {
+            if (!target.crotchAvailable() && getSelfOrgan(user).moddedPartCountsAs(user, CockMod.slimy)) {
                 Clothing destroyed = target.strip(ClothingSlot.bottom, c);
                 assert target.outfit.slotEmpty(ClothingSlot.bottom);
                 String start;
@@ -127,55 +126,55 @@ public class Fuck extends Skill {
             }
         }
 
-        return Formatter.format(premessage, getSelf(), target);
+        return Formatter.format(premessage, user, target);
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        String premessage = premessage(c, target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        String premessage = premessage(c, user, target);
         int m = Random.random(10, 15);
-        BodyPart selfO = getSelfOrgan();
+        BodyPart selfO = getSelfOrgan(user);
         BodyPart targetO = getTargetOrgan(target);
-        if (selfO != null && targetO != null && selfO.isReady(getSelf()) && targetO.isReady(target)) {
-            if (targetO.isType("pussy") && target.has(Trait.temptingass) && new AssFuck(self).usable(c, target)
+        if (selfO != null && targetO != null && selfO.isReady(user) && targetO.isReady(target)) {
+            if (targetO.isType("pussy") && target.has(Trait.temptingass) && new AssFuck().usable(c, user, target)
                 && Random.random(3) == 1) {
                 
-                c.write(getSelf(), Formatter.format("%s{self:subject-action:line|lines}"
+                c.write(user, Formatter.format("%s{self:subject-action:line|lines}"
                                 + " {self:possessive} {self:body-part:cock} up with {other:name-possessive}"
                                 + " {other:body-part:pussy}. At the last moment before thrusting in, however,"
                                 + " {self:pronoun-action:shift|shifts} to the tantalizing hole next door,"
                                 + " and {self:action:sink|sinks} the hard rod into {other:name-possessive}"
-                                + " hot ass instead.<br/>", getSelf(), target, premessage));
-                new AssFuck(self).resolve(c, target);
+                                + " hot ass instead.<br/>", user, target, premessage));
+                new AssFuck().resolve(c, user, target);
                 
                 return true;
             }
-            if (getSelf().human()) {
-                c.write(getSelf(), premessage + deal(c, premessage.length(), Result.normal, target));
+            if (user.human()) {
+                c.write(user, premessage + deal(c, premessage.length(), Result.normal, user, target));
             } else if (c.shouldPrintReceive(target, c)) {
-                c.write(getSelf(), premessage + receive(c, premessage.length(), Result.normal, target));
+                c.write(user, premessage + receive(c, premessage.length(), Result.normal, user, target));
             }
             if (selfO.isType("pussy")) {
-                c.getStance().insert(c, target, getSelf()).ifPresent(newStance -> c
-                                .setStance(newStance, getSelf(), getSelf().canMakeOwnDecision()));
+                c.getStance().insert(c, target, user).ifPresent(newStance -> c
+                                .setStance(newStance, user, user.canMakeOwnDecision()));
             } else {
-                c.getStance().insert(c, getSelf(), getSelf()).ifPresent(newStance -> c
-                                .setStance(newStance, getSelf(), getSelf().canMakeOwnDecision()));
+                c.getStance().insert(c, user, user).ifPresent(newStance -> c
+                                .setStance(newStance, user, user.canMakeOwnDecision()));
             }
             int otherm = m;
-            if (getSelf().has(Trait.insertion)) {
-                otherm += Math.min(getSelf().get(Attribute.seduction) / 4, 40);
+            if (user.has(Trait.insertion)) {
+                otherm += Math.min(user.get(Attribute.seduction) / 4, 40);
             }
-            target.body.pleasure(getSelf(), selfO, targetO, otherm, c, this);
-            getSelf().body.pleasure(target, targetO, selfO, m, c, this);
+            target.body.pleasure(user, selfO, targetO, otherm, c, new SkillUsage<>(this, user, target));
+            user.body.pleasure(target, targetO, selfO, m, c, new SkillUsage<>(this, user, target));
         } else {
-            if (getSelf().human()) {
-                c.write(getSelf(), premessage + deal(c, premessage.length(), Result.miss, target));
+            if (user.human()) {
+                c.write(user, premessage + deal(c, premessage.length(), Result.miss, user, target));
             } else if (c.shouldPrintReceive(target, c)) {
-                c.write(getSelf(), premessage + receive(c, premessage.length(), Result.miss, target));
+                c.write(user, premessage + receive(c, premessage.length(), Result.miss, user, target));
             }
-            target.body.pleasure(getSelf(), selfO, targetO, 5, c, this);
-            getSelf().body.pleasure(target, targetO, selfO, 5, c, this);
+            target.body.pleasure(user, selfO, targetO, 5, c, new SkillUsage<>(this, user, target));
+            user.body.pleasure(target, targetO, selfO, 5, c, new SkillUsage<>(this, user, target));
             return false;
         }
         return true;
@@ -188,41 +187,41 @@ public class Fuck extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Fuck(user.getType());
+        return new Fuck();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 2;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.fucking;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
-        BodyPart selfO = getSelfOrgan();
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
+        BodyPart selfO = getSelfOrgan(user);
         BodyPart targetO = getTargetOrgan(target);
         if (modifier == Result.normal) {
-            return "you rub the head of your " + selfO.describe(getSelf()) + " around " + target.getName()
+            return "you rub the head of your " + selfO.describe(user) + " around " + target.getName()
                             + "'s entrance, causing "+target.directObject()+" to shiver with anticipation. Once you're sufficiently lubricated "
                             + "with "+target.possessiveAdjective()+" wetness, you thrust into "+target.possessiveAdjective()+" " + targetO.describe(target)
                             + ". " + target.getName()
                             + " tries to stifle "+target.possessiveAdjective()+" pleasured moan as you fill "+target.possessiveAdjective()+" in an instant.";
         } else if (modifier == Result.miss) {
-            if (!selfO.isReady(getSelf()) && !targetO.isReady(target)) {
+            if (!selfO.isReady(user) && !targetO.isReady(target)) {
                 return "you're in a good position to fuck " + target.getName()
                                 + ", but neither of you are aroused enough to follow through.";
             } else if (!targetO.isReady(target)) {
-                return "you position your " + selfO.describe(getSelf()) + " at the entrance to " + target.getName()
+                return "you position your " + selfO.describe(user) + " at the entrance to " + target.getName()
                                 + ", but find that "+target.pronoun()+"'s not nearly wet enough to allow a comfortable insertion. You'll need "
                                 + "to arouse "+target.directObject()+" more or you'll risk hurting "+target.directObject()+".";
-            } else if (!selfO.isReady(getSelf())) {
+            } else if (!selfO.isReady(user)) {
                 return "you're ready and willing to claim " + target.getName() + "'s eager "
                                 + targetO.describe(target) + ", but your shriveled "
-                                + selfO.describe(getSelf())
+                                + selfO.describe(user)
                                 + " isn't cooperating. Maybe your self-control training has become too effective.";
             }
             return "you managed to miss the mark.";
@@ -231,42 +230,42 @@ public class Fuck extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        BodyPart selfO = getSelfOrgan();
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        BodyPart selfO = getSelfOrgan(user);
         BodyPart targetO = getTargetOrgan(target);
         if (modifier == Result.normal) {
             return String.format("%s rubs %s %s against %s wet snatch. " +
                                  "%s slowly but steadily pushes in, forcing %s length into %s hot, wet pussy.", 
-                            getSelf().getName(), getSelf().possessiveAdjective(), selfO.describe(getSelf()), 
+                            user.getName(), user.possessiveAdjective(), selfO.describe(user),
                             target.nameOrPossessivePronoun(),
-                            Formatter.capitalizeFirstLetter(getSelf().pronoun()), getSelf().possessiveAdjective(),
+                            Formatter.capitalizeFirstLetter(user.pronoun()), user.possessiveAdjective(),
                             target.possessiveAdjective());
         } else if (modifier == Result.miss) {
-            String subject = (damage == 0 ? getSelf().getName() + " " : "");
-            if (!selfO.isReady(getSelf()) || !targetO.isReady(target)) {
+            String subject = (damage == 0 ? user.getName() + " " : "");
+            if (!selfO.isReady(user) || !targetO.isReady(target)) {
                 String indicative = target.human() ? "yours" : target.nameOrPossessivePronoun();
                 return String.format("%sgrinds %s privates against %ss, but since neither of %s are"
                                 + " very turned on yet, it doesn't accomplish much.",
-                                subject, getSelf().possessiveAdjective(), indicative,
+                                subject, user.possessiveAdjective(), indicative,
                                 c.bothDirectObject(target));
             } else if (!targetO.isReady(target)) {
                 return String.format("%stries to push %s %s inside %s pussy, but %s %s not wet enough. "
                                 + "%s simply not horny enough for effective penetration yet.",
-                                subject, getSelf().possessiveAdjective(), selfO.describe(getSelf()),
+                                subject, user.possessiveAdjective(), selfO.describe(user),
                                 target.nameOrPossessivePronoun(), target.pronoun(),
                                 target.action("are", "is"),
                                 Formatter.capitalizeFirstLetter(target.subjectAction("are", "is")));
             } else {
                 return String.format("%stries to push %s %s into %s ready pussy, but %s is still limp.",
-                                subject, getSelf().possessiveAdjective(), selfO.describe(getSelf()),
-                                target.nameOrPossessivePronoun(), getSelf().pronoun());
+                                subject, user.possessiveAdjective(), selfO.describe(user),
+                                target.nameOrPossessivePronoun(), user.pronoun());
             }
         }
         return "Bad stuff happened";
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Penetrate your opponent, switching to a sex position";
     }
 

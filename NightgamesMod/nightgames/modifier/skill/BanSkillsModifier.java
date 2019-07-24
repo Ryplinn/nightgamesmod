@@ -2,7 +2,6 @@ package nightgames.modifier.skill;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import nightgames.characters.CharacterType;
 import nightgames.json.JsonUtils;
 import nightgames.modifier.ModifierComponentLoader;
 import nightgames.skills.Skill;
@@ -10,6 +9,7 @@ import nightgames.skills.SkillPool;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class BanSkillsModifier extends SkillModifier implements ModifierComponentLoader<SkillModifier> {
@@ -21,7 +21,7 @@ public class BanSkillsModifier extends SkillModifier implements ModifierComponen
         this.skills = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(skills)));
     }
 
-    public BanSkillsModifier(Collection<Skill> skills) {
+    private BanSkillsModifier(Collection<Skill> skills) {
         this(skills.toArray(new Skill[] {}));
     }
 
@@ -37,7 +37,7 @@ public class BanSkillsModifier extends SkillModifier implements ModifierComponen
 
     @Override public BanSkillsModifier instance(JsonObject object) {
         Collection<Skill> skillPool = SkillPool.skillPool.stream()
-                        .map(skillstructor -> skillstructor.apply(CharacterType.get("dummy")))
+                        .map(Supplier::get)
                         .collect(Collectors.toSet());
         Optional<String> maybeName = JsonUtils.getOptional(object, "skill").map(JsonElement::getAsString);
         if (maybeName.isPresent()) {

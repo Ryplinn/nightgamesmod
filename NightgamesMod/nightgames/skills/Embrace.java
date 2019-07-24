@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -16,8 +15,8 @@ import nightgames.status.TailSucked;
 
 public class Embrace extends Skill {
 
-    public Embrace(CharacterType self) {
-        super("Embrace", self, 6);
+    public Embrace() {
+        super("Embrace", 6);
     }
 
     @Override
@@ -26,67 +25,67 @@ public class Embrace extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && validPosition(c.getStance(), c, target) && getSelf().body.has("wings");
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && validPosition(c.getStance(), c, user, target) && user.body.has("wings");
     }
 
     @Override
-    public float priorityMod(Combat c) {
+    public float priorityMod(Combat c, Character user) {
         return 10.f; // objectively better than the positions it's available from
     }
 
-    private boolean validPosition(Position stance, Combat c, Character target) {
-        if (!stance.connected(c) || !stance.dom(getSelf()) || stance.anallyPenetratedBy(c, getSelf(), target)) {
+    private boolean validPosition(Position stance, Combat c, Character user, Character target) {
+        if (!stance.connected(c) || !stance.dom(user) || stance.anallyPenetratedBy(c, user, target)) {
             return false;
         }
         if (stance.en == Stance.succubusembrace || stance.en == Stance.upsidedownmaledom
                         || stance.en == Stance.upsidedownfemdom
-                        || (stance.en == Stance.flying && !stance.penetrated(c, getSelf()))) {
+                        || (stance.en == Stance.flying && !stance.penetrated(c, user))) {
             return false;
         }
         if (stance.penetrated(c, target) && stance.en == Stance.doggy || stance.en == Stance.anal) {
             return true;
         }
-        return stance.vaginallyPenetrated(c, getSelf()) && stance.facing(target, getSelf());
+        return stance.vaginallyPenetrated(c, user) && stance.facing(target, user);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Give your opponent a true demon's embrace";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
 
         Position pos = c.getStance();
         Position next;
-        boolean selfCatches = c.getStance().vaginallyPenetratedBy(c, getSelf(), target);
+        boolean selfCatches = c.getStance().vaginallyPenetratedBy(c, user, target);
 
-        String trans = transition(c, pos, target, selfCatches);
+        String trans = transition(c, pos, user, target, selfCatches);
 
         if (selfCatches) {
-            c.write(getSelf(),
+            c.write(user,
                             Formatter.format("%s Now properly seated, {self:subject-action:continue|continues}"
                                             + " {self:possessive} bouncing movements while pressing {other:name-possessive}"
                                             + " head to {self:possessive} chest. Meanwhile, {self:possessive}"
                                             + " {self:body-part:wings} wrap around {other:direct-object}, holding"
-                                            + " {other:direct-object} firmly in place.", getSelf(), target, trans));
-            next = new SuccubusEmbrace(self, target.getType());
+                                            + " {other:direct-object} firmly in place.", user, target, trans));
+            next = new SuccubusEmbrace(user.getType(), target.getType());
         } else if ((c.getStance().en == Stance.anal || c.getStance().en == Stance.doggy)
-                        && c.getStance().penetratedBy(c, target, getSelf())) {
+                        && c.getStance().penetratedBy(c, target, user)) {
             if (target.hasDick()) {
-                next = new IncubusEmbrace(self, target.getType(), () -> {
-                    c.write(getSelf(), Formatter.format("{self:NAME-POSSESSIVE} {self:body-part:tail}"
+                next = new IncubusEmbrace(user.getType(), target.getType(), () -> {
+                    c.write(user, Formatter.format("{self:NAME-POSSESSIVE} {self:body-part:tail}"
                                     + " reaches around and opens up in front of {other:name-possessive}"
                                     + " hard {other:body-part:cock}. In a quick motion, the turgid shaft"
                                     + " is swallowed up completely. The bulbous head at the end of the"
                                     + " tail flexes mightily, creating an intense suction for its"
-                                    + " prisoner and drawing out {other:name-possessive} strength.", getSelf(), target));
-                    return new TailSucked(target.getType(), self, 2);
+                                    + " prisoner and drawing out {other:name-possessive} strength.", user, target));
+                    return new TailSucked(target.getType(), user.getType(), 2);
                 }, Stsflag.tailsucked);
             } else if (c.getStance().anallyPenetrated(c, target) && target.hasPussy()) {
-                next = new IncubusEmbrace(self, target.getType(), () -> {
-                    c.write(getSelf(), Formatter.format("{self:NAME-POSSESSIVE} prehensile"
+                next = new IncubusEmbrace(user.getType(), target.getType(), () -> {
+                    c.write(user, Formatter.format("{self:NAME-POSSESSIVE} prehensile"
                                     + " {self:body-part:tail} snakes around {other:name-possessive}"
                                     + " waist and then downward between {other:possessive} legs."
                                     + " Having quickly found its target and coated it in copious"
@@ -94,25 +93,25 @@ public class Embrace extends Skill {
                                     + " {other:body-part:pussy} in a single, powerful thrust. The undulating"
                                     + " appendage does not stop, though, and keeps on pistoning in and out"
                                     + " at a speed which is leaving {other:name-do} even more breathless"
-                                    + " than {other:pronoun} already {other:action:were|was}.", getSelf(), target));
-                    return new TailFucked(self, target.getType(), "pussy");
+                                    + " than {other:pronoun} already {other:action:were|was}.", user, target));
+                    return new TailFucked(user.getType(), target.getType(), "pussy");
                 }, Stsflag.tailfucked);
             } else {
-                next = new IncubusEmbrace(self, target.getType());
+                next = new IncubusEmbrace(user.getType(), target.getType());
             }
-            c.write(getSelf(), trans);
+            c.write(user, trans);
         } else {
             c.write("<u><b>Error: Unexpected stance for Embrace. Moving on.</b></u>");
             Thread.dumpStack();
             return false;
         }
  
-        c.setStance(next, getSelf(), true);
+        c.setStance(next, user, true);
 
         return false;
     }
 
-    private String transition(Combat c, Position pos, Character target, boolean selfCatches) {
+    private String transition(Combat c, Position pos, Character user, Character target, boolean selfCatches) {
         switch (pos.en) {
             case cowgirl:
                 assert selfCatches;
@@ -125,7 +124,7 @@ public class Embrace extends Skill {
                                                 + " <i>\"There, there, {other:name}. Just relax. Have a drink, if"
                                                 + " you like.\"</i> All the while, {self:pronoun-action:keep|keeps}"
                                                 + " rocking {self:possessive} hips against {other:direct-object}.",
-                                getSelf(), target);
+                                user, target);
             case coiled:
                 assert selfCatches;
                 return Formatter.format(
@@ -136,9 +135,9 @@ public class Embrace extends Skill {
                                                 + " {other:subject-action:have|has} a chance to respond,"
                                                 + " {self:subject-action:shove|shoves} {other:possessive} head"
                                                 + " into {self:possessive} milky cleavage.",
-                                getSelf(), target, c.bothDirectObject(target));
+                                user, target, c.bothDirectObject(target));
             case flying:
-                if (pos.penetrated(c, getSelf())) {
+                if (pos.penetrated(c, user)) {
                     return Formatter.format(
                                     "A powerful fear seizes {other:name-do} as"
                                                     + " {self:subject} suddenly {self:action:swoop|swoops} down to"
@@ -148,7 +147,7 @@ public class Embrace extends Skill {
                                                     + " in {other:possessive} lap. {self:PRONOUN} then hugs {other:direct-object}"
                                                     + " close, pushing {other:possessive} face into {self:possessive}"
                                                     + " lactating {self:body-part:breasts}.",
-                                    getSelf(), target, c.bothDirectObject(target));
+                                    user, target, c.bothDirectObject(target));
                 } else {
                     return "";
                 }
@@ -158,7 +157,7 @@ public class Embrace extends Skill {
                 return Formatter.format("{self:SUBJECT-ACTION:lean} forward and {self:action:grab}"
                                 + " {other:subject} %s. {self:PRONOUN} then hoists %s back upright and"
                                 + " {self:action:wrap} {self:possessive} wings around {other:name-do}, continuing"
-                                + " {self:possessive} thrusts with new vigor.", getSelf(), target, target.hasBreasts() ?
+                                + " {self:possessive} thrusts with new vigor.", user, target, target.hasBreasts() ?
                                                   "by {other:possessive} {other:body-part:breasts}"
                                                 : "in a tight bear-hug", c.bothDirectObject(target));
             case missionary:
@@ -170,21 +169,21 @@ public class Embrace extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Embrace(user.getType());
+        return new Embrace();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.fucking;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 

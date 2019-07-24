@@ -1,19 +1,18 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.global.DebugFlags;
 import nightgames.pet.Ptype;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * TODO: Write class-level documentation.
  */
 public class SkillPool {
-    public static Set<Function<CharacterType, Skill>> skillPool = new HashSet<>();
+    public static Set<Supplier<Skill>> skillPool = new HashSet<>();
 
     public static void buildSkillPool() {
         skillPool.clear();
@@ -100,11 +99,11 @@ public class SkillPool {
         skillPool.add(Masochism::new);
         skillPool.add(NakedBloom::new);
         skillPool.add(ShrinkRay::new);
-        skillPool.add((ch) -> new SpawnFaerie(ch, Ptype.fairyfem));
-        skillPool.add((ch) -> new SpawnImp(ch, Ptype.impfem));
-        skillPool.add((ch) -> new SpawnFaerie(ch, Ptype.fairymale));
-        skillPool.add((ch) -> new SpawnImp(ch, Ptype.impmale));
-        skillPool.add((ch) -> new SpawnFGoblin(ch, Ptype.fgoblin));
+        skillPool.add(() -> new SpawnFaerie(Ptype.fairyfem));
+        skillPool.add(() -> new SpawnImp(Ptype.impfem));
+        skillPool.add(() -> new SpawnFaerie(Ptype.fairymale));
+        skillPool.add(() -> new SpawnImp(Ptype.impmale));
+        skillPool.add(() -> new SpawnFGoblin(Ptype.fgoblin));
         skillPool.add(SpawnSlime::new);
         skillPool.add(StunBlast::new);
         skillPool.add(Fly::new);
@@ -278,7 +277,7 @@ public class SkillPool {
     }
 
     public static void learnSkills(Character c) {
-        for (Function<CharacterType, Skill> skillstructor : skillPool) {
+        for (Supplier<Skill> skillstructor : skillPool) {
             c.learn(skillstructor);
         }
     }

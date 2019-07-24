@@ -2,15 +2,14 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.Shield;
 
 public class Barrier extends Skill {
 
-    public Barrier(CharacterType self) {
-        super("Barrier", self);
+    public Barrier() {
+        super("Barrier");
     }
 
     @Override
@@ -19,46 +18,46 @@ public class Barrier extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return !c.getStance().sub(getSelf()) && !c.getStance().prone(getSelf()) && !c.getStance().prone(target)
-                        && getSelf().canAct();
+    public boolean usable(Combat c, Character user, Character target) {
+        return !c.getStance().sub(user) && !c.getStance().prone(user) && !c.getStance().prone(target)
+                        && user.canAct();
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 10;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Creates a magical barrier to protect you from physical damage: 3 Mojo";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.normal, target);
-        getSelf().add(c, new Shield(self, .5));
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.normal, user, target);
+        user.add(c, new Shield(user.getType(), .5));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Barrier(user.getType());
+        return new Barrier();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.recovery;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You conjure a simple magic barrier around yourself, reducing physical damage. Unfortunately, it will do nothing against a gentle caress.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        return getSelf().getName()
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        return user.getName()
                         + " holds a hand in front of her and "+target.subjectAction("see")+" a magical barrier appear briefly, before it becomes invisible.";
     }
 

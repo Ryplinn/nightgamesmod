@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.Body;
 import nightgames.characters.body.CockMod;
 import nightgames.combat.Combat;
@@ -13,8 +12,8 @@ import nightgames.status.Stsflag;
 
 public class ToggleKnot extends Skill {
 
-    public ToggleKnot(CharacterType self) {
-        super("Toggle Knot", self);
+    public ToggleKnot() {
+        super("Toggle Knot");
     }
 
     private boolean isActive(Character target) {
@@ -27,87 +26,87 @@ public class ToggleKnot extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return (getSelf().canRespond() && isActive(target)) || (getSelf().canAct() && c.getStance().inserted(getSelf()));
+    public boolean usable(Combat c, Character user, Character target) {
+        return (user.canRespond() && isActive(target)) || (user.canAct() && c.getStance().inserted(user));
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Inflate or deflate your knot.";
     }
 
     @Override
-    public String getLabel(Combat c) {
-        if (isActive(c.getOpponent(getSelf()))) {
+    public String getLabel(Combat c, Character user) {
+        if (isActive(c.getOpponent(user))) {
             return "Deflate Knot";
         }
         return "Inflate Knot";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         if (isActive(target)) {
-            if (getSelf().human()) {
-                c.write(getSelf(),
+            if (user.human()) {
+                c.write(user,
                                 "Deciding she's had enough for now, you let your cock return to its regular shape, once again permitting movement.");
             } else if (c.shouldPrintReceive(target, c)) {
-                String part = Random.pickRandom(c.getStance().getPartsFor(c, target, getSelf())).orElse(Body.nonePart).describe(target);
-                c.write(getSelf(), String.format("%s the intense pressure in %s %s "
+                String part = Random.pickRandom(c.getStance().getPartsFor(c, target, user)).orElse(Body.nonePart).describe(target);
+                c.write(user, String.format("%s the intense pressure in %s %s "
                                 + "recede as %s allows %s knot to deflate.", target.subjectAction("feel"),
-                                target.possessiveAdjective(), part, getSelf().subject(),
-                                getSelf().possessiveAdjective()));
+                                target.possessiveAdjective(), part, user.subject(),
+                                user.possessiveAdjective()));
             }
             target.removeStatus(Stsflag.knotted);
         } else {
-            if (getSelf().human()) {
-                c.write(getSelf(),
+            if (user.human()) {
+                c.write(user,
                                 "You'd like to stay inside " + target.getName() + " for a bit, so you "
-                                                + (c.getStance().canthrust(c, getSelf()) ? "thrust" : "buck up")
+                                                + (c.getStance().canthrust(c, user) ? "thrust" : "buck up")
                                                 + " as deep inside of her as you can and send a mental command to the base of your cock, where your"
                                                 + " knot soon swells up, locking you inside,");
             } else if (c.shouldPrintReceive(target, c)) {
                 String firstPart;
-                if (c.getStance().dom(getSelf())) {
+                if (c.getStance().dom(user)) {
                     firstPart = String.format("%s bottoms out inside of %s, and something quickly feels off%s.",
-                                    getSelf().subject(), target.nameDirectObject(),
+                                    user.subject(), target.nameDirectObject(),
                                     c.isBeingObserved() ? " to " + target.directObject() : "");
                 } else {
                     firstPart = String.format("%s pulls %s all the way onto %s cock. "
                                     + "As soon as %s pelvis touches %s, something starts happening.",
-                                    getSelf().subject(), target.nameDirectObject(),
-                                    getSelf().possessiveAdjective(), getSelf().possessiveAdjective(),
+                                    user.subject(), target.nameDirectObject(),
+                                    user.possessiveAdjective(), user.possessiveAdjective(),
                                     (target.human() || target.useFemalePronouns()) 
                                     ? target.possessiveAdjective() + "s" : "s");
                 }
-                c.write(getSelf() ,String.format("%s A ball swells up at the base of %s dick,"
+                c.write(user ,String.format("%s A ball swells up at the base of %s dick,"
                                 + " growing to the size of a small apple. %s not"
                                                 + " getting <i>that</i> out of %s any time soon...",
-                                                firstPart, getSelf().nameOrPossessivePronoun(),
+                                                firstPart, user.nameOrPossessivePronoun(),
                                                 Formatter.capitalizeFirstLetter(target.subjectAction("are", "is")),
                                                 target.reflectivePronoun()));
             }
-            target.add(c, new Knotted(target.getType(), self, c.getStance().anallyPenetrated(c, target)));
+            target.add(c, new Knotted(target.getType(), user.getType(), c.getStance().anallyPenetrated(c, target)));
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new ToggleKnot(user.getType());
+        return new ToggleKnot();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 

@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -10,8 +9,8 @@ import nightgames.nskills.tags.SkillTag;
 
 public class MutualUndress extends Skill {
 
-    MutualUndress(CharacterType self) {
-        super("Tempt Undress", self);
+    MutualUndress() {
+        super("Tempt Undress");
         addTag(SkillTag.undressing);
         addTag(SkillTag.stripping);
     }
@@ -22,46 +21,46 @@ public class MutualUndress extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().stripDifficulty(target) == 0 && getSelf().canAct() && c.getStance().mobile(getSelf())
-                        && !getSelf().mostlyNude() && !target.mostlyNude();
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.stripDifficulty(target) == 0 && user.canAct() && c.getStance().mobile(user)
+                        && !user.mostlyNude() && !target.mostlyNude();
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 30;
     }
 
     @Override
-    public float priorityMod(Combat c) {
-        return c.getStance().dom(getSelf()) ? 2.0f : 0.0f;
+    public float priorityMod(Combat c, Character user) {
+        return c.getStance().dom(user) ? 2.0f : 0.0f;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Tempt opponent to remove clothes by removing your own";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.strong, target);
-        getSelf().undress(c);
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.strong, user, target);
+        user.undress(c);
         target.undress(c);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new MutualUndress(user.getType());
+        return new MutualUndress();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.stripping;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "During a brief respite in the fight as " + target.getName()
                         + " is catching her breath, you ask if we can finish the fight naked. "
                         + "Without waiting for an answer, you slowly strip off all your clothing."
@@ -69,16 +68,16 @@ public class MutualUndress extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format("%s asks for a quick time out and starts sexily slipping %s clothes off. Although there"
                         + " are no time outs in the rules, %s can't help staring "
                         + "at the seductive display until %s finishes with a cute wiggle of %s naked ass. "
                         + "%s asks %s if %s %s to join %s in feeling good, and before %s it "
-                        + "%s has got %s naked as well.", getSelf().subject(), getSelf().possessiveAdjective(),
-                        target.subject(), getSelf().subject(), getSelf().possessiveAdjective(),
-                        Formatter.capitalizeFirstLetter(getSelf().pronoun()), target.directObject(),
-                        target.pronoun(), target.action("want"), getSelf().directObject(),
-                        target.subjectAction("realize"), getSelf().subject(),
+                        + "%s has got %s naked as well.", user.subject(), user.possessiveAdjective(),
+                        target.subject(), user.subject(), user.possessiveAdjective(),
+                        Formatter.capitalizeFirstLetter(user.pronoun()), target.directObject(),
+                        target.pronoun(), target.action("want"), user.directObject(),
+                        target.subjectAction("realize"), user.subject(),
                         target.directObject());
     }
 }

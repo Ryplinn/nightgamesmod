@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -13,8 +12,8 @@ import nightgames.stance.StandingOver;
 
 public class Dominate extends Skill {
 
-    public Dominate(CharacterType self) {
-        super("Dominate", self, 3);
+    public Dominate() {
+        super("Dominate", 3);
         addTag(SkillTag.positioning);
         addTag(SkillTag.knockdown);
         addTag(SkillTag.dark);
@@ -26,43 +25,43 @@ public class Dominate extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return !target.wary() && !c.getStance().sub(getSelf()) && !c.getStance().prone(getSelf())
-                        && !c.getStance().prone(target) && !c.getStance().sub(target) && getSelf().canAct() && !getSelf().has(Trait.submissive);
+    public boolean usable(Combat c, Character user, Character target) {
+        return !target.wary() && !c.getStance().sub(user) && !c.getStance().prone(user)
+                        && !c.getStance().prone(target) && !c.getStance().sub(target) && user.canAct() && !user.has(Trait.submissive);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Overwhelm your opponent to force her to lie down: 30% Arousal";
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 15;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        getSelf().arouse((int) (getSelf().getArousal().max() * .30), c);
-        writeOutput(c, Result.normal, target);
-        c.setStance(new StandingOver(self, target.getType()), target, false);
-        getSelf().emote(Emotion.dominant, 20);
+    public boolean resolve(Combat c, Character user, Character target) {
+        user.arouse((int) (user.getArousal().max() * .30), c);
+        writeOutput(c, Result.normal, user, target);
+        c.setStance(new StandingOver(user.getType(), target.getType()), target, false);
+        user.emote(Emotion.dominant, 20);
         target.emote(Emotion.nervous, 20);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Dominate(user.getType());
+        return new Dominate();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You take a deep breathe, gathering dark energy into your lungs. You expend the power to command "
                         + target.getName() + " to submit. The demonic command renders her "
                         + "unable to resist and she drops to floor, spreading her legs open to you. As you approach, she comes to her senses and quickly closes her legs. Looks like her "
@@ -70,17 +69,17 @@ public class Dominate extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format("%s forcefully orders %s to \"Kneel!\" %s body complies without waiting for"
                         + " %s brain and %s %s to %s knees in front of %s. %s smiles and "
                         + "pushes %s onto %s back. By the time %s free of %s suggestion, %s %s"
-                        + " flat on the floor with %s foot planted on %s chest.", getSelf().subject(),
+                        + " flat on the floor with %s foot planted on %s chest.", user.subject(),
                         target.subject(), Formatter.capitalizeFirstLetter(target.pronoun()),
                         target.possessiveAdjective(), target.pronoun(), target.action("drop"),
-                        target.possessiveAdjective(), getSelf().directObject(),
-                        getSelf().getName(), target.nameDirectObject(), target.possessiveAdjective(),
-                        target.subjectAction("break"), getSelf().possessiveAdjective(), target.pronoun(),
-                        target.action("are", "is"), getSelf().nameOrPossessivePronoun(), target.possessiveAdjective());
+                        target.possessiveAdjective(), user.directObject(),
+                        user.getName(), target.nameDirectObject(), target.possessiveAdjective(),
+                        target.subjectAction("break"), user.possessiveAdjective(), target.pronoun(),
+                        target.action("are", "is"), user.nameOrPossessivePronoun(), target.possessiveAdjective());
     }
 
 }

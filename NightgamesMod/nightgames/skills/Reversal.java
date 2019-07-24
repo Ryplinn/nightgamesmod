@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -16,44 +15,44 @@ import java.util.Optional;
 
 public class Reversal extends Skill {
 
-    public Reversal(CharacterType self) {
-        super("Reversal", self);
+    public Reversal() {
+        super("Reversal");
         addTag(SkillTag.escaping);
         addTag(SkillTag.positioning);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return !target.wary() && !c.getStance().mobile(getSelf()) && c.getStance().sub(getSelf()) && getSelf().canAct();
+    public boolean usable(Combat c, Character user, Character target) {
+        return !target.wary() && !c.getStance().mobile(user) && c.getStance().sub(user) && user.canAct();
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 20;
     }
     
     @Override
-    public float priorityMod(Combat c) {
-        return 5.f - (float) getSelf().get(Attribute.submission) / 3.f;
+    public float priorityMod(Combat c, Character user) {
+        return 5.f - (float) user.get(Attribute.submission) / 3.f;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        Optional<String> compulsion = Compulsive.describe(c, getSelf(), Situation.PREVENT_REVERSAL);
+    public boolean resolve(Combat c, Character user, Character target) {
+        Optional<String> compulsion = Compulsive.describe(c, user, Situation.PREVENT_REVERSAL);
         if (compulsion.isPresent()) {
-            c.write(getSelf(), compulsion.get());
-            getSelf().pain(c, null, Random.random(20, 50));
-            Compulsive.doPostCompulsion(c, getSelf(), Situation.PREVENT_REVERSAL);
+            c.write(user, compulsion.get());
+            user.pain(c, null, Random.random(20, 50));
+            Compulsive.doPostCompulsion(c, user, Situation.PREVENT_REVERSAL);
             return false;
         }
-        if (target.roll(getSelf(), accuracy(c, target))) {
-            writeOutput(c, Result.normal, target);
+        if (target.roll(user, accuracy(c, user, target))) {
+            writeOutput(c, Result.normal, user, target);
 
-            c.setStance(new Pin(self, target.getType()), getSelf(), true);
+            c.setStance(new Pin(user.getType(), target.getType()), user, true);
             target.emote(Emotion.nervous, 10);
-            getSelf().emote(Emotion.dominant, 10);
+            user.emote(Emotion.dominant, 10);
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
         return true;
@@ -66,28 +65,28 @@ public class Reversal extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Reversal(user.getType());
+        return new Reversal();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 4;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return Math.round(Math.max(Math.min(150,
-                        2.5f * (getSelf().get(Attribute.cunning) - target.get(Attribute.cunning)) + 75),
+                        2.5f * (user.get(Attribute.cunning) - target.get(Attribute.cunning)) + 75),
                         40));
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "You try to get on top of " + target.getName()
                             + ", but she's apparently more ready for it than you realized.";
@@ -97,20 +96,20 @@ public class Reversal extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s tries to reverse %s hold, but %s %s %s.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(),
+                            user.subject(), target.nameOrPossessivePronoun(),
                             target.pronoun(), target.action("stop"),
-                            getSelf().directObject());
+                            user.directObject());
         } else {
             return String.format("%s rolls %s over and ends up on top.",
-                            getSelf().subject(), target.nameDirectObject());
+                            user.subject(), target.nameDirectObject());
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Take dominant position: 10 Mojo";
     }
 

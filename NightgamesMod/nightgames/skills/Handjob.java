@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,50 +12,50 @@ import nightgames.stance.Stance;
 
 public class Handjob extends Skill {
 
-    public Handjob(CharacterType self) {
-        this("Handjob", self);
+    public Handjob() {
+        this("Handjob");
         addTag(SkillTag.usesHands);
         addTag(SkillTag.pleasure);
     }
 
-    public Handjob(String string, CharacterType self) {
-        super(string, self);
+    public Handjob(String string) {
+        super(string);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().reachBottom(getSelf())
-                        && (target.crotchAvailable() || getSelf().has(Trait.dexterous)
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().reachBottom(user)
+                        && (target.crotchAvailable() || user.has(Trait.dexterous)
                                         && target.getOutfit().getTopOfSlot(ClothingSlot.bottom).getLayer() <= 1)
-                        && target.hasDick() && getSelf().canAct()
+                        && target.hasDick() && user.canAct()
                         && (!c.getStance().inserted(target));
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 7;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return c.getStance().en == Stance.neutral ? 50 : 100;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         int m = Random.random(8, 13);
 
-        if (target.roll(getSelf(), accuracy(c, target))) {
-            if (getSelf().get(Attribute.seduction) >= 8) {
+        if (target.roll(user, accuracy(c, user, target))) {
+            if (user.get(Attribute.seduction) >= 8) {
                 m += 6;
-                writeOutput(c, Result.normal, target);
-                target.body.pleasure(getSelf(), getSelf().body.getRandom("hands"), target.body.getRandom("cock"), m, c, this);
+                writeOutput(c, Result.normal, user, target);
+                target.body.pleasure(user, user.body.getRandom("hands"), target.body.getRandom("cock"), m, c, new SkillUsage<>(this, user, target));
             } else {
-                writeOutput(c, Result.weak, target);
-                target.body.pleasure(getSelf(), getSelf().body.getRandom("hands"), target.body.getRandom("cock"), m, c, this);
+                writeOutput(c, Result.weak, user, target);
+                target.body.pleasure(user, user.body.getRandom("hands"), target.body.getRandom("cock"), m, c, new SkillUsage<>(this, user, target));
             }
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
         return true;
@@ -69,16 +68,16 @@ public class Handjob extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Handjob(user.getType());
+        return new Handjob();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "You reach for " + target.getName() + "'s dick but miss. (Maybe you should get closer?)";
         } else {
@@ -88,47 +87,47 @@ public class Handjob extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s grabs for %s dick and misses.",
-                            getSelf().subject(), target.nameOrPossessivePronoun());
+                            user.subject(), target.nameOrPossessivePronoun());
         }
         int r;
         if (!target.crotchAvailable()) {
             return String.format("%s slips %s hand into %s %s and strokes %s dick.",
-                            getSelf().subject(), getSelf().possessiveAdjective(),
+                            user.subject(), user.possessiveAdjective(),
                             target.nameOrPossessivePronoun(),
                             target.getOutfit().getTopOfSlot(ClothingSlot.bottom).getName(),
                             target.possessiveAdjective());
         } else if (modifier == Result.weak) {
             return String.format("%s clumsily fondles %s crotch. It's not skillful by"
                             + " any means, but it's also not entirely ineffective.",
-                            getSelf().subject(), target.nameOrPossessivePronoun());
+                            user.subject(), target.nameOrPossessivePronoun());
         } else {
             if (target.getArousal().get() < 15) {
                 return String.format("%s grabs %s soft penis and plays with the sensitive organ "
                                 + "until it springs into readiness.",
-                                getSelf().subject(), target.nameOrPossessivePronoun());
+                                user.subject(), target.nameOrPossessivePronoun());
             }
 
             else if ((r = Random.random(3)) == 0) {
                 return String.format("%s strokes and teases %s dick, sending shivers of pleasure up %s spine.",
-                                getSelf().subject(), target.nameOrPossessivePronoun(),
+                                user.subject(), target.nameOrPossessivePronoun(),
                                 target.possessiveAdjective());
             } else if (r == 1) {
                 return String.format("%s rubs the sensitive head of %s penis and fondles %s balls.",
-                                getSelf().subject(), target.nameOrPossessivePronoun(),
+                                user.subject(), target.nameOrPossessivePronoun(),
                                 target.possessiveAdjective());
             } else {
                 return String.format("%s jerks %s off like she's trying to milk every drop of %s cum.",
-                                getSelf().subject(), target.subject(),
+                                user.subject(), target.subject(),
                                 target.possessiveAdjective());
             }
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Rub your opponent's dick";
     }
 

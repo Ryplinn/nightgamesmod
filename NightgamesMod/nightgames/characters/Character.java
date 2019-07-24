@@ -42,7 +42,6 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -66,7 +65,7 @@ public abstract class Character extends Observable implements Cloneable {
     public Outfit outfit;
     public OutfitPlan outfitPlan;
     protected Area location;
-    protected CopyOnWriteArrayList<Function<CharacterType, Skill>> skills;
+    protected CopyOnWriteArrayList<Supplier<Skill>> skills;
     public CopyOnWriteArrayList<Status> status;
     private Set<Stsflag> statusFlags;
     private CopyOnWriteArrayList<Trait> traits;
@@ -664,7 +663,7 @@ public abstract class Character extends Observable implements Cloneable {
 
             if (skill != null) {
                 if (c != null) {
-                    stalenessModifier = c.getCombatantData(skill.getSelf()).getMoveModifier(skill);
+                    stalenessModifier = c.getCombatantData(this).getMoveModifier(skill);
                 }
                 if (Math.abs(stalenessModifier - 1.0) >= .1 ) {
                     stalenessString = String.format(", staleness: %.1f", stalenessModifier);
@@ -1416,7 +1415,7 @@ public abstract class Character extends Observable implements Cloneable {
     public int getEscape(Combat c, Character from) {
         int total = 0;
         for (Status s : getStatuses()) {
-            total += s.escape();
+            total += s.escape(from);
         }
         if (has(Trait.freeSpirit)) {
             total += 5;
@@ -1687,8 +1686,8 @@ public abstract class Character extends Observable implements Cloneable {
         }
     }
 
-    private static final OrgasmicTighten TIGHTEN_SKILL = new OrgasmicTighten(null);
-    private static final OrgasmicThrust THRUST_SKILL = new OrgasmicThrust(null);
+    private static final OrgasmicTighten TIGHTEN_SKILL = new OrgasmicTighten();
+    private static final OrgasmicThrust THRUST_SKILL = new OrgasmicThrust();
 
     protected void resolveOrgasm(Combat c, Character opponent, BodyPart selfPart, BodyPart opponentPart, int times, int totalTimes) {
         if (has(Trait.HiveMind) && !c.getPetsFor(this).isEmpty()) {
@@ -1749,11 +1748,11 @@ public abstract class Character extends Observable implements Cloneable {
         if (has(Trait.lastStand)) {
             OrgasmicTighten tightenCopy = (OrgasmicTighten) TIGHTEN_SKILL.copy(this);
             OrgasmicThrust thrustCopy = (OrgasmicThrust) THRUST_SKILL.copy(this);
-            if (tightenCopy.usable(c, opponent)) {
-                tightenCopy.resolve(c, opponent);
+            if (tightenCopy.usable(c, this, opponent)) {
+                tightenCopy.resolve(c, this, opponent);
             }
-            if (thrustCopy.usable(c, opponent)) {
-                thrustCopy.resolve(c, opponent);
+            if (thrustCopy.usable(c, this, opponent)) {
+                thrustCopy.resolve(c, this, opponent);
             }
         }
         if (this != opponent && times == totalTimes && canRespond()) {
@@ -2193,8 +2192,8 @@ public abstract class Character extends Observable implements Cloneable {
                 chance += 20 * fetish.get().magnitude;
             }
             if (chance >= Random.random(100)) {
-                AssFuck fuck = new AssFuck(this.getType());
-                if (fuck.requirements(c, opponent) && fuck.usable(c, opponent)) {
+                AssFuck fuck = new AssFuck();
+                if (fuck.requirements(c, this, opponent) && fuck.usable(c, this, opponent)) {
                     c.write(opponent,
                                     Formatter.format("<b>The look of {other:name-possessive} ass,"
                                                     + " so easily within {self:possessive} reach, causes"
@@ -2268,7 +2267,7 @@ public abstract class Character extends Observable implements Cloneable {
 
     public abstract void emote(Emotion emo, int amt);
 
-    public void learn(Function<CharacterType, Skill> skillstructor) {
+    public void learn(Supplier<Skill> skillstructor) {
         skills.addIfAbsent(skillstructor);
     }
 
@@ -3006,7 +3005,7 @@ public abstract class Character extends Observable implements Cloneable {
             if (a instanceof ThrowSlime) {
                 a = a.copy(this);
             }
-            if (Skill.skillIsUsable(c, a)) {
+            if (Skill.skillIsUsable(c, a, this, target)) {
                 if (cooldownAvailable(a)) {
                     available.add(a);
                 } else {
@@ -3025,7 +3024,7 @@ public abstract class Character extends Observable implements Cloneable {
         HashSet<Skill> misc = new HashSet<>();
         Skill.filterAllowedSkills(c, available, this, target);
         if (available.size() == 0) {
-            available.add(new Nothing(getType()));
+            available.add(new Nothing());
         }
         available.addAll(cds);
         GUI.gui.clearCommand();
@@ -3033,55 +3032,55 @@ public abstract class Character extends Observable implements Cloneable {
         for (Skill a : available) {
             if (a.getName().equals(c.getCombatantData(this).getLastUsedSkillName())) {
                 lastUsed = a;
-            } else if (a.type(c) == Tactics.damage) {
+            } else if (a.type(c, this) == Tactics.damage) {
                 damage.add(a);
-            } else if (a.type(c) == Tactics.pleasure) {
+            } else if (a.type(c, this) == Tactics.pleasure) {
                 pleasure.add(a);
-            } else if (a.type(c) == Tactics.fucking) {
+            } else if (a.type(c, this) == Tactics.fucking) {
                 fucking.add(a);
-            } else if (a.type(c) == Tactics.positioning) {
+            } else if (a.type(c, this) == Tactics.positioning) {
                 position.add(a);
-            } else if (a.type(c) == Tactics.debuff) {
+            } else if (a.type(c, this) == Tactics.debuff) {
                 debuff.add(a);
-            } else if (a.type(c) == Tactics.recovery || a.type(c) == Tactics.calming) {
+            } else if (a.type(c, this) == Tactics.recovery || a.type(c, this) == Tactics.calming) {
                 recovery.add(a);
-            } else if (a.type(c) == Tactics.summoning) {
+            } else if (a.type(c, this) == Tactics.summoning) {
                 summoning.add(a);
-            } else if (a.type(c) == Tactics.stripping) {
+            } else if (a.type(c, this) == Tactics.stripping) {
                 stripping.add(a);
             } else {
                 misc.add(a);
             }
         }
         if (lastUsed != null) {
-            GUI.gui.addSkill(c, lastUsed, target);
+            GUI.gui.addSkill(c, lastUsed, this, target);
         }
         for (Skill a : stripping) {
-            GUI.gui.addSkill(c, a, target);
+            GUI.gui.addSkill(c, a, this, target);
         }
         for (Skill a : position) {
-            GUI.gui.addSkill(c, a, target);
+            GUI.gui.addSkill(c, a, this, target);
         }
         for (Skill a : fucking) {
-            GUI.gui.addSkill(c, a, target);
+            GUI.gui.addSkill(c, a, this, target);
         }
         for (Skill a : pleasure) {
-            GUI.gui.addSkill(c, a, target);
+            GUI.gui.addSkill(c, a, this, target);
         }
         for (Skill a : damage) {
-            GUI.gui.addSkill(c, a, target);
+            GUI.gui.addSkill(c, a, this, target);
         }
         for (Skill a : debuff) {
-            GUI.gui.addSkill(c, a, target);
+            GUI.gui.addSkill(c, a, this, target);
         }
         for (Skill a : summoning) {
-            GUI.gui.addSkill(c, a, target);
+            GUI.gui.addSkill(c, a, this, target);
         }
         for (Skill a : recovery) {
-            GUI.gui.addSkill(c, a, target);
+            GUI.gui.addSkill(c, a, this, target);
         }
         for (Skill a : misc) {
-            GUI.gui.addSkill(c, a, target);
+            GUI.gui.addSkill(c, a, this, target);
         }
         GUI.gui.showSkills();
     }
@@ -3470,9 +3469,10 @@ public abstract class Character extends Observable implements Cloneable {
             bonus += s.drained(c, drained);
         }
         drained += bonus;
-        overkill = Math.max(0, drained - targetMeter.get());
+        overkill = Math.max(0, drained - targetMeter.get());    // no negative overkill
         drained -= overkill;
-        int restored = Math.round(drained * efficiency);
+        drained = Math.max(0, drained);
+        int restored = Math.round(drained * efficiency);    // no negative drain amounts
         if (c != null) {
             String subjectText = String.format("%s drained of", subjectWas());
             String drainText = String.format(" <font color=%s>%d<font color='white'> %s%s", drainType.lossColor.rgbHTML(),
@@ -3777,7 +3777,7 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public Collection<Skill> getSkills() {
-        return skills.stream().map(skillstructor -> skillstructor.apply(getType())).collect(Collectors.toSet());
+        return skills.stream().map(Supplier::get).collect(Collectors.toSet());
     }
 
     protected void distributePoints(List<PreferredAttribute> preferredAttributes) {

@@ -120,7 +120,7 @@ class CombatLog {
     private void useSkills(Skill p1act, Skill p2act, StringBuilder sb, String linebreak) {
         Skill firstSkill, secondSkill;
         Character firstCharacter, secondCharacter;
-        if (p1.init() + p1act.speed() >= p2.init() + p2act.speed()) {
+        if (p1.init() + p1act.speed(p1) >= p2.init() + p2act.speed(p2)) {
             firstSkill = p1act;
             secondSkill = p2act;
             firstCharacter = p1;
@@ -132,10 +132,10 @@ class CombatLog {
             secondCharacter = p1;
         }
         boolean first, second = false;
-        if (!(first = cbt.resolveSkill(firstSkill, secondCharacter))) {
+        if (!(first = cbt.resolveSkill(new Skill.SkillUsage<>(firstSkill, firstCharacter, secondCharacter)))) {
             // only use second skill if an orgasm didn't happen
             cbt.write("<br/>");
-            second = cbt.resolveSkill(secondSkill, firstCharacter);
+            second = cbt.resolveSkill(new Skill.SkillUsage<>(secondSkill, secondCharacter, firstCharacter));
         }
         sb.append(String.format("%s went first: %s%s", firstCharacter.getTrueName(), first ? "orgasm" : "normal", linebreak));
         sb.append(String.format("%s went second: %s%s", secondCharacter.getTrueName(),

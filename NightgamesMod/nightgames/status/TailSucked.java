@@ -23,7 +23,7 @@ public class TailSucked extends Status implements InsertedStatus {
         this.sucker = sucker;
         this.power = power;
         requirements.add((c, self, other) -> c != null && self != null && other != null
-                        && new TailSuck(other.getType()).usable(c, self));
+                        && new TailSuck().usable(c, other, self));
         flag(Stsflag.bound);
         flag(Stsflag.debuff);
         flag(Stsflag.tailsucked);
@@ -109,7 +109,7 @@ public class TailSucked extends Status implements InsertedStatus {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return power * -5;
     }
 

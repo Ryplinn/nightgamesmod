@@ -390,7 +390,7 @@ public class MindControl extends Addiction {
         }
 
         @Override
-        public int escape() {
+        public int escape(Character from) {
             return 0;
         }
 

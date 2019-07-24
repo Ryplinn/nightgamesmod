@@ -1,9 +1,6 @@
 package nightgames.status;
 
-import static nightgames.requirements.RequirementShortcuts.eitherinserted;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
@@ -11,6 +8,8 @@ import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
+
+import static nightgames.requirements.RequirementShortcuts.eitherinserted;
 
 public class TailFucked extends Status implements InsertedStatus {
     private String target;
@@ -107,7 +106,7 @@ public class TailFucked extends Status implements InsertedStatus {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return -5;
     }
 

@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -14,8 +13,8 @@ import nightgames.stance.Stance;
 import nightgames.status.BodyFetish;
 
 public class HeelGrind extends Skill {
-    HeelGrind(CharacterType self) {
-        super("Heel Grind", self);
+    HeelGrind() {
+        super("Heel Grind");
         addTag(SkillTag.usesFeet);
         addTag(SkillTag.pleasure);
         addTag(SkillTag.dominant);
@@ -27,68 +26,68 @@ public class HeelGrind extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().behind(getSelf()) && target.crotchAvailable() && getSelf().canAct()
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().behind(user) && target.crotchAvailable() && user.canAct()
                         && !c.getStance().vaginallyPenetrated(c, target) && target.hasPussy()
-                        && getSelf().outfit.hasNoShoes();
+                        && user.outfit.hasNoShoes();
     }
 
     @Override
-    public float priorityMod(Combat c) {
-        BodyPart feet = getSelf().body.getRandom("feet");
-        Character other = c.p1 == getSelf() ? c.p2 : c.p1;
+    public float priorityMod(Combat c, Character user) {
+        BodyPart feet = user.body.getRandom("feet");
+        Character other = c.p1 == user ? c.p2 : c.p1;
         BodyPart otherpart = other.hasDick() ? other.body.getRandomCock() : other.body.getRandomPussy();
         if (feet != null) {
-            return (float) Math.max(0, feet.getPleasure(getSelf(), otherpart) - 1);
+            return (float) Math.max(0, feet.getPleasure(user, otherpart) - 1);
         }
         return 0;
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 15;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         int m = 12 + Random.random(6);
         int m2 = m / 2;
-        writeOutput(c, Result.normal, target);
-        target.body.pleasure(getSelf(), getSelf().body.getRandom("feet"), target.body.getRandom("pussy"), m, c, this);
-        target.body.pleasure(getSelf(), getSelf().body.getRandom("hands"), target.body.getRandom("breasts"), m2, c, this);
+        writeOutput(c, Result.normal, user, target);
+        target.body.pleasure(user, user.body.getRandom("feet"), target.body.getRandom("pussy"), m, c, new SkillUsage<>(this, user, target));
+        target.body.pleasure(user, user.body.getRandom("hands"), target.body.getRandom("breasts"), m2, c, new SkillUsage<>(this, user, target));
         if (c.getStance().en != Stance.behindfootjob) {
-            c.setStance(new BehindFootjob(self, target.getType()), getSelf(), true);
+            c.setStance(new BehindFootjob(user.getType(), target.getType()), user, true);
         }
-        if (Random.random(100) < 15 + 2 * getSelf().get(Attribute.fetishism)) {
-            target.add(c, new BodyFetish(target.getType(), self, "feet", .25));
+        if (Random.random(100) < 15 + 2 * user.get(Attribute.fetishism)) {
+            target.add(c, new BodyFetish(target.getType(), user.getType(), "feet", .25));
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new HeelGrind(user.getType());
+        return new HeelGrind();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 4;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return Formatter.format(
                         "You wrap your legs around {other:name-possessive} waist and press your heel gently into {other:possessive} cunt. Locking your ankles to keep {other:possessive} held in place, you start to gently gyrate your heel against {other:possessive} wet lips. Cupping each of {other:possessive} {other:body-part:breasts} with your hands, you start to pull and play with {other:name-possessive} nipples between your fingers. Your heel now coated in {other:possessive} wetness, you apply even more pressure and speed as you feel {other:subject} starting to hump it on {other:possessive} own.",
-                        getSelf(), target);
+                        user, target);
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return Formatter.format(
                         "{self:subject} wraps {self:possessive} legs around {other:name-possessive} waist and "
                         + "presses {self:possessive} soft heel against {other:possessive} pussy, eliciting a gasp. "
@@ -98,11 +97,11 @@ public class HeelGrind extends Skill {
                         + "tweak and pinch {other:possessive} nipples. Flushed and dripping with arousal, "
                         + "{other:subject-action:feel|feels} {other:possessive} body helplessly "
                         + "grinding {self:possessive} soaked heel, which starts to sink into {other:possessive} cunt bit by bit.",
-                        getSelf(), target);
+                        user, target);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Pleasure your opponent with your feet";
     }
 

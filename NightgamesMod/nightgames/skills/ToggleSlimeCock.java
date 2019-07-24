@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.CockPart;
 import nightgames.characters.body.mods.SizeMod;
@@ -14,87 +13,87 @@ import nightgames.status.Stsflag;
 
 public class ToggleSlimeCock extends Skill {
 
-    ToggleSlimeCock(CharacterType self) {
-        super("Toggle Slime Cock", self);
+    ToggleSlimeCock() {
+        super("Toggle Slime Cock");
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().get(Attribute.slime) > 14;
+        return user.get(Attribute.slime) > 14;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canRespond() && (!hasSlimeCock() || !c.getStance().inserted(getSelf()));
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canRespond() && (!hasSlimeCock(user) || !c.getStance().inserted(user));
     }
 
     @Override
-    public float priorityMod(Combat c) {
-        return (float) ((getSelf().dickPreference() - 5) * (hasSlimeCock() ? -.3 : .3));
+    public float priorityMod(Combat c, Character user) {
+        return (float) ((user.dickPreference() - 5) * (hasSlimeCock(user) ? -.3 : .3));
     }
 
     @Override
-    public String getLabel(Combat c) {
-        return hasSlimeCock() ? "Retract Cock" : "Form Cock";
+    public String getLabel(Combat c, Character user) {
+        return hasSlimeCock(user) ? "Retract Cock" : "Form Cock";
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 15;
     }
 
     @Override
-    public String describe(Combat c) {
-        return hasSlimeCock() ? "Pull your slime cock back into your body" : "Form a cock using your slime";
+    public String describe(Combat c, Character user) {
+        return hasSlimeCock(user) ? "Pull your slime cock back into your body" : "Form a cock using your slime";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         String msg = "{self:SUBJECT-ACTION:close|closes} {self:possessive} eyes and ";
-        if (hasSlimeCock()) {
-            if (getSelf().human() || getSelf().crotchAvailable()) {
+        if (hasSlimeCock(user)) {
+            if (user.human() || user.crotchAvailable()) {
                 msg += "{self:possessive} {self:body-part:cock} retreats back into {self:possessive} body.";
             } else {
-                msg += "the bulge in {self:possessive} " + getSelf().outfit.getTopOfSlot(ClothingSlot.bottom).getName()
+                msg += "the bulge in {self:possessive} " + user.outfit.getTopOfSlot(ClothingSlot.bottom).getName()
                                 + " shrinks considerably.";
             }
-            getSelf().body.removeTemporaryParts("cock");
+            user.body.removeTemporaryParts("cock");
         } else {
-            if (getSelf().human() || getSelf().crotchAvailable()) {
+            if (user.human() || user.crotchAvailable()) {
                 msg += "a thick, slimy cock forms between {self:possessive} legs.";
             } else {
-                msg += "a sizable bulge forms in " + getSelf().outfit.getTopOfSlot(ClothingSlot.bottom).getName() + ".";
+                msg += "a sizable bulge forms in " + user.outfit.getTopOfSlot(ClothingSlot.bottom).getName() + ".";
             }
-            getSelf().body.temporaryAddOrReplacePartWithType(new CockPart().applyMod(new SizeMod(SizeMod.COCK_SIZE_BIG)).applyMod(CockMod.slimy), 100);
+            user.body.temporaryAddOrReplacePartWithType(new CockPart().applyMod(new SizeMod(SizeMod.COCK_SIZE_BIG)).applyMod(CockMod.slimy), 100);
         }
         if (!target.human() || !target.is(Stsflag.blinded))
-            c.write(getSelf(), Formatter.format(msg, getSelf(), target));
+            c.write(user, Formatter.format(msg, user, target));
         else 
-            printBlinded(c);
+            printBlinded(c, user);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new ToggleSlimeCock(user.getType());
+        return new ToggleSlimeCock();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.misc;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 
-    private boolean hasSlimeCock() {
-        return getSelf().hasDick() && getSelf().body.getRandomCock().moddedPartCountsAs(getSelf(), CockMod.slimy);
+    private boolean hasSlimeCock(Character user) {
+        return user.hasDick() && user.body.getRandomCock().moddedPartCountsAs(user, CockMod.slimy);
     }
 }

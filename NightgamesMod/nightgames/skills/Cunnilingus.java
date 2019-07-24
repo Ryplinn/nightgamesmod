@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -16,30 +15,30 @@ import nightgames.status.Enthralled;
 @SuppressWarnings("unused")
 public class Cunnilingus extends Skill {
 
-    public Cunnilingus(CharacterType self) {
-        super("Lick Pussy", self);
+    public Cunnilingus() {
+        super("Lick Pussy");
         addTag(SkillTag.usesMouth);
         addTag(SkillTag.pleasure);
         addTag(SkillTag.oral);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        boolean canUse = c.getStance().isBeingFaceSatBy(getSelf(), target) && getSelf().canRespond()
-                        || getSelf().canAct();
+    public boolean usable(Combat c, Character user, Character target) {
+        boolean canUse = c.getStance().isBeingFaceSatBy(user, target) && user.canRespond()
+                        || user.canAct();
         boolean pussyAvailable = target.crotchAvailable() && target.hasPussy();
-        boolean stanceAvailable = c.getStance().oral(getSelf(), target) && (!c.getStance().vaginallyPenetrated(c, target) || c.getStance().getPartsFor(c, getSelf(), target).contains(getSelf().body.getRandom("mouth")));
+        boolean stanceAvailable = c.getStance().oral(user, target) && (!c.getStance().vaginallyPenetrated(c, target) || c.getStance().getPartsFor(c, user, target).contains(user.body.getRandom("mouth")));
         return pussyAvailable && stanceAvailable && canUse;
     }
 
     @Override
-    public float priorityMod(Combat c) {
-        return getSelf().has(Trait.silvertongue) ? 1 : 0;
+    public float priorityMod(Combat c, Character user) {
+        return user.has(Trait.silvertongue) ? 1 : 0;
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
-        if (c.getStance().isBeingFaceSatBy(getSelf(), c.getOpponent(getSelf()))) {
+    public int getMojoBuilt(Combat c, Character user) {
+        if (c.getStance().isBeingFaceSatBy(user, c.getOpponent(user))) {
             return 0;
         } else {
             return 5;
@@ -47,39 +46,39 @@ public class Cunnilingus extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         Result results = Result.normal;
-        boolean facesitting = c.getStance().isBeingFaceSatBy(getSelf(), target);
+        boolean facesitting = c.getStance().isBeingFaceSatBy(user, target);
         int m = 10 + Random.random(8);
-        if (getSelf().has(Trait.silvertongue)) {
+        if (user.has(Trait.silvertongue)) {
             m += 4;
         }
         int i = 0;
-        if (!facesitting && c.getStance().mobile(target) && !target.roll(getSelf(), accuracy(c, target))) {
+        if (!facesitting && c.getStance().mobile(target) && !target.roll(user, accuracy(c, user, target))) {
             results = Result.miss;
         } else {
             if (target.has(Trait.enthrallingjuices) && Random.random(4) == 0 && !target.wary()) {
                 i = -2;
             } else if (target.has(Trait.lacedjuices)) {
                 i = -1;
-                getSelf().temptNoSource(c, target, 5, this);
+                user.temptNoSource(c, target, 5, this);
             }
             if (facesitting) {
                 results = Result.reverse;
             }
         }
-        writeOutput(c, i, results, target);
+        writeOutput(c, i, results, user, target);
         if (i == -2) {
-            getSelf().add(c, new Enthralled(self, target.getType(), 3));
+            user.add(c, new Enthralled(user.getType(), target.getType(), 3));
         }
         if (results != Result.miss) {
             if (results == Result.reverse) {
                 target.buildMojo(c, 10);
             }
             if (c.getStance() instanceof ReverseMount) {
-                c.setStance(new SixNine(self, target.getType()), getSelf(), true);
+                c.setStance(new SixNine(user.getType(), target.getType()), user, true);
             }
-            target.body.pleasure(getSelf(), getSelf().body.getRandom("mouth"), target.body.getRandom("pussy"), m, c, this);
+            target.body.pleasure(user, user.body.getRandom("mouth"), target.body.getRandom("pussy"), m, c, new SkillUsage<>(this, user, target));
         }
         return results != Result.miss;
     }
@@ -91,26 +90,26 @@ public class Cunnilingus extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Cunnilingus(user.getType());
+        return new Cunnilingus();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 2;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
-        return !c.getStance().isBeingFaceSatBy(getSelf(), target) && c.getStance().reachTop(target)? 75 : 200;
+    public int accuracy(Combat c, Character user, Character target) {
+        return !c.getStance().isBeingFaceSatBy(user, target) && c.getStance().reachTop(target)? 75 : 200;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "You try to eat out " + target.getName() + ", but she pushes your head away.";
         }
@@ -169,45 +168,45 @@ public class Cunnilingus extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         String special;
         switch (damage) {
             case -1:
                 special = String.format(" %s aphrodisiac juices manage to arouse %s as much as %s aroused %s.", 
-                                target.nameOrPossessivePronoun(), getSelf().nameDirectObject(),
-                                getSelf().pronoun(), target.nameDirectObject());
+                                target.nameOrPossessivePronoun(), user.nameDirectObject(),
+                                user.pronoun(), target.nameDirectObject());
                 break;
             case -2:
                 special = String.format(" %s tainted juices quickly reduce %s into a willing thrall.",
-                                target.nameOrPossessivePronoun(), getSelf().nameDirectObject());
+                                target.nameOrPossessivePronoun(), user.nameDirectObject());
                 break;
             default:
                 special = "";
         }
         if (modifier == Result.miss) {
             return String.format("%s tries to tease %s cunt with %s mouth, but %s %s %s face away from %s box.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(), getSelf().possessiveAdjective(),
-                            target.pronoun(), target.action("push", "pushes"), getSelf().nameOrPossessivePronoun(),
+                            user.subject(), target.nameOrPossessivePronoun(), user.possessiveAdjective(),
+                            target.pronoun(), target.action("push", "pushes"), user.nameOrPossessivePronoun(),
                             target.possessiveAdjective());
         } else if (modifier == Result.special) {
             return String.format("%s skilled tongue explores %s pussy, finding and pleasuring %s more sensitive areas. "
                             + "%s repeatedly attacks %s clitoris until %s can't suppress %s pleasured moans.%s",
-                            getSelf().nameOrPossessivePronoun(), target.nameOrPossessivePronoun(), target.possessiveAdjective(),
-                            Formatter.capitalizeFirstLetter(getSelf().pronoun()), target.nameOrPossessivePronoun(),
+                            user.nameOrPossessivePronoun(), target.nameOrPossessivePronoun(), target.possessiveAdjective(),
+                            Formatter.capitalizeFirstLetter(user.pronoun()), target.nameOrPossessivePronoun(),
                             target.pronoun(), target.possessiveAdjective(), special);
         } else if (modifier == Result.reverse) {
             return String.format("%s obediently laps at %s pussy as %s %s on %s face.%s",
-                            getSelf().subject(), target.nameOrPossessivePronoun(),
-                            target.pronoun(), target.action("sit"), getSelf().possessiveAdjective(),
+                            user.subject(), target.nameOrPossessivePronoun(),
+                            target.pronoun(), target.action("sit"), user.possessiveAdjective(),
                             special);
         }
         return String.format("%s locates and captures %s clit between %s lips and attacks it with %s tongue.%s", 
-                        getSelf().subject(), target.nameOrPossessivePronoun(), getSelf().possessiveAdjective(),
-                        getSelf().possessiveAdjective(), special);
+                        user.subject(), target.nameOrPossessivePronoun(), user.possessiveAdjective(),
+                        user.possessiveAdjective(), special);
     }
     
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Perform cunnilingus on opponent";
     }
 }

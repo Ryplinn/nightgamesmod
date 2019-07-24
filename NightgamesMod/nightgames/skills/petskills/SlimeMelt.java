@@ -1,7 +1,6 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -16,28 +15,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SlimeMelt extends SimpleEnemySkill {
-    public SlimeMelt(CharacterType self) {
-        super("Slime Melt", self);
+    public SlimeMelt() {
+        super("Slime Melt");
         addTag(SkillTag.stripping);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return super.usable(c, target) && !(target.crotchAvailable() && target.breastsAvailable());
+    public boolean usable(Combat c, Character user, Character target) {
+        return super.usable(c, user, target) && !(target.crotchAvailable() && target.breastsAvailable());
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 5;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 65;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         List<ClothingSlot> strippable = new ArrayList<>();
         if (!target.crotchAvailable() && target.outfit.slotShreddable(ClothingSlot.bottom)) {
             strippable.add(ClothingSlot.bottom);
@@ -46,16 +45,16 @@ public class SlimeMelt extends SimpleEnemySkill {
             strippable.add(ClothingSlot.top);
         }
         ClothingSlot targetSlot = Random.pickRandomGuaranteed(strippable);
-        if (target.roll(getSelf(), accuracy(c, target))) {
+        if (target.roll(user, accuracy(c, user, target))) {
             // should never be null here, since otherwise we can't use the skill          
             Clothing stripped = target.strip(targetSlot, c);
-            c.write(getSelf(), Formatter.format("{self:SUBJECT} pounces on {other:name-do} playfully, "
+            c.write(user, Formatter.format("{self:SUBJECT} pounces on {other:name-do} playfully, "
                             + "and its corrosive body melts {other:possessive} %s as a fortunate accident.", 
-                            getSelf(), target, stripped.getName()));
+                            user, target, stripped.getName()));
             target.emote(Emotion.nervous, 10);
         } else {
-            c.write(getSelf(), Formatter.format("{self:SUBJECT} launches itself towards {other:name-do}, but {other:SUBJECT-ACTION:sidestep|sidesteps} it handily.",
-                            getSelf(), target));
+            c.write(user, Formatter.format("{self:SUBJECT} launches itself towards {other:name-do}, but {other:SUBJECT-ACTION:sidestep|sidesteps} it handily.",
+                            user, target));
             return false;
         }
         return true;
@@ -63,16 +62,16 @@ public class SlimeMelt extends SimpleEnemySkill {
 
     @Override
     public Skill copy(Character user) {
-        return new SlimeMelt(user.getType());
+        return new SlimeMelt();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 8;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.stripping;
     }
 

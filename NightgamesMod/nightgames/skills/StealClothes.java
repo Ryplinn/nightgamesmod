@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.items.clothing.Clothing;
@@ -11,96 +10,94 @@ import nightgames.nskills.tags.SkillTag;
 
 public class StealClothes extends Skill {
 
-    StealClothes(CharacterType self) {
-        super("Steal Clothes", self);
+    StealClothes() {
+        super("Steal Clothes");
         addTag(SkillTag.stripping);
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.ninjutsu) >= 15;
+        return user.getPure(Attribute.ninjutsu) >= 15;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return (c.getStance()
-                 .reachTop(getSelf()) && !target.outfit.slotEmptyOrMeetsCondition(ClothingSlot.top, this::blocked))
-                        || (c.getStance()
-                             .reachBottom(getSelf())
-                                        && !target.outfit.slotEmptyOrMeetsCondition(ClothingSlot.bottom,
-                                                        this::blocked));
+    public boolean usable(Combat c, Character user, Character target) {
+        return (c.getStance().reachTop(user) && !target.outfit
+                        .slotEmptyOrMeetsCondition(ClothingSlot.top, clothing -> blocked(user, clothing))) || (
+                        c.getStance().reachBottom(user) && !target.outfit.slotEmptyOrMeetsCondition(ClothingSlot.bottom,
+                                        clothing -> blocked(user, clothing)));
 
     }
 
-    private boolean blocked(Clothing c) {
+    private boolean blocked(Character user, Clothing c) {
         // Allow crossdressing for now, except for strapons and bras.
         // This may change.
-        if ((getSelf().hasDick() && c.getID()
+        if ((user.hasDick() && c.getID()
                                      .equals("strapon"))
-                        || (!getSelf().hasBreasts() && c.getSlots()
+                        || (!user.hasBreasts() && c.getSlots()
                                                         .contains(ClothingSlot.top)
                                         && c.getLayer() == 0))
             return false;
 
-        return getSelf().outfit.canEquip(c);
+        return user.outfit.canEquip(c);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 10;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Steal and put on an article of clothing: 10 Mojo.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         Clothing stripped;
         boolean top;
-        if (!target.outfit.slotEmptyOrMeetsCondition(ClothingSlot.top, this::blocked)) {
+        if (!target.outfit.slotEmptyOrMeetsCondition(ClothingSlot.top, c1 -> blocked(user, c1))) {
             stripped = target.outfit.unequip(target.outfit.getTopOfSlot(ClothingSlot.top));
-            getSelf().outfit.equip(stripped);
+            user.outfit.equip(stripped);
             top = true;
-        } else if (!target.outfit.slotEmptyOrMeetsCondition(ClothingSlot.bottom, this::blocked)) {
+        } else if (!target.outfit.slotEmptyOrMeetsCondition(ClothingSlot.bottom, c1 -> blocked(user, c1))) {
             stripped = target.outfit.unequip(target.outfit.getTopOfSlot(ClothingSlot.bottom));
-            getSelf().outfit.equip(stripped);
+            user.outfit.equip(stripped);
             top = false;
         } else {
-            c.write(getSelf(), "<b>Error: Couldn't strip anything in StealClothes#resolve</b>");
+            c.write(user, "<b>Error: Couldn't strip anything in StealClothes#resolve</b>");
             return false;
         }
-        c.write(getSelf(), String.format(
+        c.write(user, String.format(
                         "%s %s with %s quick movements, and before %s %s what's" + " going on, %s %s graces %s %s.",
-                        getSelf().subjectAction("dazzle"), target.subject(), getSelf().possessiveAdjective(),
+                        user.subjectAction("dazzle"), target.subject(), user.possessiveAdjective(),
                         target.pronoun(), target.action("realize"), target.possessiveAdjective(),
-                        stripped.getName(), getSelf().nameOrPossessivePronoun(), top ? "chest" : "hips"));
+                        stripped.getName(), user.nameOrPossessivePronoun(), top ? "chest" : "hips"));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new StealClothes(user.getType());
+        return new StealClothes();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.stripping;
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 6;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 

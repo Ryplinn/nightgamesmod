@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -12,8 +11,8 @@ import nightgames.global.Random;
 import nightgames.status.Hypersensitive;
 
 public class BreastGrowth extends Skill {
-    BreastGrowth(CharacterType self) {
-        super("Breast Growth", self);
+    BreastGrowth() {
+        super("Breast Growth");
     }
 
     @Override
@@ -22,37 +21,37 @@ public class BreastGrowth extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance()
-                                      .mobile(getSelf())
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && c.getStance()
+                                      .mobile(user)
                         && !c.getStance()
-                             .prone(getSelf());
+                             .prone(user);
     }
 
     @Override
-    public float priorityMod(Combat c) {
+    public float priorityMod(Combat c, Character user) {
         return 0;
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 25;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Grow your opponent's boobs to make her more sensitive.";
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 90;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         Result res;
-        if (target.roll(getSelf(), accuracy(c, target))) {
+        if (target.roll(user, accuracy(c, user, target))) {
             if (target.body.getRandomBreasts().equals(BreastsPart.flat)) {
                 res = Result.special;
             } else {
@@ -61,9 +60,9 @@ public class BreastGrowth extends Skill {
         } else {
             res = Result.miss;
         }
-        boolean permanent = Random.random(20) == 0 && (getSelf().human() || c.shouldPrintReceive(target, c))
+        boolean permanent = Random.random(20) == 0 && (user.human() || c.shouldPrintReceive(target, c))
                         && !target.has(Trait.stableform);
-        writeOutput(c, permanent ? 1 : 0, res, target);
+        writeOutput(c, permanent ? 1 : 0, res, user, target);
         if (res != Result.miss) {
             target.add(c, new Hypersensitive(target.getType(), 10));
             BreastsPart part = target.body.getBreastsBelow(BreastsPart.f.getSize());
@@ -83,16 +82,16 @@ public class BreastGrowth extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new BreastGrowth(user.getType());
+        return new BreastGrowth();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         String message;
         if (modifier == Result.normal) {
             message = String.format(
@@ -124,14 +123,14 @@ public class BreastGrowth extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         String message;
         if (modifier == Result.normal) {
             message = String.format(
                             "%s moving and begins chanting. %s %s breasts grow hot, and they start expanding!"
                                             + " %s to hold them back with %s hands, but the growth continues untill they are a full cup size"
                                             + " bigger than before. The new sensations from %s substantially larger breasts make %s tremble.",
-                            getSelf().getName(), Formatter.capitalizeFirstLetter(target.subjectAction("feel")),
+                            user.getName(), Formatter.capitalizeFirstLetter(target.subjectAction("feel")),
                             target.possessiveAdjective(), Formatter.capitalizeFirstLetter(target.pronoun()),
                             target.action("try", "tries"), target.possessiveAdjective(), target.directObject());
             if (damage > 0) {
@@ -143,14 +142,14 @@ public class BreastGrowth extends Skill {
                             "%s moving and begins chanting. %s %s chest grow hot, and small, perky breasts start to form!"
                                             + " %s to hold them back with %s hands, but the growth continues untill they are a full A-cup."
                                             + " The new sensations from %s new breasts make %s tremble.",
-                            getSelf().getName(), Formatter.capitalizeFirstLetter(target.subjectAction("feel")),
+                            user.getName(), Formatter.capitalizeFirstLetter(target.subjectAction("feel")),
                             target.possessiveAdjective(), Formatter.capitalizeFirstLetter(target.pronoun()),
                             target.action("try", "tries"), target.possessiveAdjective(), target.directObject());
         } else {
             message = String.format(
                             "%s moving and begins chanting. %s feeling some tingling in %s breasts, "
                                             + "but it quickly subsides as %s %s out of the way.",
-                            getSelf().subjectAction("stop"),
+                            user.subjectAction("stop"),
                             Formatter.capitalizeFirstLetter(target.subjectAction("start")), target.possessiveAdjective(),
                             target.pronoun(), target.action("dodge"));
         }

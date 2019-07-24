@@ -76,7 +76,7 @@ public class Disguised extends Status {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return 0;
     }
 

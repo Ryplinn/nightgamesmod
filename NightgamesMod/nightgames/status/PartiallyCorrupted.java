@@ -117,7 +117,7 @@ public class PartiallyCorrupted extends DurationStatus {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return 0;
     }
 

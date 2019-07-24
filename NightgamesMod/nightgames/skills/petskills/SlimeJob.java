@@ -1,7 +1,6 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
@@ -10,13 +9,13 @@ import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
 public class SlimeJob extends SimpleEnemySkill {
-    public SlimeJob(CharacterType self) {
-        super("Slime Job", self);
+    public SlimeJob() {
+        super("Slime Job");
         addTag(SkillTag.pleasure);
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 5;
     }
 
@@ -26,47 +25,47 @@ public class SlimeJob extends SimpleEnemySkill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), accuracy(c, target))) {
-            int m = (int) (Random.random(10, 16) + Math.sqrt(getSelf().getLevel())/ 2);
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.roll(user, accuracy(c, user, target))) {
+            int m = (int) (Random.random(10, 16) + Math.sqrt(user.getLevel())/ 2);
             if (target.crotchAvailable() && !c.getStance().penisInserted(target) && target.hasDick()) {
-                c.write(getSelf(), Formatter.format("{self:SUBJECT} forms into a humanoid shape and grabs {other:name-possessive} dick. "
+                c.write(user, Formatter.format("{self:SUBJECT} forms into a humanoid shape and grabs {other:name-possessive} dick. "
                                 + "A slimy vagina forms around {other:possessive} penis and rubs {other:direct-object} with a slippery pleasure.",
-                                    getSelf(), target));
-                target.body.pleasure(getSelf(), getSelf().body.getRandomPussy(), target.body.getRandomCock(), m, c);
+                                    user, target));
+                target.body.pleasure(user, user.body.getRandomPussy(), target.body.getRandomCock(), m, c);
                 return true;
-            } else if (target.hasPussy() && !c.getStance().vaginallyPenetrated(c, target) && target.crotchAvailable() && getSelf().hasDick()) {
-                c.write(getSelf(), Formatter.format("Two long appendages extend from {self:name-do} and wrap around {other:name-possessive} legs. "
+            } else if (target.hasPussy() && !c.getStance().vaginallyPenetrated(c, target) && target.crotchAvailable() && user.hasDick()) {
+                c.write(user, Formatter.format("Two long appendages extend from {self:name-do} and wrap around {other:name-possessive} legs. "
                                 + "A third, phallic shaped appendage forms and penetrates {other:possessive} "
                                 + "pussy. {self:PRONOUN} stifles a moan as the slimy phallus thrusts in and out of {other:direct-object}.",
-                                getSelf(), target));
-                target.body.pleasure(getSelf(), getSelf().body.getRandomCock(), target.body.getRandomPussy(), m, c);
+                                user, target));
+                target.body.pleasure(user, user.body.getRandomCock(), target.body.getRandomPussy(), m, c);
                 return true;
             } else if (target.breastsAvailable()) {
-                c.write(getSelf(), Formatter.format("{self:SUBJECT} grows two long slimy appendages which rises up and tweaks {other:name-possessive} "
+                c.write(user, Formatter.format("{self:SUBJECT} grows two long slimy appendages which rises up and tweaks {other:name-possessive} "
                                 + "sensitive nipples.",
-                                getSelf(), target));
-                target.body.pleasure(getSelf(), getSelf().body.getRandom("tentacles"), target.body.getRandomBreasts(), m, c);
+                                user, target));
+                target.body.pleasure(user, user.body.getRandom("tentacles"), target.body.getRandomBreasts(), m, c);
                 return true;
             }
         }
-        c.write(getSelf(), Formatter
-                        .format("You see eyes form in {self:name-do} as it watches the fight curiously.", getSelf(), target));
+        c.write(user, Formatter
+                        .format("You see eyes form in {self:name-do} as it watches the fight curiously.", user, target));
         return false;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new SlimeJob(user.getType());
+        return new SlimeJob();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 8;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 

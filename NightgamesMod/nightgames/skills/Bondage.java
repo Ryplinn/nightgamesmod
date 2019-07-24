@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.BondageFetish;
@@ -10,8 +9,8 @@ import nightgames.status.Stsflag;
 
 public class Bondage extends Skill {
 
-    public Bondage(CharacterType self) {
-        super("Bondage", self);
+    public Bondage() {
+        super("Bondage");
     }
 
     @Override
@@ -20,43 +19,43 @@ public class Bondage extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canRespond() && c.getStance().mobile(getSelf()) && getSelf().getArousal().get() >= 5
-                        && !getSelf().is(Stsflag.bondage);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canRespond() && c.getStance().mobile(user) && user.getArousal().get() >= 5
+                        && !user.is(Stsflag.bondage);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "You and your opponent become aroused by being tied up for five turns: Arousal at least 5";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.normal, target);
-        getSelf().add(c, new BondageFetish(self));
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.normal, user, target);
+        user.add(c, new BondageFetish(user.getType()));
         target.add(c, new BondageFetish(target.getType()));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Bondage(user.getType());
+        return new Bondage();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You imagine the exhilarating feeling of ropes digging into your skin and binding you. You push this feeling into "
                         + target.getName() + "'s libido.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        return getSelf().getName()
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        return user.getName()
                         + " flushes and wraps her arms around herself tightly. Suddenly the thought of being tied up and dominated slips into "+target.nameOrPossessivePronoun()+" head.";
     }
 

@@ -26,7 +26,7 @@ public class NurseStrategy extends KnockdownThenActionStrategy {
         if (self.getMood().equals(Emotion.angry) || self.getMood().equals(Emotion.nervous)) {
             weight *= .2;
         }
-        if (!(new Nurse(self.getType())).requirements(c, self, c.getOpponent(self))) {
+        if (!(new Nurse()).requirements(c, self, c.getOpponent(self))) {
             weight = 0;
         }
         return weight;
@@ -35,8 +35,8 @@ public class NurseStrategy extends KnockdownThenActionStrategy {
     @Override
     protected Optional<Set<Skill>> getPreferredSkills(Combat c, Character self, Set<Skill> allowedSkills) {
         return emptyIfSetEmpty(allowedSkills.stream()
-                        .filter(skill -> skill.getTags(c).contains(SkillTag.breastfeed)
-                                        && !skill.getTags(c).contains(SkillTag.suicidal))
+                        .filter(skill -> skill.getTags(c, self).contains(SkillTag.breastfeed)
+                                        && !skill.getTags(c, self).contains(SkillTag.suicidal))
                         .collect(Collectors.toSet()));
     }
     

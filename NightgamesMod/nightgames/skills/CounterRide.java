@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -12,35 +11,35 @@ import nightgames.stance.Cowgirl;
 import nightgames.stance.Missionary;
 
 public class CounterRide extends CounterBase {
-    CounterRide(CharacterType self) {
-        super("Sex Counter", self, 5, "{self:SUBJECT-ACTION:invite|invites} the opponent with {self:possessive} body.");
+    CounterRide() {
+        super("Sex Counter", 5, "{self:SUBJECT-ACTION:invite|invites} the opponent with {self:possessive} body.");
         addTag(SkillTag.fucking);
         addTag(SkillTag.positioning);
         addTag(SkillTag.counter);
     }
 
     @Override
-    public float priorityMod(Combat c) {
+    public float priorityMod(Combat c, Character user) {
         return (float) Random.randomdouble() * 2;
     }
 
     @Override
-    public void resolveCounter(Combat c, Character target) {
+    public void resolveCounter(Combat c, Character user, Character target) {
     	if (target.isPet()) {
     		c.write("Something weird happened, pets shouldn't trigger counters.");
     		return;
     	}
-        if (getSelf().human()) {
-            c.write(getSelf(), deal(c, 0, Result.normal, target));
+        if (user.human()) {
+            c.write(user, deal(c, 0, Result.normal, user, target));
         } else {
-            c.write(getSelf(), receive(c, 0, Result.normal, target));
+            c.write(user, receive(c, 0, Result.normal, user, target));
         }
-        if (target.hasDick() && getSelf().hasPussy()) {
-            c.setStance(Cowgirl.similarInstance(getSelf(), target), getSelf(), true);
-            new Thrust(self).resolve(c, target);
+        if (target.hasDick() && user.hasPussy()) {
+            c.setStance(Cowgirl.similarInstance(user, target), user, true);
+            new Thrust().resolve(c, user, target);
         } else {
-            c.setStance(Missionary.similarInstance(getSelf(), target), getSelf(), true);
-            new Thrust(self).resolve(c, target);
+            c.setStance(Missionary.similarInstance(user, target), user, true);
+            new Thrust().resolve(c, user, target);
         }
     }
 
@@ -50,80 +49,80 @@ public class CounterRide extends CounterBase {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return !c.getStance().dom(getSelf()) && !c.getStance().dom(target) && getSelf().canAct()
-                        && getSelf().crotchAvailable() && target.crotchAvailable()
-                        && (getSelf().hasDick() && target.hasPussy() || getSelf().hasPussy() && target.hasDick()) && target.canAct();
+    public boolean usable(Combat c, Character user, Character target) {
+        return !c.getStance().dom(user) && !c.getStance().dom(target) && user.canAct()
+                        && user.crotchAvailable() && target.crotchAvailable()
+                        && (user.hasDick() && target.hasPussy() || user.hasPussy() && target.hasDick()) && target.canAct();
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 40;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Invites opponent into your embrace";
     }
 
     @Override
     public Skill copy(Character user) {
-        return new CounterRide(user.getType());
+        return new CounterRide();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.fucking;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
-        if (modifier == Result.setup && getSelf().hasPussy()) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
+        if (modifier == Result.setup && user.hasPussy()) {
             return Formatter.format(
                             "You turn around and bend over with your ass seductively waving in the air. You slowly "
                                             + "tease your glistening lower lips and spread them apart, inviting {other:name} to take {other:possessive} pleasure.",
-                            getSelf(), target);
-        } else if (modifier == Result.setup && getSelf().hasDick()) {
+                            user, target);
+        } else if (modifier == Result.setup && user.hasDick()) {
             return Formatter.format(
                             "You grab your cock and quickly stroke it to full mast. You let your dick go and it swings back and forth, catching {other:name-possessive} gaze.",
-                            getSelf(), target);
-        } else if (getSelf().hasPussy() && target.hasDick()) {
+                            user, target);
+        } else if (user.hasPussy() && target.hasDick()) {
             return Formatter.format(
                             "As {other:subject} approaches you, you suddenly lower your center of balance and sweep {other:possessive} legs out from under her. "
                                             + "With one smooth motion, you drop your hips and lodge {other:possessive} dick firmly inside yourself.",
-                            getSelf(), target);
+                            user, target);
         } else {
             return Formatter.format(
                             "As {other:subject} approaches you, you suddenly lower your center of balance and sweep {other:possessive} legs out from under her. "
                                             + "With one smooth motion, you spread her legs apart and plunge into her depths.",
-                            getSelf(), target);
+                            user, target);
         }
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        if (modifier == Result.setup && getSelf().hasPussy()) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        if (modifier == Result.setup && user.hasPussy()) {
             return Formatter.format(
                             "{self:SUBJECT} turns around and bends over her ass seductively waving in the air. She slowly "
                                             + "teases her glistening lower lips and spread them apart, inviting {other:name-do} in to her depths.",
-                            getSelf(), target);
-        } else if (modifier == Result.setup && getSelf().hasDick()) {
+                            user, target);
+        } else if (modifier == Result.setup && user.hasDick()) {
             return Formatter.format(
                             "{self:SUBJECT} takes out her cock and strokes it to full mast. She then lets her dick go and it swings back and forth, catching {other:name-possessive} gaze.",
-                            getSelf(), target);
-        } else if (getSelf().hasPussy() && target.hasDick()) {
+                            user, target);
+        } else if (user.hasPussy() && target.hasDick()) {
             return Formatter.format(
                             "As {other:subject-action:approach|approaches} {self:name}, {self:pronoun} suddenly disappears from "
                             + "{other:possessive} view; half a second later, {other:possessive} legs are swept out from under {other:direct-object}. "
                                             + "With a soft giggle, {self:name} swiftly mounts {other:name-do} and starts riding {other:possessive} cock.",
-                            getSelf(), target);
+                            user, target);
         } else {
             return Formatter.format(
                             "As {other:subject} approaches {self:name}, she suddenly disappears from {other:name-possessive} view; half a second "
                             + "later, {other:possessive} legs are swept out from under {other:direct-object}. "
                                             + "With a sexy grin, {self:name} wrenches {other:name-possessive}"
                                             + " legs apart and plunges into {other:possessive} slobbering vagina.",
-                            getSelf(), target);
+                            user, target);
         }
     }
     

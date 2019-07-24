@@ -105,7 +105,7 @@ public abstract class AddictionSymptom extends Status {
         return 0;
     }
 
-    @Override public int escape() {
+    @Override public int escape(Character from) {
         return 0;
     }
 

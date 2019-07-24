@@ -36,7 +36,8 @@ public class KnockdownStrategy extends AbstractStrategy {
         positioningTactics.add(Tactics.damage);
         positioningTactics.add(Tactics.positioning);
 
-        Set<Skill> positioningSkills = allowedSkills.stream().filter(skill -> positioningTactics.contains(skill.type(c))).collect(Collectors.toSet());
+        Set<Skill> positioningSkills = allowedSkills.stream().filter(skill -> positioningTactics.contains(skill.type(c,
+                        self))).collect(Collectors.toSet());
         if (!c.getStance().mobile(self) || c.getStance().mobile(other)) {
             return positioningSkills;
         }

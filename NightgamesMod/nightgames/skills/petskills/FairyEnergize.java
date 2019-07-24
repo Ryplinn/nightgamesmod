@@ -1,7 +1,6 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
@@ -9,30 +8,30 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.Skill;
 
 public class FairyEnergize extends SimpleMasterSkill {
-    public FairyEnergize(CharacterType self) {
-        super("Fairy Energize", self, 5);
+    public FairyEnergize() {
+        super("Fairy Energize", 5);
         addTag(SkillTag.buff);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 5;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 80;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), accuracy(c, target))) {
-            int m = Random.random(17, 24) + getSelf().getLevel() / 2;
-            c.write(getSelf(), Formatter.format("{self:SUBJECT} flies around {other:name-do}, channeling energy into {other:direct-object}.", getSelf(), target));
-            target.buildMojo(c, m, " (" +getSelf().getName()+ ")");
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.roll(user, accuracy(c, user, target))) {
+            int m = Random.random(17, 24) + user.getLevel() / 2;
+            c.write(user, Formatter.format("{self:SUBJECT} flies around {other:name-do}, channeling energy into {other:direct-object}.", user, target));
+            target.buildMojo(c, m, " (" +user.getName()+ ")");
         } else {
-            c.write(getSelf(), Formatter
-                            .format("{self:SUBJECT} flies around the edge of the fight looking for an opening.", getSelf(), target));
+            c.write(user, Formatter
+                            .format("{self:SUBJECT} flies around the edge of the fight looking for an opening.", user, target));
             return false;
         }
         return true;
@@ -40,6 +39,6 @@ public class FairyEnergize extends SimpleMasterSkill {
 
     @Override
     public Skill copy(Character user) {
-        return new FairyEnergize(user.getType());
+        return new FairyEnergize();
     }
 }

@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -16,8 +15,8 @@ import nightgames.status.Primed;
 
 public class CheapShot extends Skill {
 
-    CheapShot(CharacterType self) {
-        super("Cheap Shot", self);
+    CheapShot() {
+        super("Cheap Shot");
         addTag(SkillTag.hurt);
         addTag(SkillTag.staminaDamage);
         addTag(SkillTag.positioning);
@@ -29,31 +28,31 @@ public class CheapShot extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
+    public boolean usable(Combat c, Character user, Character target) {
         Position s = c.getStance();
-        return s.mobile(getSelf()) && !s.prone(getSelf()) && !s.prone(target) && !s.behind(getSelf())
-                        && getSelf().canAct() && !s.penetrated(c, target) && !s.penetrated(c, getSelf())
-                        && Primed.isPrimed(getSelf(), 3);
+        return s.mobile(user) && !s.prone(user) && !s.prone(target) && !s.behind(user)
+                        && user.canAct() && !s.penetrated(c, target) && !s.penetrated(c, user)
+                        && Primed.isPrimed(user, 3);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Stop time long enough to get in an unsportsmanlike attack from behind: 3 charges";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        getSelf().add(c, new Primed(self, -3));
-        writeOutput(c, Result.normal, target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        user.add(c, new Primed(user.getType(), -3));
+        writeOutput(c, Result.normal, user, target);
         if (target.human() && Random.random(5) >= 3) {
-            c.write(getSelf(), getSelf().bbLiner(c, target));
+            c.write(user, user.bbLiner(c, target));
         }
-        c.setStance(new Behind(self, target.getType()), getSelf(), true);
-        target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(8, 20)));
-        getSelf().buildMojo(c, 10);
+        c.setStance(new Behind(user.getType(), target.getType()), user, true);
+        target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random.random(8, 20)));
+        user.buildMojo(c, 10);
 
-        getSelf().emote(Emotion.confident, 15);
-        getSelf().emote(Emotion.dominant, 15);
+        user.emote(Emotion.confident, 15);
+        user.emote(Emotion.dominant, 15);
         target.emote(Emotion.nervous, 10);
         target.emote(Emotion.angry, 20);
         return true;
@@ -61,16 +60,16 @@ public class CheapShot extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new CheapShot(user.getType());
+        return new CheapShot();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.damage;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (target.mostlyNude()) {
             if (target.hasBalls()) {
                 return String.format(
@@ -95,18 +94,18 @@ public class CheapShot extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (target.mostlyNude()) {
             return String.format(
                             "%s suddenly vanishes right in front of %s eyes. That wasn't just fast, %s completely disappeared! Before "
                                             + "%s can react, %s %s hit from behind with a devastating punch to %s unprotected balls.",
-                            getSelf().getName(), target.nameOrPossessivePronoun(), getSelf().pronoun(),
+                            user.getName(), target.nameOrPossessivePronoun(), user.pronoun(),
                             target.subject(), target.pronoun(), target.subjectAction("are", "is"), target.possessiveAdjective());
         } else {
             return String.format(
                             "%s suddenly vanishes right in front of %s eyes. That wasn't just fast, %s completely disappeared! %s something "
                                             + "that sounds like 'Za Warudo' before %s suffer a painful groin hit from behind.",
-                            getSelf().getName(), target.nameOrPossessivePronoun(), getSelf().pronoun(),
+                            user.getName(), target.nameOrPossessivePronoun(), user.pronoun(),
                             Formatter.capitalizeFirstLetter(target.subjectAction("hear")), target.pronoun());
         }
     }

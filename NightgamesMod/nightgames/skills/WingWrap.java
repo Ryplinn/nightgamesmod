@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -14,61 +13,61 @@ import nightgames.status.WingWrapped;
 
 public class WingWrap extends Skill {
 
-    public WingWrap(CharacterType self) {
-        super("Wing Wrap", self);
+    public WingWrap() {
+        super("Wing Wrap");
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().has(Trait.DemonsEmbrace);
+        return user.has(Trait.DemonsEmbrace);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && getSelf().body.has("wings") && (c.getStance()
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && user.body.has("wings") && (c.getStance()
                                                                       .havingSex(c)
                         || c.getStance()
                             .distance() < 2)
                         && !target.is(Stsflag.wrapped)
-                        && c.getStance().facing(getSelf(), target) || c.getStance().en == Stance.behind
+                        && c.getStance().facing(user, target) || c.getStance().en == Stance.behind
                             || c.getStance().en == Stance.behindfootjob;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Wrap your opponent up in your wings";
     }
 
     @Override
-    public float priorityMod(Combat c) {
-        return getSelf().has(Trait.VampireWings) ? 4.f : 1.f;
+    public float priorityMod(Combat c, Character user) {
+        return user.has(Trait.VampireWings) ? 4.f : 1.f;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
 
-        c.write(getSelf(), describeWrap(c, target));
-        target.add(c, new WingWrapped(target.getType(), self));
+        c.write(user, describeWrap(c, user, target));
+        target.add(c, new WingWrapped(target.getType(), user.getType()));
 
         if (c.getStance()
-             .sub(getSelf())
+             .sub(user)
                         && c.getStance()
                             .havingSex(c)) {
-            SubmissiveHold hold = new SubmissiveHold(self);
-            if (Skill.skillIsUsable(c, hold, target)) {
-                c.write(getSelf(),
+            SubmissiveHold hold = new SubmissiveHold();
+            if (Skill.skillIsUsable(c, hold, user, target)) {
+                c.write(user,
                                 Formatter.format("Taking full advantage of {other:name-possessive}"
                                                 + " surprise, {self:subject-action} uses more conventional means"
-                                                + " to secure an even better hold on {other:direct-object}!", getSelf(),
+                                                + " to secure an even better hold on {other:direct-object}!", user,
                                                 target));
-                hold.resolve(c, target);
+                hold.resolve(c, user, target);
             }
         }
 
         return true;
     }
 
-    private String describeWrap(Combat c, Character target) {
+    private String describeWrap(Combat c, Character user, Character target) {
         String desc;
         switch (c.getStance().en) {
             case missionary:
@@ -81,7 +80,7 @@ public class WingWrap extends Skill {
             case cowgirl:
                 desc = "{self:SUBJECT-ACTION:lean|leans} down over {other:name-do}, "
                                 + "{self:possessive} {self:body-part:breasts}"
-                                + (getSelf().body.getLargestBreasts().getSize() > BreastsPart.c.getSize()
+                                + (user.body.getLargestBreasts().getSize() > BreastsPart.c.getSize()
                                                 ? "rubbing delightfully into {other:possessive}"
                                                                 + " {other:body-part:breasts}."
                                                 : "hanging enticingly above {other:direct-object}")
@@ -97,7 +96,7 @@ public class WingWrap extends Skill {
                                 + " {other:direct-object} close to {self:direct-object}.";
         }
         if (c.getStance()
-             .facing(getSelf(), target)) {
+             .facing(user, target)) {
             desc += " In what little light penetrates the cocoon {self:name-possessive} wings" + " have created, ";
             if (target.human()) {
                 desc += "{self:possessive} face, coupled with {self:possessive} confident expression,"
@@ -106,30 +105,30 @@ public class WingWrap extends Skill {
                 desc += "{self:pronoun-action:look|looks} down on {other:direct-object} with amusement.";
             }
         }
-        if (getSelf().has(Trait.VampireWings) && target.outfit.slotEmpty(ClothingSlot.top)) {
+        if (user.has(Trait.VampireWings) && target.outfit.slotEmpty(ClothingSlot.top)) {
             desc += "As the material of the wings settle on {other:name-possessive} skin,"
                             + " they begin to drain {other:direct-object} of {other:possessive}" + " Power!";
         }
-        return Formatter.format(desc, getSelf(), target);
+        return Formatter.format(desc, user, target);
     }
 
     @Override
     public Skill copy(Character user) {
-        return new WingWrap(user.getType());
+        return new WingWrap();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 

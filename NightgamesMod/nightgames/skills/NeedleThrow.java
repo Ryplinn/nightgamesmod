@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -12,50 +11,50 @@ import nightgames.status.Horny;
 
 public class NeedleThrow extends Skill {
 
-    NeedleThrow(CharacterType self) {
-        super("Needle Throw", self);
+    NeedleThrow() {
+        super("Needle Throw");
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.ninjutsu) >= 1;
+        return user.getPure(Attribute.ninjutsu) >= 1;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
+    public boolean usable(Combat c, Character user, Character target) {
         return c.getStance()
-                .mobile(getSelf())
+                .mobile(user)
                         && !c.getStance()
-                             .prone(getSelf())
-                        && getSelf().canAct() && getSelf().has(Item.Needle);
+                             .prone(user)
+                        && user.canAct() && user.has(Item.Needle);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Throw a drugged needle at your opponent.";
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 70;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        getSelf().consume(Item.Needle, 1);
-        if (getSelf().roll(getSelf(), accuracy(c, target))) {
-            c.write(getSelf(), String.format(
+    public boolean resolve(Combat c, Character user, Character target) {
+        user.consume(Item.Needle, 1);
+        if (user.roll(user, accuracy(c, user, target))) {
+            c.write(user, String.format(
                             "%s %s with one of %s drugged needles. "
                                             + "%s %s with arousal and %s it difficult to stay on %s feet.",
-                            getSelf().subjectAction("hit"), target.subject(), getSelf().possessiveAdjective(),
+                            user.subjectAction("hit"), target.subject(), user.possessiveAdjective(),
                             Formatter.capitalizeFirstLetter(target.pronoun()), target.action("flush", "flushes"),
                             target.action("find", target.pronoun() + " is finding"), target.possessiveAdjective()));
-            target.add(c, Horny.getWithBiologicalType(getSelf(), target, 3, 4, getSelf().nameOrPossessivePronoun() + " drugged needle"));
+            target.add(c, Horny.getWithBiologicalType(user, target, 3, 4, user.nameOrPossessivePronoun() + " drugged needle"));
             target.add(c, new Drowsy(target.getType()));
         } else {
-            c.write(getSelf(),
+            c.write(user,
                             String.format("%s a small, drugged needle at %s, but %s %s it.",
-                                            getSelf().subjectAction("throw"), target.subject(),
+                                            user.subjectAction("throw"), target.subject(),
                                             target.pronoun(), target.action("dodge")));
         }
         return true;
@@ -63,29 +62,29 @@ public class NeedleThrow extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new NeedleThrow(user.getType());
+        return new NeedleThrow();
     }
 
     public int accuracy() {
         return 8;
     }
 
-    public int speed() {
+    public int speed(Character user) {
         return 9;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 

@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -11,37 +10,37 @@ import nightgames.skills.damage.DamageType;
 
 public class SuckNeck extends Skill {
 
-    SuckNeck(CharacterType self) {
-        super("Suck Neck", self);
+    SuckNeck() {
+        super("Suck Neck");
         addTag(SkillTag.usesMouth);
         addTag(SkillTag.pleasure);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().kiss(getSelf(), target) && getSelf().canAct();
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().kiss(user, target) && user.canAct();
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 7;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), accuracy(c, target))) {
-            if (getSelf().get(Attribute.darkness) >= 1) {
-                writeOutput(c, Result.special, target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.roll(user, accuracy(c, user, target))) {
+            if (user.get(Attribute.darkness) >= 1) {
+                writeOutput(c, Result.special, user, target);
                 int m = target.getStamina().max() / 8;
-                target.drain(c, getSelf(),
-                                (int) DamageType.drain.modifyDamage(getSelf(), target, m), Character.MeterType.STAMINA);
+                target.drain(c, user,
+                                (int) DamageType.drain.modifyDamage(user, target, m), Character.MeterType.STAMINA);
             } else {
-                writeOutput(c, Result.normal, target);
+                writeOutput(c, Result.normal, user, target);
             }
             int m = 1 + Random.random(8);
-            target.body.pleasure(getSelf(), getSelf().body.getRandom("mouth"), target.body.getRandom("skin"), m, c, this);
+            target.body.pleasure(user, user.body.getRandom("mouth"), target.body.getRandom("skin"), m, c, new SkillUsage<>(this, user, target));
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
         return true;
@@ -49,40 +48,40 @@ public class SuckNeck extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().get(Attribute.seduction) >= 12;
+        return user.get(Attribute.seduction) >= 12;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new SuckNeck(user.getType());
+        return new SuckNeck();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 5;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
-        return c.getStance().dom(getSelf()) ? 100 : 70;
+    public int accuracy(Combat c, Character user, Character target) {
+        return c.getStance().dom(user) ? 100 : 70;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String getLabel(Combat c) {
-        if (getSelf().get(Attribute.darkness) >= 1) {
+    public String getLabel(Combat c, Character user) {
+        if (user.get(Attribute.darkness) >= 1) {
             return "Drain energy";
         } else {
-            return getName(c);
+            return getName(c, user);
         }
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "You lean in to kiss " + target.getName() + "'s neck, but she slips away.";
         } else if (modifier == Result.special) {
@@ -95,29 +94,29 @@ public class SuckNeck extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s goes after %s neck, but %s %s %s back.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(),
+                            user.subject(), target.nameOrPossessivePronoun(),
                             target.pronoun(), target.action("push", "pushes"),
-                            getSelf().possessiveAdjective());
+                            user.possessiveAdjective());
         } else if (modifier == Result.special) {
             return String.format("%s presses %s lips against %s neck. %s gives %s a "
                             + "hickey and %s knees start to go weak. It's like %s strength"
                             + " is being sucked out through "
-                            + "%s skin.", getSelf().subject(), getSelf().possessiveAdjective(),
-                            target.nameOrPossessivePronoun(), getSelf().subject(),
+                            + "%s skin.", user.subject(), user.possessiveAdjective(),
+                            target.nameOrPossessivePronoun(), user.subject(),
                             target.directObject(), target.possessiveAdjective(), target.possessiveAdjective(),
                             target.possessiveAdjective());
         } else {
             return String.format("%s licks and sucks %s neck, biting lightly when %s %s expecting it.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(),
+                            user.subject(), target.nameOrPossessivePronoun(),
                             target.pronoun(), target.action("aren't", "isn't"));
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Suck on opponent's neck. Highly variable effectiveness";
     }
 

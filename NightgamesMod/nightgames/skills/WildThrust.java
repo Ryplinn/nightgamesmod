@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -14,8 +13,8 @@ import nightgames.status.addiction.AddictionType;
 import java.util.Optional;
 
 public class WildThrust extends Thrust {
-    public WildThrust(CharacterType self) {
-        super("Wild Thrust", self);
+    public WildThrust() {
+        super("Wild Thrust");
     }
 
     @Override
@@ -24,45 +23,45 @@ public class WildThrust extends Thrust {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return havingSex(c, target);
+    public boolean usable(Combat c, Character user, Character target) {
+        return havingSex(c, user, target);
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 5;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        boolean effective = super.resolve(c, target);
-        if (effective && c.getStance().sub(getSelf()) && getSelf().has(Trait.Untamed) && Random.random(4) == 0 ) {
-            c.write(getSelf(), Formatter.format("{self:SUBJECT-ACTION:fuck|fucks} {other:name-do} with such abandon that it leaves {other:direct-object} "
-                            + "momentarily dazed. {self:SUBJECT-ACTION:do|does} not let this chance slip and {self:action:rotate|rotates} {self:possessive} body so that {self:pronoun-action:are|is} on top!", getSelf(), target));
+    public boolean resolve(Combat c, Character user, Character target) {
+        boolean effective = super.resolve(c, user, target);
+        if (effective && c.getStance().sub(user) && user.has(Trait.Untamed) && Random.random(4) == 0 ) {
+            c.write(user, Formatter.format("{self:SUBJECT-ACTION:fuck|fucks} {other:name-do} with such abandon that it leaves {other:direct-object} "
+                            + "momentarily dazed. {self:SUBJECT-ACTION:do|does} not let this chance slip and {self:action:rotate|rotates} {self:possessive} body so that {self:pronoun-action:are|is} on top!", user, target));
             c.setStance(c.getStance().reverse(c, false));
         }
-        if (effective && getSelf().has(Trait.breeder) && c.getStance().vaginallyPenetratedBy(c, getSelf(), target)
+        if (effective && user.has(Trait.breeder) && c.getStance().vaginallyPenetratedBy(c, user, target)
                          && target.human()) {
-            c.write(getSelf(), Formatter.format("The sheer ferocity of {self:name-possessive} movements"
+            c.write(user, Formatter.format("The sheer ferocity of {self:name-possessive} movements"
                             + " fill you with an unnatural desire to sate {self:possessive} thirst with"
-                            + " your cum.", getSelf(), target));
-            target.addict(c, AddictionType.BREEDER, getSelf(), Addiction.LOW_INCREASE);
+                            + " your cum.", user, target));
+            target.addict(c, AddictionType.BREEDER, user, Addiction.LOW_INCREASE);
         }
         return effective;
     }
 
     @Override
-    public int[] getDamage(Combat c, Character target) {
+    public int[] getDamage(Combat c, Character user, Character target) {
         int[] results = new int[2];
 
         int m = 5 + Random.random(20) + Math
-                        .min(getSelf().get(Attribute.animism), getSelf().getArousal().getReal() / 30);
+                        .min(user.get(Attribute.animism), user.getArousal().getReal() / 30);
         int mt = 5 + Random.random(20);
         mt = Math.max(1, mt);
 
         results[0] = m;
         results[1] = mt;
-        modBreeder(c, getSelf(), target, results);
+        modBreeder(c, user, target, results);
 
         return results;
     }
@@ -86,18 +85,18 @@ public class WildThrust extends Thrust {
 
     @Override
     public Skill copy(Character user) {
-        return new WildThrust(user.getType());
+        return new WildThrust();
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.anal || modifier == Result.upgrade) {
             return "You wildly pound " + target.getName()
                             + " in the ass with no regard to technique. She whimpers in pleasure and can barely summon the strength to hold herself off the floor.";
         } else if (modifier == Result.reverse) {
             return Formatter.format(
                             "{self:SUBJECT-ACTION:%s {other:name-possessive} cock with no regard to technique, relentlessly driving you both towards orgasm.",
-                            getSelf(), target, c.getStance().sub(getSelf()) ? "grind} against" : "bounce} on");
+                            user, target, c.getStance().sub(user) ? "grind} against" : "bounce} on");
         } else {
             return "You wildly pound your dick into " + target.getName()
                             + "'s pussy with no regard to technique. Her pleasure filled cries are proof that you're having an effect, but you're feeling it "
@@ -106,39 +105,39 @@ public class WildThrust extends Thrust {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.anal) {
             return String.format("%s passionately pegs %s in the ass as %s %s and %s to endure the sensation.",
-                            getSelf().subject(), target.nameDirectObject(), target.pronoun(),
+                            user.subject(), target.nameDirectObject(), target.pronoun(),
                             target.action("groan"), target.action("try", "tries"));
         } else if (modifier == Result.upgrade) {
             return String.format("%s pistons wildly into %s while pushing %s shoulders on the ground; %s tits "
-                            + "are shaking above %s head while %s strapon stimulates %s %s.", getSelf().subject(),
+                            + "are shaking above %s head while %s strapon stimulates %s %s.", user.subject(),
                             target.nameDirectObject(), target.possessiveAdjective(),
-                            Formatter.capitalizeFirstLetter(getSelf().possessiveAdjective()), target.possessiveAdjective(),
-                            getSelf().possessiveAdjective(), target.possessiveAdjective(),
+                            Formatter.capitalizeFirstLetter(user.possessiveAdjective()), target.possessiveAdjective(),
+                            user.possessiveAdjective(), target.possessiveAdjective(),
                             target.hasBalls() ? "prostate" : "insides");
         } else if (modifier == Result.reverse) {
             return String.format("%s frenziedly %s %s cock, relentlessly driving %s both toward orgasm.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(), c.bothDirectObject(target), c.getStance().sub(getSelf()) ? "grinds against" : "bounces on");
+                            user.subject(), target.nameOrPossessivePronoun(), c.bothDirectObject(target), c.getStance().sub(user) ? "grinds against" : "bounces on");
         } else {
             return Formatter.format(
                             "{self:SUBJECT-ACTION:rapidly pound|rapidly pounds} {self:possessive} {self:body-part:cock} into {other:possessive} {other:body-part:pussy}, "
                                             + "relentlessly driving %s both toward orgasm",
-                            getSelf(), target, c.bothDirectObject(target));
+                            user, target, c.bothDirectObject(target));
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Fucks opponent without holding back. Extremely random large damage.";
     }
 
     @Override
-    public String getName(Combat c) {
-        if (c.getStance().penetratedBy(c, c.getStance().getPartner(c, getSelf()), getSelf())) {
+    public String getName(Combat c, Character user) {
+        if (c.getStance().penetratedBy(c, c.getStance().getPartner(c, user), user)) {
             return "Wild Thrust";
-        } else if (c.getStance().sub(getSelf())) {
+        } else if (c.getStance().sub(user)) {
             return "Wild Grind";
         } else {
             return "Wild Ride";

@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.Stsflag;
@@ -10,8 +9,8 @@ import nightgames.status.WaterStance;
 
 public class WaterForm extends Skill {
 
-    public WaterForm(CharacterType self) {
-        super("Water Form", self);
+    public WaterForm() {
+        super("Water Form");
     }
 
     @Override
@@ -20,41 +19,41 @@ public class WaterForm extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && !c.getStance().sub(getSelf()) && !getSelf().is(Stsflag.form);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && !c.getStance().sub(user) && !user.is(Stsflag.form);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Improves evasion and counterattack rate at expense of Power";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.normal, target);
-        getSelf().add(c, new WaterStance(self));
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.normal, user, target);
+        user.add(c, new WaterStance(user.getType()));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new WaterForm(user.getType());
+        return new WaterForm();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You relax your muscles, prepared to flow with and counter " + target.getName() + "'s attacks.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format("%s takes a deep breath and %s movements become much more fluid.",
-                        getSelf().subject(), getSelf().possessiveAdjective());
+                        user.subject(), user.possessiveAdjective());
     }
 
 }

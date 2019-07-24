@@ -1,8 +1,8 @@
 package nightgames.status;
 
 import com.google.gson.JsonObject;
-import nightgames.characters.*;
 import nightgames.characters.Character;
+import nightgames.characters.*;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -20,23 +20,23 @@ public class Frenzied extends DurationStatus {
     static {
         // Skills that either lead to penetration, or can be used during it.
         Character p = NPC.noneCharacter();
-        FUCK_SKILLS.add(new AssFuck(p.getType()));
-        FUCK_SKILLS.add(new Carry(p.getType()));
-        FUCK_SKILLS.add(new Shove(p.getType()));
-        FUCK_SKILLS.add(new Tackle(p.getType()));
-        FUCK_SKILLS.add(new Straddle(p.getType()));
-        FUCK_SKILLS.add(new Tear(p.getType()));
-        FUCK_SKILLS.add(new Undress(p.getType()));
-        FUCK_SKILLS.add(new Fly(p.getType()));
-        FUCK_SKILLS.add(new Fuck(p.getType()));
-        FUCK_SKILLS.add(new Invitation(p.getType()));
-        FUCK_SKILLS.add(new WildThrust(p.getType()));
-        FUCK_SKILLS.add(new ReverseAssFuck(p.getType()));
-        FUCK_SKILLS.add(new ReverseCarry(p.getType()));
-        FUCK_SKILLS.add(new ReverseFly(p.getType()));
-        FUCK_SKILLS.add(new ReverseFuck(p.getType()));
-        FUCK_SKILLS.add(new SubmissiveHold(p.getType()));
-        FUCK_SKILLS.add(new ToggleKnot(p.getType()));
+        FUCK_SKILLS.add(new AssFuck());
+        FUCK_SKILLS.add(new Carry());
+        FUCK_SKILLS.add(new Shove());
+        FUCK_SKILLS.add(new Tackle());
+        FUCK_SKILLS.add(new Straddle());
+        FUCK_SKILLS.add(new Tear());
+        FUCK_SKILLS.add(new Undress());
+        FUCK_SKILLS.add(new Fly());
+        FUCK_SKILLS.add(new Fuck());
+        FUCK_SKILLS.add(new Invitation());
+        FUCK_SKILLS.add(new WildThrust());
+        FUCK_SKILLS.add(new ReverseAssFuck());
+        FUCK_SKILLS.add(new ReverseCarry());
+        FUCK_SKILLS.add(new ReverseFly());
+        FUCK_SKILLS.add(new ReverseFuck());
+        FUCK_SKILLS.add(new SubmissiveHold());
+        FUCK_SKILLS.add(new ToggleKnot());
     }
 
     private boolean selfInflicted;
@@ -135,7 +135,7 @@ public class Frenzied extends DurationStatus {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return -10;
     }
 

@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -16,8 +15,8 @@ public class StripTop extends Skill {
 
     private Clothing stripped, extra;
     
-    StripTop(CharacterType self) {
-        super("Strip Top", self);
+    StripTop() {
+        super("Strip Top");
 
         addTag(SkillTag.positioning);
         addTag(SkillTag.stripping);
@@ -26,39 +25,39 @@ public class StripTop extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().reachTop(getSelf()) && !target.breastsAvailable() && getSelf().canAct();
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().reachTop(user) && !target.breastsAvailable() && user.canAct();
     }
 
     @Override
-    public int getMojoCost(Combat c) {
-        return c.getStance().dom(getSelf()) ? 2 : 10;
+    public int getMojoCost(Combat c, Character user) {
+        return c.getStance().dom(user) ? 2 : 10;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         int difficulty = target.getOutfit().getTopOfSlot(ClothingSlot.top).dc() + target.getLevel()
                         + (target.getStamina().percent() / 5 - target.getArousal().percent()) / 4
                         - (!target.canAct() || c.getStance().sub(target) ? 20 : 0);
-        if (getSelf().checkVsDc(Attribute.cunning, difficulty) || !target.canAct()) {
+        if (user.checkVsDc(Attribute.cunning, difficulty) || !target.canAct()) {
             stripped = target.strip(ClothingSlot.top, c);
             boolean doubled = false;
-            if (getSelf().get(Attribute.cunning) >= 30 && !target.breastsAvailable()
-                            && getSelf().checkVsDc(Attribute.cunning, difficulty) || !target.canAct()) {
+            if (user.get(Attribute.cunning) >= 30 && !target.breastsAvailable()
+                            && user.checkVsDc(Attribute.cunning, difficulty) || !target.canAct()) {
                 extra = target.strip(ClothingSlot.top, c);
                 doubled = true;
-                writeOutput(c, Result.critical, target);
+                writeOutput(c, Result.critical, user, target);
             } else {
-                writeOutput(c, Result.normal, target);
+                writeOutput(c, Result.normal, user, target);
             }
-            if (getSelf().human() && target.mostlyNude()) {
+            if (user.human() && target.mostlyNude()) {
                 c.write(target, target.nakedLiner(c, target));
             }
             target.emote(Emotion.nervous, doubled ? 20 : 10);
         } else {
             stripped = target.outfit.getTopOfSlot(ClothingSlot.top);
-            writeOutput(c, Result.miss, target);
-            target.weaken(c, (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(8, 16)));
+            writeOutput(c, Result.miss, user, target);
+            target.weaken(c, (int) DamageType.physical.modifyDamage(user, target, Random.random(8, 16)));
             return false;
         }
         return true;
@@ -71,21 +70,21 @@ public class StripTop extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new StripTop(user.getType());
+        return new StripTop();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 3;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.stripping;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "You attempt to strip off " + target.getName() + "'s "
                             + stripped.getName()
@@ -102,18 +101,18 @@ public class StripTop extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s tries to yank off %s %s, but %s %s to hang onto it.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(),
+                            user.subject(), target.nameOrPossessivePronoun(),
                             stripped.getName(), target.pronoun(), target.action("manage"));
         } else {
             String msg = String.format("%s grabs a hold of %s %s and yanks it off before %s can stop %s.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(), stripped.getName(),
-                            target.pronoun(), getSelf().directObject());
+                            user.subject(), target.nameOrPossessivePronoun(), stripped.getName(),
+                            target.pronoun(), user.directObject());
             if (modifier == Result.critical && extra != null) {
                 msg += String.format(" Before %s can react, %s also strips off %s %s!", 
-                                target.subject(), getSelf().subject(), 
+                                target.subject(), user.subject(),
                                 target.possessiveAdjective(), extra.getName());
             }
             return msg;
@@ -121,7 +120,7 @@ public class StripTop extends Skill {
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Attempt to remove opponent's top. More likely to succeed if she's weakened and aroused";
     }
 

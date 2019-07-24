@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -12,8 +11,8 @@ import nightgames.nskills.tags.SkillTag;
 
 public class Edge extends Skill {
 
-    public Edge(CharacterType self) {
-        super("Edge", self);
+    public Edge() {
+        super("Edge");
         addTag(SkillTag.usesHands);
         addTag(SkillTag.pleasure);
     }
@@ -24,86 +23,86 @@ public class Edge extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().reachBottom(getSelf())
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().reachBottom(user)
                         && target.crotchAvailable()
-                        && target.hasDick() && getSelf().canAct()
+                        && target.hasDick() && user.canAct()
                         && !c.getStance().havingSex(c);
     }
 
     @Override
-    public float priorityMod(Combat c) {
+    public float priorityMod(Combat c, Character user) {
         float mod = 0.f;
-        if (getSelf().has(Trait.dexterous) || getSelf().has(Trait.defthands) ||
-                        getSelf().has(Trait.limbTraining1)) {
+        if (user.has(Trait.dexterous) || user.has(Trait.defthands) ||
+                        user.has(Trait.limbTraining1)) {
             mod += .5f;
         }
-        if (c.getOpponent(getSelf()).getArousal().percent() >= 100 
-                        && c.getOpponent(getSelf()).getArousal().percent() < 300) {
+        if (c.getOpponent(user).getArousal().percent() >= 100
+                        && c.getOpponent(user).getArousal().percent() < 300) {
             mod *= 2;
         }
-        if (getSelf().getArousal().percent() >= 80) {
+        if (user.getArousal().percent() >= 80) {
             mod /= 3;
         }
         return mod;
     }
     
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Get your opponent close to the edge, without pushing them over.";
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 80;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        boolean hit = !target.canAct() || c.getStance().dom(getSelf())
-                        || target.roll(getSelf(), accuracy(c, target));
+    public boolean resolve(Combat c, Character user, Character target) {
+        boolean hit = !target.canAct() || c.getStance().dom(user)
+                        || target.roll(user, accuracy(c, user, target));
         if (!hit) {
-            c.write(getSelf(), Formatter.format("{self:NAME-POSSESSIVE} hands descend towards"
+            c.write(user, Formatter.format("{self:NAME-POSSESSIVE} hands descend towards"
                             + "{other:name-possessive} {other:body-part:cock}, but "
-                            + "{other:pronoun} succeeds in keeping them well away.", getSelf(), target));
+                            + "{other:pronoun} succeeds in keeping them well away.", user, target));
             return false;
         } else if (target.getArousal().percent() < 100) {
-            c.write(getSelf(), Formatter.format("{self:SUBJECT-ACTION:jerk|jerks} {other:name-possessive}"
-                            + " {other:body-part:cock} slowly yet deliberately with both hands.", getSelf(), target));
+            c.write(user, Formatter.format("{self:SUBJECT-ACTION:jerk|jerks} {other:name-possessive}"
+                            + " {other:body-part:cock} slowly yet deliberately with both hands.", user, target));
         } else {
-            c.write(getSelf(), Formatter.format("{other:SUBJECT-ACTION:are|is} already so close to cumming, but"
+            c.write(user, Formatter.format("{other:SUBJECT-ACTION:are|is} already so close to cumming, but"
                             + " {self:name-possessive} hands make such careful, calculated movements all over"
                             + " {other:possessive} {other:body-part:cock} that {other:pronoun-action:stay|stays}"
                             + " <i>just</i> away from that impending peak. "
                             + "{other:PRONOUN-ACTION:<i>do</i>|<i>does</i>} thrash around a lot, trying desperately"
                             + " to get that little bit of extra stimulation, and it's draining"
-                            + " {other:possessive} energy quite rapidly.", getSelf(), target));
+                            + " {other:possessive} energy quite rapidly.", user, target));
             target.weaken(c, Math.min(30, Random.random((target.getArousal().percent() - 100) / 10)));
         }
-        target.temptWithSkill(c, getSelf(), getSelf().body.getRandom("hands"), 20 + Random.random(8), this);
+        target.temptWithSkill(c, user, user.body.getRandom("hands"), 20 + Random.random(8), this);
         target.emote(Emotion.horny, 30);
-        getSelf().emote(Emotion.confident, 15);
-        getSelf().emote(Emotion.dominant, 15);
+        user.emote(Emotion.confident, 15);
+        user.emote(Emotion.dominant, 15);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Edge(user.getType());
+        return new Edge();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 

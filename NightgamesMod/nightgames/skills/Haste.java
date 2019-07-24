@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.AttributeBuff;
@@ -10,8 +9,8 @@ import nightgames.status.Primed;
 
 public class Haste extends Skill {
 
-    Haste(CharacterType self) {
-        super("Haste", self, 6);
+    Haste() {
+        super("Haste", 6);
     }
 
     @Override
@@ -20,47 +19,47 @@ public class Haste extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
+    public boolean usable(Combat c, Character user, Character target) {
         return c.getStance()
-                .mobile(getSelf())
+                .mobile(user)
                         && !c.getStance()
-                             .prone(getSelf())
-                        && getSelf().canAct() && Primed.isPrimed(getSelf(), 1);
+                             .prone(user)
+                        && user.canAct() && Primed.isPrimed(user, 1);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Temporarily buffs your speed: 1 charge";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        getSelf().add(c, new Primed(self, -1));
-        getSelf().add(c, new AttributeBuff(self, Attribute.speed, 10, 6));
-        writeOutput(c, Result.normal, target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        user.add(c, new Primed(user.getType(), -1));
+        user.add(c, new AttributeBuff(user.getType(), Attribute.speed, 10, 6));
+        writeOutput(c, Result.normal, user, target);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Haste(user.getType());
+        return new Haste();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You spend a stored time charge. The world around you appears to slow down as your personal time accelerates.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format(
                         "%s hits a button on %s wristwatch and suddenly speeds up. %s is moving so fast that %s seems to blur.",
-                        getSelf().getName(), getSelf().possessiveAdjective(), getSelf().pronoun(), getSelf().pronoun());
+                        user.getName(), user.possessiveAdjective(), user.pronoun(), user.pronoun());
     }
 
 }

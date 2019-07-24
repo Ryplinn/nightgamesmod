@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -11,65 +10,65 @@ import nightgames.status.Stsflag;
 
 public class Spores extends Skill {
 
-    public Spores(CharacterType self) {
-        super("Spores", self);
+    public Spores() {
+        super("Spores");
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().get(Attribute.bio) >= 13;
+        return user.get(Attribute.bio) >= 13;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canRespond() && !target.is(Stsflag.aggressive);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canRespond() && !target.is(Stsflag.aggressive);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 20;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Release some spores to force your opponent into a frenzied attack.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         if (target.wary()) {
-            c.write(getSelf(),
+            c.write(user,
                             Formatter.format("{self:SUBJECT-ACTION:release|releases} a mass of tiny particles, but "
                                             + "{other:subject-action:avoid|avoids} breathing any of them in.",
-                            getSelf(), target));
+                            user, target));
             return false;
         } else {
-            c.write(getSelf(),
+            c.write(user,
                             Formatter.format("{self:SUBJECT-ACTION:release|releases} a mass of tiny particles, and "
                                             + "{other:subject-action:are|is} forced to breathe them in. The scent"
-                                            + " drives {other:direct-object} into a frenzy.", getSelf(), target));
-            target.add(c, new Aggressive(target.getType(), getSelf().nameOrPossessivePronoun() + " spores", 5));
+                                            + " drives {other:direct-object} into a frenzy.", user, target));
+            target.add(c, new Aggressive(target.getType(), user.nameOrPossessivePronoun() + " spores", 5));
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Spores(user.getType());
+        return new Spores();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 

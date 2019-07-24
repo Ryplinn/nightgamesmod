@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -10,20 +9,20 @@ import nightgames.global.Random;
 import nightgames.nskills.tags.SkillTag;
 
 public class CounterPin extends CounterBase {
-    CounterPin(CharacterType self) {
-        super("Counter", self, 4, "{self:SUBJECT-ACTION:hold|holds} a low stance.");
+    CounterPin() {
+        super("Counter", 4, "{self:SUBJECT-ACTION:hold|holds} a low stance.");
         addTag(SkillTag.positioning);
     }
 
     @Override
-    public float priorityMod(Combat c) {
+    public float priorityMod(Combat c, Character user) {
         return (float) Random.randomdouble();
     }
 
     @Override
-    public void resolveCounter(Combat c, Character target) {
-        Restrain skill = new Restrain(self);
-        skill.resolve(c, target, true);
+    public void resolveCounter(Combat c, Character user, Character target) {
+        Restrain skill = new Restrain();
+        skill.resolve(c, user, target, true);
     }
 
     @Override
@@ -32,43 +31,43 @@ public class CounterPin extends CounterBase {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return !c.getStance().dom(getSelf()) && !c.getStance().dom(target) && getSelf().canAct() && target.canAct();
+    public boolean usable(Combat c, Character user, Character target) {
+        return !c.getStance().dom(user) && !c.getStance().dom(target) && user.canAct() && target.canAct();
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 10;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Sets up a counter";
     }
 
     @Override
     public Skill copy(Character user) {
-        return new CounterPin(user.getType());
+        return new CounterPin();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
-        if (modifier == Result.setup && getSelf().hasPussy()) {
-            return Formatter.format("You shift into a low stance, beckoning her inside your reach.", getSelf(), target);
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
+        if (modifier == Result.setup && user.hasPussy()) {
+            return Formatter.format("You shift into a low stance, beckoning her inside your reach.", user, target);
         } else {
             return "";
         }
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        if (modifier == Result.setup && getSelf().hasPussy()) {
-            return Formatter.format("Eyeing {other:name-do} carefully, {self:SUBJECT} shifts to a low stance.", getSelf(), target);
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        if (modifier == Result.setup && user.hasPussy()) {
+            return Formatter.format("Eyeing {other:name-do} carefully, {self:SUBJECT} shifts to a low stance.", user, target);
         } else {
             return "";
         }

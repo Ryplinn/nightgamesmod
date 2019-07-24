@@ -1035,9 +1035,9 @@ public class GUI extends JFrame implements Observer {
         commandPanel.reset();
     }
 
-    public void addSkill(Combat com, Skill action, Character target) {
-        SkillButton btn = new SkillButton(com, action, target, chosenSkill);
-        skills.get(action.type(com).getGroup()).add(btn);
+    public void addSkill(Combat com, Skill action, Character user, Character target) {
+        SkillButton btn = new SkillButton(com, action, user, target, chosenSkill);
+        skills.get(action.type(com, user).getGroup()).add(btn);
     }
 
     public Skill getChosenSkill() throws InterruptedException {

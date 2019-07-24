@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -14,13 +13,13 @@ import nightgames.status.LegLocked;
 import nightgames.status.Stsflag;
 
 public class SubmissiveHold extends Skill {
-    public SubmissiveHold(CharacterType self) {
-        super("Submissive Hold", self);
+    public SubmissiveHold() {
+        super("Submissive Hold");
     }
 
     @Override
-    public float priorityMod(Combat c) {
-        return getSelf().has(Trait.submissive) ? 4 : 2;
+    public float priorityMod(Combat c, Character user) {
+        return user.has(Trait.submissive) ? 4 : 2;
     }
 
     @Override
@@ -29,20 +28,20 @@ public class SubmissiveHold extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance().sub(getSelf())
-                        && getSelf().canSpend(getMojoCost(c)) && !target.is(Stsflag.armlocked)
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && c.getStance().sub(user)
+                        && user.canSpend(getMojoCost(c, user)) && !target.is(Stsflag.armlocked)
                         && !target.is(Stsflag.leglocked)
-                        && c.getStance().havingSex(c, getSelf());
+                        && c.getStance().havingSex(c, user);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 10;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Holds your opponent in position";
     }
 
@@ -51,7 +50,7 @@ public class SubmissiveHold extends Skill {
     }
 
     @Override
-    public String getLabel(Combat c) {
+    public String getLabel(Combat c, Character user) {
         if (isArmLock(c.getStance())) {
             return "Hand Lock";
         } else {
@@ -61,51 +60,51 @@ public class SubmissiveHold extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new SubmissiveHold(user.getType());
+        return new SubmissiveHold();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (isArmLock(c.getStance())) {
             return Formatter.format("You entwine {other:name-possessive} fingers with your own, holding her in position.",
-                            getSelf(), target);
+                            user, target);
         } else {
             return Formatter.format(
                             "You embrace {other:name} and wrap your legs around her waist, holding her inside you.",
-                            getSelf(), target);
+                            user, target);
         }
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (isArmLock(c.getStance())) {
             return Formatter.format("{self:SUBJECT} entwines {other:name-possessive} fingers with {self:possessive}"
                             + " own, holding {other:direct-object} in position.",
-                            getSelf(), target);
+                            user, target);
         } else {
             return Formatter.format(
                             "{self:SUBJECT} embraces {other:name-do} and wraps {self:possessive} lithesome legs "
                             + "around {other:possessive} waist, holding {other:direct-object} inside {self:direct-object}.",
-                            getSelf(), target);
+                            user, target);
         }
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (getSelf().human()) {
-            c.write(getSelf(), deal(c, 0, Result.normal, target));
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (user.human()) {
+            c.write(user, deal(c, 0, Result.normal, user, target));
         } else {
-            c.write(getSelf(), receive(c, 0, Result.normal, target));
+            c.write(user, receive(c, 0, Result.normal, user, target));
         }
         if (isArmLock(c.getStance())) {
-            target.add(c, new ArmLocked(target.getType(), 4 * getSelf().get(Attribute.power)));
+            target.add(c, new ArmLocked(target.getType(), 4 * user.get(Attribute.power)));
         } else {
-            target.add(c, new LegLocked(target.getType(), 4 * getSelf().get(Attribute.power)));
+            target.add(c, new LegLocked(target.getType(), 4 * user.get(Attribute.power)));
         }
         return true;
     }

@@ -100,15 +100,15 @@ public class BreastSmothering extends Position {
             return Collections.emptySet();
         } else {
             Collection<Skill> avail = new HashSet<>();
-            avail.add(new FondleBreasts(bottom));
-            avail.add(new Suckle(bottom));
-            avail.add(new Tickle(bottom));
-            avail.add(new Finger(bottom));
-            avail.add(new Nurple(bottom));
-            avail.add(new Escape(bottom));
-            avail.add(new Struggle(bottom));
-            avail.add(new Nothing(bottom));
-            avail.add(new Wait(bottom));
+            avail.add(new FondleBreasts());
+            avail.add(new Suckle());
+            avail.add(new Tickle());
+            avail.add(new Finger());
+            avail.add(new Nurple());
+            avail.add(new Escape());
+            avail.add(new Struggle());
+            avail.add(new Nothing());
+            avail.add(new Wait());
             return avail;
         }
     }
@@ -127,13 +127,13 @@ public class BreastSmothering extends Position {
     public void struggle(Combat c, Character struggler) {
         c.write(struggler, Formatter.format("{self:SUBJECT-ACTION:attempt} to struggle out of {other:name-possessive} {other:body-part:breasts}, "
                         + "but {other:pronoun-action:have} other ideas.", struggler, getTop()));
-        (new BreastSmother(top)).resolve(c, getBottom());
+        (new BreastSmother()).resolve(c, struggler, getBottom());
     }
 
     @Override
     public void escape(Combat c, Character escapee) {
         c.write(escapee, Formatter.format("{self:SUBJECT-ACTION:attempt} to extract {self:reflective} out of {other:name-possessive} {other:body-part:breasts}, "
                         + "but {other:pronoun-action:have} other ideas.", escapee, getTop()));
-        (new BreastSmother(top)).resolve(c, getBottom());
+        (new BreastSmother()).resolve(c, escapee, getBottom());
     }
 }

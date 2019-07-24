@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,15 +12,19 @@ import nightgames.skills.damage.DamageType;
 import nightgames.status.Drained;
 
 public class Drain extends Skill {
-    public Drain(CharacterType self) {
-        super("Drain", self, 5);
+    public Drain() {
+        this("Drain");
+    }
+
+    public Drain(String name) {
+        this(name, 5);
+    }
+
+    public Drain(String name, int cooldown) {
+        super(name, cooldown);
         addTag(SkillTag.drain);
         addTag(SkillTag.dark);
         addTag(SkillTag.fucking);
-    }
-
-    public Drain(String name, CharacterType self) {
-        super(name, self, 5);
     }
 
     @Override
@@ -30,73 +33,73 @@ public class Drain extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance().havingSexNoStrapped(c);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && c.getStance().havingSexNoStrapped(c);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
-        return drainsAttributes() ? 30 : 0;
+    public int getMojoCost(Combat c, Character user) {
+        return drainsAttributes(user) ? 30 : 0;
     }
 
-    private boolean drainsAttributes() {
-        return getSelf().getMojo().get() >= 30;
+    private boolean drainsAttributes(Character user) {
+        return user.getMojo().get() >= 30;
     }
 
     @Override
-    public float priorityMod(Combat c) {
+    public float priorityMod(Combat c, Character user) {
         return 2.0f;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Drain your opponent of their energy";
     }
 
-    private void steal(Combat c, Character target, Attribute att, int amount) {
-        Drained.drain(c, getSelf(), target, att, amount, 20, true);
+    private void steal(Combat c, Character user, Character target, Attribute att, int amount) {
+        Drained.drain(c, user, target, att, amount, 20, true);
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        int strength = Math.max(10, 1 + getSelf().get(Attribute.darkness) / 4);
+    public boolean resolve(Combat c, Character user, Character target) {
+        int strength = Math.max(10, 1 + user.get(Attribute.darkness) / 4);
         int staminaStrength = 50;
-        int type = Math.max(1, Random.centeredrandom(6, getSelf().get(Attribute.darkness) / 3.0, 3));
-        if (!drainsAttributes() && type > 2) {
+        int type = Math.max(1, Random.centeredrandom(6, user.get(Attribute.darkness) / 3.0, 3));
+        if (!drainsAttributes(user) && type > 2) {
             type = 1;
             staminaStrength /= 2;
         }
 
-        writeOutput(c, type, Result.normal, target);
+        writeOutput(c, type, Result.normal, user, target);
         switch (type) {
             case 0:
-                getSelf().arouse(getSelf().getArousal().max() / 4, c);
+                user.arouse(user.getArousal().max() / 4, c);
             case 1:
-                target.drain(c, getSelf(), (int) DamageType.drain.modifyDamage(getSelf(), target, staminaStrength), Character.MeterType.STAMINA);
+                target.drain(c, user, (int) DamageType.drain.modifyDamage(user, target, staminaStrength), Character.MeterType.STAMINA);
                 break;
             case 2:
                 target.loseMojo(c, staminaStrength / 2);
-                getSelf().buildMojo(c, staminaStrength / 2);
+                user.buildMojo(c, staminaStrength / 2);
                 break;
             case 3:
-                steal(c, target, Attribute.cunning, strength);
-                target.drain(c, getSelf(), target.getMojo().get() / 2, Character.MeterType.MOJO);
+                steal(c, user, target, Attribute.cunning, strength);
+                target.drain(c, user, target.getMojo().get() / 2, Character.MeterType.MOJO);
                 break;
             case 4:
-                steal(c, target, Attribute.power, strength);
-                target.drain(c, getSelf(), (int) DamageType.drain.modifyDamage(getSelf(), target, staminaStrength), Character.MeterType.STAMINA);
+                steal(c, user, target, Attribute.power, strength);
+                target.drain(c, user, (int) DamageType.drain.modifyDamage(user, target, staminaStrength), Character.MeterType.STAMINA);
                 break;
             case 5:
-                steal(c, target, Attribute.seduction, strength);
-                target.temptNoSource(c, getSelf(), 10, this);
+                steal(c, user, target, Attribute.seduction, strength);
+                target.temptNoSource(c, user, 10, this);
                 break;
             case 6:
-                steal(c, target, Attribute.power, strength);
-                steal(c, target, Attribute.seduction, strength);
-                steal(c, target, Attribute.cunning, strength);
-                target.drain(c, getSelf(), (int) DamageType.drain.modifyDamage(getSelf(), target, staminaStrength), Character.MeterType.STAMINA);
-                target.drain(c, getSelf(), target.getMojo().get(), Character.MeterType.MOJO);
-                target.temptNoSource(c, getSelf(), 20, this);
+                steal(c, user, target, Attribute.power, strength);
+                steal(c, user, target, Attribute.seduction, strength);
+                steal(c, user, target, Attribute.cunning, strength);
+                target.drain(c, user, (int) DamageType.drain.modifyDamage(user, target, staminaStrength), Character.MeterType.STAMINA);
+                target.drain(c, user, target.getMojo().get(), Character.MeterType.MOJO);
+                target.temptNoSource(c, user, 20, this);
                 break;
             default:
                 break;
@@ -106,21 +109,21 @@ public class Drain extends Skill {
 
     @Override
     public Skill copy(Character target) {
-        return new Drain(target.getType());
+        return new Drain();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (c.getStance().inserted(target)) {
-            String muscDesc = c.getStance().anallyPenetrated(c, getSelf()) ? "anal" : "vaginal";
-            String partDesc = c.getStance().anallyPenetrated(c, getSelf())
-                            ? getSelf().body.getRandom("ass").describe(getSelf())
-                            : getSelf().body.getRandomPussy().describe(getSelf());
+            String muscDesc = c.getStance().anallyPenetrated(c, user) ? "anal" : "vaginal";
+            String partDesc = c.getStance().anallyPenetrated(c, user)
+                            ? user.body.getRandom("ass").describe(user)
+                            : user.body.getRandomPussy().describe(user);
             String base = "You put your powerful " + muscDesc + " muscles to work whilst" + " transfixing "
                             + target.getName() + "'s gaze with your own, goading " + target.possessiveAdjective()
                             + " energy into " + target.possessiveAdjective() + " cock."
@@ -180,24 +183,24 @@ public class Drain extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        String demon = getSelf().useFemalePronouns() ? "succubus" : "incubus";
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        String demon = user.useFemalePronouns() ? "succubus" : "incubus";
         
         if (c.getStance().inserted(target)) {
-            String muscDesc = c.getStance().anallyPenetrated(c, getSelf()) ? "anal" : "vaginal";
-            String partDesc = c.getStance().anallyPenetrated(c, getSelf())
-                            ? getSelf().body.getRandom("ass").describe(getSelf())
-                            : getSelf().body.getRandomPussy().describe(getSelf());
+            String muscDesc = c.getStance().anallyPenetrated(c, user) ? "anal" : "vaginal";
+            String partDesc = c.getStance().anallyPenetrated(c, user)
+                            ? user.body.getRandom("ass").describe(user)
+                            : user.body.getRandomPussy().describe(user);
 
             String base = String.format("%s %s  powerful %s muscles suddenly tighten around %s. "
                             + "%s starts kneading %s dick, bringing %s immense pleasure and soon"
                             + " %s %s erupt into %s, but %s %s %s %s shooting"
                             + " something far more precious than semen into her %s; "
                             + "as more of the ethereal fluid leaves %s, %s ", 
-                            target.subjectAction("feel"), getSelf().nameOrPossessivePronoun(),
-                            muscDesc, target.directObject(), getSelf().subject(),
+                            target.subjectAction("feel"), user.nameOrPossessivePronoun(),
+                            muscDesc, target.directObject(), user.subject(),
                             target.possessiveAdjective(), target.directObject(),
-                            target.subjectAction("feel"), target.reflectivePronoun(), getSelf().nameDirectObject(),
+                            target.subjectAction("feel"), target.reflectivePronoun(), user.nameDirectObject(),
                             target.pronoun(), target.action("realize"), target.pronoun(), target.action("are", "is"),
                             partDesc, target.directObject(), target.subjectAction("feel"));
             switch (damage) {
@@ -214,27 +217,27 @@ public class Drain extends Skill {
                                     target.directObject());
                 case 3:
                     return base + String.format("%s mind go numb, causing %s confidence and cunning to flow into %s.",
-                                    target.possessiveAdjective(), target.possessiveAdjective(), getSelf().nameDirectObject());
+                                    target.possessiveAdjective(), target.possessiveAdjective(), user.nameDirectObject());
                 case 1:
                     return String.format("Clearly the %s is trying to do something really special to %s, "
                                     + "as %s can feel the walls of %s %s squirm against %s in a way "
                                     + "no human could manage, but all %s is some drowsiness.",
                                     demon, target.nameDirectObject(), target.pronoun(),
-                                    getSelf().nameOrPossessivePronoun(), partDesc, target.directObject(),
+                                    user.nameOrPossessivePronoun(), partDesc, target.directObject(),
                                     target.subjectAction("feel"));
                 case 2:
                     return String.format("Clearly the %s is trying to do something really special to %s, "
                                     + "as %s can feel the walls of %s %s squirm against %s in a way "
                                     + "no human could manage, but all %s is %s focus waning a bit.",
                                     demon, target.nameDirectObject(), target.pronoun(),
-                                    getSelf().nameOrPossessivePronoun(), partDesc, target.directObject(),
+                                    user.nameOrPossessivePronoun(), partDesc, target.directObject(),
                                     target.subjectAction("feel"), target.possessiveAdjective());
                 case 0:
                     return String.format("%s squeezes %s with %s %s and starts to milk %s,"
                                     + " but %s suddenly %s %s shudder and moan loudly."
-                                    + " Looks like %s plan backfired.", getSelf().getName(), target.subject(),
-                                    getSelf().possessiveAdjective(), partDesc, target.directObject(),
-                                    target.pronoun(), target.action("feel"), getSelf().directObject(),
+                                    + " Looks like %s plan backfired.", user.getName(), target.subject(),
+                                    user.possessiveAdjective(), partDesc, target.directObject(),
+                                    target.pronoun(), target.action("feel"), user.directObject(),
                                     target.nameOrPossessivePronoun());
                 case 6:
                     return base + String.format("something snap loose inside of %s and it seems to flow right "
@@ -244,8 +247,8 @@ public class Drain extends Skill {
                                     + " %s has kept on thrusting and %s right on the edge of climax."
                                     + " %s defeat appears imminent, but %s %s already lost something"
                                     + " far more valuable than a simple sex fight...",
-                                    target.directObject(), target.possessiveAdjective(), getSelf().nameDirectObject(),
-                                    target.subjectAction("feel"), getSelf().subject(), getSelf().pronoun(),
+                                    target.directObject(), target.possessiveAdjective(), user.nameDirectObject(),
+                                    target.subjectAction("feel"), user.subject(), user.pronoun(),
                                     target.subjectAction("are", "is"), Formatter.capitalizeFirstLetter(target.possessiveAdjective()),
                                     target.pronoun(), target.action("have", "has"));
                 default:
@@ -254,8 +257,8 @@ public class Drain extends Skill {
             }
         } else {
             String base = String.format("%s feel %s powerful will drawing some of %s energy into %s cock, ",
-                            target.subjectAction("feel"), getSelf().nameOrPossessivePronoun(), 
-                            target.possessiveAdjective(), getSelf().possessiveAdjective());
+                            target.subjectAction("feel"), user.nameOrPossessivePronoun(),
+                            target.possessiveAdjective(), user.possessiveAdjective());
             switch (damage) {
                 case 4:
                     return base + String.format("%s strength leaving %s with it, "
@@ -270,28 +273,28 @@ public class Drain extends Skill {
                                     target.directObject());
                 case 3:
                     return base + String.format("%s mind go numb, causing %s confidence and cunning to flow into %s.",
-                                    target.possessiveAdjective(), target.possessiveAdjective(), getSelf().nameDirectObject());
+                                    target.possessiveAdjective(), target.possessiveAdjective(), user.nameDirectObject());
                 case 1:
                     return String.format("Clearly the %s is trying to do something really special to %s, "
                                     + "as %s can feel %s cock thrust against %s in a way "
                                     + "no human could manage, but all %s is some drowsiness.",
                                     demon, target.nameDirectObject(), target.pronoun(),
-                                    getSelf().nameOrPossessivePronoun(), target.directObject(),
+                                    user.nameOrPossessivePronoun(), target.directObject(),
                                     target.subjectAction("feel"));
                 case 2:
                     return String.format("Clearly the %s is trying to do something really special to %s, "
                                     + "as %s can feel %s cock thrust against %s in a way "
                                     + "no human could manage, but all %s is %s focus waning a bit.",
                                     demon, target.nameDirectObject(), target.pronoun(),
-                                    getSelf().nameOrPossessivePronoun(), target.directObject(),
+                                    user.nameOrPossessivePronoun(), target.directObject(),
                                     target.subjectAction("feel"), target.possessiveAdjective());
                 case 0:
                     return String.format("%s draws upon %s will through %s connection, but %s"
                                     + " suddenly %s %s shudder and moan loudly. Looks like %s plan backfired.",
-                                    getSelf().nameOrPossessivePronoun(), target.nameOrPossessivePronoun(),
+                                    user.nameOrPossessivePronoun(), target.nameOrPossessivePronoun(),
                                     c.bothPossessive(target), target.subject(),
-                                                    target.action("feel"), getSelf().subject(),
-                                                    getSelf().possessiveAdjective());
+                                                    target.action("feel"), user.subject(),
+                                                    user.possessiveAdjective());
                 case 6:
                     return base + String.format("something snap loose inside of %s and it seems to flow right "
                                     + "through %s pussy and into %s. When it is over %s... empty "
@@ -300,8 +303,8 @@ public class Drain extends Skill {
                                     + " %s has kept on thrusting and %s right on the edge of climax."
                                     + " %s defeat appears imminent, but %s %s already lost something"
                                     + " far more valuable than a simple sex fight...",
-                                    target.directObject(), target.possessiveAdjective(), getSelf().nameDirectObject(),
-                                    target.subjectAction("feel"), getSelf().subject(), getSelf().pronoun(),
+                                    target.directObject(), target.possessiveAdjective(), user.nameDirectObject(),
+                                    target.subjectAction("feel"), user.subject(), user.pronoun(),
                                     target.subjectAction("are", "is"), Formatter.capitalizeFirstLetter(target.possessiveAdjective()),
                                     target.pronoun(), target.action("have", "has"));
                 default:

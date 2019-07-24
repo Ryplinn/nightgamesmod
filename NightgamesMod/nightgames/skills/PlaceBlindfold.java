@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -11,8 +10,8 @@ import nightgames.status.Stsflag;
 
 public class PlaceBlindfold extends Skill {
 
-    PlaceBlindfold(CharacterType self) {
-        super("Place Blindfold", self);
+    PlaceBlindfold() {
+        super("Place Blindfold");
     }
 
     @Override
@@ -21,43 +20,43 @@ public class PlaceBlindfold extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && getSelf().has(Item.Blindfold) && !target.is(Stsflag.blinded) && !c.getStance()
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && user.has(Item.Blindfold) && !target.is(Stsflag.blinded) && !c.getStance()
                                                                                  .mobile(target);
     }
 
     @Override
-    public float priorityMod(Combat c) {
-        if (!getSelf().human() && getSelf().has(Trait.mindcontroller)) {
+    public float priorityMod(Combat c, Character user) {
+        if (!user.human() && user.has(Trait.mindcontroller)) {
             return -3.f;
         }
         return 2.f;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Place a blindfold over your opponent's eyes";
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return target.canAct() ? 200 : 60;
     }
     
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), accuracy(c, target))) {
-            c.write(getSelf(),
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.roll(user, accuracy(c, user, target))) {
+            c.write(user,
                             String.format("%s a blindfold around %s head, covering %s eyes.",
-                                            getSelf().subjectAction("snap"), target.nameOrPossessivePronoun(),
+                                            user.subjectAction("snap"), target.nameOrPossessivePronoun(),
                                             target.possessiveAdjective()));
-            getSelf().remove(Item.Blindfold);
+            user.remove(Item.Blindfold);
             target.add(c, new Blinded(target.getType(), "a blindfold", false));
         } else {
-            c.write(getSelf(),
+            c.write(user,
                             String.format("%s out a blindfold and %s to place it around %s "
                                             + "head, but %s it away and throws it clear.",
-                                            getSelf().subjectAction("take"), getSelf().action("try", "tries"),
+                                            user.subjectAction("take"), user.action("try", "tries"),
                                             target.possessiveAdjective(),
                                             target.subjectAction("rip")));
         }
@@ -66,21 +65,21 @@ public class PlaceBlindfold extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new PlaceBlindfold(user.getType());
+        return new PlaceBlindfold();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 

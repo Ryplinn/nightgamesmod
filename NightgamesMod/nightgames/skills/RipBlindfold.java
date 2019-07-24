@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -10,8 +9,8 @@ import nightgames.status.Stsflag;
 
 public class RipBlindfold extends Skill {
 
-    RipBlindfold(CharacterType self) {
-        super("Rip Blindfold", self);
+    RipBlindfold() {
+        super("Rip Blindfold");
     }
 
     @Override
@@ -20,27 +19,27 @@ public class RipBlindfold extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance()
-                                      .reachTop(getSelf())
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && c.getStance()
+                                      .reachTop(user)
                         && target.is(Stsflag.blinded) && target.getStatus(Stsflag.blinded) instanceof Blinded;
     }
 
     @Override
-    public float priorityMod(Combat c) {
-        if (!getSelf().human() && getSelf().has(Trait.mindcontroller)) {
-            return c.getStance().dom(getSelf()) ? 10.f : 2.f;
+    public float priorityMod(Combat c, Character user) {
+        if (!user.human() && user.has(Trait.mindcontroller)) {
+            return c.getStance().dom(user) ? 10.f : 2.f;
         }
         return -5.f;
     }
     
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Rip your opponent's blindfold off.";
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         if (!target.canAct() || !((Blinded) target.getStatus(Stsflag.blinded)).isVoluntary()) {
             return 200;
         }
@@ -48,26 +47,26 @@ public class RipBlindfold extends Skill {
         if (c.getStance().sub(target)) {
             base = 100 - (base / 2);
         }
-        if (c.getStance().penetratedBy(c, target, getSelf())) {
+        if (c.getStance().penetratedBy(c, target, user)) {
             base = 100 - (base / 3);
         }
         return base;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        boolean hit = target.roll(getSelf(), accuracy(c, target));
+    public boolean resolve(Combat c, Character user, Character target) {
+        boolean hit = target.roll(user, accuracy(c, user, target));
 
         if (hit) {
-            c.write(getSelf(),
+            c.write(user,
                             String.format("%s %s blindfold and %s it off with a strong yank.",
-                                            getSelf().subjectAction("grab"), target.nameOrPossessivePronoun(),
-                                            getSelf().action("pull")));
+                                            user.subjectAction("grab"), target.nameOrPossessivePronoun(),
+                                            user.action("pull")));
             target.removeStatus(Stsflag.blinded);
         } else {
-            c.write(getSelf(), String.format("%s at %s blindfold, but %s %s away from %s fingers.",
-                            getSelf().subjectAction("grasp"), target.nameOrPossessivePronoun(),
-                            target.pronoun(), target.action("twist"), getSelf().possessiveAdjective()));
+            c.write(user, String.format("%s at %s blindfold, but %s %s away from %s fingers.",
+                            user.subjectAction("grasp"), target.nameOrPossessivePronoun(),
+                            target.pronoun(), target.action("twist"), user.possessiveAdjective()));
         }
 
         return hit;
@@ -75,21 +74,21 @@ public class RipBlindfold extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new RipBlindfold(user.getType());
+        return new RipBlindfold();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.misc;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 

@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,8 +12,8 @@ import nightgames.stance.Stance;
 public class Grind extends Thrust {
     private static final String divineName = "Sacrament";
 
-    public Grind(CharacterType self) {
-        super("Grind", self);
+    public Grind() {
+        super("Grind");
     }
 
     @Override
@@ -23,27 +22,27 @@ public class Grind extends Thrust {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return havingSex(c, target) && (c.getStance().canthrust(c, getSelf()) || getSelf().has(Trait.powerfulhips)) && c.getStance().en != Stance.anal;
+    public boolean usable(Combat c, Character user, Character target) {
+        return havingSex(c, user, target) && (c.getStance().canthrust(c, user) || user.has(Trait.powerfulhips)) && c.getStance().en != Stance.anal;
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 10;
     }
 
     @Override
-    public int[] getDamage(Combat c, Character target) {
+    public int[] getDamage(Combat c, Character user, Character target) {
         int[] results = new int[2];
 
         int ms = 12;
         int mt = 6;
-        if (getLabel(c).equals(divineName)) {
+        if (getLabel(c, user).equals(divineName)) {
             ms = 16;
             mt = 10;
         }
 
-        if (getSelf().has(Trait.experienced)) {
+        if (user.has(Trait.experienced)) {
             mt = mt * 2 / 3;
         }
         results[0] = ms;
@@ -54,62 +53,62 @@ public class Grind extends Thrust {
 
     @Override
     public Skill copy(Character user) {
-        return new Grind(user.getType());
+        return new Grind();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.fucking;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        boolean res = super.resolve(c, target);
-        if (getLabel(c).equals(divineName)) {
+    public boolean resolve(Combat c, Character user, Character target) {
+        boolean res = super.resolve(c, user, target);
+        if (getLabel(c, user).equals(divineName)) {
             target.heal(c, 20);
             target.buildMojo(c, 5);
             target.loseWillpower(c, Random.random(3) + 2, false);
-            getSelf().usedAttribute(Attribute.divinity, c, .5);
+            user.usedAttribute(Attribute.divinity, c, .5);
         }
         return res;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.reverse) {
-            if (getLabel(c).equals(divineName)) {
+            if (getLabel(c, user).equals(divineName)) {
                 return Formatter.format(
                                 "{self:SUBJECT-ACTION:fill|fills} {self:possessive} pussy with divine power until it's positively dripping with glowing golden mists. {self:PRONOUN} {self:action:then grind|grinds} against {other:direct-object} with {self:possessive} "
-                                                + getSelfOrgan(c, target).fullDescribe(getSelf())
+                                                + getSelfOrgan(c, user, target).fullDescribe(user)
                                                 + ", stimulating {other:possessive} entire manhood, completely obliterating any resistance from {other:possessive} mind.",
-                                getSelf(), target);
+                                user, target);
             }
             return Formatter.format(
                             "{self:SUBJECT-ACTION:grind|grinds} against {other:direct-object} with {self:possessive} "
-                                            + getSelfOrgan(c, target).fullDescribe(getSelf())
+                                            + getSelfOrgan(c, user, target).fullDescribe(user)
                                             + ", stimulating {other:possessive} entire manhood and bringing {other:direct-object} closer to climax.",
-                            getSelf(), target);
+                            user, target);
         } else {
-            if (getLabel(c).equals(divineName)) {
+            if (getLabel(c, user).equals(divineName)) {
                 // TODO divine for fucking someone
                 return Formatter.format(
                                 "{self:SUBJECT} grind {self:possessive} hips against {other:direct-object} without thrusting. {other:SUBJECT} trembles and gasps as the movement stimulates {other:possessive} clit and the walls of {other:possessive} {other:body-part:pussy}.",
-                                getSelf(), target);
+                                user, target);
             }
             return Formatter.format(
                             "{self:SUBJECT} grind {self:possessive} hips against {other:direct-object} without thrusting. {other:SUBJECT} trembles and gasps as the movement stimulates {other:possessive} clit and the walls of {other:possessive} {other:body-part:pussy}.",
-                            getSelf(), target);
+                            user, target);
         }
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character attacker) {
-        return deal(c, damage, modifier, attacker);
+    public String receive(Combat c, int damage, Result modifier, Character user, Character attacker) {
+        return deal(c, damage, modifier, user, attacker);
     }
 
     @Override
-    public String describe(Combat c) {
-        if (getLabel(c).equals(divineName)) {
+    public String describe(Combat c, Character user) {
+        if (getLabel(c, user).equals(divineName)) {
             return "Grind against your opponent with minimal thrusting. Extremely consistent pleasure and builds some mojo";
         } else {
             return "Grind against your opponent with minimal thrusting. Extremely consistent pleasure and builds some mojo for both player";
@@ -117,8 +116,8 @@ public class Grind extends Thrust {
     }
 
     @Override
-    public String getLabel(Combat c) {
-        if (getSelf().get(Attribute.divinity) >= 10) {
+    public String getLabel(Combat c, Character user) {
+        if (user.get(Attribute.divinity) >= 10) {
             return divineName;
         } else {
             return "Grind";

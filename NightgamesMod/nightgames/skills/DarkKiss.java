@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -12,8 +11,8 @@ import nightgames.status.addiction.AddictionType;
 
 public class DarkKiss extends Skill {
 
-    DarkKiss(CharacterType self) {
-        super("Dark Kiss", self, 3);
+    DarkKiss() {
+        super("Dark Kiss", 3);
         addTag(SkillTag.dark);
     }
 
@@ -23,30 +22,30 @@ public class DarkKiss extends Skill {
     }
     
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 15;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().checkAnyAddiction(AddictionType.CORRUPTION)
-                        && c.getStance().kiss(getSelf(), target)
-                        && getSelf().canAct();
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.checkAnyAddiction(AddictionType.CORRUPTION)
+                        && c.getStance().kiss(user, target)
+                        && user.canAct();
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Feed some of your opponent's will to the demonic corruption taking hold of you.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        assert getSelf().human();
-        c.write(getSelf(), String.format("You lean in and plant an intense kiss on %s lips. The corruption which Reyka"
+    public boolean resolve(Combat c, Character user, Character target) {
+        assert user.human();
+        c.write(user, String.format("You lean in and plant an intense kiss on %s lips. The corruption which Reyka"
                         + " has imbued you with stirs, and greedily draws %s willpower in through your connection, growing"
                         + " more powerful.", target.nameOrPossessivePronoun(), target.possessiveAdjective()));
 
-        Addiction add = getSelf().getAnyAddiction(AddictionType.CORRUPTION).orElseThrow(() -> new SkillUnusableException(this));
+        Addiction add = user.getAnyAddiction(AddictionType.CORRUPTION).orElseThrow(() -> new SkillUnusableException(new SkillUsage<>(this, user, target)));
         // TODO: Review Corruption's use of combat magnitude. I'm not sure its effect are consistent.
         float mag = add.activeTracker().map(AddictionSymptom::getCombatMagnitude).orElse(0.f);
         int min = (int) (mag * 3);
@@ -54,17 +53,17 @@ public class DarkKiss extends Skill {
         int amt = min + Random.random(mod);
         target.loseWillpower(c, amt, false);
         add.activeTracker().ifPresent(symptom -> symptom.alleviateCombat(c, Addiction.HIGH_INCREASE));
-        getSelf().addict(c, AddictionType.CORRUPTION, add.getCause(), Addiction.LOW_INCREASE);
+        user.addict(c, AddictionType.CORRUPTION, add.getCause(), Addiction.LOW_INCREASE);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new DarkKiss(user.getType());
+        return new DarkKiss();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
     
@@ -74,12 +73,12 @@ public class DarkKiss extends Skill {
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 

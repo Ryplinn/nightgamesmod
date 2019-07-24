@@ -1,14 +1,13 @@
 package nightgames.skills;
 
-import java.util.Arrays;
-import java.util.List;
-
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
 import nightgames.items.Item;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class CommandGive extends PlayerCommand {
 
@@ -17,14 +16,14 @@ public class CommandGive extends PlayerCommand {
                                     Item.Beer, Item.Lubricant, Item.Rope, Item.ZipTie, Item.Tripwire, Item.Spring);
     private Item transfer;
 
-    CommandGive(CharacterType self) {
-        super("Take Item", self);
+    CommandGive() {
+        super("Take Item");
         transfer = null;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        if (!super.usable(c, target)) {
+    public boolean usable(Combat c, Character user, Character target) {
+        if (!super.usable(c, user, target)) {
             return false;
         }
         for (Item transferable : TRANSFERABLES) {
@@ -36,12 +35,12 @@ public class CommandGive extends PlayerCommand {
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Make your opponent give you an item.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         do {
             transfer = Item.values()[Random.random(Item.values().length)];
             if (!(target.has(transfer) && TRANSFERABLES.contains(transfer))) {
@@ -49,29 +48,29 @@ public class CommandGive extends PlayerCommand {
             }
         } while (transfer == null);
         target.consume(transfer, 1);
-        getSelf().gain(transfer);
-        c.write(getSelf(), deal(c, 0, Result.normal, target));
+        user.gain(transfer);
+        c.write(user, deal(c, 0, Result.normal, user, target));
         transfer = null;
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new CommandGive(user.getType());
+        return new CommandGive();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int magnitude, Result modifier, Character target) {
+    public String deal(Combat c, int magnitude, Result modifier, Character user, Character target) {
         return target.getName() + " takes out " + transfer.pre() + transfer.getName() + " and hands it to you.";
     }
 
     @Override
-    public String receive(Combat c, int magnitude, Result modifier, Character target) {
+    public String receive(Combat c, int magnitude, Result modifier, Character user, Character target) {
         return "<<This should not be displayed, please inform The" + " Silver Bard: CommandGive-receive>>";
     }
 

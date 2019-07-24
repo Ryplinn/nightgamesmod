@@ -1,7 +1,6 @@
 package nightgames.status;
 
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
@@ -80,7 +79,7 @@ public class CockBound extends Status {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         float dc = toughness;
         return Math.round(dc * 10);
     }

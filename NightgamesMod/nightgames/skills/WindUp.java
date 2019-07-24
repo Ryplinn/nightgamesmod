@@ -2,15 +2,14 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.Primed;
 
 public class WindUp extends Skill {
 
-    public WindUp(CharacterType self) {
-        super("Wind Up", self);
+    public WindUp() {
+        super("Wind Up");
     }
 
     @Override
@@ -19,16 +18,16 @@ public class WindUp extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
+    public boolean usable(Combat c, Character user, Character target) {
         return c.getStance()
-                .mobile(getSelf())
+                .mobile(user)
                         && !c.getStance()
-                             .prone(getSelf());
+                             .prone(user);
     }
     
     @Override
-    public float priorityMod(Combat c) {
-        int temp = getSelf().getPure(Attribute.temporal);
+    public float priorityMod(Combat c, Character user) {
+        int temp = user.getPure(Attribute.temporal);
         float base;
         if (temp < 6)
             base = 1.f;
@@ -38,44 +37,44 @@ public class WindUp extends Skill {
             base = 2.5f;
         else
             base = 3.f;
-        return Primed.isPrimed(getSelf(), 6) ? base / 2.f : base;
+        return Primed.isPrimed(user, 6) ? base / 2.f : base;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Primes time charges: first charge free, 2 Mojo for each additional charge";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        int charges = Math.min(4, getSelf().getMojo()
+    public boolean resolve(Combat c, Character user, Character target) {
+        int charges = Math.min(4, user.getMojo()
                                            .get()
                         / 5);
-        getSelf().add(c, new Primed(self, charges + 1));
-        getSelf().spendMojo(c, charges * 5);
-        writeOutput(c, Result.normal, target);
+        user.add(c, new Primed(user.getType(), charges + 1));
+        user.spendMojo(c, charges * 5);
+        writeOutput(c, Result.normal, user, target);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new WindUp(user.getType());
+        return new WindUp();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.recovery;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You take advantage of a brief lull in the fight to wind up your Procrastinator, priming time charges for later use.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        return String.format("%s fiddles with a small device on %s wrist.", getSelf().getName(),
-                        getSelf().possessiveAdjective());
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        return String.format("%s fiddles with a small device on %s wrist.", user.getName(),
+                        user.possessiveAdjective());
     }
 
 }

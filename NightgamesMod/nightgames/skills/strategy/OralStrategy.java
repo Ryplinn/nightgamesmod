@@ -18,8 +18,7 @@ public class OralStrategy extends KnockdownThenActionStrategy {
     @Override
     public double weight(Combat c, Character self) {
         double weight = .55;
-        if (!(new Cunnilingus(self.getType())).requirements(c, self, c.getOpponent(self)) && !(new Blowjob(
-                        self.getType()).requirements(c, c.getOpponent(self)))) {
+        if (!(new Cunnilingus()).requirements(c, self, c.getOpponent(self)) && !(new Blowjob().requirements(c, self, c.getOpponent(self)))) {
 
             return 0;
         }
@@ -50,10 +49,10 @@ public class OralStrategy extends KnockdownThenActionStrategy {
             return Optional.empty();
         }
         return emptyIfSetEmpty(allowedSkills.stream()
-                        .filter(skill -> ((skill.getTags(c).contains(SkillTag.oral)
-                                        && skill.getTags(c).contains(SkillTag.pleasure)
-                                        ) || skill.getTags(c).contains(SkillTag.stripping))
-                                        && !skill.getTags(c).contains(SkillTag.suicidal))
+                        .filter(skill -> ((skill.getTags(c, self).contains(SkillTag.oral)
+                                        && skill.getTags(c, self).contains(SkillTag.pleasure)
+                                        ) || skill.getTags(c, self).contains(SkillTag.stripping))
+                                        && !skill.getTags(c, self).contains(SkillTag.suicidal))
                         .collect(Collectors.toSet()));
     }
     

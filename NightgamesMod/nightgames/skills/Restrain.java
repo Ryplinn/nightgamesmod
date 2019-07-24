@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -11,32 +10,32 @@ import nightgames.stance.Pin;
 
 public class Restrain extends Skill {
 
-    public Restrain(CharacterType self) {
-        super("Pin", self);
+    public Restrain() {
+        super("Pin");
         addTag(SkillTag.positioning);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return !target.wary() && c.getStance().mobile(getSelf()) && c.getStance().prone(target)
-                        && c.getStance().reachTop(getSelf()) && getSelf().canAct() && c.getStance().reachTop(target)
+    public boolean usable(Combat c, Character user, Character target) {
+        return !target.wary() && c.getStance().mobile(user) && c.getStance().prone(target)
+                        && c.getStance().reachTop(user) && user.canAct() && c.getStance().reachTop(target)
                         && !c.getStance().connected(c);
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        return resolve(c, target, false);
+    public boolean resolve(Combat c, Character user, Character target) {
+        return resolve(c, user, target, false);
     }
 
-    public boolean resolve(Combat c, Character target, boolean nofail) {
-        if (nofail || target.roll(getSelf(), accuracy(c, target))) {
-            writeOutput(c, Result.normal, target);
-            c.setStance(new Pin(self, target.getType()), getSelf(), true);
+    public boolean resolve(Combat c, Character user, Character target, boolean nofail) {
+        if (nofail || target.roll(user, accuracy(c, user, target))) {
+            writeOutput(c, Result.normal, user, target);
+            c.setStance(new Pin(user.getType(), target.getType()), user, true);
             target.emote(Emotion.nervous, 10);
             target.emote(Emotion.desperate, 10);
-            getSelf().emote(Emotion.dominant, 20);
+            user.emote(Emotion.dominant, 20);
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
         return true;
@@ -49,26 +48,26 @@ public class Restrain extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Restrain(user.getType());
+        return new Restrain();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 2;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 75;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "You try to catch " + target.getName() + "'s hands, but she squirms too much to keep your grip on her.";
         } else {
@@ -77,20 +76,20 @@ public class Restrain extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s tries to pin %s down, but %s %s %s arms free.",
-                            getSelf().subject(), target.nameDirectObject(),
+                            user.subject(), target.nameDirectObject(),
                             target.pronoun(), target.action("keep"), target.possessiveAdjective());
         } else {
             return String.format("%s pounces on %s and pins %s arms in place, leaving %s at %s mercy.",
-                            getSelf().subject(), target.nameDirectObject(), target.possessiveAdjective(),
-                            target.directObject(), getSelf().directObject());
+                            user.subject(), target.nameDirectObject(), target.possessiveAdjective(),
+                            target.directObject(), user.directObject());
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Restrain opponent until she struggles free";
     }
 

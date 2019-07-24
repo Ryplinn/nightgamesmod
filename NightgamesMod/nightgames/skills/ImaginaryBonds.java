@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -12,8 +11,8 @@ import nightgames.status.Bound;
 
 public class ImaginaryBonds extends Skill {
 
-    private ImaginaryBonds(CharacterType self) {
-        super("Binding", self, 4);
+    private ImaginaryBonds() {
+        super("Binding", 4);
         addTag(SkillTag.positioning);
     }
 
@@ -23,50 +22,50 @@ public class ImaginaryBonds extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
+    public boolean usable(Combat c, Character user, Character target) {
         return target.isHypnotized();
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 10;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Trap your opponent with mental bondage.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.normal, target);
-        target.add(c, new Bound(target.getType(), 45 + 5 * Math.sqrt(getSelf().get(Attribute.hypnotism)), "imaginary bindings"));
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.normal, user, target);
+        target.add(c, new Bound(target.getType(), 45 + 5 * Math.sqrt(user.get(Attribute.hypnotism)), "imaginary bindings"));
         target.emote(Emotion.nervous, 5);
-        getSelf().emote(Emotion.confident, 20);
-        getSelf().emote(Emotion.dominant, 10);
+        user.emote(Emotion.confident, 20);
+        user.emote(Emotion.dominant, 10);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new ImaginaryBonds(user.getType());
+        return new ImaginaryBonds();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return Formatter.format("You lean close to {other:name-do} and tell her that {other:pronoun} cannot move {other:possessive} body. "
-                        + "{other:NAME-POSSESSIVE} eyes widen as your hypnotic suggestion rings true in {other:possessive} mind.", getSelf(), target);
+                        + "{other:NAME-POSSESSIVE} eyes widen as your hypnotic suggestion rings true in {other:possessive} mind.", user, target);
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return Formatter.format("{self:SUBJECT} leans close to you and helpfully informs {other:name-do} that {other:pronoun} cannot move your body. "
-                        + "Of course! why didn't {other:pronoun} notice this earlier? ", getSelf(), target);
+                        + "Of course! why didn't {other:pronoun} notice this earlier? ", user, target);
     }
 
 }

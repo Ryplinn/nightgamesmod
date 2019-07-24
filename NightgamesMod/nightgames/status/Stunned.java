@@ -1,9 +1,8 @@
 package nightgames.status;
 
 import com.google.gson.JsonObject;
-
-import nightgames.characters.*;
 import nightgames.characters.Character;
+import nightgames.characters.*;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
@@ -112,7 +111,7 @@ public class Stunned extends DurationStatus {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return 0;
     }
 

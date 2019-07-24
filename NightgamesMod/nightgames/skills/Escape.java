@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.arms.skills.Grab;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -16,90 +15,90 @@ import nightgames.status.Stsflag;
 import java.util.Optional;
 
 public class Escape extends Skill {
-    public Escape(CharacterType self) {
-        super("Escape", self);
+    public Escape() {
+        super("Escape");
         addTag(SkillTag.positioning);
         addTag(SkillTag.escaping);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
+    public boolean usable(Combat c, Character user, Character target) {
         if (target.hasStatus(Stsflag.cockbound)) {
             return false;
         }
         return (c.getStance()
-                 .sub(getSelf())
+                 .sub(user)
                         && !c.getStance()
-                             .mobile(getSelf())
-                        || (getSelf().bound() && !getSelf().is(Stsflag.maglocked))) && getSelf().canRespond();
+                             .mobile(user)
+                        || (user.bound() && !user.is(Stsflag.maglocked))) && user.canRespond();
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (blockedByCollar(c)) {
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (blockedByCollar(c, user)) {
             return false;
         }
-        if (getSelf().bound()) {
-            if (getSelf().checkVsDc(Attribute.cunning, 5 - getSelf().getEscape(c, target))) {
-                if (getSelf().human()) {
-                    c.write(getSelf(), "You slip your hands out of your restraints.");
+        if (user.bound()) {
+            if (user.checkVsDc(Attribute.cunning, 5 - user.getEscape(c, target))) {
+                if (user.human()) {
+                    c.write(user, "You slip your hands out of your restraints.");
                 } else if (c.shouldPrintReceive(target, c)) {
-                    c.write(getSelf(), getSelf().getName() + " manages to free " + getSelf().reflectivePronoun() + ".");
+                    c.write(user, user.getName() + " manages to free " + user.reflectivePronoun() + ".");
                 }
-                getSelf().free();
-                c.getCombatantData(getSelf()).setIntegerFlag(Grab.FLAG, 0);
+                user.free();
+                c.getCombatantData(user).setIntegerFlag(Grab.FLAG, 0);
             } else {
-                if (getSelf().human()) {
-                    c.write(getSelf(), "You try to slip your restraints, but can't get free.");
+                if (user.human()) {
+                    c.write(user, "You try to slip your restraints, but can't get free.");
                 } else if (c.shouldPrintReceive(target, c)) {
-                    c.write(getSelf(), String.format("%s squirms against %s restraints fruitlessly.", getSelf().getName(),
-                                    getSelf().possessiveAdjective()));
+                    c.write(user, String.format("%s squirms against %s restraints fruitlessly.", user.getName(),
+                                    user.possessiveAdjective()));
                 }
-                getSelf().struggle();
+                user.struggle();
                 return false;
             }
-        } else if (getSelf().checkVsDc(Attribute.cunning, 10 + target.get(Attribute.cunning) - getSelf().getEscape(c, target))) {
-            if (getSelf().human()) {
-                if (getSelf().hasStatus(Stsflag.cockbound)) {
-                    c.write(getSelf(), "You somehow managed to wiggle out of " + target.getName()
+        } else if (user.checkVsDc(Attribute.cunning, 10 + target.get(Attribute.cunning) - user.getEscape(c, target))) {
+            if (user.human()) {
+                if (user.hasStatus(Stsflag.cockbound)) {
+                    c.write(user, "You somehow managed to wiggle out of " + target.getName()
                                     + "'s iron grip on your dick.");
-                    getSelf().removeStatus(Stsflag.cockbound);
+                    user.removeStatus(Stsflag.cockbound);
                     return true;
                 }
-                c.write(getSelf(), "Your quick wits find a gap in " + target.getName() + "'s hold and you slip away.");
+                c.write(user, "Your quick wits find a gap in " + target.getName() + "'s hold and you slip away.");
             } else if (c.shouldPrintReceive(target, c)) {
-                if (getSelf().hasStatus(Stsflag.cockbound)) {
-                    c.write(getSelf(),
+                if (user.hasStatus(Stsflag.cockbound)) {
+                    c.write(user,
                                     String.format("%s somehow managed to wiggle out of %s iron grip on %s dick.",
-                                                    getSelf().pronoun(), target.nameOrPossessivePronoun(),
-                                                    getSelf().possessiveAdjective()));
-                    getSelf().removeStatus(Stsflag.cockbound);
+                                                    user.pronoun(), target.nameOrPossessivePronoun(),
+                                                    user.possessiveAdjective()));
+                    user.removeStatus(Stsflag.cockbound);
                     return true;
                 }
-                c.write(getSelf(), String.format(
+                c.write(user, String.format(
                                 "%s goes limp and %s the opportunity to adjust %s grip on %s"
                                                 + ". As soon as %s %s, %s bolts out of %s weakened hold. "
                                                 + "It was a trick!",
-                                getSelf().getName(), target.subjectAction("take"),
-                                target.possessiveAdjective(), getSelf().directObject(),
-                                target.pronoun(), target.action("move"), getSelf().pronoun(),
+                                user.getName(), target.subjectAction("take"),
+                                target.possessiveAdjective(), user.directObject(),
+                                target.pronoun(), target.action("move"), user.pronoun(),
                                 target.possessiveAdjective()));
             }
-            c.setStance(new Neutral(self, c.getOpponent(getSelf()).getType()), getSelf(), true);
+            c.setStance(new Neutral(user.getType(), c.getOpponent(user).getType()), user, true);
         } else {
-            c.escape(getSelf(), c.getStance());
-            getSelf().struggle();
+            c.escape(user, c.getStance());
+            user.struggle();
             return false;
         }
         return true;
     }
 
-    private boolean blockedByCollar(Combat c) {
-        Optional<String> compulsion = Compulsive.describe(c, getSelf(), Situation.PREVENT_ESCAPE);
+    private boolean blockedByCollar(Combat c, Character user) {
+        Optional<String> compulsion = Compulsive.describe(c, user, Situation.PREVENT_ESCAPE);
         if (compulsion.isPresent()) {
-            c.write(getSelf(), compulsion.get());
-            getSelf().pain(c, null, 20 + Random.random(40));
-            Compulsive.doPostCompulsion(c, getSelf(), Situation.PREVENT_ESCAPE);
+            c.write(user, compulsion.get());
+            user.pain(c, null, 20 + Random.random(40));
+            Compulsive.doPostCompulsion(c, user, Situation.PREVENT_ESCAPE);
             return true;
         }
         return false;
@@ -112,33 +111,33 @@ public class Escape extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Escape(user.getType());
+        return new Escape();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 1;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character attacker) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character attacker) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Uses Cunning to try to escape a submissive position";
     }
 

@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.items.Item;
@@ -10,8 +9,8 @@ import nightgames.items.clothing.ClothingTable;
 import nightgames.items.clothing.ClothingTrait;
 
 public class NursesGloves extends Skill {
-    private NursesGloves(CharacterType self) {
-        super("Nurse's Gloves", self, 5);
+    private NursesGloves() {
+        super("Nurse's Gloves", 5);
     }
 
     @Override
@@ -20,52 +19,52 @@ public class NursesGloves extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance().mobile(getSelf()) && !getSelf().has(ClothingTrait.nursegloves)
-                        && getSelf().has(Item.MedicalSupplies, 1);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && c.getStance().mobile(user) && !user.has(ClothingTrait.nursegloves)
+                        && user.has(Item.MedicalSupplies, 1);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Puts on a pair of plastic medical examiner's gloves";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (getSelf().human()) {
-            c.write(getSelf(), deal(c, 0, Result.normal, target));
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (user.human()) {
+            c.write(user, deal(c, 0, Result.normal, user, target));
         } else {
-            c.write(getSelf(), receive(c, 0, Result.normal, target));
+            c.write(user, receive(c, 0, Result.normal, user, target));
         }
-        getSelf().getOutfit().equip(ClothingTable.getByID("nursesgloves"));
-        getSelf().consume(Item.MedicalSupplies, 1);
+        user.getOutfit().equip(ClothingTable.getByID("nursesgloves"));
+        user.consume(Item.MedicalSupplies, 1);
 
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new NursesGloves(user.getType());
+        return new NursesGloves();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         String message;
         message = "You grab a pair of rubber gloves, pulling them on with a satisfying snap.";
         return message;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         String message;
         message = String.format("With a lecherous grin on %s face, %s snaps on a pair of"
                         + " rubber gloves similar to those you would see at the doctor's.",
-                        getSelf().possessiveAdjective(), getSelf().subject());
+                        user.possessiveAdjective(), user.subject());
         return message;
     }
 

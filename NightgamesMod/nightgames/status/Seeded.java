@@ -177,7 +177,7 @@ public class Seeded extends Status implements InsertedStatus {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return 0;
     }
 

@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -14,12 +13,12 @@ import nightgames.stance.Stance;
 import nightgames.status.*;
 
 public class ThrowSlime extends Skill {
-    ThrowSlime(CharacterType self) {
-        this(self, 0);
+    ThrowSlime() {
+        this(0);
     }
 
-    public ThrowSlime(CharacterType self, int slimeAttribute) {
-        super("Throw Slime", self, 4);
+    public ThrowSlime(int slimeAttribute) {
+        super("Throw Slime", 4);
         addTag(SkillTag.knockdown);
         if (slimeAttribute >= 12) {
             addTag(SkillTag.mental);
@@ -32,38 +31,38 @@ public class ThrowSlime extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && (c.getStance().en == Stance.neutral 
-                        || (c.getStance().en == Stance.standingover && c.getStance().dom(getSelf())))
-                        && !getSelf().is(Stsflag.charmed);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && (c.getStance().en == Stance.neutral
+                        || (c.getStance().en == Stance.standingover && c.getStance().dom(user)))
+                        && !user.is(Stsflag.charmed);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
-        return 9 + getSelf().get(Attribute.slime);
+    public int getMojoCost(Combat c, Character user) {
+        return 9 + user.get(Attribute.slime);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Throw some globs of slime at your opponent. Unlocks more effects with higher Slime attribute.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         if (target.has(Trait.slime)) {
-            c.write(getSelf(), Formatter.format("{self:SUBJECT-ACTION:throw|throws} a glob of slime at"
+            c.write(user, Formatter.format("{self:SUBJECT-ACTION:throw|throws} a glob of slime at"
                             + " {other:name-do}, but it is simply absorbed into {other:possessive}"
-                            + " equally slimy body. That was rather underwhelming.", getSelf(), target));
+                            + " equally slimy body. That was rather underwhelming.", user, target));
             return false;
         } else {
-            HitType type = decideEffect(c, target);
+            HitType type = decideEffect(c, user, target);
             c.write(Formatter.format("With a large movement of {self:possessive} arms, {self:subject-action:throw|throws}"
-                            + " a big glob of viscous slime at {other:name-do}. ", getSelf(), target));
-            type.message(c, getSelf(), target);
+                            + " a big glob of viscous slime at {other:name-do}. ", user, target));
+            type.message(c, user, target);
             if (type != HitType.NONE) {
-                target.add(c, type.build(getSelf(), target));
-                if (getSelf().has(Trait.VolatileSubstrate)) {
-                    target.add(c, new Slimed(target.getType(), self, Random.random(1, 11)));
+                target.add(c, type.build(user, target));
+                if (user.has(Trait.VolatileSubstrate)) {
+                    target.add(c, new Slimed(target.getType(), user.getType(), Random.random(1, 11)));
                 }
                 return true;
             } else {
@@ -74,21 +73,21 @@ public class ThrowSlime extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new ThrowSlime(user.getType(), user.get(Attribute.slime));
+        return new ThrowSlime(user.get(Attribute.slime));
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return null;
     }
 
@@ -237,8 +236,8 @@ public class ThrowSlime extends Skill {
         return r;
     }
 
-    public HitType decideEffect(Combat c, Character target) {
-        int slime = getSelf().get(Attribute.slime);
+    public HitType decideEffect(Combat c, Character user, Character target) {
+        int slime = user.get(Attribute.slime);
         int bonus = Math.min(slime, 40) - 20;
 
         if (!c.getStance().mobile(target) || !target.canRespond()) {

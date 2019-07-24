@@ -1,7 +1,6 @@
 package nightgames.status;
 
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
@@ -75,7 +74,7 @@ public class Distorted extends DurationStatus {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return 0;
     }
 

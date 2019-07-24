@@ -8,6 +8,7 @@ import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
+import nightgames.pet.PetCharacter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +26,9 @@ public class Drained extends AttributeBuff {
                         (Attribute.isBasic(att) ? 3 : 0), value);
         if (realValue > 0) {
             drainer.add(c, new Drained(drainer.getType(), drained.getType(), att, realValue, duration));
+            while (drainer instanceof PetCharacter) {
+                drainer = ((PetCharacter) drainer).getSelf().owner();
+            }
             drained.add(c, new Drained(drained.getType(), drainer.getType(), att, -realValue, duration));
             if (write) {
                 if (drainer.has(Trait.WillingSacrifice) && drained.is(Stsflag.charmed)) {
@@ -148,8 +152,8 @@ public class Drained extends AttributeBuff {
     }
 
     @Override
-    public int escape() {
-        return other != null && getOther().has(Trait.SpecificSapping) && value < 0 ? Math.max(-10, -value) : 0;
+    public int escape(Character from) {
+        return from != null && from.has(Trait.SpecificSapping) && value < 0 ? Math.max(-10, -value) : 0;
     }
 
     @Override

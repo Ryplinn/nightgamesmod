@@ -110,11 +110,11 @@ public class NursingHold extends Position {
             return Collections.emptySet();
         } else {
             Collection<Skill> avail = new HashSet<>();
-            avail.add(new Suckle(bottom));
-            avail.add(new Escape(bottom));
-            avail.add(new Struggle(bottom));
-            avail.add(new Nothing(bottom));
-            avail.add(new Wait(bottom));
+            avail.add(new Suckle());
+            avail.add(new Escape());
+            avail.add(new Struggle());
+            avail.add(new Nothing());
+            avail.add(new Wait());
             return avail;
         }
     }
@@ -150,7 +150,7 @@ public class NursingHold extends Position {
                             getTop().possessiveAdjective(), struggler.possessiveAdjective(),
                             struggler.directObject()));
         }
-        (new Suckle(struggler.getType())).resolve(c, getTop());
+        (new Suckle()).resolve(c, struggler, getTop());
     }
 
     @Override
@@ -158,6 +158,6 @@ public class NursingHold extends Position {
         c.write(escapee, Formatter.format("{self:SUBJECT-ACTION:try} to escape {other:name-possessive} hold, but with"
                         + " {other:direct-object} impressive chest in front of {self:possessive} face, {self:pronoun-action:are} easily convinced to stop.",
                         escapee, getTop()));
-        (new Suckle(escapee.getType())).resolve(c, getTop());
+        (new Suckle()).resolve(c, escapee, getTop());
     }
 }

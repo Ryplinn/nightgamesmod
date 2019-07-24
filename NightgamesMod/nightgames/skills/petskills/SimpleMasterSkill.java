@@ -1,7 +1,6 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.nskills.tags.SkillTag;
@@ -11,42 +10,42 @@ import nightgames.skills.Tactics;
 public abstract class SimpleMasterSkill extends Skill {
     private int levelReq;
 
-    SimpleMasterSkill(String name, CharacterType self) {
-        this(name, self, 0);
+    SimpleMasterSkill(String name) {
+        this(name, 0);
     }
-    SimpleMasterSkill(String name, CharacterType self, int levelReq) {
-        super(name, self);
+    SimpleMasterSkill(String name, int levelReq) {
+        super(name);
         this.levelReq = levelReq;
         addTag(SkillTag.helping);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().isPetOf(target);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.isPetOf(target);
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getLevel() >= this.levelReq;
+        return user.getLevel() >= this.levelReq;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "<ERROR>";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return "<ERROR>";
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "";
     }
     
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.recovery;
     }
 }

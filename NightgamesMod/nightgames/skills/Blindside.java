@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -14,13 +13,13 @@ import nightgames.stance.Stance;
 
 public class Blindside extends Skill {
 
-    public Blindside(CharacterType self) {
-        super("Blindside", self, 2);
+    public Blindside() {
+        super("Blindside", 2);
         addTag(SkillTag.positioning);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 15;
     }
 
@@ -30,38 +29,38 @@ public class Blindside extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
+    public boolean usable(Combat c, Character user, Character target) {
         return !target.wary() && c.getStance()
                                   .enumerate() == Stance.neutral;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Distract your opponent and take them down.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.normal, target);
-        c.setStance(new Mount(self, target.getType()), getSelf(), true);
-        getSelf().emote(Emotion.confident, 15);
-        getSelf().emote(Emotion.dominant, 15);
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.normal, user, target);
+        c.setStance(new Mount(user.getType(), target.getType()), user, true);
+        user.emote(Emotion.confident, 15);
+        user.emote(Emotion.dominant, 15);
         target.emote(Emotion.nervous, 10);
         return false;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Blindside(user.getType());
+        return new Blindside();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format(
                         "You move up to %s and kiss %s strongly. "
                                         + "While %s is distracted, you throw %s down and plant "
@@ -71,18 +70,18 @@ public class Blindside extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format(
                         "Seductively swaying %s hips, %s sashays over to %s. "
                                         + "%s eyes fix %s in place as %s leans in and firmly kisses %s, shoving %s tongue down"
                                         + " %s mouth. %s are so absorbed in kissing back, that %s only notice %s ulterior motive"
                                         + " once %s has already swept %s legs out from under %s and %s has landed on top of %s.",
-                        getSelf().possessiveAdjective(), getSelf().getName(), target.subject(),
-                        Formatter.capitalizeFirstLetter(getSelf().possessiveAdjective()), target.directObject(),
-                        getSelf().pronoun(), target.directObject(), getSelf().possessiveAdjective(),
+                        user.possessiveAdjective(), user.getName(), target.subject(),
+                        Formatter.capitalizeFirstLetter(user.possessiveAdjective()), target.directObject(),
+                        user.pronoun(), target.directObject(), user.possessiveAdjective(),
                         target.possessiveAdjective(), Formatter.capitalizeFirstLetter(target.pronoun()), target.pronoun(),
-                        getSelf().possessiveAdjective(), getSelf().pronoun(), target.possessiveAdjective(),
-                        target.directObject(), getSelf().pronoun(), target.directObject());
+                        user.possessiveAdjective(), user.pronoun(), target.possessiveAdjective(),
+                        target.directObject(), user.pronoun(), target.directObject());
     }
 
 }

@@ -1,15 +1,14 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.Stsflag;
 
 public class Obey extends Skill {
 
-    Obey(CharacterType self) {
-        super("Obey", self);
+    Obey() {
+        super("Obey");
     }
 
     @Override
@@ -18,48 +17,48 @@ public class Obey extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().is(Stsflag.enthralled) && !getSelf().is(Stsflag.stunned);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.is(Stsflag.enthralled) && !user.is(Stsflag.stunned);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Obey your master's every command";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (getSelf().human()) {
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (user.human()) {
             String controller = target.useFemalePronouns() ? "mistress'" : "master's";
-            c.write(getSelf(), "You patiently await your "+controller+" command.");
+            c.write(user, "You patiently await your "+controller+" command.");
         } else if (c.shouldPrintReceive(target, c)) {
-            c.write(getSelf(), getSelf().getName() + " stares ahead blankly, waiting for "+getSelf().possessiveAdjective()+" orders.");
+            c.write(user, user.getName() + " stares ahead blankly, waiting for "+user.possessiveAdjective()+" orders.");
         }
-        if (getSelf().human()) {
-            (new Command(target.getType())).resolve(c, getSelf());
+        if (user.human()) {
+            (new Command()).resolve(c, user, user);
         } else {
-            (new Masturbate(self)).resolve(c, target);
+            (new Masturbate()).resolve(c, user, target);
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Obey(user.getType());
+        return new Obey();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.misc;
     }
 
     @Override
-    public String deal(Combat c, int paramInt, Result paramResult, Character paramCharacter) {
+    public String deal(Combat c, int paramInt, Result paramResult, Character user, Character paramCharacter) {
         return "";
     }
 
     @Override
-    public String receive(Combat c, int paramInt, Result paramResult, Character paramCharacter) {
+    public String receive(Combat c, int paramInt, Result paramResult, Character user, Character paramCharacter) {
         return "";
     }
 

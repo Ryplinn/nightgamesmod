@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
@@ -18,19 +17,19 @@ import nightgames.status.Oiled;
 import nightgames.status.Stsflag;
 
 public class ReverseAssFuck extends Fuck {
-    public ReverseAssFuck(CharacterType self) {
-        super("Anal Ride", self, 0);
+    public ReverseAssFuck() {
+        super("Anal Ride", 0);
         addTag(SkillTag.anal);
     }
 
     @Override
-    public float priorityMod(Combat c) {
-        return ((getSelf().getMood() == Emotion.dominant ? 1.0f : 0)
-                        + (getSelf().has(Trait.autonomousAss) ? 4.0f : 0) 
-                        + (getSelf().has(Trait.oiledass) ? 2.0f : 0)
-                        + (getSelf().has(Trait.drainingass) ? 3.f : 0)
-                        + (getSelf().has(Trait.bewitchingbottom) ? 3.f : 0))
-                        * (getSelf().has(Trait.powerfulcheeks) ? 2.f : 1.f);
+    public float priorityMod(Combat c, Character user) {
+        return ((user.getMood() == Emotion.dominant ? 1.0f : 0)
+                        + (user.has(Trait.autonomousAss) ? 4.0f : 0)
+                        + (user.has(Trait.oiledass) ? 2.0f : 0)
+                        + (user.has(Trait.drainingass) ? 3.f : 0)
+                        + (user.has(Trait.bewitchingbottom) ? 3.f : 0))
+                        * (user.has(Trait.powerfulcheeks) ? 2.f : 1.f);
     }
 
     @Override
@@ -39,56 +38,56 @@ public class ReverseAssFuck extends Fuck {
     }
 
     @Override
-    public BodyPart getSelfOrgan() {
-        return getSelf().body.getRandom("ass");
+    public BodyPart getSelfOrgan(Character user) {
+        return user.body.getRandom("ass");
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return fuckable(c, target) && c.getStance().mobile(getSelf()) && c.getStance().prone(target)
-                        && !c.getStance().mobile(target) && getSelf().canAct() && getTargetOrgan(target).isReady(target)
-                        && (getSelfOrgan().isReady(getSelf()) || getSelf().has(Item.Lubricant)
-                                        || getSelf().getArousal().percent() > 50 || getSelf().has(Trait.alwaysready));
+    public boolean usable(Combat c, Character user, Character target) {
+        return fuckable(c, user, target) && c.getStance().mobile(user) && c.getStance().prone(target)
+                        && !c.getStance().mobile(target) && user.canAct() && getTargetOrgan(target).isReady(target)
+                        && (getSelfOrgan(user).isReady(user) || user.has(Item.Lubricant)
+                                        || user.getArousal().percent() > 50 || user.has(Trait.alwaysready));
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        String premessage = premessage(c, target);
-        if (!getSelf().hasStatus(Stsflag.oiled) && getSelf().getArousal().percent() > 50
-                        || getSelf().has(Trait.alwaysready)) {
-            String fluids = getSelf().hasDick() ? "copious pre-cum" : "own juices";
+    public boolean resolve(Combat c, Character user, Character target) {
+        String premessage = premessage(c, user, target);
+        if (!user.hasStatus(Stsflag.oiled) && user.getArousal().percent() > 50
+                        || user.has(Trait.alwaysready)) {
+            String fluids = user.hasDick() ? "copious pre-cum" : "own juices";
             if (premessage.isEmpty()) {
                 premessage = "{self:subject-action:lube|lubes}";
             } else {
                 premessage += "{self:action:lube|lubes}";
             }
             premessage += " up {self:possessive} ass with {self:possessive} " + fluids + ".";
-            getSelf().add(c, new Oiled(self));
-        } else if (!getSelf().hasStatus(Stsflag.oiled) && getSelf().has(Item.Lubricant)) {
+            user.add(c, new Oiled(user.getType()));
+        } else if (!user.hasStatus(Stsflag.oiled) && user.has(Item.Lubricant)) {
             if (premessage.isEmpty()) {
                 premessage = "{self:subject-action:lube|lubes}";
             } else {
                 premessage += "{self:action:lube|lubes}";
             }
             premessage += " up {self:possessive} ass.";
-            getSelf().add(c, new Oiled(self));
-            getSelf().consume(Item.Lubricant, 1);
+            user.add(c, new Oiled(user.getType()));
+            user.consume(Item.Lubricant, 1);
         }
-        c.write(getSelf(), Formatter.format(premessage, getSelf(), target));
+        c.write(user, Formatter.format(premessage, user, target));
 
         int m = Random.random(10, 15);
-        writeOutput(c, Result.normal, target);
+        writeOutput(c, Result.normal, user, target);
 
         int otherm = m;
-        if (getSelf().has(Trait.insertion)) {
-            otherm += Math.min(getSelf().get(Attribute.seduction) / 4, 40);
+        if (user.has(Trait.insertion)) {
+            otherm += Math.min(user.get(Attribute.seduction) / 4, 40);
         }
-        target.body.pleasure(getSelf(), getSelfOrgan(), getTargetOrgan(target), otherm, c, this);
-        getSelf().body.pleasure(target, getTargetOrgan(target), getSelfOrgan(), m, c, this);
-        c.setStance(new AnalCowgirl(self, target.getType()), getSelf(), getSelf().canMakeOwnDecision());
-        getSelf().emote(Emotion.dominant, 30);
-        if (Random.random(100) < 5 + 2 * getSelf().get(Attribute.fetishism) || getSelf().has(Trait.bewitchingbottom)) {
-            target.add(c, new BodyFetish(target.getType(), self, "ass", .25));
+        target.body.pleasure(user, getSelfOrgan(user), getTargetOrgan(target), otherm, c, new SkillUsage<>(this, user, target));
+        user.body.pleasure(target, getTargetOrgan(target), getSelfOrgan(user), m, c, new SkillUsage<>(this, user, target));
+        c.setStance(new AnalCowgirl(user.getType(), target.getType()), user, user.canMakeOwnDecision());
+        user.emote(Emotion.dominant, 30);
+        if (Random.random(100) < 5 + 2 * user.get(Attribute.fetishism) || user.has(Trait.bewitchingbottom)) {
+            target.add(c, new BodyFetish(target.getType(), user.getType(), "ass", .25));
         }
         return true;
     }
@@ -100,37 +99,37 @@ public class ReverseAssFuck extends Fuck {
 
     @Override
     public Skill copy(Character user) {
-        return new ReverseAssFuck(user.getType());
+        return new ReverseAssFuck();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 2;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.fucking;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format(
                         "You make sure your %s is sufficiently lubricated and you push %s %s into your greedy hole.",
-                        getSelfOrgan().describe(getSelf()), target.nameOrPossessivePronoun(),
+                        getSelfOrgan(user).describe(user), target.nameOrPossessivePronoun(),
                         getTargetOrgan(target).describe(target));
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format("%s makes sure %s %s is sufficiently lubricated and pushes %s %s into %s greedy hole.",
-                        getSelf().getName(), getSelf().possessiveAdjective(), getSelfOrgan().describe(getSelf()), 
+                        user.getName(), user.possessiveAdjective(), getSelfOrgan(user).describe(user),
                         target.nameOrPossessivePronoun(),
-                        getTargetOrgan(target).describe(target), getSelf().possessiveAdjective());
+                        getTargetOrgan(target).describe(target), user.possessiveAdjective());
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Fuck your opponent with your ass.";
     }
 

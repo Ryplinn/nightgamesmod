@@ -32,12 +32,12 @@ public class FuckStrategy extends AbstractStrategy {
         Character other = c.getOpponent(self);
 
         if (other.getArousal().percent() < 15) {
-            return allowedSkills.stream().filter(skill -> skill.type(c).equals(Tactics.pleasure)).collect(Collectors.toSet());
+            return allowedSkills.stream().filter(skill -> skill.type(c, self).equals(Tactics.pleasure)).collect(Collectors.toSet());
         }
         if (self.getArousal().percent() < 15) {
-            return allowedSkills.stream().filter(skill -> skill.getTags(c).contains(SkillTag.pleasureSelf)).collect(Collectors.toSet());
+            return allowedSkills.stream().filter(skill -> skill.getTags(c, self).contains(SkillTag.pleasureSelf)).collect(Collectors.toSet());
         }
-        Set<Skill> fuckSkills = allowedSkills.stream().filter(skill -> Tactics.fucking.equals(skill.type(c))).collect(Collectors.toSet());
+        Set<Skill> fuckSkills = allowedSkills.stream().filter(skill -> Tactics.fucking.equals(skill.type(c, self))).collect(Collectors.toSet());
         if (!fuckSkills.isEmpty()) {
             return fuckSkills;
         }
@@ -46,15 +46,16 @@ public class FuckStrategy extends AbstractStrategy {
         positioningTactics.add(Tactics.damage);
         positioningTactics.add(Tactics.positioning);
 
-        Set<Skill> positioningSkills = allowedSkills.stream().filter(skill -> positioningTactics.contains(skill.type(c))).collect(Collectors.toSet());
+        Set<Skill> positioningSkills = allowedSkills.stream().filter(skill -> positioningTactics.contains(skill.type(c,
+                        self))).collect(Collectors.toSet());
         if (!c.getStance().mobile(self) || c.getStance().mobile(other)) {
             return positioningSkills;
         }
         if (!other.body.getAllGenitals().stream().allMatch(other::clothingFuckable)) {
-            return allowedSkills.stream().filter(skill -> Tactics.stripping.equals(skill.type(c))).collect(Collectors.toSet());
+            return allowedSkills.stream().filter(skill -> Tactics.stripping.equals(skill.type(c, self))).collect(Collectors.toSet());
         }
         if (!self.body.getAllGenitals().stream().allMatch(other::clothingFuckable)) {
-            return allowedSkills.stream().filter(skill -> skill.getTags(c).contains(SkillTag.undressing)).collect(Collectors.toSet());
+            return allowedSkills.stream().filter(skill -> skill.getTags(c, self).contains(SkillTag.undressing)).collect(Collectors.toSet());
         }
         return Collections.emptySet();
     }

@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -11,8 +10,8 @@ import nightgames.items.clothing.ClothingTable;
 import nightgames.nskills.tags.SkillTag;
 
 public class LivingClothingOther extends Skill {
-    LivingClothingOther(CharacterType self) {
-        super("Living Clothing: Other", self, 8);
+    LivingClothingOther() {
+        super("Living Clothing: Other", 8);
         addTag(SkillTag.pleasure);
         addTag(SkillTag.debuff);
     }
@@ -23,23 +22,23 @@ public class LivingClothingOther extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && !c.getStance().mobile(target) && c.getStance().mobile(getSelf())
-                        && !c.getStance().inserted() && target.torsoNude() && getSelf().has(Item.Battery, 3);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && !c.getStance().mobile(target) && c.getStance().mobile(user)
+                        && !c.getStance().inserted() && target.torsoNude() && user.has(Item.Battery, 3);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Fabricate a living suit of tentacles to wrap around your opponent: 3 Batteries";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        getSelf().consume(Item.Battery, 3);
-        if (getSelf().human()) {
-            c.write(getSelf(), deal(c, 0, Result.normal, target));
+    public boolean resolve(Combat c, Character user, Character target) {
+        user.consume(Item.Battery, 3);
+        if (user.human()) {
+            c.write(user, deal(c, 0, Result.normal, user, target));
         } else {
-            c.write(getSelf(), receive(c, 0, Result.normal, target));
+            c.write(user, receive(c, 0, Result.normal, user, target));
         }
         ClothingTable.getByID("tentacletop").ifPresent(top -> target.getOutfit().equip(top));
         ClothingTable.getByID("tentaclebottom").ifPresent(bottom -> target.getOutfit().equip(bottom));
@@ -48,16 +47,16 @@ public class LivingClothingOther extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new LivingClothingOther(user.getType());
+        return new LivingClothingOther();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         String message;
         message = "You power up your fabricator and dial the knob to the emergency reclothing setting. "
                         + "You hit the button and dark tentacles squirm out of the device. " + "You hold "
@@ -68,14 +67,14 @@ public class LivingClothingOther extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         String message;
         message = String.format("While holding %s down, %s powers up %s fabricator and dials the knob"
                         + " to the emergency reclothing setting. %s hits the button and dark tentacles squirm"
                         + " out of the device. The created tentacles coils around %s body and"
                         + " wrap themselves into a living suit.", target.nameDirectObject(),
-                        getSelf().subject(), getSelf().possessiveAdjective(),
-                        Formatter.capitalizeFirstLetter(getSelf().pronoun()),
+                        user.subject(), user.possessiveAdjective(),
+                        Formatter.capitalizeFirstLetter(user.pronoun()),
                         target.nameOrPossessivePronoun());
         return message;
     }

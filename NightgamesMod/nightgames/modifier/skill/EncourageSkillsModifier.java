@@ -3,7 +3,6 @@ package nightgames.modifier.skill;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.modifier.ModifierComponentLoader;
 import nightgames.skills.Skill;
@@ -13,6 +12,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class EncourageSkillsModifier extends SkillModifier implements ModifierComponentLoader<SkillModifier> {
@@ -69,7 +69,7 @@ public class EncourageSkillsModifier extends SkillModifier implements ModifierCo
     }
 
     private Stream<Skill> getSkillsFromPool() {
-        return SkillPool.skillPool.stream().map(skillstructor -> skillstructor.apply(CharacterType.get("dummy")));
+        return SkillPool.skillPool.stream().map(Supplier::get);
     }
 
     @Override public EncourageSkillsModifier instance(JsonObject object) {

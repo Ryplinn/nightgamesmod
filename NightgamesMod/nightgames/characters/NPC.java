@@ -324,13 +324,13 @@ public class NPC extends Character {
         }
         HashSet<Skill> available = new HashSet<>();
         for (Skill act : possibleSkills) {
-            if (Skill.skillIsUsable(c, act) && cooldownAvailable(act)) {
+            if (Skill.skillIsUsable(c, act, this) && cooldownAvailable(act)) {
                 available.add(act);
             }
         }
         Skill.filterAllowedSkills(c, available, this, target);
         if (available.size() == 0) {
-            available.add(new Nothing(this.getType()));
+            available.add(new Nothing());
         }
         c.chooseSkill(this, ai.chooseSkill(available, c, this));
         return false;
@@ -380,13 +380,13 @@ public class NPC extends Character {
             target = c.p1;
         }
         for (Skill act : getSkills()) {
-            if (Skill.skillIsUsable(c, act) && cooldownAvailable(act)) {
+            if (Skill.skillIsUsable(c, act, this) && cooldownAvailable(act)) {
                 available.add(act);
             }
         }
         Skill.filterAllowedSkills(c, available, this, target);
         if (available.size() == 0) {
-            available.add(new Nothing(this.getType()));
+            available.add(new Nothing());
         }
         return ai.chooseSkill(available, c, this);
     }

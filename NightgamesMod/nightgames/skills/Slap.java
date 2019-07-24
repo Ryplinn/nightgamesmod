@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -17,75 +16,75 @@ import nightgames.status.Slimed;
 
 public class Slap extends Skill {
 
-    public Slap(CharacterType self) {
-        super("Slap", self);
+    public Slap() {
+        super("Slap");
         addTag(SkillTag.hurt);
         addTag(SkillTag.positioning);
         addTag(SkillTag.staminaDamage);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().reachTop(getSelf()) && getSelf().canAct() && c.getStance().front(getSelf());
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().reachTop(user) && user.canAct() && c.getStance().front(user);
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
-        return getSelf().has(Trait.pimphand) ? 15 : 5;
+    public int getMojoBuilt(Combat c, Character user) {
+        return user.has(Trait.pimphand) ? 15 : 5;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 90;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), accuracy(c, target))) {
-            if (isSlime()) {
-                writeOutput(c, Result.critical, target);
-                target.pain(c, getSelf(), Math.min(80, Random.random(10) + getSelf().get(Attribute.slime) + getSelf().get(Attribute.power) / 2));
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.roll(user, accuracy(c, user, target))) {
+            if (isSlime(user)) {
+                writeOutput(c, Result.critical, user, target);
+                target.pain(c, user, Math.min(80, Random.random(10) + user.get(Attribute.slime) + user.get(Attribute.power) / 2));
                 if (c.getStance().en == Stance.neutral && Random.random(5) == 0) {
-                    c.setStance(new StandingOver(self, target.getType()), getSelf(), true);
-                    c.write(getSelf(),
+                    c.setStance(new StandingOver(user.getType(), target.getType()), user, true);
+                    c.write(user,
                                     Formatter.format("{self:SUBJECT-ACTION:slap|slaps} {other:direct-object} hard"
-                                                    + " enough to throw {other:pronoun} to the ground.", getSelf(),
+                                                    + " enough to throw {other:pronoun} to the ground.", user,
                                     target));
                 }
-                if (getSelf().has(Trait.VolatileSubstrate)) {
-                    target.add(c, new Slimed(target.getType(), self, Random.random(2, 4)));
+                if (user.has(Trait.VolatileSubstrate)) {
+                    target.add(c, new Slimed(target.getType(), user.getType(), Random.random(2, 4)));
                 }
                 target.emote(Emotion.nervous, 40);
                 target.emote(Emotion.angry, 30);
-            } else if (getSelf().get(Attribute.animism) >= 8) {
-                writeOutput(c, Result.special, target);
-                if (getSelf().has(Trait.pimphand)) {
-                    target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target,
-                                    Random.random(35, 50) * (25 + getSelf().getArousal().percent()) / 100));
+            } else if (user.get(Attribute.animism) >= 8) {
+                writeOutput(c, Result.special, user, target);
+                if (user.has(Trait.pimphand)) {
+                    target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target,
+                                    Random.random(35, 50) * (25 + user.getArousal().percent()) / 100));
                     target.emote(Emotion.nervous, 40);
                     target.emote(Emotion.angry, 30);
                 } else {
-                    target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target,
-                                    Random.random(25, 45) * (25 + getSelf().getArousal().percent()) / 100));
+                    target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target,
+                                    Random.random(25, 45) * (25 + user.getArousal().percent()) / 100));
                     target.emote(Emotion.nervous, 25);
                     target.emote(Emotion.angry, 30);
                 }
             } else {
-                writeOutput(c, Result.normal, target);
-                if (getSelf().has(Trait.pimphand)) {
-                    target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random
+                writeOutput(c, Result.normal, user, target);
+                if (user.has(Trait.pimphand)) {
+                    target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random
                                     .random(7, 15)));
                     target.emote(Emotion.nervous, 20);
                     target.emote(Emotion.angry, 30);
                 } else {
-                    target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random
+                    target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random
                                     .random(5, 10)));
                     target.emote(Emotion.nervous, 10);
                     target.emote(Emotion.angry, 30);
                 }
             }
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
         return true;
@@ -98,28 +97,28 @@ public class Slap extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Slap(user.getType());
+        return new Slap();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 8;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.damage;
     }
     
-    private boolean isSlime() {
-        return getSelf().get(Attribute.slime) > 4;
+    private boolean isSlime(Character user) {
+        return user.get(Attribute.slime) > 4;
     }
 
     @Override
-    public String getLabel(Combat c) {
-        if (isSlime()) {
+    public String getLabel(Combat c, Character user) {
+        if (isSlime(user)) {
             return "Clobber";
-        } else if (getSelf().get(Attribute.animism) >= 8) {
+        } else if (user.get(Attribute.animism) >= 8) {
             return "Tiger Claw";
         } else {
             return "Slap";
@@ -127,7 +126,7 @@ public class Slap extends Skill {
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return target.getName() + " avoids your slap.";
         } else if (modifier == Result.special) {
@@ -142,28 +141,28 @@ public class Slap extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s tries to slap %s but %s %s %s wrist.",
-                            getSelf().subject(), target.nameDirectObject(),
+                            user.subject(), target.nameDirectObject(),
                             target.pronoun(), target.action("catch", "catches"),
-                            getSelf().possessiveAdjective());
+                            user.possessiveAdjective());
         } else if (modifier == Result.special) {
             return String.format("%s palm hits %s in a savage strike that makes %s head ring.",
-                            getSelf().nameOrPossessivePronoun(), target.nameDirectObject(),
+                            user.nameOrPossessivePronoun(), target.nameDirectObject(),
                             target.possessiveAdjective());
         } else if (modifier == Result.critical) {
             return String.format("%s hand grows significantly, and then %s swings it powerfully into %s face.",
-                            getSelf().nameOrPossessivePronoun(), getSelf().pronoun(),
+                            user.nameOrPossessivePronoun(), user.pronoun(),
                             target.nameOrPossessivePronoun());
         } else {
             return String.format("%s slaps %s across the face, leaving a stinging heat on %s cheek.",
-                            getSelf().subject(), target.nameDirectObject(), target.possessiveAdjective());
+                            user.subject(), target.nameDirectObject(), target.possessiveAdjective());
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Slap opponent across the face";
     }
 

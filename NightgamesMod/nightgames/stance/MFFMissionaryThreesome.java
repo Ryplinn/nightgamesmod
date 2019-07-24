@@ -31,15 +31,6 @@ public class MFFMissionaryThreesome extends Threesome {
     }
 
     @Override
-    public Optional<Position> checkOngoing(Combat c) {
-        if (!c.otherCombatantsContains(getDomSexCharacter())) {
-            c.write(getBottom(), Formatter.format("With the disappearance of {self:name-do}, {other:subject-action:manage|manages} to escape.", getDomSexCharacter(), getBottom()));
-            return Optional.of(new Neutral(top, bottom));
-        }
-        return Optional.empty();
-    }
-
-    @Override
     public List<BodyPart> partsForStanceOnly(Combat combat, Character self, Character other) {
         if (self == getDomSexCharacter() && other.getType() == bottom) {
             return topParts();
@@ -138,8 +129,8 @@ public class MFFMissionaryThreesome extends Threesome {
         } else {
             return self.getSkills().stream()
                             .filter(skill -> skill.requirements(c, self, getBottom()))
-                            .filter(skill -> Skill.skillIsUsable(c, skill, getBottom()))
-                            .filter(skill -> skill.type(c) == Tactics.fucking).collect(Collectors.toSet());
+                            .filter(skill -> Skill.skillIsUsable(c, skill, self, getBottom()))
+                            .filter(skill -> skill.type(c, self) == Tactics.fucking).collect(Collectors.toSet());
         }
     }
 

@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.stance.Stance;
@@ -11,8 +10,8 @@ import nightgames.status.Stsflag;
 
 public class CatsGrace extends Skill {
 
-    CatsGrace(CharacterType self) {
-        super("Cat's Grace", self);
+    CatsGrace() {
+        super("Cat's Grace");
     }
 
     @Override
@@ -21,42 +20,42 @@ public class CatsGrace extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return !getSelf().is(Stsflag.nimble) && c.getStance().en == Stance.neutral && getSelf().canAct() && c.getStance().mobile(getSelf())
-                        && getSelf().getArousal().percent() >= 20;
+    public boolean usable(Combat c, Character user, Character target) {
+        return !user.is(Stsflag.nimble) && c.getStance().en == Stance.neutral && user.canAct() && c.getStance().mobile(user)
+                        && user.getArousal().percent() >= 20;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Use your instinct to nimbly avoid attacks";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.normal, target);
-        getSelf().add(c, new Nimble(self, 4));
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.normal, user, target);
+        user.add(c, new Nimble(user.getType(), 4));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new CatsGrace(user.getType());
+        return new CatsGrace();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You rely on your animal instincts to quicken your movements and avoid attacks.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        return getSelf().getName()
-                        + " focuses for a moment and "+getSelf().possessiveAdjective()
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        return user.getName()
+                        + " focuses for a moment and "+user.possessiveAdjective()
                         +" movements start to speed up and become more animalistic.";
     }
 

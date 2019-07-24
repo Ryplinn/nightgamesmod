@@ -1,16 +1,15 @@
 package nightgames.status;
 
-import static nightgames.requirements.RequirementShortcuts.inserted;
-import static nightgames.requirements.RequirementShortcuts.rev;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
+
+import static nightgames.requirements.RequirementShortcuts.inserted;
+import static nightgames.requirements.RequirementShortcuts.rev;
 
 public class Knotted extends Status {
 
@@ -87,7 +86,7 @@ public class Knotted extends Status {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return -15;
     }
 

@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -9,57 +8,57 @@ import nightgames.global.Random;
 
 public class CommandOral extends PlayerCommand {
 
-    CommandOral(CharacterType self) {
-        super("Force Oral", self);
+    CommandOral() {
+        super("Force Oral");
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return super.usable(c, target) && getSelf().crotchAvailable() && c.getStance().oral(target, target);
+    public boolean usable(Combat c, Character user, Character target) {
+        return super.usable(c, user, target) && user.crotchAvailable() && c.getStance().oral(target, target);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Force your opponent to go down on you.";
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 30;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         boolean silvertongue = target.has(Trait.silvertongue);
-        boolean lowStart = getSelf().getArousal().get() < 15;
+        boolean lowStart = user.getArousal().get() < 15;
         int m = (silvertongue ? 8 : 5) + Random.random(10);
-        if (getSelf().human()) {
+        if (user.human()) {
             if (lowStart) {
                 if (m < 8) {
-                    c.write(getSelf(), deal(c, 0, Result.weak, target));
+                    c.write(user, deal(c, 0, Result.weak, user, target));
                 } else {
-                    c.write(getSelf(), deal(c, 0, Result.strong, target));
+                    c.write(user, deal(c, 0, Result.strong, user, target));
                 }
             } else {
-                c.write(getSelf(), deal(c, 0, Result.normal, target));
+                c.write(user, deal(c, 0, Result.normal, user, target));
             }
         }
-        getSelf().body.pleasure(target, target.body.getRandom("mouth"), getSelf().body.getRandom("cock"), m, c, this);
+        user.body.pleasure(target, target.body.getRandom("mouth"), user.body.getRandom("cock"), m, c, new SkillUsage<>(this, user, target));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new CommandOral(user.getType());
+        return new CommandOral();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.misc;
     }
 
     @Override
-    public String deal(Combat c, int magnitude, Result modifier, Character target) {
+    public String deal(Combat c, int magnitude, Result modifier, Character user, Character target) {
         switch (modifier) {
             case normal:
                 return target.getName() + " is ecstatic at being given the privilege of"
@@ -78,7 +77,7 @@ public class CommandOral extends PlayerCommand {
     }
 
     @Override
-    public String receive(Combat c, int magnitude, Result modifier, Character target) {
+    public String receive(Combat c, int magnitude, Result modifier, Character user, Character target) {
         return "<<This should not be displayed, please inform The" + " Silver Bard: CommandOral-receive>>";
     }
 

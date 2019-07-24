@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -13,8 +12,8 @@ import nightgames.skills.damage.DamageType;
 
 public class Flick extends Skill {
 
-    public Flick(CharacterType self) {
-        super("Flick", self, 2);
+    public Flick() {
+        super("Flick", 2);
         addTag(SkillTag.mean);
         addTag(SkillTag.hurt);
         addTag(SkillTag.positioning);
@@ -22,47 +21,47 @@ public class Flick extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return target.crotchAvailable() && c.getStance().reachBottom(getSelf()) && getSelf().canAct()
-                        && !getSelf().has(Trait.shy);
+    public boolean usable(Combat c, Character user, Character target) {
+        return target.crotchAvailable() && c.getStance().reachBottom(user) && user.canAct()
+                        && !user.has(Trait.shy);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 10;
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 5;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 90;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), accuracy(c, target))) {
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.roll(user, accuracy(c, user, target))) {
             if (target.has(Trait.brassballs)) {
-                writeOutput(c, Result.weak, target);
+                writeOutput(c, Result.weak, user, target);
             } else {
                 int mojoLost = 25;
                 int m = Random.random(8) + 8;
-                writeOutput(c, Result.normal, target);
+                writeOutput(c, Result.normal, user, target);
                 if (target.has(Trait.achilles)) {
                     m += 2 + Random.random(target.get(Attribute.perception) / 2);
                     mojoLost = 40;
                 }
-                target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, m));
+                target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, m));
                 target.loseMojo(c, mojoLost);
-                getSelf().emote(Emotion.dominant, 10);
+                user.emote(Emotion.dominant, 10);
                 target.emote(Emotion.angry, 15);
                 target.emote(Emotion.nervous, 15);
             }
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
         return true;
@@ -75,21 +74,21 @@ public class Flick extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Flick(user.getType());
+        return new Flick();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 6;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.damage;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "You flick your finger between " + target.getName() + "'s legs, but don't hit anything sensitive.";
         } else if (modifier == Result.weak) {
@@ -108,26 +107,26 @@ public class Flick extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s flicks at %s balls, but hits only air.",
-                            getSelf().subject(), target.nameOrPossessivePronoun());
+                            user.subject(), target.nameOrPossessivePronoun());
         } else if (modifier == Result.weak) {
             return String.format("%s flicks %s balls, but %s barely %s a thing.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(),
+                            user.subject(), target.nameOrPossessivePronoun(),
                             target.pronoun(), target.action("feel"));
         } else {
             return String.format("%s gives %s a mischievous grin and flicks each of %s balls with %s finger. "
                             + "It startles %s more than anything, but it does hurt and "
                             + "%s seemingly carefree abuse of %s jewels destroys %s confidence.",
-                            getSelf().subject(), target.nameDirectObject(), target.possessiveAdjective(),
-                            getSelf().possessiveAdjective(), target.directObject(), getSelf().nameOrPossessivePronoun(),
+                            user.subject(), target.nameDirectObject(), target.possessiveAdjective(),
+                            user.possessiveAdjective(), target.directObject(), user.nameOrPossessivePronoun(),
                             target.nameOrPossessivePronoun(), target.possessiveAdjective());
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Flick opponent's genitals, which is painful and embarrassing";
     }
 

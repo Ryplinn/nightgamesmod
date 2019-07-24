@@ -1,11 +1,6 @@
 package nightgames.status;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
@@ -13,6 +8,10 @@ import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class Braced extends DurationStatus {
 
@@ -105,7 +104,7 @@ public class Braced extends DurationStatus {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return 0;
     }
 

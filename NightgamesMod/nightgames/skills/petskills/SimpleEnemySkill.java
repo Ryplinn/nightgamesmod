@@ -1,7 +1,6 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Flag;
@@ -9,48 +8,48 @@ import nightgames.skills.Skill;
 
 public abstract class SimpleEnemySkill extends Skill {
     private int levelReq;
-    public SimpleEnemySkill (String name, CharacterType self) {
-        this(name, self, 0);
+    public SimpleEnemySkill(String name) {
+        this(name, 0);
     }
-    public SimpleEnemySkill (String name, CharacterType self, int levelReq) {
-        super(name, self);
+    public SimpleEnemySkill(String name, int levelReq) {
+        super(name);
         this.levelReq = levelReq;
     }
 
-    boolean gendersMatch(Character other) {
-        if (other.useFemalePronouns() && getSelf().useFemalePronouns() && Flag.checkFlag(Flag.skipFF)) {
+    boolean gendersMatch(Character user, Character other) {
+        if (other.useFemalePronouns() && user.useFemalePronouns() && Flag.checkFlag(Flag.skipFF)) {
             return false;
         }
-        return other.useFemalePronouns() || getSelf().useFemalePronouns() || !Flag.checkFlag(Flag.skipMM);
+        return other.useFemalePronouns() || user.useFemalePronouns() || !Flag.checkFlag(Flag.skipMM);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return !getSelf().isPetOf(target);
+    public boolean usable(Combat c, Character user, Character target) {
+        return !user.isPetOf(target);
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 5;
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getLevel() >= levelReq;
+        return user.getLevel() >= levelReq;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "<ERROR>";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return "<ERROR>";
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "";
     }
 }

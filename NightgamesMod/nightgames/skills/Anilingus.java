@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.AssPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -21,62 +20,62 @@ import java.util.Set;
 public class Anilingus extends Skill {
     private static final String worshipString = "Ass Worship";
 
-    public Anilingus(CharacterType self) {
-        super("Lick Ass", self);
+    public Anilingus() {
+        super("Lick Ass");
         addTag(SkillTag.usesMouth);
         addTag(SkillTag.pleasure);
         addTag(SkillTag.oral);
     }
 
     @Override
-    public Set<SkillTag> getTags(Combat c, Character target) {
-        if (isWorship(c, target)) {
-            Set<SkillTag> tags = new HashSet<>(super.getTags(c, target));
+    public Set<SkillTag> getTags(Combat c, Character user, Character target) {
+        if (isWorship(c, user, target)) {
+            Set<SkillTag> tags = new HashSet<>(super.getTags(c, user, target));
             tags.add(SkillTag.worship);
             return tags;
         }
-        return super.getTags(c, target);
+        return super.getTags(c, user, target);
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().has(Trait.shameless) || getSelf().get(Attribute.seduction) >= 30 || c.getStance().en == Stance.facesitting;
+        return user.has(Trait.shameless) || user.get(Attribute.seduction) >= 30 || c.getStance().en == Stance.facesitting;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        boolean canUse = c.getStance().isBeingFaceSatBy(getSelf(), target) && getSelf().canRespond()
-                        || getSelf().canAct();
+    public boolean usable(Combat c, Character user, Character target) {
+        boolean canUse = c.getStance().isBeingFaceSatBy(user, target) && user.canRespond()
+                        || user.canAct();
         boolean titsBlocking = c.getStance().enumerate() == Stance.paizuripin
                         || c.getStance().enumerate() == Stance.titfucking;
-        return target.crotchAvailable() && target.body.has("ass") && c.getStance().oral(getSelf(), target) && canUse
+        return target.crotchAvailable() && target.body.has("ass") && c.getStance().oral(user, target) && canUse
                         && !c.getStance().anallyPenetrated(c, target) && !titsBlocking;
     }
 
     @Override
-    public float priorityMod(Combat c) {
-        return getSelf().has(Trait.silvertongue) ? 1 : 0;
+    public float priorityMod(Combat c, Character user) {
+        return user.has(Trait.silvertongue) ? 1 : 0;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         AssPart targetAss = (AssPart) target.body.getRandom("ass");
         Result result = Result.normal;
         int m = 10;
         int n = 0;
         int selfm = 0;
-        if (isWorship(c, target)) {
+        if (isWorship(c, user, target)) {
             result = Result.sub;
             m += 4 + Random.random(6);
             n = 20;
             selfm = 20;
-        } else if (c.getStance().isBeingFaceSatBy(getSelf(), target)) {
+        } else if (c.getStance().isBeingFaceSatBy(user, target)) {
             result = Result.reverse;
             m += Random.random(6);
             n = 10;
-        } else if (!c.getStance().mobile(target) || target.roll(getSelf(), accuracy(c, target))) {
+        } else if (!c.getStance().mobile(target) || target.roll(user, accuracy(c, user, target))) {
             m += Random.random(6);
-            if (getSelf().has(Trait.silvertongue)) {
+            if (user.has(Trait.silvertongue)) {
                 m += 4;
                 result = Result.special;
             }
@@ -85,45 +84,45 @@ public class Anilingus extends Skill {
             n = 0;
             result = Result.miss;
         }
-        writeOutput(c, m, result, target);
+        writeOutput(c, m, result, user, target);
         if (m > 0) {
-            target.body.pleasure(getSelf(), getSelf().body.getRandom("mouth"), targetAss, m, c, this);
+            target.body.pleasure(user, user.body.getRandom("mouth"), targetAss, m, c, new SkillUsage<>(this, user, target));
         }
         if (n > 0) {
             target.buildMojo(c, n);
         }
         if (selfm > 0) {
-            getSelf().temptWithSkill(c, target, target.body.getRandom("ass"), selfm, this);
+            user.temptWithSkill(c, target, target.body.getRandom("ass"), selfm, this);
         }
-        if (target.has(Trait.temptingass) && !getSelf().bound()) {
-            c.write(target, Formatter.format("Servicing {other:possessive} perfect behind makes {self:direct-object} almost unconsciously touch {self:reflective}.", getSelf(), target));
-            (new Masturbate(self)).resolve(c, target);
+        if (target.has(Trait.temptingass) && !user.bound()) {
+            c.write(target, Formatter.format("Servicing {other:possessive} perfect behind makes {self:direct-object} almost unconsciously touch {self:reflective}.", user, target));
+            (new Masturbate()).resolve(c, user, target);
         }
         return result != Result.miss;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Anilingus(user.getType());
+        return new Anilingus();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 2;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
-        return !c.getStance().isBeingFaceSatBy(getSelf(), target) && c.getStance().reachTop(target)? 75 : 200;
+    public int accuracy(Combat c, Character user, Character target) {
+        return !c.getStance().isBeingFaceSatBy(user, target) && c.getStance().reachTop(target)? 75 : 200;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "You try to lick " + target.getName() + "'s rosebud, but "+target.pronoun()+" pushes your head away.";
         } else if (modifier == Result.special) {
@@ -143,42 +142,42 @@ public class Anilingus extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
-            return String.format("%s closes in on %s behind, but %s %s to push %s head away.", getSelf().getName(), 
-                            target.nameOrPossessivePronoun(), getSelf().pronoun(), 
+            return String.format("%s closes in on %s behind, but %s %s to push %s head away.", user.getName(),
+                            target.nameOrPossessivePronoun(), user.pronoun(),
                             target.action("manage"), target.possessiveAdjective());
         } else if (modifier == Result.special) {
             return String.format("%s gently rims %s asshole with %s tongue, sending shivers through %s body.",
-                            getSelf().getName(), target.nameOrPossessivePronoun(), getSelf().possessiveAdjective(),
+                            user.getName(), target.nameOrPossessivePronoun(), user.possessiveAdjective(),
                             target.possessiveAdjective());
         } else if (modifier == Result.reverse) {
             return String.format("With %s ass pressing into %s face, %s helplessly gives in and starts licking %s ass.",
-                            target.nameOrPossessivePronoun(), getSelf().nameOrPossessivePronoun(), getSelf().pronoun(),
+                            target.nameOrPossessivePronoun(), user.nameOrPossessivePronoun(), user.pronoun(),
                             target.possessiveAdjective());
         } else if (modifier == Result.sub) {
             return String.format("As if entranced, %s buries %s face inside %s asscheeks, licking %s crack and worshipping %s anus.",
-                            getSelf().subject(), getSelf().possessiveAdjective(), target.nameOrPossessivePronoun(), target.possessiveAdjective(), target.possessiveAdjective());
+                            user.subject(), user.possessiveAdjective(), target.nameOrPossessivePronoun(), target.possessiveAdjective(), target.possessiveAdjective());
         }
         return String.format("%s licks %s tight asshole, both surprising and arousing %s.",
-                        getSelf().getName(), target.nameOrPossessivePronoun(), target.pronoun());
+                        user.getName(), target.nameOrPossessivePronoun(), target.pronoun());
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Perform anilingus on opponent";
     }
 
-    private boolean isWorship(Combat c, Character target) {
-        Optional<BodyFetish> fetish = getSelf().body.getFetish("ass");
-        boolean worship = c.getOpponent(getSelf()).has(Trait.objectOfWorship);
-        boolean enthralled = getSelf().is(Stsflag.enthralled);
-        boolean isPet = target == null ? getSelf().isPet() : getSelf().isPetOf(target);
+    private boolean isWorship(Combat c, Character user, Character target) {
+        Optional<BodyFetish> fetish = user.body.getFetish("ass");
+        boolean worship = c.getOpponent(user).has(Trait.objectOfWorship);
+        boolean enthralled = user.is(Stsflag.enthralled);
+        boolean isPet = target == null ? user.isPet() : user.isPetOf(target);
         return fetish.isPresent() || worship || enthralled || isPet;
     }
 
     @Override
-    public String getLabel(Combat c) {
-        return isWorship(c, null) ? worshipString : "Lick Ass";
+    public String getLabel(Combat c, Character user) {
+        return isWorship(c, user, null) ? worshipString : "Lick Ass";
     }
 }

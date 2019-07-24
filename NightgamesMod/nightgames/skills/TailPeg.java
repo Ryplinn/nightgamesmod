@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.TailPart;
@@ -22,8 +21,8 @@ import java.util.List;
 
 public class TailPeg extends Skill {
 
-    TailPeg(CharacterType self) {
-        super("Tail Peg", self);
+    TailPeg() {
+        super("Tail Peg");
     }
 
     @Override
@@ -34,43 +33,43 @@ public class TailPeg extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().getArousal().get() >= 30 && getSelf().canAct() && target.crotchAvailable()
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.getArousal().get() >= 30 && user.canAct() && target.crotchAvailable()
                         && c.getStance().en != Stance.standing && c.getStance().en != Stance.standingover
                         && (!target.is(Stsflag.debuff, "Tail Pegged") || !target.is(Stsflag.debuff, "Tail Fucked"));
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 20;
     }
 
     @Override
-    public String describe(Combat c) {
-        if (c.getStance().anallyPenetrated(c, c.getOpponent(getSelf()))) {
+    public String describe(Combat c, Character user) {
+        if (c.getStance().anallyPenetrated(c, c.getOpponent(user))) {
             return "Fuck your opponent with your tail";
         }
         return "Shove your tail up your opponent's ass.";
     }
 
     @Override
-    public String getLabel(Combat c) {
-        if (c.getStance().anallyPenetrated(c, c.getOpponent(getSelf()))) {
+    public String getLabel(Combat c, Character user) {
+        if (c.getStance().anallyPenetrated(c, c.getOpponent(user))) {
             return "Tail Fuck";
         } else {
             return "Tail Peg";
         }
     }
 
-    public int accuracy(Combat c, Character target) {
-        boolean intercourse = !c.getStance().getPartsFor(c, getSelf(), target).isEmpty() && c.getStance().penisInserted(target);
+    public int accuracy(Combat c, Character user, Character target) {
+        boolean intercourse = !c.getStance().getPartsFor(c, user, target).isEmpty() && c.getStance().penisInserted(target);
         return intercourse ? 100 : 60;
     }
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), accuracy(c, target))) {
-            int strength = Math.min(20, 10 + getSelf().get(Attribute.darkness) / 4);
-            boolean intercourse = !c.getStance().getPartsFor(c, getSelf(), target).isEmpty() && c.getStance().penisInserted(target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.roll(user, accuracy(c, user, target))) {
+            int strength = Math.min(20, 10 + user.get(Attribute.darkness) / 4);
+            boolean intercourse = !c.getStance().getPartsFor(c, user, target).isEmpty() && c.getStance().penisInserted(target);
             boolean shamed = false;
             if (!intercourse && Random.random(4) == 2) {
                 target.add(c, new Shamed(target.getType()));
@@ -78,62 +77,62 @@ public class TailPeg extends Skill {
             }
             if (target.human()) {
                 if (intercourse) {
-                    c.write(getSelf(), receive(c, 0, Result.intercourse, target));
+                    c.write(user, receive(c, 0, Result.intercourse, user, target));
                 } else if (c.getStance().inserted(target)) {
-                    c.write(getSelf(), receive(c, 0, Result.special, target));
+                    c.write(user, receive(c, 0, Result.special, user, target));
                 } else if (c.getStance().dom(target)) {
-                    c.write(getSelf(), receive(c, 0, Result.critical, target));
-                } else if (c.getStance().behind(getSelf())) {
-                    c.write(getSelf(), receive(c, 0, Result.strong, target));
+                    c.write(user, receive(c, 0, Result.critical, user, target));
+                } else if (c.getStance().behind(user)) {
+                    c.write(user, receive(c, 0, Result.strong, user, target));
                 } else {
-                    c.write(getSelf(), receive(c, 0, Result.normal, target));
+                    c.write(user, receive(c, 0, Result.normal, user, target));
                 }
                 if (shamed) {
-                    c.write(getSelf(), "The shame of having your ass violated by " + getSelf().getName()
+                    c.write(user, "The shame of having your ass violated by " + user.getName()
                                     + " has destroyed your confidence.");
                 }
-            } else if (getSelf().human()) {
+            } else if (user.human()) {
                 if (intercourse) {
-                    c.write(getSelf(), deal(c, 0, Result.intercourse, target));
+                    c.write(user, deal(c, 0, Result.intercourse, user, target));
                 }
                 if (c.getStance().inserted(target)) {
-                    c.write(getSelf(), deal(c, 0, Result.special, target));
+                    c.write(user, deal(c, 0, Result.special, user, target));
                 } else if (c.getStance().dom(target)) {
-                    c.write(getSelf(), deal(c, 0, Result.critical, target));
-                } else if (c.getStance().behind(getSelf())) {
-                    c.write(getSelf(), deal(c, 0, Result.strong, target));
+                    c.write(user, deal(c, 0, Result.critical, user, target));
+                } else if (c.getStance().behind(user)) {
+                    c.write(user, deal(c, 0, Result.strong, user, target));
                 } else {
-                    c.write(getSelf(), deal(c, 0, Result.normal, target));
+                    c.write(user, deal(c, 0, Result.normal, user, target));
                 }
                 if (shamed) {
-                    c.write(getSelf(), "The shame of having her ass violated by you has destroyed " + target.getName()
+                    c.write(user, "The shame of having her ass violated by you has destroyed " + target.getName()
                                     + "'s confidence.");
                 }
             }
             if (intercourse) {
                 if (!c.getStance().vaginallyPenetrated(c, target)) {
-                    target.body.pleasure(getSelf(), getSelf().body.getRandom("tail"), target.body.getRandom("pussy"),
-                                    strength, c, this);
-                    target.add(c, new TailFucked(target.getType(), self, "pussy"));
+                    target.body.pleasure(user, user.body.getRandom("tail"), target.body.getRandom("pussy"),
+                                    strength, c, new SkillUsage<>(this, user, target));
+                    target.add(c, new TailFucked(target.getType(), user.getType(), "pussy"));
                 } else if (!c.getStance().anallyPenetrated(c, target)) {
-                    target.body.pleasure(getSelf(), getSelf().body.getRandom("tail"), target.body.getRandom("ass"),
-                                    strength, c, this);
-                    target.add(c, new TailFucked(target.getType(), self, "ass"));
+                    target.body.pleasure(user, user.body.getRandom("tail"), target.body.getRandom("ass"),
+                                    strength, c, new SkillUsage<>(this, user, target));
+                    target.add(c, new TailFucked(target.getType(), user.getType(), "ass"));
                 }
             }
-            target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, strength / 2));
+            target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, strength / 2));
             target.emote(Emotion.nervous, 10);
             target.emote(Emotion.desperate, 10);
-            getSelf().emote(Emotion.confident, 15);
-            getSelf().emote(Emotion.dominant, 25);
-            if (Random.random(100) < 5 + 2 * getSelf().get(Attribute.fetishism)) {
-                target.add(c, new BodyFetish(target.getType(), self, "tail", .25));
+            user.emote(Emotion.confident, 15);
+            user.emote(Emotion.dominant, 25);
+            if (Random.random(100) < 5 + 2 * user.get(Attribute.fetishism)) {
+                target.add(c, new BodyFetish(target.getType(), user.getType(), "tail", .25));
             }
         } else {
             if (target.human()) {
-                c.write(getSelf(), receive(c, 0, Result.miss, target));
+                c.write(user, receive(c, 0, Result.miss, user, target));
             } else {
-                c.write(getSelf(), deal(c, 0, Result.miss, target));
+                c.write(user, deal(c, 0, Result.miss, user, target));
             }
             return false;
         }
@@ -142,16 +141,16 @@ public class TailPeg extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new TailPeg(user.getType());
+        return new TailPeg();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int magnitude, Result modifier, Character target) {
+    public String deal(Combat c, int magnitude, Result modifier, Character user, Character target) {
         switch (modifier) {
             case critical:
                 return "You flex your prehensile tail and spread " + target.nameOrPossessivePronoun() + " legs apart. "
@@ -193,70 +192,70 @@ public class TailPeg extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int magnitude, Result modifier, Character target) {
+    public String receive(Combat c, int magnitude, Result modifier, Character user, Character target) {
         switch (modifier) {
             case critical:
                 return String.format("Smiling down on %s, %s spreads %s legs and tickles %s butt with %s tail."
                                 + " %s how the tail itself is slick and wet as it"
                                 + " slowly pushes through %s anus, spreading %s cheeks apart. %s"
                                 + " pumps it in and out a for a few times before taking it out again.",
-                                target.nameDirectObject(), getSelf().subject(), target.possessiveAdjective(),
-                                target.possessiveAdjective(), getSelf().possessiveAdjective(),
+                                target.nameDirectObject(), user.subject(), target.possessiveAdjective(),
+                                target.possessiveAdjective(), user.possessiveAdjective(),
                                 Formatter.capitalizeFirstLetter(target.subjectAction("notice")),
                                 target.possessiveAdjective(), target.possessiveAdjective(),
-                                getSelf().subject());
+                                user.subject());
             case miss:
                 return String.format("%s tries to peg %s with her tail but %s %s to clench"
                                 + " %s butt cheeks together in time to keep it out.",
-                                getSelf().subject(), target.nameDirectObject(),
+                                user.subject(), target.nameDirectObject(),
                                 target.pronoun(), target.action("manage"),
                                 target.possessiveAdjective());
             case normal:
                 return String.format("%s suddenly moves very close to %s. %s an attack from the front"
                                 + " and %s to move back, but %s up shoving %s tail right up %s ass.",
-                                getSelf().subject(), target.nameDirectObject(),
+                                user.subject(), target.nameDirectObject(),
                                 Formatter.capitalizeFirstLetter(target.subjectAction("expect")),
                                 target.action("try", "tries"), target.action("end"),
-                                getSelf().possessiveAdjective(), target.possessiveAdjective());
+                                user.possessiveAdjective(), target.possessiveAdjective());
             case special:
                 return String.format("%s smirks and wiggles %s tail behind %s back. %s briefly %s "
                                 + "at it and %s the appendage move behind %s. %s to keep it"
                                 + " out by clenching %s butt together, but a squeeze of %s"
                                 + " vagina breaks %s concentration, so the tail slides up %s ass"
                                 + " and %s almost %s it as %s cock and ass are stimulated so thoroughly"
-                                + " at the same time.", getSelf().subject(), getSelf().possessiveAdjective(),
+                                + " at the same time.", user.subject(), user.possessiveAdjective(),
                                 target.nameOrPossessivePronoun(),
                                 Formatter.capitalizeFirstLetter(target.pronoun()), target.action("look"),
                                 target.action("see"), target.directObject(), 
                                 Formatter.capitalizeFirstLetter(target.subjectAction("try", "tries")),
-                                target.possessiveAdjective(), getSelf().nameOrPossessivePronoun(),
+                                target.possessiveAdjective(), user.nameOrPossessivePronoun(),
                                 target.possessiveAdjective(), target.possessiveAdjective(),
                                 target.pronoun(), target.action("lose"), target.possessiveAdjective());
             case intercourse:
-                List<BodyPart> parts = c.getStance().getPartsFor(c, getSelf(), target);
+                List<BodyPart> parts = c.getStance().getPartsFor(c, user, target);
                 String part = "hands";
                 if (!parts.isEmpty()) {
-                    part = Random.pickRandomGuaranteed(parts).describe(getSelf());
+                    part = Random.pickRandomGuaranteed(parts).describe(user);
                 }
                 return String.format("%s smirks and coils %s tail around in front of %s. %s briefly %s "
                                 + "at it and %s the appendage move under %s and %s. %s to keep it"
                                 + " out by clamping %s legs together, but a squeeze of %s"
                                 + " %s breaks %s concentration, so the tail slides smoothly into %s pussy.",
-                                getSelf().subject(), getSelf().possessiveAdjective(), 
+                                user.subject(), user.possessiveAdjective(),
                                 target.nameDirectObject(), Formatter.capitalizeFirstLetter(target.pronoun()),
                                 target.action("look"), target.action("see"), target.directObject(),
                                 target.action("panic"),
                                 Formatter.capitalizeFirstLetter(target.subjectAction("try", "tries")),
-                                target.possessiveAdjective(), getSelf().nameOrPossessivePronoun(),
+                                target.possessiveAdjective(), user.nameOrPossessivePronoun(),
                                 part,
                                 target.possessiveAdjective(), target.possessiveAdjective());
             case strong:
                 return String.format("%s hugs %s from behind and rubs %s chest against %s back."
                                 + " Distracted by that, %s managed to push %s tail between %s"
                                 + " ass cheeks and started tickling %s %s with the tip.",
-                                getSelf().subject(), target.nameDirectObject(),
-                                getSelf().possessiveAdjective(), target.possessiveAdjective(),
-                                getSelf().pronoun(), getSelf().possessiveAdjective(),
+                                user.subject(), target.nameDirectObject(),
+                                user.possessiveAdjective(), target.possessiveAdjective(),
+                                user.pronoun(), user.possessiveAdjective(),
                                 target.possessiveAdjective(), target.possessiveAdjective(),
                                 target.hasBalls() ? "prostate" : "sensitive insides");
             default:

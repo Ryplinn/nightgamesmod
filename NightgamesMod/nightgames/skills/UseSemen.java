@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -10,8 +9,8 @@ import nightgames.items.Item;
 import nightgames.items.ItemEffect;
 
 public class UseSemen extends Skill {
-    UseSemen(CharacterType self) {
-        super("Drink Semen Bottle", self);
+    UseSemen() {
+        super("Drink Semen Bottle");
     }
 
     @Override
@@ -20,50 +19,50 @@ public class UseSemen extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        boolean hasItems = getSelf().has(Item.semen);
-        return hasItems && getSelf().canAct() && getSelf().has(Trait.succubus) && c.getStance().mobile(getSelf());
+    public boolean usable(Combat c, Character user, Character target) {
+        boolean hasItems = user.has(Item.semen);
+        return hasItems && user.canAct() && user.has(Trait.succubus) && c.getStance().mobile(user);
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         Item used = Item.semen;
         boolean eventful = false;
-        c.write(getSelf(),
+        c.write(user,
                         Formatter.format("{self:SUBJECT-ACTION:take|takes} out a bottle of milky white semen and {self:action:gulp|gulps} it down in one breath.",
-                                        getSelf(), target));
+                                        user, target));
         for (ItemEffect e : used.getEffects()) {
-            eventful = e.use(c, getSelf(), target, used) || eventful;
+            eventful = e.use(c, user, target, used) || eventful;
         }
         if (!eventful) {
-            c.write(getSelf(), "...But nothing happened.");
+            c.write(user, "...But nothing happened.");
         }
-        getSelf().consume(used, 1);
+        user.consume(used, 1);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new UseSemen(user.getType());
+        return new UseSemen();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return "";
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Drink a bottle of semen";
     }
 

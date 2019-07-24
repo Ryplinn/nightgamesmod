@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -13,8 +12,8 @@ import nightgames.status.Falling;
 
 public class DarkTendrils extends Skill {
 
-    DarkTendrils(CharacterType self) {
-        super("Dark Tendrils", self, 4);
+    DarkTendrils() {
+        super("Dark Tendrils", 4);
         addTag(SkillTag.positioning);
         addTag(SkillTag.knockdown);
         addTag(SkillTag.dark);
@@ -26,32 +25,32 @@ public class DarkTendrils extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return !target.wary() && !c.getStance().sub(getSelf()) && !c.getStance().prone(getSelf())
-                        && !c.getStance().prone(target) && getSelf().canAct();
+    public boolean usable(Combat c, Character user, Character target) {
+        return !target.wary() && !c.getStance().sub(user) && !c.getStance().prone(user)
+                        && !c.getStance().prone(target) && user.canAct();
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Summon shadowy tentacles to grab or trip your opponent: 20% Arousal";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        getSelf().arouse((int) (getSelf().getArousal().max() * .20), c);
-        if (target.roll(getSelf(), accuracy(c, target))) {
+    public boolean resolve(Combat c, Character user, Character target) {
+        user.arouse((int) (user.getArousal().max() * .20), c);
+        if (target.roll(user, accuracy(c, user, target))) {
             if (Random.random(2) == 1) {
-                writeOutput(c, Result.normal, target);
-                target.add(c, new Bound(target.getType(), 35 + 2 * Math.sqrt(getSelf().get(Attribute.darkness)), "shadows"));
+                writeOutput(c, Result.normal, user, target);
+                target.add(c, new Bound(target.getType(), 35 + 2 * Math.sqrt(user.get(Attribute.darkness)), "shadows"));
                 target.add(c, new Falling(target.getType()));
-            } else if (getSelf().checkVsDc(Attribute.darkness, target.knockdownDC() - getSelf().getMojo().get())) {
-                writeOutput(c, Result.weak, target);
+            } else if (user.checkVsDc(Attribute.darkness, target.knockdownDC() - user.getMojo().get())) {
+                writeOutput(c, Result.weak, user, target);
                 target.add(c, new Falling(target.getType()));
             } else {
-                writeOutput(c, Result.miss, target);
+                writeOutput(c, Result.miss, user, target);
             }
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
         return true;
@@ -59,21 +58,21 @@ public class DarkTendrils extends Skill {
 
     @Override
     public nightgames.skills.Skill copy(Character user) {
-        return new DarkTendrils(user.getType());
+        return new DarkTendrils();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 75;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "You summon dark tentacles to hold " + target.getName() + ", but she twists away.";
         } else if (modifier == Result.weak) {
@@ -85,17 +84,17 @@ public class DarkTendrils extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s makes a gesture and evil looking tentacles pop up around %s. %s %s out of the way as they try to grab %s.",
-                            getSelf().subject(), target.subject(), Formatter.capitalizeFirstLetter(target.pronoun()),
+                            user.subject(), target.subject(), Formatter.capitalizeFirstLetter(target.pronoun()),
                             target.action("dive"), target.directObject());
         } else if (modifier == Result.weak) {
             return String.format("%s shadow seems to come to life as dark tendrils wrap around %s legs and bring %s to the floor.",
                             target.nameOrPossessivePronoun(), target.possessiveAdjective(), target.directObject());
         } else {
             return String.format("%s summons shadowy tentacles which snare %s arms and hold %s in place.", 
-                            getSelf().subject(), target.nameOrPossessivePronoun(), target.directObject());
+                            user.subject(), target.nameOrPossessivePronoun(), target.directObject());
         }
     }
 

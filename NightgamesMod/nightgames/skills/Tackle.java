@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -15,8 +14,8 @@ import nightgames.status.Winded;
 
 public class Tackle extends Skill {
 
-    public Tackle(CharacterType self) {
-        super("Tackle", self);
+    public Tackle() {
+        super("Tackle");
 
         addTag(SkillTag.positioning);
         addTag(SkillTag.hurt);
@@ -25,45 +24,45 @@ public class Tackle extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return !target.wary() && c.getStance().mobile(getSelf()) && c.getStance().mobile(target)
-                        && !c.getStance().prone(getSelf()) && getSelf().canAct();
+    public boolean usable(Combat c, Character user, Character target) {
+        return !target.wary() && c.getStance().mobile(user) && c.getStance().mobile(target)
+                        && !c.getStance().prone(user) && user.canAct();
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (getSelf().has(Trait.takedown) && target.getStamina().percent() <= 25) {
-            c.write(getSelf(), Formatter.format("While {other:subject-action:take|takes} a breath,"
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (user.has(Trait.takedown) && target.getStamina().percent() <= 25) {
+            c.write(user, Formatter.format("While {other:subject-action:take|takes} a breath,"
                             + " {self:subject-action:take|takes} careful aim at {other:possessive}"
                             + " waist and {self:action:charge|charges} in at full speed. It's a perfect"
                             + " hit, knocking the wind out of {other:subject} and allowing {self:subject}"
                             + " to take {self:subject} place on top of {other:possessive} heaving chest."
-                            , getSelf(), target));
-            c.setStance(new Mount(self, target.getType()));
-            target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(15, 30)));
+                            , user, target));
+            c.setStance(new Mount(user.getType(), target.getType()));
+            target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random.random(15, 30)));
             target.add(c, new Winded(target.getType(), 2));
         }
-        if (target.roll(getSelf(), accuracy(c, target))
-                        && getSelf().checkVsDc(Attribute.power, target.knockdownDC() - getSelf().get(Attribute.animism))) {
-            if (getSelf().get(Attribute.animism) >= 1) {
-                writeOutput(c, Result.special, target);
-                target.pain(c, getSelf(), (int) DamageType.physical
-                                .modifyDamage(getSelf(), target, Random.random(15, 30)));
+        if (target.roll(user, accuracy(c, user, target))
+                        && user.checkVsDc(Attribute.power, target.knockdownDC() - user.get(Attribute.animism))) {
+            if (user.get(Attribute.animism) >= 1) {
+                writeOutput(c, Result.special, user, target);
+                target.pain(c, user, (int) DamageType.physical
+                                .modifyDamage(user, target, Random.random(15, 30)));
             } else {
-                writeOutput(c, Result.normal, target);
-                target.pain(c, getSelf(), (int) DamageType.physical
-                                .modifyDamage(getSelf(), target, Random.random(10, 25)));
+                writeOutput(c, Result.normal, user, target);
+                target.pain(c, user, (int) DamageType.physical
+                                .modifyDamage(user, target, Random.random(10, 25)));
             }
-            c.setStance(new Mount(self, target.getType()), getSelf(), true);
+            c.setStance(new Mount(user.getType(), target.getType()), user, true);
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
         return true;
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 15;
     }
 
@@ -74,12 +73,12 @@ public class Tackle extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Tackle(user.getType());
+        return new Tackle();
     }
 
     @Override
-    public int speed() {
-        if (getSelf().get(Attribute.animism) >= 1) {
+    public int speed(Character user) {
+        if (user.get(Attribute.animism) >= 1) {
             return 3;
         } else {
             return 1;
@@ -87,36 +86,36 @@ public class Tackle extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
-        if (getSelf().has(Trait.takedown) && target.getStamina().percent() <= 25) {
+    public int accuracy(Combat c, Character user, Character target) {
+        if (user.has(Trait.takedown) && target.getStamina().percent() <= 25) {
             return 200;
         }
         
         int base = 80;
-        if (getSelf().get(Attribute.animism) >= 1) {
-            base = 120 + (getSelf().getArousal().getReal() / 10);
+        if (user.get(Attribute.animism) >= 1) {
+            base = 120 + (user.getArousal().getReal() / 10);
         }
         return Math.round(Math.max(Math.min(150,
-                        2.5f * (getSelf().get(Attribute.power) - c.getOpponent(getSelf()).get(Attribute.power)) + base),
+                        2.5f * (user.get(Attribute.power) - c.getOpponent(user).get(Attribute.power)) + base),
                         40));
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String getLabel(Combat c) {
-        if (getSelf().get(Attribute.animism) >= 1) {
+    public String getLabel(Combat c, Character user) {
+        if (user.get(Attribute.animism) >= 1) {
             return "Pounce";
         } else {
-            return getName(c);
+            return getName(c, user);
         }
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.special) {
             return "You let your instincts take over and you pounce on " + target.getName()
                             + " like a predator catching your prey.";
@@ -128,23 +127,23 @@ public class Tackle extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.special) {
             return String.format("%s wiggles her butt cutely before leaping at %s and pinning %s to the floor.",
-                            getSelf().subject(), target.nameDirectObject(), target.directObject());
+                            user.subject(), target.nameDirectObject(), target.directObject());
         }
         if (modifier == Result.miss) {
             return String.format("%s tries to tackle %s, but %s %s out of the way.",
-                            getSelf().subject(), target.nameDirectObject(),
+                            user.subject(), target.nameDirectObject(),
                             target.pronoun(), target.action("sidestep"));
         } else {
             return String.format("%s bowls %s over and sits triumphantly on %s chest.",
-                            getSelf().subject(), target.nameDirectObject(), target.possessiveAdjective());
+                            user.subject(), target.nameDirectObject(), target.possessiveAdjective());
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Knock opponent to ground and get on top of her";
     }
 

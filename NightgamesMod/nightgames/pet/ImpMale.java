@@ -52,7 +52,7 @@ public class ImpMale extends Pet {
                                 + "fluid, the slime's color darkens and it gradually solidifies, unable to move.");
                 break;
             default:
-                (new ImpTease(getSelf().getType())).resolve(c, opponent.getSelf());
+                (new ImpTease()).resolve(c, getSelf(), opponent.getSelf());
                 return;
         }
         c.removePet(opponent.getSelf());

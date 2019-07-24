@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -15,74 +14,74 @@ import nightgames.status.addiction.AddictionType;
 
 public class Beg extends Skill {
 
-    public Beg(CharacterType self) {
-        super("Beg", self);
+    public Beg() {
+        super("Beg");
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.submission) >= 12;
+        return user.getPure(Attribute.submission) >= 12;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && !c.getStance()
-                                       .dom(getSelf());
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && !c.getStance()
+                                       .dom(user);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Beg your opponent to go easy on you";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if ((Random.random(30) <= getSelf().get(Attribute.submission) - target.get(Attribute.cunning) / 2
+    public boolean resolve(Combat c, Character user, Character target) {
+        if ((Random.random(30) <= user.get(Attribute.submission) - target.get(Attribute.cunning) / 2
                         && !target.is(Stsflag.cynical) || target.getMood() == Emotion.dominant)
                         && target.getMood() != Emotion.angry && target.getMood() != Emotion.desperate) {
             Result results;
-            if (getSelf().is(Stsflag.fluidaddiction)) {
+            if (user.is(Stsflag.fluidaddiction)) {
                 results = Result.special;
             } else {
                 results = Result.normal;
             }
-            if (getSelf().human()) {
-                c.write(getSelf(), deal(c, 0, results, target));
+            if (user.human()) {
+                c.write(user, deal(c, 0, results, user, target));
             } else if (c.shouldPrintReceive(target, c)) {
-                c.write(getSelf(), receive(c, 0, results, target));
+                c.write(user, receive(c, 0, results, user, target));
             }
             if (results == Result.normal) {
                 target.add(c, new Charmed(target.getType()));
             }
-            if (getSelf().checkAddiction(AddictionType.MIND_CONTROL, target)) {
-                getSelf().unaddictCombat(AddictionType.MIND_CONTROL, target, Addiction.LOW_INCREASE, c);
-                c.write(getSelf(), "Acting submissively voluntarily reduces Mara's control over " + getSelf().nameDirectObject());
+            if (user.checkAddiction(AddictionType.MIND_CONTROL, target)) {
+                user.unaddictCombat(AddictionType.MIND_CONTROL, target, Addiction.LOW_INCREASE, c);
+                c.write(user, "Acting submissively voluntarily reduces Mara's control over " + user.nameDirectObject());
             }
             return true;
         }
-        writeOutput(c, Result.miss, target);
+        writeOutput(c, Result.miss, user, target);
         return false;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Beg(user.getType());
+        return new Beg();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "You throw away your pride and ask " + target.getName() + " for mercy. This just seems to encourage "
                             + target.possessiveAdjective() + " sadistic side.";
         }
         if (modifier == Result.special) {
             return Formatter.format("You put yourself completely at {other:name-possessive} mercy and beg for some more of addictive fluids. "
-                            + "Unfortunately {other:pronoun} doesn't seem to be very inclined to oblige you.", getSelf(), target);
+                            + "Unfortunately {other:pronoun} doesn't seem to be very inclined to oblige you.", user, target);
         }
         return "You put yourself completely at " + target.getName() + "'s mercy. "
                         + Formatter.capitalizeFirstLetter(target.pronoun())
@@ -90,19 +89,19 @@ public class Beg extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s gives %s a pleading look and asks %s to go light on %s."+
-                            "%s is cute, but %s is not getting away that easily.", getSelf().getName(), target.subject(),
-                            target.directObject(), getSelf().directObject(), Formatter.capitalizeFirstLetter(getSelf().pronoun()),
-                            getSelf().pronoun());
+                            "%s is cute, but %s is not getting away that easily.", user.getName(), target.subject(),
+                            target.directObject(), user.directObject(), Formatter.capitalizeFirstLetter(user.pronoun()),
+                            user.pronoun());
         }
         if (modifier == Result.special) {
-            return getSelf().getName() + " begs you for a taste of your addictive fluids, looking almost ready to cry. Maybe you should give "
-                            + getSelf().directObject() + " a break...?";
+            return user.getName() + " begs you for a taste of your addictive fluids, looking almost ready to cry. Maybe you should give "
+                            + user.directObject() + " a break...?";
         }
-        return getSelf().getName() + " begs you for mercy, looking ready to cry. Maybe you should give "
-                        + getSelf().directObject() + " a break.";
+        return user.getName() + " begs you for mercy, looking ready to cry. Maybe you should give "
+                        + user.directObject() + " a break.";
 
     }
 

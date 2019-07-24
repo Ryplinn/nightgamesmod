@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.EarPart;
 import nightgames.characters.body.mods.PlantMod;
@@ -17,8 +16,8 @@ import nightgames.status.SlimeMimicry;
 import nightgames.status.Stsflag;
 
 public class MimicDryad extends Skill {
-    MimicDryad(CharacterType self) {
-        super("Mimicry: Dryad", self);
+    MimicDryad() {
+        super("Mimicry: Dryad");
     }
 
     @Override
@@ -27,88 +26,88 @@ public class MimicDryad extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canRespond() && !getSelf().is(Stsflag.mimicry) && Match.getParticipants().stream().anyMatch(character -> character.has(Trait.dryad));
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canRespond() && !user.is(Stsflag.mimicry) && Match.getParticipants().stream().anyMatch(character -> character.has(Trait.dryad));
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Mimics a dryad's abilities";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (getSelf().human()) {
-            c.write(getSelf(), deal(c, 0, Result.normal, target));
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (user.human()) {
+            c.write(user, deal(c, 0, Result.normal, user, target));
         } else if (c.shouldPrintReceive(target, c)) {
             if (!target.is(Stsflag.blinded))
-                c.write(getSelf(), receive(c, 0, Result.normal, target));
+                c.write(user, receive(c, 0, Result.normal, user, target));
             else 
-                printBlinded(c);
+                printBlinded(c, user);
         }
-        if (getSelf().has(Trait.ImitatedStrength)) {
-            getSelf().addTemporaryTrait(Trait.dryad, 10);
-            if (getSelf().getLevel() >= 20) {
-                getSelf().addTemporaryTrait(Trait.magicEyeFrenzy, 10);
+        if (user.has(Trait.ImitatedStrength)) {
+            user.addTemporaryTrait(Trait.dryad, 10);
+            if (user.getLevel() >= 20) {
+                user.addTemporaryTrait(Trait.magicEyeFrenzy, 10);
             }
-            if (getSelf().getLevel() >= 28) {
-                getSelf().addTemporaryTrait(Trait.lacedjuices, 10);
+            if (user.getLevel() >= 28) {
+                user.addTemporaryTrait(Trait.lacedjuices, 10);
             }
-            if (getSelf().getLevel() >= 36) {
-                getSelf().addTemporaryTrait(Trait.RawSexuality, 10);
+            if (user.getLevel() >= 36) {
+                user.addTemporaryTrait(Trait.RawSexuality, 10);
             }
-            if (getSelf().getLevel() >= 44) {
-                getSelf().addTemporaryTrait(Trait.temptingtits, 10);
+            if (user.getLevel() >= 44) {
+                user.addTemporaryTrait(Trait.temptingtits, 10);
             }
-            if (getSelf().getLevel() >= 52) {
-                getSelf().addTemporaryTrait(Trait.addictivefluids, 10);
+            if (user.getLevel() >= 52) {
+                user.addTemporaryTrait(Trait.addictivefluids, 10);
             }
-            if (getSelf().getLevel() >= 60) {
-                getSelf().body.temporaryAddPartMod("pussy", TentacledMod.INSTANCE, 10);
+            if (user.getLevel() >= 60) {
+                user.body.temporaryAddPartMod("pussy", TentacledMod.INSTANCE, 10);
             }
         }
-        getSelf().addTemporaryTrait(Trait.dryad, 10);
-        getSelf().addTemporaryTrait(Trait.magicEyeFrenzy, 10);
-        getSelf().addTemporaryTrait(Trait.frenzyingjuices, 10);
-        getSelf().addTemporaryTrait(Trait.RawSexuality, 10);
-        getSelf().addTemporaryTrait(Trait.temptingtits, 10);
-        getSelf().body.temporaryAddOrReplacePartWithType(EarPart.pointed, 10);
-        BreastsPart part = getSelf().body.getBreastsBelow(BreastsPart.h.getSize());
+        user.addTemporaryTrait(Trait.dryad, 10);
+        user.addTemporaryTrait(Trait.magicEyeFrenzy, 10);
+        user.addTemporaryTrait(Trait.frenzyingjuices, 10);
+        user.addTemporaryTrait(Trait.RawSexuality, 10);
+        user.addTemporaryTrait(Trait.temptingtits, 10);
+        user.body.temporaryAddOrReplacePartWithType(EarPart.pointed, 10);
+        BreastsPart part = user.body.getBreastsBelow(BreastsPart.h.getSize());
         if (part != null) {
-            getSelf().body.temporaryAddOrReplacePartWithType(part.upgrade(), 10);
+            user.body.temporaryAddOrReplacePartWithType(part.upgrade(), 10);
         }
 
-        int strength = Math.max(10, getSelf().get(Attribute.slime)) * 2 / 3;
-        if (getSelf().has(Trait.Masquerade)) {
+        int strength = Math.max(10, user.get(Attribute.slime)) * 2 / 3;
+        if (user.has(Trait.Masquerade)) {
             strength = strength * 3 / 2;
         }
-        getSelf().add(c, new AttributeBuff(self, Attribute.bio, strength, 10));
-        getSelf().add(c, new SlimeMimicry("dryad", self, 10));
-        getSelf().body.temporaryAddPartMod("pussy", PlantMod.INSTANCE, 10);
+        user.add(c, new AttributeBuff(user.getType(), Attribute.bio, strength, 10));
+        user.add(c, new SlimeMimicry("dryad", user.getType(), 10));
+        user.body.temporaryAddPartMod("pussy", PlantMod.INSTANCE, 10);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new MimicDryad(user.getType());
+        return new MimicDryad();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You shift your slime into a one mimicking a dryad.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return Formatter.format("{self:NAME-POSSESSIVE} amorphous body quivers and collapses into a puddle. "
                         + "Starting from the center, the slime matter dyes itself green, transforming itself into a verdant emerald hue within seconds. "
                         + "After reforming her features out of her slime, {other:subject-action:see|sees} that {self:NAME} has taken on an appearance reminiscent of Rosea the dryad, "
-                        + "complete with a large slime-parody of a flower replacing where her usual vagina is.", getSelf(), target);
+                        + "complete with a large slime-parody of a flower replacing where her usual vagina is.", user, target);
     }
 
 }

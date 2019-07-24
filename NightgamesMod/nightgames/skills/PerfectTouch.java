@@ -2,41 +2,40 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 
 public class PerfectTouch extends Skill {
 
-    PerfectTouch(CharacterType self) {
-        super("Sleight of Hand", self);
+    PerfectTouch() {
+        super("Sleight of Hand");
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().mobile(getSelf()) && !target.torsoNude() && !c.getStance().prone(getSelf())
-                        && getSelf().canAct() && !c.getStance().connected(c);
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().mobile(user) && !target.torsoNude() && !c.getStance().prone(user)
+                        && user.canAct() && !c.getStance().connected(c);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 25;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), accuracy(c, target))) {
-            if (getSelf().human()) {
-                c.write(getSelf(), deal(c, 0, Result.normal, target));
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.roll(user, accuracy(c, user, target))) {
+            if (user.human()) {
+                c.write(user, deal(c, 0, Result.normal, user, target));
                 c.write(target, target.nakedLiner(c, target));
             } else if (c.shouldPrintReceive(target, c)) {
-                c.write(getSelf(), receive(c, 0, Result.normal, target));
+                c.write(user, receive(c, 0, Result.normal, user, target));
             }
             target.undress(c);
             target.emote(Emotion.nervous, 10);
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
         return true;
@@ -49,28 +48,28 @@ public class PerfectTouch extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new PerfectTouch(user.getType());
+        return new PerfectTouch();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 2;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return Math.round(Math.max(Math.min(150,
-                        2.5f * (getSelf().get(Attribute.cunning) - c.getOpponent(getSelf()).get(Attribute.cunning)) + 65),
+                        2.5f * (user.get(Attribute.cunning) - c.getOpponent(user).get(Attribute.cunning)) + 65),
                         40));
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "You try to steal " + target.getName() + "'s clothes off of her, but she catches you.";
         } else {
@@ -82,28 +81,28 @@ public class PerfectTouch extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s lunges toward %s, but %s %s %s hands"
                             + " before %s can get ahold of %s clothes.",
-                            getSelf().subject(), target.nameDirectObject(),
+                            user.subject(), target.nameDirectObject(),
                             target.pronoun(), target.action("catch"),
-                            target.possessiveAdjective(), getSelf().pronoun(),
+                            target.possessiveAdjective(), user.pronoun(),
                             target.possessiveAdjective());
         } else {
             return String.format("%s lunges towards %s, but dodges away without hitting %s. "
                             + "%s tosses aside a handful of clothes, "
                             + "at which point %s %s %s "
                             + "naked. How the hell did %s manage that?",
-                            getSelf().subject(), target.nameDirectObject(), target.directObject(),
-                            getSelf().subject(), target.subjectAction("realize"), target.pronoun(),
-                            target.action("are", "is"), getSelf().pronoun());
+                            user.subject(), target.nameDirectObject(), target.directObject(),
+                            user.subject(), target.subjectAction("realize"), target.pronoun(),
+                            target.action("are", "is"), user.pronoun());
         }
 
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Strips opponent completely: 25 Mojo";
     }
 

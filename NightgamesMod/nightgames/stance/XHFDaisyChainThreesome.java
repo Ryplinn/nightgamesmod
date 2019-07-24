@@ -34,7 +34,7 @@ public class XHFDaisyChainThreesome extends Threesome {
             c.write(getBottom(), Formatter.format("With the disappearance of {self:name-do}, {master:subject-action:continue} to ride {self:name-do} in a reverse cowgirl position.", getDomSexCharacter(), getBottom()));
             return Optional.of((new ReverseCowgirl(top, bottom)));
         }
-        return Optional.empty();
+        return super.checkOngoing(c);
     }
 
     @Override
@@ -183,8 +183,8 @@ public class XHFDaisyChainThreesome extends Threesome {
         } else {
             return self.getSkills().stream()
                             .filter(skill -> skill.requirements(c, self, getBottom()))
-                            .filter(skill -> Skill.skillIsUsable(c, skill, getBottom()))
-                            .filter(skill -> skill.type(c) == Tactics.fucking).collect(Collectors.toSet());
+                            .filter(skill -> Skill.skillIsUsable(c, skill, self, getBottom()))
+                            .filter(skill -> skill.type(c, self) == Tactics.fucking).collect(Collectors.toSet());
         }
     }
 }

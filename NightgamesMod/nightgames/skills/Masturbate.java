@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.Body;
 import nightgames.characters.body.BodyPart;
@@ -16,8 +15,8 @@ import nightgames.status.addiction.AddictionType;
 import java.util.ArrayList;
 
 public class Masturbate extends Skill {
-    public Masturbate(CharacterType self) {
-        super("Masturbate", self);
+    public Masturbate() {
+        super("Masturbate");
         addTag(SkillTag.pleasureSelf);
     }
 
@@ -27,21 +26,21 @@ public class Masturbate extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canMasturbate() && !getSelf().bound()
-                        && getTargetOrgan(c, getSelf()) != Body.nonePart;
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canMasturbate() && !user.bound()
+                        && getTargetOrgan(c, user, user) != Body.nonePart;
     }
 
     @Override
-    public float priorityMod(Combat c) {
+    public float priorityMod(Combat c, Character user) {
         return -10.0f;
     }
 
-    public BodyPart getSelfOrgan() {
-        return getSelf().body.getRandom("hands");
+    public BodyPart getSelfOrgan(Character user) {
+        return user.body.getRandom("hands");
     }
 
-    public BodyPart getTargetOrgan(Combat c, Character target) {
+    public BodyPart getTargetOrgan(Combat c, Character user, Character target) {
         ArrayList<BodyPart> parts = new ArrayList<>();
         BodyPart cock = target.body.getRandomCock();
         BodyPart pussy = target.body.getRandomPussy();
@@ -52,7 +51,7 @@ public class Masturbate extends Skill {
         if (pussy != null && !c.getStance().vaginallyPenetrated(c, target)) {
             parts.add(pussy);
         }
-        if ((parts.isEmpty() || getSelf().has(Trait.shameless)) && ass != null
+        if ((parts.isEmpty() || user.has(Trait.shameless)) && ass != null
                         && !c.getStance().anallyPenetrated(c, target)) {
             parts.add(ass);
         }
@@ -66,47 +65,47 @@ public class Masturbate extends Skill {
     private BodyPart targetO = Body.nonePart;
 
     @Override
-    public int getMojoBuilt(Combat c) {
-        return getSelf().canMakeOwnDecision() && getSelf().canAct() ? 25 : 0;
+    public int getMojoBuilt(Combat c, Character user) {
+        return user.canMakeOwnDecision() && user.canAct() ? 25 : 0;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        BodyPart withO = getSelfOrgan();
-        targetO = getTargetOrgan(c, getSelf());
+    public boolean resolve(Combat c, Character user, Character target) {
+        BodyPart withO = getSelfOrgan(user);
+        targetO = getTargetOrgan(c, user, user);
 
-        if (getSelf().human()) {
-            if (getSelf().getArousal().get() <= 15) {
-                c.write(getSelf(), deal(c, 0, Result.weak, target));
+        if (user.human()) {
+            if (user.getArousal().get() <= 15) {
+                c.write(user, deal(c, 0, Result.weak, user, target));
             } else {
-                c.write(getSelf(), deal(c, 0, Result.normal, target));
+                c.write(user, deal(c, 0, Result.normal, user, target));
             }
         } else if (c.shouldPrintReceive(target, c)) {
-            c.write(getSelf(), receive(c, 0, Result.normal, target));
+            c.write(user, receive(c, 0, Result.normal, user, target));
         }
-        if (getSelf().checkAddiction(AddictionType.MIND_CONTROL, target)) {
-            getSelf().unaddictCombat(AddictionType.MIND_CONTROL, target, Addiction.MED_INCREASE, c);
-            c.write(getSelf(), "Touching yourself amuses Mara, reducing her control over you.");
+        if (user.checkAddiction(AddictionType.MIND_CONTROL, target)) {
+            user.unaddictCombat(AddictionType.MIND_CONTROL, target, Addiction.MED_INCREASE, c);
+            c.write(user, "Touching yourself amuses Mara, reducing her control over you.");
         }
         int pleasure;
 
-        pleasure = getSelf().body.pleasure(getSelf(), withO, targetO, 25, c, this);
-        getSelf().emote(Emotion.horny, pleasure);
+        pleasure = user.body.pleasure(user, withO, targetO, 25, c, new SkillUsage<>(this, user, target));
+        user.emote(Emotion.horny, pleasure);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Masturbate(user.getType());
+        return new Masturbate();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.misc;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (targetO == null) {
             return "You play with yourself, building up your own arousal.";
         }
@@ -126,35 +125,35 @@ public class Masturbate extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (targetO == null) {
             return String.format("%s starts playing with %s, building up %s own arousal.",
-                            getSelf().subject(), getSelf().reflectivePronoun(),
-                            getSelf().possessiveAdjective());
+                            user.subject(), user.reflectivePronoun(),
+                            user.possessiveAdjective());
         }
         if (targetO.isType("cock")) {
             if (modifier == Result.weak) {
                 return String.format("%s takes hold of %s flaccid dick, tugging and rubbing it into a full erection.",
-                                getSelf().subject(), getSelf().possessiveAdjective());
+                                user.subject(), user.possessiveAdjective());
             } else {
                 return String.format("%s jerks off, building up %s own arousal.",
-                                getSelf().subject(), getSelf().possessiveAdjective());
+                                user.subject(), user.possessiveAdjective());
             }
         } else if (targetO.isType("pussy")) {
             return String.format("%s slowly teases her own labia and starts playing with %s.",
-                            getSelf().subject(), getSelf().reflectivePronoun());
+                            user.subject(), user.reflectivePronoun());
         } else if (targetO.isType("ass")) {
             return String.format("%s teases %s own asshole and sticks a finger in.",
-                            getSelf().subject(), getSelf().possessiveAdjective());
+                            user.subject(), user.possessiveAdjective());
         } else {
             return String.format("%s starts playing with %s, building up %s own arousal.",
-                            getSelf().subject(), getSelf().possessiveAdjective(),
-                            getSelf().reflectivePronoun());
+                            user.subject(), user.possessiveAdjective(),
+                            user.reflectivePronoun());
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Raise your own arousal and boosts your mojo";
     }
 }

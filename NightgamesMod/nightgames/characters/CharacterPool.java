@@ -243,6 +243,26 @@ public class CharacterPool {
         putAll(characters.toArray(new Character[] {}));
     }
 
+    public String dump() {
+        StringBuilder dump = new StringBuilder();
+        dump.append("=================\n");
+        dump.append("Characters in pool:\n");
+        dump.append("Human: ").append(human).append("\n");
+        dump.append("NPCs:\n");
+        for (CharacterType npc : characterPool.keySet()) {
+            dump.append("\t").append(npc).append("\n");
+        }
+        dump.append("Other combatants:\n");
+        if (otherCombatants == null || otherCombatants.size() == 0) {
+            dump.append("none\n");
+        } else {
+            for (PetCharacter pet : otherCombatants) {
+                dump.append("\t").append(pet.getType()).append("\n");
+            }
+        }
+        return dump.toString();
+    }
+
     public static class CharacterNotFoundException extends RuntimeException {
         private static final long serialVersionUID = 4849211069716366301L;
 

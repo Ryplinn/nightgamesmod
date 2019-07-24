@@ -1,15 +1,14 @@
 package nightgames.modifier.skill;
 
-import java.util.function.BiFunction;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Character;
 import nightgames.characters.NPC;
 import nightgames.combat.Combat;
 import nightgames.modifier.ModifierComponentLoader;
 import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
+
+import java.util.function.BiFunction;
 
 public class EncourageTacticsModifier extends SkillModifier implements ModifierComponentLoader<SkillModifier> {
     private static final String name = "encourage-tactic";
@@ -34,7 +33,7 @@ public class EncourageTacticsModifier extends SkillModifier implements ModifierC
 
     @Override
     public double encouragement(Skill skill, Combat c, Character user) {
-        return skill.type(c) == modified ? weight.apply(user, c) : 0.0;
+        return skill.type(c, user) == modified ? weight.apply(user, c) : 0.0;
     }
 
     // This applies only to npcs anyway

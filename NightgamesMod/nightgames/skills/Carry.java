@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,16 +12,20 @@ import nightgames.stance.Standing;
 import nightgames.status.Falling;
 
 public class Carry extends Fuck {
-    public Carry(String name, CharacterType self) {
-        super(name, self, 5);
+    public Carry(String name, int cooldown) {
+        super(name, cooldown);
         addTag(SkillTag.pleasure);
         addTag(SkillTag.pleasureSelf);
         addTag(SkillTag.fucking);
         addTag(SkillTag.positioning);
     }
 
-    public Carry(CharacterType self) {
-        super("Carry", self, 5);
+    public Carry() {
+        this("Carry");
+    }
+
+    public Carry(String name) {
+        this(name, 5);
     }
 
     @Override
@@ -31,43 +34,44 @@ public class Carry extends Fuck {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return fuckable(c, target) && !target.wary() && getTargetOrgan(target).isReady(target) && getSelf().canAct()
-                        && c.getStance().mobile(getSelf()) && !c.getStance().prone(getSelf())
-                        && !c.getStance().prone(target) && c.getStance().facing(getSelf(), target) && getSelf().getStamina().get() >= 15;
+    public boolean usable(Combat c, Character user, Character target) {
+        return fuckable(c, user, target) && !target.wary() && getTargetOrgan(target).isReady(target) && user.canAct()
+                        && c.getStance().mobile(user) && !c.getStance().prone(user)
+                        && !c.getStance().prone(target) && c.getStance().facing(user, target) && user.getStamina().get() >= 15;
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 40;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        String premessage = premessage(c, target);
-        if (target.roll(getSelf(), accuracy(c, target))) {
-            if (getSelf().human()) {
-                c.write(getSelf(), Formatter.capitalizeFirstLetter(
-                                premessage + deal(c, premessage.length(), Result.normal, target)));
+    public boolean resolve(Combat c, Character user, Character target) {
+        String premessage = premessage(c, user, target);
+        if (target.roll(user, accuracy(c, user, target))) {
+            if (user.human()) {
+                c.write(user, Formatter.capitalizeFirstLetter(
+                                premessage + deal(c, premessage.length(), Result.normal, user, target)));
             } else if (c.shouldPrintReceive(target, c)) {
-                c.write(getSelf(), premessage + receive(c, premessage.length(), Result.normal, target));
+                c.write(user, premessage + receive(c, premessage.length(), Result.normal, user, target));
             }
             int m = 5 + Random.random(5);
             int otherm = m;
-            if (getSelf().has(Trait.insertion)) {
-                otherm += Math.min(getSelf().get(Attribute.seduction) / 4, 40);
+            if (user.has(Trait.insertion)) {
+                otherm += Math.min(user.get(Attribute.seduction) / 4, 40);
             }
-            c.setStance(new Standing(self, target.getType()), getSelf(), getSelf().canMakeOwnDecision());
-            target.body.pleasure(getSelf(), getSelfOrgan(), getTargetOrgan(target), otherm, c, this);
-            getSelf().body.pleasure(target, getTargetOrgan(target), getSelfOrgan(), m, c, this);
+            c.setStance(new Standing(user.getType(), target.getType()), user, user.canMakeOwnDecision());
+            target.body.pleasure(user, getSelfOrgan(user), getTargetOrgan(target), otherm, c, new SkillUsage<>(this, user, target));
+            user.body.pleasure(target, getTargetOrgan(target), getSelfOrgan(user), m, c, new SkillUsage<>(this, user, target));
         } else {
-            if (getSelf().human()) {
-                c.write(getSelf(), Formatter
-                                .capitalizeFirstLetter(premessage + deal(c, premessage.length(), Result.miss, target)));
+            if (user.human()) {
+                c.write(user, Formatter
+                                .capitalizeFirstLetter(premessage + deal(c, premessage.length(), Result.miss, user,
+                                                target)));
             } else if (c.shouldPrintReceive(target, c)) {
-                c.write(getSelf(), premessage + receive(c, premessage.length(), Result.miss, target));
+                c.write(user, premessage + receive(c, premessage.length(), Result.miss, user, target));
             }
-            getSelf().add(c, new Falling(self));
+            user.add(c, new Falling(user.getType()));
             return false;
         }
         return true;
@@ -75,21 +79,21 @@ public class Carry extends Fuck {
 
     @Override
     public Skill copy(Character user) {
-        return new Carry(user.getType());
+        return new Carry();
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 60;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.fucking;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "you pick up " + target.getName() + ", but she flips out of your arms and manages to trip you.";
         } else {
@@ -100,7 +104,7 @@ public class Carry extends Fuck {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return Formatter.format(
                             (damage > 0 ? "" : "{self:subject} ")
@@ -108,18 +112,18 @@ public class Carry extends Fuck {
                                             + " {self:possessive} grip before {self:pronoun} can do anything. Moreover, "
                                             + "{other:pronoun-action:scramble|scrambles} to trip {self:direct-object} "
                                             + "while she's distracted.",
-                            getSelf(), target);
+                            user, target);
         } else {
             return Formatter.format(
                             (damage > 0 ? "" : "{self:subject} ")
                                             + "scoops {other:subject} up in {self:possessive} powerful arms and simultaneously thrusts"
                                             + " {self:possessive} {self:body-part:cock} into {other:possessive} {other:body-part:pussy}.",
-                            getSelf(), target);
+                            user, target);
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Picks up opponent and penetrates her: Mojo 10.";
     }
 

@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -10,20 +9,20 @@ import nightgames.stance.StandingOver;
 
 public class Submit extends Skill {
 
-    private Submit(CharacterType self) {
-        super("Submit", self);
+    private Submit() {
+        super("Submit");
 
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().en == Stance.neutral && getSelf().canAct();
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().en == Stance.neutral && user.canAct();
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.normal, target);
-        c.setStance(new StandingOver(target.getType(), self), target, false);
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.normal, user, target);
+        c.setStance(new StandingOver(target.getType(), user.getType()), target, false);
         return true;
     }
 
@@ -34,31 +33,31 @@ public class Submit extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Submit(user.getType());
+        return new Submit();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 6;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.misc;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You nervously lie down on the floor.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        return getSelf().getName() + " with a nervous glance, lies down on the floor.";
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        return user.getName() + " with a nervous glance, lies down on the floor.";
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Submits to your opponent by lying down.";
     }
 }

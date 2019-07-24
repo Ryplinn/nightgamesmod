@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,28 +12,28 @@ import nightgames.status.AttributeBuff;
 
 public class LegLock extends Skill {
 
-    public LegLock(CharacterType self) {
-        super("Leg Lock", self);
+    public LegLock() {
+        super("Leg Lock");
         // addTag(SkillTag.positioning); it's not, right?
         addTag(SkillTag.hurt);
         addTag(SkillTag.staminaDamage);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().dom(getSelf()) && c.getStance().reachBottom(getSelf()) && c.getStance().prone(target)
-                        && getSelf().canAct() && !c.getStance().connected(c);
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().dom(user) && c.getStance().reachBottom(user) && c.getStance().prone(target)
+                        && user.canAct() && !c.getStance().connected(c);
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), accuracy(c, target))) {
-            writeOutput(c, Result.normal, target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.roll(user, accuracy(c, user, target))) {
+            writeOutput(c, Result.normal, user, target);
             target.add(c, new AttributeBuff(target.getType(), Attribute.speed, -2, 5));
-            target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(10, 16)));
+            target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random.random(10, 16)));
             target.emote(Emotion.angry, 15);
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
         return true;
@@ -47,21 +46,21 @@ public class LegLock extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new LegLock(user.getType());
+        return new LegLock();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 2;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.damage;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "You grab " + target.getName() + "'s leg, but she kicks free.";
         } else {
@@ -70,19 +69,19 @@ public class LegLock extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s tries to put %s in a leglock, but %s %s away.",
-                            getSelf().subject(), target.nameDirectObject(),
+                            user.subject(), target.nameDirectObject(),
                             target.pronoun(), target.action("slip"));
         } else {
             return String.format("%s pulls %s leg across %s body in a painful submission hold.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(), getSelf().possessiveAdjective());
+                            user.subject(), target.nameOrPossessivePronoun(), user.possessiveAdjective());
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "A submission hold on your opponent's leg";
     }
 

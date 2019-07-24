@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -11,8 +10,8 @@ import nightgames.stance.HeldOral;
 import nightgames.stance.Stance;
 
 public class PinAndBlow extends Skill {
-    PinAndBlow(CharacterType self) {
-        super("Oral Pin", self);
+    PinAndBlow() {
+        super("Oral Pin");
         addTag(SkillTag.positioning);
         addTag(SkillTag.pleasure);
         addTag(SkillTag.oral);
@@ -25,79 +24,79 @@ public class PinAndBlow extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().mobile(getSelf())
-                && c.getStance().dom(getSelf())
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().mobile(user)
+                && c.getStance().dom(user)
                 && (c.getStance().prone(target)  ||  c.getStance().en == Stance.paizuripin)
-                && c.getStance().facing(getSelf(), target)
-                && target.crotchAvailable() && getSelf().canAct()
+                && c.getStance().facing(user, target)
+                && target.crotchAvailable() && user.canAct()
                 && !c.getStance().connected(c)
                 && c.getStance().en != Stance.oralpin;
     }
 
     @Override
-    public float priorityMod(Combat c) {
+    public float priorityMod(Combat c, Character user) {
         return 0;
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 5;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.normal, target);
-        c.setStance(new HeldOral(self, target.getType()), getSelf(), true);
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.normal, user, target);
+        c.setStance(new HeldOral(user.getType(), target.getType()), user, true);
         if (target.hasDick()) {
-            new Blowjob(self).resolve(c, target);
+            new Blowjob().resolve(c, user, target);
         } else if (target.hasPussy()) {
-            new Cunnilingus(self).resolve(c, target);
+            new Cunnilingus().resolve(c, user, target);
         } else if (target.body.has("ass")) {
-            new Anilingus(self).resolve(c, target);
+            new Anilingus().resolve(c, user, target);
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new PinAndBlow(user.getType());
+        return new PinAndBlow();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 5;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
-        return receive(c, damage, modifier, target);
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
+        return receive(c, damage, modifier, user, target);
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         
         if( c.getStance().en == Stance.paizuripin)
         {
             return Formatter.format(
                             "{self:SUBJECT-ACTION:free|frees} {other:possessive} cock from her breasts, and quickly {self:action:settle|settles} {self:possessive} head between {other:possessive} legs.",
-                            getSelf(), target);
+                            user, target);
         }else
         {
             return Formatter.format(
                             "{self:SUBJECT-ACTION:bow|bows} {other:name-do} over, and {self:action:settle|settles} {self:possessive} head between {other:possessive} legs.",
-                            getSelf(), target);
+                            user, target);
         }                       
                        
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Holds your opponent down and use your mouth";
     }
 

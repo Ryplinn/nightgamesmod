@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -17,8 +16,8 @@ public class StripBottom extends Skill {
 
     private Clothing stripped, extra;
 
-    StripBottom(CharacterType self) {
-        super("Strip Bottoms", self);
+    StripBottom() {
+        super("Strip Bottoms");
 
         addTag(SkillTag.positioning);
         addTag(SkillTag.stripping);
@@ -26,47 +25,47 @@ public class StripBottom extends Skill {
         addTag(SkillTag.staminaDamage);
     }
 
-    @Override public boolean usable(Combat c, Character target) {
-        return (c.getStance().oral(getSelf(), target) || c.getStance().reachBottom(getSelf())) && !target.crotchAvailable()
-                        && getSelf().canAct() && !(target.has(ClothingTrait.harpoonDildo) || target.has(ClothingTrait.harpoonOnahole));
+    @Override public boolean usable(Combat c, Character user, Character target) {
+        return (c.getStance().oral(user, target) || c.getStance().reachBottom(user)) && !target.crotchAvailable()
+                        && user.canAct() && !(target.has(ClothingTrait.harpoonDildo) || target.has(ClothingTrait.harpoonOnahole));
     }
 
-    @Override public int getMojoCost(Combat c) {
-        return c.getStance().dom(getSelf()) ? 2 : 10;
+    @Override public int getMojoCost(Combat c, Character user) {
+        return c.getStance().dom(user) ? 2 : 10;
     }
 
-    @Override public boolean resolve(Combat c, Character target) {
+    @Override public boolean resolve(Combat c, Character user, Character target) {
         stripped = extra = null;
         int difficulty = target.getOutfit().getTopOfSlot(ClothingSlot.bottom).dc() + target.getLevel()
                         + (target.getStamina().percent() / 4 - target.getArousal().percent()) / 5 - (
                         !target.canAct() || c.getStance().sub(target) ? 20 : 0);
-        if (getSelf().checkVsDc(Attribute.cunning, difficulty) || !target.canAct()) {
+        if (user.checkVsDc(Attribute.cunning, difficulty) || !target.canAct()) {
             stripped = target.strip(ClothingSlot.bottom, c);
             boolean doubled = false;
-            if (getSelf().get(Attribute.cunning) >= 30 && !target.crotchAvailable() && getSelf()
+            if (user.get(Attribute.cunning) >= 30 && !target.crotchAvailable() && user
                             .checkVsDc(Attribute.cunning, difficulty) || !target.canAct()) {
                 extra = target.strip(ClothingSlot.bottom, c);
                 doubled = true;
-                writeOutput(c, Result.critical, target);
+                writeOutput(c, Result.critical, user, target);
             } else {
-                writeOutput(c, Result.normal, target);
+                writeOutput(c, Result.normal, user, target);
             }
-            if (getSelf().human() && target.mostlyNude()) {
+            if (user.human() && target.mostlyNude()) {
                 c.write(target, target.nakedLiner(c, target));
             }
             if (target.human() && target.crotchAvailable() && target.hasDick()) {
                 if (target.body.getRandomCock().isReady(target)) {
-                    c.write(getSelf(), "Your boner springs out, no longer restrained by your pants.");
+                    c.write(user, "Your boner springs out, no longer restrained by your pants.");
                 } else {
-                    c.write(getSelf(), getSelf().getName() + " giggles as "+target.nameOrPossessivePronoun()
+                    c.write(user, user.getName() + " giggles as "+target.nameOrPossessivePronoun()
                     +" flaccid dick is exposed.");
                 }
             }
             target.emote(Emotion.nervous, doubled ? 20 : 10);
         } else {
             stripped = target.outfit.getTopOfSlot(ClothingSlot.bottom);
-            writeOutput(c, Result.miss, target);
-            target.weaken(c, (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(8, 16)));
+            writeOutput(c, Result.miss, user, target);
+            target.weaken(c, (int) DamageType.physical.modifyDamage(user, target, Random.random(8, 16)));
             return false;
         }
         return true;
@@ -77,18 +76,18 @@ public class StripBottom extends Skill {
     }
 
     @Override public Skill copy(Character user) {
-        return new StripBottom(user.getType());
+        return new StripBottom();
     }
 
-    @Override public int speed() {
+    @Override public int speed(Character user) {
         return 3;
     }
 
-    @Override public Tactics type(Combat c) {
+    @Override public Tactics type(Combat c, Character user) {
         return Tactics.stripping;
     }
 
-    @Override public String deal(Combat c, int damage, Result modifier, Character target) {
+    @Override public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "You grab " + target.getName() + "'s " + stripped.getName() + ", but " + target.pronoun()
                             + " scrambles away before you can strip " + target.directObject() + ".";
@@ -103,24 +102,24 @@ public class StripBottom extends Skill {
         }
     }
 
-    @Override public String receive(Combat c, int damage, Result modifier, Character target) {
+    @Override public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s tries to pull down %s %s, but %s %s them up.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(),
+                            user.subject(), target.nameOrPossessivePronoun(),
                             stripped.getName(), target.pronoun(), target.action("hold"));
         } else {
             String msg = String.format("%s grabs the waistband of %s %s and pulls them down.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(),
+                            user.subject(), target.nameOrPossessivePronoun(),
                             stripped.getName());
             if (modifier == Result.critical && extra != null) {
                 msg += String.format(" Before %s can react, %s also strips off %s %s!", target.subject(),
-                                getSelf().subject(), target.possessiveAdjective(), extra.getName());
+                                user.subject(), target.possessiveAdjective(), extra.getName());
             }
             return msg;
         }
     }
 
-    @Override public String describe(Combat c) {
+    @Override public String describe(Combat c, Character user) {
         return "Attempt to remove opponent's pants. More likely to succeed if she's weakened and aroused";
     }
 

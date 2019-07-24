@@ -1,7 +1,6 @@
 package nightgames.status;
 
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
@@ -67,7 +66,7 @@ public class CounterStatus extends DurationStatus {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return 0;
     }
 
@@ -93,7 +92,7 @@ public class CounterStatus extends DurationStatus {
 
     public void resolveSkill(Combat c, Character target) {
         getAffected().removelist.add(this);
-        skill.resolveCounter(c, target);
+        skill.resolveCounter(c, getAffected(), target);
     }
 
     public CounterBase getCounterSkill() {

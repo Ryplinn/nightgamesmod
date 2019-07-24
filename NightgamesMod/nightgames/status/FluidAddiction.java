@@ -10,7 +10,10 @@ import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.skills.*;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class FluidAddiction extends DurationStatus {
     protected double magnitude;
@@ -146,7 +149,7 @@ public class FluidAddiction extends DurationStatus {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return 0;
     }
 
@@ -176,15 +179,15 @@ public class FluidAddiction extends DurationStatus {
         if (!isActive()) {
             return Collections.emptySet();
         } else if (getTarget().has(Trait.lactating)) {
-            availSkills = Arrays.asList(new Suckle(affected), new LickNipples(affected), new Kiss(affected),
-                            new Cunnilingus(affected), new Blowjob(affected));
+            availSkills = Arrays.asList(new Suckle(), new LickNipples(), new Kiss(),
+                            new Cunnilingus(), new Blowjob());
         } else {
-            availSkills = Arrays.asList(new Kiss(affected), new Cunnilingus(affected), new Blowjob(affected));
+            availSkills = Arrays.asList(new Kiss(), new Cunnilingus(), new Blowjob());
         }
-        if (availSkills.stream().anyMatch(skill -> skill.usable(c, getTarget()))) {
+        if (availSkills.stream().anyMatch(skill -> skill.usable(c, getAffected(), getTarget()))) {
             return availSkills;
         } else {
-            return Collections.singletonList(new Beg(affected));
+            return Collections.singletonList(new Beg());
         }
     }
 

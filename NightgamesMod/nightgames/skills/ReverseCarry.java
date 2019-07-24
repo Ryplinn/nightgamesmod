@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -14,8 +13,8 @@ import nightgames.stance.Jumped;
 import nightgames.status.Falling;
 
 public class ReverseCarry extends Carry {
-    public ReverseCarry(CharacterType self) {
-        super("Jump", self);
+    public ReverseCarry() {
+        super("Jump");
         addTag(SkillTag.positioning);
     }
 
@@ -25,8 +24,8 @@ public class ReverseCarry extends Carry {
     }
 
     @Override
-    public BodyPart getSelfOrgan() {
-        return getSelf().body.getRandomPussy();
+    public BodyPart getSelfOrgan(Character user) {
+        return user.body.getRandomPussy();
     }
 
     @Override
@@ -35,30 +34,30 @@ public class ReverseCarry extends Carry {
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        String premessage = premessage(c, target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        String premessage = premessage(c, user, target);
 
-        if (target.roll(getSelf(), accuracy(c, target))) {
-            if (getSelf().human()) {
-                c.write(getSelf(), premessage + deal(c, premessage.length(), Result.normal, target));
+        if (target.roll(user, accuracy(c, user, target))) {
+            if (user.human()) {
+                c.write(user, premessage + deal(c, premessage.length(), Result.normal, user, target));
             } else if (c.shouldPrintReceive(target, c)) {
-                c.write(getSelf(), premessage + receive(c, premessage.length(), Result.normal, target));
+                c.write(user, premessage + receive(c, premessage.length(), Result.normal, user, target));
             }
             int m = 5 + Random.random(5);
             int otherm = m;
-            if (getSelf().has(Trait.insertion)) {
-                otherm += Math.min(getSelf().get(Attribute.seduction) / 4, 40);
+            if (user.has(Trait.insertion)) {
+                otherm += Math.min(user.get(Attribute.seduction) / 4, 40);
             }
-            c.setStance(new Jumped(self, target.getType()), getSelf(), getSelf().canMakeOwnDecision());
-            target.body.pleasure(getSelf(), getSelfOrgan(), getTargetOrgan(target), otherm, c, this);
-            getSelf().body.pleasure(target, getTargetOrgan(target), getSelfOrgan(), m, c, this);
+            c.setStance(new Jumped(user.getType(), target.getType()), user, user.canMakeOwnDecision());
+            target.body.pleasure(user, getSelfOrgan(user), getTargetOrgan(target), otherm, c, new SkillUsage<>(this, user, target));
+            user.body.pleasure(target, getTargetOrgan(target), getSelfOrgan(user), m, c, new SkillUsage<>(this, user, target));
         } else {
-            if (getSelf().human()) {
-                c.write(getSelf(), premessage + deal(c, premessage.length(), Result.miss, target));
+            if (user.human()) {
+                c.write(user, premessage + deal(c, premessage.length(), Result.miss, user, target));
             } else if (c.shouldPrintReceive(target, c)) {
-                c.write(getSelf(), premessage + receive(c, premessage.length(), Result.miss, target));
+                c.write(user, premessage + receive(c, premessage.length(), Result.miss, user, target));
             }
-            getSelf().add(c, new Falling(self));
+            user.add(c, new Falling(user.getType()));
             return false;
         }
         return true;
@@ -66,11 +65,11 @@ public class ReverseCarry extends Carry {
 
     @Override
     public Skill copy(Character user) {
-        return new ReverseCarry(user.getType());
+        return new ReverseCarry();
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return (damage > 0 ? "" : "You ") + "leap into " + target.possessiveAdjective()
                             + " arms, but she deposits you back onto the floor.";
@@ -79,31 +78,31 @@ public class ReverseCarry extends Carry {
                             (damage > 0 ? "" : "You ")
                                             + " leap into {other:possessive} arms, impaling yourself onto her {other:body-part:cock} "
                                             + ". She lets out a noise that's equal parts surprise and delight as you bounce on her pole.",
-                            getSelf(), target);
+                            user, target);
         }
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        String subject = (damage > 0 ? "" : getSelf().subject() + " ");
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        String subject = (damage > 0 ? "" : user.subject() + " ");
         if (modifier == Result.miss) {
             return String.format("%sjumps onto %s, but %s %s %s back onto the floor.",
                             subject, target.nameDirectObject(), target.pronoun(),
-                            target.action("deposit"), getSelf().directObject());
+                            target.action("deposit"), user.directObject());
         } else {
             return String.format("%sleaps into %s arms and impales %s on %s cock. "
                             + "%s wraps %s legs around %s torso and %s quickly %s %s so %s doesn't "
                             + "fall and injure %s or %s.", subject, target.nameOrPossessivePronoun(),
-                            getSelf().reflectivePronoun(), target.possessiveAdjective(),
-                            getSelf().subject(), getSelf().possessiveAdjective(), target.nameOrPossessivePronoun(),
-                            target.pronoun(), target.action("support"), getSelf().pronoun(),
-                            getSelf().pronoun(),
-                            getSelf().reflectivePronoun(), target.directObject());
+                            user.reflectivePronoun(), target.possessiveAdjective(),
+                            user.subject(), user.possessiveAdjective(), target.nameOrPossessivePronoun(),
+                            target.pronoun(), target.action("support"), user.pronoun(),
+                            user.pronoun(),
+                            user.reflectivePronoun(), target.directObject());
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Jump into your opponent's arms and impale yourself on her cock: Mojo 10.";
     }
 

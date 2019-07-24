@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.TentaclePart;
@@ -16,8 +15,8 @@ import nightgames.status.Stsflag;
 
 public class TentaclePorn extends Skill {
 
-    TentaclePorn(CharacterType self) {
-        super("Tentacle Porn", self);
+    TentaclePorn() {
+        super("Tentacle Porn");
     }
 
     @Override
@@ -26,44 +25,44 @@ public class TentaclePorn extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return !target.wary() && !c.getStance().sub(getSelf()) && !c.getStance().prone(getSelf())
-                        && !c.getStance().prone(target) && getSelf().canAct() && getSelf().getArousal().get() >= 20;
+    public boolean usable(Combat c, Character user, Character target) {
+        return !target.wary() && !c.getStance().sub(user) && !c.getStance().prone(user)
+                        && !c.getStance().prone(target) && user.canAct() && user.getArousal().get() >= 20;
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 10;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Create a bunch of hentai tentacles.";
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 90;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), accuracy(c, target))) {
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.roll(user, accuracy(c, user, target))) {
             if (target.mostlyNude()) {
-                int m = Random.random(getSelf().get(Attribute.fetishism)) / 2 + 1;
+                int m = Random.random(user.get(Attribute.fetishism)) / 2 + 1;
                 if (target.bound()) {
-                    writeOutput(c, Result.special, target);
+                    writeOutput(c, Result.special, user, target);
                     if (target.hasDick())
                         TentaclePart.pleasureWithTentacles(c, target, m, target.body.getRandomCock());
                     if (target.hasPussy())
                         TentaclePart.pleasureWithTentacles(c, target, m, target.body.getRandomPussy());
                     TentaclePart.pleasureWithTentacles(c, target, m, target.body.getRandomBreasts());
                     TentaclePart.pleasureWithTentacles(c, target, m, target.body.getRandomAss());
-                } else if (getSelf().human()) {
-                    c.write(getSelf(), deal(c, 0, Result.normal, target));
+                } else if (user.human()) {
+                    c.write(user, deal(c, 0, Result.normal, user, target));
                     TentaclePart.pleasureWithTentacles(c, target, m, target.body.getRandom("skin"));
                 } else if (c.shouldPrintReceive(target, c)) {
-                    c.write(getSelf(), receive(c, 0, Result.normal, target));
+                    c.write(user, receive(c, 0, Result.normal, user, target));
                     TentaclePart.pleasureWithTentacles(c, target, m, target.body.getRandom("skin"));
                 }
                 if (!target.is(Stsflag.oiled)) {
@@ -71,11 +70,11 @@ public class TentaclePorn extends Skill {
                 }
                 target.emote(Emotion.horny, 20);
             } else {
-                writeOutput(c, Result.weak, target);
+                writeOutput(c, Result.weak, user, target);
             }
-            target.add(c, new Bound(target.getType(), 30 + 2 * Math.sqrt(getSelf().get(Attribute.fetishism) + getSelf().get(Attribute.slime)), "tentacles"));
+            target.add(c, new Bound(target.getType(), 30 + 2 * Math.sqrt(user.get(Attribute.fetishism) + user.get(Attribute.slime)), "tentacles"));
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
         return true;
@@ -83,16 +82,16 @@ public class TentaclePorn extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new TentaclePorn(user.getType());
+        return new TentaclePorn();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "You summon a mass of tentacles that try to snare " + target.getName()
                             + ", but she nimbly dodges them.";
@@ -109,20 +108,20 @@ public class TentaclePorn extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s stomps on the ground and a bundle of tentacles erupt from the "
-                            + "ground. %s barely able to avoid them.", getSelf().subject(),
+                            + "ground. %s barely able to avoid them.", user.subject(),
                             Formatter.capitalizeFirstLetter(target.subjectAction("are", "is")));
         } else if (modifier == Result.weak) {
             return String.format("%s stomps on the ground and a bundle of tentacles erupt from the "
-                            + "ground around %s, entangling %s arms and legs.", getSelf().subject(),
+                            + "ground around %s, entangling %s arms and legs.", user.subject(),
                             target.nameDirectObject(), target.possessiveAdjective());
         } else if (modifier == Result.normal) {
             return String.format("%s stomps on the ground and a bundle of tentacles erupt from the "
                             + "ground around %s, entangling %s arms and legs. The slimy appendages "
                             + "wriggle over %s body and coat %s in the slippery liquid.",
-                            getSelf().subject(), target.nameDirectObject(), target.possessiveAdjective(),
+                            user.subject(), target.nameDirectObject(), target.possessiveAdjective(),
                             target.possessiveAdjective(), target.directObject());
         } else {
             String actions = "";
@@ -142,7 +141,7 @@ public class TentaclePorn extends Skill {
             if (actions.length() > 0)
                 actions += ", and";
             return String.format("%s summons slimy tentacles that cover %s helpless body,"
-                            + " %s probe %s ass.", getSelf().subject(),
+                            + " %s probe %s ass.", user.subject(),
                             target.nameOrPossessivePronoun(), actions,
                             target.possessiveAdjective());
         }

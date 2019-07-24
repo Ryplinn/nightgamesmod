@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -16,8 +15,8 @@ import java.util.List;
 
 public class Strapon extends Skill {
 
-    public Strapon(CharacterType self) {
-        super("Strap On", self, 15);
+    public Strapon() {
+        super("Strap On", 15);
     }
 
     @Override
@@ -26,78 +25,78 @@ public class Strapon extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && !getSelf().has(Trait.strapped) && c.getStance().mobile(getSelf())
-                        && !c.getStance().prone(getSelf())
-                        && (getSelf().has(Item.Strapon) || getSelf().has(Item.Strapon2)) && !getSelf().hasDick()
-                        && !c.getStance().connected(c) && !c.getStance().isFaceSitting(getSelf());
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && !user.has(Trait.strapped) && c.getStance().mobile(user)
+                        && !c.getStance().prone(user)
+                        && (user.has(Item.Strapon) || user.has(Item.Strapon2)) && !user.hasDick()
+                        && !c.getStance().connected(c) && !c.getStance().isFaceSitting(user);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Put on the strapon dildo";
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 15;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        List<Clothing> unequipped = getSelf().getOutfit().equip(ClothingTable.getByID("strapon"));
+    public boolean resolve(Combat c, Character user, Character target) {
+        List<Clothing> unequipped = user.getOutfit().equip(ClothingTable.getByID("strapon"));
         if (unequipped.isEmpty()) {
-            if (getSelf().human()) {
-                c.write(getSelf(), Formatter.capitalizeFirstLetter(deal(c, 0, Result.normal, target)));
+            if (user.human()) {
+                c.write(user, Formatter.capitalizeFirstLetter(deal(c, 0, Result.normal, user, target)));
             } else if (!target.is(Stsflag.blinded)) {
-                c.write(getSelf(), Formatter.capitalizeFirstLetter(receive(c, 0, Result.normal, target)));
+                c.write(user, Formatter.capitalizeFirstLetter(receive(c, 0, Result.normal, user, target)));
             } else {
-                printBlinded(c);
+                printBlinded(c, user);
             }
         } else {
-            if (getSelf().human()) {
-                c.write(getSelf(), "You take off your " + unequipped.get(0)
+            if (user.human()) {
+                c.write(user, "You take off your " + unequipped.get(0)
                                 + " and fasten a strap on dildo onto yourself.");
             } else if (!target.is(Stsflag.blinded)){
-                c.write(getSelf(),
+                c.write(user,
                                 String.format("%s takes off %s %s and straps on a thick rubber "
                                                 + "cock and grins at %s in a way that makes %s feel a bit nervous.",
-                                                getSelf().subject(), getSelf().possessiveAdjective(),
+                                                user.subject(), user.possessiveAdjective(),
                                                 unequipped.get(0), target.nameDirectObject(),
                                                 target.directObject()));
-            } else printBlinded(c);
+            } else printBlinded(c, user);
         }
         if (!target.is(Stsflag.blinded)) {
             target.loseMojo(c, 10);
             target.emote(Emotion.nervous, 10);
         }
-        getSelf().emote(Emotion.confident, 30);
-        getSelf().emote(Emotion.dominant, 40);
-        Item lost = getSelf().has(Item.Strapon2) ? Item.Strapon2 : Item.Strapon;
-        c.getCombatantData(getSelf()).loseItem(lost);
-        getSelf().remove(lost);
+        user.emote(Emotion.confident, 30);
+        user.emote(Emotion.dominant, 40);
+        Item lost = user.has(Item.Strapon2) ? Item.Strapon2 : Item.Strapon;
+        c.getCombatantData(user).loseItem(lost);
+        user.remove(lost);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Strapon(user.getType());
+        return new Strapon();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.misc;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You put on a strap on dildo.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format("%s straps on a thick rubber cock and grins in a way that "
-                        + "makes %s feel a bit nervous.", getSelf().subject(),
+                        + "makes %s feel a bit nervous.", user.subject(),
                         target.nameDirectObject());
     }
 

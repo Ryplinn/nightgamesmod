@@ -1,7 +1,6 @@
 package nightgames.characters;
 
 import nightgames.global.GameState;
-import nightgames.pet.PetCharacter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +15,7 @@ public final class CharacterType {
     // the other hand, is an implementation detail that keeps track of which character types the code has looked for,
     // and has nothing to do with the game.
     private static final Map<String, CharacterType> typeCache = new HashMap<>();
-    static CharacterPool lastUsedPool;
+    public static CharacterPool lastUsedPool;
     private final String type;
 
     // To generate an instance of CharacterType, use CharacterType.get().
@@ -68,21 +67,7 @@ public final class CharacterType {
             }
             CharacterPool pool = lastUsedPool != null ? lastUsedPool : GameState.getGameState().characterPool;
             System.err.println("Character not found: " + this);
-            System.err.println("=================");
-            System.err.println("Characters in pool: ");
-            System.err.println("Human: " + pool.human);
-            System.err.println("NPCs:");
-            for (CharacterType npc : pool.characterPool.keySet()) {
-                System.err.println("\t" + npc);
-            }
-            System.err.println("Other combatants: ");
-            if (pool.otherCombatants == null || pool.otherCombatants.size() == 0) {
-                System.err.println("none");
-            } else {
-                for (PetCharacter pet : pool.otherCombatants) {
-                    System.err.println("\t" + pet.getType());
-                }
-            }
+            System.err.print(pool.dump());
             throw e;
         }
     }

@@ -1,7 +1,6 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.nskills.tags.SkillTag;
@@ -9,30 +8,30 @@ import nightgames.skills.Skill;
 import nightgames.status.Shield;
 
 public class FairyShield extends SimpleMasterSkill {
-    public FairyShield(CharacterType self) {
-        super("Fairy Shield", self, 10);
+    public FairyShield() {
+        super("Fairy Shield", 10);
         addTag(SkillTag.buff);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 5;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 80;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), accuracy(c, target))) {
-            int duration = 3 + getSelf().getLevel() / 10;
-            c.write(getSelf(), Formatter.format("{self:SUBJECT} raises a shield around {other:name-do}, preventing attacks!", getSelf(), target));
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.roll(user, accuracy(c, user, target))) {
+            int duration = 3 + user.getLevel() / 10;
+            c.write(user, Formatter.format("{self:SUBJECT} raises a shield around {other:name-do}, preventing attacks!", user, target));
             target.add(c, new Shield(target.getType(), .5, duration));
         } else {
-            c.write(getSelf(), Formatter
-                            .format("{self:SUBJECT} flies around the edge of the fight looking for an opening.", getSelf(), target));
+            c.write(user, Formatter
+                            .format("{self:SUBJECT} flies around the edge of the fight looking for an opening.", user, target));
             return false;
         }
         return true;
@@ -45,6 +44,6 @@ public class FairyShield extends SimpleMasterSkill {
 
     @Override
     public Skill copy(Character user) {
-        return new FairyShield(user.getType());
+        return new FairyShield();
     }
 }

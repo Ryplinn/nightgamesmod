@@ -1,9 +1,6 @@
 package nightgames.skills;
 
-import java.util.Optional;
-
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,9 +10,11 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.Kneeling;
 import nightgames.status.BodyFetish;
 
+import java.util.Optional;
+
 public class FootWorship extends Skill {
-    public FootWorship(CharacterType self) {
-        super("Foot Worship", self);
+    public FootWorship() {
+        super("Foot Worship");
         addTag(SkillTag.pleasure);
         addTag(SkillTag.worship);
         addTag(SkillTag.pleasureSelf);
@@ -25,67 +24,67 @@ public class FootWorship extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        Optional<BodyFetish> fetish = getSelf().body.getFetish("feet");
+        Optional<BodyFetish> fetish = user.body.getFetish("feet");
         return user.isPetOf(target) || (fetish.isPresent() && fetish.get().magnitude >= .5);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return target.body.has("feet") && c.getStance().reachBottom(getSelf()) && getSelf().canAct()
-                        && !c.getStance().behind(getSelf()) && !c.getStance().behind(target)
+    public boolean usable(Combat c, Character user, Character target) {
+        return target.body.has("feet") && c.getStance().reachBottom(user) && user.canAct()
+                        && !c.getStance().behind(user) && !c.getStance().behind(target)
                         && target.outfit.hasNoShoes();
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 150;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         int m;
         int n;
         m = 8 + Random.random(6);
         n = 20;
-        BodyPart mouth = getSelf().body.getRandom("mouth");
+        BodyPart mouth = user.body.getRandom("mouth");
         BodyPart feet = target.body.getRandom("feet");
-        if (getSelf().human()) {
-            c.write(getSelf(), Formatter.format(deal(c, 0, Result.normal, target), getSelf(), target));
+        if (user.human()) {
+            c.write(user, Formatter.format(deal(c, 0, Result.normal, user, target), user, target));
         } else {
-            c.write(getSelf(), Formatter.format(receive(c, 0, Result.normal, target), getSelf(), target));
+            c.write(user, Formatter.format(receive(c, 0, Result.normal, user, target), user, target));
         }
         if (m > 0) {
-            target.body.pleasure(getSelf(), mouth, feet, m, c, this);
+            target.body.pleasure(user, mouth, feet, m, c, new SkillUsage<>(this, user, target));
             if (mouth.isErogenous()) {
-                getSelf().body.pleasure(getSelf(), feet, mouth, m, c, this);
+                user.body.pleasure(user, feet, mouth, m, c, new SkillUsage<>(this, user, target));
             }
         }
         target.buildMojo(c, n);
-        if (!c.getStance().sub(getSelf())) {
-            c.setStance(new Kneeling(target.getType(), self), getSelf(), true);
+        if (!c.getStance().sub(user)) {
+            c.setStance(new Kneeling(target.getType(), user.getType()), user, true);
         }
-        c.getCombatantData(getSelf()).toggleFlagOn("footworshipped", true);
+        c.getCombatantData(user).toggleFlagOn("footworshipped", true);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new FootWorship(user.getType());
+        return new FootWorship();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 2;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
-        if (!c.getCombatantData(getSelf()).getBooleanFlag("footworshipped")) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
+        if (!c.getCombatantData(user).getBooleanFlag("footworshipped")) {
             return "You throw yourself at " + target.nameOrPossessivePronoun()
                             + " dainty feet and start sucking on her toes. " + target.subject()
                             + " seems surprised at first, "
@@ -96,24 +95,24 @@ public class FootWorship extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        if (!c.getCombatantData(getSelf()).getBooleanFlag("footworshipped")) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        if (!c.getCombatantData(user).getBooleanFlag("footworshipped")) {
             return String.format("%s throws %s at %s feet. %s worshipfully grasps %s feet "
                             + "and starts licking between %s toes, all while %s face displays a mask of ecstasy.",
-                            getSelf().subject(), getSelf().reflectivePronoun(), target.nameOrPossessivePronoun(),
-                            getSelf().subject(), target.possessiveAdjective(), target.possessiveAdjective(),
-                            getSelf().possessiveAdjective());
+                            user.subject(), user.reflectivePronoun(), target.nameOrPossessivePronoun(),
+                            user.subject(), target.possessiveAdjective(), target.possessiveAdjective(),
+                            user.possessiveAdjective());
         }
         return String.format("%s can't seem to get enough of %s feet as %s continues to "
                         + "lick along the bottom of %s soles, %s face further lost in "
-                        + "servitude as %s is careful not to miss a spot.", getSelf().subject(),
-                        target.nameOrPossessivePronoun(), getSelf().pronoun(),
-                        target.possessiveAdjective(), getSelf().possessiveAdjective(),
-                        getSelf().pronoun());
+                        + "servitude as %s is careful not to miss a spot.", user.subject(),
+                        target.nameOrPossessivePronoun(), user.pronoun(),
+                        target.possessiveAdjective(), user.possessiveAdjective(),
+                        user.pronoun());
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Worship opponent's feet: builds mojo for opponent";
     }
 }

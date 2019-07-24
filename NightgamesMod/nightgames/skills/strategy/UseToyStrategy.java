@@ -19,9 +19,9 @@ public class UseToyStrategy extends KnockdownThenActionStrategy {
     @Override
     protected Optional<Set<Skill>> getPreferredSkills(Combat c, Character self, Set<Skill> allowedSkills) {
         return emptyIfSetEmpty(allowedSkills.stream()
-                        .filter(skill -> (skill.getTags(c).contains(SkillTag.usesToy)
-                                        || skill.getTags(c).contains(SkillTag.stripping))
-                                        && !skill.getTags(c).contains(SkillTag.suicidal))
+                        .filter(skill -> (skill.getTags(c, self).contains(SkillTag.usesToy)
+                                        || skill.getTags(c, self).contains(SkillTag.stripping))
+                                        && !skill.getTags(c, self).contains(SkillTag.suicidal))
                         .collect(Collectors.toSet()));
     }
     

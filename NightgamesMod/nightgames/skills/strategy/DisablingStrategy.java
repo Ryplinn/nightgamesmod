@@ -42,18 +42,18 @@ public class DisablingStrategy extends KnockdownThenActionStrategy {
             return Collections.emptySet();
         }
         Set<Skill> skills = new HashSet<>();
-        skills.add(new Embrace(self.getType()));
+        skills.add(new Embrace());
         
         if (c.getStance().sub(self)) {
-            skills.add(new Reversal(self.getType()));
+            skills.add(new Reversal());
         }
         if (self.has(Trait.Pacification)) {
-            skills.add(new SuccubusNurse(self.getType()));
+            skills.add(new SuccubusNurse());
         }
         if (self.has(Trait.DemonsEmbrace)) {
-            skills.add(new WingWrap(self.getType()));
+            skills.add(new WingWrap());
         }
-        if (skills.stream().anyMatch(skill -> skill.usable(c, c.getOpponent(self)))) {
+        if (skills.stream().anyMatch(skill -> skill.usable(c, self, c.getOpponent(self)))) {
             return skills;
         }
         return new FuckStrategy().filterSkills(c, self, allowedSkills);

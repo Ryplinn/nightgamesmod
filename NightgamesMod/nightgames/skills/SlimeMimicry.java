@@ -2,8 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
-import nightgames.characters.NPC;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -15,15 +13,15 @@ import java.util.List;
 
 public class SlimeMimicry extends Skill {
     private final static List<Skill> MIMICRY_SKILLS = Arrays.asList(
-                    new MimicAngel(NPC.noneCharacter().getType()),
-                    new MimicCat(NPC.noneCharacter().getType()),
-                    new MimicDryad(NPC.noneCharacter().getType()),
-                    new MimicSuccubus(NPC.noneCharacter().getType()),
-                    new MimicWitch(NPC.noneCharacter().getType())
+                    new MimicAngel(),
+                    new MimicCat(),
+                    new MimicDryad(),
+                    new MimicSuccubus(),
+                    new MimicWitch()
                     );
     
-    SlimeMimicry(CharacterType self) {
-        super("Slime Mimicry", self);
+    SlimeMimicry() {
+        super("Slime Mimicry");
     }
 
     @Override
@@ -32,37 +30,37 @@ public class SlimeMimicry extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canRespond() && !getSelf().is(Stsflag.mimicry);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canRespond() && !user.is(Stsflag.mimicry);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Mimics a random NPC";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        return Random.pickRandomGuaranteed(MIMICRY_SKILLS).copy(getSelf()).resolve(c, target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        return Random.pickRandomGuaranteed(MIMICRY_SKILLS).copy(user).resolve(c, user, target);
     }
 
     @Override
     public Skill copy(Character user) {
-        return new SlimeMimicry(user.getType());
+        return new SlimeMimicry();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return "";
     }
 

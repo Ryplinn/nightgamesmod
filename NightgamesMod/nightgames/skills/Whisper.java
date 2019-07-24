@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -13,44 +12,44 @@ import nightgames.status.Enthralled;
 
 public class Whisper extends Skill {
 
-    public Whisper(CharacterType self) {
-        super("Whisper", self);
+    public Whisper() {
+        super("Whisper");
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().kiss(getSelf(), target) && getSelf().canAct() && !getSelf().has(Trait.direct);
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().kiss(user, target) && user.canAct() && !user.has(Trait.direct);
     }
 
     @Override
-    public float priorityMod(Combat c) {
-        return getSelf().has(Trait.darkpromises) ? .2f : 0;
+    public float priorityMod(Combat c, Character user) {
+        return user.has(Trait.darkpromises) ? .2f : 0;
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 10;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        int roll = Random.centeredrandom(4, getSelf().get(Attribute.darkness) / 5.0, 2);
+    public boolean resolve(Combat c, Character user, Character target) {
+        int roll = Random.centeredrandom(4, user.get(Attribute.darkness) / 5.0, 2);
         int m = 4 + Random.random(6);
 
         if (target.has(Trait.imagination)) {
             m += 4;
         }
-        if (getSelf().has(Trait.darkpromises)) {
+        if (user.has(Trait.darkpromises)) {
             m += 3;
         }
-        if (getSelf().has(Trait.darkpromises) && roll == 4 && getSelf().canSpend(15) && !target.wary()) {
-            getSelf().spendMojo(c, 15);
-            writeOutput(c, Result.special, target);
-            target.add(c, new Enthralled(target.getType(), self, 4));
+        if (user.has(Trait.darkpromises) && roll == 4 && user.canSpend(15) && !target.wary()) {
+            user.spendMojo(c, 15);
+            writeOutput(c, Result.special, user, target);
+            target.add(c, new Enthralled(target.getType(), user.getType(), 4));
         } else {
-            writeOutput(c, Result.normal, target);
+            writeOutput(c, Result.normal, user, target);
         }
-        target.temptNoSource(c, getSelf(), m, this);
+        target.temptNoSource(c, user, m, this);
         target.emote(Emotion.horny, 30);
         return true;
     }
@@ -62,21 +61,21 @@ public class Whisper extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Whisper(user.getType());
+        return new Whisper();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 9;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.special) {
             return "You whisper words of domination in " + target.getName()
                             + "'s ear, filling her with your darkness. The spirit in her eyes seems to dim as she submits to your will.";
@@ -87,24 +86,24 @@ public class Whisper extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.special) {
             return String.format("%s whispers in %s ear in some eldritch language."
                             + " %s words echo through %s head and %s %s a"
-                            + " strong compulsion to do what %s tells %s.", getSelf().subject(),
+                            + " strong compulsion to do what %s tells %s.", user.subject(),
                             target.nameOrPossessivePronoun(), 
-                            Formatter.capitalizeFirstLetter(getSelf().possessiveAdjective()),
+                            Formatter.capitalizeFirstLetter(user.possessiveAdjective()),
                                             target.possessiveAdjective(), target.pronoun(),
-                                            target.action("feel"), getSelf().subject(),
+                                            target.action("feel"), user.subject(),
                                             target.directObject());
         } else {
             return String.format("%s whispers some deliciously seductive suggestions in %s ear.",
-                            getSelf().subject(), target.nameOrPossessivePronoun());
+                            user.subject(), target.nameOrPossessivePronoun());
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Arouse opponent by whispering in her ear";
     }
 }

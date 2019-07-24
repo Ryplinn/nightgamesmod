@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -16,8 +15,8 @@ import nightgames.status.Falling;
 import nightgames.status.Stsflag;
 
 public class Shove extends Skill {
-    public Shove(CharacterType self) {
-        super("Shove", self);
+    public Shove() {
+        super("Shove");
         addTag(SkillTag.positioning);
         addTag(SkillTag.hurt);
         addTag(SkillTag.staminaDamage);
@@ -25,71 +24,71 @@ public class Shove extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
+    public boolean usable(Combat c, Character user, Character target) {
         if (target.hasStatus(Stsflag.cockbound)) {
             return false;
         }
-        return !c.getStance().dom(getSelf()) && !c.getStance().prone(target) && c.getStance().reachTop(getSelf())
-                        && getSelf().canAct() && !c.getStance().havingSex(c);
+        return !c.getStance().dom(user) && !c.getStance().prone(target) && c.getStance().reachTop(user)
+                        && user.canAct() && !c.getStance().havingSex(c);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 10;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         boolean success = true;
-        if (getSelf().get(Attribute.ki) >= 1 && target.getOutfit().slotShreddable(ClothingSlot.top)
-                        && getSelf().canSpend(5)) {
-            writeOutput(c, Result.special, target);
+        if (user.get(Attribute.ki) >= 1 && target.getOutfit().slotShreddable(ClothingSlot.top)
+                        && user.canSpend(5)) {
+            writeOutput(c, Result.special, user, target);
             target.shred(ClothingSlot.top);
-            target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(10, 25)));
-            if (getSelf().checkVsDc(Attribute.power, target.knockdownDC() - getSelf().get(Attribute.ki))) {
-                c.setStance(new Neutral(self, c.getOpponent(getSelf()).getType()), getSelf(), true);
+            target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random.random(10, 25)));
+            if (user.checkVsDc(Attribute.power, target.knockdownDC() - user.get(Attribute.ki))) {
+                c.setStance(new Neutral(user.getType(), c.getOpponent(user).getType()), user, true);
             }
         } else if (c.getStance().getClass() == Mount.class || c.getStance().getClass() == ReverseMount.class) {
-            if (getSelf().checkVsDc(Attribute.power, target.knockdownDC() + 5)) {
-                if (getSelf().human()) {
-                    c.write(getSelf(), "You shove " + target.getName()
+            if (user.checkVsDc(Attribute.power, target.knockdownDC() + 5)) {
+                if (user.human()) {
+                    c.write(user, "You shove " + target.getName()
                                     + " off of you and get to your feet before she can retaliate.");
                 } else if (c.shouldPrintReceive(target, c)) {
-                    c.write(getSelf(), String.format("%s shoves %s hard enough to free %s and jump up.",
-                                    getSelf().subject(), target.nameDirectObject(), getSelf().reflectivePronoun()));
+                    c.write(user, String.format("%s shoves %s hard enough to free %s and jump up.",
+                                    user.subject(), target.nameDirectObject(), user.reflectivePronoun()));
                 }
-                c.setStance(new Neutral(self, c.getOpponent(getSelf()).getType()), getSelf(), true);
+                c.setStance(new Neutral(user.getType(), c.getOpponent(user).getType()), user, true);
             } else {
-                if (getSelf().human()) {
-                    c.write(getSelf(), "You push " + target.getName() + ", but you're unable to dislodge her.");
+                if (user.human()) {
+                    c.write(user, "You push " + target.getName() + ", but you're unable to dislodge her.");
                 } else if (c.shouldPrintReceive(target, c)) {
-                    c.write(getSelf(), String.format("%s shoves %s weakly.", getSelf().subject(), 
+                    c.write(user, String.format("%s shoves %s weakly.", user.subject(),
                                     target.nameDirectObject()));
                 }
                 success = false;
             }
-            target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(8, 20)));
+            target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random.random(8, 20)));
         } else {
-            if (getSelf().checkVsDc(Attribute.power, target.knockdownDC())) {
-                if (getSelf().human()) {
-                    c.write(getSelf(), "You shove " + target.getName() + " hard enough to knock her flat on her back.");
+            if (user.checkVsDc(Attribute.power, target.knockdownDC())) {
+                if (user.human()) {
+                    c.write(user, "You shove " + target.getName() + " hard enough to knock her flat on her back.");
                 } else if (c.shouldPrintReceive(target, c)) {
-                    c.write(getSelf(), String.format("%s knocks %s off balance and %s %s at her feet.",
-                                    getSelf().subject(), target.nameDirectObject(),
+                    c.write(user, String.format("%s knocks %s off balance and %s %s at her feet.",
+                                    user.subject(), target.nameDirectObject(),
                                     target.pronoun(), target.action("fall")));
                 }
                 target.add(c, new Falling(target.getType()));
             } else {
-                if (getSelf().human()) {
-                    c.write(getSelf(), "You shove " + target.getName() + " back a step, but she keeps her footing.");
+                if (user.human()) {
+                    c.write(user, "You shove " + target.getName() + " back a step, but she keeps her footing.");
                 } else if (c.shouldPrintReceive(target, c)) {
-                    c.write(getSelf(), String.format("%s pushes %s back, but %s %s able to maintain %s balance.",
-                                    getSelf().subject(), target.nameDirectObject(), target.pronoun(),
+                    c.write(user, String.format("%s pushes %s back, but %s %s able to maintain %s balance.",
+                                    user.subject(), target.nameDirectObject(), target.pronoun(),
                                     target.action("are", "is"), target.possessiveAdjective()));
                 }
                 success = false;
             }
-            target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(16, 25)));
+            target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random.random(16, 25)));
         }
         return success;
     }
@@ -101,46 +100,46 @@ public class Shove extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Shove(user.getType());
+        return new Shove();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 7;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.damage;
     }
 
     @Override
-    public String getLabel(Combat c) {
-        if (getSelf().get(Attribute.ki) >= 1) {
+    public String getLabel(Combat c, Character user) {
+        if (user.get(Attribute.ki) >= 1) {
             return "Shredding Palm";
         } else {
-            return getName(c);
+            return getName(c, user);
         }
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You channel your ki into your hands and strike " + target.getName() + " in the chest, destroying her "
                         + target.getOutfit().getTopOfSlot(ClothingSlot.top).getName() + ".";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format("%s strikes %s in the chest with %s palm, staggering %s footing. Suddenly %s "
-                        + "%s tears and falls off %s in tatters.", getSelf().subject(),
-                        target.nameDirectObject(), getSelf().possessiveAdjective(),
+                        + "%s tears and falls off %s in tatters.", user.subject(),
+                        target.nameDirectObject(), user.possessiveAdjective(),
                         target.possessiveAdjective(), target.nameOrPossessivePronoun(),
                         target.getOutfit().getTopOfSlot(ClothingSlot.top).getName(),
                         target.directObject());
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Slightly damage opponent and try to knock her down";
     }
 

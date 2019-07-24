@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
@@ -14,23 +13,23 @@ import nightgames.stance.FlyingCowgirl;
 import nightgames.status.Falling;
 
 public class ReverseFly extends Fly {
-    public ReverseFly(CharacterType self) {
-        super("ReverseFly", self);
+    public ReverseFly() {
+        super("ReverseFly");
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Take off and fuck your opponent's cock in the air.";
     }
 
     @Override
     public Skill copy(Character user) {
-        return new ReverseFly(user.getType());
+        return new ReverseFly();
     }
 
     @Override
-    public BodyPart getSelfOrgan() {
-        return getSelf().body.getRandomPussy();
+    public BodyPart getSelfOrgan(Character user) {
+        return user.body.getRandomPussy();
     }
 
     @Override
@@ -39,68 +38,68 @@ public class ReverseFly extends Fly {
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        String premessage = premessage(c, target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        String premessage = premessage(c, user, target);
 
-        Result result = target.roll(getSelf(), accuracy(c, target)) ? Result.normal : Result.miss;
-        if (getSelf().human()) {
-            c.write(getSelf(), premessage + deal(c, 0, result, target));
+        Result result = target.roll(user, accuracy(c, user, target)) ? Result.normal : Result.miss;
+        if (user.human()) {
+            c.write(user, premessage + deal(c, 0, result, user, target));
         } else if (c.shouldPrintReceive(target, c)) {
-            c.write(getSelf(), premessage + receive(c, 0, result, target));
+            c.write(user, premessage + receive(c, 0, result, user, target));
         }
         if (result == Result.normal) {
-            getSelf().emote(Emotion.dominant, 50);
-            getSelf().emote(Emotion.horny, 30);
+            user.emote(Emotion.dominant, 50);
+            user.emote(Emotion.horny, 30);
             target.emote(Emotion.desperate, 50);
             target.emote(Emotion.nervous, 75);
 
             int m = 5 + Random.random(5);
             int otherm = m;
-            if (getSelf().has(Trait.insertion)) {
-                otherm += Math.min(getSelf().get(Attribute.seduction) / 4, 40);
+            if (user.has(Trait.insertion)) {
+                otherm += Math.min(user.get(Attribute.seduction) / 4, 40);
             }
-            c.setStance(new FlyingCowgirl(self, target.getType()), getSelf(), getSelf().canMakeOwnDecision());
-            target.body.pleasure(getSelf(), getSelfOrgan(), getTargetOrgan(target), otherm, c, this);
-            getSelf().body.pleasure(target, getTargetOrgan(target), getSelfOrgan(), m, c, this);
+            c.setStance(new FlyingCowgirl(user.getType(), target.getType()), user, user.canMakeOwnDecision());
+            target.body.pleasure(user, getSelfOrgan(user), getTargetOrgan(target), otherm, c, new SkillUsage<>(this, user, target));
+            user.body.pleasure(target, getTargetOrgan(target), getSelfOrgan(user), m, c, new SkillUsage<>(this, user, target));
         } else {
-            getSelf().add(c, new Falling(self));
+            user.add(c, new Falling(user.getType()));
             return false;
         }
         return true;
     }
 
     @Override
-    public String deal(Combat c, int amount, Result modifier, Character target) {
+    public String deal(Combat c, int amount, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "you grab " + target.getName() + " tightly and try to take off. However " + target.pronoun()
                             + " has other ideas. She knees your crotch as you approach and sends you sprawling to the ground.";
         } else {
             return "you grab " + target.getName() + " tightly and take off, " + "inserting his dick into your hungry "
-                            + getSelf().body.getRandomPussy().describe(getSelf()) + ".";
+                            + user.body.getRandomPussy().describe(user) + ".";
         }
     }
 
     @Override
-    public String receive(Combat c, int amount, Result modifier, Character target) {
+    public String receive(Combat c, int amount, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s lunges for %s with a hungry look in %s eyes. However, %s other ideas."
                             + " %s %s %s as %s approaches and send %s sprawling to the floor.",
-                            getSelf().subject(), target.nameDirectObject(), getSelf().possessiveAdjective(),
+                            user.subject(), target.nameDirectObject(), user.possessiveAdjective(),
                             target.subjectAction("have", "has"), Formatter.capitalizeFirstLetter(target.pronoun()),
-                            target.action("trip"), getSelf().directObject(), getSelf().pronoun(),
-                            getSelf().directObject());
+                            target.action("trip"), user.directObject(), user.pronoun(),
+                            user.directObject());
         } else {
             return String.format("Suddenly, %s leaps at %s, embracing %s tightly. %s then flaps %s %s"
                             + " hard and before %s %s it,"
                             + " %s twenty feet in the sky held up by %s arms and legs."
                             + " Somehow, %s dick ended up inside of %s in the process and"
                             + " the rhythmic movements of %s flying arouse %s to no end.",
-                            getSelf().subject(), target.nameDirectObject(), target.directObject(),
-                            Formatter.capitalizeFirstLetter(getSelf().pronoun()),
-                            getSelf().possessiveAdjective(), getSelf().body.getRandomWings().describe(getSelf()),
+                            user.subject(), target.nameDirectObject(), target.directObject(),
+                            Formatter.capitalizeFirstLetter(user.pronoun()),
+                            user.possessiveAdjective(), user.body.getRandomWings().describe(user),
                             target.pronoun(), target.action("know"), target.subjectAction("are", "is"),
-                            getSelf().possessiveAdjective(), target.nameOrPossessivePronoun(),
-                            getSelf().nameDirectObject(), getSelf().possessiveAdjective(),
+                            user.possessiveAdjective(), target.nameOrPossessivePronoun(),
+                            user.nameDirectObject(), user.possessiveAdjective(),
                             target.directObject());
         }
     }

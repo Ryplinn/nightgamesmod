@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -12,8 +11,8 @@ import nightgames.status.Primed;
 
 public class EmergencyJump extends Skill {
 
-    EmergencyJump(CharacterType self) {
-        super("Emergency Jump", self);
+    EmergencyJump() {
+        super("Emergency Jump");
         addTag(SkillTag.positioning);
         addTag(SkillTag.escaping);
     }
@@ -24,62 +23,62 @@ public class EmergencyJump extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
+    public boolean usable(Combat c, Character user, Character target) {
         return ((c.getStance()
-                  .sub(getSelf())
+                  .sub(user)
                         && !c.getStance()
-                             .mobile(getSelf())
+                             .mobile(user)
                         && !c.getStance()
-                             .penetrated(c, getSelf())
+                             .penetrated(c, user)
                         && !c.getStance()
                              .penetrated(c, target))
-                        || getSelf().bound()) && !getSelf().stunned() && !getSelf().distracted()
-                        && Primed.isPrimed(getSelf(), 2);
+                        || user.bound()) && !user.stunned() && !user.distracted()
+                        && Primed.isPrimed(user, 2);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Escape from a disadvantageous position and/or bind: 2 charges";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        getSelf().add(c, new Primed(self,-2));
-        getSelf().free();
-        c.setStance(new Behind(self, target.getType()), getSelf(), true);
-        if(getSelf().human()){
-            c.write(getSelf(),deal(c,0,Result.normal,target));
+    public boolean resolve(Combat c, Character user, Character target) {
+        user.add(c, new Primed(user.getType(),-2));
+        user.free();
+        c.setStance(new Behind(user.getType(), target.getType()), user, true);
+        if(user.human()){
+            c.write(user,deal(c,0,Result.normal, user, target));
         }
         else if(target.human()){
-            c.write(getSelf(),receive(c,0,Result.normal,target));
+            c.write(user,receive(c,0,Result.normal, user, target));
         }
-        getSelf().emote(Emotion.confident, 15);
+        user.emote(Emotion.confident, 15);
         target.emote(Emotion.nervous, 15);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new EmergencyJump(user.getType());
+        return new EmergencyJump();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You're in trouble for a moment, so you trigger your temporal manipulator and stop time just long "
                         + "enough to free yourself.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format(
                         "%s thought %s had %s right where %s wanted %s, but %s seems to vanish completely and escape.",
-                        target.subject(), target.pronoun(), getSelf().getName(), 
-                        target.pronoun(), getSelf().directObject(), getSelf().pronoun());
+                        target.subject(), target.pronoun(), user.getName(),
+                        target.pronoun(), user.directObject(), user.pronoun());
     }
 
 }

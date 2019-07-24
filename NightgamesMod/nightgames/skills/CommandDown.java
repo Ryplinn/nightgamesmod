@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.nskills.tags.SkillTag;
@@ -12,51 +11,51 @@ import nightgames.status.Stsflag;
 public class CommandDown extends PlayerCommand {
 
     @Override
-    public boolean usable(Combat c, Character target) {
+    public boolean usable(Combat c, Character user, Character target) {
         return target.is(Stsflag.enthralled)
-                        && ((Enthralled) target.getStatus(Stsflag.enthralled)).master.equals(self)
-                        && !c.getStance().havingSex(c) && getSelf().canRespond();
+                        && ((Enthralled) target.getStatus(Stsflag.enthralled)).master.equals(user.getType())
+                        && !c.getStance().havingSex(c) && user.canRespond();
     }
 
-    CommandDown(CharacterType self) {
-        super("Force Down", self);
+    CommandDown() {
+        super("Force Down");
         addTag(SkillTag.positioning);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Command your opponent to lie down on the ground.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        c.setStance(new Mount(self, target.getType()), target, false);
-        writeOutput(c, Result.normal, target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        c.setStance(new Mount(user.getType(), target.getType()), target, false);
+        writeOutput(c, Result.normal, user, target);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new CommandDown(user.getType());
+        return new CommandDown();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int magnitude, Result modifier, Character target) {
+    public String deal(Combat c, int magnitude, Result modifier, Character user, Character target) {
         return "Trembling under the weight of your command, " + target.getName()
                         + " lies down. You follow her down and mount her, facing her head.";
     }
 
     @Override
-    public String receive(Combat c, int magnitude, Result modifier, Character target) {
+    public String receive(Combat c, int magnitude, Result modifier, Character user, Character target) {
         return String.format("%s tells %s to remain still and"
                                         + " gracefully lies down on %s, %s face right above %ss.",
-                                        getSelf().getName(), target.subject(), 
-                                        target.directObject(), getSelf().possessiveAdjective(),
+                                        user.getName(), target.subject(),
+                                        target.directObject(), user.possessiveAdjective(),
                                         target.possessiveAdjective());
     }
 }

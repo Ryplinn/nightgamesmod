@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -15,8 +14,8 @@ import nightgames.skills.damage.DamageType;
 
 public class Knee extends Skill {
 
-    public Knee(CharacterType self) {
-        super("Knee", self);
+    public Knee() {
+        super("Knee");
         addTag(SkillTag.mean);
         addTag(SkillTag.hurt);
         addTag(SkillTag.positioning);
@@ -24,35 +23,35 @@ public class Knee extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().mobile(getSelf()) && !c.getStance().prone(getSelf()) && getSelf().canAct()
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().mobile(user) && !c.getStance().prone(user) && user.canAct()
                         && c.getStance().front(target) && !c.getStance().connected(c);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 25;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 80;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), accuracy(c, target))) {
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.roll(user, accuracy(c, user, target))) {
             double m = Random.random(40, 60);
-            if (getSelf().human()) {
-                c.write(getSelf(), deal(c, 0, Result.normal, target));
+            if (user.human()) {
+                c.write(user, deal(c, 0, Result.normal, user, target));
             } else if (c.shouldPrintReceive(target, c)) {
                 if (c.getStance().prone(target)) {
-                    c.write(getSelf(), receive(c, 0, Result.special, target));
+                    c.write(user, receive(c, 0, Result.special, user, target));
                 } else {
-                    c.write(getSelf(), receive(c, 0, Result.normal, target));
+                    c.write(user, receive(c, 0, Result.normal, user, target));
                 }
                 if (target.hasBalls() && Random.random(5) >= 3) {
-                    c.write(getSelf(), getSelf().bbLiner(c, target));
+                    c.write(user, user.bbLiner(c, target));
                 }
             }
             if (target.has(Trait.achilles) && !target.has(ClothingTrait.armored)) {
@@ -61,11 +60,11 @@ public class Knee extends Skill {
             if (target.has(ClothingTrait.armored) || target.has(Trait.brassballs)) {
                 m *= .75;
             }
-            target.pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), target, m));
+            target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, m));
 
             target.emote(Emotion.angry, 20);
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
         return true;
@@ -78,21 +77,21 @@ public class Knee extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Knee(user.getType());
+        return new Knee();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 4;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.damage;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return target.getName() + " blocks your knee strike.";
         }
@@ -101,11 +100,11 @@ public class Knee extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         String victim = target.hasBalls() ? "balls" : "crotch";
         if (modifier == Result.miss) {
             return String.format("%s tries to knee %s in the %s, but %s %s it.",
-                            getSelf().subject(), target.nameDirectObject(),
+                            user.subject(), target.nameDirectObject(),
                             victim, target.pronoun(),
                                             target.action("block"));
         }
@@ -114,15 +113,15 @@ public class Knee extends Skill {
                             + "down like a hammer onto %s %s. %s"
                             + " out in pain and instinctively try "
                             + "to close %s legs, but %s holds them open.",
-                            getSelf().subject(), getSelf().possessiveAdjective(),
+                            user.subject(), user.possessiveAdjective(),
                             target.nameOrPossessivePronoun(), victim,
                             Formatter.capitalizeFirstLetter(target.subjectAction("cry", "cries")),
-                            target.possessiveAdjective(), getSelf().subject());
+                            target.possessiveAdjective(), user.subject());
         } else {
             return String.format("%s steps in close and brings %s knee up between %s legs, "
                             + "crushing %s fragile balls. %s and nearly %s from the "
-                            + "intense pain in %s abdomen.", getSelf().subject(),
-                            getSelf().possessiveAdjective(), target.nameOrPossessivePronoun(),
+                            + "intense pain in %s abdomen.", user.subject(),
+                            user.possessiveAdjective(), target.nameOrPossessivePronoun(),
                             target.possessiveAdjective(),
                             Formatter.capitalizeFirstLetter(target.subjectAction("groan")),
                             target.action("collapse"), target.possessiveAdjective());
@@ -130,7 +129,7 @@ public class Knee extends Skill {
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Knee opponent in the groin";
     }
 

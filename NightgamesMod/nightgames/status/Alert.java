@@ -1,9 +1,8 @@
 package nightgames.status;
 
 import com.google.gson.JsonObject;
-
-import nightgames.characters.*;
 import nightgames.characters.Character;
+import nightgames.characters.*;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 
@@ -75,7 +74,7 @@ public class Alert extends DurationStatus {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return 0;
     }
 

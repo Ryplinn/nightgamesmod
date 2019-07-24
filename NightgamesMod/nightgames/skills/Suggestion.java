@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.Charmed;
@@ -10,61 +9,61 @@ import nightgames.status.Stsflag;
 
 public class Suggestion extends Skill {
 
-    public Suggestion(CharacterType self) {
-        super("Suggestion", self);
+    public Suggestion() {
+        super("Suggestion");
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.hypnotism) >= 1;
+        return user.getPure(Attribute.hypnotism) >= 1;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance().mobile(getSelf()) && !c.getStance().behind(getSelf())
-                        && !c.getStance().behind(target) && !c.getStance().sub(getSelf()) && !target.is(Stsflag.charmed);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && c.getStance().mobile(user) && !c.getStance().behind(user)
+                        && !c.getStance().behind(target) && !c.getStance().sub(user) && !target.is(Stsflag.charmed);
     }
     
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 5;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Hypnotize your opponent so she can't defend herself";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         if (!target.is(Stsflag.cynical)) {
-            if (getSelf().human()) {
-                c.write(getSelf(), deal(c, 0, Result.normal, target));
+            if (user.human()) {
+                c.write(user, deal(c, 0, Result.normal, user, target));
             } else {
-                c.write(getSelf(), receive(c, 0, Result.normal, target));
+                c.write(user, receive(c, 0, Result.normal, user, target));
             }
             target.add(c, new Charmed(target.getType()));
             return true;
-        } else if (getSelf().human()) {
-            c.write(getSelf(), deal(c, 0, Result.miss, target));
+        } else if (user.human()) {
+            c.write(user, deal(c, 0, Result.miss, user, target));
         } else {
-            c.write(getSelf(), receive(c, 0, Result.miss, target));
+            c.write(user, receive(c, 0, Result.miss, user, target));
         }
         return false;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Suggestion(user.getType());
+        return new Suggestion();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format(
                             "You attempt to put %s under hypnotic suggestion, but %s doesn't appear to be affected.",
@@ -76,20 +75,20 @@ public class Suggestion extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s attempts to put %s under hypnotic suggestion, but"
                             + " %s %s to regain control of %s consciousness.",
-                            getSelf().subject(), target.nameDirectObject(),
+                            user.subject(), target.nameDirectObject(),
                             target.pronoun(), target.action("manage"), target.possessiveAdjective());
         }
         return String.format("%s speaks in a firm, but relaxing tone, attempting to put %s"
                         + " into a trance. Obviously %s wouldn't let %s be "
                         + "hypnotized in the middle of a match, right? ...Right? ..."
-                        + "Why %s %s fighting %s again?", getSelf().subject(),
+                        + "Why %s %s fighting %s again?", user.subject(),
                         target.nameDirectObject(), target.subject(),
                         target.reflectivePronoun(), target.action("was", "were"),
-                        target.pronoun(), getSelf().subject());
+                        target.pronoun(), user.subject());
     }
 
 }

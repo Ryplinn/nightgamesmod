@@ -1,27 +1,26 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 
 public class Nothing extends Skill {
 
-    public Nothing(CharacterType self) {
-        super("Nothing", self);
+    public Nothing() {
+        super("Nothing");
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
+    public boolean usable(Combat c, Character user, Character target) {
         return true;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (getSelf().human()) {
-            deal(c, 0, Result.normal, target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (user.human()) {
+            deal(c, 0, Result.normal, user, target);
         } else {
-            receive(c, 0, Result.normal, target);
+            receive(c, 0, Result.normal, user, target);
         }
         return true;
     }
@@ -33,31 +32,31 @@ public class Nothing extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Nothing(user.getType());
+        return new Nothing();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 0;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.misc;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You are unable to do anything.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        return getSelf().subject() + "is unable to do anything.";
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        return user.subject() + "is unable to do anything.";
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Do nothing";
     }
 }

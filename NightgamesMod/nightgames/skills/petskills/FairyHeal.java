@@ -1,7 +1,6 @@
 package nightgames.skills.petskills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
@@ -9,29 +8,29 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.Skill;
 
 public class FairyHeal extends SimpleMasterSkill {
-    public FairyHeal(CharacterType self) {
-        super("Fairy Heal", self);
+    public FairyHeal() {
+        super("Fairy Heal");
         addTag(SkillTag.heal);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 5;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 80;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), accuracy(c, target))) {
-            int m = Random.random(7, 14) + getSelf().getLevel();
-            c.write(getSelf(), Formatter.format("{self:SUBJECT} flies around {other:name-do}, rains magic energy on {other:direct-object}, restoring {other:possessive} strength.", getSelf(), target));
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.roll(user, accuracy(c, user, target))) {
+            int m = Random.random(7, 14) + user.getLevel();
+            c.write(user, Formatter.format("{self:SUBJECT} flies around {other:name-do}, rains magic energy on {other:direct-object}, restoring {other:possessive} strength.", user, target));
             target.heal(c, m);
         } else {
-            c.write(getSelf(), Formatter.format("{self:SUBJECT} flies around the edge of the fight looking for an opening to heal {self:possessive} master.", getSelf(), target));
+            c.write(user, Formatter.format("{self:SUBJECT} flies around the edge of the fight looking for an opening to heal {self:possessive} master.", user, target));
             return false;
         }
         return true;
@@ -39,6 +38,6 @@ public class FairyHeal extends SimpleMasterSkill {
 
     @Override
     public Skill copy(Character user) {
-        return new FairyHeal(user.getType());
+        return new FairyHeal();
     }
 }

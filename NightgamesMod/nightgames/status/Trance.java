@@ -1,10 +1,6 @@
 package nightgames.status;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
@@ -15,6 +11,9 @@ import nightgames.skills.Masturbate;
 import nightgames.skills.Piston;
 import nightgames.skills.Skill;
 import nightgames.skills.Thrust;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 public class Trance extends DurationStatus {
     private boolean makesCynical;
@@ -84,7 +83,7 @@ public class Trance extends DurationStatus {
 
     @Override
     public Collection<Skill> allowedSkills(Combat c) {
-        return Arrays.asList(new Masturbate(affected), new Thrust(affected), new Piston(affected));
+        return Arrays.asList(new Masturbate(), new Thrust(), new Piston());
     }
 
     @Override
@@ -114,7 +113,7 @@ public class Trance extends DurationStatus {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return -10;
     }
 

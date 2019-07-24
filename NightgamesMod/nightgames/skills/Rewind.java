@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -10,8 +9,8 @@ import nightgames.status.Primed;
 
 public class Rewind extends Skill {
 
-    Rewind(CharacterType self) {
-        super("Rewind", self);
+    Rewind() {
+        super("Rewind");
     }
 
     @Override
@@ -20,30 +19,26 @@ public class Rewind extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance()
-                .mobile(getSelf())
-                        && !c.getStance()
-                             .prone(getSelf())
-                        && getSelf().canAct() && Primed.isPrimed(getSelf(), 8);
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().mobile(user) && !c.getStance().prone(user) && user.canAct() && Primed.isPrimed(user, 8);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Rewind your personal time to undo all damage you've taken: 8 charges";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        getSelf().add(c, new Primed(self, -8));
-        getSelf().getArousal()
+    public boolean resolve(Combat c, Character user, Character target) {
+        user.add(c, new Primed(user.getType(), -8));
+        user.getArousal()
                  .empty();
-        getSelf().getStamina()
+        user.getStamina()
                  .fill();
-        getSelf().clearStatus();
-        writeOutput(c, Result.normal, target);
-        getSelf().emote(Emotion.confident, 25);
-        getSelf().emote(Emotion.dominant, 20);
+        user.clearStatus();
+        writeOutput(c, Result.normal, user, target);
+        user.emote(Emotion.confident, 25);
+        user.emote(Emotion.dominant, 20);
         target.emote(Emotion.nervous, 10);
         target.emote(Emotion.desperate, 10);
         return true;
@@ -51,26 +46,26 @@ public class Rewind extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Rewind(user.getType());
+        return new Rewind();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.recovery;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "It takes a lot of time energy, but you manage to rewind your physical condition back to the very start "
                         + "of the match, removing all damage you've taken.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format(
                         "%s hits a button on %s wristband and suddenly seems to completely recover. It's like nothing "
                                         + "%s done even happened.",
-                        getSelf().getName(), getSelf().possessiveAdjective(),
+                        user.getName(), user.possessiveAdjective(),
                         target.subjectAction("have", "has"));
     }
 

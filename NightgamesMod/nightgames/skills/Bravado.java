@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -10,8 +9,8 @@ import nightgames.combat.Result;
 public class Bravado extends Skill {
     private int cost;
 
-    public Bravado(CharacterType self) {
-        super("Determination", self, 5);
+    public Bravado() {
+        super("Determination", 5);
         cost = 0;
     }
 
@@ -21,52 +20,52 @@ public class Bravado extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canRespond() && c.getStance().mobile(getSelf());
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canRespond() && c.getStance().mobile(user);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
-        cost = Math.max(20, getSelf().getMojo().get());
+    public int getMojoCost(Combat c, Character user) {
+        cost = Math.max(20, user.getMojo().get());
         return cost;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         int x = cost;
-        writeOutput(c, Result.normal, target);
-        getSelf().calm(c, 20 + x / 2);
-        getSelf().heal(c, x);
-        getSelf().restoreWillpower(c, 2 + x / 10);
-        getSelf().emote(Emotion.confident, 30);
-        getSelf().emote(Emotion.dominant, 20);
-        getSelf().emote(Emotion.nervous, -20);
-        getSelf().emote(Emotion.desperate, -30);
+        writeOutput(c, Result.normal, user, target);
+        user.calm(c, 20 + x / 2);
+        user.heal(c, x);
+        user.restoreWillpower(c, 2 + x / 10);
+        user.emote(Emotion.confident, 30);
+        user.emote(Emotion.dominant, 20);
+        user.emote(Emotion.nervous, -20);
+        user.emote(Emotion.desperate, -30);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Bravado(user.getType());
+        return new Bravado();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.recovery;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You grit your teeth and put all your willpower into the fight.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character attacker) {
-        return getSelf().getName() + " gives "+attacker.nameDirectObject()+" a determined glare as " + getSelf().pronoun() + " seems to gain a second wind.";
+    public String receive(Combat c, int damage, Result modifier, Character user, Character attacker) {
+        return user.getName() + " gives "+attacker.nameDirectObject()+" a determined glare as " + user.pronoun() + " seems to gain a second wind.";
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Consume mojo to restore stamina and reduce arousal";
     }
 

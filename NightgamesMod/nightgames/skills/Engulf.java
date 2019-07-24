@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.custom.CharacterLine;
 import nightgames.combat.Combat;
@@ -13,8 +12,8 @@ import nightgames.stance.Engulfed;
 import nightgames.stance.Stance;
 
 public class Engulf extends CounterBase {
-    public Engulf(CharacterType self) {
-        super("Engulf", self, 5, counterDesc(), 2);
+    public Engulf() {
+        super("Engulf", 5, counterDesc(), 2);
         addTag(SkillTag.fucking);
         addTag(SkillTag.positioning);
     }
@@ -24,70 +23,70 @@ public class Engulf extends CounterBase {
     }
 
     @Override
-    public float priorityMod(Combat c) {
+    public float priorityMod(Combat c, Character user) {
         return 2;
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().get(Attribute.slime) > 19;
+        return user.get(Attribute.slime) > 19;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance().en != Stance.engulfed && target.mostlyNude();
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && c.getStance().en != Stance.engulfed && target.mostlyNude();
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 30;
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return -20;
     }
 
     @Override
-    public String getBlockedString(Combat c, Character target) {
+    public String getBlockedString(Combat c, Character user, Character target) {
         return Formatter.format(
                         "{self:SUBJECT-ACTION:move|moves} to engulf {other:subject} "
                                         + "in {self:possessive} slime, but {other:pronoun} stays out of {self:possessive} reach.",
-                        getSelf(), target);
+                        user, target);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Set up a counter to engulf the opponent in your slime";
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Engulf(user.getType());
+        return new Engulf();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.fucking;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return Formatter.format(
                         "You spread out your slime, getting ready to trap {other:name} in it.",
-                        getSelf(), target);
+                        user, target);
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return Formatter.format(
                         "{self:NAME}'s body spreads out across the floor. From {self:possessive} lowered position, "
                         + "{self:pronoun} smiles deviously up at {other:name-do}, goading {other:direct-object} into an attack.",
-                        getSelf(), target);
+                        user, target);
     }
 
     @Override
-    public void resolveCounter(Combat c, Character target) {
+    public void resolveCounter(Combat c, Character user, Character target) {
         String msg = "As {other:subject-action:approach|approaches}, {self:subject} suddenly {self:action:rush|rushes}"
                         + " forward, folding {self:possessive} slime around {other:direct-object}. ";
         if (!target.outfit.isNude()) {
@@ -105,11 +104,11 @@ public class Engulf extends CounterBase {
         if (target.hasPussy())
             msg += "pussy, ";
         msg += "ass and every other inch of {other:possessive} skin. ";
-        msg += getSelf().getRandomLineFor(CharacterLine.ENGULF_LINER, c, target);
-        c.write(getSelf(), Formatter.format(msg, getSelf(), target));
-        c.setStance(new Engulfed(self, target.getType()), getSelf(), true);
-        getSelf().emote(Emotion.dominant, 50);
-        getSelf().emote(Emotion.horny, 30);
+        msg += user.getRandomLineFor(CharacterLine.ENGULF_LINER, c, target);
+        c.write(user, Formatter.format(msg, user, target));
+        c.setStance(new Engulfed(user.getType(), target.getType()), user, true);
+        user.emote(Emotion.dominant, 50);
+        user.emote(Emotion.horny, 30);
         target.emote(Emotion.nervous, 50);
     }
     

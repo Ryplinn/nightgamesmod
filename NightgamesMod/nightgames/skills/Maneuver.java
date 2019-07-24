@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -11,48 +10,48 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.Behind;
 
 public class Maneuver extends Skill {
-    public Maneuver(CharacterType self) {
-        super("Maneuver", self, 2);
+    public Maneuver() {
+        super("Maneuver", 2);
         addTag(SkillTag.positioning);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return !target.wary() && c.getStance().mobile(getSelf()) && !c.getStance().prone(getSelf())
-                        && !c.getStance().prone(target) && !c.getStance().behind(getSelf()) && getSelf().canAct()
-                        && !getSelf().has(Trait.undisciplined) && !c.getStance().connected(c);
+    public boolean usable(Combat c, Character user, Character target) {
+        return !target.wary() && c.getStance().mobile(user) && !c.getStance().prone(user)
+                        && !c.getStance().prone(target) && !c.getStance().behind(user) && user.canAct()
+                        && !user.has(Trait.undisciplined) && !c.getStance().connected(c);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 15;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (isFlashStep()) {
-            if (target.roll(getSelf(), accuracy(c, target))) {
-                writeOutput(c, Result.special, target);
-                c.setStance(new Behind(self, target.getType()), getSelf(), true);
-                getSelf().weaken(c, getSelf().getStamina().get() / 10);
-                getSelf().emote(Emotion.confident, 15);
-                getSelf().emote(Emotion.dominant, 15);
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (isFlashStep(user)) {
+            if (target.roll(user, accuracy(c, user, target))) {
+                writeOutput(c, Result.special, user, target);
+                c.setStance(new Behind(user.getType(), target.getType()), user, true);
+                user.weaken(c, user.getStamina().get() / 10);
+                user.emote(Emotion.confident, 15);
+                user.emote(Emotion.dominant, 15);
                 target.emote(Emotion.nervous, 10);
                 return true;
             } else {
-                writeOutput(c, Result.miss, target);
+                writeOutput(c, Result.miss, user, target);
                 return false;
             }
         } else {
-            if (target.roll(getSelf(), accuracy(c, target))) {
-                writeOutput(c, Result.normal, target);
-                c.setStance(new Behind(self, target.getType()), getSelf(), true);
-                getSelf().emote(Emotion.confident, 15);
-                getSelf().emote(Emotion.dominant, 15);
+            if (target.roll(user, accuracy(c, user, target))) {
+                writeOutput(c, Result.normal, user, target);
+                c.setStance(new Behind(user.getType(), target.getType()), user, true);
+                user.emote(Emotion.confident, 15);
+                user.emote(Emotion.dominant, 15);
                 target.emote(Emotion.nervous, 10);
                 return true;
             } else {
-                writeOutput(c, Result.miss, target);
+                writeOutput(c, Result.miss, user, target);
                 return false;
             }
         }
@@ -60,31 +59,31 @@ public class Maneuver extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.cunning) >= 20 || isFlashStep();
+        return user.get(Attribute.cunning) >= 20 || isFlashStep(user);
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Maneuver(user.getType());
+        return new Maneuver();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 8;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
-        return isFlashStep() ? 200 : 75;
+    public int accuracy(Combat c, Character user, Character target) {
+        return isFlashStep(user) ? 200 : 75;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.special) {
             return "You channel your ki into your feet and dash behind " + target.getName()
             + " faster than her eyes can follow.";
@@ -96,33 +95,33 @@ public class Maneuver extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s tries to slip behind %s, but %s %s able to keep %s in sight.",
-                            getSelf().subject(), target.nameDirectObject(), target.pronoun(),
-                            target.action("are", "is"), getSelf().directObject());
+                            user.subject(), target.nameDirectObject(), target.pronoun(),
+                            target.action("are", "is"), user.directObject());
         } else if (modifier == Result.special) {
             return String.format("%s starts to move and suddenly vanishes. %s for a"
                             + " second and feel %s grab %s from behind.",
-                            getSelf().subject(), target.subjectAction("hesitate"),
-                            getSelf().subject(), target.directObject());
+                            user.subject(), target.subjectAction("hesitate"),
+                            user.subject(), target.directObject());
         } else {
             return String.format("%s lunges at %s, but when %s %s to grab %s, %s ducks out of sight. "
                             + "Suddenly %s arms are wrapped around %ss. How did %s get behind %s?",
-                            getSelf().subject(), target.nameDirectObject(), target.pronoun(),
-                            target.action("try", "tries"), target.directObject(), getSelf().pronoun(),
-                            getSelf().nameOrPossessivePronoun(), target.nameOrPossessivePronoun(),
-                            getSelf().pronoun(), target.directObject());
+                            user.subject(), target.nameDirectObject(), target.pronoun(),
+                            target.action("try", "tries"), target.directObject(), user.pronoun(),
+                            user.nameOrPossessivePronoun(), target.nameOrPossessivePronoun(),
+                            user.pronoun(), target.directObject());
         }
     }
 
-    private boolean isFlashStep() {
-        return getSelf().getStamina().percent() > 15 && getSelf().get(Attribute.ki) >= 6;
+    private boolean isFlashStep(Character user) {
+        return user.getStamina().percent() > 15 && user.get(Attribute.ki) >= 6;
     }
 
     @Override
-    public String describe(Combat c) {
-        if (isFlashStep()) {
+    public String describe(Combat c, Character user) {
+        if (isFlashStep(user)) {
             return "Use lightning speed to get behind your opponent before she can react: 10% stamina";
         } else {
             return "Get behind opponent";
@@ -135,10 +134,10 @@ public class Maneuver extends Skill {
     }
 
     @Override
-    public String getLabel(Combat c) {
-        if (isFlashStep()) {
+    public String getLabel(Combat c, Character user) {
+        if (isFlashStep(user)) {
             return "Flash Step";
         }
-        return getName(c);
+        return getName(c, user);
     }
 }

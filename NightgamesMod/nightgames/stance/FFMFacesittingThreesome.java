@@ -8,7 +8,10 @@ import nightgames.global.Formatter;
 import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -46,17 +49,6 @@ public class FFMFacesittingThreesome extends FFMCowgirlThreesome {
         }
         return Collections.emptyList();
     }
-    
-    @Override
-    public Optional<Position> checkOngoing(Combat c) {
-        if (!c.otherCombatantsContains(getDomSexCharacter())) {
-            c.write(getBottom(), Formatter.format(
-                            "With the disappearance of {self:name-do}, {other:subject-action:manage|manages} to escape.",
-                            getDomSexCharacter(), getBottom()));
-            return Optional.of(new Neutral(top, bottom));
-        }
-        return null;
-    }
 
     public List<Character> getAllPartners(Combat c, Character self) {
         if (self.getType() == bottom) {
@@ -93,8 +85,8 @@ public class FFMFacesittingThreesome extends FFMCowgirlThreesome {
         } else {
             return self.getSkills().stream()
                             .filter(skill -> skill.requirements(c, self, getBottom()))
-                            .filter(skill -> Skill.skillIsUsable(c, skill, getBottom()))
-                            .filter(skill -> skill.type(c) == Tactics.fucking).collect(Collectors.toSet());
+                            .filter(skill -> Skill.skillIsUsable(c, skill, self, getBottom()))
+                            .filter(skill -> skill.type(c, self) == Tactics.fucking).collect(Collectors.toSet());
         }
     }
 

@@ -147,7 +147,7 @@ public class Slimed extends DurationStatus {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return -stacks / 3;
     }
 

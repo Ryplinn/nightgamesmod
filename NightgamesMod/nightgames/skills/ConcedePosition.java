@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -9,8 +8,8 @@ import nightgames.nskills.tags.SkillTag;
 
 public class ConcedePosition extends Skill {
 
-    public ConcedePosition(CharacterType self) {
-        super("Concede Position", self);
+    public ConcedePosition() {
+        super("Concede Position");
         addTag(SkillTag.worship);
         addTag(SkillTag.petDisallowed);
         addTag(SkillTag.positioning);
@@ -22,55 +21,55 @@ public class ConcedePosition extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().dom(getSelf()) && c.getStance().reverse(c, false) != c.getStance() && c.getStance().havingSex(c, getSelf());
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().dom(user) && c.getStance().reverse(c, false) != c.getStance() && c.getStance().havingSex(c, user);
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.normal, target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.normal, user, target);
         c.setStance(c.getStance().reverse(c, false));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new ConcedePosition(user.getType());
+        return new ConcedePosition();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
             return Formatter.format("{other:NAME-POSSESSIVE} divine majesty is too much for {self:name-do}. "
-                            + "With a docile smile, {self:pronoun-action:concede|concedes} {self:possessive} dominant position to {other:direct-object}.", getSelf(), target);
+                            + "With a docile smile, {self:pronoun-action:concede|concedes} {self:possessive} dominant position to {other:direct-object}.", user, target);
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.anal) {
             return String.format("%s the pressure in %s anus recede as %s pulls out.",
                             target.subjectAction("feel"), target.possessiveAdjective(),
-                            getSelf().subject());
+                            user.subject());
         } else if (modifier == Result.reverse) {
             return String.format("%s lifts %s hips more than normal, letting %s dick slip completely out of %s.",
-                            getSelf().subject(), getSelf().possessiveAdjective(),
-                            target.nameOrPossessivePronoun(), getSelf().directObject());
+                            user.subject(), user.possessiveAdjective(),
+                            target.nameOrPossessivePronoun(), user.directObject());
         } else if (modifier == Result.normal) {
             return String.format("%s pulls %s dick completely out of %s pussy, leaving %s feeling empty.",
-                            getSelf().subject(), getSelf().possessiveAdjective(),
+                            user.subject(), user.possessiveAdjective(),
                             target.nameOrPossessivePronoun(), target.directObject());
         } else {
             return String.format("%s lifts herself off %s face, giving %s a brief respite.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(), target.directObject());
+                            user.subject(), target.nameOrPossessivePronoun(), target.directObject());
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Concede your dominant position to your opponent";
     }
 

@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -13,8 +12,8 @@ import nightgames.skills.damage.DamageType;
 import java.util.Optional;
 
 public class FlyCatcher extends Skill {
-    FlyCatcher(CharacterType self) {
-        super("Fly Catcher", self);
+    FlyCatcher() {
+        super("Fly Catcher");
     }
 
     @Override
@@ -23,58 +22,58 @@ public class FlyCatcher extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return !c.getPetsFor(target).isEmpty() && getSelf().canAct() && c.getStance().mobile(getSelf())
-                        && !c.getStance().prone(getSelf());
+    public boolean usable(Combat c, Character user, Character target) {
+        return !c.getPetsFor(target).isEmpty() && user.canAct() && c.getStance().mobile(user)
+                        && !c.getStance().prone(user);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 15;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Focus on eliminating the enemy pet: 25% Stamina";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         Optional<PetCharacter> targetPet = Random.pickRandom(c.getPetsFor(target));
         if (targetPet.isPresent()) {
-            writeOutput(c, Result.normal, targetPet.get());
+            writeOutput(c, Result.normal, user, targetPet.get());
             double m = Random.random(30, 50);
-            targetPet.get().pain(c, getSelf(), (int) DamageType.physical.modifyDamage(getSelf(), targetPet.get(), m));
-            getSelf().weaken(c, getSelf().getStamina().max() / 4);
+            targetPet.get().pain(c, user, (int) DamageType.physical.modifyDamage(user, targetPet.get(), m));
+            user.weaken(c, user.getStamina().max() / 4);
         return true;
         } else {
-            writeOutput(c, Result.normal, target);
+            writeOutput(c, Result.normal, user, target);
             return false;   
         }
     }
 
     @Override
     public Skill copy(Character user) {
-        return new FlyCatcher(user.getType());
+        return new FlyCatcher();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.summoning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
-        return receive(c, damage, modifier, target);
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
+        return receive(c, damage, modifier, user, target);
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
-            return Formatter.format("{self:SUBJECT-ACTION:try|tries} to chase down {other:name-possessive} pet, but there are none!", getSelf(), target);
+            return Formatter.format("{self:SUBJECT-ACTION:try|tries} to chase down {other:name-possessive} pet, but there are none!", user, target);
         }
         return Formatter.format("{self:SUBJECT-ACTION:take|takes} the time to focus on chasing down {other:name-do}, "
-                        + "finally catching {other:direct-object} in a submission hold.", getSelf(), target);
+                        + "finally catching {other:direct-object} in a submission hold.", user, target);
     }
 
 }

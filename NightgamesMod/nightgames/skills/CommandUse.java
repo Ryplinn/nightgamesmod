@@ -1,10 +1,6 @@
 package nightgames.skills;
 
-import java.util.Arrays;
-import java.util.List;
-
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
@@ -13,19 +9,22 @@ import nightgames.status.Hypersensitive;
 import nightgames.status.Oiled;
 import nightgames.status.Stsflag;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class CommandUse extends PlayerCommand {
 
     private static final List<Item> CANDIDATES = Arrays.asList(Item.Lubricant, Item.SPotion);
     private Item used;
 
-    CommandUse(CharacterType self) {
-        super("Force Item Use", self);
+    CommandUse() {
+        super("Force Item Use");
         used = null;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        if (!super.usable(c, target) || !target.mostlyNude()) {
+    public boolean usable(Combat c, Character user, Character target) {
+        if (!super.usable(c, user, target) || !target.mostlyNude()) {
             return false;
         }
         boolean usable = false;
@@ -47,12 +46,12 @@ public class CommandUse extends PlayerCommand {
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Force your thrall to use a harmful item on themselves";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         do {
             used = Item.values()[Random.random(Item.values().length)];
             boolean hasStatus = false;
@@ -73,14 +72,14 @@ public class CommandUse extends PlayerCommand {
         switch (used) {
             case Lubricant:
                 target.add(c, new Oiled(target.getType()));
-                c.write(getSelf(), deal(c, 0, Result.normal, target));
+                c.write(user, deal(c, 0, Result.normal, user, target));
                 break;
             case SPotion:
                 target.add(c, new Hypersensitive(target.getType()));
-                c.write(getSelf(), deal(c, 0, Result.special, target));
+                c.write(user, deal(c, 0, Result.special, user, target));
                 break;
             default:
-                c.write(getSelf(), "<<This should not be displayed, please inform The" + " Silver Bard: CommandUse-resolve>>");
+                c.write(user, "<<This should not be displayed, please inform The" + " Silver Bard: CommandUse-resolve>>");
                 return false;
         }
         target.consume(used, 1);
@@ -90,16 +89,16 @@ public class CommandUse extends PlayerCommand {
 
     @Override
     public Skill copy(Character user) {
-        return new CommandUse(user.getType());
+        return new CommandUse();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int magnitude, Result modifier, Character target) {
+    public String deal(Combat c, int magnitude, Result modifier, Character user, Character target) {
         switch (modifier) {
             case normal:
                 return target.getName() + " coats herself in a shiny lubricant at your 'request'.";
@@ -111,7 +110,7 @@ public class CommandUse extends PlayerCommand {
     }
 
     @Override
-    public String receive(Combat c, int magnitude, Result modifier, Character target) {
+    public String receive(Combat c, int magnitude, Result modifier, Character user, Character target) {
         return "<<This should not be displayed, please inform The" + " Silver Bard: CommandUse-receive>>";
     }
 

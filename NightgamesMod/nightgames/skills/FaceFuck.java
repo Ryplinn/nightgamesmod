@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -15,8 +14,8 @@ import nightgames.status.Shamed;
 
 public class FaceFuck extends Skill {
 
-    FaceFuck(CharacterType self) {
-        super("Face Fuck", self);
+    FaceFuck() {
+        super("Face Fuck");
     }
 
     @Override
@@ -25,20 +24,20 @@ public class FaceFuck extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance().dom(getSelf()) && c.getStance().prone(target)
-                        && (getSelf().crotchAvailable() && getSelf().hasDick() || getSelf().has(Trait.strapped))
-                        && !c.getStance().inserted(getSelf()) && c.getStance().front(getSelf())
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && c.getStance().dom(user) && c.getStance().prone(target)
+                        && (user.crotchAvailable() && user.hasDick() || user.has(Trait.strapped))
+                        && !c.getStance().inserted(user) && c.getStance().front(user)
                         && !c.getStance().behind(target);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Force your opponent to orally pleasure you.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         Result res = Result.normal;
         int selfDamage = 4;
         int targetDamage = 0;
@@ -47,8 +46,8 @@ public class FaceFuck extends Skill {
             res = Result.reverse;
             selfDamage *= 2;
         }
-        if (getSelf().has(Trait.strapped)) {
-            if (getSelf().has(Item.Strapon2)) {
+        if (user.has(Trait.strapped)) {
+            if (user.has(Item.Strapon2)) {
                 res = Result.upgrade;
                 targetDamage += 6;
             } else {
@@ -62,21 +61,21 @@ public class FaceFuck extends Skill {
         selfDamage += Random.random(selfDamage * 2 / 3);
         targetDamage += Random.random(targetDamage * 2 / 3);
 
-        if (getSelf().human()) {
-            c.write(getSelf(), deal(c, 0, res, target));
+        if (user.human()) {
+            c.write(user, deal(c, 0, res, user, target));
         } else {
-            c.write(getSelf(), receive(c, 0, res, target));
+            c.write(user, receive(c, 0, res, user, target));
         }
         target.add(c, new Shamed(target.getType()));
 
         if (selfDamage > 0) {
-            getSelf().body.pleasure(target, targetMouth, getSelf().body.getRandom("cock"), selfDamage, c, this);
+            user.body.pleasure(target, targetMouth, user.body.getRandom("cock"), selfDamage, c, new SkillUsage<>(this, user, target));
         }
         if (targetDamage > 0) {
-            target.body.pleasure(target, getSelf().body.getRandomInsertable(), targetMouth, targetDamage, c, this);
+            target.body.pleasure(target, user.body.getRandomInsertable(), targetMouth, targetDamage, c, new SkillUsage<>(this, user, target));
         }
-        if (Random.random(100) < 5 + 2 * getSelf().get(Attribute.fetishism) && !getSelf().has(Trait.strapped)) {
-            target.add(c, new BodyFetish(target.getType(), self, "cock", .25));
+        if (Random.random(100) < 5 + 2 * user.get(Attribute.fetishism) && !user.has(Trait.strapped)) {
+            target.add(c, new BodyFetish(target.getType(), user.getType(), "cock", .25));
         }
         target.loseMojo(c, Random.random(10, 20));
         target.loseWillpower(c, 5);
@@ -85,16 +84,16 @@ public class FaceFuck extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new FaceFuck(user.getType());
+        return new FaceFuck();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         String m;
         if (modifier == Result.strapon || modifier == Result.upgrade) {
             m = "You grab hold of " + target.getName()
@@ -125,27 +124,27 @@ public class FaceFuck extends Skill {
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 25;
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         String m;
         if (modifier == Result.strapon) {
             m = String.format("%s forces her strapon cock into %s mouth and fucks %s face with it. "
                             + "It's only rubber, but the position is still humiliating. %s not "
                             + "to gag on the artificial member while %s revels in her dominance.",
-                            Formatter.capitalizeFirstLetter(getSelf().subject()), target.nameOrPossessivePronoun(), target.possessiveAdjective(),
-                            target.subjectAction("try", "tries"), getSelf().subject());
+                            Formatter.capitalizeFirstLetter(user.subject()), target.nameOrPossessivePronoun(), target.possessiveAdjective(),
+                            target.subjectAction("try", "tries"), user.subject());
         } else if (modifier == Result.upgrade) {
             m = String.format("%s moves slightly towards %s, pushing her strapon against %s lips. %s to keep %s"
                             + " mouth closed but %s pinches %s nose shut, "
                             + "and pushes in the rubbery invader as %s for air. After a few sucks, %s"
                             + " %s to break free, although %s %s still shivering "
-                            + "with a mix of arousal and humiliation.", Formatter.capitalizeFirstLetter(getSelf().subject()), target.nameDirectObject(),
+                            + "with a mix of arousal and humiliation.", Formatter.capitalizeFirstLetter(user.subject()), target.nameDirectObject(),
                             target.possessiveAdjective(), target.subjectAction("try", "tries"), target.possessiveAdjective(),
-                            getSelf().subject(), target.possessiveAdjective(), target.subjectAction("gasp"),
+                            user.subject(), target.possessiveAdjective(), target.subjectAction("gasp"),
                             target.pronoun(), target.action("manage"), target.pronoun(), target.action("are", "is"));
         } else if (target.body.getRandom("mouth").isErogenous()) {
             m = String.format("%s forces %s mouth open and shoves %s %s into it. %s "
@@ -153,11 +152,11 @@ public class FaceFuck extends Skill {
                             + "%s quickly starts moving %s hips, fucking %s mouth. However, %s "
                             + "modified oral orifice was literally designed to squeeze cum; soon %s finds "
                             + "%s ramming with little more than %s own enjoyment in mind.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(), getSelf().possessiveAdjective(),
-                            getSelf().body.getRandomCock().describe(getSelf()), target.subjectAction("are", "is"),
-                            getSelf().subject(), getSelf().possessiveAdjective(), target.possessiveAdjective(),
-                            target.nameOrPossessivePronoun(), getSelf().subject(), getSelf().reflectivePronoun(),
-                            getSelf().possessiveAdjective());
+                            user.subject(), target.nameOrPossessivePronoun(), user.possessiveAdjective(),
+                            user.body.getRandomCock().describe(user), target.subjectAction("are", "is"),
+                            user.subject(), user.possessiveAdjective(), target.possessiveAdjective(),
+                            target.nameOrPossessivePronoun(), user.subject(), user.reflectivePronoun(),
+                            user.possessiveAdjective());
         } else {
             m = String.format("%s forces %s mouth open and shoves %s %s into it. %s "
                             + "momentarily overwhelmed by the strong, musky smell and the taste, but "
@@ -165,12 +164,12 @@ public class FaceFuck extends Skill {
                             + "%s cheeks redden in shame, but %s still %s what you can to pleasure %s. "
                             + "%s may be using you like a sex toy, but %s going to try to scrounge "
                             + "whatever advantage %s can get.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(), getSelf().possessiveAdjective(),
-                            getSelf().body.getRandomCock().describe(getSelf()), target.subjectAction("are", "is"),
-                            getSelf().subject(), getSelf().possessiveAdjective(), target.possessiveAdjective(),
+                            user.subject(), target.nameOrPossessivePronoun(), user.possessiveAdjective(),
+                            user.body.getRandomCock().describe(user), target.subjectAction("are", "is"),
+                            user.subject(), user.possessiveAdjective(), target.possessiveAdjective(),
                             Formatter.capitalizeFirstLetter(target.subjectAction("feel")), target.possessiveAdjective(),
-                            target.pronoun(), target.action("do", "does"), getSelf().nameDirectObject(),
-                            Formatter.capitalizeFirstLetter(getSelf().subject()), target.subjectAction("are", "is"),
+                            target.pronoun(), target.action("do", "does"), user.nameDirectObject(),
+                            Formatter.capitalizeFirstLetter(user.subject()), target.subjectAction("are", "is"),
                             target.pronoun());
         }
         return m;

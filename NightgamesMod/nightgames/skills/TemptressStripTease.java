@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -15,8 +14,8 @@ import nightgames.status.Charmed;
 
 public class TemptressStripTease extends StripTease {
 
-    TemptressStripTease(CharacterType self) {
-        super("Skillful Strip Tease", self);
+    TemptressStripTease() {
+        super("Skillful Strip Tease");
     }
 
     @Override
@@ -25,80 +24,80 @@ public class TemptressStripTease extends StripTease {
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
-        return isDance(c) ? 0 : super.getMojoBuilt(c);
+    public int getMojoBuilt(Combat c, Character user) {
+        return isDance(c, user) ? 0 : super.getMojoBuilt(c, user);
     }
 
     @Override
-    public int getMojoCost(Combat c) {
-        return isDance(c) ? super.getMojoBuilt(c) : super.getMojoCost(c);
+    public int getMojoCost(Combat c, Character user) {
+        return isDance(c, user) ? super.getMojoBuilt(c, user) : super.getMojoCost(c, user);
     }
 
-    private boolean canStrip(Combat c, Character target) {
-        boolean sexydance = c.getStance().enumerate() == Stance.neutral && getSelf().canAct() && getSelf().mostlyNude();
-        boolean normalstrip = !getSelf().mostlyNude();
-        return getSelf().stripDifficulty(target) == 0 && (sexydance || normalstrip);
-    }
-
-    @Override
-    public boolean usable(Combat c, Character target) {
-        return canStrip(c, target) && getSelf().canAct() && c.getStance().mobile(getSelf())
-                        && !c.getStance().prone(getSelf());
+    private boolean canStrip(Combat c, Character user, Character target) {
+        boolean sexydance = c.getStance().enumerate() == Stance.neutral && user.canAct() && user.mostlyNude();
+        boolean normalstrip = !user.mostlyNude();
+        return user.stripDifficulty(target) == 0 && (sexydance || normalstrip);
     }
 
     @Override
-    public String getLabel(Combat c) {
-        return isDance(c) ? "Sexy Dance" : super.getLabel(c);
+    public boolean usable(Combat c, Character user, Character target) {
+        return canStrip(c, user, target) && user.canAct() && c.getStance().mobile(user)
+                        && !c.getStance().prone(user);
     }
 
     @Override
-    public String describe(Combat c) {
-        return isDance(c) ? "Do a slow, titillating dance to charm your opponent."
+    public String getLabel(Combat c, Character user) {
+        return isDance(c, user) ? "Sexy Dance" : super.getLabel(c, user);
+    }
+
+    @Override
+    public String describe(Combat c, Character user) {
+        return isDance(c, user) ? "Do a slow, titillating dance to charm your opponent."
                         : "Shed your clothes seductively, charming your opponent.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        int technique = getSelf().get(Attribute.technique);
+    public boolean resolve(Combat c, Character user, Character target) {
+        int technique = user.get(Attribute.technique);
         //assert technique > 0;
 
-        if (isDance(c)) {
-            if (getSelf().human()) {
-                c.write(getSelf(), deal(c, 0, Result.weak, target));
+        if (isDance(c, user)) {
+            if (user.human()) {
+                c.write(user, deal(c, 0, Result.weak, user, target));
             } else {
-                c.write(getSelf(), receive(c, 0, Result.weak, target));
+                c.write(user, receive(c, 0, Result.weak, user, target));
             }
-            target.temptNoSource(c, getSelf(), 10 + Random.random(Math.max(5, technique)), this);
+            target.temptNoSource(c, user, 10 + Random.random(Math.max(5, technique)), this);
             if (Random.random(2) == 0) {
                 target.add(c, new Charmed(target.getType(), Random.random(Math.min(3, technique))));
             }
-            getSelf().add(c, new Alluring(self, 3));
+            user.add(c, new Alluring(user.getType(), 3));
         } else {
-            if (getSelf().human()) {
-                c.write(getSelf(), deal(c, 0, Result.normal, target));
+            if (user.human()) {
+                c.write(user, deal(c, 0, Result.normal, user, target));
             } else {
-                c.write(getSelf(), receive(c, 0, Result.normal, target));
+                c.write(user, receive(c, 0, Result.normal, user, target));
             }
 
-            target.temptNoSource(c, getSelf(), 15 + Random.random(Math.max(10, technique)), this);
+            target.temptNoSource(c, user, 15 + Random.random(Math.max(10, technique)), this);
             target.add(c, new Charmed(target.getType(), Random.random(Math.min(5, technique))));
-            getSelf().add(c, new Alluring(self, 5));
-            getSelf().undress(c);
+            user.add(c, new Alluring(user.getType(), 5));
+            user.undress(c);
         }
         target.emote(Emotion.horny, 30);
-        getSelf().emote(Emotion.confident, 15);
-        getSelf().emote(Emotion.dominant, 15);
+        user.emote(Emotion.confident, 15);
+        user.emote(Emotion.dominant, 15);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new TemptressStripTease(user.getType());
+        return new TemptressStripTease();
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        if (isDance(c)) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        if (isDance(c, user)) {
             return String.format("%s backs up a little and starts swinging"
                             + " her hips side to side. Curious as to what's going on, %s"
                             + " %s attacks and watch as she bends and curves, putting"
@@ -107,7 +106,7 @@ public class TemptressStripTease extends StripTease {
                             + " the sight stirs %s imagination. %s shocked out of %s"
                             + " reverie when she plants a soft kiss on %s lips, and %s dreamily"
                             + " %s into her eyes as she gets back into a fighting stance.",
-                            getSelf().subject(), target.subjectAction("cease"),
+                            user.subject(), target.subjectAction("cease"),
                             target.possessiveAdjective(), target.possessiveAdjective(),
                             target.nameOrPossessivePronoun(), target.subjectAction("are", "is"),
                             target.possessiveAdjective(), target.possessiveAdjective(), target.pronoun(),
@@ -119,14 +118,14 @@ public class TemptressStripTease extends StripTease {
                             + " peeling her clothes off slowly, never breaking eye contact."
                             + " %s can only gawk in amazement as her perfect body is revealed bit"
                             + " by bit, and the thought of doing anything to blemish such"
-                            + " perfection seems very unpleasant indeed.", getSelf().subject(),
+                            + " perfection seems very unpleasant indeed.", user.subject(),
                             Formatter.capitalizeFirstLetter(target.subject()));
         }
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
-        if (isDance(c)) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
+        if (isDance(c, user)) {
             return "You slowly dance for " + target.getName() + ", showing off" + " your naked body.";
         } else {
             return "You seductively perform a short dance, shedding clothes as you do so. " + target.getName()
@@ -135,7 +134,7 @@ public class TemptressStripTease extends StripTease {
         }
     }
 
-    private boolean isDance(Combat c) {
-        return !super.usable(c, c.getOpponent(getSelf())) && usable(c, c.getOpponent(getSelf()));
+    private boolean isDance(Combat c, Character user) {
+        return !super.usable(c, user, c.getOpponent(user)) && usable(c, user, c.getOpponent(user));
     }
 }

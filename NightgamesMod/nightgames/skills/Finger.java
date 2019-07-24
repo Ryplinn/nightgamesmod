@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -13,56 +12,56 @@ import nightgames.stance.Stance;
 
 public class Finger extends Skill {
 
-    public Finger(CharacterType self) {
-        super("Finger", self);
+    public Finger() {
+        super("Finger");
         addTag(SkillTag.usesHands);
         addTag(SkillTag.pleasure);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().reachBottom(getSelf())
-                        && (target.crotchAvailable() || getSelf().has(Trait.dexterous)
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().reachBottom(user)
+                        && (target.crotchAvailable() || user.has(Trait.dexterous)
                                         && target.getOutfit().getTopOfSlot(ClothingSlot.bottom).getLayer() <= 1)
-                        && target.hasPussy() && getSelf().canAct() && !c.getStance().vaginallyPenetrated(c, target);
+                        && target.hasPussy() && user.canAct() && !c.getStance().vaginallyPenetrated(c, target);
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), accuracy(c, target))) {
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.roll(user, accuracy(c, user, target))) {
             int m = Random.random(8, 13);
-            if (getSelf().get(Attribute.seduction) >= 8) {
+            if (user.get(Attribute.seduction) >= 8) {
                 m += 6;
-                if (getSelf().human()) {
-                    c.write(getSelf(), deal(c, m, Result.normal, target));
+                if (user.human()) {
+                    c.write(user, deal(c, m, Result.normal, user, target));
                 } else {
-                    c.write(getSelf(), receive(c, 0, Result.normal, target));
+                    c.write(user, receive(c, 0, Result.normal, user, target));
                 }
-                target.body.pleasure(getSelf(), getSelf().body.getRandom("hands"), target.body.getRandom("pussy"), m,
-                                c, this);
+                target.body.pleasure(user, user.body.getRandom("hands"), target.body.getRandom("pussy"), m,
+                                c, new SkillUsage<>(this, user, target));
             } else {
-                if (getSelf().human()) {
-                    c.write(getSelf(), deal(c, m, Result.weak, target));
+                if (user.human()) {
+                    c.write(user, deal(c, m, Result.weak, user, target));
                 } else {
-                    c.write(getSelf(), receive(c, 0, Result.weak, target));
+                    c.write(user, receive(c, 0, Result.weak, user, target));
                 }
-                target.body.pleasure(getSelf(), getSelf().body.getRandom("hands"), target.body.getRandom("pussy"), m,
-                                c, this);
+                target.body.pleasure(user, user.body.getRandom("hands"), target.body.getRandom("pussy"), m,
+                                c, new SkillUsage<>(this, user, target));
             }
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
         return true;
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 7;
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return c.getStance().en == Stance.neutral ? 50 : 100;
     }
 
@@ -73,16 +72,16 @@ public class Finger extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new Finger(user.getType());
+        return new Finger();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "You grope at " + target.getName() + "'s pussy, but miss. (Maybe you should get closer?)";
         }
@@ -107,43 +106,43 @@ public class Finger extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s gropes at %s pussy, but misses the mark.",
-                            getSelf().subject(), target.nameOrPossessivePronoun());
+                            user.subject(), target.nameOrPossessivePronoun());
         }
         if (modifier == Result.weak) {
             return String.format("%s gropes between %s legs, not really knowing what %s is doing. "
                             + "%s doesn't know where %s the most sensitive, so %s rubs and "
                             + "strokes every bit of %s moist flesh under %s fingers.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(), getSelf().pronoun(),
-                            getSelf().subject(), target.subjectAction("are", "is"), getSelf().pronoun(),
-                            target.possessiveAdjective(), getSelf().possessiveAdjective());
+                            user.subject(), target.nameOrPossessivePronoun(), user.pronoun(),
+                            user.subject(), target.subjectAction("are", "is"), user.pronoun(),
+                            target.possessiveAdjective(), user.possessiveAdjective());
         } else {
             if (target.getArousal().get() <= 15) {
                 return String.format("%s softly rubs the petals of %s closed flower.",
-                                getSelf().subject(), target.nameOrPossessivePronoun());
+                                user.subject(), target.nameOrPossessivePronoun());
             } else if (target.getArousal().percent() < 50) {
                 return String.format("%s sensitive lower lips start to open up under"
                                 + " %s skilled touch and %s can feel %s becoming wet.",
-                                target.nameOrPossessivePronoun(), getSelf().nameOrPossessivePronoun(),
+                                target.nameOrPossessivePronoun(), user.nameOrPossessivePronoun(),
                                 target.pronoun(), target.reflectivePronoun());
             } else if (target.getArousal().percent() < 80) {
                 return String.format("%s locates %s clitoris and caress it directly, causing"
                                 + " %s to tremble from the powerful stimulation.",
-                                getSelf().subject(), target.nameOrPossessivePronoun(), target.directObject());
+                                user.subject(), target.nameOrPossessivePronoun(), target.directObject());
             } else {
                 return String.format("%s stirs %s increasingly soaked pussy with %s fingers and "
                                 + "rubs %s clit directly with %s thumb.",
-                                getSelf().subject(), target.nameOrPossessivePronoun(),
-                                getSelf().possessiveAdjective(), target.possessiveAdjective(),
-                                getSelf().possessiveAdjective());
+                                user.subject(), target.nameOrPossessivePronoun(),
+                                user.possessiveAdjective(), target.possessiveAdjective(),
+                                user.possessiveAdjective());
             }
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Digitally stimulate opponent's pussy, difficult to land without pinning her down.";
     }
 

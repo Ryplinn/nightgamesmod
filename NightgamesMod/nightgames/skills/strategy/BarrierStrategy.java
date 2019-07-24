@@ -1,7 +1,6 @@
 package nightgames.skills.strategy;
 
 import nightgames.characters.Character;
-import nightgames.characters.NPC;
 import nightgames.combat.Combat;
 import nightgames.global.Random;
 import nightgames.skills.Barrier;
@@ -12,7 +11,7 @@ import java.util.Collections;
 import java.util.Set;
 
 public class BarrierStrategy extends AbstractStrategy {
-    private static final Barrier BARRIER = new Barrier(NPC.noneCharacter().getType());
+    private static final Barrier BARRIER = new Barrier();
     
     @Override
     public double weight(Combat c, Character self) {
@@ -29,7 +28,7 @@ public class BarrierStrategy extends AbstractStrategy {
             return Collections.emptySet();
         }
         if (allowedSkills.contains(BARRIER)) {
-            return Collections.singleton(new Barrier(self.getType()));
+            return Collections.singleton(new Barrier());
         }
         return Collections.emptySet();
     }

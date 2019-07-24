@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -15,16 +14,16 @@ import nightgames.status.Stsflag;
 
 public class TemptressTitfuck extends Paizuri {
 
-    TemptressTitfuck(CharacterType user) {
-        super("Skillful Titfuck", user);
+    TemptressTitfuck() {
+        super("Skillful Titfuck");
         addTag(SkillTag.usesBreasts);
         addTag(SkillTag.pleasure);
         addTag(SkillTag.oral);
     }
 
     @Override
-    public float priorityMod(Combat c) {
-        return super.priorityMod(c) + 1.5f;
+    public float priorityMod(Combat c, Character user) {
+        return super.priorityMod(c, user) + 1.5f;
     }
 
     @Override
@@ -33,15 +32,15 @@ public class TemptressTitfuck extends Paizuri {
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Use your supreme titfucking skills on your opponent's dick.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        BreastsPart breasts = getSelf().body.getLargestBreasts();
+    public boolean resolve(Combat c, Character user, Character target) {
+        BreastsPart breasts = user.body.getLargestBreasts();
         for (int i = 0; i < 3; i++) {
-            BreastsPart otherbreasts = getSelf().body.getRandomBreasts();
+            BreastsPart otherbreasts = user.body.getRandomBreasts();
             if (otherbreasts.getSize() > MIN_REQUIRED_BREAST_SIZE) {
                 breasts = otherbreasts;
                 break;
@@ -49,111 +48,111 @@ public class TemptressTitfuck extends Paizuri {
         }
         
 
-        int fetishChance = 7 + breasts.getSize() + getSelf().get(Attribute.fetishism) / 2;
+        int fetishChance = 7 + breasts.getSize() + user.get(Attribute.fetishism) / 2;
 
-        int m = 7 + Random.random(getSelf().get(Attribute.technique) / 2) + breasts.getSize();
+        int m = 7 + Random.random(user.get(Attribute.technique) / 2) + breasts.getSize();
         
-        if(getSelf().is(Stsflag.oiled)) {
+        if(user.is(Stsflag.oiled)) {
             m += Random.random(2, 5);
         }
         
-        if( getSelf().has(Trait.lactating)) {
+        if( user.has(Trait.lactating)) {
             m += Random.random(3, 5);
             fetishChance += 5;
         }
 
-        if (target.roll(getSelf(), accuracy(c, target))) {
+        if (target.roll(user, accuracy(c, user, target))) {
             if (!target.body.getRandomCock().isReady(target)) {
                 m -= 7;
-                target.body.pleasure(getSelf(), getSelf().body.getRandom("breasts"), target.body.getRandomCock(), m, c, this);
+                target.body.pleasure(user, user.body.getRandom("breasts"), target.body.getRandomCock(), m, c, new SkillUsage<>(this, user, target));
                 if (target.body.getRandomCock().isReady(target)) {
                     // Was flaccid, got hard
-                    c.write(getSelf(), deal(c, 0, Result.special, target));
-                    getSelf().add(c, new FiredUp(self, target.getType(), "breasts"));
+                    c.write(user, deal(c, 0, Result.special, user, target));
+                    user.add(c, new FiredUp(user.getType(), target.getType(), "breasts"));
                     
-                    target.body.pleasure(getSelf(), getSelf().body.getRandom("breasts"), target.body.getRandom("cock"), m, c, this);
+                    target.body.pleasure(user, user.body.getRandom("breasts"), target.body.getRandom("cock"), m, c, new SkillUsage<>(this, user, target));
                     if (Random.random(100) < fetishChance) {
-                        target.add(c, new BodyFetish(target.getType(), self, BreastsPart.a.getType(), .05 + (0.01 * breasts.getSize()) + getSelf().get(Attribute.fetishism) * .01));
+                        target.add(c, new BodyFetish(target.getType(), user.getType(), BreastsPart.a.getType(), .05 + (0.01 * breasts.getSize()) + user.get(Attribute.fetishism) * .01));
                     }
                 } else {
                     // Was flaccid, still is
-                    c.write(getSelf(), deal(c, 0, Result.weak, target));
+                    c.write(user, deal(c, 0, Result.weak, user, target));
                 }
                 
                 
             } else {
-                FiredUp status = (FiredUp) getSelf().status.stream().filter(s -> s instanceof FiredUp).findAny()
+                FiredUp status = (FiredUp) user.status.stream().filter(s -> s instanceof FiredUp).findAny()
                                 .orElse(null);
                 int stack = status == null || !status.getPart().equals("breasts") ? 0 : status.getStack();
-                c.write(getSelf(), deal(c, stack, Result.normal, target));
-                target.body.pleasure(getSelf(), getSelf().body.getRandom("breasts"), target.body.getRandomCock(),
-                                m + m * stack / 2, c, this);
-                getSelf().add(c, new FiredUp(self, target.getType(), "breasts"));
+                c.write(user, deal(c, stack, Result.normal, user, target));
+                target.body.pleasure(user, user.body.getRandom("breasts"), target.body.getRandomCock(),
+                                m + m * stack / 2, c, new SkillUsage<>(this, user, target));
+                user.add(c, new FiredUp(user.getType(), target.getType(), "breasts"));
                 
                 if (Random.random(100) < fetishChance) {
-                    target.add(c, new BodyFetish(target.getType(), self, BreastsPart.a.getType(), .05 + (0.01 * breasts.getSize()) + getSelf().get(Attribute.fetishism) * .01));
+                    target.add(c, new BodyFetish(target.getType(), user.getType(), BreastsPart.a.getType(), .05 + (0.01 * breasts.getSize()) + user.get(Attribute.fetishism) * .01));
                 }
             }
         } else {
-            c.write(getSelf(), deal(c, 0, Result.miss, target));
+            c.write(user, deal(c, 0, Result.miss, user, target));
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new TemptressTitfuck(user.getType());
+        return new TemptressTitfuck();
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         switch (modifier) {
             case miss:
-                return String.format("%s towards %s %s, but %s %s hips back.", getSelf().subjectAction("move"),
+                return String.format("%s towards %s %s, but %s %s hips back.", user.subjectAction("move"),
                                 target.nameOrPossessivePronoun(), target.body.getRandomCock().describe(target),
                                 target.pronoun(), target.action("pull"));
             case weak:
                 return String.format(
                                 "%s %s up %s flaccid %s between %s %s, doing everything %s"
                                                 + " can to get it hard, but %s %s back before %s can manage it.",
-                                getSelf().getName(),  getSelf().subjectAction("wrap"), target.nameOrPossessivePronoun(), target.body.getRandomCock().describe(target), 
-                                getSelf().pronoun(), getSelf().body.getLargestBreasts().describe(getSelf()),  
-                                getSelf().pronoun(), target.pronoun(), target.action("pull"), getSelf().pronoun());
+                                user.getName(),  user.subjectAction("wrap"), target.nameOrPossessivePronoun(), target.body.getRandomCock().describe(target),
+                                user.pronoun(), user.body.getLargestBreasts().describe(user),
+                                user.pronoun(), target.pronoun(), target.action("pull"), user.pronoun());
             case special:
                 return String.format(
                                 "%s %s %s %s between her %s and %s them with intense pressure. %s %s hardens"
                                                 + " instantly, throbbing happily in it's new home.",
-                                 getSelf().pronoun(), getSelf().subjectAction("trap"), target.possessivePronoun(),
-                                target.body.getRandomCock().describe(target), getSelf().body.getLargestBreasts().describe(getSelf()),
-                                getSelf().action("squeeze"), target.possessivePronoun(), target.body.getRandomCock().describe(target));
+                                 user.pronoun(), user.subjectAction("trap"), target.possessivePronoun(),
+                                target.body.getRandomCock().describe(target), user.body.getLargestBreasts().describe(user),
+                                user.action("squeeze"), target.possessivePronoun(), target.body.getRandomCock().describe(target));
             default: // should be Result.normal
                 switch (damage) {
                     case 0:
                         return String.format(
                                         "%s strokes %s %s with her %s in slow circular motions while"
                                                         + " lightly licking the tip, causing %s to groan in pleasure.",
-                                        getSelf().getName(), target.nameOrPossessivePronoun(),
-                                        target.body.getRandomCock().describe(target), getSelf().body.getLargestBreasts().fullDescribe(getSelf()), target.directObject());
+                                        user.getName(), target.nameOrPossessivePronoun(),
+                                        target.body.getRandomCock().describe(target), user.body.getLargestBreasts().fullDescribe(user), target.directObject());
                     case 1:
                         return String.format("%s tongue loops around the head of %s hard %s "
                                         + "and %s the shaft with her %s, constantly increasing  in intensity.",
-                                        getSelf().nameOrPossessivePronoun(),
+                                        user.nameOrPossessivePronoun(),
                                         target.nameOrPossessivePronoun(), target.body.getRandomCock().describe(target),
-                                        getSelf().action("milk"), getSelf().body.getLargestBreasts().fullDescribe(getSelf()));
+                                        user.action("milk"), user.body.getLargestBreasts().fullDescribe(user));
                     default:
                         return String.format("As %s %s rapidly fuck %s %s, a pleasurable pressure constantly builds at the base. "
                                         + "All while %s %s the head sending bolts of electric pleasure back down %s shaft. "
                                         + "Overwhelmed from the pleasure, you grit %s teeth through a pleasure filled smile trying not to cum.",
-                                        getSelf().nameOrPossessivePronoun(), getSelf().body.getLargestBreasts().describe(getSelf()),
-                                        target.possessivePronoun(), target.body.getRandomCock().describe(target), getSelf().getName(),
-                                        getSelf().action("suck"), target.possessivePronoun(), target.possessivePronoun());
+                                        user.nameOrPossessivePronoun(), user.body.getLargestBreasts().describe(user),
+                                        target.possessivePronoun(), target.body.getRandomCock().describe(target), user.getName(),
+                                        user.action("suck"), target.possessivePronoun(), target.possessivePronoun());
                 }
         }
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        return deal(c, damage, modifier, target);
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        return deal(c, damage, modifier, user, target);
     }
 
 }

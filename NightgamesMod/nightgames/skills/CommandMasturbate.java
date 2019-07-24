@@ -1,43 +1,42 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Random;
 
 public class CommandMasturbate extends PlayerCommand {
 
-    CommandMasturbate(CharacterType self) {
-        super("Force Masturbation", self);
+    CommandMasturbate() {
+        super("Force Masturbation");
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return super.usable(c, target) && target.crotchAvailable();
+    public boolean usable(Combat c, Character user, Character target) {
+        return super.usable(c, user, target) && target.crotchAvailable();
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Convince your opponents to pleasure themselves for your viewing pleasure";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         boolean lowStart = target.getArousal().get() < 15;
         int m = 5 + Random.random(10);
-        target.body.pleasure(target, target.body.getRandom("hands"), target.body.getRandomGenital(), m, c, this);
+        target.body.pleasure(target, target.body.getRandom("hands"), target.body.getRandomGenital(), m, c, new SkillUsage<>(this, user, target));
 
         boolean lowEnd = target.getArousal().get() < 15;
-        if (getSelf().human()) {
+        if (user.human()) {
             if (lowStart) {
                 if (lowEnd) {
-                    c.write(getSelf(), deal(c, 0, Result.weak, target));
+                    c.write(user, deal(c, 0, Result.weak, user, target));
                 } else {
-                    c.write(getSelf(), deal(c, 0, Result.strong, target));
+                    c.write(user, deal(c, 0, Result.strong, user, target));
                 }
             } else {
-                c.write(getSelf(), deal(c, 0, Result.normal, target));
+                c.write(user, deal(c, 0, Result.normal, user, target));
             }
         }
         return true;
@@ -45,16 +44,16 @@ public class CommandMasturbate extends PlayerCommand {
 
     @Override
     public Skill copy(Character user) {
-        return new CommandMasturbate(user.getType());
+        return new CommandMasturbate();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int magnitude, Result modifier, Character target) {
+    public String deal(Combat c, int magnitude, Result modifier, Character user, Character target) {
         switch (modifier) {
             case normal:
                 return target.getName() + " seems more than happy to do as you tell her, "
@@ -70,7 +69,7 @@ public class CommandMasturbate extends PlayerCommand {
     }
 
     @Override
-    public String receive(Combat c, int magnitude, Result modifier, Character target) {
+    public String receive(Combat c, int magnitude, Result modifier, Character user, Character target) {
         return "<<This should not be displayed, please inform The" + " Silver Bard: CommandMasturbate-receive>>";
     }
 

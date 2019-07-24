@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.items.Item;
@@ -10,8 +9,8 @@ import nightgames.status.Stsflag;
 
 public class Lubricate extends Skill {
 
-    Lubricate(CharacterType self) {
-        super("Lubricate", self);
+    Lubricate() {
+        super("Lubricate");
     }
 
     @Override
@@ -20,44 +19,44 @@ public class Lubricate extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().mobile(getSelf()) && getSelf().canAct() && getSelf().has(Item.Lubricant)
-                        && target.mostlyNude() && !target.is(Stsflag.oiled) && !c.getStance().prone(getSelf());
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().mobile(user) && user.canAct() && user.has(Item.Lubricant)
+                        && target.mostlyNude() && !target.is(Stsflag.oiled) && !c.getStance().prone(user);
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.normal, target);
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.normal, user, target);
         target.add(c, new Oiled(target.getType()));
-        getSelf().consume(Item.Lubricant, 1);
+        user.consume(Item.Lubricant, 1);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new Lubricate(user.getType());
+        return new Lubricate();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You cover " + target.getName() + " with an oily Lubricant.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format("%s throws an oily liquid at %s. The liquid "
                         + "clings to %s and makes %s whole body slippery.",
-                        getSelf().subject(), target.nameDirectObject(),
+                        user.subject(), target.nameDirectObject(),
                         target.directObject(), target.possessiveAdjective());
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Oil up your opponent, making her easier to pleasure";
     }
 

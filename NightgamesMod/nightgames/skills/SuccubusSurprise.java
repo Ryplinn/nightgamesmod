@@ -18,8 +18,8 @@ import nightgames.status.Stsflag;
 
 public class SuccubusSurprise extends Skill {
 
-    SuccubusSurprise(CharacterType self) {
-        super("Succubus Surprise", self);
+    SuccubusSurprise() {
+        super("Succubus Surprise");
     }
 
     @Override
@@ -28,63 +28,63 @@ public class SuccubusSurprise extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canRespond() && !getSelf().has(Trait.succubus) && getSelf().has(Item.SuccubusDraft)
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canRespond() && !user.has(Trait.succubus) && user.has(Item.SuccubusDraft)
                         && c.getStance().inserted(target) && !c.getStance().anallyPenetrated(c)
-                        && !BodyPart.hasOnlyType(c.getStance().topParts(), "strapon") && c.getStance().sub(getSelf())
-                        && getSelf().canSpend(getMojoCost(c)) && !target.is(Stsflag.armlocked)
+                        && !BodyPart.hasOnlyType(c.getStance().topParts(), "strapon") && c.getStance().sub(user)
+                        && user.canSpend(getMojoCost(c, user)) && !target.is(Stsflag.armlocked)
                         && !target.is(Stsflag.leglocked);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Use a Succubus Draft and latch unto your opponent.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         boolean oppHasBlessed = c.getStance().insertedPartFor(c, target).moddedPartCountsAs(target, CockMod.blessed);
-        if (getSelf().human()) {
+        if (user.human()) {
             if (oppHasBlessed) {
-                c.write(getSelf(), deal(c, 0, Result.weak, target));
+                c.write(user, deal(c, 0, Result.weak, user, target));
             } else {
-                c.write(getSelf(), deal(c, 0, Result.normal, target));
+                c.write(user, deal(c, 0, Result.normal, user, target));
             }
         } else {
             if (oppHasBlessed) {
-                c.write(getSelf(), receive(c, 0, Result.weak, target));
+                c.write(user, receive(c, 0, Result.weak, user, target));
             } else {
-                c.write(getSelf(), receive(c, 0, Result.normal, target));
+                c.write(user, receive(c, 0, Result.normal, user, target));
             }
         }
-        getSelf().remove(Item.SuccubusDraft);
-        Item.SuccubusDraft.getEffects().forEach(e -> e.use(c, getSelf(), target, Item.SuccubusDraft));
+        user.remove(Item.SuccubusDraft);
+        Item.SuccubusDraft.getEffects().forEach(e -> e.use(c, user, target, Item.SuccubusDraft));
         if (isArmLock(c.getStance())) {
-            target.add(c, new ArmLocked(target.getType(), 4 * getSelf().get(Attribute.power)));
+            target.add(c, new ArmLocked(target.getType(), 4 * user.get(Attribute.power)));
         } else {
-            target.add(c, new LegLocked(target.getType(), 4 * getSelf().get(Attribute.power)));
+            target.add(c, new LegLocked(target.getType(), 4 * user.get(Attribute.power)));
         }
-        new Grind(self).resolve(c, target);
+        new Grind().resolve(c, user, target);
 
-        if (!getSelf().human() && target.human() && !oppHasBlessed
-                        && getSelf().getType().equals(CharacterType.get("CUSTOM_NPCSamantha"))) {
-            c.write(getSelf(), "<br/><br/>\"<i>Do you like your surprise, " + target.getName() + "? I do.\"</i>");
+        if (!user.human() && target.human() && !oppHasBlessed
+                        && user.getType().equals(CharacterType.get("CUSTOM_NPCSamantha"))) {
+            c.write(user, "<br/><br/>\"<i>Do you like your surprise, " + target.getName() + "? I do.\"</i>");
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new SuccubusSurprise(user.getType());
+        return new SuccubusSurprise();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.fucking;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         String result = String.format(
                         "You might be on the receiving end here, but that"
                                         + " doesn't mean you should just give up! You distract %s for a moment,"
@@ -113,26 +113,26 @@ public class SuccubusSurprise extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         String result = String.format("Despite %s dominant position, %s seems unfazed."
                         + " %s twists %s head to the side and %s %s gaze, fearing"
                         + " another competitor may be about to crash %s party. There's no one"
                         + " there, though, and when %s back at %s, %s has already downed"
                         + " a draft of some kind. %s grin widens as black wings and a tail form on %s back."
                         + " %s to pull out, but ", target.nameOrPossessivePronoun(),
-                        getSelf().getName(), getSelf().subject(), getSelf().possessiveAdjective(),
-                        target.subjectAction("follow"), getSelf().possessiveAdjective(), 
-                        target.possessiveAdjective(), getSelf().getName(), getSelf().directObject(),
-                        getSelf().pronoun(), Formatter.capitalizeFirstLetter(getSelf().possessiveAdjective()),
-                        getSelf().possessiveAdjective(), 
+                        user.getName(), user.subject(), user.possessiveAdjective(),
+                        target.subjectAction("follow"), user.possessiveAdjective(),
+                        target.possessiveAdjective(), user.getName(), user.directObject(),
+                        user.pronoun(), Formatter.capitalizeFirstLetter(user.possessiveAdjective()),
+                        user.possessiveAdjective(),
                         Formatter.capitalizeFirstLetter(target.subjectAction("try", "tries")));
         if (isArmLock(c.getStance())) {
             result += String.format("%s grabs %s hands tightly to %s body, holding %s in place. ",
-                            getSelf().subject(), target.possessiveAdjective(), 
-                            getSelf().possessiveAdjective(), target.directObject());
+                            user.subject(), target.possessiveAdjective(),
+                            user.possessiveAdjective(), target.directObject());
         } else {
             result += String.format("%s wraps %s lithe legs around %s waist, keeping %s inside.",
-                            getSelf().subject(), getSelf().possessiveAdjective(),
+                            user.subject(), user.possessiveAdjective(),
                             target.possessiveAdjective(), target.directObject());
         }
         if (modifier == Result.weak) {
@@ -154,12 +154,12 @@ public class SuccubusSurprise extends Skill {
     }
 
     @Override
-    public int getMojoCost(Combat c) {
-        return Math.max(10, 50 - getSelf().get(Attribute.technique));
+    public int getMojoCost(Combat c, Character user) {
+        return Math.max(10, 50 - user.get(Attribute.technique));
     }
 
     @Override
-    public float priorityMod(Combat c) {
+    public float priorityMod(Combat c, Character user) {
         return 0f;
     }
     

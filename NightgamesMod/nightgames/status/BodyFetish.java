@@ -1,33 +1,17 @@
 package nightgames.status;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-
 import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
-import nightgames.skills.Anilingus;
-import nightgames.skills.Blowjob;
-import nightgames.skills.BreastWorship;
-import nightgames.skills.CockWorship;
-import nightgames.skills.FootWorship;
-import nightgames.skills.Grind;
-import nightgames.skills.Invitation;
-import nightgames.skills.Piston;
-import nightgames.skills.PussyWorship;
-import nightgames.skills.ReverseAssFuck;
-import nightgames.skills.ReverseCarry;
-import nightgames.skills.ReverseFly;
-import nightgames.skills.Skill;
-import nightgames.skills.SpiralThrust;
-import nightgames.skills.Thrust;
-import nightgames.skills.WildThrust;
+import nightgames.skills.*;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 public class BodyFetish extends DurationStatus {
     private CharacterType origin;
@@ -94,18 +78,18 @@ public class BodyFetish extends DurationStatus {
         if (magnitude <= .99) {
             return Collections.emptySet();
         } else if (part.equals("pussy")) {
-            return Collections.singletonList(new PussyWorship(affected));
+            return Collections.singletonList(new PussyWorship());
         } else if (part.equals("breasts")) {
-            return Collections.singletonList(new BreastWorship(affected));
+            return Collections.singletonList(new BreastWorship());
         } else if (part.equals("feet")) {
-            return Collections.singletonList(new FootWorship(affected));
+            return Collections.singletonList(new FootWorship());
         } else if (part.equals("ass")) {
-            return Collections.singletonList(new Anilingus(affected));
+            return Collections.singletonList(new Anilingus());
         } else if (part.equals("cock")) {
-            return Arrays.asList(new Blowjob(affected), new ReverseAssFuck(affected), new ReverseFly(affected),
-                            new ReverseCarry(affected), new Invitation(affected), new Thrust(affected),
-                            new Piston(affected), new Grind(affected), new SpiralThrust(affected),
-                            new CockWorship(affected), new WildThrust(affected));
+            return Arrays.asList(new Blowjob(), new ReverseAssFuck(), new ReverseFly(),
+                            new ReverseCarry(), new Invitation(), new Thrust(),
+                            new Piston(), new Grind(), new SpiralThrust(),
+                            new CockWorship(), new WildThrust());
         } else {
             return Collections.emptySet();
         }
@@ -161,7 +145,7 @@ public class BodyFetish extends DurationStatus {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return 0;
     }
 

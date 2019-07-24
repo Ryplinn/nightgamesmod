@@ -3,8 +3,10 @@ package nightgames.stance;
 import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
+import nightgames.global.Formatter;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * TODO: Write class-level documentation.
@@ -28,6 +30,15 @@ public abstract class Threesome extends Position {
                 domSexCharacter = other.getType();
             }
         }
+    }
+
+    @Override
+    public Optional<Position> checkOngoing(Combat c) {
+        if (!c.otherCombatantsContains(getDomSexCharacter())) {
+            c.write(getBottom(), Formatter.format("With the disappearance of {self:name-do}, {other:subject-action:manage|manages} to escape.", getDomSexCharacter(), getBottom()));
+            return Optional.of(new Neutral(c.p1.getType(), c.p2.getType()));
+        }
+        return super.checkOngoing(c);
     }
 
     @Override

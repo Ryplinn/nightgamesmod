@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -14,8 +13,8 @@ import nightgames.pet.Ptype;
 public class SpawnFaerie extends Skill {
     private Ptype gender;
 
-    SpawnFaerie(CharacterType self, Ptype gender) {
-        super("Summon Faerie (" + gender.name() + ")", self);
+    SpawnFaerie(Ptype gender) {
+        super("Summon Faerie (" + gender.name() + ")");
         this.gender = gender;
     }
 
@@ -25,46 +24,46 @@ public class SpawnFaerie extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance().mobile(getSelf()) && !c.getStance().prone(getSelf())
-                        && c.getPetsFor(getSelf()).size() < getSelf().getPetLimit();
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && c.getStance().mobile(user) && !c.getStance().prone(user)
+                        && c.getPetsFor(user).size() < user.getPetLimit();
     }
 
     @Override
-    public int getMojoCost(Combat c) {
-        return getSelf().has(Trait.faefriend) ? 10 : 25;
+    public int getMojoCost(Combat c, Character user) {
+        return user.has(Trait.faefriend) ? 10 : 25;
     }
 
     @Override
-    public String describe(Combat c) {
-        return "Summon a Faerie familiar to support you: "+getMojoCost(c)+" Mojo";
+    public String describe(Combat c, Character user) {
+        return "Summon a Faerie familiar to support you: " + getMojoCost(c, user) + " Mojo";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        int power = 5 + getSelf().get(Attribute.spellcasting);
-        int ac = 4 + getSelf().get(Attribute.spellcasting) / 10;
-        if (getSelf().human()) {
-            c.write(getSelf(), deal(c, 0, Result.normal, target));
+    public boolean resolve(Combat c, Character user, Character target) {
+        int power = 5 + user.get(Attribute.spellcasting);
+        int ac = 4 + user.get(Attribute.spellcasting) / 10;
+        if (user.human()) {
+            c.write(user, deal(c, 0, Result.normal, user, target));
             switch (gender) {
                 case fairyfem:
-                    c.addPet(getSelf(), new Fairy(getSelf(), Ptype.fairyfem, power, ac).getSelf());
+                    c.addPet(user, new Fairy(user, Ptype.fairyfem, power, ac).getSelf());
                     break;
                 case fairymale:
-                    c.addPet(getSelf(), new Fairy(getSelf(), Ptype.fairymale, power, ac).getSelf());
+                    c.addPet(user, new Fairy(user, Ptype.fairymale, power, ac).getSelf());
                     break;
                 case fairyherm:
                 default:
-                    c.addPet(getSelf(), new Fairy(getSelf(), Ptype.fairyherm, power, ac).getSelf());
+                    c.addPet(user, new Fairy(user, Ptype.fairyherm, power, ac).getSelf());
             }
         } else {
             if (target.human()) {
-                c.write(getSelf(), receive(c, 0, Result.normal, target));
+                c.write(user, receive(c, 0, Result.normal, user, target));
             }
             if (gender == Ptype.fairyfem) {
-                c.addPet(getSelf(), new FairyFem(getSelf(), power, ac).getSelf());
+                c.addPet(user, new FairyFem(user, power, ac).getSelf());
             } else {
-                c.addPet(getSelf(), new FairyMale(getSelf(), power, ac).getSelf());
+                c.addPet(user, new FairyMale(user, power, ac).getSelf());
             }
         }
         return true;
@@ -72,16 +71,16 @@ public class SpawnFaerie extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new SpawnFaerie(user.getType(), gender);
+        return new SpawnFaerie(gender);
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.summoning;
     }
 
     @Override
-    public String getLabel(Combat c) {
+    public String getLabel(Combat c, Character user) {
         if (gender == Ptype.fairyfem) {
             return "Faerie (female)";
         } else {
@@ -90,7 +89,7 @@ public class SpawnFaerie extends Skill {
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (gender == Ptype.fairyfem) {
             return "You start a summoning chant and in your mind, seek out a familiar. A pretty little faerie girl appears in front of you and gives you a friendly wave before "
                             + "landing softly on your shoulder.";
@@ -101,17 +100,17 @@ public class SpawnFaerie extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
     	if (gender == Ptype.fairyfem) {
 	        return String.format("%s casts a spell as %s extends %s hand. In a flash of magic,"
 	                        + " a small, naked girl with butterfly wings appears in %s palm.",
-	                        getSelf().subject(), getSelf().pronoun(), getSelf().possessiveAdjective(),
-	                        getSelf().possessiveAdjective());
+	                        user.subject(), user.pronoun(), user.possessiveAdjective(),
+	                        user.possessiveAdjective());
     	} else {
 	        return String.format("%s casts a spell as %s extends %s hand. In a flash of magic,"
 	                        + " a small, naked boy with butterfly wings appears in %s palm.",
-	                        getSelf().subject(), getSelf().pronoun(), getSelf().possessiveAdjective(),
-	                        getSelf().possessiveAdjective());
+	                        user.subject(), user.pronoun(), user.possessiveAdjective(),
+	                        user.possessiveAdjective());
     	}
     }
 

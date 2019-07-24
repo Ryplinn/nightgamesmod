@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.trait.Trait;
 import nightgames.combat.Combat;
@@ -14,34 +13,34 @@ import nightgames.status.AttributeBuff;
 
 public class ArmBar extends Skill {
 
-    ArmBar(CharacterType self) {
-        super("Armbar", self);
+    ArmBar() {
+        super("Armbar");
         addTag(SkillTag.hurt);
         addTag(SkillTag.staminaDamage);
         addTag(SkillTag.positioning);
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return c.getStance().dom(getSelf()) && c.getStance().reachTop(target) && getSelf().canAct()
-                        && !getSelf().has(Trait.undisciplined) && !c.getStance().inserted();
+    public boolean usable(Combat c, Character user, Character target) {
+        return c.getStance().dom(user) && c.getStance().reachTop(target) && user.canAct()
+                        && !user.has(Trait.undisciplined) && !c.getStance().inserted();
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 90;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        if (target.roll(getSelf(), accuracy(c, target))) {
-            int m = (int) DamageType.physical.modifyDamage(getSelf(), target, Random.random(6, 10));
-            writeOutput(c, m, Result.normal, target);
-            target.pain(c, getSelf(), m);
+    public boolean resolve(Combat c, Character user, Character target) {
+        if (target.roll(user, accuracy(c, user, target))) {
+            int m = (int) DamageType.physical.modifyDamage(user, target, Random.random(6, 10));
+            writeOutput(c, m, Result.normal, user, target);
+            target.pain(c, user, m);
             target.add(c, new AttributeBuff(target.getType(), Attribute.power, -4, 5));
             target.emote(Emotion.angry, 15);
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
         return true;
@@ -54,21 +53,21 @@ public class ArmBar extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new ArmBar(user.getType());
+        return new ArmBar();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 2;
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.damage;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return "You grab at " + target.getName() + "'s arm, but "+target.pronoun()+" pulls it free.";
         } else {
@@ -78,23 +77,23 @@ public class ArmBar extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s %s wrist, but %s %s it out of %s grasp.",
-                            getSelf().subjectAction("grab"), target.nameOrPossessivePronoun(),
-                            target.pronoun(), target.action("pry", "pries"), getSelf().possessiveAdjective());
+                            user.subjectAction("grab"), target.nameOrPossessivePronoun(),
+                            target.pronoun(), target.action("pry", "pries"), user.possessiveAdjective());
         } else {
             return String.format("%s %s arm between %s legs, forcibly overextending %s elbow. "
                             + "The pain almost makes %s tap out, but %s %s to yank %s arm out of %s grip",
-                            getSelf().subjectAction("pull"), target.nameOrPossessivePronoun(), 
-                            getSelf().possessiveAdjective(), target.possessiveAdjective(), target.pronoun(),
+                            user.subjectAction("pull"), target.nameOrPossessivePronoun(),
+                            user.possessiveAdjective(), target.possessiveAdjective(), target.pronoun(),
                             target.pronoun(), target.action("manage"), target.possessiveAdjective(),
-                            getSelf().possessiveAdjective());
+                            user.possessiveAdjective());
         }
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "A judo submission hold that hyperextends the arm.";
     }
 

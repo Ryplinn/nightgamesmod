@@ -1,51 +1,50 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 
 public class CommandInsult extends PlayerCommand {
 
-    CommandInsult(CharacterType self) {
-        super("Insult", self);
+    CommandInsult() {
+        super("Insult");
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Temporarily destroy your thrall's self-image, draining their mojo.";
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
+    public int getMojoBuilt(Combat c, Character user) {
         return 10;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         target.loseMojo(c, 15);
-        c.write(getSelf(), deal(c, 0, Result.normal, target));
+        c.write(user, deal(c, 0, Result.normal, user, target));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new CommandInsult(user.getType());
+        return new CommandInsult();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int magnitude, Result modifier, Character target) {
+    public String deal(Combat c, int magnitude, Result modifier, Character user, Character target) {
         return "Your words nearly drive " + target.getName() + " to tears with their ferocity and psychic backup. Luckily,"
                         + " she won't remember any of it later.";
     }
 
     @Override
-    public String receive(Combat c, int magnitude, Result modifier, Character target) {
+    public String receive(Combat c, int magnitude, Result modifier, Character user, Character target) {
         return "<<This should not be displayed, please inform The" + " Silver Bard: CommandInsult-receive>>";
     }
 

@@ -1,10 +1,6 @@
 package nightgames.status;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import com.google.gson.JsonObject;
-
 import nightgames.actions.Action;
 import nightgames.actions.ControlledMasturbation;
 import nightgames.characters.Attribute;
@@ -15,6 +11,9 @@ import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.skills.Masturbate;
 import nightgames.skills.Skill;
+
+import java.util.Collection;
+import java.util.Collections;
 
 public class RemoteMasturbation extends DurationStatus {
 
@@ -39,7 +38,7 @@ public class RemoteMasturbation extends DurationStatus {
 
     @Override
     public Collection<Skill> allowedSkills(Combat c) {
-        return Collections.singleton(new Masturbate(affected));
+        return Collections.singleton(new Masturbate());
     }
 
     @Override
@@ -86,7 +85,7 @@ public class RemoteMasturbation extends DurationStatus {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return 0;
     }
 

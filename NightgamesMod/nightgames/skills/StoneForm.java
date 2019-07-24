@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.status.StoneStance;
@@ -10,8 +9,8 @@ import nightgames.status.Stsflag;
 
 public class StoneForm extends Skill {
 
-    StoneForm(CharacterType self) {
-        super("Stone Form", self);
+    StoneForm() {
+        super("Stone Form");
     }
 
     @Override
@@ -20,41 +19,41 @@ public class StoneForm extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && !c.getStance().sub(getSelf()) && !getSelf().is(Stsflag.form);
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && !c.getStance().sub(user) && !user.is(Stsflag.form);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Improves Pain Resistance rate at expense of Speed";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.normal, target);
-        getSelf().add(c, new StoneStance(self));
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.normal, user, target);
+        user.add(c, new StoneStance(user.getType()));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new StoneForm(user.getType());
+        return new StoneForm();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "You tense your body to absorb and shrug off attacks.";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return String.format("%s braces %s to resist %s attacks.",
-                        getSelf().subject(), getSelf().reflectivePronoun(),
+                        user.subject(), user.reflectivePronoun(),
                         target.nameOrPossessivePronoun());
     }
 

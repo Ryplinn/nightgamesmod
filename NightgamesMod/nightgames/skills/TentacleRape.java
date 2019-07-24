@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.trait.Trait;
@@ -17,8 +16,8 @@ import nightgames.status.Stsflag;
 
 public class TentacleRape extends Skill {
 
-    TentacleRape(CharacterType self) {
-        super("Tentacle Rape", self);
+    TentacleRape() {
+        super("Tentacle Rape");
     }
 
     @Override
@@ -27,122 +26,122 @@ public class TentacleRape extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return !target.wary() && !c.getStance().sub(getSelf()) && !c.getStance().prone(getSelf())
-                        && !c.getStance().prone(target) && getSelf().canAct() && getSelf().body.has("tentacles");
+    public boolean usable(Combat c, Character user, Character target) {
+        return !target.wary() && !c.getStance().sub(user) && !c.getStance().prone(user)
+                        && !c.getStance().prone(target) && user.canAct() && user.body.has("tentacles");
     }
 
     @Override
-    public int getMojoCost(Combat c) {
+    public int getMojoCost(Combat c, Character user) {
         return 10;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Violate your opponent with your tentacles.";
     }
 
     private BodyPart tentacles = null;
 
     @Override
-    public int accuracy(Combat c, Character target) {
+    public int accuracy(Combat c, Character user, Character target) {
         return 90;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        tentacles = getSelf().body.getRandom("tentacles");
-        if (target.roll(getSelf(), accuracy(c, target))) {
+    public boolean resolve(Combat c, Character user, Character target) {
+        tentacles = user.body.getRandom("tentacles");
+        if (target.roll(user, accuracy(c, user, target))) {
             if (target.mostlyNude()) {
                 int m = 2 + Random.random(4);
                 if (target.bound()) {
-                    writeOutput(c, Result.special, target);
+                    writeOutput(c, Result.special, user, target);
                     if (target.hasDick()) {
-                        target.body.pleasure(getSelf(), tentacles, target.body.getRandom("cock"), m, c, this);
+                        target.body.pleasure(user, tentacles, target.body.getRandom("cock"), m, c, new SkillUsage<>(this, user, target));
                         m = 2 + Random.random(4);
                     }
                     if (target.hasPussy()) {
-                        target.body.pleasure(getSelf(), tentacles, target.body.getRandom("pussy"), m, c, this);
+                        target.body.pleasure(user, tentacles, target.body.getRandom("pussy"), m, c, new SkillUsage<>(this, user, target));
                         m = 2 + Random.random(4);
                     }
                     if (target.hasBreasts()) {
-                        target.body.pleasure(getSelf(), tentacles, target.body.getRandom("breasts"), m, c, this);
+                        target.body.pleasure(user, tentacles, target.body.getRandom("breasts"), m, c, new SkillUsage<>(this, user, target));
                         m = 2 + Random.random(4);
                     }
                     if (target.body.has("ass")) {
-                        target.body.pleasure(getSelf(), tentacles, target.body.getRandom("ass"), m, c, this);
+                        target.body.pleasure(user, tentacles, target.body.getRandom("ass"), m, c, new SkillUsage<>(this, user, target));
                         target.emote(Emotion.horny, 10);
                     }
                 } else {
-                    writeOutput(c, Result.normal, target);
-                    target.body.pleasure(getSelf(), tentacles, target.body.getRandom("skin"), m, c, this);
+                    writeOutput(c, Result.normal, user, target);
+                    target.body.pleasure(user, tentacles, target.body.getRandom("skin"), m, c, new SkillUsage<>(this, user, target));
                 }
                 if (!target.is(Stsflag.oiled)) {
                     target.add(c, new Oiled(target.getType()));
                 }
                 target.emote(Emotion.horny, 20);
             } else {
-                writeOutput(c, Result.weak, target);
+                writeOutput(c, Result.weak, user, target);
             }
-            target.add(c, new Bound(target.getType(), 30 + 2 * Math.sqrt(getSelf().get(Attribute.fetishism) + getSelf().get(Attribute.slime)), "tentacles"));
+            target.add(c, new Bound(target.getType(), 30 + 2 * Math.sqrt(user.get(Attribute.fetishism) + user.get(Attribute.slime)), "tentacles"));
         } else {
-            writeOutput(c, Result.miss, target);
+            writeOutput(c, Result.miss, user, target);
             return false;
         }
-        if (getSelf().has(Trait.VolatileSubstrate) && getSelf().has(Trait.slime)) {
-            target.add(c, new Slimed(target.getType(), self, Random.random(2, 5)));
+        if (user.has(Trait.VolatileSubstrate) && user.has(Trait.slime)) {
+            target.add(c, new Slimed(target.getType(), user.getType(), Random.random(2, 5)));
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new TentacleRape(user.getType());
+        return new TentacleRape();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
-            return "You use your " + tentacles.describe(getSelf()) + " to snare " + target.getName()
+            return "You use your " + tentacles.describe(user) + " to snare " + target.getName()
                             + ", but she nimbly dodges them.";
         } else if (modifier == Result.weak) {
-            return "You use your " + tentacles.describe(getSelf()) + " to wrap around " + target.getName()
+            return "You use your " + tentacles.describe(user) + " to wrap around " + target.getName()
                             + "'s arms, holding her in place.";
         } else if (modifier == Result.normal) {
-            return "You use your " + tentacles.describe(getSelf()) + " to wrap around " + target.getName()
+            return "You use your " + tentacles.describe(user) + " to wrap around " + target.getName()
                             + "'s naked body. They squirm against her and squirt slimy fluids on her body.";
         } else {
-            return "You use your " + tentacles.describe(getSelf()) + " to toy with " + target.getName()
+            return "You use your " + tentacles.describe(user) + " to toy with " + target.getName()
                             + "'s helpless form. The tentacles toy with her breasts and penetrate her genitals and ass.";
         }
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s shoots %s %s forward at %s. %s barely able to avoid them.",
-                            getSelf().subject(), getSelf().possessiveAdjective(),
-                            tentacles.describe(getSelf()), target.nameDirectObject(), 
+                            user.subject(), user.possessiveAdjective(),
+                            tentacles.describe(user), target.nameDirectObject(),
                             Formatter.capitalizeFirstLetter(target.subjectAction("are", "is")));
         } else if (modifier == Result.weak) {
             return String.format("%s shoots %s %s forward at %s, entangling %s arms and legs.",
-                            getSelf().subject(), getSelf().possessiveAdjective(), tentacles.describe(getSelf()),
+                            user.subject(), user.possessiveAdjective(), tentacles.describe(user),
                             target.nameDirectObject(), target.possessiveAdjective());
         } else if (modifier == Result.normal) {
             return String.format("%s shoots %s %s forward at %s, "
                             + "entangling %s arms and legs. The slimy appendages "
                             + "wriggle over %s body and coat %s in the slippery liquid.",
-                            getSelf().subject(), getSelf().possessiveAdjective(), tentacles.describe(getSelf()),
+                            user.subject(), user.possessiveAdjective(), tentacles.describe(user),
                             target.nameDirectObject(), target.possessiveAdjective(),
                             target.nameOrPossessivePronoun(), target.directObject());
         } else {
             return String.format("%s %s cover %s helpless body, tease %s genitals, and probe %s ass.",
-                            getSelf().nameOrPossessivePronoun(), tentacles.describe(getSelf()),
+                            user.nameOrPossessivePronoun(), tentacles.describe(user),
                             target.nameOrPossessivePronoun(), target.possessiveAdjective(),
                             target.possessiveAdjective());
         }

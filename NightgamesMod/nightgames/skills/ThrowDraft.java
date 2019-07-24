@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Decider;
 import nightgames.characters.NPC;
 import nightgames.characters.trait.Trait;
@@ -26,8 +25,8 @@ public class ThrowDraft extends Skill {
         transformativeItems.add(Item.FemDraft);
     }
 
-    ThrowDraft(CharacterType self) {
-        super("Throw draft", self);
+    ThrowDraft() {
+        super("Throw draft");
     }
 
     @Override
@@ -36,17 +35,17 @@ public class ThrowDraft extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        boolean hasItems = subChoices(c).size() > 0;
-        return hasItems && getSelf().canAct() && c.getStance().mobile(getSelf())
-                        && (c.getStance().reachTop(getSelf()) || c.getStance().reachBottom(getSelf())) && !getSelf().isPet();
+    public boolean usable(Combat c, Character user, Character target) {
+        boolean hasItems = subChoices(c, user).size() > 0;
+        return hasItems && user.canAct() && c.getStance().mobile(user)
+                        && (c.getStance().reachTop(user) || c.getStance().reachBottom(user)) && !user.isPet();
     }
 
     @Override
-    public Collection<String> subChoices(Combat c) {
+    public Collection<String> subChoices(Combat c, Character user) {
         ArrayList<String> usables = new ArrayList<>();
-        for (Item i : getSelf().getInventory().keySet()) {
-            if (getSelf().has(i) && i.getEffects().get(0).throwable()) {
+        for (Item i : user.getInventory().keySet()) {
+            if (user.has(i) && i.getEffects().get(0).throwable()) {
                 usables.add(i.getName());
             }
         }
@@ -82,10 +81,10 @@ public class ThrowDraft extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         Item used = null;
-        if (getSelf().human()) {
-            for (Item i : getSelf().getInventory().keySet()) {
+        if (user.human()) {
+            for (Item i : user.getInventory().keySet()) {
                 if (i.getName().equals(choice)) {
                     used = i;
                     break;
@@ -93,65 +92,65 @@ public class ThrowDraft extends Skill {
             }
         } else {
             ArrayList<Item> usables = new ArrayList<>();
-            for (Item i : getSelf().getInventory().keySet()) {
-                if (i.getEffects().get(0).throwable() && i.usable(c, getSelf(), c.getOpponent(getSelf()))) {
+            for (Item i : user.getInventory().keySet()) {
+                if (i.getEffects().get(0).throwable() && i.usable(c, user, c.getOpponent(user))) {
                     usables.add(i);
                 }
             }
-            if (usables.size() > 0 && getSelf() instanceof NPC) {
-                used = pickBest(c, (NPC) getSelf(), target, usables);
+            if (usables.size() > 0 && user instanceof NPC) {
+                used = pickBest(c, (NPC) user, target, usables);
             }
         }
         if (used == null) {
-            c.write(getSelf(), "Skill failed...");
+            c.write(user, "Skill failed...");
         } else {
             String verb = used.getEffects().get(0).getOtherVerb();
             if (verb.isEmpty()) {
                 verb = "throw";
             }
-            c.write(getSelf(), Formatter.format(
+            c.write(user, Formatter.format(
                             String.format("{self:SUBJECT-ACTION:%s|%ss} %s%s.", verb, verb, used.pre(), used.getName()),
-                            getSelf(), target));
+                            user, target));
             if (transformativeItems.contains(used) && target.has(Trait.stableform)) {
                 c.write(target, "...But nothing happened (Stable Form).");
             } else {
                 boolean eventful = false;
-                if (used.usable(c, getSelf(), getSelf())) {
+                if (used.usable(c, user, user)) {
                     for (ItemEffect e : used.getEffects()) {
-                        eventful |= e.use(c, target, getSelf(), used);
+                        eventful |= e.use(c, target, user, used);
                     }
                 }
                 if (!eventful) {
-                    c.write(getSelf(), "...But nothing happened.");
+                    c.write(user, "...But nothing happened.");
                 }
             }
-            getSelf().consume(used, 1);
+            user.consume(used, 1);
         }
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new ThrowDraft(user.getType());
+        return new ThrowDraft();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         return "";
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         return "";
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Throw a draft at your opponent";
     }
 

@@ -44,25 +44,25 @@ public class Decider {
         HashSet<Skill> misc = new HashSet<>();
         ArrayList<WeightedSkill> priority = new ArrayList<>();
         for (Skill a : available) {
-            if (a.type(c) == Tactics.damage) {
+            if (a.type(c, character) == Tactics.damage) {
                 damage.add(a);
-            } else if (a.type(c) == Tactics.pleasure) {
+            } else if (a.type(c, character) == Tactics.pleasure) {
                 pleasure.add(a);
-            } else if (a.type(c) == Tactics.fucking) {
+            } else if (a.type(c, character) == Tactics.fucking) {
                 fucking.add(a);
-            } else if (a.type(c) == Tactics.positioning) {
+            } else if (a.type(c, character) == Tactics.positioning) {
                 position.add(a);
-            } else if (a.type(c) == Tactics.debuff) {
+            } else if (a.type(c, character) == Tactics.debuff) {
                 debuff.add(a);
-            } else if (a.type(c) == Tactics.recovery) {
+            } else if (a.type(c, character) == Tactics.recovery) {
                 recovery.add(a);
-            } else if (a.type(c) == Tactics.calming) {
+            } else if (a.type(c, character) == Tactics.calming) {
                 calming.add(a);
-            } else if (a.type(c) == Tactics.summoning) {
+            } else if (a.type(c, character) == Tactics.summoning) {
                 summoning.add(a);
-            } else if (a.type(c) == Tactics.stripping) {
+            } else if (a.type(c, character) == Tactics.stripping) {
                 stripping.add(a);
-            } else if (a.type(c) == Tactics.misc) {
+            } else if (a.type(c, character) == Tactics.misc) {
                 misc.add(a);
             }
         }
@@ -250,7 +250,7 @@ public class Decider {
     private static WeightedSkill prioritizePetWithWeights(PetCharacter self, Character target,
                     List<WeightedSkill> plist, Combat c) {
         if (plist.isEmpty()) {
-            return new WeightedSkill(1.0, new Wait(self.getType()));
+            return new WeightedSkill(1.0, new Wait());
         }
         // The higher, the better the AI will plan for "rare" events better
         final int RUN_COUNT = 3;
@@ -270,7 +270,7 @@ public class Decider {
         for (WeightedSkill wskill : plist) {
             // Run it a couple of times
             double rating, raw_rating = 0;
-            if (wskill.skill.type(c) == Tactics.damage && self.has(Trait.sadist)) {
+            if (wskill.skill.type(c, self) == Tactics.damage && self.has(Trait.sadist)) {
                 wskill.weight += 1.0;
             }
             for (int j = 0; j < RUN_COUNT; j++) {
@@ -278,7 +278,7 @@ public class Decider {
             }
 
             // Sum up rating, add to map
-            rating = Math.pow(2, RATING_FACTOR * raw_rating + wskill.weight + wskill.skill.priorityMod(c)
+            rating = Math.pow(2, RATING_FACTOR * raw_rating + wskill.weight + wskill.skill.priorityMod(c, self)
                             + Match.getMatch().condition.getSkillModifier().encouragement(wskill.skill, c, self));
             sum += rating;
             moveList.add(new WeightedSkill(sum, raw_rating, rating, wskill.skill));
@@ -291,7 +291,7 @@ public class Decider {
             StringBuilder s = new StringBuilder("Pet choices: ");
             for (WeightedSkill entry : moveList) {
                 s.append(String.format("\n(%.1f\t\t%.1f\t\tculm: %.1f\t\t/ %.1f)\t\t-> %s", entry.raw_rating,
-                                entry.rating, entry.weight, entry.rating * 100.0f / sum, entry.skill.getLabel(c)));
+                                entry.rating, entry.weight, entry.rating * 100.0f / sum, entry.skill.getLabel(c, self)));
             }
             System.out.println(s);
         }
@@ -328,10 +328,10 @@ public class Decider {
         for (WeightedSkill wskill : plist) {
             // Run it a couple of times
             double rating, raw_rating = 0;
-            if (wskill.skill.type(c) == Tactics.fucking && self.has(Trait.experienced)) {
+            if (wskill.skill.type(c, self) == Tactics.fucking && self.has(Trait.experienced)) {
                 wskill.weight += 1.0;
             }
-            if (wskill.skill.type(c) == Tactics.damage && self.has(Trait.sadist)) {
+            if (wskill.skill.type(c, self) == Tactics.damage && self.has(Trait.sadist)) {
                 wskill.weight += 1.0;
             }
             for (int j = 0; j < RUN_COUNT; j++) {
@@ -343,7 +343,7 @@ public class Decider {
                 wskill.weight += (selfNPC.ai.getAiModifiers(selfNPC).modAttack(wskill.skill.getClass()));
             }
             // Sum up rating, add to map
-            rating = Math.pow(2, RATING_FACTOR * raw_rating + wskill.weight + wskill.skill.priorityMod(c)
+            rating = Math.pow(2, RATING_FACTOR * raw_rating + wskill.weight + wskill.skill.priorityMod(c, self)
                             + Match.getMatch().condition.getSkillModifier().encouragement(wskill.skill, c, self));
             sum += rating;
             moveList.add(new WeightedSkill(sum, raw_rating, rating, wskill.skill));
@@ -356,7 +356,7 @@ public class Decider {
             StringBuilder s = new StringBuilder("AI choices: ");
             for (WeightedSkill entry : moveList) {
                 s.append(String.format("\n(%.1f\t\t%.1f\t\tculm: %.1f\t\t/ %.1f)\t\t-> %s", entry.raw_rating,
-                                entry.rating, entry.weight, entry.rating * 100.0f / sum, entry.skill.getLabel(c)));
+                                entry.rating, entry.weight, entry.rating * 100.0f / sum, entry.skill.getLabel(c, self)));
             }
             System.out.println(s);
         }
@@ -380,9 +380,7 @@ public class Decider {
             System.out.println("Before:\n" + c.debugMessage());
         }
         return rateActionWithObserver(self, self.getSelf().owner(), target, c, masterFit, otherFit, (combat, selfCopy, other) -> {
-            skill.setSelf(selfCopy.getType());
-            skill.resolve(combat, other);
-            skill.setSelf(self.getType());
+            skill.resolve(combat, selfCopy, other);
             return true;
         });
     }
@@ -395,9 +393,7 @@ public class Decider {
         }
         // FIXME: null pointer exception here attempting to rate Tighten while fighting Eve during a threesome
         return rateAction(self, c, selfFit, otherFit, (combat, selfCopy, other) -> {
-            skill.setSelf(selfCopy.getType());
-            skill.resolve(combat, other);
-            skill.setSelf(self.getType());
+            skill.resolve(combat, selfCopy, other);
             return true;
         });
     }

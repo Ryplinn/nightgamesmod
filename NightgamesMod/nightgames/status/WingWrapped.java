@@ -134,7 +134,7 @@ public class WingWrapped extends Status {
     }
 
     @Override
-    public int escape() {
+    public int escape(Character from) {
         return -strength;
     }
 

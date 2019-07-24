@@ -1,7 +1,6 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Formatter;
@@ -10,8 +9,8 @@ import nightgames.status.Stsflag;
 
 public class ShakeOff extends Skill {
 
-    private ShakeOff(CharacterType self) {
-        super("Shake Off", self);
+    private ShakeOff() {
+        super("Shake Off");
     }
 
     @Override
@@ -20,39 +19,39 @@ public class ShakeOff extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().is(Stsflag.slimed) && getSelf().canAct() && c.getStance().mobile(getSelf());
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.is(Stsflag.slimed) && user.canAct() && c.getStance().mobile(user);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Shake off some of that slime.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        writeOutput(c, Result.normal, target);
-        getSelf().add(c, new Slimed(self, target.getType(), -10));
+    public boolean resolve(Combat c, Character user, Character target) {
+        writeOutput(c, Result.normal, user, target);
+        user.add(c, new Slimed(user.getType(), target.getType(), -10));
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new ShakeOff(user.getType());
+        return new ShakeOff();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
-        return Formatter.format("{self:SUBJECT-ACTION:take|takes} a moment to shake off the sticky slime all over {self:reflective}", getSelf(), target);
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
+        return Formatter.format("{self:SUBJECT-ACTION:take|takes} a moment to shake off the sticky slime all over {self:reflective}", user, target);
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
-        return deal(c, damage, modifier, target);
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
+        return deal(c, damage, modifier, user, target);
     }
 }

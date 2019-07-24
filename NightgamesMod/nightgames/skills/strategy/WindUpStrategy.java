@@ -11,16 +11,16 @@ import java.util.Collections;
 import java.util.Set;
 
 public class WindUpStrategy extends AbstractStrategy {
-    private final WindUp windUp;
+    private final Skill.SkillUsage<WindUp> windUp;
 
     public WindUpStrategy(NPC self) {
-        this.windUp = new WindUp(self.getType());
+        this.windUp = new Skill.SkillUsage<>(new WindUp(), self, null);
     }
 
     @Override
     public double weight(Combat c, Character self) {
         double weight = 2;
-        if (windUp.requirements(c, c.getOpponent(self)) && Primed.isPrimed(self, 2)) {
+        if (windUp.requirements(c) && Primed.isPrimed(self, 2)) {
             return 0;
         }
         return weight;
@@ -28,8 +28,8 @@ public class WindUpStrategy extends AbstractStrategy {
 
     @Override
     protected Set<Skill> filterSkills(Combat c, Character self, Set<Skill> allowedSkills) {
-        if (allowedSkills.contains(windUp)) {
-            return Collections.singleton(windUp);
+        if (allowedSkills.contains(windUp.skill)) {
+            return Collections.singleton(windUp.skill);
         }
         return Collections.emptySet();
     }

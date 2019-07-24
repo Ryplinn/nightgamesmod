@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -10,96 +9,96 @@ import nightgames.global.Random;
 
 public class BunshinService extends Skill {
 
-    BunshinService(CharacterType self) {
-        super("Bunshin Service", self);
+    BunshinService() {
+        super("Bunshin Service");
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.ninjutsu) >= 12;
+        return user.getPure(Attribute.ninjutsu) >= 12;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
+    public boolean usable(Combat c, Character user, Character target) {
         return c.getStance()
-                .mobile(getSelf())
+                .mobile(user)
                         && !c.getStance()
-                             .prone(getSelf())
-                        && getSelf().canAct() && !c.getStance()
+                             .prone(user)
+                        && user.canAct() && !c.getStance()
                                                    .behind(target)
                         && !c.getStance()
                              .penetrated(c, target)
                         && !c.getStance()
-                             .penetrated(c, getSelf())
+                             .penetrated(c, user)
                         && target.mostlyNude();
     }
 
     @Override
-    public int getMojoCost(Combat c) {
-        return numberOfClones() * 2;
+    public int getMojoCost(Combat c, Character user) {
+        return numberOfClones(user) * 2;
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Pleasure your opponent with shadow clones: 4 mojo per attack (min 2))";
     }
 
-    private int numberOfClones() {
-        return Math.min(Math.min(getSelf().getMojo().get()/2, getSelf().get(Attribute.ninjutsu)/2), 15);
+    private int numberOfClones(Character user) {
+        return Math.min(Math.min(user.getMojo().get()/2, user.get(Attribute.ninjutsu)/2), 15);
     }
 
     @Override
-    public int accuracy(Combat c, Character target) {
-        return 25 + getSelf().get(Attribute.speed) * 5;
+    public int accuracy(Combat c, Character user, Character target) {
+        return 25 + user.get(Attribute.speed) * 5;
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
-        int clones = numberOfClones();
+    public boolean resolve(Combat c, Character user, Character target) {
+        int clones = numberOfClones(user);
         Result r;
-        if(getSelf().human()){
-            c.write(getSelf(), String.format("You form %d shadow clones and rush forward.",clones));
+        if(user.human()){
+            c.write(user, String.format("You form %d shadow clones and rush forward.",clones));
         }
         else if(c.shouldPrintReceive(target, c)){
-            c.write(getSelf(), String.format("%s moves in a blur and suddenly %s %d of %s approaching %s.",getSelf().getName(),
-                            target.subjectAction("see"),clones,getSelf().pronoun(),target.reflectivePronoun()));
+            c.write(user, String.format("%s moves in a blur and suddenly %s %d of %s approaching %s.",user.getName(),
+                            target.subjectAction("see"),clones,user.pronoun(),target.reflectivePronoun()));
         }
         for (int i = 0; i < clones; i++) {
-            if (target.roll(getSelf(), accuracy(c, target))) {
+            if (target.roll(user, accuracy(c, user, target))) {
                 switch (Random.random(4)) {
                     case 0:
                         r = Result.weak;
-                        target.tempt(Random.random(3) + getSelf().get(Attribute.seduction) / 4);
+                        target.tempt(Random.random(3) + user.get(Attribute.seduction) / 4);
                         break;
                     case 1:
                         r = Result.normal;
-                        target.body.pleasure(getSelf(),  getSelf().body.getRandom("hands"),target.body.getRandomBreasts(),
-                                        Random.random(3 + getSelf().get(Attribute.seduction) / 2)
+                        target.body.pleasure(user,  user.body.getRandom("hands"),target.body.getRandomBreasts(),
+                                        Random.random(3 + user.get(Attribute.seduction) / 2)
                                                         + target.get(Attribute.perception) / 2,
-                                        c, this);
+                                        c, new SkillUsage<>(this, user, target));
                         break;
                     case 2:
                         r = Result.strong;
                         BodyPart targetPart = target.body.has("cock") ? target.body.getRandomCock()
                                         : target.hasPussy() ? target.body.getRandomPussy()
                                                         : target.body.getRandomAss();
-                        target.body.pleasure(getSelf(), getSelf().body.getRandom("hands"),targetPart, Random.random(4 + getSelf().get(Attribute.seduction))
+                        target.body.pleasure(user, user.body.getRandom("hands"),targetPart, Random.random(4 + user.get(Attribute.seduction))
                                                         + target.get(Attribute.perception) / 2,
-                                        c, this);
+                                        c, new SkillUsage<>(this, user, target));
                         break;
                     default:
                         r = Result.critical;
                         targetPart = target.body.has("cock") ? target.body.getRandomCock()
                                         : target.hasPussy() ? target.body.getRandomPussy()
                                                         : target.body.getRandomAss();
-                        target.body.pleasure(getSelf(),getSelf().body.getRandom("hands"), targetPart, Random.random(6)
-                                        + getSelf().get(Attribute.seduction) / 2f + target.get(Attribute.perception), c,
-                                        this);
+                        target.body.pleasure(user,user.body.getRandom("hands"), targetPart, Random.random(6)
+                                        + user.get(Attribute.seduction) / 2f + target.get(Attribute.perception), c,
+                                        new SkillUsage<>(this, user, target));
                         break;
                 }
-                writeOutput(c, r, target);
+                writeOutput(c, r, user, target);
             } else {
-                writeOutput(c, Result.miss, target);
+                writeOutput(c, Result.miss, user, target);
             }
         }
         return true;
@@ -107,21 +106,21 @@ public class BunshinService extends Skill {
 
     @Override
     public Skill copy(Character user) {
-        return new BunshinService(user.getType());
+        return new BunshinService();
     }
 
     @Override
-    public int speed() {
+    public int speed(Character user) {
         return 4;
     }
     
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if(modifier==Result.miss){
             return String.format("%s dodges your clone's groping hands.",target.getName());
         }else if(modifier==Result.weak){
@@ -144,12 +143,12 @@ public class BunshinService extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if(modifier==Result.miss){
             return String.format("%s to avoid one of the shadow clones.",
                             target.subjectAction("manage"));
         }else if(modifier==Result.weak){
-            return String.format("One of the %ss grabs %s and kisses %s enthusiastically.",getSelf().getName(),
+            return String.format("One of the %ss grabs %s and kisses %s enthusiastically.",user.getName(),
                             target.subject(), target.directObject());
         }else if(modifier==Result.strong){
             if(target.hasBalls()){
@@ -161,18 +160,18 @@ public class BunshinService extends Skill {
             }
         }else if(modifier==Result.critical){
             if(target.hasDick()){
-                return String.format("One of the %s clones kneels between %s legs to lick and suck %s cock.",getSelf().getName(),
+                return String.format("One of the %s clones kneels between %s legs to lick and suck %s cock.",user.getName(),
                                 target.nameOrPossessivePronoun(), target.possessiveAdjective());
             }else{
-                return String.format("One of the %s clones kneels between %s legs to lick %s nether lips.",getSelf().getName(),
+                return String.format("One of the %s clones kneels between %s legs to lick %s nether lips.",user.getName(),
                                 target.nameOrPossessivePronoun(), target.possessiveAdjective());
             }
         }else{
-            if(getSelf().hasBreasts()){
-                return String.format("A %s clone presses her boobs against %s and teases %s nipples.",getSelf().getName(),
+            if(user.hasBreasts()){
+                return String.format("A %s clone presses her boobs against %s and teases %s nipples.",user.getName(),
                                 target.subject(), target.possessiveAdjective());
             }else{
-                return String.format("A %s clone caresses %s chest and teases %s nipples.",getSelf().getName(),
+                return String.format("A %s clone caresses %s chest and teases %s nipples.",user.getName(),
                                 target.nameOrPossessivePronoun(), target.possessiveAdjective());
             }
             

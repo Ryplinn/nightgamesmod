@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -12,66 +11,66 @@ import nightgames.status.Stsflag;
 
 public class LewdSuggestion extends Skill {
 
-    public LewdSuggestion(CharacterType self) {
-        super("Lewd Suggestion", self);
+    public LewdSuggestion() {
+        super("Lewd Suggestion");
     }
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.hypnotism) >= 3;
+        return user.getPure(Attribute.hypnotism) >= 3;
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance().mobile(getSelf()) && !c.getStance().behind(getSelf())
-                        && !c.getStance().behind(target) && !c.getStance().sub(getSelf());
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.canAct() && c.getStance().mobile(user) && !c.getStance().behind(user)
+                        && !c.getStance().behind(target) && !c.getStance().sub(user);
     }
 
     @Override
-    public String describe(Combat c) {
+    public String describe(Combat c, Character user) {
         return "Plant an erotic suggestion in your hypnotized target.";
     }
 
     @Override
-    public boolean resolve(Combat c, Character target) {
+    public boolean resolve(Combat c, Character user, Character target) {
         boolean alreadyTranced =
                         target.is(Stsflag.charmed) || target.is(Stsflag.enthralled) || target.is(Stsflag.trance);
         if (!alreadyTranced && Random.random(3) == 0) {
-            if (getSelf().human()) {
-                c.write(getSelf(), deal(c, 0, Result.miss, target));
+            if (user.human()) {
+                c.write(user, deal(c, 0, Result.miss, user, target));
             } else {
-                c.write(getSelf(), receive(c, 0, Result.miss, target));
+                c.write(user, receive(c, 0, Result.miss, user, target));
             }
             return false;
         } else if (target.is(Stsflag.horny)) {
-            if (getSelf().human()) {
-                c.write(getSelf(), deal(c, 0, Result.strong, target));
+            if (user.human()) {
+                c.write(user, deal(c, 0, Result.strong, user, target));
             } else {
-                c.write(getSelf(), receive(c, 0, Result.strong, target));
+                c.write(user, receive(c, 0, Result.strong, user, target));
             }
-        } else if (getSelf().human()) {
-            c.write(getSelf(), deal(c, 0, Result.normal, target));
+        } else if (user.human()) {
+            c.write(user, deal(c, 0, Result.normal, user, target));
         } else {
-            c.write(getSelf(), receive(c, 0, Result.normal, target));
+            c.write(user, receive(c, 0, Result.normal, user, target));
         }
 
-        target.add(c, Horny.getWithPsychologicalType(getSelf(), target, 10, 4, "Hypnosis"));
+        target.add(c, Horny.getWithPsychologicalType(user, target, 10, 4, "Hypnosis"));
         target.emote(Emotion.horny, 30);
         return true;
     }
 
     @Override
     public Skill copy(Character user) {
-        return new LewdSuggestion(user.getType());
+        return new LewdSuggestion();
     }
 
     @Override
-    public Tactics type(Combat c) {
+    public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
 
     @Override
-    public String deal(Combat c, int damage, Result modifier, Character target) {
+    public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.strong) {
             return String.format(
                             "You take advantage of the erotic fantasies already swirling through %s's head, whispering ideas that fan the flame of %s lust.",
@@ -87,22 +86,22 @@ public class LewdSuggestion extends Skill {
     }
 
     @Override
-    public String receive(Combat c, int damage, Result modifier, Character target) {
+    public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.strong) {
             return String.format(
                             "%s whispers a lewd suggestion to %s, intensifying the fantasies %s %s trying to ignore and inflaming %s arousal.",
-                            getSelf().getName(), target.nameDirectObject(), target.pronoun(), target.action("were", "was"),
+                            user.getName(), target.nameDirectObject(), target.pronoun(), target.action("were", "was"),
                             target.possessiveAdjective());
         }
         if (modifier == Result.miss) {
             return String.format(
                             "%s whispers a lewd suggestion to %s, but %s just %s it, and %s to concentrate on the fight.",
-                            getSelf().getName(), target.nameDirectObject(), target.pronoun(),
+                            user.getName(), target.nameDirectObject(), target.pronoun(),
                             target.action("ignore"), target.action("try", "tries"));
         }
         return String.format(
                         "%s gives %s a hypnotic suggestion and %s head is immediately filled with erotic possibilities.",
-                        getSelf().getName(), target.nameDirectObject(), target.possessiveAdjective());
+                        user.getName(), target.nameDirectObject(), target.possessiveAdjective());
     }
 
 }

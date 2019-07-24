@@ -7,14 +7,14 @@ package nightgames.skills;
 public class SkillUnusableException extends RuntimeException {
 
     private static final long serialVersionUID = 2449705009333893124L;
-    private final Skill skill;
+    private final Skill.SkillUsage usage;
 
-    SkillUnusableException(Skill skill) {
-        this.skill = skill;
+    SkillUnusableException(Skill.SkillUsage usage) {
+        this.usage = usage;
     }
 
     @Override public String getMessage() {
-        return "Something went wrong between checking whether " + skill.getName()
+        return "Something went wrong between checking whether " + usage.skill.getName()
                         + " was usable and resolving the skill.";
     }
 }

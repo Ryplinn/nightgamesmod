@@ -1,15 +1,14 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.status.Enthralled;
 import nightgames.status.Stsflag;
 
 public abstract class PlayerCommand extends Skill {
 
-    public PlayerCommand(String name, CharacterType self) {
-        super(name, self);
+    public PlayerCommand(String name) {
+        super(name);
     }
 
     @Override
@@ -18,9 +17,9 @@ public abstract class PlayerCommand extends Skill {
     }
 
     @Override
-    public boolean usable(Combat c, Character target) {
-        return getSelf().human() && target.is(Stsflag.enthralled)
-                        && ((Enthralled) target.getStatus(Stsflag.enthralled)).master.equals(self)
-                        && !c.getStance().havingSex(c) && getSelf().canRespond();
+    public boolean usable(Combat c, Character user, Character target) {
+        return user.human() && target.is(Stsflag.enthralled)
+                        && ((Enthralled) target.getStatus(Stsflag.enthralled)).master.equals(user.getType())
+                        && !c.getStance().havingSex(c) && user.canRespond();
     }
 }
