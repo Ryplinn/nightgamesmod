@@ -160,7 +160,7 @@ public class Invitation extends Skill {
             } else {
                 target.add(c, new ArmLocked(target.getType(), 4 * user.get(Attribute.power)));
             }
-            new Thrust().resolve(c, user, user);
+            new Thrust().resolve(c, target, user);
             if (hasDivinity(user)) {
                 user.usedAttribute(Attribute.divinity, c, .5);
             }
