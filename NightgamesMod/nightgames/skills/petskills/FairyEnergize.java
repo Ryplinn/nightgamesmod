@@ -5,7 +5,6 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.nskills.tags.SkillTag;
-import nightgames.skills.Skill;
 
 public class FairyEnergize extends SimpleMasterSkill {
     public FairyEnergize() {
@@ -37,8 +36,4 @@ public class FairyEnergize extends SimpleMasterSkill {
         return true;
     }
 
-    @Override
-    public Skill copy(Character user) {
-        return new FairyEnergize();
-    }
 }

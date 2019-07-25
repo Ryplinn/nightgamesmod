@@ -91,11 +91,6 @@ public class TemptressStripTease extends StripTease {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new TemptressStripTease();
-    }
-
-    @Override
     public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         if (isDance(c, user)) {
             return String.format("%s backs up a little and starts swinging"

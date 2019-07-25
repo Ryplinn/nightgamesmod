@@ -78,11 +78,6 @@ public class Aphrodisiac extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Aphrodisiac();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }

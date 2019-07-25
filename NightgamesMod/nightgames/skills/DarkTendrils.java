@@ -57,11 +57,6 @@ public class DarkTendrils extends Skill {
     }
 
     @Override
-    public nightgames.skills.Skill copy(Character user) {
-        return new DarkTendrils();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }

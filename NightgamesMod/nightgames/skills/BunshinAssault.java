@@ -100,11 +100,6 @@ public class BunshinAssault extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new BunshinAssault();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.damage;
     }

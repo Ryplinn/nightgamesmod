@@ -47,11 +47,6 @@ public class Restrain extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Restrain();
-    }
-
-    @Override
     public int speed(Character user) {
         return 2;
     }

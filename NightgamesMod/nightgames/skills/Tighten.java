@@ -91,11 +91,6 @@ public class Tighten extends Thrust {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Tighten();
-    }
-
-    @Override
     public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (c.getStance().en == Stance.anal) {
             return Formatter.format(

@@ -74,11 +74,6 @@ public class ToggleSlimeCock extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new ToggleSlimeCock();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.misc;
     }

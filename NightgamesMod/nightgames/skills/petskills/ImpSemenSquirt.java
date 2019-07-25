@@ -5,7 +5,6 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.nskills.tags.SkillTag;
-import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 import nightgames.status.Horny;
 
@@ -38,11 +37,6 @@ public class ImpSemenSquirt extends SimpleEnemySkill {
         user.body.pleasure(user, user.body.getRandom("hands"), user.body.getRandomCock(), 10, c);
         target.add(c, new Horny(target.getType(), m, 5, "imp cum"));
         return true;
-    }
-
-    @Override
-    public Skill copy(Character user) {
-        return new ImpSemenSquirt();
     }
 
     @Override

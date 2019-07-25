@@ -28,11 +28,6 @@ public class Distracted extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Distracted();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.misc;
     }

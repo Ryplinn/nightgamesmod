@@ -5,7 +5,6 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.nskills.tags.SkillTag;
-import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 import nightgames.status.Horny;
 
@@ -36,11 +35,6 @@ public class ImpFacesit extends SimpleEnemySkill {
         user.body.pleasure(target, target.body.getRandom("mouth"), user.body.getRandomPussy(), 10, c);
         target.add(c, new Horny(target.getType(), m, 5, "imp juices"));
         return true;
-    }
-
-    @Override
-    public Skill copy(Character user) {
-        return new ImpFacesit();
     }
 
     @Override

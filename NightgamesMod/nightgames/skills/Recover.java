@@ -43,11 +43,6 @@ public class Recover extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Recover();
-    }
-
-    @Override
     public int speed(Character user) {
         return 0;
     }

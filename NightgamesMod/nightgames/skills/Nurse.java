@@ -89,11 +89,6 @@ public class Nurse extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Nurse();
-    }
-
-    @Override
     public int speed(Character user) {
         return 6;
     }

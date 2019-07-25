@@ -62,11 +62,6 @@ public class SpiralThrust extends Thrust {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new SpiralThrust();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.fucking;
     }

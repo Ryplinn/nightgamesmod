@@ -75,11 +75,6 @@ public class OrgasmicTighten extends Thrust {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new OrgasmicTighten();
-    }
-
-    @Override
     public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (c.getStance().en == Stance.anal) {
             return Formatter.format("While cumming {self:name-possessive} spasming backdoor seems to urge {other:name-do} to do the same.",

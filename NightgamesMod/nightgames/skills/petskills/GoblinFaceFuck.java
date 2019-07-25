@@ -4,7 +4,6 @@ import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.nskills.tags.SkillTag;
-import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 import nightgames.status.Shamed;
 import nightgames.status.Stsflag;
@@ -36,11 +35,6 @@ public class GoblinFaceFuck extends SimpleEnemySkill {
         user.body.pleasure(target, target.body.getRandom("skin"), user.body.getRandomCock(), 10, c);
         target.add(c, new Shamed(target.getType()));
         return true;
-    }
-
-    @Override
-    public Skill copy(Character user) {
-        return new GoblinFaceFuck();
     }
 
     @Override

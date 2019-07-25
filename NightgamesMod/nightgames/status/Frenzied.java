@@ -176,8 +176,9 @@ public class Frenzied extends DurationStatus {
     public Collection<Skill> allowedSkills(Combat c) {
         // Gather the preferred skills for which the character meets the
         // requirements
-        return FUCK_SKILLS.stream().filter(s -> s.requirements(c, getAffected(), c.getOpponent(getAffected())))
-                        .map(s -> s.copy(getAffected())).collect(Collectors.toSet());
+        Character affected = getAffected();
+        return FUCK_SKILLS.stream().filter(s -> s.requirements(c, affected, c.getOpponent(affected)))
+                        .collect(Collectors.toSet());
     }
 
     @Override  public JsonObject saveToJson() {

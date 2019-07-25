@@ -99,11 +99,6 @@ public class Shove extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Shove();
-    }
-
-    @Override
     public int speed(Character user) {
         return 7;
     }

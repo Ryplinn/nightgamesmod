@@ -106,11 +106,6 @@ public class Squeeze extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Squeeze();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.damage;
     }

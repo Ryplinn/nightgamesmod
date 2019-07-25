@@ -105,11 +105,6 @@ public class BunshinService extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new BunshinService();
-    }
-
-    @Override
     public int speed(Character user) {
         return 4;
     }

@@ -50,11 +50,6 @@ public class EyesOfTemptation extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new EyesOfTemptation();
-    }
-
-    @Override
     public int speed(Character user) {
         return 9;
     }

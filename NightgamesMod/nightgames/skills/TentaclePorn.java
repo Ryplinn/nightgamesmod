@@ -81,11 +81,6 @@ public class TentaclePorn extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new TentaclePorn();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }

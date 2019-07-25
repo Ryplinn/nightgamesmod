@@ -4,7 +4,6 @@ import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.nskills.tags.SkillTag;
-import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 import nightgames.status.Oiled;
 import nightgames.status.Stsflag;
@@ -45,11 +44,6 @@ public class SlimeOil extends SimpleEnemySkill {
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
         return true;
-    }
-
-    @Override
-    public Skill copy(Character user) {
-        return new SlimeOil();
     }
 
     @Override

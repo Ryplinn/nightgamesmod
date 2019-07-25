@@ -63,11 +63,6 @@ public class Yank extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Yank();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }

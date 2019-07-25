@@ -41,11 +41,6 @@ public class Turnover extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Turnover();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }

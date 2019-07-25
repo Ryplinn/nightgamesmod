@@ -89,11 +89,6 @@ public class MagLock extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new MagLock();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }

@@ -58,11 +58,6 @@ public class ComeHither extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new ComeHither();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }

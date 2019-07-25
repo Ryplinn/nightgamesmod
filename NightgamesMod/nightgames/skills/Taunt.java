@@ -76,11 +76,6 @@ public class Taunt extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Taunt();
-    }
-
-    @Override
     public int speed(Character user) {
         return 9;
     }

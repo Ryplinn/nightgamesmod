@@ -43,11 +43,6 @@ public class CommandMasturbate extends PlayerCommand {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new CommandMasturbate();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }

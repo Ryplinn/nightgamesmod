@@ -77,11 +77,6 @@ public class TemptressRide extends Thrust {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new TemptressRide();
-    }
-
-    @Override
     public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         switch (damage) {
             case 0:

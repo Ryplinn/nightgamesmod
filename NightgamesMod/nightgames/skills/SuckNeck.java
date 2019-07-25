@@ -52,11 +52,6 @@ public class SuckNeck extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new SuckNeck();
-    }
-
-    @Override
     public int speed(Character user) {
         return 5;
     }

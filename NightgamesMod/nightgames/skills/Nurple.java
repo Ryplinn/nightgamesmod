@@ -64,11 +64,6 @@ public class Nurple extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Nurple();
-    }
-
-    @Override
     public int speed(Character user) {
         return 7;
     }

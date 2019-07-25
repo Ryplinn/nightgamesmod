@@ -111,11 +111,6 @@ public class Command extends Skill {
     }
 
     @Override
-    public Skill copy(Character target) {
-        return new Command();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }
@@ -206,7 +201,6 @@ public class Command extends Skill {
         if (user.getSkills()
                   .stream()
                   .filter(skill -> Tactics.fucking.equals(skill.type(c, user)))
-                  .map(s -> s.copy(user))
                   .anyMatch(s -> s.requirements(c, user, target) && s.usable(c, user, target)))
             available.add(CommandType.MASTER_INSERT);
 
@@ -480,7 +474,6 @@ public class Command extends Skill {
                                                     target.subject(), user.pronoun(), target.directObject()));
                 }
                 user.getSkills().stream().filter(skill -> Tactics.fucking.equals(skill.type(c, user)))
-                                .map(s -> s.copy(user))
                                 .filter(s -> s.requirements(c, user, target) && s.usable(c, user, target)).findAny()
                                 .ifPresent(skill -> skill.resolve(c, user, target));
                 break;

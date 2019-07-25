@@ -64,11 +64,6 @@ public class Diversion extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Diversion();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }

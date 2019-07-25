@@ -62,11 +62,6 @@ public class Spank extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Spank();
-    }
-
-    @Override
     public int speed(Character user) {
         return 8;
     }

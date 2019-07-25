@@ -55,11 +55,6 @@ public class Prostrate extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Prostrate();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.recovery; // because of the unaddict?
     }

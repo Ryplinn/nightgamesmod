@@ -51,11 +51,6 @@ public class FootSmother extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new FootSmother();
-    }
-
-    @Override
     public int speed(Character user) {
         return 2;
     }

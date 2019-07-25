@@ -113,11 +113,6 @@ public class Blowjob extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Blowjob();
-    }
-
-    @Override
     public int speed(Character user) {
         return 2;
     }

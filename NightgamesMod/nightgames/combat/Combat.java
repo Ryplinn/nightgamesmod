@@ -767,8 +767,7 @@ public class Combat extends Observable implements Cloneable {
         }
         Collections.shuffle(avail);
         while (!avail.isEmpty()) {
-            Skill skill = avail.remove(avail.size() - 1)
-                               .copy(self);
+            Skill skill = avail.remove(avail.size() - 1);
             if (Skill.skillIsUsable(this, skill, self, other)) {
                 write(other, Formatter.format(
                                 "<b>{other:NAME-POSSESSIVE} divine aura forces {self:subject} to forget what {self:pronoun} {self:action:were|was} doing and crawl to {other:direct-object} on {self:possessive} knees.</b>",

@@ -101,11 +101,6 @@ public class FaceSit extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new FaceSit();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }

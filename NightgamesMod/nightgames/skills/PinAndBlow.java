@@ -59,11 +59,6 @@ public class PinAndBlow extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new PinAndBlow();
-    }
-
-    @Override
     public int speed(Character user) {
         return 5;
     }

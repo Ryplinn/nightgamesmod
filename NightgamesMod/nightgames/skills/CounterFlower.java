@@ -80,11 +80,6 @@ public class CounterFlower extends CounterBase {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new CounterFlower();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.fucking;
     }

@@ -60,11 +60,6 @@ public class NeedleThrow extends Skill {
         return true;
     }
 
-    @Override
-    public Skill copy(Character user) {
-        return new NeedleThrow();
-    }
-
     public int accuracy() {
         return 8;
     }

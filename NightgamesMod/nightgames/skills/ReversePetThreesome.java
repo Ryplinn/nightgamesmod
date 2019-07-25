@@ -29,8 +29,4 @@ public class ReversePetThreesome extends PetThreesome {
         return target.body.getRandomPussy();
     }
 
-    @Override
-    public Skill copy(Character user) {
-        return new ReversePetThreesome();
-    }
 }

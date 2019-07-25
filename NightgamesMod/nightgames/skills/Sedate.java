@@ -48,11 +48,6 @@ public class Sedate extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Sedate();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.damage;
     }

@@ -50,11 +50,6 @@ public class Cowardice extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Cowardice();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.misc;
     }

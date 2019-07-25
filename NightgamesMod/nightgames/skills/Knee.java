@@ -76,11 +76,6 @@ public class Knee extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Knee();
-    }
-
-    @Override
     public int speed(Character user) {
         return 4;
     }

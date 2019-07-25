@@ -51,11 +51,6 @@ public class Sensitize extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Sensitize();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }

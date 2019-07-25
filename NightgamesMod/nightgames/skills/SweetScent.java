@@ -47,11 +47,6 @@ public class SweetScent extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new SweetScent();
-    }
-
-    @Override
     public int speed(Character user) {
         return 9;
     }

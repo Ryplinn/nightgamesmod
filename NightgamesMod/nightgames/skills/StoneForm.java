@@ -36,11 +36,6 @@ public class StoneForm extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new StoneForm();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }

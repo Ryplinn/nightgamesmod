@@ -81,11 +81,6 @@ public class BreastGrowth extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new BreastGrowth();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }

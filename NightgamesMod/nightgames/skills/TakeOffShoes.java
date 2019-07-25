@@ -51,11 +51,6 @@ public class TakeOffShoes extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new TakeOffShoes();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         if (user != null) {
             Optional<BodyFetish> footFetish =

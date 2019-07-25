@@ -46,11 +46,6 @@ public class CounterPin extends CounterBase {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new CounterPin();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }

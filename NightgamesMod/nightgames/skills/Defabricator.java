@@ -42,11 +42,6 @@ public class Defabricator extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Defabricator();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.stripping;
     }

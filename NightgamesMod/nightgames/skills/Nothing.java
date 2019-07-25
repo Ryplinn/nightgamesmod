@@ -31,11 +31,6 @@ public class Nothing extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Nothing();
-    }
-
-    @Override
     public int speed(Character user) {
         return 0;
     }

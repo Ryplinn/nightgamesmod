@@ -162,11 +162,6 @@ public class Thrust extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Thrust();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.fucking;
     }

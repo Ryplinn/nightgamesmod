@@ -50,11 +50,6 @@ public class MutualUndress extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new MutualUndress();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.stripping;
     }

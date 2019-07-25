@@ -45,11 +45,6 @@ public class Rewind extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Rewind();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.recovery;
     }

@@ -45,11 +45,6 @@ public class LivingClothing extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new LivingClothing();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.recovery;
     }

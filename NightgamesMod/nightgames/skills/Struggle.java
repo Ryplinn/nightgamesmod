@@ -361,11 +361,6 @@ public class Struggle extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Struggle();
-    }
-
-    @Override
     public int speed(Character user) {
         return 0;
     }

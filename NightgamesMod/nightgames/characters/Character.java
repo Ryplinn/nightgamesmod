@@ -1686,8 +1686,8 @@ public abstract class Character extends Observable implements Cloneable {
         }
     }
 
-    private static final OrgasmicTighten TIGHTEN_SKILL = new OrgasmicTighten();
-    private static final OrgasmicThrust THRUST_SKILL = new OrgasmicThrust();
+    private static final Supplier<OrgasmicTighten> TIGHTEN_SKILL = OrgasmicTighten::new;
+    private static final Supplier<OrgasmicThrust> THRUST_SKILL = OrgasmicThrust::new;
 
     protected void resolveOrgasm(Combat c, Character opponent, BodyPart selfPart, BodyPart opponentPart, int times, int totalTimes) {
         if (has(Trait.HiveMind) && !c.getPetsFor(this).isEmpty()) {
@@ -1746,8 +1746,8 @@ public abstract class Character extends Observable implements Cloneable {
             add(c, new AttributeBuff(this.getType(), Attribute.seduction, 5, 10));
         }
         if (has(Trait.lastStand)) {
-            OrgasmicTighten tightenCopy = (OrgasmicTighten) TIGHTEN_SKILL.copy(this);
-            OrgasmicThrust thrustCopy = (OrgasmicThrust) THRUST_SKILL.copy(this);
+            OrgasmicTighten tightenCopy = TIGHTEN_SKILL.get();
+            OrgasmicThrust thrustCopy = THRUST_SKILL.get();
             if (tightenCopy.usable(c, this, opponent)) {
                 tightenCopy.resolve(c, this, opponent);
             }
@@ -3001,10 +3001,6 @@ public abstract class Character extends Observable implements Cloneable {
         HashSet<Skill> available = new HashSet<>();
         HashSet<Skill> cds = new HashSet<>();
         for (Skill a : getSkills()) {
-            // band-aid fix until a better way of handling conditional skill tags is found
-            if (a instanceof ThrowSlime) {
-                a = a.copy(this);
-            }
             if (Skill.skillIsUsable(c, a, this, target)) {
                 if (cooldownAvailable(a)) {
                     available.add(a);

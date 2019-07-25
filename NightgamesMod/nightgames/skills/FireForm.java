@@ -43,11 +43,6 @@ public class FireForm extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new FireForm();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }

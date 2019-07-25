@@ -47,11 +47,6 @@ public class PerfectTouch extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new PerfectTouch();
-    }
-
-    @Override
     public int speed(Character user) {
         return 2;
     }

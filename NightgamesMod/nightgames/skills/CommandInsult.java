@@ -28,11 +28,6 @@ public class CommandInsult extends PlayerCommand {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new CommandInsult();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }

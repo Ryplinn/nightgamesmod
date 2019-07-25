@@ -82,11 +82,6 @@ public class Footjob extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Footjob();
-    }
-
-    @Override
     public int speed(Character user) {
         return 4;
     }

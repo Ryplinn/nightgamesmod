@@ -46,11 +46,6 @@ public class SpawnSlime extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new SpawnSlime();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.summoning;
     }

@@ -81,11 +81,6 @@ public class Charm extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Charm();
-    }
-
-    @Override
     public int speed(Character user) {
         return 9;
     }

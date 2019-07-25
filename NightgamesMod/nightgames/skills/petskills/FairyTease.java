@@ -6,7 +6,6 @@ import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.nskills.tags.SkillTag;
-import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
 public class FairyTease extends SimpleEnemySkill {
@@ -58,11 +57,6 @@ public class FairyTease extends SimpleEnemySkill {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public Skill copy(Character user) {
-        return new FairyTease();
     }
 
     @Override

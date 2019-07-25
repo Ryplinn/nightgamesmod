@@ -110,11 +110,6 @@ public class Escape extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Escape();
-    }
-
-    @Override
     public int speed(Character user) {
         return 1;
     }

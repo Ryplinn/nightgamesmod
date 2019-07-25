@@ -65,11 +65,6 @@ public class HeelGrind extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new HeelGrind();
-    }
-
-    @Override
     public int speed(Character user) {
         return 4;
     }

@@ -59,11 +59,6 @@ public class PressurePoint extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new PressurePoint();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }

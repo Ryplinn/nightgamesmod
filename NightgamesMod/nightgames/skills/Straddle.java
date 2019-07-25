@@ -34,11 +34,6 @@ public class Straddle extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Straddle();
-    }
-
-    @Override
     public int speed(Character user) {
         return 6;
     }

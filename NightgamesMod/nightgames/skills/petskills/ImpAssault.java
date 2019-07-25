@@ -8,7 +8,6 @@ import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.items.clothing.ClothingTrait;
 import nightgames.nskills.tags.SkillTag;
-import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 import nightgames.skills.damage.DamageType;
 import nightgames.status.Stsflag;
@@ -60,11 +59,6 @@ public class ImpAssault extends SimpleEnemySkill {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public Skill copy(Character user) {
-        return new ImpAssault();
     }
 
     @Override

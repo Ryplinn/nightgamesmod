@@ -64,11 +64,6 @@ public class ReverseCarry extends Carry {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new ReverseCarry();
-    }
-
-    @Override
     public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.miss) {
             return (damage > 0 ? "" : "You ") + "leap into " + target.possessiveAdjective()

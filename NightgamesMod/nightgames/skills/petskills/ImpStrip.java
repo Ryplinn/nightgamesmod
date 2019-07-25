@@ -9,7 +9,6 @@ import nightgames.global.Random;
 import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.nskills.tags.SkillTag;
-import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
 import java.util.ArrayList;
@@ -61,11 +60,6 @@ public class ImpStrip extends SimpleEnemySkill {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public Skill copy(Character user) {
-        return new ImpStrip();
     }
 
     @Override

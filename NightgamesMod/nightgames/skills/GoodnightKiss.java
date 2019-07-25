@@ -51,11 +51,6 @@ public class GoodnightKiss extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new GoodnightKiss();
-    }
-    
-    @Override
     public int speed(Character user) {
         return 7;
     }

@@ -11,7 +11,7 @@ import java.util.Optional;
 public class NSkillAdapter extends Skill {
     SkillInterface skill;
 
-    public NSkillAdapter(Character user, SkillInterface skill) {
+    public NSkillAdapter(SkillInterface skill) {
         super(skill.getName());
         this.skill = skill;
     }
@@ -35,11 +35,6 @@ public class NSkillAdapter extends Skill {
     @Override
     public boolean resolve(Combat c, Character user, Character target) {
         return skill.resolve(c, user, target);
-    }
-
-    @Override
-    public Skill copy(Character user) {
-        return new NSkillAdapter(user, skill);
     }
 
     @Override

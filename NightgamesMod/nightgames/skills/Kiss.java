@@ -130,11 +130,6 @@ public class Kiss extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Kiss();
-    }
-
-    @Override
     public int speed(Character user) {
         return 6;
     }

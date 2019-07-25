@@ -14,11 +14,6 @@ public class PetInitiatedThreesome extends PetThreesome {
         return 2.0f;
     }
 
-    @Override
-    public Skill copy(Character user) {
-        return new PetInitiatedThreesome();
-    }
-
     protected Character getFucker(Combat c, Character user) {
         return user;
     }

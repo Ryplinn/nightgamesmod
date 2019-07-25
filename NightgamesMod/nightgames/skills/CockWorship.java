@@ -77,11 +77,6 @@ public class CockWorship extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new CockWorship();
-    }
-
-    @Override
     public int speed(Character user) {
         return 2;
     }

@@ -63,11 +63,6 @@ public class Wait extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Wait();
-    }
-
-    @Override
     public int speed(Character user) {
         return 0;
     }

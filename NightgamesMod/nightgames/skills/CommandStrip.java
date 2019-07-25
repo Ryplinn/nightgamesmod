@@ -34,11 +34,6 @@ public class CommandStrip extends PlayerCommand {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new CommandStrip();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.stripping;
     }

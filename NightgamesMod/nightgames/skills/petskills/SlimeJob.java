@@ -5,7 +5,6 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.nskills.tags.SkillTag;
-import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
 public class SlimeJob extends SimpleEnemySkill {
@@ -52,11 +51,6 @@ public class SlimeJob extends SimpleEnemySkill {
         c.write(user, Formatter
                         .format("You see eyes form in {self:name-do} as it watches the fight curiously.", user, target));
         return false;
-    }
-
-    @Override
-    public Skill copy(Character user) {
-        return new SlimeJob();
     }
 
     @Override

@@ -102,11 +102,6 @@ public class Paizuri extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Paizuri();
-    }
-
-    @Override
     public int speed(Character user) {
         return 4;
     }

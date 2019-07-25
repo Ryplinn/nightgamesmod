@@ -69,11 +69,6 @@ public class StripTop extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new StripTop();
-    }
-
-    @Override
     public int speed(Character user) {
         return 3;
     }

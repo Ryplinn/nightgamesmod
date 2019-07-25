@@ -74,11 +74,6 @@ public class PussyWorship extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new PussyWorship();
-    }
-
-    @Override
     public int speed(Character user) {
         return 2;
     }

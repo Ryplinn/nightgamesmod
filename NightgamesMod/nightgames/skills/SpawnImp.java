@@ -63,11 +63,6 @@ public class SpawnImp extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new SpawnImp(gender);
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.summoning;
     }

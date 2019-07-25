@@ -52,11 +52,6 @@ public class ArmBar extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new ArmBar();
-    }
-
-    @Override
     public int speed(Character user) {
         return 2;
     }

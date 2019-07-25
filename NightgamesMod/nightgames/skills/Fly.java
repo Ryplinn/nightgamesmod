@@ -78,11 +78,6 @@ public class Fly extends Fuck {
     }
 
     @Override
-    public Skill copy(Character target) {
-        return new Fly();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.fucking;
     }

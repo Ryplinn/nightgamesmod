@@ -72,11 +72,6 @@ public class Tempt extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Tempt();
-    }
-
-    @Override
     public int speed(Character user) {
         return 9;
     }

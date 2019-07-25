@@ -57,11 +57,6 @@ public class VibroTease extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new VibroTease();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }

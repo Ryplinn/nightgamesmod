@@ -96,11 +96,6 @@ public class Slap extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Slap();
-    }
-
-    @Override
     public int speed(Character user) {
         return 8;
     }

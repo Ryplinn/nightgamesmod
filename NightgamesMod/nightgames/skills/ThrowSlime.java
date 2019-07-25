@@ -12,17 +12,20 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.Stance;
 import nightgames.status.*;
 
-public class ThrowSlime extends Skill {
-    ThrowSlime() {
-        this(0);
-    }
+import java.util.Set;
 
-    public ThrowSlime(int slimeAttribute) {
+public class ThrowSlime extends Skill {
+    public ThrowSlime() {
         super("Throw Slime", 4);
         addTag(SkillTag.knockdown);
-        if (slimeAttribute >= 12) {
-            addTag(SkillTag.mental);
+    }
+
+    @Override public Set<SkillTag> getTags(Combat c, Character user, Character target) {
+        Set<SkillTag> tags = super.getTags(c, user, target);
+        if (user.get(Attribute.slime) >= 12) {
+            tags.add(SkillTag.mental);
         }
+        return tags;
     }
 
     @Override
@@ -69,11 +72,6 @@ public class ThrowSlime extends Skill {
                 return false;
             }
         }
-    }
-
-    @Override
-    public Skill copy(Character user) {
-        return new ThrowSlime(user.get(Attribute.slime));
     }
 
     @Override

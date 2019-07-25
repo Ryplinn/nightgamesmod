@@ -65,11 +65,6 @@ public class Undress extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Undress();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.misc;
     }

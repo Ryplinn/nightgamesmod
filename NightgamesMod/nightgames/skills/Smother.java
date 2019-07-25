@@ -84,11 +84,6 @@ public class Smother extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Smother();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         if (c.getStance().enumerate() != Stance.smothering) {
             return Tactics.positioning;

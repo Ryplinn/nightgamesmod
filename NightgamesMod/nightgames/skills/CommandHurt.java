@@ -25,11 +25,6 @@ public class CommandHurt extends PlayerCommand {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new CommandHurt();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.damage;
     }

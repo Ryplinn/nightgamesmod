@@ -55,11 +55,6 @@ public class CommandGive extends PlayerCommand {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new CommandGive();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }

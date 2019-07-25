@@ -33,11 +33,6 @@ public class Lubricate extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Lubricate();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }

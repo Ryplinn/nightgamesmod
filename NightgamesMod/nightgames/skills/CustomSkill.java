@@ -41,11 +41,6 @@ public class CustomSkill extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new CustomSkill(data);
-    }
-
-    @Override
     public int getMojoBuilt(Combat c, Character user) {
         return data.mojoBuilt;
     }

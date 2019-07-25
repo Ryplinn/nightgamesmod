@@ -57,11 +57,6 @@ public class UseDildo extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new UseDildo();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }

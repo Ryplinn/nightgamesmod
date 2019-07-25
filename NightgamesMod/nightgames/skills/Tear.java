@@ -221,11 +221,6 @@ public class Tear extends Skill {
         return true;
     }
 
-    @Override
-    public Skill copy(Character user) {
-        return new Tear();
-    }
-
     public String getLabel(Combat c, Character user) {
         if (user.get(Attribute.medicine) >= 12) {
             return "Clothing-ectomy";

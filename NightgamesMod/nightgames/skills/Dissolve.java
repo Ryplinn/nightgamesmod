@@ -74,11 +74,6 @@ public class Dissolve extends Skill {
             return target.shredRandom();
         return target.shred(slot);
     }
-    
-    @Override
-    public Skill copy(Character user) {
-        return new Dissolve();
-    }
 
     @Override
     public Tactics type(Combat c, Character user) {

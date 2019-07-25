@@ -48,11 +48,6 @@ public class OrgasmicThrust extends Thrust {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new OrgasmicThrust();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.fucking;
     }

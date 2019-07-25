@@ -4,7 +4,6 @@ import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.nskills.tags.SkillTag;
-import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 import nightgames.status.Falling;
 
@@ -43,11 +42,6 @@ public class SlimeTrip extends SimpleEnemySkill {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public Skill copy(Character user) {
-        return new SlimeTrip();
     }
 
     @Override

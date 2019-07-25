@@ -60,11 +60,6 @@ public class Whisper extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Whisper();
-    }
-
-    @Override
     public int speed(Character user) {
         return 9;
     }

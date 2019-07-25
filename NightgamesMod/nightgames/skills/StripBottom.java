@@ -75,10 +75,6 @@ public class StripBottom extends Skill {
         return user.get(Attribute.cunning) >= 3;
     }
 
-    @Override public Skill copy(Character user) {
-        return new StripBottom();
-    }
-
     @Override public int speed(Character user) {
         return 3;
     }

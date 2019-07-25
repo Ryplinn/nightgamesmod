@@ -74,11 +74,6 @@ public class SuccubusSurprise extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new SuccubusSurprise();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.fucking;
     }

@@ -104,11 +104,6 @@ public class LaunchHarpoon extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new LaunchHarpoon();
-    }
-    
-    @Override
     public int accuracy(Combat c, Character user, Character target) {
         int acc = 80;
         if (user.has(Trait.yank)) {

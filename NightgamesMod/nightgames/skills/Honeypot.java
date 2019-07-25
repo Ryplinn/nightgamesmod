@@ -53,11 +53,6 @@ public class Honeypot extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Honeypot();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.summoning;
     }

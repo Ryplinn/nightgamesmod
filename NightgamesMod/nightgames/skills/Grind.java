@@ -52,11 +52,6 @@ public class Grind extends Thrust {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Grind();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.fucking;
     }

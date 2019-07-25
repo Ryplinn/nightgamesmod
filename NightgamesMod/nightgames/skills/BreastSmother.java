@@ -95,11 +95,6 @@ public class BreastSmother extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new BreastSmother();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         if (c.getStance().enumerate() != Stance.breastsmothering) {
             return Tactics.positioning;

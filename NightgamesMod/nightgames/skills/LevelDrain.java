@@ -105,11 +105,6 @@ public class LevelDrain extends Drain {
     }
 
     @Override
-    public Skill copy(Character target) {
-        return new LevelDrain();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }

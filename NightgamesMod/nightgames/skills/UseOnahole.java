@@ -54,11 +54,6 @@ public class UseOnahole extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new UseOnahole();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }

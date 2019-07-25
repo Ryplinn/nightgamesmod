@@ -49,11 +49,6 @@ public class TailJob extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new TailJob();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }

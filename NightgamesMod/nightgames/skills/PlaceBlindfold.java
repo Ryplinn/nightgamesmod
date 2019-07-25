@@ -64,11 +64,6 @@ public class PlaceBlindfold extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new PlaceBlindfold();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }

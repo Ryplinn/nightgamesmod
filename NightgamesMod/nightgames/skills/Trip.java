@@ -63,11 +63,6 @@ public class Trip extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Trip();
-    }
-
-    @Override
     public int speed(Character user) {
         return 2;
     }

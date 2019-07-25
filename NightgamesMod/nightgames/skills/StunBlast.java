@@ -61,11 +61,6 @@ public class StunBlast extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new StunBlast();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.damage;
     }

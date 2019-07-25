@@ -91,11 +91,6 @@ public class ToggleKnot extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new ToggleKnot();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }

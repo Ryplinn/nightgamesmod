@@ -35,11 +35,6 @@ public class CommandDown extends PlayerCommand {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new CommandDown();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }

@@ -95,11 +95,6 @@ public class Masturbate extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Masturbate();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.misc;
     }

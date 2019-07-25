@@ -38,10 +38,6 @@ public class InjectAntidote extends Skill {
         return true;
     }
 
-    public Skill copy(Character user) {
-        return new InjectAntidote();
-    }
-
     public Tactics type(Combat c, Character user) {
         return Tactics.recovery;
     }

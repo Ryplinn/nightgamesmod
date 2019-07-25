@@ -94,11 +94,6 @@ public class ShrinkRay extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new ShrinkRay();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }

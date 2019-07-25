@@ -23,11 +23,6 @@ public class ReverseFly extends Fly {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new ReverseFly();
-    }
-
-    @Override
     public BodyPart getSelfOrgan(Character user) {
         return user.body.getRandomPussy();
     }

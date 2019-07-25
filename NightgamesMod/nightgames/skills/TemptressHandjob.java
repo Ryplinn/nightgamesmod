@@ -59,11 +59,6 @@ public class TemptressHandjob extends Handjob {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new TemptressHandjob();
-    }
-
-    @Override
     public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         switch (modifier) {
             case miss:

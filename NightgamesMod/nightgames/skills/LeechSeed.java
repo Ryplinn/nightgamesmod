@@ -57,11 +57,6 @@ public class LeechSeed extends Skill {
         return user.get(Attribute.bio) >= 10;
     }
 
-    @Override
-    public Skill copy(Character user) {
-        return new LeechSeed();
-    }
-
     public int speed(Character user) {
         return 5;
     }

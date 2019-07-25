@@ -81,11 +81,6 @@ public class ToggleSlimePussy extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new ToggleSlimePussy();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.misc;
     }

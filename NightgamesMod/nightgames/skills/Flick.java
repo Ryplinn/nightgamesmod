@@ -73,11 +73,6 @@ public class Flick extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Flick();
-    }
-
-    @Override
     public int speed(Character user) {
         return 6;
     }

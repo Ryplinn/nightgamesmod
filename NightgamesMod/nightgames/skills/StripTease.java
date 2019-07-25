@@ -74,11 +74,6 @@ public class StripTease extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new StripTease();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }

@@ -14,11 +14,6 @@ public class PetInitiatedReverseThreesome extends ReversePetThreesome {
         return 2.0f;
     }
 
-    @Override
-    public Skill copy(Character user) {
-        return new PetInitiatedReverseThreesome();
-    }
-
     protected Character getFucker(Combat c, Character user) {
         return user;
     }

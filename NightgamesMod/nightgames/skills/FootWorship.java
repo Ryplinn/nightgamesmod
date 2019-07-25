@@ -68,11 +68,6 @@ public class FootWorship extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new FootWorship();
-    }
-
-    @Override
     public int speed(Character user) {
         return 2;
     }

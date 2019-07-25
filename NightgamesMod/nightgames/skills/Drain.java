@@ -108,11 +108,6 @@ public class Drain extends Skill {
     }
 
     @Override
-    public Skill copy(Character target) {
-        return new Drain();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }

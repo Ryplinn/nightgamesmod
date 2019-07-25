@@ -9,7 +9,6 @@ import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.pet.PetCharacter;
-import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
 import java.util.ArrayList;
@@ -61,11 +60,6 @@ public class SlimeCloneParasite extends SimpleEnemySkill {
         }
         c.write(user, Formatter.format("{self:SUBJECT-ACTION:launch} {self:reflective} at {other:name-do}, but {other:pronoun-action:dodge} away in time.", user, target));
         return false;
-    }
-
-    @Override
-    public Skill copy(Character user) {
-        return new SlimeCloneParasite();
     }
 
     @Override

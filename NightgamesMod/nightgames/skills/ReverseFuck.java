@@ -28,11 +28,6 @@ public class ReverseFuck extends Fuck {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new ReverseFuck();
-    }
-
-    @Override
     public boolean usable(Combat c, Character user, Character target) {
         return super.usable(c, user, target);
     }

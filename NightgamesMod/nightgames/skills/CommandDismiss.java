@@ -29,11 +29,6 @@ public class CommandDismiss extends PlayerCommand {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new CommandDismiss();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.summoning;
     }

@@ -45,11 +45,6 @@ public class LegLock extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new LegLock();
-    }
-
-    @Override
     public int speed(Character user) {
         return 2;
     }

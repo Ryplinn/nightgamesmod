@@ -100,11 +100,6 @@ public class TemptressTitfuck extends Paizuri {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new TemptressTitfuck();
-    }
-
-    @Override
     public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         switch (modifier) {
             case miss:

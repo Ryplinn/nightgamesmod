@@ -62,11 +62,6 @@ public class PinningPaizuri extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new PinningPaizuri();
-    }
-
-    @Override
     public int speed(Character user) {
         return 5;
     }

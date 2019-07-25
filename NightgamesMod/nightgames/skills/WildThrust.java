@@ -84,11 +84,6 @@ public class WildThrust extends Thrust {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new WildThrust();
-    }
-
-    @Override
     public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.anal || modifier == Result.upgrade) {
             return "You wildly pound " + target.getName()

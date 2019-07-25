@@ -58,10 +58,6 @@ public class FootPump extends Skill {
         return true;
     }
 
-    @Override public Skill copy(Character user) {
-        return new FootPump();
-    }
-
     @Override public int speed(Character user) {
         return 4;
     }

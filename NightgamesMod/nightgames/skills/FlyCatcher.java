@@ -53,11 +53,6 @@ public class FlyCatcher extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new FlyCatcher();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.summoning;
     }

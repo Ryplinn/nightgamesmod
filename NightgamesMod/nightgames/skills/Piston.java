@@ -45,11 +45,6 @@ public class Piston extends Thrust {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Piston();
-    }
-
-    @Override
     public String deal(Combat c, int damage, Result modifier, Character user, Character target) {
         if (modifier == Result.anal || modifier == Result.upgrade) {
             return "You pound " + target.getName()

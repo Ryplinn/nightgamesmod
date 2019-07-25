@@ -124,8 +124,6 @@ public abstract class Skill {
 
     public abstract boolean resolve(Combat c, Character user, Character target);
 
-    public abstract Skill copy(Character user);
-
     public abstract Tactics type(Combat c, Character user);
 
     public abstract String deal(Combat c, int damage, Result modifier, Character user, Character target);

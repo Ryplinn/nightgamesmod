@@ -63,11 +63,6 @@ public class Maneuver extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Maneuver();
-    }
-
-    @Override
     public int speed(Character user) {
         return 8;
     }

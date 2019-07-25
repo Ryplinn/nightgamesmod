@@ -72,11 +72,6 @@ public class Tackle extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Tackle();
-    }
-
-    @Override
     public int speed(Character user) {
         if (user.get(Attribute.animism) >= 1) {
             return 3;

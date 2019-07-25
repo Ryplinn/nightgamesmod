@@ -102,11 +102,6 @@ public class Anilingus extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Anilingus();
-    }
-
-    @Override
     public int speed(Character user) {
         return 2;
     }

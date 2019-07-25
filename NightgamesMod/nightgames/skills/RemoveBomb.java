@@ -60,11 +60,6 @@ public class RemoveBomb extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new RemoveBomb();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.recovery;
     }

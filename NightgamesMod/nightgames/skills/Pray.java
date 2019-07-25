@@ -45,11 +45,6 @@ public class Pray extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Pray();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.recovery;
     }

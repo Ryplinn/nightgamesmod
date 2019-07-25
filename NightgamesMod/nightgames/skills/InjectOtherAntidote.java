@@ -40,10 +40,6 @@ public class InjectOtherAntidote extends Skill {
         return true;
     }
 
-    public Skill copy(Character user) {
-        return new InjectOtherAntidote();
-    }
-
     public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }

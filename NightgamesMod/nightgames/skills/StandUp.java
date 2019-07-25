@@ -32,11 +32,6 @@ public class StandUp extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new StandUp();
-    }
-
-    @Override
     public int speed(Character user) {
         return 0;
     }

@@ -94,11 +94,6 @@ public class Stomp extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Stomp();
-    }
-
-    @Override
     public int speed(Character user) {
         return 4;
     }

@@ -46,10 +46,6 @@ public class InjectAphrodisiac extends Skill {
         return true;
     }
 
-    public Skill copy(Character user) {
-        return new InjectAphrodisiac();
-    }
-
     public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }

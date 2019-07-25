@@ -5,7 +5,6 @@ import nightgames.combat.Combat;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.nskills.tags.SkillTag;
-import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
 public class ImpTease extends SimpleEnemySkill {
@@ -50,11 +49,6 @@ public class ImpTease extends SimpleEnemySkill {
         }
         c.write(user, Formatter.format("{self:SUBJECT} stands at the periphery of the fight, touching {self:reflective} idly.", user, target));
         return false;
-    }
-
-    @Override
-    public Skill copy(Character user) {
-        return new ImpTease();
     }
 
     @Override

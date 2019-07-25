@@ -66,11 +66,6 @@ public class CounterRide extends CounterBase {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new CounterRide();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.fucking;
     }

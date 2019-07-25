@@ -78,11 +78,6 @@ public class Carry extends Fuck {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Carry();
-    }
-
-    @Override
     public int accuracy(Combat c, Character user, Character target) {
         return 60;
     }

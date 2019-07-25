@@ -38,11 +38,6 @@ public class Masochism extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Masochism();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }

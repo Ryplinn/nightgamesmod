@@ -58,11 +58,6 @@ public class Substitute extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Substitute();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.positioning;
     }

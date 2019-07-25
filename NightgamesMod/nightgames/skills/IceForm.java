@@ -43,11 +43,6 @@ public class IceForm extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new IceForm();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.debuff;
     }

@@ -76,11 +76,6 @@ public class Frottage extends Skill {
     }
 
     @Override
-    public Skill copy(Character user) {
-        return new Frottage();
-    }
-
-    @Override
     public Tactics type(Combat c, Character user) {
         return Tactics.pleasure;
     }

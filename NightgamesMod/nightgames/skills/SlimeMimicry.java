@@ -41,12 +41,7 @@ public class SlimeMimicry extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character user, Character target) {
-        return Random.pickRandomGuaranteed(MIMICRY_SKILLS).copy(user).resolve(c, user, target);
-    }
-
-    @Override
-    public Skill copy(Character user) {
-        return new SlimeMimicry();
+        return Random.pickRandomGuaranteed(MIMICRY_SKILLS).resolve(c, user, target);
     }
 
     @Override
