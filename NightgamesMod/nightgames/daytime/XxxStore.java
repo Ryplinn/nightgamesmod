@@ -2,7 +2,6 @@ package nightgames.daytime;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.NPC;
-import nightgames.characters.Player;
 import nightgames.global.Flag;
 import nightgames.global.Random;
 import nightgames.gui.GUI;
@@ -314,7 +313,7 @@ public class XxxStore extends Store {
 
         GUI.gui.message("<br/>They also sell a selection of salacious clothing:");
         clothingstock.keySet().forEach(clothing -> GUI.gui.message(String.format("%s: $%d%s", clothing.getName(), clothing.getPrice(),
-                                        getPlayer().has(clothing) ? " (Owned)" : "")));
+                                        getPlayer().ownsClothing(clothing) ? " (Owned)" : "")));
         nextChoices.addAll(displayClothes());
 
         GUI.gui.message("You have $" + getPlayer().money + " to spend.");

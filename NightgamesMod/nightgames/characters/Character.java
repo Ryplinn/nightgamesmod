@@ -2365,7 +2365,7 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     private void gainIfAbsent(Clothing clothing) {
-            if (!has(clothing)) {
+            if (!ownsClothing(clothing)) {
                 gain(clothing);
             }
     }
@@ -2402,7 +2402,7 @@ public abstract class Character extends Observable implements Cloneable {
         change();
     }
 
-    public boolean has(Clothing item) {
+    public boolean ownsClothing(Clothing item) {
         return closet.contains(item) || outfit.getEquipped().contains(item);
     }
 

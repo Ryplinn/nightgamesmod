@@ -1,6 +1,5 @@
 package nightgames.daytime;
 
-import nightgames.characters.Player;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
@@ -44,7 +43,7 @@ public abstract class Store extends Activity {
     }
 
     List<LabeledValue<String>> displayClothes() {
-        return clothingstock.keySet().stream().filter(clothing -> !getPlayer().has(clothing)).map(this::sale).collect(Collectors.toList());
+        return clothingstock.keySet().stream().filter(clothing -> !getPlayer().ownsClothing(clothing)).map(this::sale).collect(Collectors.toList());
     }
 
     protected List<LabeledValue<String>> displayItems() {

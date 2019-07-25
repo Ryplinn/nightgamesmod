@@ -1,7 +1,6 @@
 package nightgames.daytime;
 
 import nightgames.characters.NPC;
-import nightgames.characters.Player;
 import nightgames.characters.trait.Trait;
 import nightgames.global.Flag;
 import nightgames.global.Formatter;
@@ -48,7 +47,7 @@ public abstract class BaseNPCTime extends Activity {
 
     private List<Loot> getGiftables() {
         List<Loot> giftables = new ArrayList<>();
-        getPlayer().closet.stream().filter(article -> !npc.has(article)).forEach(giftables::add);
+        getPlayer().closet.stream().filter(article -> !npc.ownsClothing(article)).forEach(giftables::add);
         return giftables;
     }
 

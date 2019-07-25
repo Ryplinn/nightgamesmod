@@ -1,7 +1,6 @@
 package nightgames.daytime;
 
 import nightgames.characters.NPC;
-import nightgames.characters.Player;
 import nightgames.global.Flag;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
@@ -38,7 +37,7 @@ public class ClothingStore extends Store {
             GUI.gui.message(
                             "This is a normal retail clothing outlet. For obvious reasons, you'll need to buy anything you want to wear at night in bulk.");
             for (Clothing i : clothing().keySet()) {
-                GUI.gui.message(i.getName() + ": " + i.getPrice() + (getPlayer().has(i) ? " (Owned)" : ""));
+                GUI.gui.message(i.getName() + ": " + i.getPrice() + (getPlayer().ownsClothing(i) ? " (Owned)" : ""));
             }
             GUI.gui.message("You have: $" + getPlayer().money + " available to spend.");
             displayGoods(nextChoices);

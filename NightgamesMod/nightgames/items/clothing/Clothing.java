@@ -75,7 +75,7 @@ public class Clothing implements Loot {
 
     @Override
     public void pickup(Character owner) {
-        if (!owner.has(this)) {
+        if (!owner.ownsClothing(this)) {
             owner.gain(this);
         }
     }
