@@ -244,7 +244,7 @@ public class Command extends Skill {
                 int m = target.has(Trait.silvertongue) ? 15 : 10;
                 user.body.pleasure(target, target.body.getRandom("mouth"), user.body.getRandomAss(),
                                 7 + Random.random(m), c, new SkillUsage<>(this, user, target));
-                if (Random.random(50) < user.get(Attribute.fetishism) + 10) {
+                if (Random.random(50) < user.getAttribute(Attribute.fetishism) + 10) {
                     target.add(c, new BodyFetish(target.getType(), user.getType(), "ass", .1));
                 }
                 if (c.getStance().dom(target)) {
@@ -266,7 +266,7 @@ public class Command extends Skill {
                 m = target.has(Trait.silvertongue) ? 15 : 10;
                 user.body.pleasure(target, target.body.getRandom("mouth"), user.body.getRandomCock(),
                                 7 + Random.random(m), c, new SkillUsage<>(this, user, target));
-                if (Random.random(50) < user.get(Attribute.fetishism) + 10) {
+                if (Random.random(50) < user.getAttribute(Attribute.fetishism) + 10) {
                     target.add(c, new BodyFetish(target.getType(), user.getType(), "cock", .1));
                 }
 
@@ -287,7 +287,7 @@ public class Command extends Skill {
                 m = target.has(Trait.silvertongue) ? 15 : 10;
                 user.body.pleasure(target, target.body.getRandom("mouth"), user.body.getRandomPussy(),
                                 7 + Random.random(m), c, new SkillUsage<>(this, user, target));
-                if (Random.random(50) < user.get(Attribute.fetishism) + 10) {
+                if (Random.random(50) < user.getAttribute(Attribute.fetishism) + 10) {
                     target.add(c, new BodyFetish(target.getType(), user.getType(), "pussy", .1));
                 }
 

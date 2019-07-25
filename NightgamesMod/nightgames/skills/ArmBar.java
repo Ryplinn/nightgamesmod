@@ -48,7 +48,7 @@ public class ArmBar extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.power) >= 20 && !user.has(Trait.undisciplined);
+        return user.getAttribute(Attribute.power) >= 20 && !user.has(Trait.undisciplined);
     }
 
     @Override

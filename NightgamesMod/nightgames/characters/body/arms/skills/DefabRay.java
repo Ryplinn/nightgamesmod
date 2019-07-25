@@ -23,7 +23,7 @@ public class DefabRay extends ArmSkill {
     @Override
     public boolean resolve(Combat c, Arm arm, Character owner, Character target) {
         boolean sub = c.getStance().dom(owner);
-        boolean success = sub || Random.random(100) < 10 + owner.get(Attribute.science);
+        boolean success = sub || Random.random(100) < 10 + owner.getAttribute(Attribute.science);
         
         if (success) {
             ClothingSlot slot = target.outfit.getRandomShreddableSlot();

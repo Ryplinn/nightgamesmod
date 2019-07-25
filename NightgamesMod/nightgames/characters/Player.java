@@ -232,7 +232,7 @@ public class Player extends Character {
     @Override
     public void detect() {
         for (Area adjacent : location.adjacent) {
-            if (adjacent.ping(get(Attribute.perception))) {
+            if (adjacent.ping(getAttribute(Attribute.perception))) {
                 GUI.gui
                       .message("You hear something in the <b>" + adjacent.name + "</b>.");
                 adjacent.setPinged(true);
@@ -271,20 +271,20 @@ public class Player extends Character {
             gui.message("She is naked and helpless.<br/>");
             return;
         }
-        if (get(Attribute.perception) >= 6) {
+        if (getAttribute(Attribute.perception) >= 6) {
             gui.message("She is level " + opponent.getLevel());
         }
-        if (get(Attribute.perception) >= 8) {
-            gui.message("Her Power is " + opponent.get(Attribute.power) + ", her Cunning is "
-                            + opponent.get(Attribute.cunning) + ", and her Seduction is "
-                            + opponent.get(Attribute.seduction));
+        if (getAttribute(Attribute.perception) >= 8) {
+            gui.message("Her Power is " + opponent.getAttribute(Attribute.power) + ", her Cunning is "
+                            + opponent.getAttribute(Attribute.cunning) + ", and her Seduction is "
+                            + opponent.getAttribute(Attribute.seduction));
         }
         if (opponent.mostlyNude() || opponent.state == State.shower) {
             gui.message("She is completely naked.");
         } else {
             gui.message("She is dressed and ready to fight.");
         }
-        if (get(Attribute.perception) >= 4) {
+        if (getAttribute(Attribute.perception) >= 4) {
             if (opponent.getArousal()
                         .percent() > 70) {
                 arousal = "horny";
@@ -467,7 +467,7 @@ public class Player extends Character {
 
     @Override
     public int getMaxWillpowerPossible() {
-        return 50 + getLevel() * 5 - get(Attribute.submission) * 2;
+        return 50 + getLevel() * 5 - getAttribute(Attribute.submission) * 2;
     }
 
     @Override
@@ -734,18 +734,18 @@ public class Player extends Character {
             case damage:
                 c.write(this, "You dodge " + target.getName()
                                 + "'s slow attack and hit her sensitive tit to stagger her.");
-                target.pain(c, target, 4 + Math.min(Random.random(get(Attribute.power)), 20));
+                target.pain(c, target, 4 + Math.min(Random.random(getAttribute(Attribute.power)), 20));
                 break;
             case pleasure:
                 if (!target.crotchAvailable() || !target.hasPussy()) {
                     c.write(this, "You pull " + target.getName()
                                     + " off balance and lick her sensitive ear. She trembles as you nibble on her earlobe.");
                     target.body.pleasure(this, body.getRandom("tongue"), target.body.getRandom("ears"),
-                                    4 + Math.min(Random.random(get(Attribute.seduction)), 20), c);
+                                    4 + Math.min(Random.random(getAttribute(Attribute.seduction)), 20), c);
                 } else {
                     c.write(this, "You pull " + target.getName() + " to you and rub your thigh against her girl parts.");
                     target.body.pleasure(this, body.getRandom("feet"), target.body.getRandomPussy(),
-                                    4 + Math.min(Random.random(get(Attribute.seduction)), 20), c);
+                                    4 + Math.min(Random.random(getAttribute(Attribute.seduction)), 20), c);
                 }
                 break;
             case fucking:
@@ -763,7 +763,7 @@ public class Player extends Character {
                     }
                 } else {
                     target.body.pleasure(this, body.getRandom("hands"), target.body.getRandomBreasts(),
-                                    4 + Math.min(Random.random(get(Attribute.seduction)), 20), c);
+                                    4 + Math.min(Random.random(getAttribute(Attribute.seduction)), 20), c);
                     c.write(this, Formatter.format(
                                     "{self:SUBJECT-ACTION:pinch|pinches} {other:possessive} nipples with {self:possessive} hands as {other:subject-action:try|tries} to fuck {self:direct-object}. "
                                                     + "While {other:subject-action:yelp|yelps} with surprise, {self:subject-action:take|takes} the chance to pleasure {other:possessive} body.",
@@ -779,7 +779,7 @@ public class Player extends Character {
                 } else {
                     c.write(this, "You manage to dodge " + target.possessiveAdjective()
                                     + " groping hands and give a retaliating slap in return.");
-                    target.pain(c, target, 4 + Math.min(Random.random(get(Attribute.power)), 20));
+                    target.pain(c, target, 4 + Math.min(Random.random(getAttribute(Attribute.power)), 20));
                 }
                 break;
             case positioning:
@@ -796,7 +796,7 @@ public class Player extends Character {
             default:
                 c.write(this, "You manage to dodge " + target.possessiveAdjective()
                                 + " attack and give a retaliating slap in return.");
-                target.pain(c, target, 4 + Math.min(Random.random(get(Attribute.power)), 20));
+                target.pain(c, target, 4 + Math.min(Random.random(getAttribute(Attribute.power)), 20));
         }
     }
 

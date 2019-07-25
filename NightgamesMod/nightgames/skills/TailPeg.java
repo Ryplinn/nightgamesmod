@@ -29,7 +29,7 @@ public class TailPeg extends Skill {
     public boolean requirements(Combat c, Character user, Character target) {
         Collection<BodyPart> tails = user.body.get("tail");
         boolean hasFuckableTail = tails.stream().anyMatch(p -> p.isType("tail") && p != TailPart.cat && p != TailPart.slimeycat);
-        return hasFuckableTail && (user.get(Attribute.darkness) >= 1 || user.get(Attribute.seduction) >= 20);
+        return hasFuckableTail && (user.getAttribute(Attribute.darkness) >= 1 || user.getAttribute(Attribute.seduction) >= 20);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class TailPeg extends Skill {
     @Override
     public boolean resolve(Combat c, Character user, Character target) {
         if (target.roll(user, accuracy(c, user, target))) {
-            int strength = Math.min(20, 10 + user.get(Attribute.darkness) / 4);
+            int strength = Math.min(20, 10 + user.getAttribute(Attribute.darkness) / 4);
             boolean intercourse = !c.getStance().getPartsFor(c, user, target).isEmpty() && c.getStance().penisInserted(target);
             boolean shamed = false;
             if (!intercourse && Random.random(4) == 2) {
@@ -125,7 +125,7 @@ public class TailPeg extends Skill {
             target.emote(Emotion.desperate, 10);
             user.emote(Emotion.confident, 15);
             user.emote(Emotion.dominant, 25);
-            if (Random.random(100) < 5 + 2 * user.get(Attribute.fetishism)) {
+            if (Random.random(100) < 5 + 2 * user.getAttribute(Attribute.fetishism)) {
                 target.add(c, new BodyFetish(target.getType(), user.getType(), "tail", .25));
             }
         } else {

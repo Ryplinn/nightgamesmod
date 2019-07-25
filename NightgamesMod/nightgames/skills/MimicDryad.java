@@ -22,7 +22,7 @@ public class MimicDryad extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.human() && user.get(Attribute.slime) >= 10;
+        return user.human() && user.getAttribute(Attribute.slime) >= 10;
     }
 
     @Override
@@ -77,7 +77,7 @@ public class MimicDryad extends Skill {
             user.body.temporaryAddOrReplacePartWithType(part.upgrade(), 10);
         }
 
-        int strength = Math.max(10, user.get(Attribute.slime)) * 2 / 3;
+        int strength = Math.max(10, user.getAttribute(Attribute.slime)) * 2 / 3;
         if (user.has(Trait.Masquerade)) {
             strength = strength * 3 / 2;
         }

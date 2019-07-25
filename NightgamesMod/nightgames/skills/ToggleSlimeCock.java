@@ -19,7 +19,7 @@ public class ToggleSlimeCock extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.slime) > 14;
+        return user.getAttribute(Attribute.slime) > 14;
     }
 
     @Override

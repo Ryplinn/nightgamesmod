@@ -26,7 +26,7 @@ public class Trip extends Skill {
     }
 
     private boolean isSlime(Character user) {
-        return user.get(Attribute.slime) > 11;
+        return user.getAttribute(Attribute.slime) > 11;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class Trip extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.cunning) >= 16;
+        return user.getAttribute(Attribute.cunning) >= 16;
     }
 
     @Override
@@ -69,8 +69,8 @@ public class Trip extends Skill {
 
     @Override
     public int accuracy(Combat c, Character user, Character target) {
-        double cunningDifference = user.get(Attribute.cunning) - c.getOpponent(user)
-                                                                       .get(Attribute.cunning);
+        double cunningDifference = user.getAttribute(Attribute.cunning) - c.getOpponent(user)
+                                                                       .getAttribute(Attribute.cunning);
         double accuracy = 2.5f * cunningDifference + 75 - target.knockdownDC();
         if (isSlime(user)) {
             accuracy += 25;

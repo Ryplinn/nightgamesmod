@@ -58,19 +58,19 @@ public class Offer extends Skill {
                 writeOutput(c, Result.special, user, target);
                 c.setStance(new Missionary(target.getType(), user.getType()), target, true);
                 user.body.pleasure(target, target.body.getRandomCock(), user.body.getRandomPussy(),
-                                Random.random(5) + user.get(Attribute.perception), c, new SkillUsage<>(this, user, target));
+                                Random.random(5) + user.getAttribute(Attribute.perception), c, new SkillUsage<>(this, user, target));
                 target.body.pleasure(user, user.body.getRandomPussy(), target.body.getRandomCock(),
-                                Random.random(5) + user.get(Attribute.perception), c, new SkillUsage<>(this, user, target));
+                                Random.random(5) + user.getAttribute(Attribute.perception), c, new SkillUsage<>(this, user, target));
 
             } else {
                 // offer ass to dick/strapon
                 writeOutput(c, Result.anal, user, target);
                 c.setStance(new Anal(target.getType(), user.getType()), target, true);
                 user.body.pleasure(target, target.body.getRandomInsertable(), user.body.getRandomAss(),
-                                Random.random(5) + user.get(Attribute.perception), c, new SkillUsage<>(this, user, target));
+                                Random.random(5) + user.getAttribute(Attribute.perception), c, new SkillUsage<>(this, user, target));
                 if (!target.has(Trait.strapped)) {
                     target.body.pleasure(user, user.body.getRandomAss(), target.body.getRandomCock(),
-                                    Random.random(5) + user.get(Attribute.perception), c, new SkillUsage<>(this, user, target));
+                                    Random.random(5) + user.getAttribute(Attribute.perception), c, new SkillUsage<>(this, user, target));
                 }
             }
         } else {
@@ -79,9 +79,9 @@ public class Offer extends Skill {
             writeOutput(c, Result.normal, user, target);
             c.setStance(new Cowgirl(target.getType(), user.getType()), target, true);
             user.body.pleasure(target, target.body.getRandomPussy(), user.body.getRandomCock(),
-                            Random.random(5) + user.get(Attribute.perception), c, new SkillUsage<>(this, user, target));
+                            Random.random(5) + user.getAttribute(Attribute.perception), c, new SkillUsage<>(this, user, target));
             target.body.pleasure(user, user.body.getRandomCock(), target.body.getRandomPussy(),
-                            Random.random(5) + user.get(Attribute.perception), c, new SkillUsage<>(this, user, target));
+                            Random.random(5) + user.getAttribute(Attribute.perception), c, new SkillUsage<>(this, user, target));
         }
 
         if (user.checkAddiction(AddictionType.MIND_CONTROL, target)) {

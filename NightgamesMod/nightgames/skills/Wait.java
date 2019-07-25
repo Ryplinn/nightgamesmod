@@ -24,7 +24,7 @@ public class Wait extends Skill {
     @Override
     public int getMojoBuilt(Combat c, Character user) {
         if (channel(c, user)) {
-            return 20 + user.get(Attribute.spellcasting) / 3;
+            return 20 + user.getAttribute(Attribute.spellcasting) / 3;
         } else if (focused(c, user)) {
             return 20;
         } else {
@@ -131,10 +131,10 @@ public class Wait extends Skill {
     }
 
     private boolean focused(Combat c, Character user) {
-        return user.get(Attribute.cunning) >= 15 && !user.has(Trait.undisciplined) && user.canRespond() && !c.getStance().sub(user);
+        return user.getAttribute(Attribute.cunning) >= 15 && !user.has(Trait.undisciplined) && user.canRespond() && !c.getStance().sub(user);
     }
 
     private boolean channel(Combat c, Character user) {
-        return user.get(Attribute.spellcasting) >= 1 && user.canRespond() && !c.getStance().sub(user);
+        return user.getAttribute(Attribute.spellcasting) >= 1 && user.canRespond() && !c.getStance().sub(user);
     }
 }

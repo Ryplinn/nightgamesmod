@@ -80,13 +80,13 @@ public class ReverseAssFuck extends Fuck {
 
         int otherm = m;
         if (user.has(Trait.insertion)) {
-            otherm += Math.min(user.get(Attribute.seduction) / 4, 40);
+            otherm += Math.min(user.getAttribute(Attribute.seduction) / 4, 40);
         }
         target.body.pleasure(user, getSelfOrgan(user), getTargetOrgan(target), otherm, c, new SkillUsage<>(this, user, target));
         user.body.pleasure(target, getTargetOrgan(target), getSelfOrgan(user), m, c, new SkillUsage<>(this, user, target));
         c.setStance(new AnalCowgirl(user.getType(), target.getType()), user, user.canMakeOwnDecision());
         user.emote(Emotion.dominant, 30);
-        if (Random.random(100) < 5 + 2 * user.get(Attribute.fetishism) || user.has(Trait.bewitchingbottom)) {
+        if (Random.random(100) < 5 + 2 * user.getAttribute(Attribute.fetishism) || user.has(Trait.bewitchingbottom)) {
             target.add(c, new BodyFetish(target.getType(), user.getType(), "ass", .25));
         }
         return true;
@@ -94,7 +94,7 @@ public class ReverseAssFuck extends Fuck {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.seduction) >= 15;
+        return user.getAttribute(Attribute.seduction) >= 15;
     }
 
     @Override

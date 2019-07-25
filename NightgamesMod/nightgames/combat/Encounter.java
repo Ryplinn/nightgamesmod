@@ -2,8 +2,8 @@ package nightgames.combat;
 
 import nightgames.actions.Movement;
 import nightgames.areas.Area;
-import nightgames.characters.*;
 import nightgames.characters.Character;
+import nightgames.characters.*;
 import nightgames.characters.trait.Trait;
 import nightgames.global.DebugFlags;
 import nightgames.global.Formatter;
@@ -240,7 +240,7 @@ public class Encounter implements Serializable {
         Random.DieRoll p2Check = p2.check(Attribute.speed, p2.getTraitMod(Trait.sprinter, 5));
 
         if (p1Check.result() == p2Check.result()) {
-            if (p1.get(Attribute.speed) >= p2.get(Attribute.speed)) {
+            if (p1.getAttribute(Attribute.speed) >= p2.getAttribute(Attribute.speed)) {
                 return Arrays.asList(p1, p2);
             } else {
                 return Arrays.asList(p2, p1);

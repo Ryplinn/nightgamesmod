@@ -19,7 +19,7 @@ public class FootSmother extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.fetishism) >= 20;
+        return user.getAttribute(Attribute.fetishism) >= 20;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class FootSmother extends Skill {
             c.write(user, Formatter.format(receive(c, 0, Result.normal, user, target), user, target));
         }
         target.temptWithSkill(c, user, user.body.getRandom("feet"), m, this);
-        if (Random.random(100) < 30 + 2 * user.get(Attribute.fetishism)) {
+        if (Random.random(100) < 30 + 2 * user.getAttribute(Attribute.fetishism)) {
             target.add(c, new BodyFetish(target.getType(), user.getType(), "feet", .25));
         }
         return true;

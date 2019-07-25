@@ -40,12 +40,12 @@ public class Shove extends Skill {
     @Override
     public boolean resolve(Combat c, Character user, Character target) {
         boolean success = true;
-        if (user.get(Attribute.ki) >= 1 && target.getOutfit().slotShreddable(ClothingSlot.top)
+        if (user.getAttribute(Attribute.ki) >= 1 && target.getOutfit().slotShreddable(ClothingSlot.top)
                         && user.canSpend(5)) {
             writeOutput(c, Result.special, user, target);
             target.shred(ClothingSlot.top);
             target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random.random(10, 25)));
-            if (user.checkVsDc(Attribute.power, target.knockdownDC() - user.get(Attribute.ki))) {
+            if (user.checkVsDc(Attribute.power, target.knockdownDC() - user.getAttribute(Attribute.ki))) {
                 c.setStance(new Neutral(user.getType(), c.getOpponent(user).getType()), user, true);
             }
         } else if (c.getStance().getClass() == Mount.class || c.getStance().getClass() == ReverseMount.class) {
@@ -95,7 +95,7 @@ public class Shove extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.power) >= 5;
+        return user.getAttribute(Attribute.power) >= 5;
     }
 
     @Override
@@ -110,7 +110,7 @@ public class Shove extends Skill {
 
     @Override
     public String getLabel(Combat c, Character user) {
-        if (user.get(Attribute.ki) >= 1) {
+        if (user.getAttribute(Attribute.ki) >= 1) {
             return "Shredding Palm";
         } else {
             return getName(c, user);

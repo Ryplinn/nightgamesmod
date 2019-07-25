@@ -26,7 +26,7 @@ public class FaceSit extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.getLevel() >= 10 || user.get(Attribute.seduction) >= 30;
+        return user.getLevel() >= 10 || user.getAttribute(Attribute.seduction) >= 30;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class FaceSit extends Skill {
         } else {
             user.body.pleasure(target, target.body.getRandom("mouth"), user.body.getRandom("pussy"), m, c, new SkillUsage<>(this, user, target));
             
-            if (Random.random(100) < 1 + user.get(Attribute.fetishism) / 2) {
+            if (Random.random(100) < 1 + user.getAttribute(Attribute.fetishism) / 2) {
                 target.add(c, new BodyFetish(target.getType(), user.getType(), "pussy", .05));
             }
         }
@@ -84,7 +84,7 @@ public class FaceSit extends Skill {
         if (!c.getStance().isFaceSitting(user)) {
             c.setStance(new FaceSitting(user.getType(), target.getType()), user, true);
         }
-        int fetishChance = 5 + 2 * user.get(Attribute.fetishism);
+        int fetishChance = 5 + 2 * user.getAttribute(Attribute.fetishism);
         if (user.has(Trait.bewitchingbottom)) {
             fetishChance *= 2;
         }

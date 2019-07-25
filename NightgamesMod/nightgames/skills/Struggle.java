@@ -130,7 +130,7 @@ public class Struggle extends Skill {
             diffMod += 15;
         if (user.checkVsDc(Attribute.power,
                         target.getStamina().get() / 2 - user.getStamina().get() / 2
-                                        + target.get(Attribute.power) - user.get(Attribute.power)
+                                        + target.getAttribute(Attribute.power) - user.getAttribute(Attribute.power)
                                         - user.getEscape(c, target) + diffMod)) {
             if (c.getStance().reversable(c)) {
                 c.setStance(c.getStance().reverse(c, true));
@@ -188,7 +188,7 @@ public class Struggle extends Skill {
         }
         if (user.checkVsDc(Attribute.power,
                         target.getStamina().get() / 2 - user.getStamina().get() / 2
-                                        + target.get(Attribute.power) - user.get(Attribute.power)
+                                        + target.getAttribute(Attribute.power) - user.getAttribute(Attribute.power)
                                         - user.getEscape(c, target) + diffMod)) {
             if (user.hasStatus(Stsflag.cockbound)) {
                 CockBound s = (CockBound) user.getStatus(Stsflag.cockbound);
@@ -234,7 +234,7 @@ public class Struggle extends Skill {
 
     private boolean struggleRegular(Combat c, Character user, Character target) {
         int difficulty = target.getStamina().get() / 2 - user.getStamina().get() / 2
-                        + target.get(Attribute.power) - user.get(Attribute.power)
+                        + target.getAttribute(Attribute.power) - user.getAttribute(Attribute.power)
                         - user.getEscape(c, target);
         if (target.has(Trait.powerfulcheeks)) {
             difficulty += 5;
@@ -278,9 +278,9 @@ public class Struggle extends Skill {
         int dc;
         
         if (basic) {
-           attrLevel = Math.max(user.get(Attribute.power),
-                           Math.max(user.get(Attribute.seduction),
-                                           user.get(Attribute.cunning))) / 2;
+           attrLevel = Math.max(user.getAttribute(Attribute.power),
+                           Math.max(user.getAttribute(Attribute.seduction),
+                                           user.getAttribute(Attribute.cunning))) / 2;
         }
         dc = attrLevel + Random.random(-10, 20);
         
@@ -337,10 +337,10 @@ public class Struggle extends Skill {
     }
     
     private boolean struggleGrabber(Combat c, Character user, Character target) {
-        int baseResist = Math.min(90, 40 + target.get(Attribute.science));
-        int trueResist = Math.max(20, baseResist) - user.get(Attribute.science) / 2
-                                                  - user.get(Attribute.power) / 3
-                                                  - user.get(Attribute.cunning) / 3;
+        int baseResist = Math.min(90, 40 + target.getAttribute(Attribute.science));
+        int trueResist = Math.max(20, baseResist) - user.getAttribute(Attribute.science) / 2
+                                                  - user.getAttribute(Attribute.power) / 3
+                                                  - user.getAttribute(Attribute.cunning) / 3;
         if (Random.random(100) > trueResist) {
             c.write(user, Formatter.format("{self:SUBJECT-ACTION:wrench|wrenches}"
                             + " {other:name-possessive} Grabber off {self:possessive}"
@@ -357,7 +357,7 @@ public class Struggle extends Skill {
     
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.power) >= 3;
+        return user.getAttribute(Attribute.power) >= 3;
     }
 
     @Override

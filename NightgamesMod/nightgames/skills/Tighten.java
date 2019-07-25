@@ -40,7 +40,7 @@ public class Tighten extends Thrust {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.seduction) >= 26 || user.has(Trait.tight);
+        return user.getAttribute(Attribute.seduction) >= 26 || user.has(Trait.tight);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class Tighten extends Thrust {
     public int[] getDamage(Combat c, Character user, Character target) {
         int[] result = new int[2];
 
-        int m = 5 + Random.random(10) + Math.min(user.get(Attribute.power) / 3, 20);
+        int m = 5 + Random.random(10) + Math.min(user.getAttribute(Attribute.power) / 3, 20);
         result[0] = m;
         result[1] = 1;
 
@@ -79,7 +79,7 @@ public class Tighten extends Thrust {
             target.body.pleasure(user, selfO, targetO, m[0], c, new SkillUsage<>(this, user, target));
         if (m[1] != 0)
             user.body.pleasure(target, targetO, selfO, m[1], 0, c, false, new SkillUsage<>(this, user, target));
-        if (selfO.isType("ass") && Random.random(100) < 2 + user.get(Attribute.fetishism)) {
+        if (selfO.isType("ass") && Random.random(100) < 2 + user.getAttribute(Attribute.fetishism)) {
             target.add(c, new BodyFetish(target.getType(), user.getType(), "ass", .25));
         }
         return true;

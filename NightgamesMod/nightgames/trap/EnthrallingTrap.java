@@ -17,7 +17,7 @@ public class EnthrallingTrap extends Trap {
     }
 
     public void setStrength(Character user) {
-        setStrength(user.get(Attribute.darkness) + user.get(Attribute.spellcasting) + user.getLevel() / 2);
+        setStrength(user.getAttribute(Attribute.darkness) + user.getAttribute(Attribute.spellcasting) + user.getLevel() / 2);
     }
 
     public EnthrallingTrap(CharacterType owner) {
@@ -63,7 +63,7 @@ public class EnthrallingTrap extends Trap {
 
     @Override
     public boolean requirements(Character owner) {
-        return owner.get(Attribute.darkness) > 5;
+        return owner.getAttribute(Attribute.darkness) > 5;
     }
 
     @Override

@@ -17,7 +17,7 @@ public class Defabricator extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.science) >= 18;
+        return user.getAttribute(Attribute.science) >= 18;
     }
 
     @Override

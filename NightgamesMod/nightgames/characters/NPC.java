@@ -549,7 +549,7 @@ public class NPC extends Character {
                 if (!has(Trait.immobile) && moves.isEmpty()) {
                     for (Area path : location.adjacent) {
                         moves.add(new Move(path));
-                        if (path.ping(get(Attribute.perception))) {
+                        if (path.ping(getAttribute(Attribute.perception))) {
                             radar.add(path.id());
                         }
                     }
@@ -700,25 +700,25 @@ public class NPC extends Character {
         switch (type) {
             case damage:
                 c.write(this, getName() + " avoids your clumsy attack and swings her fist into your nuts.");
-                target.pain(c, target, 4 + Math.min(Random.random(get(Attribute.power)), 20));
+                target.pain(c, target, 4 + Math.min(Random.random(getAttribute(Attribute.power)), 20));
                 break;
             case pleasure:
                 if (target.hasDick()) {
                     if (target.crotchAvailable()) {
                         c.write(this, getName() + " catches you by the penis and rubs your sensitive glans.");
                         target.body.pleasure(this, body.getRandom("hands"), target.body.getRandom("cock"),
-                                        4 + Math.min(Random.random(get(Attribute.seduction)), 20), c);
+                                        4 + Math.min(Random.random(getAttribute(Attribute.seduction)), 20), c);
                     } else {
                         c.write(this, getName() + " catches you as you approach and grinds her knee into the tent in your "
                                         + target.getOutfit().getTopOfSlot(ClothingSlot.bottom) +".");
                         target.body.pleasure(this, body.getRandom("legs"), target.body.getRandom("cock"),
-                                        4 + Math.min(Random.random(get(Attribute.seduction)), 20), c);
+                                        4 + Math.min(Random.random(getAttribute(Attribute.seduction)), 20), c);
                     }
                 } else {
                     c.write(this, getName()
                                     + " pulls you off balance and licks your sensitive ear. You tremble as she nibbles on your earlobe.");
                     target.body.pleasure(this, body.getRandom("tongue"), target.body.getRandom("ears"),
-                                    4 + Math.min(Random.random(get(Attribute.seduction)), 20), c);
+                                    4 + Math.min(Random.random(getAttribute(Attribute.seduction)), 20), c);
                 }
                 break;
             case fucking:
@@ -734,7 +734,7 @@ public class NPC extends Character {
                     }
                 } else {
                     target.body.pleasure(this, body.getRandom("hands"), target.body.getRandomBreasts(),
-                                    4 + Math.min(Random.random(get(Attribute.seduction)), 20), c);
+                                    4 + Math.min(Random.random(getAttribute(Attribute.seduction)), 20), c);
                     c.write(this, Formatter.format(
                                     "{self:SUBJECT-ACTION:pinch|pinches} {other:possessive} nipples with {self:possessive} hands as {other:subject-action:try|tries} to fuck {self:direct-object}. "
                                                     + "While {other:subject-action:yelp|yelps} with surprise, {self:subject-action:take|takes} the chance to pleasure {other:possessive} body",
@@ -751,7 +751,7 @@ public class NPC extends Character {
                 } else {
                     c.write(this, getName()
                                     + " manages to dodge your groping hands and gives a retaliating slap in return.");
-                    target.pain(c, target, 4 + Math.min(Random.random(get(Attribute.power)), 20));
+                    target.pain(c, target, 4 + Math.min(Random.random(getAttribute(Attribute.power)), 20));
                 }
                 break;
             case positioning:
@@ -765,7 +765,7 @@ public class NPC extends Character {
                 break;
             default:
                 c.write(this, getName() + " manages to dodge your attack and gives a retaliating slap in return.");
-                target.pain(c, target, 4 + Math.min(Random.random(get(Attribute.power)), 20));
+                target.pain(c, target, 4 + Math.min(Random.random(getAttribute(Attribute.power)), 20));
         }
     }
 

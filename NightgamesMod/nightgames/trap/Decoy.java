@@ -41,7 +41,7 @@ public class Decoy extends Trap {
 
     @Override
     public boolean requirements(Character owner) {
-        return owner.get(Attribute.cunning) >= 6 && !owner.has(Trait.direct);
+        return owner.getAttribute(Attribute.cunning) >= 6 && !owner.has(Trait.direct);
     }
 
     @Override

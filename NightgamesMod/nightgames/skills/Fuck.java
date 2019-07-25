@@ -163,7 +163,7 @@ public class Fuck extends Skill {
             }
             int otherm = m;
             if (user.has(Trait.insertion)) {
-                otherm += Math.min(user.get(Attribute.seduction) / 4, 40);
+                otherm += Math.min(user.getAttribute(Attribute.seduction) / 4, 40);
             }
             target.body.pleasure(user, selfO, targetO, otherm, c, new SkillUsage<>(this, user, target));
             user.body.pleasure(target, targetO, selfO, m, c, new SkillUsage<>(this, user, target));

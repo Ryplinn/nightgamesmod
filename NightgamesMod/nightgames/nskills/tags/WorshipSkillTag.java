@@ -24,7 +24,7 @@ public class WorshipSkillTag extends SkillTag {
             }
             if (other.has(Trait.objectOfWorship)) {
                 // check roll for worship
-                if (!(value + other.get(Attribute.divinity) < results.getRoll() * 100)) {
+                if (!(value + other.getAttribute(Attribute.divinity) < results.getRoll() * 100)) {
                     //mental resist check failed
                     return true;
                 }

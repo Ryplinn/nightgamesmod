@@ -93,7 +93,7 @@ public class MouthPart extends GenericBodyPart {
                 }
                 opponent.add(c, new Trance(opponent.getType()));
             }
-            bonus += Random.random(3) + MathUtils.clamp(self.get(Attribute.seduction) / 3, 10, 30)
+            bonus += Random.random(3) + MathUtils.clamp(self.getAttribute(Attribute.seduction) / 3, 10, 30)
                             * self.getArousal().percent() / 100.0;
         }
         if (self.has(Trait.sweetlips) && c.getStance().sub(self)) {

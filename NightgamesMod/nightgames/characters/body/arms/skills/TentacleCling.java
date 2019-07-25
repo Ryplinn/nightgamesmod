@@ -23,7 +23,7 @@ public class TentacleCling extends TentacleArmSkill {
     @Override
     public boolean resolve(Combat c, Arm arm, Character owner, Character target) {
         boolean sub = c.getStance().dom(owner);
-        int chance = Math.min(50, 15 + owner.get(Attribute.slime));
+        int chance = Math.min(50, 15 + owner.getAttribute(Attribute.slime));
         if (sub) {
             chance += 30;
         }
@@ -32,7 +32,7 @@ public class TentacleCling extends TentacleArmSkill {
         if (success) {
             c.write(GUIColor.limbColor(owner), Formatter.format("A %s shoots out from behind {self:name-do}"
                             + " and wraps itself around {other:name-possessive} waist, restricting {other:possessive} movement.", owner, target, arm.getName()));
-            target.add(c, new TentacleBound(target.getType(), 30 + 4 * Math.sqrt(owner.get(Attribute.slime)),
+            target.add(c, new TentacleBound(target.getType(), 30 + 4 * Math.sqrt(owner.getAttribute(Attribute.slime)),
                             owner.nameOrPossessivePronoun() + " " + arm.getName(), 1));
         } else {
             c.write(GUIColor.limbColor(owner), Formatter.format("A %s shoots out from behind {self:name-do}"

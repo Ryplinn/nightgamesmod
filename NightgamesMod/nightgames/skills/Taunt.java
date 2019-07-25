@@ -72,7 +72,7 @@ public class Taunt extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.cunning) >= 8 || user.get(Attribute.power) >= 15;
+        return user.getAttribute(Attribute.cunning) >= 8 || user.getAttribute(Attribute.power) >= 15;
     }
 
     @Override

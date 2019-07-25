@@ -1159,7 +1159,7 @@ public class GUI extends JFrame implements Observer {
             cash = player.money;
             currentTime = Time.getTime();
             inventory = new HashMap<>(player.getInventory());
-            attributes = Stream.of(Attribute.values()).collect(Collectors.toMap(att -> att, player::get));
+            attributes = Stream.of(Attribute.values()).collect(Collectors.toMap(att -> att, player::getAttribute));
             attributesPure = Stream.of(Attribute.values()).collect(Collectors.toMap(att -> att, player::getPure));
             outfitDescription = player.getOutfit().describe(player);
             statusDescription = player.describeStatus();

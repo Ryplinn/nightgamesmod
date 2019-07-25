@@ -23,7 +23,7 @@ public class TailSuck extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.seduction) >= 20 && user.get(Attribute.darkness) >= 15 && user.has(Trait.energydrain)
+        return user.getAttribute(Attribute.seduction) >= 20 && user.getAttribute(Attribute.darkness) >= 15 && user.has(Trait.energydrain)
                         && user.body.get("tail").size() > 0;
     }
 
@@ -194,7 +194,7 @@ public class TailSuck extends Skill {
     }
 
     private int power(Character user) {
-        return (int) (1 + user.get(Attribute.darkness) / 20.0);
+        return (int) (1 + user.getAttribute(Attribute.darkness) / 20.0);
     }
 
 }

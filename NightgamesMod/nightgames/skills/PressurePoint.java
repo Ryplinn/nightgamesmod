@@ -19,7 +19,7 @@ public class PressurePoint extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.ki) >= 30;
+        return user.getAttribute(Attribute.ki) >= 30;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class PressurePoint extends Skill {
 
     @Override
     public int accuracy(Combat c, Character user, Character target) {
-        double kiMod = 4 * Math.sqrt(user.get(Attribute.ki));
+        double kiMod = 4 * Math.sqrt(user.getAttribute(Attribute.ki));
         double accuracy = kiMod + 60;
         return (int) Math.round(MathUtils.clamp(accuracy, 25, 100));
     }

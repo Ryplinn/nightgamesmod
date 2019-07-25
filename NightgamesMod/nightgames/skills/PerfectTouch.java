@@ -43,7 +43,7 @@ public class PerfectTouch extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.cunning) >= 18;
+        return user.getAttribute(Attribute.cunning) >= 18;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class PerfectTouch extends Skill {
     @Override
     public int accuracy(Combat c, Character user, Character target) {
         return Math.round(Math.max(Math.min(150,
-                        2.5f * (user.get(Attribute.cunning) - c.getOpponent(user).get(Attribute.cunning)) + 65),
+                        2.5f * (user.getAttribute(Attribute.cunning) - c.getOpponent(user).getAttribute(Attribute.cunning)) + 65),
                         40));
     }
 

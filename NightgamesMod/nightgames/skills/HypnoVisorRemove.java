@@ -20,7 +20,7 @@ public class HypnoVisorRemove extends Skill {
 
     @Override
     public int accuracy(Combat c, Character user, Character target) {
-        return (int) ((Math.min(0.8, .2 + user.get(Attribute.cunning) / 100.0)) * 100);
+        return (int) ((Math.min(0.8, .2 + user.getAttribute(Attribute.cunning) / 100.0)) * 100);
     }
 
     @Override

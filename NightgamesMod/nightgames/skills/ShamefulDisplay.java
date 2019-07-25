@@ -48,7 +48,7 @@ public class ShamefulDisplay extends Skill {
         }
         user.add(c, new Shamed(user.getType()));
         int divisor = target.getMood() == Emotion.dominant ? 3 : 4;
-        target.add(c, Horny.getWithPsychologicalType(user, target, user.get(Attribute.submission) / divisor, 2, " (Dominant Thrill)"));
+        target.add(c, Horny.getWithPsychologicalType(user, target, user.getAttribute(Attribute.submission) / divisor, 2, " (Dominant Thrill)"));
         return true;
     }
 

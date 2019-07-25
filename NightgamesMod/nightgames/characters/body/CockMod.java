@@ -167,7 +167,7 @@ public class CockMod extends PartMod {
                                 self.possessiveAdjective(), self.possessiveAdjective(), part.describe(self),
                                 self.possessiveAdjective());
                 c.write(self, message);
-                for (int i = 0; i < Math.max(2, (self.get(Attribute.ki) + 5) / 10); i++) { // +5
+                for (int i = 0; i < Math.max(2, (self.getAttribute(Attribute.ki) + 5) / 10); i++) { // +5
                                                                                            // for
                                                                                            // rounding:
                                                                                            // 24->29->20,

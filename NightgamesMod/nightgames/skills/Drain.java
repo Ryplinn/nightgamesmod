@@ -29,7 +29,7 @@ public class Drain extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.darkness) >= 15 || user.has(Trait.energydrain) || (user.has(Trait.leveldrainer) && user.getLevel() >= 10);
+        return user.getAttribute(Attribute.darkness) >= 15 || user.has(Trait.energydrain) || (user.has(Trait.leveldrainer) && user.getLevel() >= 10);
     }
 
     @Override
@@ -62,9 +62,9 @@ public class Drain extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character user, Character target) {
-        int strength = Math.max(10, 1 + user.get(Attribute.darkness) / 4);
+        int strength = Math.max(10, 1 + user.getAttribute(Attribute.darkness) / 4);
         int staminaStrength = 50;
-        int type = Math.max(1, Random.centeredrandom(6, user.get(Attribute.darkness) / 3.0, 3));
+        int type = Math.max(1, Random.centeredrandom(6, user.getAttribute(Attribute.darkness) / 3.0, 3));
         if (!drainsAttributes(user) && type > 2) {
             type = 1;
             staminaStrength /= 2;

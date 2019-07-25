@@ -99,7 +99,7 @@ public class Bound extends Status {
 
     @Override
     public void struggle(Character self) {
-        int struggleAmount = (int) (5 + Math.sqrt((self.getLevel() + self.get(Attribute.power) + self.get(Attribute.cunning))));
+        int struggleAmount = (int) (5 + Math.sqrt((self.getLevel() + self.getAttribute(Attribute.power) + self.getAttribute(Attribute.cunning))));
         if (DebugFlags.isDebugOn(DebugFlags.DEBUG_DAMAGE)) {
             System.out.println("Struggled for " + struggleAmount);
         }

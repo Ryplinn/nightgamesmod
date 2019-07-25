@@ -25,7 +25,7 @@ public class WingWrapped extends Status {
     }
     
     private static int calcStrength(Character wrapper) {
-        return wrapper.get(Attribute.power) / 4 + wrapper.get(Attribute.darkness) / 6;
+        return wrapper.getAttribute(Attribute.power) / 4 + wrapper.getAttribute(Attribute.darkness) / 6;
     }
 
     private Character getWrapper() {
@@ -84,7 +84,7 @@ public class WingWrapped extends Status {
                             + " they can no longer confine {self:name-do}.", getAffected(), getWrapper()));
             getAffected().removelist.add(this);
         } else if (getWrapper().has(Trait.VampireWings) && getAffected().outfit.slotEmpty(ClothingSlot.top)) {
-            if (getAffected().get(Attribute.power) < 6) {
+            if (getAffected().getAttribute(Attribute.power) < 6) {
                 c.write(getWrapper(), Formatter.format("{other:NAME-POSSESSIVE} {other:body-part:wings}, pressed"
                                 + " against {self:name-possessive} bare skin, try to reel in"
                                 + " {self:possessive} power, but they fail to draw on what little"

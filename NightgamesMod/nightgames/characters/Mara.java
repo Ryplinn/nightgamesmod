@@ -293,13 +293,13 @@ public class Mara extends BasePersonality {
                                             return true;
                                         }))));
 
-        preferredAttributes.add(c -> c.getRank() >= 4 && c.get(Attribute.temporal) < 20
+        preferredAttributes.add(c -> c.getRank() >= 4 && c.getAttribute(Attribute.temporal) < 20
                         ? Optional.of(Attribute.temporal) : Optional.empty());
-        preferredAttributes.add(c -> c.get(Attribute.science) < 15 ? Optional.of(Attribute.science) : Optional.empty());
-        preferredAttributes.add(c -> c.get(Attribute.science) >= 15 && c.get(Attribute.fetishism) < 50
+        preferredAttributes.add(c -> c.getAttribute(Attribute.science) < 15 ? Optional.of(Attribute.science) : Optional.empty());
+        preferredAttributes.add(c -> c.getAttribute(Attribute.science) >= 15 && c.getAttribute(Attribute.fetishism) < 50
                         ? Optional.of(Attribute.fetishism) : Optional.empty());
         preferredAttributes.add(
-                        c -> c.get(Attribute.cunning) < 100 ? Optional.of(Attribute.cunning) : Optional.empty());
+                        c -> c.getAttribute(Attribute.cunning) < 100 ? Optional.of(Attribute.cunning) : Optional.empty());
         selfNPC.getGrowth().addTrait(0, Trait.petite);
         selfNPC.getGrowth().addTrait(0, Trait.dexterous);
         selfNPC.getGrowth().addTrait(0, Trait.ticklish);

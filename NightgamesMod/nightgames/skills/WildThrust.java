@@ -19,7 +19,7 @@ public class WildThrust extends Thrust {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.animism) > 1 || user.checkAnyAddiction(AddictionType.BREEDER);
+        return user.getAttribute(Attribute.animism) > 1 || user.checkAnyAddiction(AddictionType.BREEDER);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class WildThrust extends Thrust {
         int[] results = new int[2];
 
         int m = 5 + Random.random(20) + Math
-                        .min(user.get(Attribute.animism), user.getArousal().getReal() / 30);
+                        .min(user.getAttribute(Attribute.animism), user.getArousal().getReal() / 30);
         int mt = 5 + Random.random(20);
         mt = Math.max(1, mt);
 

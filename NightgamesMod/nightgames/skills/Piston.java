@@ -15,7 +15,7 @@ public class Piston extends Thrust {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.seduction) >= 18;
+        return user.getAttribute(Attribute.seduction) >= 18;
     }
 
     @Override

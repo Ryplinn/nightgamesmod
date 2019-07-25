@@ -63,7 +63,7 @@ public class Eve extends BasePersonality {
         selfNPC.getGrowth().arousal = 6;
         selfNPC.getGrowth().bonusStamina = 1;
         selfNPC.getGrowth().bonusArousal = 3;
-        preferredAttributes.add(c -> c.get(Attribute.fetishism) < 80 ? Optional.of(Attribute.fetishism) : Optional.empty());
+        preferredAttributes.add(c -> c.getAttribute(Attribute.fetishism) < 80 ? Optional.of(Attribute.fetishism) : Optional.empty());
         preferredAttributes.add(c -> Optional.of(Attribute.seduction));
         selfNPC.getGrowth().addTrait(0, Trait.exhibitionist);
         selfNPC.getGrowth().addTrait(0, Trait.proheels);

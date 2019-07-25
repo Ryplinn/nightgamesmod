@@ -206,10 +206,10 @@ public class Jewel extends BasePersonality {
                                                                             return true;
                                                                         }))));
 
-        preferredAttributes.add(c -> c.get(Attribute.ki) < 15 ? Optional.of(Attribute.ki) : Optional.empty());
-        preferredAttributes.add(c -> c.get(Attribute.ki) >= 15 && c.get(Attribute.fetishism) < 100
+        preferredAttributes.add(c -> c.getAttribute(Attribute.ki) < 15 ? Optional.of(Attribute.ki) : Optional.empty());
+        preferredAttributes.add(c -> c.getAttribute(Attribute.ki) >= 15 && c.getAttribute(Attribute.fetishism) < 100
                         ? Optional.of(Attribute.fetishism) : Optional.empty());
-        preferredAttributes.add(c -> c.get(Attribute.power) < 80 ? Optional.of(Attribute.power) : Optional.empty());
+        preferredAttributes.add(c -> c.getAttribute(Attribute.power) < 80 ? Optional.of(Attribute.power) : Optional.empty());
         growth.addTrait(0, Trait.wrassler);
         growth.addTrait(0, Trait.direct);
         growth.addTrait(0, Trait.insatiable);
@@ -463,7 +463,7 @@ public class Jewel extends BasePersonality {
                             + " I like. Thanks for being cool about it.\"</i> You smile back tell her she's welcome, but you'd appreciate it if she weren't so rough. "
                             + "The last thing you hear before she round the corner is her giggled response. <i>\"We'll see.\"</i>";
         }
-        if (selfNPC.has(Trait.fighter) && selfNPC.get(Attribute.ki) >= 10) {
+        if (selfNPC.has(Trait.fighter) && selfNPC.getAttribute(Attribute.ki) >= 10) {
             String message = "Your duel with Jewel is rapidly reaching its conclusion and it's not going that well for you. Something seems different about her, her moves have an additional level of "
                             + "coordination that is made worse by her already monstrous strength. But the worst thing is that she is throwing powerful moves at you like they were nothing!<br/><br/>"
                             + "All of this has culminated in the situation you find yourself in now, namely pinned to the ground by Jewel as "

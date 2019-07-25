@@ -55,7 +55,7 @@ public class Winded extends DurationStatus {
     public void onRemove(Combat c, Character other) {
         if (c != null) {
             if (c.getStance().mobile(getAffected())) {
-                if (getAffected().get(Attribute.divinity) > 0) {
+                if (getAffected().getAttribute(Attribute.divinity) > 0) {
                     getAffected().addlist.add(new BastionOfFaith(affected));
                 } else {
                     getAffected().addlist.add(new Braced(affected));

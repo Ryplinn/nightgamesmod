@@ -22,7 +22,7 @@ public class ThrowSlime extends Skill {
 
     @Override public Set<SkillTag> getTags(Combat c, Character user, Character target) {
         Set<SkillTag> tags = super.getTags(c, user, target);
-        if (user.get(Attribute.slime) >= 12) {
+        if (user.getAttribute(Attribute.slime) >= 12) {
             tags.add(SkillTag.mental);
         }
         return tags;
@@ -30,7 +30,7 @@ public class ThrowSlime extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.slime) > 0;
+        return user.getAttribute(Attribute.slime) > 0;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ThrowSlime extends Skill {
 
     @Override
     public int getMojoCost(Combat c, Character user) {
-        return 9 + user.get(Attribute.slime);
+        return 9 + user.getAttribute(Attribute.slime);
     }
 
     @Override
@@ -116,9 +116,9 @@ public class ThrowSlime extends Skill {
         public Status build(Character user, Character target) {
             switch (this) {
                 case BOUND_S:
-                    return new Bound(target.getType(), 55 + 4 * Math.sqrt(user.get(Attribute.slime)), "slime");
+                    return new Bound(target.getType(), 55 + 4 * Math.sqrt(user.getAttribute(Attribute.slime)), "slime");
                 case BOUND_W:
-                    return new Bound(target.getType(), 20 + 2 * Math.sqrt(user.get(Attribute.slime)), "slime");
+                    return new Bound(target.getType(), 20 + 2 * Math.sqrt(user.getAttribute(Attribute.slime)), "slime");
                 case FALL:
                     return new Falling(target.getType());
                 case FLAT_1:
@@ -235,7 +235,7 @@ public class ThrowSlime extends Skill {
     }
 
     public HitType decideEffect(Combat c, Character user, Character target) {
-        int slime = user.get(Attribute.slime);
+        int slime = user.getAttribute(Attribute.slime);
         int bonus = Math.min(slime, 40) - 20;
 
         if (!c.getStance().mobile(target) || !target.canRespond()) {

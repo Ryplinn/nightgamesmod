@@ -19,7 +19,7 @@ public class MaxAttribute implements PreferredAttribute {
     }
 
     @Override public Optional<Attribute> getPreferred(Character c) {
-        if (c.get(att) < max) {
+        if (c.getAttribute(att) < max) {
             return Optional.of(att);
         } else {
             return Optional.empty();

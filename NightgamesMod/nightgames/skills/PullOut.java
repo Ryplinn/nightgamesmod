@@ -66,7 +66,7 @@ public class PullOut extends Skill {
         if (target.has(Trait.stronghold)) {
             baseDifficulty += 5;
         }
-        int powerMod = Math.min(20, Math.max(5, target.get(Attribute.power) - user.get(Attribute.power)));
+        int powerMod = Math.min(20, Math.max(5, target.getAttribute(Attribute.power) - user.getAttribute(Attribute.power)));
         if (c.getStance().en == Stance.anal) {
             if (target.has(Trait.bewitchingbottom)) {
                 Optional<BodyFetish> fetish = user.body.getFetish("ass");
@@ -114,7 +114,7 @@ public class PullOut extends Skill {
         } else {
             if (isLocked || target.has(Trait.tight) && c.getStance().inserted(user)) {
                 boolean escaped = user.checkVsDc(Attribute.power,
-                                10 - user.getEscape(c, target) + target.get(Attribute.power));
+                                10 - user.getEscape(c, target) + target.getAttribute(Attribute.power));
                 if (escaped) {
                     writeOutput(c, result, user, target);
                 } else {

@@ -21,7 +21,7 @@ public class Dominate extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.darkness) >= 9;
+        return user.getAttribute(Attribute.darkness) >= 9;
     }
 
     @Override

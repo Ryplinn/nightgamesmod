@@ -35,7 +35,7 @@ public class FaerieSwarm extends Skill {
         user.consume(Item.MinorScroll, 1);
         if (target.getOutfit().isNude()) {
             writeOutput(c, Result.normal, user, target);
-            target.body.pleasure(user, null, null, 25 + Random.random(user.get(Attribute.spellcasting)), c, new SkillUsage<>(this, user, target));
+            target.body.pleasure(user, null, null, 25 + Random.random(user.getAttribute(Attribute.spellcasting)), c, new SkillUsage<>(this, user, target));
         } else {
             writeOutput(c, Result.weak, user, target);
             target.undress(c);

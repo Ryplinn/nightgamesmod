@@ -81,10 +81,10 @@ public class DemonicMod extends PartMod {
             }
             for (int i = 0; i < 10; i++) {
                 Attribute[] canBeStolen = EnumSet.complementOf(EnumSet.of(Attribute.speed, Attribute.perception)).stream()
-                                .filter(a -> opponent.get(a) > 0).toArray(Attribute[]::new);
+                                .filter(a -> opponent.getAttribute(a) > 0).toArray(Attribute[]::new);
                 Attribute stolen = Random.pickRandom(canBeStolen).orElse(null);
                 if (stolen != null) {
-                    int stolenStrength = Math.min(strength / 10, opponent.get(stolen));
+                    int stolenStrength = Math.min(strength / 10, opponent.getAttribute(stolen));
                     Drained.drain(c, self, opponent, stolen, stolenStrength, 20, true);
                     if (self.isPet()) {
                         Character master = ((PetCharacter) self).getSelf().owner();

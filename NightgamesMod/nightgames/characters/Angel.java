@@ -214,9 +214,9 @@ public class Angel extends BasePersonality {
         selfNPC.getGrowth().addTrait(57, Trait.desensitized2);
         // 60 - second choice 6
         preferredAttributes
-                        .add(c -> c.get(Attribute.divinity) < 50 ? Optional.of(Attribute.divinity) : Optional.empty());
+                        .add(c -> c.getAttribute(Attribute.divinity) < 50 ? Optional.of(Attribute.divinity) : Optional.empty());
         preferredAttributes.add(c -> Optional.of(Attribute.seduction));
-        preferredAttributes.add(c -> (c.has(Trait.nymphomania) && c.get(Attribute.nymphomania) < (c.getLevel() - 10) / 2) ? Optional.of(Attribute.nymphomania) : Optional.empty());
+        preferredAttributes.add(c -> (c.has(Trait.nymphomania) && c.getAttribute(Attribute.nymphomania) < (c.getLevel() - 10) / 2) ? Optional.of(Attribute.nymphomania) : Optional.empty());
     }
 
     private void useSex(NPC selfNPC) {

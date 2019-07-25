@@ -17,7 +17,7 @@ public class Binding extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.spellcasting) >= 9;
+        return user.getAttribute(Attribute.spellcasting) >= 9;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class Binding extends Skill {
     @Override
     public boolean resolve(Combat c, Character user, Character target) {
         writeOutput(c, Result.normal, user, target);
-        target.add(c, new Bound(target.getType(), 45 + 3 * Math.sqrt(user.get(Attribute.spellcasting)), "seal"));
+        target.add(c, new Bound(target.getType(), 45 + 3 * Math.sqrt(user.getAttribute(Attribute.spellcasting)), "seal"));
         target.emote(Emotion.nervous, 5);
         user.emote(Emotion.confident, 20);
         user.emote(Emotion.dominant, 10);

@@ -22,7 +22,7 @@ public class Nurple extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.power) >= 13;
+        return user.getAttribute(Attribute.power) >= 13;
     }
 
     @Override

@@ -42,7 +42,7 @@ public class StripBottom extends Skill {
         if (user.checkVsDc(Attribute.cunning, difficulty) || !target.canAct()) {
             stripped = target.strip(ClothingSlot.bottom, c);
             boolean doubled = false;
-            if (user.get(Attribute.cunning) >= 30 && !target.crotchAvailable() && user
+            if (user.getAttribute(Attribute.cunning) >= 30 && !target.crotchAvailable() && user
                             .checkVsDc(Attribute.cunning, difficulty) || !target.canAct()) {
                 extra = target.strip(ClothingSlot.bottom, c);
                 doubled = true;
@@ -72,7 +72,7 @@ public class StripBottom extends Skill {
     }
 
     @Override public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.cunning) >= 3;
+        return user.getAttribute(Attribute.cunning) >= 3;
     }
 
     @Override public int speed(Character user) {

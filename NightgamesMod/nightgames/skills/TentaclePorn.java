@@ -21,7 +21,7 @@ public class TentaclePorn extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.fetishism) >= 12;
+        return user.getAttribute(Attribute.fetishism) >= 12;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class TentaclePorn extends Skill {
     public boolean resolve(Combat c, Character user, Character target) {
         if (target.roll(user, accuracy(c, user, target))) {
             if (target.mostlyNude()) {
-                int m = Random.random(user.get(Attribute.fetishism)) / 2 + 1;
+                int m = Random.random(user.getAttribute(Attribute.fetishism)) / 2 + 1;
                 if (target.bound()) {
                     writeOutput(c, Result.special, user, target);
                     if (target.hasDick())
@@ -72,7 +72,7 @@ public class TentaclePorn extends Skill {
             } else {
                 writeOutput(c, Result.weak, user, target);
             }
-            target.add(c, new Bound(target.getType(), 30 + 2 * Math.sqrt(user.get(Attribute.fetishism) + user.get(Attribute.slime)), "tentacles"));
+            target.add(c, new Bound(target.getType(), 30 + 2 * Math.sqrt(user.getAttribute(Attribute.fetishism) + user.getAttribute(Attribute.slime)), "tentacles"));
         } else {
             writeOutput(c, Result.miss, user, target);
             return false;

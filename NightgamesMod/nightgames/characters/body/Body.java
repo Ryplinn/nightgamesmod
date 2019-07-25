@@ -797,7 +797,7 @@ public class Body implements Cloneable {
         if (opponent != null && Arrays.asList(fetishParts)
                                       .contains(with.getType())) {
             if (opponent.has(Trait.fetishTrainer)
-                            && Random.random(100) < Math.min(opponent.get(Attribute.fetishism), 25)) {
+                            && Random.random(100) < Math.min(opponent.getAttribute(Attribute.fetishism), 25)) {
                 c.write(getCharacter(), getCharacter().subjectAction("now have", "now has") + " a new fetish, courtesy of "
                                 + opponent.directObject() + ".");
                 getCharacter().add(c, new BodyFetish(character, opponent.getType(), with.getType(), .25));
@@ -823,26 +823,26 @@ public class Body implements Cloneable {
         if (opponent.equals(getCharacter())) {
             return 1.0;
         } else {
-            double effectiveSeduction = getCharacter().get(Attribute.seduction);
+            double effectiveSeduction = getCharacter().getAttribute(Attribute.seduction);
             if (c.getStance().dom(getCharacter()) && getCharacter().has(Trait.brutesCharisma)) {
-                effectiveSeduction += c.getStance().getDominanceOfStance(getCharacter()) * (getCharacter().get(Attribute.power) / 5.0 + getCharacter().get(Attribute.ki) / 5.0);
+                effectiveSeduction += c.getStance().getDominanceOfStance(getCharacter()) * (getCharacter().getAttribute(Attribute.power) / 5.0 + getCharacter().getAttribute(Attribute.ki) / 5.0);
             }
 
             if (getCharacter().has(Trait.PrimalHeat) && getCharacter().is(Stsflag.frenzied)) {
-                effectiveSeduction += getCharacter().get(Attribute.animism) / 2;
+                effectiveSeduction += getCharacter().getAttribute(Attribute.animism) / 2;
             }
 
             if (opponent.has(Trait.MindlessDesire) && getCharacter().is(Stsflag.frenzied)) {
                 effectiveSeduction /= 2;
             }
 
-            int seductionDiff = (int) Math.max(0, effectiveSeduction - opponent.get(Attribute.seduction));
+            int seductionDiff = (int) Math.max(0, effectiveSeduction - opponent.getAttribute(Attribute.seduction));
             double seductionBonus = 0;
             for (int i = 0; i < seductionDiff; i++) {
                 seductionBonus += SEDUCTION_DIMINISHING_RETURNS_CURVE.getOrDefault((i / 10), 0.01);
             }
             double hotness = (getHotness(opponent) - 1) / 2 + 1;
-            double perception = (1.0 + (opponent.get(Attribute.perception) - 5) / 10.0);
+            double perception = (1.0 + (opponent.getAttribute(Attribute.perception) - 5) / 10.0);
             if (DebugFlags.isDebugOn(DebugFlags.DEBUG_DAMAGE) && DebugFlags.isDebugOn(DebugFlags.DEBUG_SKILLS_RATING)) {
                 System.out.println(String.format("Seduction Bonus: %.1f, hotness: %.1f, perception: %.1f", seductionBonus, hotness, perception));
             }

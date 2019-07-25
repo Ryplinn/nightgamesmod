@@ -57,7 +57,7 @@ public class Escape extends Skill {
                 user.struggle();
                 return false;
             }
-        } else if (user.checkVsDc(Attribute.cunning, 10 + target.get(Attribute.cunning) - user.getEscape(c, target))) {
+        } else if (user.checkVsDc(Attribute.cunning, 10 + target.getAttribute(Attribute.cunning) - user.getEscape(c, target))) {
             if (user.human()) {
                 if (user.hasStatus(Stsflag.cockbound)) {
                     c.write(user, "You somehow managed to wiggle out of " + target.getName()
@@ -106,7 +106,7 @@ public class Escape extends Skill {
     
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.cunning) >= 8;
+        return user.getAttribute(Attribute.cunning) >= 8;
     }
 
     @Override

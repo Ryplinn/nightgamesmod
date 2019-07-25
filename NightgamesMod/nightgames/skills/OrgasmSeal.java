@@ -14,7 +14,7 @@ public class OrgasmSeal extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.spellcasting) >= 15 || user.get(Attribute.darkness) >= 5;
+        return user.getAttribute(Attribute.spellcasting) >= 15 || user.getAttribute(Attribute.darkness) >= 5;
     }
 
     @Override

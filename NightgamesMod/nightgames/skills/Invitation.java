@@ -31,7 +31,7 @@ public class Invitation extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.seduction) > 25 || user.has(Trait.submissive);
+        return user.getAttribute(Attribute.seduction) > 25 || user.has(Trait.submissive);
     }
 
     @Override
@@ -128,8 +128,8 @@ public class Invitation extends Skill {
     @Override
     public boolean resolve(Combat c, Character user, Character target) {
         int difficulty = target.getLevel() - target.getArousal().get() * 10 / target.getArousal().max()
-                        + target.get(Attribute.seduction);
-        int strength = user.getLevel() + user.get(Attribute.seduction)
+                        + target.getAttribute(Attribute.seduction);
+        int strength = user.getLevel() + user.getAttribute(Attribute.seduction)
                         * (user.has(Trait.submissive) ? 2 : 1) * (hasDivinity(user) ? 2 : 1);
 
         boolean success = Random.random(Math.min(Math.max(difficulty - strength, 1), 10)) == 0;
@@ -151,9 +151,9 @@ public class Invitation extends Skill {
         }
         if (success) {
             if (c.getStance().en == Stance.missionary) {
-                target.add(c, new LegLocked(target.getType(), 4 * user.get(Attribute.power)));
+                target.add(c, new LegLocked(target.getType(), 4 * user.getAttribute(Attribute.power)));
             } else {
-                target.add(c, new ArmLocked(target.getType(), 4 * user.get(Attribute.power)));
+                target.add(c, new ArmLocked(target.getType(), 4 * user.getAttribute(Attribute.power)));
             }
             new Thrust().resolve(c, target, user);
             if (hasDivinity(user)) {
@@ -164,7 +164,7 @@ public class Invitation extends Skill {
     }
 
     private boolean hasDivinity(Character user) {
-        return user.get(Attribute.divinity) >= 25;
+        return user.getAttribute(Attribute.divinity) >= 25;
     }
 
     @Override

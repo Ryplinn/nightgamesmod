@@ -33,7 +33,7 @@ public class Whisper extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character user, Character target) {
-        int roll = Random.centeredrandom(4, user.get(Attribute.darkness) / 5.0, 2);
+        int roll = Random.centeredrandom(4, user.getAttribute(Attribute.darkness) / 5.0, 2);
         int m = 4 + Random.random(6);
 
         if (target.has(Trait.imagination)) {
@@ -56,7 +56,7 @@ public class Whisper extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.seduction) >= 32 && !user.has(Trait.direct);
+        return user.getAttribute(Attribute.seduction) >= 32 && !user.has(Trait.direct);
     }
 
     @Override

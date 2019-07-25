@@ -51,7 +51,7 @@ public class Flick extends Skill {
                 int m = Random.random(8) + 8;
                 writeOutput(c, Result.normal, user, target);
                 if (target.has(Trait.achilles)) {
-                    m += 2 + Random.random(target.get(Attribute.perception) / 2);
+                    m += 2 + Random.random(target.getAttribute(Attribute.perception) / 2);
                     mojoLost = 40;
                 }
                 target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, m));
@@ -69,7 +69,7 @@ public class Flick extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.seduction) >= 17;
+        return user.getAttribute(Attribute.seduction) >= 17;
     }
 
     @Override

@@ -37,7 +37,7 @@ public class BunshinAssault extends Skill {
     }
 
     private int numberOfClones(Character user) {
-        return Math.min(Math.min(user.getMojo().get()/2, user.get(Attribute.ninjutsu)/2), 15);
+        return Math.min(Math.min(user.getMojo().get()/2, user.getAttribute(Attribute.ninjutsu)/2), 15);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class BunshinAssault extends Skill {
 
     @Override
     public int accuracy(Combat c, Character user, Character target) {
-        return 25 + user.get(Attribute.speed) * 5;
+        return 25 + user.getAttribute(Attribute.speed) * 5;
     }
 
     @Override

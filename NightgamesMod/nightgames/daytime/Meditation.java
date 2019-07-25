@@ -2,7 +2,6 @@ package nightgames.daytime;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.NPC;
-import nightgames.characters.Player;
 import nightgames.global.Flag;
 import nightgames.global.Random;
 import nightgames.gui.GUI;
@@ -44,14 +43,14 @@ public class Meditation extends Activity {
                                 + "session.\"</i> Her expression darkens as she bites her lip. <i>\"My father is not in good health and he can't take students. I need money to keep the dojo open, and "
                                 + "I know you're making plenty in the games.\"</i>");
                 Flag.flag(Flag.metSuzume);
-                choose("Train: $" + 1000 * (getPlayer().get(Attribute.ki) + 1), nextChoices);
+                choose("Train: $" + 1000 * (getPlayer().getAttribute(Attribute.ki) + 1), nextChoices);
                 choose("Sharpen Senses", nextChoices);
                 choose("Shut Out Sensation", nextChoices);
                 choose("Leave", nextChoices);
             } else {
                 GUI.gui.message("You go to the Suzuki dojo and remove your shoes out of respect. Suzume (or Suzuki-shisho as she's instructed you to call her) give you a friendly "
                                 + "smile as you bow. <i>\"Welcome apprentice. Are you ready to continue your training or are you here to meditate?\"</i>");
-                choose("Train: $" + 1000 * (getPlayer().get(Attribute.ki) + 1), nextChoices);
+                choose("Train: $" + 1000 * (getPlayer().getAttribute(Attribute.ki) + 1), nextChoices);
                 choose("Sharpen Senses", nextChoices);
                 choose("Shut Out Sensation", nextChoices);
                 choose("Leave", nextChoices);

@@ -43,7 +43,7 @@ public class Disguised extends Status {
 
     @Override
     public int mod(Attribute a) {
-        int mod = getDisguiseTarget().get(a) - getAffected().getPure(a);
+        int mod = getDisguiseTarget().getAttribute(a) - getAffected().getPure(a);
         if (getAffected().has(Trait.Masquerade)) {
             mod = mod * 3 / 2;
         }

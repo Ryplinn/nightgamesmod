@@ -28,12 +28,12 @@ public class Dissolve extends Skill {
     @Override
     public boolean usable(Combat c, Character user, Character target) {
         return c.getStance().mobile(user) && user.canAct()
-                        && (user.has(Item.DisSol) || user.get(Attribute.slime) > 0)
+                        && (user.has(Item.DisSol) || user.getAttribute(Attribute.slime) > 0)
                         && target.outfit.getRandomShreddableSlot() != null && !c.getStance().prone(user);
     }
 
     public int accuracy(Combat c, Character user, Character target) {
-        return user.get(Attribute.slime) > 0 || user.has(Item.Aersolizer) ? 200 : 80;
+        return user.getAttribute(Attribute.slime) > 0 || user.has(Item.Aersolizer) ? 200 : 80;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class Dissolve extends Skill {
         } else if (!target.outfit.slotOpen(ClothingSlot.top) && target.outfit.slotShreddable(ClothingSlot.top)) {
             toShred = ClothingSlot.top;
         }
-        if (user.get(Attribute.slime) > 0) {
+        if (user.getAttribute(Attribute.slime) > 0) {
             Clothing destroyed = shred(target, toShred);
             String msg = "{self:SUBJECT-ACTION:reach|reaches} out with a slimy hand and"
                             + " {self:action:caress|caresses} {other:possessive} " + destroyed.getName()
@@ -113,7 +113,7 @@ public class Dissolve extends Skill {
 
     @Override
     public String describe(Combat c, Character user) {
-        if (user.get(Attribute.slime) > 0)
+        if (user.getAttribute(Attribute.slime) > 0)
             return "Use your slime to dissolve your opponent's clothes";
         return "Throws dissolving solution to destroy opponent's clothes";
     }

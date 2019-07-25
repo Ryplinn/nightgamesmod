@@ -20,7 +20,7 @@ public class TakeOffShoes extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return (user.get(Attribute.cunning) >= 5 && !user.human()) || target.body.getFetish("feet").isPresent() && user.has(Trait.direct);
+        return (user.getAttribute(Attribute.cunning) >= 5 && !user.human()) || target.body.getFetish("feet").isPresent() && user.has(Trait.direct);
     }
 
     @Override

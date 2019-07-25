@@ -19,7 +19,7 @@ public class Snare extends Trap {
     }
 
     public void setStrength(Character user) {
-        setStrength(user.get(Attribute.cunning) + user.getLevel() / 2);
+        setStrength(user.getAttribute(Attribute.cunning) + user.getLevel() / 2);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class Snare extends Trap {
     
     @Override
     public boolean requirements(Character owner) {
-        return owner.get(Attribute.cunning) >= 9;
+        return owner.getAttribute(Attribute.cunning) >= 9;
     }
 
     @Override

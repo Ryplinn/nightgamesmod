@@ -1,16 +1,15 @@
 package nightgames.daytime;
 
-import java.util.List;
-import java.util.Map;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.NPC;
-import nightgames.characters.Player;
 import nightgames.global.Flag;
 import nightgames.global.Random;
 import nightgames.gui.GUI;
 import nightgames.gui.LabeledValue;
 import nightgames.items.Item;
+
+import java.util.List;
+import java.util.Map;
 
 public class BlackMarket extends Store {
     private boolean trained;
@@ -159,8 +158,8 @@ public class BlackMarket extends Store {
                 remaining -= 1000 * (npc.getPure(Attribute.darkness) + 1);
                 npc.modAttributeDontSaveData(Attribute.darkness, 1);
             }
-            npc.money -= 1000 * (npc.get(Attribute.darkness) + 1);
-            remaining -= 1000 * (npc.get(Attribute.darkness) + 1);
+            npc.money -= 1000 * (npc.getAttribute(Attribute.darkness) + 1);
+            remaining -= 1000 * (npc.getAttribute(Attribute.darkness) + 1);
             npc.modAttributeDontSaveData(Attribute.darkness, 1);
         }
         if (npc.getPure(Attribute.fetishism) > 0 && remaining >= 1000 * (npc.getPure(Attribute.fetishism) + 1)) {

@@ -30,7 +30,7 @@ public class TentacleImpaler extends TentacleArm {
 
     @Override
     int attackOdds(Combat c, Character owner, Character target) {
-        return (int) Math.min(60, 5 + owner.get(Attribute.slime) * .6);
+        return (int) Math.min(60, 5 + owner.getAttribute(Attribute.slime) * .6);
     }
 
     @Override

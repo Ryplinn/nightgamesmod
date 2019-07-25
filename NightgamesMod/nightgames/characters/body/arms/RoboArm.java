@@ -16,6 +16,6 @@ public abstract class RoboArm extends Arm {
 
     @Override
     int attackOdds(Combat c, Character owner, Character target) {
-        return (int) Math.min(40, owner.get(Attribute.science) * .67);
+        return (int) Math.min(40, owner.getAttribute(Attribute.science) * .67);
     }
 }

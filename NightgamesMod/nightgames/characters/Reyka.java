@@ -78,9 +78,9 @@ public class Reyka extends BasePersonality {
         selfNPC.getGrowth().arousal = 10;
         selfNPC.getGrowth().bonusStamina = 1;
         selfNPC.getGrowth().bonusArousal = 3;
-        preferredAttributes.add(c -> c.get(Attribute.darkness) < 50 && c.get(Attribute.darkness) <= c.get(Attribute.fetishism) + 10
+        preferredAttributes.add(c -> c.getAttribute(Attribute.darkness) < 50 && c.getAttribute(Attribute.darkness) <= c.getAttribute(Attribute.fetishism) + 10
                         ? Optional.of(Attribute.darkness) : Optional.empty());
-        preferredAttributes.add(c -> c.get(Attribute.darkness) > c.get(Attribute.fetishism) + 10 && c.get(Attribute.fetishism) < 50
+        preferredAttributes.add(c -> c.getAttribute(Attribute.darkness) > c.getAttribute(Attribute.fetishism) + 10 && c.getAttribute(Attribute.fetishism) < 50
                                         ? Optional.of(Attribute.fetishism) : Optional.empty());
         preferredAttributes.add(c -> Optional.of(Attribute.seduction));
 

@@ -39,7 +39,7 @@ public class Anilingus extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.has(Trait.shameless) || user.get(Attribute.seduction) >= 30 || c.getStance().en == Stance.facesitting;
+        return user.has(Trait.shameless) || user.getAttribute(Attribute.seduction) >= 30 || c.getStance().en == Stance.facesitting;
     }
 
     @Override

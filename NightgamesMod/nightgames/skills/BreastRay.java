@@ -18,7 +18,7 @@ public class BreastRay extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.science) >= 12;
+        return user.getAttribute(Attribute.science) >= 12;
     }
 
     @Override
@@ -77,7 +77,7 @@ public class BreastRay extends Skill {
     @Override
     public String receive(Combat c, int damage, Result modifier, Character user, Character target) {
         String message;
-        boolean plural = target.body.getRandomBreasts().getSize() > 0 || target.get(Attribute.power) > 25;
+        boolean plural = target.body.getRandomBreasts().getSize() > 0 || target.getAttribute(Attribute.power) > 25;
         message = String.format("%s a device at %s chest and giggles as %s %s"
                         + " %s ballooning up. %s %s and %s to cover %s, but the increased sensitivity "
                         + "distracts %s in a delicious way.",

@@ -18,7 +18,7 @@ public class Recharge extends Action {
 
     @Override
     public boolean usable(Character user) {
-        return user.location().recharge() && user.get(Attribute.science) > 0 && user.count(Item.Battery) < 20 && !user.bound();
+        return user.location().recharge() && user.getAttribute(Attribute.science) > 0 && user.count(Item.Battery) < 20 && !user.bound();
     }
 
     @Override

@@ -9,7 +9,7 @@ public class AttributeSkillTag extends SkillTag {
     private SkillRequirement requirement = new SkillRequirement() {
         @Override
         public boolean meets(SkillResultStruct results, double value) {
-            return results.getSelf().getCharacter().get(attribute) >= value;
+            return results.getSelf().getCharacter().getAttribute(attribute) >= value;
         }
     };
     public AttributeSkillTag(Attribute attribute) {

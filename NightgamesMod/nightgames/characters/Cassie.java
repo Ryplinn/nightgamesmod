@@ -216,7 +216,7 @@ public class Cassie extends BasePersonality {
         selfNPC.getGrowth().addTrait(43, Trait.dickhandler);
         selfNPC.getGrowth().addTrait(47, Trait.autonomousPussy);
         selfNPC.getGrowth().addTrait(60, Trait.obsequiousAppeal);
-        preferredAttributes.add(character -> character.get(Attribute.submission) < 20 ? Optional.of(Attribute.submission) : Optional.empty());
+        preferredAttributes.add(character -> character.getAttribute(Attribute.submission) < 20 ? Optional.of(Attribute.submission) : Optional.empty());
     }
 
     @Override
@@ -302,7 +302,7 @@ public class Cassie extends BasePersonality {
                             selfNPC.getGrowth().extraAttributes += 1;
                             return true;
                         }))));
-        preferredAttributes.add(c -> c.get(Attribute.spellcasting) < 80 ? Optional.of(Attribute.spellcasting) : Optional.empty());
+        preferredAttributes.add(c -> c.getAttribute(Attribute.spellcasting) < 80 ? Optional.of(Attribute.spellcasting) : Optional.empty());
 
         selfNPC.getGrowth().addTrait(0, Trait.softheart);
         selfNPC.getGrowth().addTrait(0, Trait.romantic);

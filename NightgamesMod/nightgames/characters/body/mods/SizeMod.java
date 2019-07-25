@@ -1,18 +1,17 @@
 package nightgames.characters.body.mods;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.GenericBodyPart;
 import nightgames.global.Random;
 import nightgames.utilities.MathUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class SizeMod extends PartMod {
     public static int COCK_SIZE_TINY = 3;
@@ -130,7 +129,7 @@ public class SizeMod extends PartMod {
             if ((size > 0 || self.useFemalePronouns())) {
                 return Optional.empty();
             } else {
-                if (self.get(Attribute.power) > self.getLevel() + 5) {
+                if (self.getAttribute(Attribute.power) > self.getLevel() + 5) {
                     return Optional.of("muscular pecs");
                 }
                 return Optional.of("flat chest");

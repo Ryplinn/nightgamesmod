@@ -77,7 +77,7 @@ public class SuccubusNurse extends Skill {
             target.add(c, new AttributeBuff(target.getType(), Attribute.power, -2, 5));
         }
         new Suckle().resolve(c, user, user, true);
-        if (Random.random(100) < 5 + 2 * user.get(Attribute.fetishism)) {
+        if (Random.random(100) < 5 + 2 * user.getAttribute(Attribute.fetishism)) {
             target.add(c, new BodyFetish(target.getType(), user.getType(), BreastsPart.a.getType(), .25));
         }
         return true;

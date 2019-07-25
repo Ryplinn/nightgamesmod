@@ -159,7 +159,7 @@ public class Corruption extends Addiction {
 
     private boolean attIsDrainable(Attribute att) {
         double maxDrainFraction = 1 - getMagnitude();
-        return !UNDRAINABLE_ATTS.contains(att) && getAfflicted().get(att) > Math.max(10, getAfflicted().getPure(att) * maxDrainFraction);
+        return !UNDRAINABLE_ATTS.contains(att) && getAfflicted().getAttribute(att) > Math.max(10, getAfflicted().getPure(att) * maxDrainFraction);
     }
 
     private Optional<Attribute> getDrainAttr() {

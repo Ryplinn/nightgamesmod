@@ -57,7 +57,7 @@ public class UseCrop extends Skill {
                     m += 8;
                 } else {
                     writeOutput(c, Result.normal, user, target);
-                    target.pain(c, user, 5 + Random.random(12) + target.get(Attribute.perception) / 2);
+                    target.pain(c, user, 5 + Random.random(12) + target.getAttribute(Attribute.perception) / 2);
                 }
             } else {
                 writeOutput(c, Result.weak, user, target);

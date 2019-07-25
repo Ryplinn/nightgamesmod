@@ -53,7 +53,7 @@ public class Alarm extends Trap {
 
     @Override
     public boolean requirements(Character owner) {
-        return owner.get(Attribute.cunning) >= 6;
+        return owner.getAttribute(Attribute.cunning) >= 6;
     }
 
 }

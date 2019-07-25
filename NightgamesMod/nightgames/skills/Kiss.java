@@ -73,7 +73,7 @@ public class Kiss extends Skill {
             }
         }
         Result res;
-        if (user.get(Attribute.seduction) >= 9) {
+        if (user.getAttribute(Attribute.seduction) >= 9) {
             m += Random.random(4, 6);
             res = Result.normal;
         } else {
@@ -126,7 +126,7 @@ public class Kiss extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.seduction) >= 3;
+        return user.getAttribute(Attribute.seduction) >= 3;
     }
 
     @Override
@@ -267,11 +267,11 @@ public class Kiss extends Skill {
 
     @Override
     public String getLabel(Combat c, Character user) {
-        if (user.get(Attribute.divinity) >= 1 && user.canSpend(divineCost)) {
+        if (user.getAttribute(Attribute.divinity) >= 1 && user.canSpend(divineCost)) {
             return divineString;
         } else if (user.has(Trait.soulsucker)) {
             return "Drain Kiss";
-        } else if (user.get(Attribute.seduction) >= 20) {
+        } else if (user.getAttribute(Attribute.seduction) >= 20) {
             return "Deep Kiss";
         } else {
             return "Kiss";

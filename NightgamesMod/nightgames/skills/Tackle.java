@@ -43,8 +43,8 @@ public class Tackle extends Skill {
             target.add(c, new Winded(target.getType(), 2));
         }
         if (target.roll(user, accuracy(c, user, target))
-                        && user.checkVsDc(Attribute.power, target.knockdownDC() - user.get(Attribute.animism))) {
-            if (user.get(Attribute.animism) >= 1) {
+                        && user.checkVsDc(Attribute.power, target.knockdownDC() - user.getAttribute(Attribute.animism))) {
+            if (user.getAttribute(Attribute.animism) >= 1) {
                 writeOutput(c, Result.special, user, target);
                 target.pain(c, user, (int) DamageType.physical
                                 .modifyDamage(user, target, Random.random(15, 30)));
@@ -68,12 +68,12 @@ public class Tackle extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.power) >= 26 && !user.has(Trait.petite) || user.get(Attribute.animism) >= 1;
+        return user.getAttribute(Attribute.power) >= 26 && !user.has(Trait.petite) || user.getAttribute(Attribute.animism) >= 1;
     }
 
     @Override
     public int speed(Character user) {
-        if (user.get(Attribute.animism) >= 1) {
+        if (user.getAttribute(Attribute.animism) >= 1) {
             return 3;
         } else {
             return 1;
@@ -87,11 +87,11 @@ public class Tackle extends Skill {
         }
         
         int base = 80;
-        if (user.get(Attribute.animism) >= 1) {
+        if (user.getAttribute(Attribute.animism) >= 1) {
             base = 120 + (user.getArousal().getReal() / 10);
         }
         return Math.round(Math.max(Math.min(150,
-                        2.5f * (user.get(Attribute.power) - c.getOpponent(user).get(Attribute.power)) + base),
+                        2.5f * (user.getAttribute(Attribute.power) - c.getOpponent(user).getAttribute(Attribute.power)) + base),
                         40));
     }
 
@@ -102,7 +102,7 @@ public class Tackle extends Skill {
 
     @Override
     public String getLabel(Combat c, Character user) {
-        if (user.get(Attribute.animism) >= 1) {
+        if (user.getAttribute(Attribute.animism) >= 1) {
             return "Pounce";
         } else {
             return getName(c, user);

@@ -15,7 +15,7 @@ public class WaterForm extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.ki) >= 3;
+        return user.getAttribute(Attribute.ki) >= 3;
     }
 
     @Override

@@ -24,7 +24,7 @@ public class TentacleFuck extends TentacleArmSkill {
     @Override
     public boolean resolve(Combat c, Arm arm, Character owner, Character target) {
         boolean sub = target.bound() || !c.getStance().mobile(target);
-        boolean success = sub || Random.random(100) < 10 + owner.get(Attribute.slime);
+        boolean success = sub || Random.random(100) < 10 + owner.getAttribute(Attribute.slime);
         double strength = Random.random(10, 21);
         
         BodyPart tentaclePart;

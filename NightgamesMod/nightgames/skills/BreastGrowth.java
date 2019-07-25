@@ -17,7 +17,7 @@ public class BreastGrowth extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.spellcasting) >= 12;
+        return user.getAttribute(Attribute.spellcasting) >= 12;
     }
 
     @Override

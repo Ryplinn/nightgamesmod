@@ -239,7 +239,7 @@ public abstract class Character extends Observable implements Cloneable {
         return getXPReqToNextLevel(getLevel());
     }
 
-    public int get(Attribute a) {
+    public int getAttribute(Attribute a) {
         if (a == Attribute.slime && !has(Trait.slime)) {
             // always return 0 if there's no trait for it.
             return 0;
@@ -341,8 +341,8 @@ public abstract class Character extends Observable implements Cloneable {
      * @return The map of the character's attribute values.
      */
     public Map<Attribute, Integer> getAttributes() {
-        Map<Attribute, Integer> currentAttributes = Arrays.stream(Attribute.values()).filter(attribute -> this.get(attribute) != 0)
-                        .collect(Collectors.toMap(attribute -> attribute, this::get));
+        Map<Attribute, Integer> currentAttributes = Arrays.stream(Attribute.values()).filter(attribute -> this.getAttribute(attribute) != 0)
+                        .collect(Collectors.toMap(attribute -> attribute, this::getAttribute));
         return Collections.unmodifiableMap(currentAttributes);
     }
 
@@ -377,9 +377,9 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public Random.DieRoll check(Attribute a, int extra) {
-        Random.DieRoll roll = new Random.DieRoll(20, get(a) + extra);
+        Random.DieRoll roll = new Random.DieRoll(20, getAttribute(a) + extra);
         if (DebugFlags.isDebugOn(DebugFlags.DEBUG_DAMAGE)) {
-            System.out.println("Rolled " + a + " = " + get(a) + " with extra " + extra + ", rolled " + roll.roll);
+            System.out.println("Rolled " + a + " = " + getAttribute(a) + " with extra " + extra + ", rolled " + roll.roll);
         }
         return roll;
     }
@@ -474,7 +474,7 @@ public abstract class Character extends Observable implements Cloneable {
         }
         if (c != null) {
             if (has(Trait.cute) && other != null && other != this && primary && physical) {
-                bonus -= Math.min(get(Attribute.seduction), 50) * pain / 100;
+                bonus -= Math.min(getAttribute(Attribute.seduction), 50) * pain / 100;
                 c.write(this, Formatter.format(
                                 "{self:NAME-POSSESSIVE} innocent appearance throws {other:direct-object} off and {other:subject-action:use|uses} much less strength than intended.",
                                 this, other));
@@ -1762,7 +1762,7 @@ public abstract class Character extends Observable implements Cloneable {
 
         // TODO: Rebalance this. Kat's orgasms tend to only lose 10-15 willpower (feral?) while this restores ~20, making her a perpetual fucking machine.
         if (has(Trait.nymphomania) && (
-                        Random.random(100) < Math.sqrt(get(Attribute.nymphomania) + get(Attribute.animism)) * 10) && !getWillpower().isEmpty() && times == totalTimes) {
+                        Random.random(100) < Math.sqrt(getAttribute(Attribute.nymphomania) + getAttribute(Attribute.animism)) * 10) && !getWillpower().isEmpty() && times == totalTimes) {
             if (human()) {
                 c.write("Cumming actually made you feel kind of refreshed, albeit with a burning desire for more.");
             } else {
@@ -1770,7 +1770,7 @@ public abstract class Character extends Observable implements Cloneable {
                                 "After {self:subject} comes down from {self:possessive} orgasmic high, {self:pronoun} doesn't look satisfied at all. There's a mad glint in {self:possessive} eye that seems to be endlessly asking for more.",
                                 this, opponent));
             }
-            restoreWillpower(c, 5 + Math.min((get(Attribute.animism) + get(Attribute.nymphomania)) / 5, 15));
+            restoreWillpower(c, 5 + Math.min((getAttribute(Attribute.animism) + getAttribute(Attribute.nymphomania)) / 5, 15));
         }
 
         if (times == totalTimes) {
@@ -2180,7 +2180,7 @@ public abstract class Character extends Observable implements Cloneable {
         
         if (opponent.has(Trait.temptingass) && !is(Stsflag.frenzied)) {
             int chance = 20;
-            chance += Math.max(0, Math.min(15, opponent.get(Attribute.seduction) - get(Attribute.seduction)));
+            chance += Math.max(0, Math.min(15, opponent.getAttribute(Attribute.seduction) - getAttribute(Attribute.seduction)));
             if (is(Stsflag.feral))
                 chance += 10;
             if (is(Stsflag.charmed) || opponent.is(Stsflag.alluring))
@@ -2283,14 +2283,14 @@ public abstract class Character extends Observable implements Cloneable {
         if (bound()) {
             return false;
         }
-        int dc = checked.get(Attribute.cunning) / 3;
+        int dc = checked.getAttribute(Attribute.cunning) / 3;
         if (checked.state == State.hidden) {
-            dc += (checked.get(Attribute.cunning) * 2 / 3) + 20;
+            dc += (checked.getAttribute(Attribute.cunning) * 2 / 3) + 20;
         }
         if (checked.has(Trait.Sneaky)) {
             dc += 20;
         }
-        dc -= dc * 5 / Math.max(1, get(Attribute.perception));
+        dc -= dc * 5 / Math.max(1, getAttribute(Attribute.perception));
         return checkVsDc(Attribute.cunning, dc);
     }
 
@@ -2746,9 +2746,9 @@ public abstract class Character extends Observable implements Cloneable {
         int counter = 3;
         // subtract some counter chance if the opponent is more cunning than you.
         // 1% decreased counter chance per 5 points of cunning over you.
-        counter += Math.min(0, get(Attribute.cunning) - opponent.get(Attribute.cunning)) / 5;
+        counter += Math.min(0, getAttribute(Attribute.cunning) - opponent.getAttribute(Attribute.cunning)) / 5;
         // increase counter chance by perception difference
-        counter += get(Attribute.perception) - opponent.get(Attribute.perception);
+        counter += getAttribute(Attribute.perception) - opponent.getAttribute(Attribute.perception);
         // 1% increased counter chance per 2 speed over your opponent.
         counter += getSpeedDifference(opponent) / 2;
         for (Status s : getStatuses()) {
@@ -2776,11 +2776,11 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     private int getSpeedDifference(Character opponent) {
-        return Math.min(Math.max(get(Attribute.speed) - opponent.get(Attribute.speed), -5), 5);
+        return Math.min(Math.max(getAttribute(Attribute.speed) - opponent.getAttribute(Attribute.speed), -5), 5);
     }
     
     public int getChanceToHit(Character attacker, int accuracy) {
-        int hitDiff = attacker.getSpeedDifference(this) + (attacker.get(Attribute.perception) - get(
+        int hitDiff = attacker.getSpeedDifference(this) + (attacker.getAttribute(Attribute.perception) - getAttribute(
                         Attribute.perception));
         int levelDiff = Math.min(attacker.level - level, 5);
         levelDiff = Math.max(levelDiff, -5);
@@ -2815,7 +2815,7 @@ public abstract class Character extends Observable implements Cloneable {
             dc += getStatus(Stsflag.braced).value();
         }
         if (has(Trait.stabilized)) {
-            dc += 12 + 3 * Math.sqrt(get(Attribute.science));
+            dc += 12 + 3 * Math.sqrt(getAttribute(Attribute.science));
         }
         if (has(ClothingTrait.heels) && !has(Trait.proheels)) {
             dc -= 7;
@@ -3432,7 +3432,7 @@ public abstract class Character extends Observable implements Cloneable {
 
     public int stripDifficulty(Character other) {
         if (outfit.has(ClothingTrait.tentacleSuit) || outfit.has(ClothingTrait.tentacleUnderwear)) {
-            return other.get(Attribute.science) + 20;
+            return other.getAttribute(Attribute.science) + 20;
         }
         if (outfit.has(ClothingTrait.harpoonDildo) || outfit.has(ClothingTrait.harpoonOnahole)) {
             int diff = 20;
@@ -3538,7 +3538,7 @@ public abstract class Character extends Observable implements Cloneable {
     public float modRecoilPleasure(Combat c, float mt) {
         float total = mt;
         if (c.getStance().sub(this)) {
-            total += get(Attribute.submission) / 2;
+            total += getAttribute(Attribute.submission) / 2;
         }
         if (has(Trait.responsive)) {
             total += total / 2;
@@ -3585,7 +3585,7 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public boolean canKnockDown(Character other, Set<Attribute> attributes, int strength, double roll) {
-        return knockdownDC() < strength + (roll * 100) + attributes.stream().mapToInt(other::get).sum() + other
+        return knockdownDC() < strength + (roll * 100) + attributes.stream().mapToInt(other::getAttribute).sum() + other
                         .knockdownBonus();
     }
 
@@ -3648,7 +3648,7 @@ public abstract class Character extends Observable implements Cloneable {
         }
         if (has(Trait.RemoteControl)) {
             int currentCount = inventory.getOrDefault(Item.RemoteControl, 0);
-            gain(Item.RemoteControl, 2 - currentCount + get(Attribute.science) / 10);
+            gain(Item.RemoteControl, 2 - currentCount + getAttribute(Attribute.science) / 10);
         }
     }
 
@@ -3959,7 +3959,7 @@ public abstract class Character extends Observable implements Cloneable {
      * Characters with higher initiative move first.
      */
     public void rollInitiative() {
-        lastInitRoll = get(Attribute.speed) + Random.random(20);
+        lastInitRoll = getAttribute(Attribute.speed) + Random.random(20);
     }
 
     public enum MeterType {

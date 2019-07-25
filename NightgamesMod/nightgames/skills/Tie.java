@@ -33,12 +33,12 @@ public class Tie extends Skill {
         if (user.has(Item.Handcuffs, 1)) {
             user.consume(Item.Handcuffs, 1);
             writeOutput(c, Result.special, user, target);
-            target.add(c, new Bound(target.getType(), (40 + 3 * Math.sqrt(user.get(Attribute.cunning))), "handcuffs"));
+            target.add(c, new Bound(target.getType(), (40 + 3 * Math.sqrt(user.getAttribute(Attribute.cunning))), "handcuffs"));
         } else {
             user.consume(Item.ZipTie, 1);
             if (target.roll(user, accuracy(c, user, target))) {
                 writeOutput(c, Result.normal, user, target);
-                target.add(c, new Bound(target.getType(), (25 + 3 * Math.sqrt(user.get(Attribute.cunning))), "ziptie"));
+                target.add(c, new Bound(target.getType(), (25 + 3 * Math.sqrt(user.getAttribute(Attribute.cunning))), "ziptie"));
             } else {
                 writeOutput(c, Result.miss, user, target);
                 return false;

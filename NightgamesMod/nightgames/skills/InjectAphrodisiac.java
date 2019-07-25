@@ -16,7 +16,7 @@ public class InjectAphrodisiac extends Skill {
     }
 
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.medicine) >= 4;
+        return user.getAttribute(Attribute.medicine) >= 4;
     }
 
     public boolean usable(Combat c, Character user, Character target) {
@@ -31,7 +31,7 @@ public class InjectAphrodisiac extends Skill {
     }
 
     public boolean resolve(Combat c, Character user, Character target) {
-        int magnitude = 2 + user.get(Attribute.medicine);
+        int magnitude = 2 + user.getAttribute(Attribute.medicine);
         if (user.human()) {
             c.write(user, deal(c, magnitude, Result.normal, user, target));
         } else {

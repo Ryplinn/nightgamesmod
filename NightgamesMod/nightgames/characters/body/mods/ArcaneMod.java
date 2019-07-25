@@ -42,13 +42,13 @@ public class ArcaneMod extends PartMod {
                                                 + " The magic within them latches onto it and pulls fiercely, drawing %s strength into %s with great gulps.",
                                 self.nameOrPossessivePronoun(), part.describe(self), opponent.nameOrPossessivePronoun(),
                                 target.describe(opponent), opponent.possessiveAdjective(), self.directObject());
-                strength = 10 + self.get(Attribute.spellcasting) / 4;
+                strength = 10 + self.getAttribute(Attribute.spellcasting) / 4;
             } else {
                 message = self.nameOrPossessivePronoun() + (isMouth ? " lipstick on " : " tattoos surrounding ") + self.possessiveAdjective()
                                 + " " + part.getType() + " light up with arcane energy as " + 
                                 (fucking ? opponent.subjectAction("are", "is") + " inside " + self.directObject() : self.subjectAction("touch") + " " + opponent.directObject()) + ", channeling some of "
                                 + opponent.possessiveAdjective() + " energies back to its master.";
-                strength = 5 + self.get(Attribute.spellcasting) / 6;
+                strength = 5 + self.getAttribute(Attribute.spellcasting) / 6;
             }
             c.write(self, message);
             opponent.drain(c, self, strength, Character.MeterType.MOJO);

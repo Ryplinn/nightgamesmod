@@ -102,7 +102,7 @@ public class Squeeze extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.power) >= 9 && user.get(Attribute.seduction) >= 9;
+        return user.getAttribute(Attribute.power) >= 9 && user.getAttribute(Attribute.seduction) >= 9;
     }
 
     @Override

@@ -125,7 +125,7 @@ public class TestAngel extends BasePersonality {
         selfNPC.getGrowth().addTrait(54, Trait.desensitized2);
 
         preferredAttributes
-                        .add(c -> c.get(Attribute.divinity) < 50 ? Optional.of(Attribute.divinity) : Optional.empty());
+                        .add(c -> c.getAttribute(Attribute.divinity) < 50 ? Optional.of(Attribute.divinity) : Optional.empty());
         preferredAttributes.add(c -> Optional.of(Attribute.seduction));
     }
 

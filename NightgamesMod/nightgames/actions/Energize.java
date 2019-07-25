@@ -19,7 +19,7 @@ public class Energize extends Action {
 
     @Override
     public boolean usable(Character user) {
-        return user.get(Attribute.spellcasting) >= 1 && user.location().mana() && !user.is(Stsflag.energized) && !user.bound();
+        return user.getAttribute(Attribute.spellcasting) >= 1 && user.location().mana() && !user.is(Stsflag.energized) && !user.bound();
     }
 
     @Override

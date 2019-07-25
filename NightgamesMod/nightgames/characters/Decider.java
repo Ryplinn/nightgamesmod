@@ -169,7 +169,7 @@ public class Decider {
                 }
             }
         }
-        if (character.get(Attribute.science) >= 1 && !character.has(Item.Battery, 10)) {
+        if (character.getAttribute(Attribute.science) >= 1 && !character.has(Item.Battery, 10)) {
             for (Action act : available) {
                 if (act.consider() == Movement.recharge) {
                     return act;

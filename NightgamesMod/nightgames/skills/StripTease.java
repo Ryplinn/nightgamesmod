@@ -22,7 +22,7 @@ public class StripTease extends Skill {
     }
 
     private static boolean hasRequirements(Character user) {
-        return user.get(Attribute.seduction) >= 24 && !user.has(Trait.direct) && !user.has(Trait.shy)
+        return user.getAttribute(Attribute.seduction) >= 24 && !user.has(Trait.direct) && !user.has(Trait.shy)
                         && !user.has(Trait.temptress);
     }
 

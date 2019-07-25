@@ -102,7 +102,7 @@ public class Missionary extends Position {
     }
 
     public static Position similarInstance(Character top, Character bottom) {
-        if (top.get(Attribute.power) > 25 && Random.random(2) == 0) {
+        if (top.getAttribute(Attribute.power) > 25 && Random.random(2) == 0) {
             return new UpsideDownMaledom(top.getType(), bottom.getType());
         }
         return new Missionary(top.getType(), bottom.getType());

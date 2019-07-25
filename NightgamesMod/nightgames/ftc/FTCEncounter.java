@@ -127,9 +127,9 @@ public class FTCEncounter extends Encounter {
     }
 
     private void passAmbush(Character attacker, Character victim) {
-        int attackerScore = 30 + attacker.get(Attribute.speed) * 10 + attacker.get(Attribute.perception) * 5
+        int attackerScore = 30 + attacker.getAttribute(Attribute.speed) * 10 + attacker.getAttribute(Attribute.perception) * 5
                         + Random.random(30);
-        int victimScore = victim.get(Attribute.speed) * 10 + victim.get(Attribute.perception) * 5 + Random.random(30);
+        int victimScore = victim.getAttribute(Attribute.speed) * 10 + victim.getAttribute(Attribute.perception) * 5 + Random.random(30);
         String message = "";
         if (attackerScore > victimScore) {
             if (attacker.human()) {

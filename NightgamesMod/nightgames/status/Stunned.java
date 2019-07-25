@@ -56,7 +56,7 @@ public class Stunned extends DurationStatus {
     @Override
     public void onRemove(Combat c, Character other) {
         if (makesBraced) {
-            if (getAffected().get(Attribute.divinity) > 0) {
+            if (getAffected().getAttribute(Attribute.divinity) > 0) {
                 getAffected().addlist.add(new BastionOfFaith(affected, 3));
             } else {
                 getAffected().addlist.add(new Braced(affected, 2));

@@ -66,7 +66,7 @@ public class NpcConfigurationTest {
         NPC angel = new NPC(CharacterType.get("TestAngel"), new TestAngel(), startConfig);
 
         // Starting stats should match config but breasts should be the same as base Angel if not overwritten in config.
-        assertThat(angel.get(Attribute.seduction), equalTo(angelConfig.attributes.get(Attribute.seduction)));
+        assertThat(angel.getAttribute(Attribute.seduction), equalTo(angelConfig.attributes.get(Attribute.seduction)));
         assertThat(angel.body.getLargestBreasts(),
                         equalTo(TestAngel.baseTestAngelChar.body.getLargestBreasts()));
         assertEquals(TestAngel.baseTestAngelChar.body.getLargestBreasts(),

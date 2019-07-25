@@ -18,7 +18,7 @@ public class Bluff extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.has(Trait.pokerface) && user.get(Attribute.cunning) >= 9;
+        return user.has(Trait.pokerface) && user.getAttribute(Attribute.cunning) >= 9;
     }
 
     @Override

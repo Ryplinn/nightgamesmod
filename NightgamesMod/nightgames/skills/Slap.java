@@ -43,7 +43,7 @@ public class Slap extends Skill {
         if (target.roll(user, accuracy(c, user, target))) {
             if (isSlime(user)) {
                 writeOutput(c, Result.critical, user, target);
-                target.pain(c, user, Math.min(80, Random.random(10) + user.get(Attribute.slime) + user.get(Attribute.power) / 2));
+                target.pain(c, user, Math.min(80, Random.random(10) + user.getAttribute(Attribute.slime) + user.getAttribute(Attribute.power) / 2));
                 if (c.getStance().en == Stance.neutral && Random.random(5) == 0) {
                     c.setStance(new StandingOver(user.getType(), target.getType()), user, true);
                     c.write(user,
@@ -56,7 +56,7 @@ public class Slap extends Skill {
                 }
                 target.emote(Emotion.nervous, 40);
                 target.emote(Emotion.angry, 30);
-            } else if (user.get(Attribute.animism) >= 8) {
+            } else if (user.getAttribute(Attribute.animism) >= 8) {
                 writeOutput(c, Result.special, user, target);
                 if (user.has(Trait.pimphand)) {
                     target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target,
@@ -92,7 +92,7 @@ public class Slap extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.power) >= 5;
+        return user.getAttribute(Attribute.power) >= 5;
     }
 
     @Override
@@ -106,14 +106,14 @@ public class Slap extends Skill {
     }
     
     private boolean isSlime(Character user) {
-        return user.get(Attribute.slime) > 4;
+        return user.getAttribute(Attribute.slime) > 4;
     }
 
     @Override
     public String getLabel(Combat c, Character user) {
         if (isSlime(user)) {
             return "Clobber";
-        } else if (user.get(Attribute.animism) >= 8) {
+        } else if (user.getAttribute(Attribute.animism) >= 8) {
             return "Tiger Claw";
         } else {
             return "Slap";

@@ -170,7 +170,7 @@ public class DebugGUIPanel extends JPanel {
                         sb.append(", ");
                     }
                 }
-                String attString = Arrays.stream(Attribute.values()).filter(att -> target.get(att) != 0).map(att -> String.format("%s: %d", att, target.get(att))).collect(Collectors.joining("\n"));
+                String attString = Arrays.stream(Attribute.values()).filter(att -> target.getAttribute(att) != 0).map(att -> String.format("%s: %d", att, target.getAttribute(att))).collect(Collectors.joining("\n"));
                 output.setText(String.format("Stamina [%s]\nArousal [%s]\nMojo [%s]\nWillpower [%s]\nAttractiveness: %.01f\n%s\n%s",
                                 target.getStamina().toString(), target.getArousal().toString(),
                                 target.getMojo().toString(), target.getWillpower().toString(), target.body.getHotness(

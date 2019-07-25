@@ -20,7 +20,7 @@ public class StripMinor extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.cunning) >= 3;
+        return user.getAttribute(Attribute.cunning) >= 3;
     }
 
     @Override

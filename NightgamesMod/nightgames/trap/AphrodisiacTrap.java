@@ -22,7 +22,7 @@ public class AphrodisiacTrap extends Trap {
     }
 
     public void setStrength(Character user) {
-        setStrength(user.get(Attribute.cunning) + user.get(Attribute.science) + user.getLevel() / 2);
+        setStrength(user.getAttribute(Attribute.cunning) + user.getAttribute(Attribute.science) + user.getLevel() / 2);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class AphrodisiacTrap extends Trap {
 
     @Override
     public boolean requirements(Character owner) {
-        return owner.get(Attribute.cunning) >= 12 && !owner.has(Trait.direct);
+        return owner.getAttribute(Attribute.cunning) >= 12 && !owner.has(Trait.direct);
     }
 
     @Override

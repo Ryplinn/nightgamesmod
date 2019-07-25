@@ -20,7 +20,7 @@ public class FaceFuck extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.fetishism) >= 15;
+        return user.getAttribute(Attribute.fetishism) >= 15;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class FaceFuck extends Skill {
         if (targetDamage > 0) {
             target.body.pleasure(target, user.body.getRandomInsertable(), targetMouth, targetDamage, c, new SkillUsage<>(this, user, target));
         }
-        if (Random.random(100) < 5 + 2 * user.get(Attribute.fetishism) && !user.has(Trait.strapped)) {
+        if (Random.random(100) < 5 + 2 * user.getAttribute(Attribute.fetishism) && !user.has(Trait.strapped)) {
             target.add(c, new BodyFetish(target.getType(), user.getType(), "cock", .25));
         }
         target.loseMojo(c, Random.random(10, 20));

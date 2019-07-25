@@ -61,7 +61,7 @@ public class Pheromones extends Horny {
             if (getSource().has(Trait.BefuddlingFragrance)) {
                 List<Attribute> debuffable = Arrays.stream(Attribute.values())
                                   .filter(att -> !NON_DEBUFFABLE_ATTS.contains(att))
-                                  .filter(att -> getAffected().get(att) > 0)
+                                  .filter(att -> getAffected().getAttribute(att) > 0)
                                   .collect(Collectors.toList());
                 Attribute att = Random.pickRandomGuaranteed(debuffable);
                 String message = Formatter.format("{other:NAME-POSSESSIVE} intoxicating aroma is messing with {self:name-possessive} head, "

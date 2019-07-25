@@ -68,8 +68,8 @@ public class Yui extends BasePersonality {
         selfNPC.getGrowth().willpower = 1.4f;
         selfNPC.getGrowth().bonusStamina = 2;
         selfNPC.getGrowth().bonusArousal = 2;
-        preferredAttributes.add(c -> c.get(Attribute.ninjutsu) < 60 && c.getLevel() >= 10 ? Optional.of(Attribute.ninjutsu)  : Optional.empty());
-        preferredAttributes.add(c -> c.get(Attribute.cunning) < 50 ? Optional.of(Attribute.cunning) : Optional.empty());
+        preferredAttributes.add(c -> c.getAttribute(Attribute.ninjutsu) < 60 && c.getLevel() >= 10 ? Optional.of(Attribute.ninjutsu)  : Optional.empty());
+        preferredAttributes.add(c -> c.getAttribute(Attribute.cunning) < 50 ? Optional.of(Attribute.cunning) : Optional.empty());
 
         selfNPC.getGrowth().addTrait(0, Trait.obedient);
         selfNPC.getGrowth().addTrait(0, Trait.cute);

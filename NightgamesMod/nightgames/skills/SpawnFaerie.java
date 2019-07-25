@@ -20,7 +20,7 @@ public class SpawnFaerie extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.spellcasting) >= 3;
+        return user.getAttribute(Attribute.spellcasting) >= 3;
     }
 
     @Override
@@ -41,8 +41,8 @@ public class SpawnFaerie extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character user, Character target) {
-        int power = 5 + user.get(Attribute.spellcasting);
-        int ac = 4 + user.get(Attribute.spellcasting) / 10;
+        int power = 5 + user.getAttribute(Attribute.spellcasting);
+        int ac = 4 + user.getAttribute(Attribute.spellcasting) / 10;
         if (user.human()) {
             c.write(user, deal(c, 0, Result.normal, user, target));
             switch (gender) {

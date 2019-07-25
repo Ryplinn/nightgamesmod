@@ -39,12 +39,12 @@ public class FieryMod extends PartMod {
                                 "The heat emanating from %s %s is extremely hazardous for %s %s, nearly burning through its circuitry and definitely causing intense pain.",
                                 self.nameOrPossessivePronoun(), part.describe(self), opponent.nameOrPossessivePronoun(),
                                 target.describe(opponent)));
-                opponent.pain(c, self, Math.max(30, 20 + self.get(Attribute.ki)));
+                opponent.pain(c, self, Math.max(30, 20 + self.getAttribute(Attribute.ki)));
             } else {
                 c.write(self, String.format("Plunging %s %s into %s %s leaves %s gasping from the heat.",
                                 opponent.possessiveAdjective(), target.describe(opponent), self.possessiveAdjective(),
                                 part.describe(self), opponent.directObject()));
-                opponent.pain(c, self, 20 + self.get(Attribute.ki) / 2);
+                opponent.pain(c, self, 20 + self.getAttribute(Attribute.ki) / 2);
             }
         } else {
             c.write(self, Formatter.format(
@@ -68,11 +68,11 @@ public class FieryMod extends PartMod {
                                 "The heat emanating from %s %s is extremely hazardous for %s %s, nearly burning through its circuitry and definitely causing intense pain.",
                                 self.nameOrPossessivePronoun(), part.describe(self), opponent.nameOrPossessivePronoun(),
                                 target.describe(opponent)));
-                opponent.pain(c, self, Math.max(30, 20 + self.get(Attribute.ki)));
+                opponent.pain(c, self, Math.max(30, 20 + self.getAttribute(Attribute.ki)));
             } else {
                 c.write(self, String.format("The heat from %s %s leaves %s gasping.",
                                 self.possessiveAdjective(), part.describe(self), opponent.directObject()));
-                opponent.pain(c, self, 20 + self.get(Attribute.ki) / 2);
+                opponent.pain(c, self, 20 + self.getAttribute(Attribute.ki) / 2);
             }
         }
     }

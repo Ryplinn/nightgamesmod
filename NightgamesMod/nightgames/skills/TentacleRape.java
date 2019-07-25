@@ -83,7 +83,7 @@ public class TentacleRape extends Skill {
             } else {
                 writeOutput(c, Result.weak, user, target);
             }
-            target.add(c, new Bound(target.getType(), 30 + 2 * Math.sqrt(user.get(Attribute.fetishism) + user.get(Attribute.slime)), "tentacles"));
+            target.add(c, new Bound(target.getType(), 30 + 2 * Math.sqrt(user.getAttribute(Attribute.fetishism) + user.getAttribute(Attribute.slime)), "tentacles"));
         } else {
             writeOutput(c, Result.miss, user, target);
             return false;

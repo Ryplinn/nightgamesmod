@@ -24,7 +24,7 @@ public class SuccubusSurprise extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.seduction) >= 15 || user.get(Attribute.cunning) >= 15;
+        return user.getAttribute(Attribute.seduction) >= 15 || user.getAttribute(Attribute.cunning) >= 15;
     }
 
     @Override
@@ -60,9 +60,9 @@ public class SuccubusSurprise extends Skill {
         user.remove(Item.SuccubusDraft);
         Item.SuccubusDraft.getEffects().forEach(e -> e.use(c, user, target, Item.SuccubusDraft));
         if (isArmLock(c.getStance())) {
-            target.add(c, new ArmLocked(target.getType(), 4 * user.get(Attribute.power)));
+            target.add(c, new ArmLocked(target.getType(), 4 * user.getAttribute(Attribute.power)));
         } else {
-            target.add(c, new LegLocked(target.getType(), 4 * user.get(Attribute.power)));
+            target.add(c, new LegLocked(target.getType(), 4 * user.getAttribute(Attribute.power)));
         }
         new Grind().resolve(c, user, target);
 
@@ -150,7 +150,7 @@ public class SuccubusSurprise extends Skill {
 
     @Override
     public int getMojoCost(Combat c, Character user) {
-        return Math.max(10, 50 - user.get(Attribute.technique));
+        return Math.max(10, 50 - user.getAttribute(Attribute.technique));
     }
 
     @Override

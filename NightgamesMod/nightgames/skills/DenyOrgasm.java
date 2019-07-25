@@ -16,7 +16,7 @@ public class DenyOrgasm extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.power) >= 20 && user.has(Trait.tight);
+        return user.getAttribute(Attribute.power) >= 20 && user.has(Trait.tight);
     }
 
     @Override

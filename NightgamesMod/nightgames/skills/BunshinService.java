@@ -44,12 +44,12 @@ public class BunshinService extends Skill {
     }
 
     private int numberOfClones(Character user) {
-        return Math.min(Math.min(user.getMojo().get()/2, user.get(Attribute.ninjutsu)/2), 15);
+        return Math.min(Math.min(user.getMojo().get()/2, user.getAttribute(Attribute.ninjutsu)/2), 15);
     }
 
     @Override
     public int accuracy(Combat c, Character user, Character target) {
-        return 25 + user.get(Attribute.speed) * 5;
+        return 25 + user.getAttribute(Attribute.speed) * 5;
     }
 
     @Override
@@ -68,13 +68,13 @@ public class BunshinService extends Skill {
                 switch (Random.random(4)) {
                     case 0:
                         r = Result.weak;
-                        target.tempt(Random.random(3) + user.get(Attribute.seduction) / 4);
+                        target.tempt(Random.random(3) + user.getAttribute(Attribute.seduction) / 4);
                         break;
                     case 1:
                         r = Result.normal;
                         target.body.pleasure(user,  user.body.getRandom("hands"),target.body.getRandomBreasts(),
-                                        Random.random(3 + user.get(Attribute.seduction) / 2)
-                                                        + target.get(Attribute.perception) / 2,
+                                        Random.random(3 + user.getAttribute(Attribute.seduction) / 2)
+                                                        + target.getAttribute(Attribute.perception) / 2,
                                         c, new SkillUsage<>(this, user, target));
                         break;
                     case 2:
@@ -82,8 +82,8 @@ public class BunshinService extends Skill {
                         BodyPart targetPart = target.body.has("cock") ? target.body.getRandomCock()
                                         : target.hasPussy() ? target.body.getRandomPussy()
                                                         : target.body.getRandomAss();
-                        target.body.pleasure(user, user.body.getRandom("hands"),targetPart, Random.random(4 + user.get(Attribute.seduction))
-                                                        + target.get(Attribute.perception) / 2,
+                        target.body.pleasure(user, user.body.getRandom("hands"),targetPart, Random.random(4 + user.getAttribute(Attribute.seduction))
+                                                        + target.getAttribute(Attribute.perception) / 2,
                                         c, new SkillUsage<>(this, user, target));
                         break;
                     default:
@@ -92,7 +92,7 @@ public class BunshinService extends Skill {
                                         : target.hasPussy() ? target.body.getRandomPussy()
                                                         : target.body.getRandomAss();
                         target.body.pleasure(user,user.body.getRandom("hands"), targetPart, Random.random(6)
-                                        + user.get(Attribute.seduction) / 2f + target.get(Attribute.perception), c,
+                                        + user.getAttribute(Attribute.seduction) / 2f + target.getAttribute(Attribute.perception), c,
                                         new SkillUsage<>(this, user, target));
                         break;
                 }

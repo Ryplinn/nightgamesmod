@@ -24,7 +24,7 @@ public class Kick extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.power) >= 17;
+        return user.getAttribute(Attribute.power) >= 17;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class Kick extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character user, Character target) {
-        if (target.getOutfit().slotShreddable(ClothingSlot.bottom) && user.get(Attribute.ki) >= 14
+        if (target.getOutfit().slotShreddable(ClothingSlot.bottom) && user.getAttribute(Attribute.ki) >= 14
                         && Random.random(3) == 2) {
             writeOutput(c, Result.special, user, target);
             target.shred(ClothingSlot.bottom);
@@ -95,7 +95,7 @@ public class Kick extends Skill {
 
     @Override
     public String getLabel(Combat c, Character user) {
-        if (user.get(Attribute.ki) >= 14) {
+        if (user.getAttribute(Attribute.ki) >= 14) {
             return "Shatter Kick";
         } else {
             return "Kick";

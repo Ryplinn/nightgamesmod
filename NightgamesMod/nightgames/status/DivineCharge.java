@@ -98,7 +98,7 @@ public class DivineCharge extends Status {
         // this will get out of hand super quick, but eh, you shouldn't let it
         // get
         // that far.
-        double maximum = Math.max(2, Math.pow(2., getAffected().get(Attribute.divinity) / 5.0) * .25);
+        double maximum = Math.max(2, Math.pow(2., getAffected().getAttribute(Attribute.divinity) / 5.0) * .25);
         this.magnitude = Math.min(maximum, this.magnitude);
 
     }
