@@ -34,23 +34,12 @@ public class Taunt extends Skill {
         writeOutput(c, Result.normal, user, target);
         double m = (6 + Random.random(4) + user.body.getHotness(target)) / 3
                         * Math.min(2, 1 + target.getExposure());
-        double chance = .25;
         if (target.has(Trait.imagination)) {
             m += 4;
-            chance += .25;
-        } 
-        if (user.has(Trait.bitingwords)) {
-            m += 4;
-            chance += .25;
-        } 
+            // chance += .25;
+        }
         target.temptNoSource(c, user, (int) Math.round(m), this);
-        if (Random.randomdouble() < chance) {
-            target.add(c, new Shamed(target.getType()));
-        }
-        if (c.getStance().dom(user) && user.has(Trait.bitingwords)) {
-            int willpowerLoss = Math.max(target.getWillpower().max() / 50, 3) + Random.random(3);
-            target.loseWillpower(c, willpowerLoss, 0, false, " (Biting Words)");
-        }
+        statusCheck(new Shamed(target.getType()), c, user, target, .25).ifPresent(status -> target.add(c, status));
         if (user.has(Trait.commandingvoice) && Random.random(3) == 0) {
             c.write(user, Formatter.format("{other:SUBJECT-ACTION:speak|speaks} with such unquestionable"
                             + " authority that {self:subject-action:don't|doesn't} even consider not obeying."

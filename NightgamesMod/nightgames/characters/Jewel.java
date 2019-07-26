@@ -335,12 +335,10 @@ public class Jewel extends BasePersonality {
         selfNPC.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> "Jewel takes several heaving breaths, looking beaten and exhausted. She suddenly grins ear to ear. <i>\"OK, I'm impressed.\"</i>");
 
         selfNPC.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> {
-            if (self.has(Trait.bitingwords) && c.getStance()
-                                                .dom(self)) {
+            if (self.has(Trait.bitingwords) && c.getStance().dom(self)) {
                 ArrayList<String> possible = new ArrayList<>();
                 possible.add("Jewel looks down at you with a sadistic smirk, <i>\"That's a nice look on you there "
-                                + other.getName()
-                                + ".\"</i>");
+                                + other.getName() + ".\"</i>");
                 possible.add("Shifting her weight a bit to glare into your eyes, Jewel says happily, <i>\"Aha, it looks like you're quite comfortable there. Maybe you're a natural bottom?\"</i>");
                 if (other.hasBalls()) {
                     possible.add("Jewel cups your vulnerable balls and gives them a light squeeze. <i>\"Worthless "

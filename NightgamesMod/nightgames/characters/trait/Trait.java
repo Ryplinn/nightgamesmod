@@ -16,7 +16,7 @@ import java.util.*;
 
 public enum Trait {
     sadist(new Sadist()),
-    bitingwords("Biting Words", "Knows how to rub salt in the wound."),
+    bitingwords(new BitingWords()),
     smqueen("SM Queen", "A natural dom."),
 
     // Perks
@@ -571,8 +571,11 @@ public enum Trait {
 
     public void describe(Character c, StringBuilder b) {
         if (longDesc != null) {
-            b.append(longDesc.describe(c));
-            b.append(' ');
+            String description = longDesc.describe(c);
+            if (!description.isEmpty()) {
+                b.append(description);
+                b.append(' ');
+            }
         }
     }
     

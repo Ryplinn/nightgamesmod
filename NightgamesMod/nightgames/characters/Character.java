@@ -618,7 +618,7 @@ public abstract class Character extends Observable implements Cloneable {
         tempt(c, tempter, with, i, skill);
     }
 
-    private void tempt(Combat c, Character tempter, BodyPart with, int i, Skill skill) {
+    private void tempt(Combat c, Character tempter, BodyPart with, int baseDamage, Skill skill) {
         String extraMsg = "";
         double baseModifier = 1.0;
         if (has(Trait.oblivious)) {
@@ -635,12 +635,18 @@ public abstract class Character extends Observable implements Cloneable {
         }
 
         int bonus = 0;
+        if (tempter != null) {
+            bonus += tempter.getTraits().stream().filter(trait -> trait.baseTrait != null).map(trait -> trait.baseTrait)
+                            .mapToInt(baseTrait -> baseTrait.dealTemptBonusDamage(c, tempter, this, with, baseDamage, skill)).sum();
+        }
+        bonus += getTraits().stream().filter(trait -> trait.baseTrait != null).map(trait -> trait.baseTrait)
+                        .mapToInt(baseTrait -> baseTrait.receiveTemptBonusDamage(c, this, tempter, with, baseDamage, skill)).sum();
         for (Status s : getStatuses()) {
-            bonus += s.tempted(c, i);
+            bonus += s.tempted(c, baseDamage);
         }
 
         if (has(Trait.desensitized2)) {
-            bonus -= i / 2;
+            bonus -= baseDamage / 2;
         }
 
         String bonusString = "";
@@ -669,22 +675,22 @@ public abstract class Character extends Observable implements Cloneable {
             if (with != null) {
                 // triple multiplier for the body part
                 temptMultiplier *= tempter.body.getCharismaBonus(c, this) + with.getHotness(tempter, this) * 2;
-                dmg = (int) Math.max(0, Math.round((i + bonus) * temptMultiplier * stalenessModifier));
+                dmg = (int) Math.max(0, Math.round((baseDamage + bonus) * temptMultiplier * stalenessModifier));
                 message = String.format(
                                 "%s tempted by %s %s for <font color=%s>%d<font color='white'> (base:%d%s, charisma:%.1f%s)%s\n",
                                 Formatter.capitalizeFirstLetter(subjectWas()), tempter.nameOrPossessivePronoun(),
-                                with.describe(tempter), AROUSAL_TEMPT.rgbHTML(), dmg, i, bonusString, temptMultiplier, stalenessString, extraMsg);
+                                with.describe(tempter), AROUSAL_TEMPT.rgbHTML(), dmg, baseDamage, bonusString, temptMultiplier, stalenessString, extraMsg);
             } else {
                 temptMultiplier *= tempter.body.getCharismaBonus(c, this);
                 if (c != null && tempter.has(Trait.obsequiousAppeal) && c.getStance()
                                                                          .sub(tempter)) {
                     temptMultiplier *= 2;
                 }
-                dmg = Math.max((int) Math.round((i + bonus) * temptMultiplier * stalenessModifier), 0);
+                dmg = Math.max((int) Math.round((baseDamage + bonus) * temptMultiplier * stalenessModifier), 0);
                 message = String.format(
                                 "%s tempted %s for <font color=%s>%d<font color='white'> (base:%d%s, charisma:%.1f%s)%s\n",
                                 Formatter.capitalizeFirstLetter(tempter.subject()),
-                                tempter == this ? reflectivePronoun() : nameDirectObject(), AROUSAL_TEMPT.rgbHTML(), dmg, i, bonusString, temptMultiplier, stalenessString, extraMsg);
+                                tempter == this ? reflectivePronoun() : nameDirectObject(), AROUSAL_TEMPT.rgbHTML(), dmg, baseDamage, bonusString, temptMultiplier, stalenessString, extraMsg);
             }
 
             if (DebugFlags.isDebugOn(DebugFlags.DEBUG_DAMAGE)) {
@@ -712,7 +718,7 @@ public abstract class Character extends Observable implements Cloneable {
                 }
             }
         } else {
-            int damage = Math.max(0, (int) Math.round((i + bonus) * baseModifier));
+            int damage = Math.max(0, (int) Math.round((baseDamage + bonus) * baseModifier));
             if (c != null) {
                 c.writeSystemMessage(
                                 String.format("%s tempted for <font color=%s>%d<font color='white'>%s\n",

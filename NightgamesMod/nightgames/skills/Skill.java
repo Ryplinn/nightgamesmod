@@ -13,10 +13,7 @@ import nightgames.status.FiredUp;
 import nightgames.status.Status;
 import nightgames.status.Stsflag;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 // TODO: Separate Skills into skill specifications and skill usage instances. Should make it easier to reduce
 // squirreliness with CharacterTypes vs Characters.
@@ -203,6 +200,8 @@ public abstract class Skill {
         }
 
         boolean success = skill.resolve(c, user, target);
+        user.getTraits().stream().filter(trait -> trait.baseTrait != null).map(trait -> trait.baseTrait)
+                        .forEach(baseTrait -> baseTrait.onSkillUse(skill, c, user, target));
         user.spendMojo(c, skill.getMojoCost(c, user));
         if (success) {
             user.buildMojo(c, generated);
@@ -217,6 +216,18 @@ public abstract class Skill {
             c.getCombatantData(user).setLastUsedSkillName(skill.getName());
         }
         return success;
+    }
+
+    Optional<Status> statusCheck(Status possible, Combat c, Character user, Character target, double baseChance) {
+        double chance = baseChance * (1 + user.getTraits().stream().filter(trait -> trait.baseTrait != null)
+                        .map(trait -> trait.baseTrait)
+                        .mapToDouble(baseTrait -> baseTrait.statusChanceMultiplier(this, c, user, target, possible))
+                        .sum());
+        if (Random.randomdouble() < chance) {
+            return Optional.of(possible);
+        } else {
+            return Optional.empty();
+        }
     }
 
     public int getCooldown() {
