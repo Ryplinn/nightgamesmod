@@ -17,7 +17,7 @@ import java.util.*;
 public enum Trait {
     sadist(new Sadist()),
     bitingwords(new BitingWords()),
-    smqueen("SM Queen", "A natural dom."),
+    smqueen(new SMQueen()),
 
     // Perks
     ticklemonster("Tickle Monster", "Skilled at tickling in unconventional areas"), // Mara Sex perk,

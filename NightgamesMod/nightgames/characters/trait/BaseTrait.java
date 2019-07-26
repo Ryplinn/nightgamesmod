@@ -62,12 +62,12 @@ public abstract class BaseTrait {
      * A multiplier of .20 on a base application chance of 25% would result in a 30% application chance. A multiplier
      * of 1.00 on a base application chance of 25% would result in a 50% application chance.
      *
-     * @param skill
-     * @param c
-     * @param user
-     * @param target
-     * @param possible
-     * @return
+     * @param skill The skill being used that applies the status.
+     * @param c The current combat.
+     * @param user The user of the skill with this trait.
+     * @param target The target of the skill.
+     * @param possible The status that may be applied.
+     * @return An additive multiplier to the chance of applying the status.
      */
     public double statusChanceMultiplier(Skill skill, Combat c, Character user, Character target, Status possible) {
         return 0;
@@ -81,5 +81,24 @@ public abstract class BaseTrait {
     public int dealTemptBonusDamage(Combat c, Character tempter, Character target, BodyPart with, int baseDamage,
                     Skill skill) {
         return 0;
+    }
+
+    public int dominanceTimer(Combat c, Character self, Character other) {
+        return 2;
+    }
+
+    /**
+     * Format string for end-of-turn stance dominance tick.
+     * @param c The current combat.
+     * @param self The character in the dominant position with this trait.
+     * @param other The opponent of the current combat.
+     * @return A format string that prints before the end-of-turn willpower loss.
+     */
+    public String dominanceFormat(Combat c, Character self, Character other) {
+        return "";
+    }
+
+    public String subDominanceFormat(Combat c, Character self, Character other) {
+        return "";
     }
 }

@@ -404,8 +404,8 @@ public class Combat extends Observable implements Cloneable {
                 checkStamina(other);
             }
         });
-        doStanceTick(p1);
-        doStanceTick(p2);
+        doStanceDominanceTick(p1);
+        doStanceDominanceTick(p2);
 
         List<Character> team1 = new ArrayList<>(getPetsFor(p1));
         team1.add(p1);
@@ -901,9 +901,10 @@ public class Combat extends Observable implements Cloneable {
         return !alreadyBattled.isEmpty();
     }
 
-    private void doStanceTick(Character self) {
+    private void doStanceDominanceTick(Character self) {
         int stanceDominance = getStance().getDominanceOfStance(self);
-        if (!(stanceDominance > 0)) {
+        if (stanceDominance <= 0) {
+            // dominance willpower loss is handled by the dominant character only
             return;
         }
 
@@ -916,32 +917,36 @@ public class Combat extends Observable implements Cloneable {
                     write(self, Formatter.format(
                                     "{self:name} does {self:possessive} best to be dominant, but with the way " + add
                                                     .getCause().getName()
-                                                    + " has been working {self:direct-object} over {self:pronoun-action:are} completely desensitized.",
+                                                    + " has been working {self:direct-object} over, {self:pronoun-action:are} completely desensitized.",
                                     self, other));
                 }
             });
             return;
         }
+        int dominanceTimer = Math.max(1, self.getTraits().stream().filter(trait -> trait.baseTrait != null)
+                        .map(trait -> trait.baseTrait).mapToInt(baseTrait -> baseTrait.dominanceTimer(this, self, other)).min().orElse(2));
 
-        if (self.has(Trait.smqueen)) {
-                write(self,
-                            Formatter.format("{self:NAME-POSSESSIVE} cold gaze in {self:possessive} dominant position"
-                                            + " makes {other:direct-object} shiver.",
-                                            self, other));
-            other.loseWillpower(this, stanceDominance, 0, false, " (SM Queen)");
-        } else if (getStance().time % 2 == 0 && getStance().time > 0) {
-            if (other.has(Trait.indomitable)) {
-                write(self, Formatter.format("{other:SUBJECT}, typically being the dominant one,"
-                                + "{other:action:are|is} simply refusing to acknowledge {self:name-possessive}"
-                                + " current dominance.", self, other));
-                stanceDominance = Math.max(1, stanceDominance - 3);
-            } else {
-                write(self, Formatter.format("{other:NAME-POSSESSIVE} compromising position takes a toll on {other:possessive} willpower.",
-                                            self, other));
+        if (getStance().time % dominanceTimer == 0 && getStance().time > 0) {
+            String dominanceFormat = self.getTraits().stream().filter(trait -> trait.baseTrait != null)
+                            .map(trait -> trait.baseTrait)
+                            .map(baseTrait -> baseTrait.dominanceFormat(this, self, other))
+                            .filter(format -> !format.equals("")).findFirst().orElse("");
+            if (dominanceFormat.equals("")) {
+                dominanceFormat = other.getTraits().stream().filter(trait -> trait.baseTrait != null)
+                                .map(trait -> trait.baseTrait)
+                                .map(baseTrait -> baseTrait.subDominanceFormat(this, other, self)).filter(format -> !format.equals("")).findFirst().orElse("");
+                if (other.has(Trait.indomitable)) {
+                    dominanceFormat = "{other:SUBJECT}, typically being the dominant one,{other:action:are|is} simply refusing to acknowledge {self:name-possessive} current dominance.";
+                    stanceDominance = Math.max(1, stanceDominance - 3);
+                }
+                if (dominanceFormat.equals("")) {
+                    dominanceFormat = "{other:NAME-POSSESSIVE} compromising position takes a toll on {other:possessive} willpower.";
+                }
             }
+            write(self, Formatter.format(dominanceFormat, self, other));
             other.loseWillpower(this, stanceDominance, 0, false, " (Dominance)");
         }
-        
+
         if (self.has(Trait.confidentdom) && Random.random(2) == 0) {
             Attribute attr;
             String desc;
