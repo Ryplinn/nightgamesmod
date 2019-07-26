@@ -455,6 +455,10 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public void pain(Combat c, Character other, int i, boolean primary, boolean physical) {
+        if (other != null) {
+            other.getTraits().stream().filter(trait -> trait.baseTrait != null).map(trait -> trait.baseTrait)
+                            .forEach(trait -> trait.onCausePain(c, other, this));
+        }
         int pain = i;
         int bonus = 0;
         if (is(Stsflag.rewired) && physical) {
@@ -522,14 +526,6 @@ public abstract class Character extends Observable implements Cloneable {
             } else {
                 calm(c, difference);
             }
-        }
-        if (other != null && other.has(Trait.sadist) && !is(Stsflag.masochism)) {
-            if (c != null) {
-                c.write("<br/>"+ Formatter.capitalizeFirstLetter(
-                                String.format("%s blows hits all the right spots and %s to some masochistic tendencies.",
-                                                other.nameOrPossessivePronoun(), subjectAction("awaken"))));
-            }
-            add(c, new Masochistic(this.getType()));
         }
         // if you are a masochist, arouse by pain up to the threshold.
         if (is(Stsflag.masochism) && physical) {
@@ -1331,6 +1327,7 @@ public abstract class Character extends Observable implements Cloneable {
         removelist.clear();
     }
 
+    // TODO: Methods hasStatus(Stsflag) and is(Stsflag) exist and are nearly identical.
     public boolean is(Stsflag sts) {
         if (statusFlags.contains(sts))
             return true;
@@ -2097,6 +2094,8 @@ public abstract class Character extends Observable implements Cloneable {
             cooldowns.remove(s);
         }
         handleInserted(c);
+        getTraits().stream().filter(trait -> trait.baseTrait != null).map(trait -> trait.baseTrait)
+                        .forEach(baseTrait -> baseTrait.endOfTurn(c, this, opponent));
         if (outfit.has(ClothingTrait.tentacleSuit)) {
             c.write(this, Formatter.format("The tentacle suit squirms against {self:name-possessive} body.", this,
                             opponent));
@@ -2311,14 +2310,8 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public void upkeep() {
-        getTraits().forEach(trait -> {
-            if (trait.statusFunction != null) {
-                Status newStatus = trait.statusFunction.apply(getType());
-                if (!has(newStatus)) {
-                    addNonCombat(newStatus);
-                }
-            }
-        });
+        if (has(Trait.lethargic))
+            new Lethargic(this.getType(), 999, .75);
         regen();
         tick(null);
         if (has(Trait.Confident)) {

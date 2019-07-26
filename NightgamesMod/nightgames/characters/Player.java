@@ -810,11 +810,6 @@ public class Player extends Character {
                             + ", you feel your body heat up. Something in her scent is making you extremely horny.");
             add(c, Pheromones.getWith(opponent, this, opponent.getPheromonePower(), 10));
         }
-        if (opponent.has(Trait.sadist) && !is(Stsflag.masochism)) {
-            c.write("<br/>"+ Formatter.capitalizeFirstLetter(
-                            String.format("%s seem to shudder in arousal at the thought of pain.", subject())));
-            add(c, new Masochistic(this.getType()));
-        }
         if (has(Trait.RawSexuality)) {
             c.write(this, Formatter.format("{self:NAME-POSSESSIVE} raw sexuality turns both of you on.", this, opponent));
             temptNoSkillNoSource(c, opponent, arousal.max() / 25);

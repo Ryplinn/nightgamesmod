@@ -2,6 +2,7 @@ package nightgames.characters.trait;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.requirements.Requirement;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -11,25 +12,21 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class TraitTree {
-    private interface TraitRequirement {
-        boolean meetsRequirement(Character self);
-    }
+import static nightgames.requirements.RequirementShortcuts.*;
 
-    public class RequirementXmlHandler extends DefaultHandler {
-        private HashMap<Trait, List<TraitRequirement>> requirements;
+public class TraitTree {
+
+    public static class RequirementXmlHandler extends DefaultHandler {
+        private HashMap<Trait, List<Requirement>> requirements;
         private String text;
         private String trait;
-        private List<TraitRequirement> reqs;
+        private List<Requirement> reqs;
         private Attribute att;
 
-        public HashMap<Trait, List<TraitRequirement>> getRequirements() {
+        public HashMap<Trait, List<Requirement>> getRequirements() {
             return requirements;
         }
 
@@ -64,30 +61,38 @@ public class TraitTree {
          * where the real stuff happens
          */
         @Override
-        public void endElement(String uri, String localName, String qName) throws SAXException {
+        public void endElement(String uri, String localName, String qName) {
             final String val = text;
-            if (qName.equals("Name")) {
-                trait = text;
-            } else if (qName.equals("Trait")) {
-                requirements.put(Trait.valueOf(trait), reqs);
-            } else if (qName.equals("LevelReq")) {
-                reqs.add(c -> c.getLevel() > Integer.valueOf(val.trim()));
-            } else if (qName.equals("TraitReq")) {
-                reqs.add(c -> c.has(Trait.valueOf(val.trim())));
-            } else if (qName.equals("NoTraitReq")) {
-                reqs.add(c -> !c.has(Trait.valueOf(val.trim())));
-            } else if (qName.equals("BreastsReq")) {
-                reqs.add(c -> c.body.getLargestBreasts().getSize() >= Integer.valueOf(val.trim()));
-            } else if (qName.equals("AttributeReq")) {
-                final Attribute attribute = att;
-                reqs.add(c -> c.getPure(attribute) > Integer.valueOf(val.trim()));
-            } else if (qName.equals("BodypartReq")) {
-                reqs.add(c -> c.body.has(val.trim()));
+            switch (qName) {
+                case "Name":
+                    trait = text;
+                    break;
+                case "Trait":
+                    requirements.put(Trait.valueOf(trait), reqs);
+                    break;
+                case "LevelReq":
+                    reqs.add(level(Integer.parseInt(val.trim())));
+                    break;
+                case "TraitReq":
+                    reqs.add(trait(Trait.valueOf(val.trim())));
+                    break;
+                case "NoTraitReq":
+                    reqs.add(noTrait(Trait.valueOf(val.trim())));
+                    break;
+                case "BreastsReq":
+                    reqs.add((c, self, other) -> self.body.getLargestBreasts().getSize() >= Integer.parseInt(val.trim()));
+                    break;
+                case "AttributeReq":
+                    reqs.add(attribute(att, Integer.parseInt(val.trim())));
+                    break;
+                case "BodypartReq":
+                    reqs.add(bodypart(val.trim()));
+                    break;
             }
         }
     }
 
-    private HashMap<Trait, List<TraitRequirement>> requirements;
+    private Map<Trait, List<Requirement>> requirements;
 
     public TraitTree(InputStream xml) {
         try {
@@ -101,11 +106,12 @@ public class TraitTree {
         }
     }
 
-    public boolean meetsRequirements(Character c, Trait t) {
-        return requirements.get(t).parallelStream().allMatch(req -> req.meetsRequirement(c));
+    private boolean meetsRequirements(Character self, Trait t) {
+        List<Requirement> reqs = t.baseTrait != null ? t.baseTrait.getRequirements() : requirements.get(t);
+        return reqs.parallelStream().allMatch(req -> req.meets(null, self, null));
     }
 
-    public List<Trait> availTraits(Character c) {
-        return requirements.keySet().stream().filter(key -> meetsRequirements(c, key)).collect(Collectors.toList());
+    List<Trait> availTraits(Character self) {
+        return requirements.keySet().stream().filter(trait -> meetsRequirements(self, trait)).collect(Collectors.toList());
     }
 }

@@ -270,9 +270,9 @@ public class Decider {
         for (WeightedSkill wskill : plist) {
             // Run it a couple of times
             double rating, raw_rating = 0;
-            if (wskill.skill.type(c, self) == Tactics.damage && self.has(Trait.sadist)) {
-                wskill.weight += 1.0;
-            }
+            self.getTraits().stream().filter(trait -> trait.baseTrait != null).map(trait -> trait.baseTrait)
+                            .map(baseTrait -> baseTrait.skillWeightMod(wskill.skill, c, self))
+                            .forEach(mod -> wskill.weight += mod);
             for (int j = 0; j < RUN_COUNT; j++) {
                 raw_rating += ratePetMove(self, wskill.skill, target, c, masterFit, otherFit);
             }
@@ -328,10 +328,9 @@ public class Decider {
         for (WeightedSkill wskill : plist) {
             // Run it a couple of times
             double rating, raw_rating = 0;
+            self.getTraits().stream().filter(trait -> trait.baseTrait != null).map(trait -> trait.baseTrait)
+                            .map(baseTrait -> baseTrait.skillWeightMod(wskill.skill, c, self)).forEach(mod -> wskill.weight += mod);
             if (wskill.skill.type(c, self) == Tactics.fucking && self.has(Trait.experienced)) {
-                wskill.weight += 1.0;
-            }
-            if (wskill.skill.type(c, self) == Tactics.damage && self.has(Trait.sadist)) {
                 wskill.weight += 1.0;
             }
             for (int j = 0; j < RUN_COUNT; j++) {

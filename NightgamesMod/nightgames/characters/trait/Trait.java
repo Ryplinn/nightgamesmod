@@ -1,23 +1,21 @@
 package nightgames.characters.trait;
 
 import nightgames.characters.Character;
-import nightgames.characters.CharacterType;
 import nightgames.global.Formatter;
 import nightgames.global.Random;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.items.clothing.ClothingTrait;
-import nightgames.status.*;
+import nightgames.status.Pheromones;
+import nightgames.status.Resistance;
+import nightgames.status.Stsflag;
 import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionSymptom;
 import nightgames.status.addiction.AddictionType;
 
 import java.util.*;
-import java.util.function.Function;
 
 public enum Trait {
-    sadist("Sadist", "Skilled at providing pleasure alongside pain",
-                    (b, c, t) -> b.append(Formatter.capitalizeFirstLetter(
-                                    String.format("%s sneers in an unsettling way.", c.subject())))),
+    sadist(new Sadist()),
     bitingwords("Biting Words", "Knows how to rub salt in the wound."),
     smqueen("SM Queen", "A natural dom."),
 
@@ -85,13 +83,15 @@ public enum Trait {
     desensitized("Desensitized", "Sex is old hat now"), // Reyka Sex perk slight
                                                         // pleasure reduction
     desensitized2("Desensitized 2", "Only the strongest stimulation gets you off"),
-    RawSexuality("Raw Sexuality", "Constant lust boost for you and your opponent in battle", (b, c, t) -> {
-        if (c.human()) {
+    RawSexuality("Raw Sexuality", "Constant lust boost for you and your opponent in battle", self -> {
+        StringBuilder b = new StringBuilder();
+        if (self.human()) {
             b.append("You exude");
         } else {
-            b.append(c.getName()).append(" exudes");
+            b.append(self.getName()).append(" exudes");
         }
         b.append(" an aura of pure eros, making both of you flush with excitement.");
+        return b.toString();
     }), // Eve
     affectionate("Affectionate", "Increased affection gain from draws"), // Kat
                                                                          // Sex
@@ -106,18 +106,20 @@ public enum Trait {
 
     // Passive Skills
     exhibitionist("Exhibitionist", "More effective without any clothes"), // Passively
-                                                                          // builds
-                                                                          // mojo
-                                                                          // while
-                                                                          // nude
-    pheromones("Pheromones", "Scent can drive people wild", (b, c, t) -> {
+    // builds
+    // mojo
+    // while
+    // nude
+    pheromones("Pheromones", "Scent can drive people wild", self -> {
+        StringBuilder b = new StringBuilder();
         b.append("A primal musk surrounds ");
-        if (c.human()) {
+        if (self.human()) {
             b.append("your");
         } else {
-            b.append(c.getName()).append("'s");
+            b.append(self.getName()).append("'s");
         }
         b.append(" body.");
+        return b.toString();
     }), // causes horny in opponents if aroused
     augmentedPheromones("Augmented Pheromones", "Artificially enhanced pheromones", null, pheromones),
 
@@ -133,17 +135,19 @@ public enum Trait {
     addictivefluids("Addictive Fluids", "Addictive bodily fluids"), // opponents can only use oral skills if available
     temptingtits("Tempting Tits", "Perfectly shaped and oh-so-tempting."),
     beguilingbreasts("Beguiling Breasts", "Glamourous breasts can put you in trance"), // the first time in a fight that you see bare breasts you are entranced
-    lactating("Lactating", "Breasts produces milk", (b, c, t) -> {
-        if (!c.human()) {
-            if (c.breastsAvailable()) {
+    lactating("Lactating", "Breasts produces milk", self -> {
+        StringBuilder b = new StringBuilder();
+        if (!self.human()) {
+            if (self.breastsAvailable()) {
                 b.append("You occasionally see milk dribbling down her breasts. Is she lactating?");
             } else {
                 b.append("You notice a damp spot on her ")
-                                .append(c.getOutfit().getTopOfSlot(ClothingSlot.top).getName()).append(".");
+                                .append(self.getOutfit().getTopOfSlot(ClothingSlot.top).getName()).append(".");
             }
         } else {
             b.append("Your nipples ache from the milk building up in your mammaries.");
         }
+        return b.toString();
     }),
     sedativecream("Sedative Cream", "Lactate that weakens the drinker"), // the first time in a fight that you see bare breasts you are entranced
     PheromonedMilk("Pheromoned Milk", "Milk can cause drinker to go into heat"),
@@ -170,7 +174,7 @@ public enum Trait {
 
     energydrain("Energy Drain", "Drains energy during intercourse"),
     objectOfWorship("Object Of Worship", "Opponents is periodically forced to worship your body.",
-                    (b, c, t) -> b.append("A divine aura surrounds ").append(c.nameDirectObject()).append(".")),
+                    self -> "A divine aura surrounds " + self.nameDirectObject() + "."),
     spiritphage("Semenphage", "Feeds on semen"),
     erophage("Erophage", "Feeds on sexuality"),
     tight("Tight", "Powerful musculature and exquisite tightness makes for quick orgasms."),
@@ -245,7 +249,7 @@ public enum Trait {
     pussywhipped("Pussy Whipped", "Loves pussy far more than is healthy, always have a pussy fetish."), // Starts off each match with a pussy fetish
     cockcraver("Cock Craver", "Constantly thinking about cocks, always has a cock fetish."), // Starts off each match with a cock fetish
     immobile("Immobile", "Unable to move."), // Cannot move
-    lethargic("Lethargic", "Very low mojo gain from normal methods.", (weakChar) -> new Lethargic(weakChar, 999, .75)), // 25% mojo gain
+    lethargic("Lethargic", "Very low mojo gain from normal methods."),// 25% mojo gain
     hairtrigger("Hair Trigger", "Very quick to shoot. Not for beginners."),
     buttslut("Buttslut", "Extremely weak to anal pleasure."),
     obedient("Obedient", "Easy to order around."),
@@ -257,11 +261,14 @@ public enum Trait {
     undisciplined("Undisciplined", "Lover, not a fighter"), // restricts manuever, focus, armbar
     direct("Direct", "Patience is overrated"), // restricts whisper, dissolving trap, aphrodisiac trap, decoy, strip tease
 
-    shy("Shy", "Seldom prone to shameless displays", (b, c, t) -> {
-        if (c.human())
+    shy("Shy", "Seldom prone to shameless displays", c -> {
+        StringBuilder b = new StringBuilder();
+        if (c.human()) {
             b.append("You shy away from your opponent's gaze.");
-        else
+        } else {
             b.append(c.subject()).append(" quickly avoids your gaze.");
+        }
+        return b.toString();
     }), // restricts striptease, flick, facesit, taunt, squeeze
 
     // Class
@@ -342,7 +349,8 @@ public enum Trait {
     powerfulhips("Powerful Hips", "Can grind from submissive positions"),
     strongwilled("Strong Willed", "Lowers willpower loss from orgasms"),
     nymphomania("Nymphomania", "Restores willpower upon orgasm"),
-    alwaysready("Always Ready", "Always ready for penetration", (b, c, t) -> {
+    alwaysready("Always Ready", "Always ready for penetration", c -> {
+        StringBuilder b = new StringBuilder();
         if (c.hasPussy() && c.crotchAvailable()) {
             b.append("Juices constainly drool from ");
             if (c.human()) {
@@ -351,6 +359,7 @@ public enum Trait {
                 b.append(c.nameOrPossessivePronoun()).append(" slobbering pussy.");
             }
         }
+        return b.toString();
     }),
     revered("Revered", "Higher chance of worship"),
     cautious("Cautious", "Better chance of avoiding traps"),
@@ -360,9 +369,7 @@ public enum Trait {
     // Kat's traits
     // Speed Focus
     NimbleRecovery("Nimble Recovery", "Recovers from knockdowns faster"),
-    FeralAgility("Feral Agility", "Extra cunning, evade and counter chance", (b, c, t) -> {
-        b.append(Formatter.format("It's hard to follow {self:name-possessive} erratic movement with the eyes.", c, c));
-    }),
+    FeralAgility("Feral Agility", "Extra cunning, evade and counter chance", c -> Formatter.format("It's hard to follow {self:name-possessive} erratic movement with the eyes.", c, c)),
     CrossCounter("Cross Counter", "Chance to counter your opponent's counters"),
     Catwalk("Catwalk", "Sexy walk, alluring when moving"),
     // Power Focus
@@ -375,8 +382,7 @@ public enum Trait {
     FrenzyScent("Frenzy Scent", "Chance to become frenzied when affected by pheromones"),
     FastDiffusion("Fast Diffusion", "Bonus to pheromone power when far away."),
     PiercingOdor("Piercing Odor", "Pheromones are strong enough to overcome the calm."),
-    ComplexAroma("Complex Aroma", "Pheromones can stack more times.", (b, c, t) ->
-        b.append(Formatter.format("A complex aroma lingers in the air.", c, c))),
+    ComplexAroma("Complex Aroma", "Pheromones can stack more times.", c -> Formatter.format("A complex aroma lingers in the air.", c, c)),
 
     // Frenzy Focus
     Rut("Rut", "Chance to go into a frenzy when over half arousal."),
@@ -479,12 +485,14 @@ public enum Trait {
     stronghold("Strong Hold", "Harder to escape Arm/Leg Locks"),
 
     // Item
-    strapped("Strapped", "Penis envy", (b, c, t) -> {
+    strapped("Strapped", "Penis envy", c -> {
+        StringBuilder b = new StringBuilder();
         if (c.human()) {
             b.append("A large black strap-on dildo adorns your waist.");
         } else {
-            b.append("A large black strap-on dildo adorns ").append(c.nameOrPossessivePronoun()).append(" waists.");
+            b.append("A large black strap-on dildo adorns ").append(c.nameOrPossessivePronoun()).append(" waist.");
         }
+        return b.toString();
     }), // currently wearing a strapon
 
     event("event", "special character"),
@@ -505,7 +513,7 @@ public enum Trait {
     private TraitDescription longDesc;
     private String name;
     public Trait parent;
-    public Function<CharacterType, Status> statusFunction;
+    public BaseTrait baseTrait;
 
     public static void buildFeatPool() {
         featPool = new HashSet<>();
@@ -549,11 +557,13 @@ public enum Trait {
         this.parent = parent;
     }
 
-    Trait(String name, String description, Function<CharacterType, Status> statusFunction) {
-        this.name = name;
-        desc = description;
-        this.statusFunction = statusFunction;
+    Trait(BaseTrait baseTrait) {
+        this.name = baseTrait.name;
+        this.desc = baseTrait.description;
+        this.longDesc = baseTrait::describe;
+        this.baseTrait = baseTrait;
     }
+
 
     public boolean isFeat() {
         return compareTo(sprinter) >= 0 && compareTo(strapped) < 0;
@@ -561,7 +571,7 @@ public enum Trait {
 
     public void describe(Character c, StringBuilder b) {
         if (longDesc != null) {
-            longDesc.describe(b, c, this);
+            b.append(longDesc.describe(c));
             b.append(' ');
         }
     }
@@ -683,6 +693,6 @@ public enum Trait {
     }
 
     public interface TraitDescription {
-        void describe(StringBuilder b, Character c, Trait t);
+        String describe(Character c);
     }
 }

@@ -21,14 +21,6 @@
 		</Requirements>
 	</Trait>
 	<Trait>
-		<Name>sadist</Name>
-		<Requirements>
-			<AttributeReq type="Fetish">25</AttributeReq>
-			<LevelReq>25</LevelReq>
-			<TraitReq>asshandler</TraitReq>
-		</Requirements>
-	</Trait>
-	<Trait>
 		<Name>asshandler</Name>
 		<Requirements>
 			<AttributeReq type="Fetish">20</AttributeReq>
