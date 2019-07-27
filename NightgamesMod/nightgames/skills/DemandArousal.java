@@ -34,7 +34,7 @@ public class DemandArousal extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Addiction addict = target.getAddiction(AddictionType.MIND_CONTROL, user)
                         .orElseThrow(() -> new SkillUnusableException(new SkillUsage<>(this, user, target)));
         int dmg = (int) ((20 + Random.randomdouble() * 20) * addict.activeTracker()

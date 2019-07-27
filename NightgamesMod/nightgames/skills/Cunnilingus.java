@@ -46,7 +46,7 @@ public class Cunnilingus extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Result results = Result.normal;
         boolean facesitting = c.getStance().isBeingFaceSatBy(user, target);
         int m = 10 + Random.random(8);
@@ -54,7 +54,7 @@ public class Cunnilingus extends Skill {
             m += 4;
         }
         int i = 0;
-        if (!facesitting && c.getStance().mobile(target) && !target.roll(user, accuracy(c, user, target))) {
+        if (!facesitting && c.getStance().mobile(target) && !rollSucceeded) {
             results = Result.miss;
         } else {
             if (target.has(Trait.enthrallingjuices) && Random.random(4) == 0 && !target.wary()) {
@@ -94,7 +94,7 @@ public class Cunnilingus extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return !c.getStance().isBeingFaceSatBy(user, target) && c.getStance().reachTop(target)? 75 : 200;
     }
 

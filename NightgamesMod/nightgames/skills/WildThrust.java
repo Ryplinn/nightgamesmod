@@ -33,8 +33,8 @@ public class WildThrust extends Thrust {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        boolean effective = super.resolve(c, user, target);
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        boolean effective = super.resolve(c, user, target, rollSucceeded);
         if (effective && c.getStance().sub(user) && user.has(Trait.Untamed) && Random.random(4) == 0 ) {
             c.write(user, Formatter.format("{self:SUBJECT-ACTION:fuck|fucks} {other:name-do} with such abandon that it leaves {other:direct-object} "
                             + "momentarily dazed. {self:SUBJECT-ACTION:do|does} not let this chance slip and {self:action:rotate|rotates} {self:possessive} body so that {self:pronoun-action:are|is} on top!", user, target));

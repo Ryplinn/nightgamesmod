@@ -25,7 +25,7 @@ public class Tempt extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         double m = 4 + Random.random(4);
 

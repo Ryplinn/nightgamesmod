@@ -43,7 +43,7 @@ public class FootPump extends Skill {
         return 5;
     }
 
-    @Override public boolean resolve(Combat c, Character user, Character target) {
+    @Override public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int m = 12 + Random.random(6);
         int m2 = m / 2;
         writeOutput(c, Result.normal, user, target);

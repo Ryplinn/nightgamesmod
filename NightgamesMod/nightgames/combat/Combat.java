@@ -588,7 +588,7 @@ public class Combat extends Observable implements Cloneable {
                                     Formatter.format("Sensing a moment of distraction, you use the power in your voice to force {self:subject} to your will.",
                                                     other, self));
                 }
-                (new Command()).resolve(this, self, other);
+                (new Command()).resolve(this, self, other, true);
                 int cooldown = Math.max(1, 6 - (self.getLevel() - other.getLevel() / 5));
                 getCombatantData(self).setIntegerFlag("enchantingvoice-count", -cooldown);
             } else {
@@ -678,7 +678,7 @@ public class Combat extends Observable implements Cloneable {
                     if (getCombatantData(drainer).getIntegerFlag("level_drain_thrusts") < 10) {
                         Skill thrustSkill = getStance().en == Stance.trib ? new PussyGrind() :
                                         Random.pickRandomGuaranteed(Arrays.asList(new Thrust(), new Grind(), new Piston()));
-                        thrustSkill.resolve(this, drainer, drained);
+                        thrustSkill.resolve(this, drainer, drained, true);
                         write("<br/>");
                         getCombatantData(drainer).increaseIntegerFlag("level_drain_thrusts", 1);
                     } else {
@@ -1476,7 +1476,7 @@ public class Combat extends Observable implements Cloneable {
             if (initiator != null && initiator.isPet() && newStance.top == initiator.getType()) {
                 PetInitiatedThreesome threesomeSkill = new PetInitiatedThreesome();
                 if (newStance.havingSex(this)) {
-                    threesomeSkill.resolve(this, initiator, newStance.getBottom());
+                    threesomeSkill.resolve(this, initiator, newStance.getBottom(), true);
                 } else if (!getStance().sub(newStance.getBottom())) {
                     write(initiator, Formatter.format("{self:SUBJECT-ACTION:take|takes} the chance to send {other:name-do} sprawling to the ground", initiator, newStance.getBottom()));
                     newStance.getBottom().add(this, new Falling(newStance.bottom));

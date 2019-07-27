@@ -61,7 +61,7 @@ public class LevelDrain extends Drain {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int type = Random.centeredrandom(2, user.getAttribute(Attribute.darkness) / 20.0f, 2);
         writeOutput(c, type, Result.normal, user, target);
         switch (type) {

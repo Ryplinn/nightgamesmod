@@ -38,7 +38,7 @@ public class Substitute extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (user.human()) {
             c.write(user, String.format("By the time %s realizes %s's pinning a dummy, you're already behind %s.",
                             target.getName(), target.pronoun(), target.directObject()));

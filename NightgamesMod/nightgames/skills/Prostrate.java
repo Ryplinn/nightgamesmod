@@ -35,7 +35,7 @@ public class Prostrate extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         c.write(user, "You kneel and bend forward in front of Angel, touching your forehead to the ground."
                         + " You say nothing, wordlessly offering yourself to whatever She wants for you.");
         if (!target.hasDick() || Random.random(2) == 0) {

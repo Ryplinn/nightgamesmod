@@ -40,7 +40,7 @@ public class PussyGrind extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         BodyPart selfO = getSelfOrgan(user);
         BodyPart targetO = getTargetOrgan(target);
         writeOutput(c, Result.normal, user, target);

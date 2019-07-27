@@ -38,7 +38,7 @@ public class StunBlast extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (target.has(Trait.conducivetoy) && target.has(ClothingTrait.harpoonDildo) || 
                                         target.has(ClothingTrait.harpoonOnahole)) { 
             writeOutput(c, Result.special, user, target);

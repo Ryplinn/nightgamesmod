@@ -70,7 +70,7 @@ public class Masturbate extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         BodyPart withO = getSelfOrgan(user);
         targetO = getTargetOrgan(c, user, user);
 

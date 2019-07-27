@@ -36,7 +36,7 @@ public class CustomSkill extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         return true;
     }
 
@@ -61,7 +61,7 @@ public class CustomSkill extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return data.accuracy;
     }
 

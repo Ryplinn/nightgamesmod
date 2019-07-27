@@ -48,7 +48,7 @@ public class FairyFem extends Pet {
                                 + "violently and sprays liquid from the tip until the entire creature is a puddle on the floor.");
                 break;
             default:
-                (new FairyTease()).resolve(c, getSelf(), opponent.getSelf());
+                (new FairyTease()).resolve(c, getSelf(), opponent.getSelf(), true);
                 return;
         }
         c.removePet(opponent.getSelf());

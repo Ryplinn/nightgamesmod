@@ -29,14 +29,14 @@ public class LickNipples extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return c.getStance().en != Stance.neutral ? 200 : 70;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int m = 3 + Random.random(6);
-        if (target.roll(user, accuracy(c, user, target))) {
+        if (rollSucceeded) {
             writeOutput(c, Result.normal, user, target);
             if (user.has(Trait.silvertongue)) {
                 m += 4;

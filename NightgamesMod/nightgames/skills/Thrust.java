@@ -105,7 +105,7 @@ public class Thrust extends Skill {
 
     // FIXME: During sims characters with no insertables keep trying to thrust
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         BodyPart selfO = getSelfOrgan(c, user, target);
         BodyPart targetO = getTargetOrgan(c, user, target);
         if (selfO == null || targetO == null) {

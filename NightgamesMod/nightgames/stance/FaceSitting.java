@@ -234,9 +234,9 @@ public class FaceSitting extends Position {
                             struggler.directObject(), getTop().directObject()));
         }
         if (getTop().hasPussy() && !getTop().has(Trait.temptingass)) {
-            new Cunnilingus().resolve(c, struggler, getTop());
+            new Cunnilingus().resolve(c, struggler, getTop(), true);
         } else {
-            new Anilingus().resolve(c, struggler, getTop());
+            new Anilingus().resolve(c, struggler, getTop(), true);
         }
     }
 

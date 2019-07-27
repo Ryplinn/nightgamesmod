@@ -27,7 +27,7 @@ public class Obey extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (user.human()) {
             String controller = target.useFemalePronouns() ? "mistress'" : "master's";
             c.write(user, "You patiently await your "+controller+" command.");
@@ -35,9 +35,9 @@ public class Obey extends Skill {
             c.write(user, user.getName() + " stares ahead blankly, waiting for "+user.possessiveAdjective()+" orders.");
         }
         if (user.human()) {
-            (new Command()).resolve(c, user, user);
+            (new Command()).resolve(c, user, user, true);
         } else {
-            (new Masturbate()).resolve(c, user, target);
+            (new Masturbate()).resolve(c, user, target, true);
         }
         return true;
     }

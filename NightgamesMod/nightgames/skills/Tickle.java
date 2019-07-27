@@ -12,7 +12,6 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.damage.DamageType;
 import nightgames.skills.damage.Staleness;
 import nightgames.status.Hypersensitive;
-import nightgames.status.Winded;
 
 public class Tickle extends Skill {
     public Tickle() {
@@ -34,14 +33,14 @@ public class Tickle extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return 90;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         DamageType type = DamageType.technique;
-        if (user.has(Trait.ticklemonster) || target.roll(user, accuracy(c, user, target))) {
+        if (rollSucceeded) {
             if (target.crotchAvailable() && c.getStance().reachBottom(user) && !c.getStance().havingSex(c)) {
                 int bonus = 0;
                 int weak = 0;
@@ -60,14 +59,6 @@ public class Tickle extends Skill {
                     type = DamageType.gadgets;
                 }
                 writeOutput(c, result, user, target);
-                if (user.has(Trait.ticklemonster) && target.mostlyNude()) {
-                    writeOutput(c, Result.special, user, target);
-                    bonus += 5 + Random.random(4);
-                    weak += 3 + Random.random(4);
-                    if (Random.random(4) == 0) {
-                        target.add(c, new Winded(target.getType(), 1));
-                    }
-                }
                 if (result == Result.special) {
                     target.add(c, new Hypersensitive(target.getType(), 5));
                 }
@@ -77,9 +68,10 @@ public class Tickle extends Skill {
                                     "{other:SUBJECT-ACTION:squirm|squirms} uncontrollably from {self:name-possessive} actions. Yup, definitely ticklish.",
                                     user, target));
                 }
+                SkillUsage usage = new SkillUsage<>(this, user, target);
                 target.body.pleasure(user, user.body.getRandom("hands"), target.body.getRandom("skin"),
-                                (int) type.modifyDamage(user, target, 2 + Random.random(4)), bonus, c, false, new SkillUsage<>(this, user, target));
-                target.weaken(c, (int) type.modifyDamage(user, target, weak + Random.random(10, 15)));
+                                (int) type.modifyDamage(user, target, 2 + Random.random(4)), bonus, c, false, usage);
+                target.weaken(c, (int) type.modifyDamage(user, target, weak + Random.random(10, 15)), usage);
             } else if (hasTickler(user) && Random.random(2) == 1) {
                 type = DamageType.gadgets;
                 int bonus = 0;

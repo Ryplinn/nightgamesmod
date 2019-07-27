@@ -42,7 +42,7 @@ public class ShrinkRay extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.consume(Item.Battery, 2);
         boolean permanent = Random.random(20) == 0 && (user.human() || target.human())
                         && !target.has(Trait.stableform);

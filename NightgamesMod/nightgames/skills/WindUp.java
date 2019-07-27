@@ -46,7 +46,7 @@ public class WindUp extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int charges = Math.min(4, user.getMojo()
                                            .get()
                         / 5);

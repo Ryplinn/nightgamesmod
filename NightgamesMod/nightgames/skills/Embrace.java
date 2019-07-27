@@ -55,7 +55,7 @@ public class Embrace extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
 
         Position pos = c.getStance();
         Position next;

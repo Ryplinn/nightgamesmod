@@ -41,7 +41,7 @@ public class Dominate extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.arouse((int) (user.getArousal().max() * .30), c);
         writeOutput(c, Result.normal, user, target);
         c.setStance(new StandingOver(user.getType(), target.getType()), target, false);

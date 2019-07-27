@@ -25,18 +25,18 @@ public class Sedate extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return user.has(Item.Aersolizer) ? 200 : 65;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.consume(Item.Sedative, 1);
         if (user.has(Item.Aersolizer)) {
             writeOutput(c, Result.special, user, target);
             target.weaken(c, (int) DamageType.biological.modifyDamage(user, target, 50));
             target.loseMojo(c, (int) DamageType.biological.modifyDamage(user, target, 35));
-        } else if (target.roll(user, accuracy(c, user, target))) {
+        } else if (rollSucceeded) {
             writeOutput(c, Result.normal, user, target);
             target.weaken(c, (int) DamageType.biological.modifyDamage(user, target, 50));
             target.loseMojo(c, (int) DamageType.biological.modifyDamage(user, target, 35));

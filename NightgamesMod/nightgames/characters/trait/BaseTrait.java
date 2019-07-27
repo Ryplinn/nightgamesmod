@@ -101,4 +101,16 @@ public abstract class BaseTrait {
     public String subDominanceFormat(Combat c, Character self, Character other) {
         return "";
     }
+
+    public int modAccuracy(Combat c, Character user, Character target, Skill skill) {
+        return 0;
+    }
+
+    public int modPleasureDealt(Combat c, Character dealer, Character target, Skill skill) {
+        return 0;
+    }
+
+    public int modWeakenDealt(Combat c, Character dealer, Character target, Skill skill) {
+        return 0;
+    }
 }

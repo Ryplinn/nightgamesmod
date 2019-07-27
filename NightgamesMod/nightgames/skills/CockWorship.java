@@ -40,7 +40,7 @@ public class CockWorship extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int m = 10 + Random.random(8);
         if (user.has(Trait.silvertongue)) {
             m += 4;
@@ -72,7 +72,7 @@ public class CockWorship extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return 150;
     }
 

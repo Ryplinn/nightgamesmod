@@ -39,7 +39,7 @@ public class DarkKiss extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         assert user.human();
         c.write(user, String.format("You lean in and plant an intense kiss on %s lips. The corruption which Reyka"
                         + " has imbued you with stirs, and greedily draws %s willpower in through your connection, growing"

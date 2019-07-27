@@ -37,7 +37,7 @@ public class ComeHither extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
 
         boolean selfMounts = (!user.hasPussy() && user.hasDick())
                              || target.getAttribute(Attribute.submission) > Random.random(30);
@@ -52,7 +52,7 @@ public class ComeHither extends Skill {
                 target.add(c, new WingWrapped(target.getType(), user.getType()));
             }
         }
-        new Kiss().resolve(c, user, target);
+        new Kiss().resolve(c, user, target, true);
         
         return true;
     }

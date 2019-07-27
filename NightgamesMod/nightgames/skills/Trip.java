@@ -30,8 +30,8 @@ public class Trip extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        if (target.roll(user, accuracy(c, user, target))) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        if (rollSucceeded) {
             if (isSlime(user)) {
                 writeOutput(c, Result.special, user, target);
                 if (user.has(Trait.VolatileSubstrate)) {
@@ -68,7 +68,7 @@ public class Trip extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         double cunningDifference = user.getAttribute(Attribute.cunning) - c.getOpponent(user)
                                                                        .getAttribute(Attribute.cunning);
         double accuracy = 2.5f * cunningDifference + 75 - target.knockdownDC();

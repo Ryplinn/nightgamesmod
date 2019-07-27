@@ -55,8 +55,8 @@ public class LaunchHarpoon extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        if (!target.canAct() || c.getStance().sub(target) || target.roll(user, accuracy(c, user, target))) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        if (!target.canAct() || c.getStance().sub(target) || rollSucceeded) {
             String aim;
             if (!target.canAct()) {
                 aim = "With {other:subject} unable to do anything to evade it, when"
@@ -104,7 +104,7 @@ public class LaunchHarpoon extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         int acc = 80;
         if (user.has(Trait.yank)) {
             acc += 4;

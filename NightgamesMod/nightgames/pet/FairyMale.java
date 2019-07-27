@@ -44,7 +44,7 @@ public class FairyMale extends Pet {
                                 + "only shudder once before going still.");
                 break;
             default:
-                (new FairyTease()).resolve(c, getSelf(), opponent.getSelf());
+                (new FairyTease()).resolve(c, getSelf(), opponent.getSelf(), true);
                 return;
         }
         c.removePet(opponent.getSelf());

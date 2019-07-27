@@ -37,7 +37,7 @@ public class ImaginaryBonds extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         target.add(c, new Bound(target.getType(), 45 + 5 * Math.sqrt(user.getAttribute(Attribute.hypnotism)), "imaginary bindings"));
         target.emote(Emotion.nervous, 5);

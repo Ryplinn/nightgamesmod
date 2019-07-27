@@ -32,7 +32,7 @@ public class Defabricator extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.consume(Item.Battery, 8);
         writeOutput(c, Result.normal, user, target);
         if (user.human() || c.isBeingObserved())

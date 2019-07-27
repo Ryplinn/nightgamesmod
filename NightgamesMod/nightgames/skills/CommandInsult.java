@@ -21,7 +21,7 @@ public class CommandInsult extends PlayerCommand {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         target.loseMojo(c, 15);
         c.write(user, deal(c, 0, Result.normal, user, target));
         return true;

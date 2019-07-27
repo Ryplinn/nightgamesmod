@@ -33,7 +33,7 @@ public class RemoveBomb extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Optional<String> compulsion = Compulsive.describe(c, user, Situation.PREVENT_REMOVE_BOMB);
         if (compulsion.isPresent() && Random.random(100) < 40) {
             c.write(user, compulsion.get());

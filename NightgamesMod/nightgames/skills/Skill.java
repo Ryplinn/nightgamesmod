@@ -119,7 +119,7 @@ public abstract class Skill {
 
     public abstract String describe(Combat c, Character user);
 
-    public abstract boolean resolve(Combat c, Character user, Character target);
+    public abstract boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded);
 
     public abstract Tactics type(Combat c, Character user);
 
@@ -135,7 +135,7 @@ public abstract class Skill {
         return 0.0f;
     }
 
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return 200;
     }
 
@@ -179,6 +179,11 @@ public abstract class Skill {
         return false;
     }
 
+    public final int accuracy(Combat c, Character user, Character target) {
+        return this.baseAccuracy(c, user, target) + user.getTraits().stream().filter(trait -> trait.baseTrait != null)
+                        .mapToInt(trait -> trait.baseTrait.modAccuracy(c, user, target, this)).sum();
+    }
+
     public static boolean resolve(Skill skill, Combat c, Character user, Character target) {
         user.addCooldown(skill);
         // save the mojo built of the skill before resolving it (or the status
@@ -199,7 +204,7 @@ public abstract class Skill {
             }
         }
 
-        boolean success = skill.resolve(c, user, target);
+        boolean success = skill.resolve(c, user, target, target.roll(user, skill.accuracy(c, user, target)));
         user.getTraits().stream().filter(trait -> trait.baseTrait != null).map(trait -> trait.baseTrait)
                         .forEach(baseTrait -> baseTrait.onSkillUse(skill, c, user, target));
         user.spendMojo(c, skill.getMojoCost(c, user));
@@ -218,7 +223,7 @@ public abstract class Skill {
         return success;
     }
 
-    Optional<Status> statusCheck(Status possible, Combat c, Character user, Character target, double baseChance) {
+    public Optional<Status> statusCheck(Status possible, Combat c, Character user, Character target, double baseChance) {
         double chance = baseChance * (1 + user.getTraits().stream().filter(trait -> trait.baseTrait != null)
                         .map(trait -> trait.baseTrait)
                         .mapToDouble(baseTrait -> baseTrait.statusChanceMultiplier(this, c, user, target, possible))
@@ -254,7 +259,7 @@ public abstract class Skill {
         return getStage().multiplierFor(target);
     }
     
-    protected void writeOutput(Combat c, Result result, Character user, Character target) {
+    public void writeOutput(Combat c, Result result, Character user, Character target) {
         writeOutput(c, 0, result, user, target);
     }
     

@@ -130,7 +130,7 @@ public class Fuck extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         String premessage = premessage(c, user, target);
         int m = Random.random(10, 15);
         BodyPart selfO = getSelfOrgan(user);
@@ -145,7 +145,7 @@ public class Fuck extends Skill {
                                 + " {self:pronoun-action:shift|shifts} to the tantalizing hole next door,"
                                 + " and {self:action:sink|sinks} the hard rod into {other:name-possessive}"
                                 + " hot ass instead.<br/>", user, target, premessage));
-                new AssFuck().resolve(c, user, target);
+                new AssFuck().resolve(c, user, target, true);
                 
                 return true;
             }

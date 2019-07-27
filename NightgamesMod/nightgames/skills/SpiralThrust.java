@@ -53,8 +53,8 @@ public class SpiralThrust extends Thrust {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        boolean res = super.resolve(c, user, target);
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        boolean res = super.resolve(c, user, target, rollSucceeded);
         if (res) {
             user.add(c, new Lethargic(user.getType(), 30, .75));
         }

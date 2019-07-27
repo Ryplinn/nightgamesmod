@@ -26,7 +26,7 @@ public class ConcedePosition extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         c.setStance(c.getStance().reverse(c, false));
         return true;

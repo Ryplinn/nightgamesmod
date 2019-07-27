@@ -50,7 +50,7 @@ public class ToggleBlindfold extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (!user.is(Stsflag.blinded)) {
             user.remove(Item.Blindfold);
             if (!c.getStance()

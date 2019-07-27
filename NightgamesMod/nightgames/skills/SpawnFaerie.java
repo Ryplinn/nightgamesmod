@@ -40,7 +40,7 @@ public class SpawnFaerie extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int power = 5 + user.getAttribute(Attribute.spellcasting);
         int ac = 4 + user.getAttribute(Attribute.spellcasting) / 10;
         if (user.human()) {

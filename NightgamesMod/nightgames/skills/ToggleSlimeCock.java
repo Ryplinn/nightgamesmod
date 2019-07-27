@@ -48,7 +48,7 @@ public class ToggleSlimeCock extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         String msg = "{self:SUBJECT-ACTION:close|closes} {self:possessive} eyes and ";
         if (hasSlimeCock(user)) {
             if (user.human() || user.crotchAvailable()) {

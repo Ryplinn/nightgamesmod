@@ -51,12 +51,12 @@ public class BunshinAssault extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return 25 + user.getAttribute(Attribute.speed) * 5;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int clones = numberOfClones(user);
         Result r;
         if(user.human()){
@@ -67,7 +67,7 @@ public class BunshinAssault extends Skill {
                             target.subjectAction("see"),clones,user.pronoun(),target.reflectivePronoun()));
         }
         for(int i=0;i<clones;i++){
-            if(target.roll(user, accuracy(c, user, target))) {
+            if(rollSucceeded) {
                 switch(Random.random(4)){
                 case 0:
                     r=Result.weak;

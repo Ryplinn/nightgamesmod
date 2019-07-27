@@ -29,7 +29,7 @@ public class ShakeOff extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         user.add(c, new Slimed(user.getType(), target.getType(), -10));
         return true;

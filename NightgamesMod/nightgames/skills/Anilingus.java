@@ -58,7 +58,7 @@ public class Anilingus extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         AssPart targetAss = (AssPart) target.body.getRandom("ass");
         Result result = Result.normal;
         int m = 10;
@@ -73,7 +73,7 @@ public class Anilingus extends Skill {
             result = Result.reverse;
             m += Random.random(6);
             n = 10;
-        } else if (!c.getStance().mobile(target) || target.roll(user, accuracy(c, user, target))) {
+        } else if (!c.getStance().mobile(target) || rollSucceeded) {
             m += Random.random(6);
             if (user.has(Trait.silvertongue)) {
                 m += 4;
@@ -96,7 +96,7 @@ public class Anilingus extends Skill {
         }
         if (target.has(Trait.temptingass) && !user.bound()) {
             c.write(target, Formatter.format("Servicing {other:possessive} perfect behind makes {self:direct-object} almost unconsciously touch {self:reflective}.", user, target));
-            (new Masturbate()).resolve(c, user, target);
+            (new Masturbate()).resolve(c, user, target, true);
         }
         return result != Result.miss;
     }
@@ -107,7 +107,7 @@ public class Anilingus extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return !c.getStance().isBeingFaceSatBy(user, target) && c.getStance().reachTop(target)? 75 : 200;
     }
 

@@ -30,7 +30,7 @@ public class Taunt extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         double m = (6 + Random.random(4) + user.body.getHotness(target)) / 3
                         * Math.min(2, 1 + target.getExposure());

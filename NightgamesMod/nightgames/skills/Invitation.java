@@ -126,7 +126,7 @@ public class Invitation extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int difficulty = target.getLevel() - target.getArousal().get() * 10 / target.getArousal().max()
                         + target.getAttribute(Attribute.seduction);
         int strength = user.getLevel() + user.getAttribute(Attribute.seduction)
@@ -155,7 +155,7 @@ public class Invitation extends Skill {
             } else {
                 target.add(c, new ArmLocked(target.getType(), 4 * user.getAttribute(Attribute.power)));
             }
-            new Thrust().resolve(c, target, user);
+            new Thrust().resolve(c, target, user, true);
             if (hasDivinity(user)) {
                 user.usedAttribute(Attribute.divinity, c, .5);
             }

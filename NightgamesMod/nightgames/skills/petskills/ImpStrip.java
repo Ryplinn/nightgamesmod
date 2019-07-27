@@ -42,7 +42,7 @@ public class ImpStrip extends SimpleEnemySkill {
         return strippable;
     }
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Optional<ClothingSlot> targetSlot = Random.pickRandom(getStrippableSlots(target));
         int difficulty = targetSlot.map(clothingSlot ->
                         target.getOutfit().getTopOfSlot(clothingSlot).dc() + target.getLevel()

@@ -127,13 +127,13 @@ public class BreastSmothering extends Position {
     public void struggle(Combat c, Character struggler) {
         c.write(struggler, Formatter.format("{self:SUBJECT-ACTION:attempt} to struggle out of {other:name-possessive} {other:body-part:breasts}, "
                         + "but {other:pronoun-action:have} other ideas.", struggler, getTop()));
-        (new BreastSmother()).resolve(c, struggler, getBottom());
+        (new BreastSmother()).resolve(c, struggler, getBottom(), true);
     }
 
     @Override
     public void escape(Combat c, Character escapee) {
         c.write(escapee, Formatter.format("{self:SUBJECT-ACTION:attempt} to extract {self:reflective} out of {other:name-possessive} {other:body-part:breasts}, "
                         + "but {other:pronoun-action:have} other ideas.", escapee, getTop()));
-        (new BreastSmother()).resolve(c, escapee, getBottom());
+        (new BreastSmother()).resolve(c, escapee, getBottom(), true);
     }
 }

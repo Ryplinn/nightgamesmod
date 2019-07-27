@@ -31,7 +31,7 @@ public abstract class CounterBase extends Skill {
     }
 
     @Override
-    public final boolean resolve(Combat c, Character user, Character target) {
+    public final boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (user.human()) {
             c.write(user, deal(c, 0, Result.setup, user, target));
         } else if (!target.is(Stsflag.blinded)) {

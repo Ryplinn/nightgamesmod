@@ -46,7 +46,7 @@ public class AssFuck extends Fuck {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         String premessage = premessage(c, user, target);
         if (!target.hasStatus(Stsflag.oiled) && user.getArousal().percent() > 50
                         || user.has(Trait.alwaysready) || user.has(Trait.assmaster)) {

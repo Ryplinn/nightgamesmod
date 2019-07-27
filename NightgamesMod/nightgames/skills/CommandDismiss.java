@@ -22,7 +22,7 @@ public class CommandDismiss extends PlayerCommand {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         c.write(user, deal(c, 0, Result.normal, user, target));
         c.getPetsFor(target).stream().map(PetCharacter::getSelf).forEach(pet -> c.removePet(pet.getSelf()));
         return true;

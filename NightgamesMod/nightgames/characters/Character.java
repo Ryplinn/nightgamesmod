@@ -543,8 +543,16 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public void weaken(Combat c, final int i) {
+        weaken(c, i, null);
+    }
+
+    public void weaken(Combat c, final int i, Skill.SkillUsage usage) {
         int weak = i;
         int bonus = 0;
+        if (usage != null && usage.skill != null && usage.user != null) {
+            bonus += usage.user.getTraits().stream().filter(trait -> trait.baseTrait != null)
+                            .mapToInt(trait -> trait.baseTrait.modWeakenDealt(c, usage.user, this, usage.skill)).sum();
+        }
         for (Status s : getStatuses()) {
             bonus += s.weakened(c, i);
         }
@@ -1752,10 +1760,10 @@ public abstract class Character extends Observable implements Cloneable {
             OrgasmicTighten tightenCopy = TIGHTEN_SKILL.get();
             OrgasmicThrust thrustCopy = THRUST_SKILL.get();
             if (tightenCopy.usable(c, this, opponent)) {
-                tightenCopy.resolve(c, this, opponent);
+                tightenCopy.resolve(c, this, opponent, true);
             }
             if (thrustCopy.usable(c, this, opponent)) {
-                thrustCopy.resolve(c, this, opponent);
+                thrustCopy.resolve(c, this, opponent, true);
             }
         }
         if (this != opponent && times == totalTimes && canRespond()) {

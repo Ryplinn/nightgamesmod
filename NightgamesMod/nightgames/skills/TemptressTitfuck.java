@@ -37,7 +37,7 @@ public class TemptressTitfuck extends Paizuri {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         BreastsPart breasts = user.body.getLargestBreasts();
         for (int i = 0; i < 3; i++) {
             BreastsPart otherbreasts = user.body.getRandomBreasts();
@@ -61,7 +61,7 @@ public class TemptressTitfuck extends Paizuri {
             fetishChance += 5;
         }
 
-        if (target.roll(user, accuracy(c, user, target))) {
+        if (rollSucceeded) {
             if (!target.body.getRandomCock().isReady(target)) {
                 m -= 7;
                 target.body.pleasure(user, user.body.getRandom("breasts"), target.body.getRandomCock(), m, c, new SkillUsage<>(this, user, target));

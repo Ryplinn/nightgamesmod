@@ -57,7 +57,7 @@ public class ImpFem extends Pet {
                                 + "semi-solid body. The slime writhes more and more before it suddenly shudders, then slowly melts into a puddle.");
                 break;
             default:
-                (new ImpTease()).resolve(c, getSelf(), opponent.getSelf());
+                (new ImpTease()).resolve(c, getSelf(), opponent.getSelf(), true);
                 return;
         }
         c.removePet(opponent.getSelf());

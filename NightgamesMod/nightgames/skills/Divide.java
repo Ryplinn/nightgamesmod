@@ -83,7 +83,7 @@ public class Divide extends Skill {
     }
     
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Pet pet = makeClone(c, user);
         if (pet == null) {
             return false;

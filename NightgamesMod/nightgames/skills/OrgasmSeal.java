@@ -33,7 +33,7 @@ public class OrgasmSeal extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         target.add(c, new nightgames.status.OrgasmSeal(target.getType(), 15));
         return true;

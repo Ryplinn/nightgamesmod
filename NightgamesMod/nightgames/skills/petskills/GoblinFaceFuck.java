@@ -27,7 +27,7 @@ public class GoblinFaceFuck extends SimpleEnemySkill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         c.write(user, Formatter.format("{self:SUBJECT} straddles {other:name-possessive} head, giving {other:direct-object} an eyeful of her assorted genitals. "
                         + "She pulls the vibrator out of her pussy, causing a rain of love juice to splash {other:possessive} face. "
                         + "{self:SUBJECT} then wipes her leaking cock on {other:name-possessive} forehead, smearing {other:direct-object} with precum. "

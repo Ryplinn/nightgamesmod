@@ -30,12 +30,12 @@ public class SlimeMelt extends SimpleEnemySkill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return 65;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         List<ClothingSlot> strippable = new ArrayList<>();
         if (!target.crotchAvailable() && target.outfit.slotShreddable(ClothingSlot.bottom)) {
             strippable.add(ClothingSlot.bottom);
@@ -44,7 +44,7 @@ public class SlimeMelt extends SimpleEnemySkill {
             strippable.add(ClothingSlot.top);
         }
         ClothingSlot targetSlot = Random.pickRandomGuaranteed(strippable);
-        if (target.roll(user, accuracy(c, user, target))) {
+        if (rollSucceeded) {
             // should never be null here, since otherwise we can't use the skill          
             Clothing stripped = target.strip(targetSlot, c);
             c.write(user, Formatter.format("{self:SUBJECT} pounces on {other:name-do} playfully, "

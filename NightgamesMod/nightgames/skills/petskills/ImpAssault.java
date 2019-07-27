@@ -31,8 +31,8 @@ public class ImpAssault extends SimpleEnemySkill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        if (target.roll(user, accuracy(c, user, target))) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        if (rollSucceeded) {
             int m = 8 + user.getLevel() + Random.random(5);
             if (target.hasBalls()) {
                 if (target.has(Trait.achilles) && !target.has(ClothingTrait.armored)) {

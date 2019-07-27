@@ -22,7 +22,7 @@ public class Straddle extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         c.setStance(new Mount(user.getType(), target.getType()), user, true);
         return true;

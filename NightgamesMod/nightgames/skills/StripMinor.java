@@ -75,7 +75,7 @@ public class StripMinor extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Clothing clothing;
         Optional<Clothing> articleToStrip;
         if (user.human()) {

@@ -52,7 +52,7 @@ public class ThrowBomb extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.consume(Item.Battery, 3);
         Stance s = c.getStance().en;
         if ((s == Stance.behind && c.getStance()

@@ -69,7 +69,7 @@ public class Blowjob extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int m = 10 + Random.random(8);
         boolean facesitting = isFacesitting(c, user, target);
         if (user.has(Trait.silvertongue)) {
@@ -83,7 +83,7 @@ public class Blowjob extends Skill {
             writeOutput(c, m, Result.reverse, user, target);
             target.body.pleasure(user, user.body.getRandom("mouth"), target.body.getRandom("cock"), m, c, new SkillUsage<>(this, user, target));
             target.buildMojo(c, 10);
-        } else if (target.roll(user, accuracy(c, user, target))) {
+        } else if (rollSucceeded) {
             writeOutput(c, m, user.has(Trait.silvertongue) ? Result.special : Result.normal, user, target);
             BodyPart mouth = user.body.getRandom("mouth");
             BodyPart cock = target.body.getRandom("cock");
@@ -108,7 +108,7 @@ public class Blowjob extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return isVaginal(c, user, target) || isFacesitting(c, user, target) || !c.getStance().reachTop(target)? 200 : 75;
     }
 

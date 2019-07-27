@@ -29,7 +29,7 @@ public class Unstrip extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.outfit.dress(user.outfitPlan);
         user.add(c, new Primed(user.getType(), -6));
         writeOutput(c, Result.normal, user, target);

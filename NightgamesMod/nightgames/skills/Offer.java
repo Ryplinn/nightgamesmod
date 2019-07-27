@@ -43,12 +43,12 @@ public class Offer extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (target.getArousal().get() < 15) {
             writeOutput(c, Result.miss, user, target);
             user.add(c, new Shamed(user.getType()));
             if (target.hasDick() || target.has(Trait.strapped)) {
-                new Spank().resolve(c, user, user);
+                new Spank().resolve(c, user, user, true);
             }
             return false;
         }

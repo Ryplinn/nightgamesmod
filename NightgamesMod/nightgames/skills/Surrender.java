@@ -28,7 +28,7 @@ public class Surrender extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         user.temptNoSkillNoTempter(c, user.getArousal().max());
         user.loseWillpower(c, user.getWillpower().max());

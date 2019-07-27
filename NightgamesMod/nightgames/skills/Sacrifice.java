@@ -33,7 +33,7 @@ public class Sacrifice extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         user.pain(c, user, user.getStamina().max() / 3);
         user.calm(c, user.getArousal().max() / 3 + 20 + user.getAttribute(Attribute.darkness));

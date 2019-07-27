@@ -35,7 +35,7 @@ public class SpawnFGoblin extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int power = 3 + user.getAttribute(Attribute.fetishism);
         int ac = 2 + user.getAttribute(Attribute.fetishism);
         writeOutput(c, Result.normal, user, target);

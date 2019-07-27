@@ -35,7 +35,7 @@ public class Simulacrum extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Pet pet;
         int power = Math.max(10, user.getLevel() - 2);
         int ac = 4 + power / 3;

@@ -31,7 +31,7 @@ public class FaerieSwarm extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.consume(Item.MinorScroll, 1);
         if (target.getOutfit().isNude()) {
             writeOutput(c, Result.normal, user, target);

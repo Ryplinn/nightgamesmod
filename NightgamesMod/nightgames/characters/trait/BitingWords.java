@@ -5,6 +5,7 @@ import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Random;
 import nightgames.skills.Skill;
+import nightgames.skills.Taunt;
 import nightgames.status.Status;
 
 /**
@@ -23,14 +24,14 @@ public class BitingWords extends BaseTrait {
     @Override
     public int dealTemptBonusDamage(Combat c, Character tempter, Character target, BodyPart with, int baseDamage,
                     Skill skill) {
-        if (skill != null && skill.getName(c, tempter).equals("Taunt")) {
+        if (skill instanceof Taunt) {
             return 4;
         }
         return super.dealTemptBonusDamage(c, tempter, target, with, baseDamage, skill);
     }
 
     @Override public void onSkillUse(Skill skill, Combat c, Character user, Character target) {
-        if (skill.getName(c, user).equals("Taunt") && c.getStance().dom(user)) {
+        if (skill instanceof Taunt && c.getStance().dom(user)) {
             int willpowerLoss = Math.max(target.getWillpower().max() / 50, 3) + Random.random(3);
             target.loseWillpower(c, willpowerLoss, 0, false, " (Biting Words)");
         }
@@ -38,7 +39,7 @@ public class BitingWords extends BaseTrait {
 
     @Override
     public double statusChanceMultiplier(Skill skill, Combat c, Character user, Character target, Status possible) {
-        if (skill.getName(c, user).equals("Taunt") && possible.name.equals("Shamed")) {
+        if (skill instanceof Taunt && possible.name.equals("Shamed")) {
             return 1;
         }
         return super.statusChanceMultiplier(skill, c, user, target, possible);

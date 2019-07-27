@@ -53,14 +53,14 @@ public class Edge extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return 80;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         boolean hit = !target.canAct() || c.getStance().dom(user)
-                        || target.roll(user, accuracy(c, user, target));
+                        || rollSucceeded;
         if (!hit) {
             c.write(user, Formatter.format("{self:NAME-POSSESSIVE} hands descend towards"
                             + "{other:name-possessive} {other:body-part:cock}, but "

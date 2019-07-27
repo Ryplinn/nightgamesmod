@@ -38,7 +38,7 @@ public class SpawnImp extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.arouse(5, c);
         int power = 5 + user.getAttribute(Attribute.darkness);
         int ac = 2 + user.getAttribute(Attribute.darkness) / 10;

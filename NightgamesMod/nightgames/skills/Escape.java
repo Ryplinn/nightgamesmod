@@ -34,7 +34,7 @@ public class Escape extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (blockedByCollar(c, user)) {
             return false;
         }

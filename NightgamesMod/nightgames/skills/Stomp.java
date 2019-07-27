@@ -37,7 +37,7 @@ public class Stomp extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int pain = Random.random(1, 10);
         if (target.has(Trait.brassballs)) {
             if (user.has(Trait.heeldrop) && target.crotchAvailable() && target.hasBalls()) {

@@ -36,7 +36,7 @@ public class Yank extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int acc = 70;
         int removeChance = 50;
         if (user.has(Trait.intensesuction)) {

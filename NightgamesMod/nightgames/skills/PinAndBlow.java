@@ -45,15 +45,15 @@ public class PinAndBlow extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         c.setStance(new HeldOral(user.getType(), target.getType()), user, true);
         if (target.hasDick()) {
-            new Blowjob().resolve(c, user, target);
+            new Blowjob().resolve(c, user, target, true);
         } else if (target.hasPussy()) {
-            new Cunnilingus().resolve(c, user, target);
+            new Cunnilingus().resolve(c, user, target, true);
         } else if (target.body.has("ass")) {
-            new Anilingus().resolve(c, user, target);
+            new Anilingus().resolve(c, user, target, true);
         }
         return true;
     }

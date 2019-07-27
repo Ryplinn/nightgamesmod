@@ -20,7 +20,7 @@ public class Submit extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         c.setStance(new StandingOver(target.getType(), user.getType()), target, false);
         return true;

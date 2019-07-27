@@ -39,15 +39,15 @@ public class KiShout extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         double attDifference = (2 * user.getAttribute(Attribute.ki) + user.getAttribute(Attribute.power)) - target.getAttribute(Attribute.power);
         double accuracy = 2.5f * attDifference + 75 - target.knockdownDC();
         return (int) Math.round(MathUtils.clamp(accuracy, 25, 150));
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        if (target.roll(user, accuracy(c, user, target))) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        if (rollSucceeded) {
             writeOutput(c, Result.normal, user, target);
             target.pain(c, user, (int) (10 + 3 * Math.sqrt(user.getAttribute(Attribute.ki))));
             target.add(c, new Falling(target.getType()));

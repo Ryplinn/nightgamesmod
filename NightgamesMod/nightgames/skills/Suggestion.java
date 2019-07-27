@@ -35,7 +35,7 @@ public class Suggestion extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (!target.is(Stsflag.cynical)) {
             if (user.human()) {
                 c.write(user, deal(c, 0, Result.normal, user, target));

@@ -41,12 +41,12 @@ public class AssJob extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return c.getStance().behind(target) ? 200 : 75;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (c.getStance().behind(target)) {
             writeOutput(c, Result.special, user, target);
             int m = Random.random(10, 14);
@@ -68,7 +68,7 @@ public class AssJob extends Skill {
             if (Random.random(100) < fetishChance) {
                 target.add(c, new BodyFetish(target.getType(), user.getType(), "ass", .1 + user.getAttribute(Attribute.fetishism) * .05));
             }
-        } else if (target.roll(user, accuracy(c, user, target))) {
+        } else if (rollSucceeded) {
             if (c.getStance().en == Stance.reversemount) {
                 writeOutput(c, Result.strong, user, target);
                 int m = Random.random(14, 19);

@@ -36,15 +36,15 @@ public class Nurple extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return 90;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         double m = Random.random(4, 7);
         DamageType damageType = DamageType.physical;
-        if (target.roll(user, accuracy(c, user, target))) {
+        if (rollSucceeded) {
             if (user.has(Item.ShockGlove) && user.has(Item.Battery, 2)) {
                 writeOutput(c, Result.special, user, target);
                 user.consume(Item.Battery, 2);

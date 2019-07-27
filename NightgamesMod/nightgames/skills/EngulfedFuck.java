@@ -42,7 +42,7 @@ public class EngulfedFuck extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Pairing pair = Pairing.findPairing(user, target);
         double base = 10.0 + Math.min(20, Random
                         .random(user.getAttribute(Attribute.slime) / 3 + user.getAttribute(Attribute.seduction) / 5));

@@ -39,7 +39,7 @@ public class HipThrow extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (user.checkVsDc(Attribute.power, target.knockdownDC() - target.getAttribute(Attribute.cunning) / 2)) {
             writeOutput(c, Result.normal, user, target);
             target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random.random(10, 16)));

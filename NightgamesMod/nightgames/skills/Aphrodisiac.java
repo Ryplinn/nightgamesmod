@@ -46,15 +46,15 @@ public class Aphrodisiac extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return user.has(Item.Aersolizer) ? 200 : (c.getStance().mobile(target) ? 65 : 100);
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         float magnitude = 10;
         String type = " aphrodisiacs";
-        if (!target.roll(user, accuracy(c, user, target))) {
+        if (!rollSucceeded) {
 
             writeOutput(c, Result.miss, user, target);
             return false;

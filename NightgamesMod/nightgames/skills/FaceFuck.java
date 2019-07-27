@@ -37,7 +37,7 @@ public class FaceFuck extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Result res = Result.normal;
         int selfDamage = 4;
         int targetDamage = 0;

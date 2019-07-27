@@ -31,7 +31,7 @@ public class Bravado extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int x = cost;
         writeOutput(c, Result.normal, user, target);
         user.calm(c, 20 + x / 2);

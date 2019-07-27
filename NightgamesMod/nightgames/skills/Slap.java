@@ -34,13 +34,13 @@ public class Slap extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return 90;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        if (target.roll(user, accuracy(c, user, target))) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        if (rollSucceeded) {
             if (isSlime(user)) {
                 writeOutput(c, Result.critical, user, target);
                 target.pain(c, user, Math.min(80, Random.random(10) + user.getAttribute(Attribute.slime) + user.getAttribute(Attribute.power) / 2));

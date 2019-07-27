@@ -48,13 +48,13 @@ public class Footjob extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return target.body.getFetish("feet").isPresent() ? 200 : 80;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        if (target.roll(user, accuracy(c, user, target))) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        if (rollSucceeded) {
             int m = Random.random(12, 20);
             if (user.human()) {
                 c.write(user, Formatter.format(deal(c, m, Result.normal, user, target), user, target));

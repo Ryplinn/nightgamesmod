@@ -33,7 +33,7 @@ public class NSkillAdapter extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         return skill.resolve(c, user, target);
     }
 

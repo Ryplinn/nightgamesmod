@@ -69,7 +69,7 @@ public class UseDraft extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Item used = null;
         if (user.human()) {
             for (Item i : user.getInventory().keySet()) {

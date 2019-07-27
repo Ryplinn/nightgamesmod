@@ -40,7 +40,7 @@ public class CommandGive extends PlayerCommand {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         do {
             transfer = Item.values()[Random.random(Item.values().length)];
             if (!(target.has(transfer) && TRANSFERABLES.contains(transfer))) {

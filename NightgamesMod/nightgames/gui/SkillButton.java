@@ -25,7 +25,7 @@ public class SkillButton extends ValueButton<Skill> {
         getButton().setFont(fontForStage(skill.getStage()));
         this.skill = skill;
         this.subChoices = new ArrayList<>(skill.subChoices(combat, user));
-        int actualAccuracy = target.getChanceToHit(user, skill.accuracy(combat, user, target));
+        int actualAccuracy = target.getChanceToHit(user, skill.baseAccuracy(combat, user, target));
         int clampedAccuracy = Math.min(100, Math.max(0, actualAccuracy));
         String text = "<html>" + skill.describe(combat, user) + " <br/><br/>Accuracy: " + (actualAccuracy >= 150 ?
                         "---" :

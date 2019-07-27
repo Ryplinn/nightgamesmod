@@ -27,8 +27,8 @@ public class SuckNeck extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        if (target.roll(user, accuracy(c, user, target))) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        if (rollSucceeded) {
             if (user.getAttribute(Attribute.darkness) >= 1) {
                 writeOutput(c, Result.special, user, target);
                 int m = target.getStamina().max() / 8;
@@ -57,7 +57,7 @@ public class SuckNeck extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return c.getStance().dom(user) ? 100 : 70;
     }
 

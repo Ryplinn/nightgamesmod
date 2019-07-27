@@ -51,7 +51,7 @@ public class ThrowSlime extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (target.has(Trait.slime)) {
             c.write(user, Formatter.format("{self:SUBJECT-ACTION:throw|throws} a glob of slime at"
                             + " {other:name-do}, but it is simply absorbed into {other:possessive}"

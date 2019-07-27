@@ -61,7 +61,7 @@ public class Drain extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int strength = Math.max(10, 1 + user.getAttribute(Attribute.darkness) / 4);
         int staminaStrength = 50;
         int type = Math.max(1, Random.centeredrandom(6, user.getAttribute(Attribute.darkness) / 3.0, 3));

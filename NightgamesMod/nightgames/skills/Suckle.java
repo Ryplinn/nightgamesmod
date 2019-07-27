@@ -24,11 +24,11 @@ public class Suckle extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        return resolve(c, user, target, false);
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        return resolve(c, user, target, rollSucceeded, false);
     }
 
-    public boolean resolve(Combat c, Character user, Character target, boolean silent) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded, boolean silent) {
         Result results = target.has(Trait.lactating) ? Result.special : Result.normal;
         int m = (user.getAttribute(Attribute.seduction) > 10 ? 8 : 4) + Random.random(6);
         if (!silent) writeOutput(c, Result.normal, user, target);

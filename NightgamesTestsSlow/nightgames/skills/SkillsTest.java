@@ -99,7 +99,7 @@ public class SkillsTest {
 				if (Skill.skillIsUsable(cloned, used, cloned.p1, cloned.p2)) {
 					System.out.println("["+cloned.getStance().getClass().getSimpleName()+"] Skill usable: " + used.getLabel(cloned,
                                     cloned.p1) + ".");
-					used.resolve(cloned, cloned.p1, cloned.p2);
+					used.resolve(cloned, cloned.p1, cloned.p2, true);
 				}
 				gameState.characterPool.setOtherCombatants(null);
 			}

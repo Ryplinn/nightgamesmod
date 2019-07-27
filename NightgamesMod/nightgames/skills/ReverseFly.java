@@ -33,10 +33,10 @@ public class ReverseFly extends Fly {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         String premessage = premessage(c, user, target);
 
-        Result result = target.roll(user, accuracy(c, user, target)) ? Result.normal : Result.miss;
+        Result result = rollSucceeded ? Result.normal : Result.miss;
         if (user.human()) {
             c.write(user, premessage + deal(c, 0, result, user, target));
         } else if (c.shouldPrintReceive(target, c)) {

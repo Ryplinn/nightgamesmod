@@ -48,7 +48,7 @@ public class Command extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
 
         EnumSet<CommandType> available = availableCommands(c, user, target);
         assert !available.isEmpty();
@@ -475,7 +475,7 @@ public class Command extends Skill {
                 }
                 user.getSkills().stream().filter(skill -> Tactics.fucking.equals(skill.type(c, user)))
                                 .filter(s -> s.requirements(c, user, target) && s.usable(c, user, target)).findAny()
-                                .ifPresent(skill -> skill.resolve(c, user, target));
+                                .ifPresent(skill -> skill.resolve(c, user, target, true));
                 break;
             case MASTER_FACESIT:
                 c.write(user, String.format("%s stands over %s face and slowly lowers %s down onto it.",

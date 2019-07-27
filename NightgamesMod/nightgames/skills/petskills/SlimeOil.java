@@ -20,13 +20,13 @@ public class SlimeOil extends SimpleEnemySkill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return 80;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        if (target.roll(user, accuracy(c, user, target))) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        if (rollSucceeded) {
             c.write(user, Formatter.format("{self:SUBJECT} forms into a shape that's vaguely human and clearly female. "
                                         + "Somehow it manages to look cute and innocent while still being an animated blob of slime. "
                                         + "The slime suddenly pounces on {other:name-do} and wraps itself around {other:direct-object}. "

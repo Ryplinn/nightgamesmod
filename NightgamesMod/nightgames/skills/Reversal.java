@@ -37,7 +37,7 @@ public class Reversal extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Optional<String> compulsion = Compulsive.describe(c, user, Situation.PREVENT_REVERSAL);
         if (compulsion.isPresent()) {
             c.write(user, compulsion.get());
@@ -45,7 +45,7 @@ public class Reversal extends Skill {
             Compulsive.doPostCompulsion(c, user, Situation.PREVENT_REVERSAL);
             return false;
         }
-        if (target.roll(user, accuracy(c, user, target))) {
+        if (rollSucceeded) {
             writeOutput(c, Result.normal, user, target);
 
             c.setStance(new Pin(user.getType(), target.getType()), user, true);
@@ -69,7 +69,7 @@ public class Reversal extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return Math.round(Math.max(Math.min(150,
                         2.5f * (user.getAttribute(Attribute.cunning) - target.getAttribute(Attribute.cunning)) + 75),
                         40));

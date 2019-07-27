@@ -28,7 +28,7 @@ public class BreastWorship extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Result results = target.has(Trait.lactating) ? Result.special : Result.normal;
         int m = 8 + Random.random(6);
         writeOutput(c, results, user, target);
@@ -55,7 +55,7 @@ public class BreastWorship extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return 150;
     }
 

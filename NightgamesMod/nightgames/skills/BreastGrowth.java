@@ -44,14 +44,14 @@ public class BreastGrowth extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return 90;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Result res;
-        if (target.roll(user, accuracy(c, user, target))) {
+        if (rollSucceeded) {
             if (target.body.getRandomBreasts().equals(BreastsPart.flat)) {
                 res = Result.special;
             } else {

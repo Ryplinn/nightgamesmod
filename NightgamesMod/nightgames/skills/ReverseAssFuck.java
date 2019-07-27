@@ -51,7 +51,7 @@ public class ReverseAssFuck extends Fuck {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         String premessage = premessage(c, user, target);
         if (!user.hasStatus(Stsflag.oiled) && user.getArousal().percent() > 50
                         || user.has(Trait.alwaysready)) {

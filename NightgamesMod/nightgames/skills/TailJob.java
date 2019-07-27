@@ -31,7 +31,7 @@ public class TailJob extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         int m = (5 + Random.random(10))
                         + Math.min(user.getArousal().getReal() / 20, user.getAttribute(Attribute.animism));

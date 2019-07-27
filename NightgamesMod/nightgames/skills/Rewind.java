@@ -29,7 +29,7 @@ public class Rewind extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.add(c, new Primed(user.getType(), -8));
         user.getArousal()
                  .empty();

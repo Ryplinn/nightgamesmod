@@ -29,8 +29,8 @@ public class FairyKick extends SimpleEnemySkill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        if (target.roll(user, accuracy(c, user, target))) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        if (rollSucceeded) {
             int m = 3 + user.getLevel() + Random.random(5);
             c.write(user, Formatter.format("{self:SUBJECT-ACTION:fly|flies} at {other:direct-object} and kicks {other:direct-object} in the balls. "
                             + "{self:PRONOUN} doesn't have a lot of weight to put behind it, but it still hurts like hell.", user, target));

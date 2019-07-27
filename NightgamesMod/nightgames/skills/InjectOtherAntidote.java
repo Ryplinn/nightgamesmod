@@ -27,7 +27,7 @@ public class InjectOtherAntidote extends Skill {
         return 10;
     }
 
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (user.human()) {
             c.write(user, deal(c, 0, Result.normal, user, target));
         } else {

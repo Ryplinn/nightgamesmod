@@ -30,7 +30,7 @@ public class Charm extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (isPurr(user)) {
             return resolvePurr(c, user, target);
         }
@@ -38,7 +38,7 @@ public class Charm extends Skill {
             printBlinded(c, user);
             return false;
         }
-        if (target.roll(user, accuracy(c, user, target))) {
+        if (rollSucceeded) {
             writeOutput(c, Result.normal, user, target);
             double mag = 2 + Random.random(4) + user.body.getHotness(target);
             if (target.has(Trait.imagination)) {

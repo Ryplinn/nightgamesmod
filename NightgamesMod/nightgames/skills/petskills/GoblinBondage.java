@@ -25,7 +25,7 @@ public class GoblinBondage extends SimpleEnemySkill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         c.write(user, Formatter.format("{self:SUBJECT} pulls the bondage straps tighter around herself. You can see the leather and latex digging into her skin as "
                         + "her bondage fascination begins to affect both of you.", user, target));
         user.pain(c, user, 10);

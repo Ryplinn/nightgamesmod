@@ -51,12 +51,12 @@ public class PinningPaizuri extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         
         c.setStance(new HeldPaizuri(user.getType(), target.getType()), user, true);
      
-        new Paizuri().resolve(c, user, target);
+        new Paizuri().resolve(c, user, target, true);
         
         return true;
     }

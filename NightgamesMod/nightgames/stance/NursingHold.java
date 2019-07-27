@@ -150,7 +150,7 @@ public class NursingHold extends Position {
                             getTop().possessiveAdjective(), struggler.possessiveAdjective(),
                             struggler.directObject()));
         }
-        (new Suckle()).resolve(c, struggler, getTop());
+        (new Suckle()).resolve(c, struggler, getTop(), true);
     }
 
     @Override
@@ -158,6 +158,6 @@ public class NursingHold extends Position {
         c.write(escapee, Formatter.format("{self:SUBJECT-ACTION:try} to escape {other:name-possessive} hold, but with"
                         + " {other:direct-object} impressive chest in front of {self:possessive} face, {self:pronoun-action:are} easily convinced to stop.",
                         escapee, getTop()));
-        (new Suckle()).resolve(c, escapee, getTop());
+        (new Suckle()).resolve(c, escapee, getTop(), true);
     }
 }

@@ -25,7 +25,7 @@ public class UseSemen extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Item used = Item.semen;
         boolean eventful = false;
         c.write(user,

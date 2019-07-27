@@ -37,15 +37,15 @@ public class Handjob extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return c.getStance().en == Stance.neutral ? 50 : 100;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int m = Random.random(8, 13);
 
-        if (target.roll(user, accuracy(c, user, target))) {
+        if (rollSucceeded) {
             if (user.getAttribute(Attribute.seduction) >= 8) {
                 m += 6;
                 writeOutput(c, Result.normal, user, target);

@@ -42,7 +42,7 @@ public class EmergencyJump extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.add(c, new Primed(user.getType(),-2));
         user.free();
         c.setStance(new Behind(user.getType(), target.getType()), user, true);

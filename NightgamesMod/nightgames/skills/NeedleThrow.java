@@ -35,14 +35,14 @@ public class NeedleThrow extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return 70;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.consume(Item.Needle, 1);
-        if (user.roll(user, accuracy(c, user, target))) {
+        if (rollSucceeded) {
             c.write(user, String.format(
                             "%s %s with one of %s drugged needles. "
                                             + "%s %s with arousal and %s it difficult to stay on %s feet.",

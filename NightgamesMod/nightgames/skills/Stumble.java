@@ -33,7 +33,7 @@ public class Stumble extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (Random.random(2) == 0) {
             c.setStance(new Mount(target.getType(), user.getType()), target, false);
         } else {

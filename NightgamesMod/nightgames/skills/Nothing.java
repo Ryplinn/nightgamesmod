@@ -16,7 +16,7 @@ public class Nothing extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (user.human()) {
             deal(c, 0, Result.normal, user, target);
         } else {

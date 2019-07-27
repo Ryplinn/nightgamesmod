@@ -30,7 +30,7 @@ public class Masochism extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         user.add(c, new Masochistic(user.getType()));
         target.add(c, new Masochistic(target.getType()));

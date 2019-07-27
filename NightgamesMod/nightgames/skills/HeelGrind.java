@@ -49,7 +49,7 @@ public class HeelGrind extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int m = 12 + Random.random(6);
         int m2 = m / 2;
         writeOutput(c, Result.normal, user, target);

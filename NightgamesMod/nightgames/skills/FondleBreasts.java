@@ -27,10 +27,10 @@ public class FondleBreasts extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int m = 6 + Random.random(4);
         Result result = Result.normal;
-        if (target.roll(user, accuracy(c, user, target))) {
+        if (rollSucceeded) {
             if (target.breastsAvailable()) {
                 m += 4;
                 result = Result.strong;
@@ -61,7 +61,7 @@ public class FondleBreasts extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return c.getStance().en == Stance.neutral ? 70 : 100;
     }
 

@@ -28,10 +28,10 @@ public class TemptressHandjob extends Handjob {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int m = 7 + Random.random(user.getAttribute(Attribute.technique) / 2);
 
-        if (target.roll(user, accuracy(c, user, target))) {
+        if (rollSucceeded) {
             if (!target.body.getRandomCock().isReady(target)) {
                 m -= 7;
                 target.body.pleasure(user, user.body.getRandom("hands"), target.body.getRandomCock(), m, c, new SkillUsage<>(this, user, target));

@@ -32,7 +32,7 @@ public class Whisper extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int roll = Random.centeredrandom(4, user.getAttribute(Attribute.darkness) / 5.0, 2);
         int m = 4 + Random.random(6);
 

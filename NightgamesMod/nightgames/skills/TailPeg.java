@@ -61,13 +61,13 @@ public class TailPeg extends Skill {
         }
     }
 
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         boolean intercourse = !c.getStance().getPartsFor(c, user, target).isEmpty() && c.getStance().penisInserted(target);
         return intercourse ? 100 : 60;
     }
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        if (target.roll(user, accuracy(c, user, target))) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        if (rollSucceeded) {
             int strength = Math.min(20, 10 + user.getAttribute(Attribute.darkness) / 4);
             boolean intercourse = !c.getStance().getPartsFor(c, user, target).isEmpty() && c.getStance().penisInserted(target);
             boolean shamed = false;

@@ -620,6 +620,11 @@ public class Body implements Cloneable {
             perceptionBonus *= 1 + (opponent.body.getCharismaBonus(c, getCharacter()) - 1) / 2;
         }
         double baseBonusDamage = bonus;
+        if (usage != null && usage.user != null) {
+            baseBonusDamage += usage.user.getTraits().stream().filter(trait -> trait.baseTrait != null).map(trait -> trait.baseTrait)
+                            .mapToInt(baseTrait -> baseTrait
+                                            .modPleasureDealt(c, usage.user, getCharacter(), usage.skill)).sum();
+        }
         if (opponent != null) {
             baseBonusDamage += with.applyBonuses(opponent, getCharacter(), target, magnitude, c);
             baseBonusDamage += target.applyReceiveBonuses(getCharacter(), opponent, with, magnitude, c);

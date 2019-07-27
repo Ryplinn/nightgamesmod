@@ -33,7 +33,7 @@ public class Haste extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.add(c, new Primed(user.getType(), -1));
         user.add(c, new AttributeBuff(user.getType(), Attribute.speed, 10, 6));
         writeOutput(c, Result.normal, user, target);

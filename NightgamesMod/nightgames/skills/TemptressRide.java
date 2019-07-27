@@ -49,9 +49,9 @@ public class TemptressRide extends Thrust {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (c.getStance().anallyPenetrated(c, user)) {
-            return super.resolve(c, user, target);
+            return super.resolve(c, user, target, rollSucceeded);
         }
         int targetDmg = 10 + Random.random(Math.max(10, user.getAttribute(Attribute.technique)));
         int selfDmg = (int) Math.max(1f, targetDmg / 3f);

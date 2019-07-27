@@ -24,13 +24,13 @@ public class SweetScent extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return 90;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        Result res = target.roll(user, accuracy(c, user, target)) ? Result.normal : Result.miss;
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        Result res = rollSucceeded ? Result.normal : Result.miss;
 
         writeOutput(c, res, user, target);
         if (res != Result.miss) {

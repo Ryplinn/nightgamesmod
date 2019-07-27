@@ -43,7 +43,7 @@ public class Frottage extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int m = 6 + Random.random(8);
         BodyPart receiver = target.hasDick() ? target.body.getRandomCock() : target.body.getRandomPussy();
         BodyPart dealer = user.hasDick() ? user.body.getRandomCock() : user.has(Trait.strapped) ? StraponPart.generic : user.body.getRandomPussy();

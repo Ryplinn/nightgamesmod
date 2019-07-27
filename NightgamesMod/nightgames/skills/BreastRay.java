@@ -38,7 +38,7 @@ public class BreastRay extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.consume(Item.Battery, 2);
         boolean permanent = Random.random(20) == 0 && (user.human() || c.shouldPrintReceive(target, c))
                         && !target.has(Trait.stableform);

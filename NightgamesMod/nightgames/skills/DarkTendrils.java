@@ -36,9 +36,9 @@ public class DarkTendrils extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.arouse((int) (user.getArousal().max() * .20), c);
-        if (target.roll(user, accuracy(c, user, target))) {
+        if (rollSucceeded) {
             if (Random.random(2) == 1) {
                 writeOutput(c, Result.normal, user, target);
                 target.add(c, new Bound(target.getType(), 35 + 2 * Math.sqrt(user.getAttribute(Attribute.darkness)), "shadows"));
@@ -62,7 +62,7 @@ public class DarkTendrils extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return 75;
     }
 

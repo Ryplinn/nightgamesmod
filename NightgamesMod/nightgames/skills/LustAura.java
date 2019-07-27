@@ -38,7 +38,7 @@ public class LustAura extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.arouse(10, c);
         writeOutput(c, Result.normal, user, target);
         target.add(c, Horny.getWithPsychologicalType(user, target, (float) (3 + 2 * user.getExposure()), 3 + Random

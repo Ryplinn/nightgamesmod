@@ -36,10 +36,10 @@ public class CounterRide extends CounterBase {
         }
         if (target.hasDick() && user.hasPussy()) {
             c.setStance(Cowgirl.similarInstance(user, target), user, true);
-            new Thrust().resolve(c, user, target);
+            new Thrust().resolve(c, user, target, true);
         } else {
             c.setStance(Missionary.similarInstance(user, target), user, true);
-            new Thrust().resolve(c, user, target);
+            new Thrust().resolve(c, user, target, true);
         }
     }
 

@@ -33,8 +33,8 @@ public class LeechSeed extends Skill {
     }
     
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        if (!target.canAct() || target.roll(user, accuracy(c, user, target))) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        if (!target.canAct() || rollSucceeded) {
             Result results = Result.anal;
             if (!c.getStance().vaginallyPenetrated(c, target)) {
                 results = Result.normal;
@@ -61,7 +61,7 @@ public class LeechSeed extends Skill {
         return 5;
     }
 
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return 15;
     }
 

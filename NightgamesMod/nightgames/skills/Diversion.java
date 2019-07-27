@@ -35,7 +35,7 @@ public class Diversion extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Clothing article = user.strip(ClothingSlot.top, c);
         if (article == null) {
             user.strip(ClothingSlot.bottom, c);

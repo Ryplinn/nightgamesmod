@@ -34,7 +34,7 @@ public class Dive extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         c.setStance(new StandingOver(target.getType(), user.getType()), target, true);
         if (user.human()) {
             c.write(user, deal(c, 0, Result.normal, user, target));

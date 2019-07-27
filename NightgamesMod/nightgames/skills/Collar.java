@@ -44,7 +44,7 @@ public class Collar extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (target.is(Stsflag.collared)) {
             user.consume(Item.Battery, 5);
             ((Collared) target.getStatus(Stsflag.collared)).recharge();

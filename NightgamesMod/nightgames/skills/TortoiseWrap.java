@@ -35,7 +35,7 @@ public class TortoiseWrap extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.consume(Item.Rope, 1);
         writeOutput(c, Result.normal, user, target);
         target.add(c, new Tied(target.getType()));

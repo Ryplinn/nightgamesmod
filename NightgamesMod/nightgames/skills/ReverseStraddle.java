@@ -20,7 +20,7 @@ public class ReverseStraddle extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         c.setStance(new ReverseMount(user.getType(), target.getType()), user, true);
         return true;

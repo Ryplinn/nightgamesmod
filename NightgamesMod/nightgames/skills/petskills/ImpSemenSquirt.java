@@ -27,7 +27,7 @@ public class ImpSemenSquirt extends SimpleEnemySkill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int m = Random.random(3,6) + user.getLevel() / 5;
         c.write(user, Formatter.format("{self:SUBJECT} masturbates frantically until {self:pronoun} cums intensely. "
                         + "{self:PRONOUN} aims {self:possessive} spurting cock at {other:name-do}, "

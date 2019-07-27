@@ -53,7 +53,7 @@ public class StealClothes extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Clothing stripped;
         boolean top;
         if (!target.outfit.slotEmptyOrMeetsCondition(ClothingSlot.top, c1 -> blocked(user, c1))) {

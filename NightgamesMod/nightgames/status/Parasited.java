@@ -105,7 +105,7 @@ public class Parasited extends Status {
                                     Formatter.format("{self:SUBJECT-ACTION:feel|feels} an immense need to service {self:NAME}!",
                                     getAffected(), getOther()));
                     c.getRandomWorshipSkill(getAffected(), getOther()).orElse(new FootWorship()).resolve(c,
-                                    getAffected(), getOther());
+                                    getAffected(), getOther(), true);
                     break;
                 case 4:
                 case 5:
@@ -125,7 +125,7 @@ public class Parasited extends Status {
                     GUI.gui.message(c, getAffected(),
                                     Formatter.format("{self:name-possessive} hands involuntarily reach into {self:possessive} crotch and start masturbating!",
                                     getAffected(), getOther()));
-                    (new Masturbate()).resolve(c, getAffected(), getOther());
+                    (new Masturbate()).resolve(c, getAffected(), getOther(), true);
             }
         } else if (time >= 2) {
             if (stage < 2) {

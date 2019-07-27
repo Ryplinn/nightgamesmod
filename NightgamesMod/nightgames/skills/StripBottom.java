@@ -34,7 +34,7 @@ public class StripBottom extends Skill {
         return c.getStance().dom(user) ? 2 : 10;
     }
 
-    @Override public boolean resolve(Combat c, Character user, Character target) {
+    @Override public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         stripped = extra = null;
         int difficulty = target.getOutfit().getTopOfSlot(ClothingSlot.bottom).dc() + target.getLevel()
                         + (target.getStamina().percent() / 4 - target.getArousal().percent()) / 5 - (

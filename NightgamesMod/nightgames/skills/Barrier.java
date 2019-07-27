@@ -34,7 +34,7 @@ public class Barrier extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         user.add(c, new Shield(user.getType(), .5));
         return true;

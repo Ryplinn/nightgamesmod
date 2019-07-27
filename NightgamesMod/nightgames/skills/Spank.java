@@ -27,7 +27,7 @@ public class Spank extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         double m = Random.random(6, 13);
         if (user.has(Trait.disciplinarian)) {
             boolean shamed = Random.random(10) >= 5 || !target.is(Stsflag.shamed) && user.canSpend(5);
@@ -67,7 +67,7 @@ public class Spank extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return c.getStance().dom(user) ? 100 : 65;
     }
 

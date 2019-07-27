@@ -50,7 +50,7 @@ public class PullOut extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Result result = Result.normal;
         if (c.getStance().inserted(user)) {
             if (c.getStance().en == Stance.anal) {

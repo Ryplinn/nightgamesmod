@@ -46,7 +46,7 @@ public class ImbueFetish extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Optional<String> fetish = Random.pickRandom(
                         POSSIBLE_FETISHES.stream().filter(part -> user.body.has(part)).toArray(String[]::new));
         if (!fetish.isPresent()) {

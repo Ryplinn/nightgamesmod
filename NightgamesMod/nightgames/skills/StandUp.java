@@ -20,7 +20,7 @@ public class StandUp extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         c.setStance(new StandingOver(user.getType(), target.getType()), user, true);
         return true;

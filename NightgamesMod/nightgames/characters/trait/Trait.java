@@ -20,11 +20,7 @@ public enum Trait {
     smqueen(new SMQueen()),
 
     // Perks
-    ticklemonster("Tickle Monster", "Skilled at tickling in unconventional areas"), // Mara Sex perk,
-                                                                                    // increases
-                                                                                    // pleasure from
-                                                                                    // tickling if
-                                                                                    // target is nude
+    ticklemonster(new TickleMonster()),
     heeldrop("Heeldrop", "A wrestling move feared by men and women alike"), // Mara
                                                                             // Sparring
                                                                             // perk,

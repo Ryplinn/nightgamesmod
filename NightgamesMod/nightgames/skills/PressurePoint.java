@@ -38,15 +38,15 @@ public class PressurePoint extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         double kiMod = 4 * Math.sqrt(user.getAttribute(Attribute.ki));
         double accuracy = kiMod + 60;
         return (int) Math.round(MathUtils.clamp(accuracy, 25, 100));
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        if (target.roll(user, accuracy(c, user, target))) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        if (rollSucceeded) {
             writeOutput(c, Result.normal, user, target);
             target.add(c, new PressurePointed(target.getType()));
             user.weaken(c, user.getStamina().max() / 5);

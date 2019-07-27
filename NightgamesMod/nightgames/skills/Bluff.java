@@ -32,7 +32,7 @@ public class Bluff extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int m = 20 + Random.random(25);
         writeOutput(c, Result.normal, user, target);
         if (!user.getArousal().isFull()) {

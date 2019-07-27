@@ -379,7 +379,7 @@ public class Decider {
             System.out.println("Before:\n" + c.debugMessage());
         }
         return rateActionWithObserver(self, self.getSelf().owner(), target, c, masterFit, otherFit, (combat, selfCopy, other) -> {
-            skill.resolve(combat, selfCopy, other);
+            skill.resolve(combat, selfCopy, other, true);
             return true;
         });
     }
@@ -392,7 +392,7 @@ public class Decider {
         }
         // FIXME: null pointer exception here attempting to rate Tighten while fighting Eve during a threesome
         return rateAction(self, c, selfFit, otherFit, (combat, selfCopy, other) -> {
-            skill.resolve(combat, selfCopy, other);
+            skill.resolve(combat, selfCopy, other, true);
             return true;
         });
     }

@@ -31,7 +31,7 @@ public class Pray extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         c.write(user,
                         Formatter.format("{self:SUBJECT-ACTION:bow} {self:possessive} head and close {self:possessive} eyes,"
                                         + " whispering a quick prayer to Angel for guidance. {other:SUBJECT-ACTION:look} at {self:direct-object} strangely, but "

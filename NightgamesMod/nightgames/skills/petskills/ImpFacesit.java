@@ -28,7 +28,7 @@ public class ImpFacesit extends SimpleEnemySkill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int m = Random.random(3,6) + user.getLevel() / 5;
         c.write(user, Formatter.format("{self:SUBJECT} straddles {other:name-possessive} face, forcing {self:possessive} wet pussy onto {other:possessive} nose and mouth. "
                         + "{self:POSSESSIVE} scent is unnaturally intoxicating and fires up {other:possessive} libido.", user, target));

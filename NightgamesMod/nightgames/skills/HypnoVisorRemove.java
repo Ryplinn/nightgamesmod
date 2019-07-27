@@ -19,7 +19,7 @@ public class HypnoVisorRemove extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return (int) ((Math.min(0.8, .2 + user.getAttribute(Attribute.cunning) / 100.0)) * 100);
     }
 
@@ -34,8 +34,8 @@ public class HypnoVisorRemove extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        if (target.roll(user, accuracy(c, user, target))) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        if (rollSucceeded) {
             c.write(user, Formatter.format("{self:SUBJECT-ACTION:find|finds} a small button"
                             + " on the side of the Hypno Visor, and pressing it unlocks whatever"
                             + " mechanisms held it in place. {self:PRONOUN-ACTION:make|makes} sure"

@@ -40,18 +40,18 @@ public class TailSuck extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return c.getStance().isPartFuckingPartInserted(c, target, target.body.getRandomCock(), user, user.body.getRandom("tail")) ? 200 : 90;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (c.getStance().isPartFuckingPartInserted(c, target, target.body.getRandomCock(), user, user.body.getRandom("tail"))) {
             writeOutput(c, Result.special, user, target);
             target.body.pleasure(user, user.body.getRandom("tail"), target.body.getRandomCock(),
                             Random.random(10) + 10, c, new SkillUsage<>(this, user, target));
             drain(c, user, target);
-        } else if (user.roll(user, accuracy(c, user, target))) {
+        } else if (rollSucceeded) {
             Result res = c.getStance().isBeingFaceSatBy(target, user) ? Result.critical
                             : Result.normal;
             writeOutput(c, res, user, target);

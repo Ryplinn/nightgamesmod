@@ -42,7 +42,7 @@ public class MutualUndress extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.strong, user, target);
         user.undress(c);
         target.undress(c);

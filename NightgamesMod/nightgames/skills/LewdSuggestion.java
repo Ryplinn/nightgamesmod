@@ -32,7 +32,7 @@ public class LewdSuggestion extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         boolean alreadyTranced =
                         target.is(Stsflag.charmed) || target.is(Stsflag.enthralled) || target.is(Stsflag.trance);
         if (!alreadyTranced && Random.random(3) == 0) {

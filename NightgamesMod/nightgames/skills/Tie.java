@@ -29,14 +29,14 @@ public class Tie extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (user.has(Item.Handcuffs, 1)) {
             user.consume(Item.Handcuffs, 1);
             writeOutput(c, Result.special, user, target);
             target.add(c, new Bound(target.getType(), (40 + 3 * Math.sqrt(user.getAttribute(Attribute.cunning))), "handcuffs"));
         } else {
             user.consume(Item.ZipTie, 1);
-            if (target.roll(user, accuracy(c, user, target))) {
+            if (rollSucceeded) {
                 writeOutput(c, Result.normal, user, target);
                 target.add(c, new Bound(target.getType(), (25 + 3 * Math.sqrt(user.getAttribute(Attribute.cunning))), "ziptie"));
             } else {
@@ -58,7 +58,7 @@ public class Tie extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return 80;
     }
 

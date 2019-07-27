@@ -35,7 +35,7 @@ public class Beg extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if ((Random.random(30) <= user.getAttribute(Attribute.submission) - target.getAttribute(Attribute.cunning) / 2
                         && !target.is(Stsflag.cynical) || target.getMood() == Emotion.dominant)
                         && target.getMood() != Emotion.angry && target.getMood() != Emotion.desperate) {

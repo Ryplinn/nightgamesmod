@@ -25,7 +25,7 @@ public class Lubricate extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         target.add(c, new Oiled(target.getType()));
         user.consume(Item.Lubricant, 1);

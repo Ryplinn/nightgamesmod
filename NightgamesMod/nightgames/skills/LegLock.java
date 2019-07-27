@@ -26,8 +26,8 @@ public class LegLock extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        if (target.roll(user, accuracy(c, user, target))) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        if (rollSucceeded) {
             writeOutput(c, Result.normal, user, target);
             target.add(c, new AttributeBuff(target.getType(), Attribute.speed, -2, 5));
             target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random.random(10, 16)));

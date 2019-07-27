@@ -35,7 +35,7 @@ public class ViceGrip extends Tighten {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         BodyPart selfO = getSelfOrgan(c, user, target);
         BodyPart targetO = getTargetOrgan(c, user, target);
         Result result = Result.normal;

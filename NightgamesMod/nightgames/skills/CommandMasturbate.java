@@ -22,7 +22,7 @@ public class CommandMasturbate extends PlayerCommand {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         boolean lowStart = target.getArousal().get() < 15;
         int m = 5 + Random.random(10);
         target.body.pleasure(target, target.body.getRandom("hands"), target.body.getRandomGenital(), m, c, new SkillUsage<>(this, user, target));

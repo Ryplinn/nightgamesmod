@@ -27,7 +27,7 @@ public class SelfStun extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.add(c, new Winded(user.getType()));
         writeOutput(c, Result.normal, user, target);
         return true;

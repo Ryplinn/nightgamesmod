@@ -39,7 +39,7 @@ public class RipBlindfold extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         if (!target.canAct() || !((Blinded) target.getStatus(Stsflag.blinded)).isVoluntary()) {
             return 200;
         }
@@ -54,10 +54,9 @@ public class RipBlindfold extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        boolean hit = target.roll(user, accuracy(c, user, target));
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
 
-        if (hit) {
+        if (rollSucceeded) {
             c.write(user,
                             String.format("%s %s blindfold and %s it off with a strong yank.",
                                             user.subjectAction("grab"), target.nameOrPossessivePronoun(),
@@ -69,7 +68,7 @@ public class RipBlindfold extends Skill {
                             target.pronoun(), target.action("twist"), user.possessiveAdjective()));
         }
 
-        return hit;
+        return rollSucceeded;
     }
 
     @Override

@@ -55,7 +55,7 @@ public class BreastSmother extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         boolean special = c.getStance().en != Stance.breastsmothering && !c.getStance().havingSex(c);        
         writeOutput(c, special ? Result.special : Result.normal, user, target);
 

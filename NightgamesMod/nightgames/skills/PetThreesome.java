@@ -68,7 +68,7 @@ public class PetThreesome extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int m = 5 + Random.random(5);
         int otherm = m;
         Character fucker = getFucker(c, user);

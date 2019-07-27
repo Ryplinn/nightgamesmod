@@ -22,7 +22,7 @@ public class UseOnahole extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return c.getStance().en == Stance.neutral ? 50 : 100;
     }
 
@@ -34,10 +34,10 @@ public class UseOnahole extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int m = 5 + Random.random(10);
 
-        if (target.roll(user, accuracy(c, user, target))) {
+        if (rollSucceeded) {
             if (user.has(Item.Onahole2)) {
                 m += 5;
                 writeOutput(c, Result.upgrade, user, target);

@@ -38,7 +38,7 @@ public class Shove extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         boolean success = true;
         if (user.getAttribute(Attribute.ki) >= 1 && target.getOutfit().slotShreddable(ClothingSlot.top)
                         && user.canSpend(5)) {

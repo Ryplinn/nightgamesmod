@@ -29,7 +29,7 @@ public class EnergyDrink extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (user.human()) {
             c.write(user, deal(c, 0, Result.normal, user, target));
         } else if (target.human()) {

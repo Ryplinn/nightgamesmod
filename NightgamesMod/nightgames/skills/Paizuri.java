@@ -45,7 +45,7 @@ public class Paizuri extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         BreastsPart breasts = user.body.getLargestBreasts();
         // try to find a set of breasts large enough, if none, default to
         // largest.

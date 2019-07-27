@@ -42,7 +42,7 @@ public class Tear extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         boolean isMedical = (user.getAttribute(Attribute.medicine) >= 12 && user.has(Item.MedicalSupplies, 1));
         if (c.getStance().reachTop(user) && !target.getOutfit().slotEmpty(ClothingSlot.top)) {
             Clothing article = target.getOutfit().getTopOfSlot(ClothingSlot.top);

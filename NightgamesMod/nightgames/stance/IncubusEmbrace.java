@@ -47,7 +47,7 @@ public class IncubusEmbrace extends Position {
         } else if (flag == null && getBottom().hasBreasts()) {
             FondleBreasts fb = new FondleBreasts();
             if (Skill.skillIsUsable(c, fb, getTop(), getBottom())) {
-                fb.resolve(c, getTop(), getBottom());
+                fb.resolve(c, getTop(), getBottom(), true);
             }
         }
         return Optional.empty();

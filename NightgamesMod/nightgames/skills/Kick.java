@@ -39,17 +39,17 @@ public class Kick extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return 90;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (target.getOutfit().slotShreddable(ClothingSlot.bottom) && user.getAttribute(Attribute.ki) >= 14
                         && Random.random(3) == 2) {
             writeOutput(c, Result.special, user, target);
             target.shred(ClothingSlot.bottom);
-        } else if (target.roll(user, accuracy(c, user, target))) {
+        } else if (rollSucceeded) {
             double m = Random.random(16, 21);
             if (target.has(Trait.brassballs)) {
                 m *= .8;

@@ -30,7 +30,7 @@ public class InjectAphrodisiac extends Skill {
         return 25;
     }
 
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int magnitude = 2 + user.getAttribute(Attribute.medicine);
         if (user.human()) {
             c.write(user, deal(c, magnitude, Result.normal, user, target));

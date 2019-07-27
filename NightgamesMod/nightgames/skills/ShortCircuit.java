@@ -32,7 +32,7 @@ public class ShortCircuit extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.consume(Item.Battery, 3);
         writeOutput(c, Result.normal, user, target);
         target.add(c, new Rewired(target.getType(), 4 + Random.random(3)));

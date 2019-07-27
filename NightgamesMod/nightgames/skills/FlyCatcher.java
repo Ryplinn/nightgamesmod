@@ -38,7 +38,7 @@ public class FlyCatcher extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Optional<PetCharacter> targetPet = Random.pickRandom(c.getPetsFor(target));
         if (targetPet.isPresent()) {
             writeOutput(c, Result.normal, user, targetPet.get());

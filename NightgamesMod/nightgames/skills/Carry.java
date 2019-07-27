@@ -46,9 +46,9 @@ public class Carry extends Fuck {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         String premessage = premessage(c, user, target);
-        if (target.roll(user, accuracy(c, user, target))) {
+        if (rollSucceeded) {
             if (user.human()) {
                 c.write(user, Formatter.capitalizeFirstLetter(
                                 premessage + deal(c, premessage.length(), Result.normal, user, target)));
@@ -78,7 +78,7 @@ public class Carry extends Fuck {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return 60;
     }
 

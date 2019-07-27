@@ -30,7 +30,7 @@ public class Tackle extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (user.has(Trait.takedown) && target.getStamina().percent() <= 25) {
             c.write(user, Formatter.format("While {other:subject-action:take|takes} a breath,"
                             + " {self:subject-action:take|takes} careful aim at {other:possessive}"
@@ -42,16 +42,14 @@ public class Tackle extends Skill {
             target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random.random(15, 30)));
             target.add(c, new Winded(target.getType(), 2));
         }
-        if (target.roll(user, accuracy(c, user, target))
-                        && user.checkVsDc(Attribute.power, target.knockdownDC() - user.getAttribute(Attribute.animism))) {
+        if (rollSucceeded && user
+                        .checkVsDc(Attribute.power, target.knockdownDC() - user.getAttribute(Attribute.animism))) {
             if (user.getAttribute(Attribute.animism) >= 1) {
                 writeOutput(c, Result.special, user, target);
-                target.pain(c, user, (int) DamageType.physical
-                                .modifyDamage(user, target, Random.random(15, 30)));
+                target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random.random(15, 30)));
             } else {
                 writeOutput(c, Result.normal, user, target);
-                target.pain(c, user, (int) DamageType.physical
-                                .modifyDamage(user, target, Random.random(10, 25)));
+                target.pain(c, user, (int) DamageType.physical.modifyDamage(user, target, Random.random(10, 25)));
             }
             c.setStance(new Mount(user.getType(), target.getType()), user, true);
         } else {
@@ -81,7 +79,7 @@ public class Tackle extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         if (user.has(Trait.takedown) && target.getStamina().percent() <= 25) {
             return 200;
         }

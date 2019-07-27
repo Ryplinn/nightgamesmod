@@ -33,14 +33,14 @@ public class EyesOfTemptation extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return target.is(Stsflag.blinded) ? -100 : 90;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Result result = target.is(Stsflag.blinded) ? Result.special
-                        : target.roll(user, accuracy(c, user, target)) ? Result.normal : Result.miss;
+                        : rollSucceeded ? Result.normal : Result.miss;
         writeOutput(c, result, user, target);
         if (result == Result.normal) {
             target.add(c, new Enthralled(target.getType(), user.getType(), 5));

@@ -47,7 +47,7 @@ public class StripSelf extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         Clothing clothing = null;
         int diff = user.stripDifficulty(target);
         if (!choice.isEmpty() && Random.random(50) < diff) {

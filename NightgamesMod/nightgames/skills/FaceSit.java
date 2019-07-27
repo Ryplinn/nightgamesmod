@@ -50,7 +50,7 @@ public class FaceSit extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (user.has(Trait.enthrallingjuices) && Random.random(4) == 0 && !target.wary()) {
             writeOutput(c, Result.special, user, target);
             target.add(c, new Enthralled(target.getType(), user.getType(), 5));

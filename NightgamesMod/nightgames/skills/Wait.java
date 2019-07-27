@@ -33,7 +33,7 @@ public class Wait extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (channel(c, user)) {
             writeOutput(c, Result.special, user, target);
             if (focused(c, user)) {

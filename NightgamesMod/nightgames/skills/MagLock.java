@@ -38,7 +38,7 @@ public class MagLock extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         MagLocked stat = (MagLocked) target.getStatus(Stsflag.maglocked);
         if (stat == null) {
             c.write(user, Formatter.format("{self:SUBJECT-ACTION:place|places} a metallic band"

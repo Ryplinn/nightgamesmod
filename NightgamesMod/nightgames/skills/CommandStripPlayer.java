@@ -23,7 +23,7 @@ public class CommandStripPlayer extends PlayerCommand {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.undress(c);
         if (user.human()) {
             c.write(user, deal(c, 0, Result.normal, user, target));

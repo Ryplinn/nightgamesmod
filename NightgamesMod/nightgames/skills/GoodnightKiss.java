@@ -34,7 +34,7 @@ public class GoodnightKiss extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         c.write(user, String.format(
                         "%s surreptitiously %s %s lips with a powerful sedative, careful not "
                                         + "to accidentally ingest any. As soon as %s %s an opening, "

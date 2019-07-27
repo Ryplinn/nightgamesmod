@@ -34,14 +34,14 @@ public class TemptressBlowjob extends Blowjob {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int m = 10 + Random.random(user.getAttribute(Attribute.technique) / 2);
 
         if (user.has(Trait.silvertongue)) {
             m += 4;
         }
 
-        if (target.roll(user, accuracy(c, user, target))) {
+        if (rollSucceeded) {
             if (!target.body.getRandomCock().isReady(target)) {
                 m -= 7;
                 target.body.pleasure(user, user.body.getRandom("mouth"), target.body.getRandomCock(), m, c, new SkillUsage<>(this, user, target));

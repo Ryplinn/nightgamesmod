@@ -28,9 +28,9 @@ public class Maneuver extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (isFlashStep(user)) {
-            if (target.roll(user, accuracy(c, user, target))) {
+            if (rollSucceeded) {
                 writeOutput(c, Result.special, user, target);
                 c.setStance(new Behind(user.getType(), target.getType()), user, true);
                 user.weaken(c, user.getStamina().get() / 10);
@@ -43,7 +43,7 @@ public class Maneuver extends Skill {
                 return false;
             }
         } else {
-            if (target.roll(user, accuracy(c, user, target))) {
+            if (rollSucceeded) {
                 writeOutput(c, Result.normal, user, target);
                 c.setStance(new Behind(user.getType(), target.getType()), user, true);
                 user.emote(Emotion.confident, 15);
@@ -68,7 +68,7 @@ public class Maneuver extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return isFlashStep(user) ? 200 : 75;
     }
 

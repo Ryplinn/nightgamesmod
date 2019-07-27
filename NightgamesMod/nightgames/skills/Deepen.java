@@ -40,7 +40,7 @@ public class Deepen extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         if (target.is(Stsflag.trance)) {
             if (target.human()) {
                 c.write(user, Formatter.format("{self:NAME-POSSESSIVE} all-encompassing eyes completely fills your field of vision now as she destroys any last trace of independent thought inside your mind.", user, target));

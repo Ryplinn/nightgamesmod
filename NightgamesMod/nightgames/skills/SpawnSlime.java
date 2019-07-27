@@ -36,7 +36,7 @@ public class SpawnSlime extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.consume(Item.Battery, 5);
         int power = 5 + user.getAttribute(Attribute.science);
         int ac = 3 + user.getAttribute(Attribute.science) / 10;

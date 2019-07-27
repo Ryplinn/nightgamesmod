@@ -42,7 +42,7 @@ public class SuccubusSurprise extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         boolean oppHasBlessed = c.getStance().insertedPartFor(c, target).moddedPartCountsAs(target, CockMod.blessed);
         if (user.human()) {
             if (oppHasBlessed) {
@@ -64,7 +64,7 @@ public class SuccubusSurprise extends Skill {
         } else {
             target.add(c, new LegLocked(target.getType(), 4 * user.getAttribute(Attribute.power)));
         }
-        new Grind().resolve(c, user, target);
+        new Grind().resolve(c, user, target, true);
 
         if (!user.human() && target.human() && !oppHasBlessed
                         && user.getType().equals(CharacterType.get("CUSTOM_NPCSamantha"))) {

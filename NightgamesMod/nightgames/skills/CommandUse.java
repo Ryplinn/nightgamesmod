@@ -51,7 +51,7 @@ public class CommandUse extends PlayerCommand {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         do {
             used = Item.values()[Random.random(Item.values().length)];
             boolean hasStatus = false;

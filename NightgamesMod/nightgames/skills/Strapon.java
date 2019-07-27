@@ -43,7 +43,7 @@ public class Strapon extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         List<Clothing> unequipped = user.getOutfit().equip(ClothingTable.getByID("strapon"));
         if (unequipped.isEmpty()) {
             if (user.human()) {

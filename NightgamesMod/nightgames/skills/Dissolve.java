@@ -32,12 +32,12 @@ public class Dissolve extends Skill {
                         && target.outfit.getRandomShreddableSlot() != null && !c.getStance().prone(user);
     }
 
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return user.getAttribute(Attribute.slime) > 0 || user.has(Item.Aersolizer) ? 200 : 80;
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         ClothingSlot toShred = null;
         if (!target.outfit.slotOpen(ClothingSlot.bottom) && target.outfit.slotShreddable(ClothingSlot.bottom)) {
             toShred = ClothingSlot.bottom;
@@ -58,7 +58,7 @@ public class Dissolve extends Skill {
             if (user.has(Item.Aersolizer)) {
                 writeOutput(c, Result.special, user, target);
                 shred(target, toShred);
-            } else if (target.roll(user, accuracy(c, user, target))) {
+            } else if (rollSucceeded) {
                 writeOutput(c, Result.normal, user, target);
                 shred(target, toShred);
             } else {

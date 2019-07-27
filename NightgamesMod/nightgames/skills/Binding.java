@@ -37,7 +37,7 @@ public class Binding extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         writeOutput(c, Result.normal, user, target);
         target.add(c, new Bound(target.getType(), 45 + 3 * Math.sqrt(user.getAttribute(Attribute.spellcasting)), "seal"));
         target.emote(Emotion.nervous, 5);

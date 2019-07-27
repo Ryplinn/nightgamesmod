@@ -56,7 +56,7 @@ public class SuccubusNurse extends Skill {
     }
     
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         c.write(user, Formatter.format(
                         "{self:SUBJECT-ACTION:shift|shifts}, pulling {other:name-possessive} head down "
                                         + "towards one of {self:possessive} puffy nipples. %s. {self:POSSESSIVE} milk"
@@ -76,7 +76,7 @@ public class SuccubusNurse extends Skill {
         if (user.has(Trait.Pacification)) {
             target.add(c, new AttributeBuff(target.getType(), Attribute.power, -2, 5));
         }
-        new Suckle().resolve(c, user, user, true);
+        new Suckle().resolve(c, user, user, true, true);
         if (Random.random(100) < 5 + 2 * user.getAttribute(Attribute.fetishism)) {
             target.add(c, new BodyFetish(target.getType(), user.getType(), BreastsPart.a.getType(), .25));
         }

@@ -49,7 +49,7 @@ public class Kiss extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         int accuracy = c.getStance().en == Stance.neutral ? 70 : 100;
         if (user.has(Trait.romantic)) {
             accuracy += 20;
@@ -58,9 +58,9 @@ public class Kiss extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         int m = Random.random(6, 10);
-        if (!target.roll(user, accuracy(c, user, target))) {
+        if (!rollSucceeded) {
             writeOutput(c, Result.miss, user, target);
             return false;
         }

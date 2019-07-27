@@ -44,7 +44,7 @@ public class WingWrap extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
 
         c.write(user, describeWrap(c, user, target));
         target.add(c, new WingWrapped(target.getType(), user.getType()));
@@ -60,7 +60,7 @@ public class WingWrap extends Skill {
                                                 + " surprise, {self:subject-action} uses more conventional means"
                                                 + " to secure an even better hold on {other:direct-object}!", user,
                                                 target));
-                hold.resolve(c, user, target);
+                hold.resolve(c, user, target, true);
             }
         }
 

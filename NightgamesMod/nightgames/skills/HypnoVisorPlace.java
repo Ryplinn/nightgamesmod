@@ -38,7 +38,7 @@ public class HypnoVisorPlace extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         String message = Formatter.format("{self:SUBJECT-ACTION:walk|walks}"
                         + " around and kneels behind {other:name-do}, propping {other:direct-object}"
                         + " up against {self:direct-object}. ", user, target) + addictionDesc(user, target) + Formatter

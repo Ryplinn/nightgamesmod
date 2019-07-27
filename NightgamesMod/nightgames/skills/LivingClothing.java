@@ -32,7 +32,7 @@ public class LivingClothing extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.consume(Item.Battery, 3);
         if (user.human()) {
             c.write(user, deal(c, 0, Result.normal, user, target));

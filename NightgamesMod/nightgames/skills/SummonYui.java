@@ -35,7 +35,7 @@ public class SummonYui extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         NPC yui = GameState.getGameState().characterPool.getNPCByType("Yui");
         int power = (user.getLevel() + target.getLevel()) / 2;
         int ac = 4 + power / 3;

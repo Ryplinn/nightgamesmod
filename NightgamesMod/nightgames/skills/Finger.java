@@ -27,8 +27,8 @@ public class Finger extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        if (target.roll(user, accuracy(c, user, target))) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        if (rollSucceeded) {
             int m = Random.random(8, 13);
             if (user.getAttribute(Attribute.seduction) >= 8) {
                 m += 6;
@@ -61,7 +61,7 @@ public class Finger extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c, Character user, Character target) {
+    public int baseAccuracy(Combat c, Character user, Character target) {
         return c.getStance().en == Stance.neutral ? 50 : 100;
     }
 

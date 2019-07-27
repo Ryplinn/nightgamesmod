@@ -41,7 +41,7 @@ public class CheapShot extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.add(c, new Primed(user.getType(), -3));
         writeOutput(c, Result.normal, user, target);
         if (target.human() && Random.random(5) >= 3) {

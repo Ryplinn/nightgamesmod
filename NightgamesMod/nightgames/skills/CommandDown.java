@@ -28,7 +28,7 @@ public class CommandDown extends PlayerCommand {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         c.setStance(new Mount(user.getType(), target.getType()), target, false);
         writeOutput(c, Result.normal, user, target);
         return true;

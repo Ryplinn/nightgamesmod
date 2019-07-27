@@ -39,7 +39,7 @@ public class TakeOffShoes extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         user.strip(ClothingSlot.feet, c);
         if (target.body.getFetish("feet").isPresent() && target.body.getFetish("feet").get().magnitude > .25) {
             writeOutput(c, Result.special, user, target);

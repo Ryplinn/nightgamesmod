@@ -55,7 +55,7 @@ public class ToggleSlimePussy extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         String msg = "{self:SUBJECT-ACTION:close|closes} {self:possessive} eyes ";
         if (hasSlimePussy(user)) {
             if (user.crotchAvailable() || user.human()) {

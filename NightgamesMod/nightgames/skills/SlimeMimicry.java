@@ -40,8 +40,8 @@ public class SlimeMimicry extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        return Random.pickRandomGuaranteed(MIMICRY_SKILLS).resolve(c, user, target);
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        return Random.pickRandomGuaranteed(MIMICRY_SKILLS).resolve(c, user, target, true);
     }
 
     @Override

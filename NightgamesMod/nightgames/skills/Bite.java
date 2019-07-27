@@ -30,7 +30,7 @@ public class Bite extends Skill {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
         boolean katOnTop = c.getStance().dom(user);
         if (katOnTop) {
             c.write(user, "Kat leans in close, grinding her breasts against you and biting your neck!"

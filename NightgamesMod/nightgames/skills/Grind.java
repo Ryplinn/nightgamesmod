@@ -57,8 +57,8 @@ public class Grind extends Thrust {
     }
 
     @Override
-    public boolean resolve(Combat c, Character user, Character target) {
-        boolean res = super.resolve(c, user, target);
+    public boolean resolve(Combat c, Character user, Character target, boolean rollSucceeded) {
+        boolean res = super.resolve(c, user, target, rollSucceeded);
         if (getLabel(c, user).equals(divineName)) {
             target.heal(c, 20);
             target.buildMojo(c, 5);
