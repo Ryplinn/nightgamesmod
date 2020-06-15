@@ -18,7 +18,7 @@ import java.util.stream.Stream;
  * Loads and stores offensive and defensive values associated with attributes.
  */
 public final class AttributeValues {
-    private static final Path DATA_PATH = Paths.get("NightgamesMod/nightgames/characters/AttributeValues.json");
+    private static final Path DATA_PATH = Paths.get("data/AttributeValues.json");
     private static final AttributeValues VALUES = loadAttributeValues(DATA_PATH);
 
     public enum PowerType {
