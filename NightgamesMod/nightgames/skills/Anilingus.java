@@ -13,6 +13,7 @@ import nightgames.stance.Stance;
 import nightgames.status.BodyFetish;
 import nightgames.status.Stsflag;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -29,12 +30,11 @@ public class Anilingus extends Skill {
 
     @Override
     public Set<SkillTag> getTags(Combat c, Character user, Character target) {
+        Set<SkillTag> tags = new HashSet<>(super.getTags(c, user, target));
         if (isWorship(c, user, target)) {
-            Set<SkillTag> tags = new HashSet<>(super.getTags(c, user, target));
             tags.add(SkillTag.worship);
-            return tags;
         }
-        return super.getTags(c, user, target);
+        return Collections.unmodifiableSet(tags);
     }
 
     @Override

@@ -12,6 +12,8 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.Stance;
 import nightgames.status.*;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 public class ThrowSlime extends Skill {
@@ -21,11 +23,11 @@ public class ThrowSlime extends Skill {
     }
 
     @Override public Set<SkillTag> getTags(Combat c, Character user, Character target) {
-        Set<SkillTag> tags = super.getTags(c, user, target);
+        Set<SkillTag> tags = new HashSet<>(super.getTags(c, user, target));
         if (user.getAttribute(Attribute.slime) >= 12) {
             tags.add(SkillTag.mental);
         }
-        return tags;
+        return Collections.unmodifiableSet(tags);
     }
 
     @Override

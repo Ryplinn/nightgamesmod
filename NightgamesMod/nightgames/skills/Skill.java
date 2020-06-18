@@ -282,6 +282,14 @@ public abstract class Skill {
         return getTags(c, user, c.getOpponent(user));
     }
 
+    /**
+     * Returns an read-only set of the skill's tags.
+     *
+     * @param c The current combat, if applicable.
+     * @param user The user of the skill.
+     * @param target The target of the skill.
+     * @return An unmodifiable set of the tags associated with a usage of this skill.
+     */
     public Set<SkillTag> getTags(Combat c, Character user, Character target) {
         return Collections.unmodifiableSet(tags);
     }
