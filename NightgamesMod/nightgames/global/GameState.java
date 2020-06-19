@@ -121,7 +121,7 @@ public class GameState {
     }
 
     synchronized void gameLoop() {
-        System.out.println(String.format("Starting game with player %s", this.characterPool.human.getName()));
+        System.out.println(String.format("Starting game with player %s", this.characterPool.human.getTrueName()));
         loopThread = Thread.currentThread();
         ingame = true;
         while (!Thread.interrupted()) {
