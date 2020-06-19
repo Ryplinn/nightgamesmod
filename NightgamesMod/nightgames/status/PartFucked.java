@@ -136,8 +136,8 @@ public class PartFucked extends Status implements InsertedStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new PartFucked(newAffected.getType(), newOther.getType(), penetrator, target);
+    public Status instance(Character newAffected, Character opponent) {
+        return new PartFucked(newAffected.getType(), opponent.getType(), penetrator, target);
     }
 
     @Override  public JsonObject saveToJson() {

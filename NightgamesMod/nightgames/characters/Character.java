@@ -178,7 +178,7 @@ public abstract class Character extends Observable implements Cloneable {
         c.outfitPlan = new OutfitPlan(this.outfitPlan);
         c.outfit = new Outfit(outfit);
         c.flags = new HashMap<>(flags);
-        c.status = status; // Will be deep-copied in finishClone()
+        c.status = status; // Will be deep-copied in cloneStatuses()
         c.traits = new CopyOnWriteArrayList<>(traits);
         c.temporaryAddedTraits = new HashMap<>(temporaryAddedTraits);
         c.temporaryRemovedTraits = new HashMap<>(temporaryRemovedTraits);
@@ -204,11 +204,13 @@ public abstract class Character extends Observable implements Cloneable {
         return c;
     }
 
-    public void finishClone(Character other) {
+    public void cloneStatuses(Character opponent) {
         List<Status> oldstatus = status;
         status = new CopyOnWriteArrayList<>();
         for (Status s : oldstatus) {
-            status.add(s.instance(this, other));
+            Status instance = s.instance(this, opponent);
+            assert instance != null;
+            status.add(instance);
         }
     }
 

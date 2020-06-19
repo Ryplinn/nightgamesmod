@@ -401,7 +401,6 @@ public class Informant extends Activity {
             RecruitmentData data = npc.getRecruitmentData();
             try {
                 Character copy = getPlayer().clone();
-                copy.finishClone(getPlayer());
                 if (data.effects.stream().allMatch((effect) -> effect.execute(null, copy, null))) {
                     data.effects.forEach((effect) -> effect.execute(null, getPlayer(), null));
                     GUI.gui.message("<i>\"" + data.confirm + "\"</i>");

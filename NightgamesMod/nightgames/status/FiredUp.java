@@ -139,8 +139,8 @@ public class FiredUp extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new FiredUp(newAffected.getType(), newOther.getType(), part);
+    public Status instance(Character newAffected, Character opponent) {
+        return new FiredUp(newAffected.getType(), opponent.getType(), part);
     }
 
     @Override

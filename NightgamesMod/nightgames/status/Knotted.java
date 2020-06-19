@@ -123,8 +123,8 @@ public class Knotted extends Status {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new Knotted(newAffected.getType(), newOther.getType(), anal);
+    public Status instance(Character newAffected, Character opponent) {
+        return new Knotted(newAffected.getType(), opponent.getType(), anal);
     }
 
     @Override  public JsonObject saveToJson() {

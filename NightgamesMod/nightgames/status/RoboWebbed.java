@@ -45,7 +45,7 @@ public class RoboWebbed extends Bound {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new RoboWebbed(newAffected.getType(), toughness, trap);
     }
 

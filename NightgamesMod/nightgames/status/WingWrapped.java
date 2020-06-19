@@ -159,8 +159,8 @@ public class WingWrapped extends Status {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new WingWrapped(newAffected.getType(), newOther.getType());
+    public Status instance(Character newAffected, Character opponent) {
+        return new WingWrapped(newAffected.getType(), opponent.getType());
     }
 
     @Override

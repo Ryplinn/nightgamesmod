@@ -86,7 +86,7 @@ public class PlayerSlimeDummy extends Status {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         assert newAffected instanceof Player;
         return new PlayerSlimeDummy(newAffected.getType());
     }

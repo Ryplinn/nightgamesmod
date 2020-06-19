@@ -113,7 +113,7 @@ public class Flatfooted extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new Flatfooted(newAffected.getType(), getDuration(), makesWary);
     }
 

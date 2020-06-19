@@ -147,7 +147,7 @@ public class Atrophy extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new Atrophy(newAffected.getType(), magnitude, getDuration(), source);
     }
 

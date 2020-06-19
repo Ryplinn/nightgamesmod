@@ -150,7 +150,7 @@ public class Horny extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new Horny(newAffected.getType(), magnitude, getDuration(), sourceSuffix);
     }
 

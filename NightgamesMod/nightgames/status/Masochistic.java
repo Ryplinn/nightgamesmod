@@ -99,7 +99,7 @@ public class Masochistic extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new Masochistic(newAffected.getType());
     }
 

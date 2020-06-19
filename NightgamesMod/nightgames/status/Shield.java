@@ -100,7 +100,7 @@ public class Shield extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new Shield(newAffected.getType(), strength, getDuration());
     }
 

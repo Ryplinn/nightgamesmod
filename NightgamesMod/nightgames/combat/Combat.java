@@ -1363,8 +1363,8 @@ public class Combat extends Observable implements Cloneable {
         Combat c = (Combat) super.clone();
         c.p1 = p1.clone();
         c.p2 = p2.clone();
-        c.p1.finishCombatClone(c.p2);
-        c.p2.finishCombatClone(c.p1);
+        c.p1.cloneStatuses(c.p2);
+        c.p2.cloneStatuses(c.p1);
         c.combatantData = new HashMap<>();
         combatantData.forEach((name, data) -> c.combatantData.put(name, (CombatantData) data.clone()));
         c.stance = getStance().clone();

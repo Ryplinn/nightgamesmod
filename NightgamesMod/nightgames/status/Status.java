@@ -142,7 +142,7 @@ public abstract class Status implements Cloneable {
         return null;
     }
 
-    public abstract Status instance(Character newAffected, Character newOther);
+    public abstract Status instance(Character newAffected, Character opponent);
 
     public String getVariant() {
         return toString();

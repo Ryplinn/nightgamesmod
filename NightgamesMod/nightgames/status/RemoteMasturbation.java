@@ -110,8 +110,8 @@ public class RemoteMasturbation extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new RemoteMasturbation(newAffected.getType(), newOther.getType());
+    public Status instance(Character newAffected, Character opponent) {
+        return new RemoteMasturbation(newAffected.getType(), opponent.getType());
     }
 
     @Override

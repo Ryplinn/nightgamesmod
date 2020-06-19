@@ -176,8 +176,8 @@ public class Enthralled extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new Enthralled(newAffected.getType(), newOther.getType(), getDuration(), makesCynical);
+    public Status instance(Character newAffected, Character opponent) {
+        return new Enthralled(newAffected.getType(), master, getDuration(), makesCynical);
     }
 
     @Override  public JsonObject saveToJson() {

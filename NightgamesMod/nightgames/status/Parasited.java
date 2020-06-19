@@ -219,8 +219,8 @@ public class Parasited extends Status {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new Parasited(newAffected.getType(), newOther.getType());
+    public Status instance(Character newAffected, Character opponent) {
+        return new Parasited(newAffected.getType(), opponent.getType());
     }
 
      public JsonObject saveToJson() {

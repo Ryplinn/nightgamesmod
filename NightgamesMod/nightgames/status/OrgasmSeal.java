@@ -115,7 +115,7 @@ public class OrgasmSeal extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new OrgasmSeal(newAffected.getType(), getDuration());
     }
 

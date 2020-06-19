@@ -147,7 +147,7 @@ public class Bound extends Status {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new Bound(newAffected.getType(), toughness, binding, trap);
     }
 

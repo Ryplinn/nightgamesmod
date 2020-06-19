@@ -166,7 +166,7 @@ public class AttributeBuff extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new AttributeBuff(newAffected.getType(), modded, value, getDuration());
     }
 

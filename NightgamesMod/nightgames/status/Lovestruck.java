@@ -110,7 +110,7 @@ public class Lovestruck extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new Lovestruck(newAffected.getType(), null, getDuration());
     }
 

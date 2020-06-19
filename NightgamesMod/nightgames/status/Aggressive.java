@@ -120,7 +120,7 @@ public class Aggressive extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new Aggressive(newAffected.getType(), cause, getDuration());
     }
 

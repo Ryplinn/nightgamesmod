@@ -110,7 +110,7 @@ public class Lethargic extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new Lethargic(newAffected.getType(), getDuration(), magnitude);
     }
 

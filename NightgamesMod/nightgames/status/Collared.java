@@ -115,8 +115,8 @@ public class Collared extends Status implements Compulsive {
     }
     
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new Collared(newAffected.getType(), newOther.getType());
+    public Status instance(Character newAffected, Character opponent) {
+        return new Collared(newAffected.getType(), opponent.getType());
     }
 
     @Override

@@ -90,7 +90,7 @@ public class Unreadable extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new Unreadable(newAffected.getType());
     }
 

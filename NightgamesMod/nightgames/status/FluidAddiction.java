@@ -192,8 +192,8 @@ public class FluidAddiction extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new FluidAddiction(newAffected.getType(), newOther.getType(), magnitude, getDuration());
+    public Status instance(Character newAffected, Character opponent) {
+        return new FluidAddiction(newAffected.getType(), opponent.getType(), magnitude, getDuration());
     }
 
     public boolean activated() {

@@ -97,7 +97,7 @@ public class Converted extends AttributeBuff {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new Converted(newAffected.getType(), modded, converted, value, getDuration());
     }
 

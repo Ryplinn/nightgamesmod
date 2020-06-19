@@ -38,9 +38,12 @@ public abstract class AddictionSymptom extends Status {
         return source;
     }
 
-    @Override public AddictionSymptom instance(Character newAffected, Character newOther) {
-        Optional<Addiction> foundAddiction = newAffected.getAddiction(getSource().getType(), newOther);
-        return foundAddiction.map(Addiction::createTrackingSymptom).orElse(null);
+    @Override public AddictionSymptom instance(Character newAffected, Character opponent) {
+        CharacterType cause = this.source.cause;
+        Optional<Addiction> foundAddiction = newAffected.getAddiction(getSource().getType(), cause);
+        return foundAddiction.map(Addiction::createTrackingSymptom).orElseThrow(() -> new RuntimeException(
+                        String.format("Could not create symptom instance for addiction %s. Afflicted: %s, Source: %s",
+                                        this.source, this.affected, cause)));
     }
 
     @Override

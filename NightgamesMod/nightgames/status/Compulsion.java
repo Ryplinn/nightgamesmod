@@ -96,8 +96,8 @@ public class Compulsion extends DurationStatus implements Compulsive {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new Compulsion(newAffected.getType(), newOther.getType());
+    public Status instance(Character newAffected, Character opponent) {
+        return new Compulsion(newAffected.getType(), compeller);
     }
 
     @Override

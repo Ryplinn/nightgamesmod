@@ -118,8 +118,8 @@ public class CockChoked extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new CockChoked(newAffected.getType(), newOther.getType(), getDuration());
+    public Status instance(Character newAffected, Character opponent) {
+        return new CockChoked(newAffected.getType(), opponent.getType(), getDuration());
     }
 
     @Override  public JsonObject saveToJson() {

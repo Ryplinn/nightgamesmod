@@ -98,7 +98,7 @@ public class Blinded extends Status {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new Blinded(newAffected.getType(), cause, voluntary);
     }
 

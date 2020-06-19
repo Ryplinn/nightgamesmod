@@ -142,8 +142,8 @@ public class PartiallyCorrupted extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new PartiallyCorrupted(newAffected.getType(), newOther.getType());
+    public Status instance(Character newAffected, Character opponent) {
+        return new PartiallyCorrupted(newAffected.getType(), opponent.getType());
     }
 
     @Override

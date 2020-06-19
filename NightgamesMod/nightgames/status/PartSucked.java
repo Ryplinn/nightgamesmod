@@ -140,8 +140,8 @@ public class PartSucked extends Status implements InsertedStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new PartSucked(newAffected.getType(), newOther.getType(), penetrated, target);
+    public Status instance(Character newAffected, Character opponent) {
+        return new PartSucked(newAffected.getType(), opponent.getType(), penetrated, target);
     }
 
     @Override  public JsonObject saveToJson() {

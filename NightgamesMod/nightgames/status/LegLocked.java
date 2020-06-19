@@ -117,7 +117,7 @@ public class LegLocked extends Status {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new LegLocked(newAffected.getType(), toughness);
     }
 

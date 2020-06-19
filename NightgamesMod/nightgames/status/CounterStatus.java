@@ -100,7 +100,7 @@ public class CounterStatus extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new CounterStatus(newAffected.getType(), skill, descriptionFormat, getDuration());
     }
 

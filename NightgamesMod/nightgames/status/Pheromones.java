@@ -118,8 +118,8 @@ public class Pheromones extends Horny {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new Pheromones(newAffected.getType(), newOther.getType(), getMagnitude(), getDuration(), sourceSuffix);
+    public Status instance(Character newAffected, Character opponent) {
+        return new Pheromones(newAffected.getType(), source, getMagnitude(), getDuration(), sourceSuffix);
     }
 
     @Override  public JsonObject saveToJson() {

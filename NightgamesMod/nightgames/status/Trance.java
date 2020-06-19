@@ -138,7 +138,7 @@ public class Trance extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new Trance(newAffected.getType(), this.getDuration(), this.makesCynical);
     }
 

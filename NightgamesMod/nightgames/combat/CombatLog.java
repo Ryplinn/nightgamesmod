@@ -30,8 +30,8 @@ class CombatLog {
         try {
             last1 = p1.clone();
             last2 = p2.clone();
-            last1.finishClone(p1);
-            last2.finishClone(p2);
+            last1.cloneStatuses(last2);
+            last2.cloneStatuses(last1);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
@@ -91,8 +91,8 @@ class CombatLog {
         try {
             last1 = p1.clone();
             last2 = p2.clone();
-            last1.finishClone(p1);
-            last2.finishClone(p2);
+            last1.cloneStatuses(last2);
+            last2.cloneStatuses(last1);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }

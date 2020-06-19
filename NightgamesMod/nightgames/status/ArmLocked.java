@@ -118,7 +118,7 @@ public class ArmLocked extends Status {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new ArmLocked(newAffected.getType(), Math.round(toughness));
     }
 

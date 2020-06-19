@@ -176,8 +176,8 @@ public class Slimed extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new Slimed(newAffected.getType(), newOther.getType(), stacks);
+    public Status instance(Character newAffected, Character opponent) {
+        return new Slimed(newAffected.getType(), opponent.getType(), stacks);
     }
 
     public JsonObject saveToJson() {

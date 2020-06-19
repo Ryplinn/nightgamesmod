@@ -111,8 +111,8 @@ public class HypnoVisor extends Status {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new HypnoVisor(newAffected.getType(), newOther.getType());
+    public Status instance(Character newAffected, Character opponent) {
+        return new HypnoVisor(newAffected.getType(), opponent.getType());
     }
 
     @Override

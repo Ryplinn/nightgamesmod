@@ -134,8 +134,8 @@ public class TailSucked extends Status implements InsertedStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new TailSucked(newAffected.getType(), newOther.getType(), power);
+    public Status instance(Character newAffected, Character opponent) {
+        return new TailSucked(newAffected.getType(), opponent.getType(), power);
     }
 
     @Override public JsonObject saveToJson() {

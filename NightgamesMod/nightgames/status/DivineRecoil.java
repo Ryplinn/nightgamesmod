@@ -114,7 +114,7 @@ public class DivineRecoil extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new DivineRecoil(newAffected.getType(), magnitude);
     }
 

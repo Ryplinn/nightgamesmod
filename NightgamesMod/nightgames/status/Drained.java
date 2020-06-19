@@ -56,19 +56,19 @@ public class Drained extends AttributeBuff {
         }
     }
 
-    private CharacterType other;
+    private final CharacterType drainer;
 
-    public Drained(CharacterType affected, CharacterType other, Attribute att, int value, int duration) {
+    public Drained(CharacterType affected, CharacterType drainer, Attribute att, int value, int duration) {
         super(affected, att, value, duration);
-        this.other = other;
+        this.drainer = drainer;
         unflag(Stsflag.purgable);
         if (value < 0) {
             flag(Stsflag.debuff);
         }
     }
 
-    public Character getOther() {
-        return other.fromPoolGuaranteed();
+    public Character getDrainer() {
+        return drainer.fromPoolGuaranteed();
     }
 
     @Override
@@ -95,7 +95,7 @@ public class Drained extends AttributeBuff {
                 // large
                 message = "{self:subject-action:have} %s some of {other:name-possessive} %s, greatly %s {self:possessive} %s.";
             }
-            return Formatter.format(message, getAffected(), getOther(), Random.pickRandomGuaranteed(stolenSynonyms), modded.getDrainedDO(),
+            return Formatter.format(message, getAffected(), getDrainer(), Random.pickRandomGuaranteed(stolenSynonyms), modded.getDrainedDO(),
                             Random.pickRandomGuaranteed(boostingSynonyms), modded.getDrainerOwnDO());
         }
     }
@@ -133,7 +133,7 @@ public class Drained extends AttributeBuff {
 
     @Override
     public String getVariant() {
-        return "DRAINED:" + other + ":" + modded.toString();
+        return "DRAINED:" + drainer + ":" + modded.toString();
     }
 
     @Override
@@ -157,8 +157,8 @@ public class Drained extends AttributeBuff {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new Drained(newAffected.getType(), newOther.getType(), modded, value, getDuration());
+    public Status instance(Character newAffected, Character opponent) {
+        return new Drained(newAffected.getType(), drainer, modded, value, getDuration());
     }
 
     @Override

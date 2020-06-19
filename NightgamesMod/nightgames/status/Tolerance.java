@@ -90,7 +90,7 @@ public class Tolerance extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new Tolerance(newAffected.getType(), getDuration());
     }
 

@@ -115,7 +115,7 @@ public class CockBound extends Status {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
+    public Status instance(Character newAffected, Character opponent) {
         return new CockBound(newAffected.getType(), toughness, binding);
     }
 

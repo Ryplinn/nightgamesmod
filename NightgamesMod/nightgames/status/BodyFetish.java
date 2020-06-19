@@ -170,8 +170,8 @@ public class BodyFetish extends DurationStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new BodyFetish(newAffected.getType(), newOther.getType(), part, magnitude);
+    public Status instance(Character newAffected, Character opponent) {
+        return new BodyFetish(newAffected.getType(), origin, part, magnitude);
     }
 
     @Override  public JsonObject saveToJson() {

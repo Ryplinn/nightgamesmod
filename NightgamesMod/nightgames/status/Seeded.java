@@ -206,8 +206,8 @@ public class Seeded extends Status implements InsertedStatus {
     }
 
     @Override
-    public Status instance(Character newAffected, Character newOther) {
-        return new Seeded(newAffected.getType(), newOther.getType(), target);
+    public Status instance(Character newAffected, Character opponent) {
+        return new Seeded(newAffected.getType(), opponent.getType(), target);
     }
 
      public JsonObject saveToJson() {
