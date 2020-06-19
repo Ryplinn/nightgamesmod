@@ -8,6 +8,7 @@ import nightgames.characters.custom.CustomNPC;
 import nightgames.characters.custom.JsonSourceNPCDataLoader;
 import nightgames.characters.custom.NPCData;
 import nightgames.characters.trait.Trait;
+import nightgames.combat.Combat;
 import nightgames.json.JsonUtils;
 import nightgames.pet.PetCharacter;
 import nightgames.start.NPCConfiguration;
@@ -26,7 +27,8 @@ public class CharacterPool {
     public Map<CharacterType, NPC> characterPool;   // All starting and unlockable characters
     private Set<CharacterType> debugChars;
     public Player human;
-    public transient List<PetCharacter> otherCombatants;
+    private transient Combat activeCombat;
+    private transient Combat origCombat;
 
     public CharacterPool() {
         characterPool = new HashMap<>();
@@ -155,8 +157,9 @@ public class CharacterPool {
     }
 
     Character getCharacterByType(CharacterType type, boolean required) {
-        if (otherCombatants != null) {
-            Optional<PetCharacter> foundPet = otherCombatants.stream().filter(pet -> pet.getType() == type).findAny();
+        if (activeCombat != null) {
+            Optional<PetCharacter> foundPet =
+                            activeCombat.getOtherCombatants().stream().filter(pet -> pet.getType() == type).findFirst();
             if (foundPet.isPresent()) {
                 return foundPet.get();
             }
@@ -223,16 +226,32 @@ public class CharacterPool {
         } else if (character instanceof NPC) {
             characterPool.put(character.getType(), (NPC) character);
         } else {
-            assert character instanceof PetCharacter;
-            if (otherCombatants == null) {
-                otherCombatants = new CopyOnWriteArrayList<>();
+            String msg;
+            if (character instanceof PetCharacter) {
+                msg = "Pet characters should be added directly to active combat";
+            } else {
+                msg = "Attempted to add unknown character type to pool";
             }
-            otherCombatants.add((PetCharacter) character);
+            throw new UnsupportedOperationException(msg);
         }
     }
 
-    public void setOtherCombatants(List<PetCharacter> otherCombatants) {
-        this.otherCombatants = otherCombatants;
+    public void combatStart(Combat activeCombat) {
+        this.activeCombat = activeCombat;
+    }
+
+    public void combatEnd() {
+        this.activeCombat = null;
+    }
+
+    public void combatSim(Combat simCombat) {
+        this.origCombat = activeCombat;
+        this.activeCombat = simCombat;
+    }
+
+    public void combatRestore() {
+        this.activeCombat = origCombat;
+        this.origCombat = null;
     }
 
     Character getCharacterByType(CharacterType type) {
@@ -253,10 +272,10 @@ public class CharacterPool {
             dump.append("\t").append(npc).append("\n");
         }
         dump.append("Other combatants:\n");
-        if (otherCombatants == null || otherCombatants.size() == 0) {
+        if (activeCombat == null || activeCombat.getOtherCombatants().size() == 0) {
             dump.append("none\n");
         } else {
-            for (PetCharacter pet : otherCombatants) {
+            for (PetCharacter pet : activeCombat.getOtherCombatants()) {
                 dump.append("\t").append(pet.getType()).append("\n");
             }
         }

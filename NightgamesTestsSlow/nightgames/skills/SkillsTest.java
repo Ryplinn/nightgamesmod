@@ -90,22 +90,24 @@ public class SkillsTest {
 
 	private void testSkill(Character npc1, Character npc2, Position pos) throws CloneNotSupportedException {
 		Combat c = new Combat(npc1, npc2, area, pos);
+		gameState.characterPool.combatStart(c);
 		pos.checkOngoing(c);
 		if (c.getStance() == pos) {
 			for (Supplier<Skill> skillstructor : SkillPool.skillPool) {
 				Combat cloned = c.clone();
-				gameState.characterPool.setOtherCombatants(cloned.getOtherCombatants());
+				gameState.characterPool.combatSim(cloned);
 				Skill used = skillstructor.get();
 				if (Skill.skillIsUsable(cloned, used, cloned.p1, cloned.p2)) {
 					System.out.println("["+cloned.getStance().getClass().getSimpleName()+"] Skill usable: " + used.getLabel(cloned,
                                     cloned.p1) + ".");
 					used.resolve(cloned, cloned.p1, cloned.p2, true);
 				}
-				gameState.characterPool.setOtherCombatants(null);
+				gameState.characterPool.combatRestore();
 			}
 		} else {
 			System.out.println("STANCE NOT EFFECTIVE: " + pos.getClass().getSimpleName() + " with top: " + pos.getTop().getTrueName() + " and bottom: " + pos.getBottom().getTrueName());
 		}
+		gameState.characterPool.combatEnd();
 	}
 
 	// TODO: May need to clone npc1 and npc2 here too, depending on how skills affect characters.

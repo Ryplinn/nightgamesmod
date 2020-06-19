@@ -1311,7 +1311,7 @@ public class Combat extends Observable implements Cloneable {
         getCombatantData(p1).getRemovedItems().forEach(p1::gain);
         getCombatantData(p2).getRemovedItems().forEach(p2::gain);
 
-        GameState.getGameState().characterPool.otherCombatants = null;
+        GameState.getGameState().characterPool.combatEnd();
 
         location.endEncounter();
         p1.spendXP();
@@ -1363,8 +1363,8 @@ public class Combat extends Observable implements Cloneable {
         Combat c = (Combat) super.clone();
         c.p1 = p1.clone();
         c.p2 = p2.clone();
-        c.p1.finishClone(c.p2);
-        c.p2.finishClone(c.p1);
+        c.p1.finishCombatClone(c.p2);
+        c.p2.finishCombatClone(c.p1);
         c.combatantData = new HashMap<>();
         combatantData.forEach((name, data) -> c.combatantData.put(name, (CombatantData) data.clone()));
         c.stance = getStance().clone();
@@ -1730,10 +1730,11 @@ public class Combat extends Observable implements Cloneable {
             delayCounter--;
             return;
         }
+
         if (phase == CombatPhase.START) {
             startScene();
         }
-        GameState.getGameState().characterPool.setOtherCombatants(this.otherCombatants);
+        GameState.getGameState().characterPool.combatStart(this);
         while (!finished) {
             boolean pause = false;
             if (!cloned && isBeingObserved()) {
