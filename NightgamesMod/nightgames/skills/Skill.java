@@ -85,19 +85,15 @@ public abstract class Skill {
             filtered = true;
         }
         Set<Skill> noReqs = new HashSet<>();
-        if (!filtered) {
-            // if the skill is restricted by status/stance, do not check for
-            // requirements
-            for (Skill sk : skills) {
-                if (sk.getTags(c, user).contains(SkillTag.mean) && user.has(Trait.softheart)) {
-                    continue;
-                }
-                if (!sk.requirements(c, user, target != null? target : sk.getDefaultTarget(c, user))) {
-                    noReqs.add(sk);
-                }
+        for (Skill sk : skills) {
+            if (sk.getTags(c, user).contains(SkillTag.mean) && user.has(Trait.softheart)) {
+                continue;
             }
-            skills.removeAll(noReqs);
+            if (!sk.requirements(c, user, target != null? target : sk.getDefaultTarget(c, user))) {
+                noReqs.add(sk);
+            }
         }
+        skills.removeAll(noReqs);
     }
 
     public int getMojoBuilt(Combat c, Character user) {
