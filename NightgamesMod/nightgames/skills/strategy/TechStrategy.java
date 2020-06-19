@@ -68,8 +68,8 @@ public class TechStrategy extends AbstractStrategy {
             secondary.addAll(new KnockdownStrategy().filterSkills(c, self, allowedSkills));
         }
 
-        preferred.removeIf(s -> !Skill.skillIsUsable(c, s, self));
-        secondary.removeIf(s -> !Skill.skillIsUsable(c, s, self));
+        preferred.removeIf(s -> !Skill.skillIsUsable(c, s, self, null));
+        secondary.removeIf(s -> !Skill.skillIsUsable(c, s, self, null));
         
         if (!preferred.isEmpty()) {
             return preferred;

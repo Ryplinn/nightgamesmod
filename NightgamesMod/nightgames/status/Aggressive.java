@@ -21,7 +21,7 @@ public class Aggressive extends DurationStatus {
                     SkillPool.skillPool.stream().map(Supplier::get)
                                     .filter(Skill::makesContact).collect(Collectors.toSet()));
 
-    private String cause;
+    private final String cause;
 
     /**
      * Default constructor for loading
@@ -54,8 +54,10 @@ public class Aggressive extends DurationStatus {
     @Override
     public Collection<Skill> allowedSkills(Combat c) {
         Character affected = getAffected();
-        return CONTACT_SKILLS.stream().filter(s -> s.requirements(c, affected, c.getOpponent(affected)) && Skill
-                        .skillIsUsable(c, s, affected)).collect(Collectors.toSet());
+        Character target = c.getOpponent(affected);
+        return CONTACT_SKILLS.stream().filter(
+                        s -> s.requirements(c, affected, target) && Skill
+                                        .skillIsUsable(c, s, affected, target)).collect(Collectors.toSet());
     }
 
     @Override
