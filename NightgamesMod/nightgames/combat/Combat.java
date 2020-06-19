@@ -386,10 +386,11 @@ public class Combat extends Observable implements Cloneable {
     private void doEndOfTurnUpkeep() {
         p1.eot(this, p2);
         p2.eot(this, p1);
+        getStance().decay(this);
+        Optional<Position> newPosition = getStance().checkOngoing(this);
+        newPosition.ifPresent(this::setStance);
         otherCombatants.removeAll(defeatedPets);
         defeatedPets.clear();
-        getStance().decay(this);
-        getStance().checkOngoing(this);
         // iterate through all the pets here so we don't get concurrent modification issues
         List<PetCharacter> pets = new ArrayList<>(otherCombatants);
         pets.forEach(other -> {
@@ -1688,6 +1689,10 @@ public class Combat extends Observable implements Cloneable {
 
     public List<CharacterType> getOtherCombatantTypes() {
         return otherCombatants.stream().map(PetCharacter::getType).collect(Collectors.toList());
+    }
+
+    public boolean isPetDefeated(PetCharacter pet) {
+        return defeatedPets.contains(pet);
     }
 
     public boolean isEnded() {

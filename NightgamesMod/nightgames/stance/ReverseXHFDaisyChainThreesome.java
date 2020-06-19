@@ -38,12 +38,10 @@ public class ReverseXHFDaisyChainThreesome extends Threesome {
 
     @Override
     public Optional<Position> checkOngoing(Combat c) {
-        if (getDomSexCharacter() instanceof PetCharacter) {
-            PetCharacter dom = (PetCharacter) getDomSexCharacter();
-            if (!c.otherCombatantsContains(getDomSexCharacter())) {
-                c.write(getBottom(), Formatter.format("With the disappearance of {self:name-do}, {other:subject-action:continue} to fuck {self:direct-object} doggy style.", dom, getBottom()));
-                return Optional.of(new Doggy(top, bottom));
-            }
+        Character dom = getDomSexCharacter();
+        if (dom instanceof PetCharacter && c.isPetDefeated((PetCharacter) dom)) {
+            c.write(getBottom(), Formatter.format("With the disappearance of {self:name-do}, {other:subject-action:continue} to fuck {self:direct-object} doggy style.", dom, getBottom()));
+            return Optional.of(new Doggy(top, bottom));
         }
         return super.checkOngoing(c);
     }

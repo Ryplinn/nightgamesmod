@@ -4,6 +4,7 @@ import nightgames.characters.Character;
 import nightgames.characters.CharacterType;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
+import nightgames.pet.PetCharacter;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,8 +35,9 @@ public abstract class Threesome extends Position {
 
     @Override
     public Optional<Position> checkOngoing(Combat c) {
-        if (!c.otherCombatantsContains(getDomSexCharacter())) {
-            c.write(getBottom(), Formatter.format("With the disappearance of {self:name-do}, {other:subject-action:manage|manages} to escape.", getDomSexCharacter(), getBottom()));
+        Character dom = getDomSexCharacter();
+        if (dom instanceof PetCharacter && c.isPetDefeated((PetCharacter) dom)) {
+            c.write(getBottom(), Formatter.format("With the disappearance of {self:name-do}, {other:subject-action:manage|manages} to escape.", dom, getBottom()));
             return Optional.of(new Neutral(c.p1.getType(), c.p2.getType()));
         }
         return super.checkOngoing(c);

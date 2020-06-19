@@ -5,6 +5,7 @@ import nightgames.characters.CharacterType;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Formatter;
+import nightgames.pet.PetCharacter;
 import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
@@ -30,8 +31,9 @@ public class XHFDaisyChainThreesome extends Threesome {
 
     @Override
     public Optional<Position> checkOngoing(Combat c) {
-        if (!c.otherCombatantsContains(getDomSexCharacter())) {
-            c.write(getBottom(), Formatter.format("With the disappearance of {self:name-do}, {master:subject-action:continue} to ride {self:name-do} in a reverse cowgirl position.", getDomSexCharacter(), getBottom()));
+        Character dom = getDomSexCharacter();
+        if (dom instanceof PetCharacter && c.isPetDefeated((PetCharacter) dom)) {
+            c.write(getBottom(), Formatter.format("With the disappearance of {self:name-do}, {master:subject-action:continue} to ride {self:name-do} in a reverse cowgirl position.", dom, getBottom()));
             return Optional.of((new ReverseCowgirl(top, bottom)));
         }
         return super.checkOngoing(c);
