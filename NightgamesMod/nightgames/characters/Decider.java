@@ -418,6 +418,9 @@ public class Decider {
 
     private static double rateActionWithObserver(Character skillUser, Character fitnessObserver, Character target,
                     Combat c, double selfFit, double otherFit, CustomEffect effect) {
+        CharacterPool previousPool = CharacterType.lastUsedPool;
+        CharacterPool.SimPool simPool = new CharacterPool.SimPool(previousPool);
+        CharacterType.usePool(simPool);
         // Clone ourselves a new combat... This should clone our characters, too
         Combat c2;
         try {
@@ -425,11 +428,7 @@ public class Decider {
         } catch (CloneNotSupportedException e) {
             return 0;
         }
-        CharacterPool previousPool = CharacterType.lastUsedPool;
-        CharacterPool simPool = new CharacterPool();
-        simPool.putAll(c2.p1, c2.p2);
         simPool.combatStart(c2);
-        CharacterType.usePool(simPool);
 
         DebugFlags.debugSimulation += 1;
         Character newSkillUser = getCopyFromCombat(c, c2, skillUser);

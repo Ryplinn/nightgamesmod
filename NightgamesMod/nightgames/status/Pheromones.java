@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Pheromones extends Horny {
-    private static List<Attribute> NON_DEBUFFABLE_ATTS = Arrays.asList(
+    private static final List<Attribute> NON_DEBUFFABLE_ATTS = Arrays.asList(
                     Attribute.speed,
                     Attribute.animism,
                     Attribute.nymphomania,
@@ -27,17 +27,17 @@ public class Pheromones extends Horny {
     }
 
     public static Pheromones getWith(Character from, Character target, float magnitude, int duration, String sourceSuffix) {
-        return new Pheromones(target.getType(), from.getType(), (float) DamageType.biological.modifyDamage(from, target, magnitude), duration, sourceSuffix);
+        return new Pheromones(target.getType(), from.getType(), (float) DamageType.biological.modifyDamage(from, target, magnitude), duration, from.nameOrPossessivePronoun() + sourceSuffix);
     }
 
     private int stacks;
-    private CharacterType source;
+    private final CharacterType source;
 
     public Pheromones(CharacterType affected, CharacterType other, float magnitude, int duration, String sourceSuffix) {
         super(affected, magnitude, duration, sourceSuffix);
         this.source = other;
         this.stacks = 1;
-        this.sourceSuffix = getSource().nameOrPossessivePronoun() + sourceSuffix;
+        this.sourceSuffix = sourceSuffix;
         flag(Stsflag.horny);
         flag(Stsflag.pheromones);
         flag(Stsflag.debuff);

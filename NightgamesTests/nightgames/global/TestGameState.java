@@ -30,4 +30,8 @@ public class TestGameState extends GameState {
     public Match makeMatch(List<Character> participants) {
         return new Match(participants, new NoModifier());
     }
+
+    public void cleanUp() {
+        GameState.setGameState(null);
+    }
 }

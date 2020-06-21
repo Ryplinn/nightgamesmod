@@ -13,13 +13,21 @@ import java.util.Optional;
 /**
  * TODO: Write class-level documentation.
  */
-public class TestCharacter extends Character {
+public class TestCharacter extends NPC {
     TestCharacter() {
         this(1);
     }
 
     private TestCharacter(int level) {
-        super(CharacterType.get("TestCharacter"), "TestCharacter", level);
+        this(CharacterType.get("TestCharacter"), "TestCharacter", level);
+    }
+
+    TestCharacter(CharacterType type, String name, int level) {
+        super(type, name, level, new BlankPersonality());
+    }
+
+    TestCharacter(String type) {
+        super(type);
     }
 
     @Override public void ding(Combat c) {

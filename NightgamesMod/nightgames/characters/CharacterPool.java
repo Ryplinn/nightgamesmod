@@ -17,7 +17,6 @@ import nightgames.start.StartConfiguration;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /**
@@ -27,7 +26,7 @@ public class CharacterPool {
     public Map<CharacterType, NPC> characterPool;   // All starting and unlockable characters
     private Set<CharacterType> debugChars;
     public Player human;
-    private transient Combat activeCombat;
+    transient Combat activeCombat;
     private transient Combat origCombat;
 
     public CharacterPool() {
@@ -289,4 +288,45 @@ public class CharacterPool {
             super("Character type " + type + " not found in character pool!");
         }
     }
+
+
+    /**
+     * CharacterPool variant that automatically clones relevant characters for use in combat sims.
+     */
+    public static class SimPool extends CharacterPool {
+        private final CharacterPool parent;
+
+        public SimPool(CharacterPool parent) {
+            super();
+            this.parent = parent;
+        }
+
+        @Override public void combatStart(Combat clonedCombat) {
+            putAll(clonedCombat.p1, clonedCombat.p2);
+            activeCombat = clonedCombat;
+        }
+
+        @Override Character getCharacterByType(CharacterType type, boolean required) {
+            Character character;
+            // first try the simulation pool, then check the parent pool
+            character = super.getCharacterByType(type, false);
+            if (character == null) {
+                character = parent.getCharacterByType(type, required);
+                // If you find it in the parent pool, keep a clone in the simulation pool
+                if (character != null) {
+                    assert !(character instanceof PetCharacter);
+                    Character simCharacter;
+                    try {
+                        simCharacter = character.clone();
+                    } catch (CloneNotSupportedException cnse) {
+                        throw new RuntimeException(cnse);
+                    }
+                    this.put(simCharacter);
+                    return simCharacter;
+                }
+            }
+            return character;
+        }
+    }
+
 }

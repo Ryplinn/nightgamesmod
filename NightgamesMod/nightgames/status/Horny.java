@@ -14,7 +14,7 @@ public class Horny extends DurationStatus {
     private float magnitude;
     protected String sourceSuffix;
 
-    public static Status getWithPsychologicalType(Character from, Character target, float magnitude, int duration, String source) {
+    public static Horny getWithPsychologicalType(Character from, Character target, float magnitude, int duration, String source) {
         return new Horny(target.getType(), (float) DamageType.temptation.modifyDamage(from, target, magnitude), duration, source);
     }
     public static Horny getWithBiologicalType(Character from, Character target, float magnitude, int duration, String source) {
