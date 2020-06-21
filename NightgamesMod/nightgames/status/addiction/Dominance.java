@@ -56,8 +56,10 @@ public class Dominance extends Addiction {
     public void endNight() {
         super.endNight();
 
-        getAfflicted().getWillpower().setTemporaryMax(originalWill);
-        originalWill = null;
+        if (originalWill != null) {
+            getAfflicted().getWillpower().setTemporaryMax(originalWill);
+            originalWill = null;
+        }
     }
 
     @Override public String describeIncrease() {
