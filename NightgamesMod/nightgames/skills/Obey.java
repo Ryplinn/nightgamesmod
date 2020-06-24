@@ -35,7 +35,7 @@ public class Obey extends Skill {
             c.write(user, user.getName() + " stares ahead blankly, waiting for "+user.possessiveAdjective()+" orders.");
         }
         if (user.human()) {
-            (new Command()).resolve(c, user, user, true);
+            (new Command()).resolve(c, user, target, true);
         } else {
             (new Masturbate()).resolve(c, user, target, true);
         }
